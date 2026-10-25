@@ -182,6 +182,12 @@
       <div id="histList"></div>
     </div>
     <div class="chips" id="chips"></div>
+    <div id="upcomingBox" style="margin-top:14px; background:#fff; color:var(--text); border:1.5px dashed var(--primary); border-radius:12px; padding:12px 14px;">
+      <div style="font-weight:800; font-size:16px;">🔥 Mã Hot Sắp Lên Sóng</div>
+      <div id="nextFrame" style="font-size:13.5px; margin-top:5px;"></div>
+      <div id="upcomingList"></div>
+      <div style="font-size:12px; color:#777; margin-top:8px;">Mã cụ thể sẽ hiện ở Bước 2 ngay khi lên sóng — trang tự rà soát, cập nhật mỗi giờ.</div>
+    </div>
   </section>
 
   <div class="banners">
@@ -301,6 +307,15 @@ const VOUCHERS = [
   { name: "Voucher Facebook", icon: "📘", off: "-30%", type: "code", code: "METAPAROCTC1925", cond: "Đơn từ 50K - Giảm tối đa 50K", note: "Hạn đến 25/10 — chỉ áp tài khoản/ngành hàng đủ điều kiện, giới hạn lượt", badge: "Khung 0H - 9H - 12H - 15H - 18H - 20H" },
   { name: "Voucher Mạng xã hội", icon: "🌐", off: "-20%", type: "code", code: "METAPARASCOCT25", cond: "Đơn từ 300K - Giảm tối đa 100K", note: "Chỉ dùng ngày 25/10 — chỉ áp tài khoản/ngành hàng đủ điều kiện, giới hạn lượt", badge: "Khung 0H - 9H - 12H - 15H - 18H - 20H" },
   { name: "Voucher YouTube", icon: "▶️", off: "-22% → -50%", type: "claim", code: "", cond: "Mã banner + mã gắn link sản phẩm YouTube", note: "Lưu trong app Shopee theo khung giờ", badge: "Back lượt 0H - 9H - 12H - 15H - 18H - 20H" },
+];
+
+/* Mã hot SẮP lên sóng — hiển thị trong ô "Mã Hot Sắp Lên Sóng" ở hero.
+   Chỉ ghi đợt/khung giờ có thật theo lịch sale Shopee và thông tin các nguồn tổng hợp đã đăng;
+   TUYỆT ĐỐI không ghi mã chữ cụ thể chưa lên sóng. Cập nhật cùng nhịp với VOUCHERS. */
+const UPCOMING = [
+  { icon: "👑", when: "Mỗi ngày", title: "Shopee VIP & Voucher Xtra back lượt", desc: "Nhả lại theo các khung 0H • 9H • 12H • 15H • 18H • 20H — canh đúng khung giờ, vào app Shopee bấm Lưu ở banner tương ứng." },
+  { icon: "🛍️", when: "11/11", title: "Siêu sale 11/11 — đợt sale lớn nhất năm của Shopee", desc: "Loạt mã toàn sàn và mã kênh mới dự kiến mở từ 0H 11/11. Trang sẽ cập nhật ngay khi mã lên sóng — quay lại săn sớm vì mã ngon hết lượt rất nhanh." },
+  { icon: "💸", when: "25/11", title: "Lương Về Sale To — sale ngày lương cuối tháng", desc: "Đợt sale ngày lương như hôm 25/10: có mã riêng theo ngày, chỉ dùng trong ngày sale. Trang cập nhật ngay khi có mã." },
 ];
 
 /* Sản phẩm hot — tuyển chọn mức giá rẻ nhất + ưu tiên shop đánh giá 4.5★+;
@@ -499,6 +514,26 @@ HOT_KEYWORDS.forEach(kw => {
   c.href = searchAff(kw); c.target = "_blank"; c.rel = "noopener";
   chipsBox.appendChild(c);
 });
+
+/* Khối "Mã Hot Sắp Lên Sóng" trong hero — khung nhả mã tiếp theo tính theo đồng hồ của khách */
+const FRAMES = [0, 9, 12, 15, 18, 20];
+(function renderUpcoming(){
+  const nfEl = document.getElementById("nextFrame");
+  if (nfEl) {
+    const h = new Date().getHours();
+    const nf = FRAMES.find(f => f > h);
+    nfEl.innerHTML = "⏰ Khung nhả mã tiếp theo: <b>" + (nf === undefined ? "0h00 ngày mai" : nf + "h00 hôm nay") + "</b> — các khung trong ngày: 0h00 • 9h00 • 12h00 • 15h00 • 18h00 • 20h00";
+  }
+  const listEl = document.getElementById("upcomingList");
+  if (listEl) {
+    UPCOMING.forEach(u => {
+      const d = document.createElement("div");
+      d.style.cssText = "margin-top:9px; font-size:13.5px; line-height:1.45;";
+      d.innerHTML = u.icon + " <b>" + u.when + " — " + u.title + "</b><br><span style=\"color:#555;\">" + u.desc + "</span>";
+      listEl.appendChild(d);
+    });
+  }
+})();
 
 /* Cổng mở mã: bình thường voucher bị KHÓA — khách chỉ thấy tên kênh + % giảm.
    Sau khi dán link và bấm "Săn sale" (đã tạo link gắn mã của shop) thì voucher mới mở. */
