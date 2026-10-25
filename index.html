@@ -281,34 +281,49 @@ const CONFIG = {
 };
 
 /* === AUTO-DATA-START: khu vực Muse tự cập nhật định kỳ — chỉ sửa trong 2 mốc này === */
-const PAGE_UPDATED = "25/10/2026";   // ← ngày cập nhật dữ liệu gần nhất
+const PAGE_UPDATED = "26/10/2026";   // ← ngày cập nhật dữ liệu gần nhất
 
 /* Danh sách voucher cho Bước 2 — sắp xếp theo KHẢ NĂNG ÁP DỤNG THỰC TẾ, không theo % giảm:
    mã toàn sàn (điều kiện nhẹ, hạn dài, áp rộng nhất) lên TRƯỚC; mã kênh % cao nhưng giới hạn
    tài khoản/ngành hàng/lượt (METAPAR Instagram/Facebook, mã Hàn quốc tế chỉ áp hàng Hàn quốc tế,
    mã lưu-ví VIP/Xtra/YouTube) xếp SAU. Hàng mã chữ ĐẦU TIÊN là mã mặc định ở kết quả Bước 1 và
    là mã sao chép âm thầm khi khách ấn nút — nên phải là mã rộng nhất.
-   Mã kênh Facebook/Instagram là MÃ CHỮ thật (dòng METAPAR...) rà soát từ nguồn tổng hợp công khai;
+   Mã kênh Facebook/Instagram là MÃ CHỮ thật, chỉ thêm lại khi nguồn tổng hợp liệt kê mã còn hiệu lực (dòng METAPAR tháng 10 đã hết hạn cuối 25/10);
    VIP / Xtra / YouTube là mã LƯU-VÍ trong app (không có dạng chữ) — bấm vào mở Shopee để lưu.
    type "code" = có mã chữ (mở sau khi đổi link); type "claim" = lưu trong app. */
 const VOUCHERS = [
+  { name: "Mã toàn sàn", icon: "🎟️", off: "-15%", type: "code", code: "2610TREND250KT1", cond: "Đơn từ 100K - Giảm tối đa 250K", note: "Toàn ngành hàng — hạn đến 31/10", badge: "Mã nhập tay toàn sàn" },
+  { name: "Mã toàn sàn", icon: "🎟️", off: "-15%", type: "code", code: "2610TREND250KT2", cond: "Đơn từ 100K - Giảm tối đa 250K", note: "Toàn ngành hàng — hạn đến 31/10", badge: "Mã nhập tay toàn sàn" },
   { name: "Mã toàn sàn", icon: "🎟️", off: "-15%", type: "code", code: "2210TREND250K", cond: "Đơn từ 100K - Giảm tối đa 250K", note: "Toàn ngành hàng — hạn đến 31/10", badge: "Mã nhập tay toàn sàn" },
   { name: "Mã toàn sàn", icon: "🎟️", off: "-25%", type: "code", code: "6311026GIAM500K18", cond: "Đơn từ 250K - Giảm tối đa 200K", note: "Hạn đến 31/10", badge: "Mã nhập tay toàn sàn" },
-  { name: "Mã toàn sàn", icon: "🎟️", off: "-18%", type: "code", code: "2510TREND350K", cond: "Đơn từ 100K - Giảm tối đa 350K", note: "Dùng ngày 25/10 (sale ngày lương)", badge: "Mã nhập tay toàn sàn" },
-  { name: "Mã toàn sàn", icon: "🎟️", off: "-16%", type: "code", code: "251026GIAM500K16", cond: "Đơn từ 150K - Giảm tối đa 500K", note: "Chỉ dùng ngày 25/10 — mã toàn sàn ngày sale", badge: "Mã 0H ngày 25/10" },
-  { name: "Mã toàn sàn", icon: "🎟️", off: "-18%", type: "code", code: "251026GIAM350K18", cond: "Đơn từ 200K - Giảm tối đa 350K", note: "Chỉ dùng ngày 25/10 — mã toàn sàn ngày sale", badge: "Mã 0H ngày 25/10" },
-  { name: "Mã toàn sàn", icon: "🎟️", off: "-20%", type: "code", code: "251026GIAM100K20", cond: "Đơn từ 250K - Giảm tối đa 100K", note: "Chỉ dùng ngày 25/10 — mã toàn sàn ngày sale", badge: "Mã 0H ngày 25/10" },
-  { name: "Mã toàn sàn", icon: "🎟️", off: "-22%", type: "code", code: "251026GIAM800K22", cond: "Đơn từ 1500K - Giảm tối đa 800K", note: "Chỉ dùng ngày 25/10 — mã toàn sàn ngày sale", badge: "Mã 0H ngày 25/10" },
-  { name: "Mã toàn sàn", icon: "🎟️", off: "-25%", type: "code", code: "251026GIAM2000K25", cond: "Đơn từ 3000K - Giảm tối đa 2000K", note: "Chỉ dùng ngày 25/10 — mã toàn sàn ngày sale", badge: "Mã 0H ngày 25/10" },
-  { name: "Mã toàn sàn", icon: "🎟️", off: "-20%", type: "code", code: "251026GIAM10K20", cond: "Đơn từ 0Đ - Giảm tối đa 10K", note: "Chỉ dùng ngày 25/10 — không yêu cầu đơn tối thiểu, hết hạn 23:59 tối nay", badge: "Mã 0H ngày 25/10" },
-  { name: "Voucher Shopee Mart", icon: "🛒", off: "-50%", type: "claim", code: "", cond: "Đơn từ 800K - Giảm tối đa 400K", note: "Mã lên mới 0H 24/10, còn hiệu lực đến hết 25/10 — lưu banner trong app Shopee Mart; kèm mã 30% tối đa 100K đơn từ 200K sẵn ví", badge: "Còn hiệu lực đến hết 25/10" },
+  { name: "Mã toàn sàn", icon: "🎟️", off: "-17%", type: "code", code: "261026GIAM100K17", cond: "Đơn từ 200K - Giảm tối đa 100K", note: "Chỉ dùng ngày 26/10 — mã toàn sàn ngày sale", badge: "Mã 0H ngày 26/10" },
+  { name: "Mã toàn sàn", icon: "🎟️", off: "-18%", type: "code", code: "261026GIAM250K18", cond: "Đơn từ 750K - Giảm tối đa 250K", note: "Chỉ dùng ngày 26/10 — mã toàn sàn ngày sale", badge: "Mã 0H ngày 26/10" },
+  { name: "Mã toàn sàn", icon: "🎟️", off: "-19%", type: "code", code: "261026GIAM600K19", cond: "Đơn từ 1000K - Giảm tối đa 600K", note: "Chỉ dùng ngày 26/10 — mã toàn sàn ngày sale", badge: "Mã 0H ngày 26/10" },
+  { name: "Mã toàn sàn", icon: "🎟️", off: "-19%", type: "code", code: "261026GIAM2000K19", cond: "Đơn từ 3000K - Giảm tối đa 2000K", note: "Chỉ dùng ngày 26/10 — mã toàn sàn ngày sale", badge: "Mã 0H ngày 26/10" },
+  { name: "Mã toàn sàn", icon: "🎟️", off: "-8%", type: "code", code: "26311026GIAM40K16", cond: "Đơn từ 99K - Giảm tối đa 40K", note: "Hạn đến 31/10", badge: "Mã nhập tay toàn sàn" },
+  { name: "Mã toàn sàn", icon: "🎟️", off: "-10%", type: "code", code: "26311026GIAM100K16", cond: "Đơn từ 500K - Giảm tối đa 100K", note: "Hạn đến 31/10", badge: "Mã nhập tay toàn sàn" },
+  { name: "Mã toàn sàn", icon: "🎟️", off: "-18%", type: "code", code: "26311026GIAM2000K17", cond: "Đơn từ 3000K - Giảm tối đa 2000K", note: "Hạn đến 31/10", badge: "Mã nhập tay toàn sàn" },
+  { name: "Voucher Shopee Mart", icon: "🛒", off: "-30%", type: "code", code: "MARTNEW230100150", cond: "Đơn từ 150K - Giảm tối đa 100K", note: "Shopee Mart — hạn đến 31/10", badge: "Mã nhập tay Shopee Mart" },
+  { name: "Voucher Bách hóa", icon: "🧺", off: "-30%", type: "code", code: "FBLPPL10", cond: "Đơn từ 300K - Giảm tối đa 100K", note: "Bách Hóa Online — hạn đến 31/10", badge: "Mã nhập tay Bách hóa" },
   { name: "Shopee VIP", icon: "👑", off: "-50%", type: "claim", code: "", cond: "Đơn từ 0Đ - Giảm tối đa 500K", note: "ĐÃ LÊN 0H 25/10 — lưu tại banner ShopeeVIP trong app; chỉ áp Thời trang/Sắc đẹp/Sức khỏe, đơn ~1 triệu hời nhất. Mã VIP 25% áp gần toàn sàn vẫn back lượt (đơn từ 0Đ, tối đa 200K, 16/10–31/10) và mã ví 25%: tối đa 2 triệu đơn từ 1 triệu, tối đa 1 triệu đơn từ 700K, tối đa 350K đơn từ 500K, tối đa 250K đơn từ 350K, giảm 20K đơn từ 99K.", badge: "Back lượt 0H - 9H - 12H - 15H - 18H - 20H" },
   { name: "Voucher Xtra", icon: "⚡", off: "-25%", type: "claim", code: "", cond: "Đơn từ 100K - Giảm tối đa 100K", note: "Lưu trong app — chọn sản phẩm có tag Voucher Xtra. ĐÃ LÊN 0H 25/10: 25% tối đa 100K đơn từ 100K (4 lần/TK), 20% tối đa 300K đơn từ 500K, 25% tối đa 2 triệu đơn từ 2 triệu (2 lần/TK); back lượt: 25% tối đa 250K đơn từ 100K (list Trendy).", badge: "Back lượt 0H - 9H - 12H - 15H - 18H - 20H" },
-  { name: "Voucher Bách hóa", icon: "🧺", off: "-30%", type: "claim", code: "", cond: "Đơn từ 300K - Giảm tối đa 100K", note: "Khung 20H 25/10 đã back lượt — lưu banner trong app; kèm mã 25% tối đa 150K đơn từ 500K (mua đơn 600K hời nhất). Chỉ dùng ngày 25/10.", badge: "Back lượt 20H ngày 25/10" },
-  { name: "Voucher Instagram", icon: "📸", off: "-50%", type: "code", code: "METAPARIGCOCT5025", cond: "Đơn từ 50K - Giảm tối đa 50K", note: "Hạn đến 25/10 — chỉ áp tài khoản/ngành hàng đủ điều kiện, giới hạn lượt", badge: "Khung 0H - 9H - 12H - 15H - 18H - 20H" },
-  { name: "Voucher Facebook", icon: "📘", off: "-30%", type: "code", code: "METAPAROCTC1925", cond: "Đơn từ 50K - Giảm tối đa 50K", note: "Hạn đến 25/10 — chỉ áp tài khoản/ngành hàng đủ điều kiện, giới hạn lượt", badge: "Khung 0H - 9H - 12H - 15H - 18H - 20H" },
-  { name: "Voucher Mạng xã hội", icon: "🌐", off: "-20%", type: "code", code: "METAPARASCOCT25", cond: "Đơn từ 300K - Giảm tối đa 100K", note: "Chỉ dùng ngày 25/10 — chỉ áp tài khoản/ngành hàng đủ điều kiện, giới hạn lượt", badge: "Khung 0H - 9H - 12H - 15H - 18H - 20H" },
   { name: "Voucher YouTube", icon: "▶️", off: "-22% → -50%", type: "claim", code: "", cond: "Mã banner + mã gắn link sản phẩm YouTube", note: "Lưu trong app Shopee theo khung giờ", badge: "Back lượt 0H - 9H - 12H - 15H - 18H - 20H" },
+  { name: "Voucher Shopee Mall", icon: "🏬", off: "-11%", type: "code", code: "MUD1111261015", cond: "Đơn từ 150K - Giảm tối đa 40K", note: "Chỉ áp Shopee Mall — chỉ dùng ngày 26/10", badge: "Mã 0H ngày 26/10" },
+  { name: "Voucher Shopee Mall", icon: "🏬", off: "-13%", type: "code", code: "MUD1313261015", cond: "Đơn từ 150K - Giảm tối đa 40K", note: "Chỉ áp Shopee Mall — chỉ dùng ngày 26/10", badge: "Mã 0H ngày 26/10" },
+  { name: "Voucher Shopee Mall", icon: "🏬", off: "-13%", type: "code", code: "MUD1313261020", cond: "Đơn từ 200K - Giảm tối đa 40K", note: "Chỉ áp Shopee Mall — chỉ dùng ngày 26/10", badge: "Mã 0H ngày 26/10" },
+  { name: "Voucher Shopee Mall", icon: "🏬", off: "-14%", type: "code", code: "MUD1414261040", cond: "Đơn từ 400K - Giảm tối đa 400K", note: "Chỉ áp Shopee Mall — chỉ dùng ngày 26/10", badge: "Mã 0H ngày 26/10" },
+  { name: "Voucher Shopee Mall", icon: "🏬", off: "-15%", type: "code", code: "MUD1515261020", cond: "Đơn từ 200K - Giảm tối đa 40K", note: "Chỉ áp Shopee Mall — chỉ dùng ngày 26/10", badge: "Mã 0H ngày 26/10" },
+  { name: "Voucher Shopee Mall", icon: "🏬", off: "-15%", type: "code", code: "MUD1515261075", cond: "Đơn từ 750K - Giảm tối đa 400K", note: "Chỉ áp Shopee Mall — chỉ dùng ngày 26/10", badge: "Mã 0H ngày 26/10" },
+  { name: "Voucher Shopee Mall", icon: "🏬", off: "-16%", type: "code", code: "MUD16162610110", cond: "Đơn từ 1100K - Giảm tối đa 500K", note: "Chỉ áp Shopee Mall — chỉ dùng ngày 26/10", badge: "Mã 0H ngày 26/10" },
+  { name: "Voucher Shopee Mall", icon: "🏬", off: "-16%", type: "code", code: "MUD1616261040", cond: "Đơn từ 400K - Giảm tối đa 400K", note: "Chỉ áp Shopee Mall — chỉ dùng ngày 26/10", badge: "Mã 0H ngày 26/10" },
+  { name: "Voucher Shopee Mall", icon: "🏬", off: "-17%", type: "code", code: "MUD17172610450", cond: "Đơn từ 4500K - Giảm tối đa 3000K", note: "Chỉ áp Shopee Mall — chỉ dùng ngày 26/10", badge: "Mã 0H ngày 26/10" },
+  { name: "Voucher Shopee Mall", icon: "🏬", off: "-17%", type: "code", code: "MUD1717261075", cond: "Đơn từ 750K - Giảm tối đa 400K", note: "Chỉ áp Shopee Mall — chỉ dùng ngày 26/10", badge: "Mã 0H ngày 26/10" },
+  { name: "Voucher Shopee Mall", icon: "🏬", off: "-18%", type: "code", code: "MUD18182610110", cond: "Đơn từ 1100K - Giảm tối đa 500K", note: "Chỉ áp Shopee Mall — chỉ dùng ngày 26/10", badge: "Mã 0H ngày 26/10" },
+  { name: "Voucher Shopee Mall", icon: "🏬", off: "-18%", type: "code", code: "MUD18182610125", cond: "Đơn từ 1250K - Giảm tối đa 500K", note: "Chỉ áp Shopee Mall — chỉ dùng ngày 26/10", badge: "Mã 0H ngày 26/10" },
+  { name: "Voucher Shopee Mall", icon: "🏬", off: "-18%", type: "code", code: "MUD18182610500", cond: "Đơn từ 5000K - Giảm tối đa 3000K", note: "Chỉ áp Shopee Mall — chỉ dùng ngày 26/10", badge: "Mã 0H ngày 26/10" },
+  { name: "Voucher Shopee Mall", icon: "🏬", off: "-19%", type: "code", code: "MUD19192610450", cond: "Đơn từ 4500K - Giảm tối đa 3000K", note: "Chỉ áp Shopee Mall — chỉ dùng ngày 26/10", badge: "Mã 0H ngày 26/10" },
+  { name: "Voucher Shopee Mall", icon: "🏬", off: "-20%", type: "code", code: "MUD20202610125", cond: "Đơn từ 1250K - Giảm tối đa 500K", note: "Chỉ áp Shopee Mall — chỉ dùng ngày 26/10", badge: "Mã 0H ngày 26/10" },
+  { name: "Voucher Shopee Mall", icon: "🏬", off: "-20%", type: "code", code: "MUD20202610500", cond: "Đơn từ 5000K - Giảm tối đa 3000K", note: "Chỉ áp Shopee Mall — chỉ dùng ngày 26/10", badge: "Mã 0H ngày 26/10" },
 ];
 
 /* Mã hot SẮP lên sóng — hiển thị trong ô "Mã Hot Sắp Lên Sóng" ở hero.
