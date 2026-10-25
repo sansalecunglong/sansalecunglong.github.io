@@ -205,16 +205,18 @@
     .stage { min-width: 0; display: grid; justify-items: center; }
     .preview-label { width: min(100%, 640px); margin: 2px 0 10px; color: var(--muted); font-size: 10px; }
     .invitation { position: relative; width: min(100%, 640px); min-height: 780px; overflow: hidden; background: var(--paper); box-shadow: var(--shadow); isolation: isolate; }
-    .cover { position: absolute; left: 0; right: 0; top: 0; z-index: 20; min-height: 780px; display: grid; place-items: center; padding: 32px; overflow: hidden; background-image: linear-gradient(var(--lotus-wash), var(--lotus-wash)), var(--lotus-image); background-size: cover; background-position: center; transition: opacity .7s ease, visibility .7s ease; }
+    .cover { position: absolute; left: 0; right: 0; top: 0; z-index: 20; min-height: 780px; display: grid; place-items: center; padding: 32px; overflow: hidden; background-image: linear-gradient(var(--lotus-wash), var(--lotus-wash)), var(--lotus-image); background-size: cover; background-position: center; transition: opacity .8s ease, transform .95s cubic-bezier(.22,.61,.36,1), visibility 0s linear .95s; will-change: opacity, transform; }
     .invitation:not(.opened) .inside { display: none; }
     .open-control { position: absolute; width: 1px; height: 1px; opacity: 0; pointer-events: none; }
-    .open-control:checked ~ .cover { opacity: 0; visibility: hidden; pointer-events: none; }
+    .open-control:checked ~ .cover { opacity: 0; visibility: hidden; pointer-events: none; transform: translateY(-34px) scale(1.018); }
     .open-control:checked ~ .inside { display: block; }
     .botanical-art { display: none; position: absolute; z-index: 0; width: 245px; height: 245px; color: var(--accent); opacity: .88; pointer-events: none; }
     .botanical-art path, .botanical-art ellipse { vector-effect: non-scaling-stroke; }
     .botanical-top { left: -36px; top: -26px; }
     .botanical-bottom { right: -38px; bottom: -28px; transform: rotate(180deg); }
-    .cover.is-open { opacity: 0; visibility: hidden; pointer-events: none; }
+    .cover.is-open { opacity: 0; visibility: hidden; pointer-events: none; transform: translateY(-34px) scale(1.018); }
+    .invitation.is-opening-cover .envelope { animation: envelopeRelease 1.55s cubic-bezier(.22,.61,.36,1) both; }
+    .invitation.is-opening-cover .open-btn { animation: openButtonRelease .7s ease-out both; }
     .envelope { z-index: 1; width: min(430px, 100%); padding: clamp(34px, 8vw, 62px) 26px 32px; text-align: center; border: 1px solid var(--line); background: linear-gradient(160deg, color-mix(in srgb, var(--paper-2) 75%, var(--paper)), var(--paper)); box-shadow: 0 14px 40px rgba(57, 44, 31, .12); position: relative; }
     .envelope::before { content: ""; position: absolute; inset: 12px; border: 1px solid color-mix(in srgb, var(--accent) 28%, transparent); pointer-events: none; }
     .cover-monogram { width: 76px; height: 76px; margin: 0 auto 24px; border: 1px solid var(--accent-2); border-radius: 50%; display: grid; place-items: center; color: var(--accent-2); font: italic 500 29px "Playfair Display", serif; }
@@ -226,71 +228,68 @@
     .open-btn { position: relative; z-index: 1; min-width: 155px; min-height: 48px; display: inline-grid; place-items: center; cursor: pointer; border: 0; border-radius: 999px; background: var(--button); color: var(--button-ink); font-weight: 600; box-shadow: 0 8px 18px rgba(35, 70, 58, .2); }
 
     .petal-burst { --burst-x: 50%; --burst-y: 52%; position: absolute; inset: 0; z-index: 45; overflow: hidden; pointer-events: none; contain: layout paint; }
-    .petal { --tx: 0px; --peak-y: -230px; --end-y: -150px; --r: 360deg; --size: 24px; position: absolute; left: var(--burst-x); top: var(--burst-y); width: var(--size); height: var(--size); opacity: 0; border-radius: 50%; background: #8f1734; filter: drop-shadow(0 4px 5px rgba(80, 8, 25, .28)); transform: translate(-50%, -50%) scale(.15); transform-origin: 50% 50%; will-change: transform, opacity; }
-    .petal::before { content: ""; position: absolute; left: 27%; top: 17%; width: 46%; height: 50%; border-radius: 64% 42% 66% 40%; background: linear-gradient(145deg, #ff8b9d, #d92f55 66%, #a31537); box-shadow: 8px 5px 0 -1px #c72449, 5px 12px 0 -1px #ee5873, -5px 12px 0 -1px #ba1e40, -8px 4px 0 -1px #e94968; }
-    .petal::after { content: ""; position: absolute; left: 38%; top: 34%; width: 28%; height: 28%; border-radius: 55% 45% 62% 38%; background: conic-gradient(from 35deg, #751027, #e74263, #981630, #f06b80, #751027); box-shadow: inset 1px 1px 2px rgba(255,255,255,.35); }
-    .petal:nth-child(3n) { --size: 19px; filter: drop-shadow(0 3px 4px rgba(80, 8, 25, .25)) brightness(1.08); }
-    .petal:nth-child(4n) { --size: 29px; }
-    .petal:nth-child(5n) { --size: 22px; filter: drop-shadow(0 4px 5px rgba(80, 8, 25, .25)) saturate(1.14); }
+    .petal-burst::before, .petal-burst::after { content: ""; position: absolute; left: var(--burst-x); top: var(--burst-y); border-radius: 50%; opacity: 0; transform: translate(-50%, -50%) scale(.2); will-change: transform, opacity; }
+    .petal-burst::before { width: 150px; height: 150px; background: radial-gradient(circle, rgba(255, 246, 248, .96) 0%, rgba(248, 169, 190, .52) 42%, rgba(248, 169, 190, 0) 70%); }
+    .petal-burst::after { width: 118px; height: 118px; border: 1px solid rgba(225, 137, 164, .68); box-shadow: 0 0 0 12px rgba(255, 221, 230, .12), inset 0 0 22px rgba(255, 255, 255, .35); }
+    .petal-burst.is-active::before, .open-control:checked ~ .petal-burst::before { animation: petalHalo 1.45s ease-out both; }
+    .petal-burst.is-active::after, .open-control:checked ~ .petal-burst::after { animation: petalRing 1.3s .07s ease-out both; }
+    .petal { --ux: 0; --uy: -1; --dist: clamp(190px, 46vmin, 350px); --tilt: 0deg; --spin: 250deg; --sway: 0px; --fall: 88px; --size: 22px; --dur: 2.45s; --delay: 0s; --petal-hi: #ffe3ea; --petal-mid: #f49ab4; --petal-deep: #d65379; position: absolute; left: var(--burst-x); top: var(--burst-y); width: var(--size); height: calc(var(--size) * 1.38); opacity: 0; border-radius: 82% 18% 82% 18% / 92% 14% 92% 14%; background: radial-gradient(ellipse at 32% 20%, rgba(255, 255, 255, .82), rgba(255, 255, 255, 0) 43%), linear-gradient(155deg, var(--petal-hi) 0%, var(--petal-mid) 54%, var(--petal-deep) 100%); box-shadow: inset -3px -5px 7px rgba(122, 20, 48, .16), inset 2px 3px 5px rgba(255, 255, 255, .42); filter: drop-shadow(0 5px 6px rgba(112, 25, 48, .18)); transform: translate(-50%, -50%) rotate(var(--tilt)) scale(.18); transform-origin: 50% 50%; will-change: transform, opacity; }
+    .petal::before { content: ""; position: absolute; left: 50%; top: 15%; width: 1px; height: 68%; border-radius: 999px; background: linear-gradient(rgba(255, 255, 255, 0), rgba(255, 255, 255, .68) 42%, rgba(146, 30, 62, .24)); transform: translateX(-50%) rotate(7deg); }
+    .petal::after { content: ""; position: absolute; left: 20%; bottom: 11%; width: 36%; height: 22%; border-radius: 50%; background: rgba(255, 255, 255, .3); filter: blur(1px); }
+    .petal:nth-child(4n+1) { --petal-hi: #ffe6ec; --petal-mid: #f7a8bc; --petal-deep: #dd6b8c; }
+    .petal:nth-child(4n+2) { --petal-hi: #ffd3de; --petal-mid: #ef7d9d; --petal-deep: #c83a5f; }
+    .petal:nth-child(4n+3) { --petal-hi: #fff0e8; --petal-mid: #f8bfb2; --petal-deep: #df8291; }
+    .petal:nth-child(4n) { --petal-hi: #f9b7c7; --petal-mid: #d94f70; --petal-deep: #9e2144; }
     .invitation.is-opening-cover .open-btn { pointer-events: none; }
     .bloom { --burst-x: 50%; --burst-y: 52%; position: absolute; inset: 0; z-index: 46; overflow: hidden; pointer-events: none; contain: layout paint; }
     .bloom::before { content: ""; position: absolute; left: var(--burst-x); top: var(--burst-y); width: 190px; height: 190px; border-radius: 50%; background: radial-gradient(circle, rgba(240, 130, 160, .9) 0%, rgba(214, 63, 101, .55) 52%, rgba(214, 63, 101, 0) 70%); opacity: 0; transform: translate(-50%, -50%) scale(.05); will-change: transform, opacity; }
     .bloom-svg { position: absolute; left: var(--burst-x); top: var(--burst-y); width: 190px; height: 190px; opacity: 0; transform: translate(-50%, -50%) scale(.04); transform-origin: 50% 50%; filter: drop-shadow(0 10px 24px rgba(90, 8, 28, .35)); will-change: transform, opacity; }
     .bloom .bp, .bloom .bloom-leaf { transform-box: fill-box; transform-origin: 50% 100%; }
-    .bloom.is-active::before, .open-control:checked ~ .bloom::before { animation: bloomGlow 2.6s ease-out both; }
-    .bloom.is-active .bloom-svg, .open-control:checked ~ .bloom .bloom-svg { animation: bloomGrow 2.6s cubic-bezier(.22,.61,.3,1) both; }
-    .bloom.is-active .bp-center, .open-control:checked ~ .bloom .bp-center { animation: bloomPetalCenter 2.6s ease-out both; }
-    .bloom.is-active .bp-mid-l, .open-control:checked ~ .bloom .bp-mid-l { animation: bloomPetalMidL 2.6s ease-out both; }
-    .bloom.is-active .bp-mid-r, .open-control:checked ~ .bloom .bp-mid-r { animation: bloomPetalMidR 2.6s ease-out both; }
-    .bloom.is-active .bp-outer-l, .open-control:checked ~ .bloom .bp-outer-l { animation: bloomPetalOuterL 2.6s ease-out both; }
-    .bloom.is-active .bp-outer-r, .open-control:checked ~ .bloom .bp-outer-r { animation: bloomPetalOuterR 2.6s ease-out both; }
-    .bloom.is-active .bp-front-l, .open-control:checked ~ .bloom .bp-front-l { animation: bloomPetalFrontL 2.6s ease-out both; }
-    .bloom.is-active .bp-front-r, .open-control:checked ~ .bloom .bp-front-r { animation: bloomPetalFrontR 2.6s ease-out both; }
-    .bloom.is-active .bloom-leaf-l, .open-control:checked ~ .bloom .bloom-leaf-l { animation: bloomLeafL 2.6s ease-out both; }
-    .bloom.is-active .bloom-leaf-r, .open-control:checked ~ .bloom .bloom-leaf-r { animation: bloomLeafR 2.6s ease-out both; }
+    .bloom.is-active::before, .open-control:checked ~ .bloom::before { animation: bloomGlow 1.5s ease-out both; }
+    .bloom.is-active .bloom-svg, .open-control:checked ~ .bloom .bloom-svg { animation: bloomGrow 1.5s cubic-bezier(.22,.61,.3,1) both; }
+    .bloom.is-active .bp-center, .open-control:checked ~ .bloom .bp-center { animation: bloomPetalCenter 1.5s ease-out both; }
+    .bloom.is-active .bp-mid-l, .open-control:checked ~ .bloom .bp-mid-l { animation: bloomPetalMidL 1.5s ease-out both; }
+    .bloom.is-active .bp-mid-r, .open-control:checked ~ .bloom .bp-mid-r { animation: bloomPetalMidR 1.5s ease-out both; }
+    .bloom.is-active .bp-outer-l, .open-control:checked ~ .bloom .bp-outer-l { animation: bloomPetalOuterL 1.5s ease-out both; }
+    .bloom.is-active .bp-outer-r, .open-control:checked ~ .bloom .bp-outer-r { animation: bloomPetalOuterR 1.5s ease-out both; }
+    .bloom.is-active .bp-front-l, .open-control:checked ~ .bloom .bp-front-l { animation: bloomPetalFrontL 1.5s ease-out both; }
+    .bloom.is-active .bp-front-r, .open-control:checked ~ .bloom .bp-front-r { animation: bloomPetalFrontR 1.5s ease-out both; }
+    .bloom.is-active .bloom-leaf-l, .open-control:checked ~ .bloom .bloom-leaf-l { animation: bloomLeafL 1.5s ease-out both; }
+    .bloom.is-active .bloom-leaf-r, .open-control:checked ~ .bloom .bloom-leaf-r { animation: bloomLeafR 1.5s ease-out both; }
     @media (prefers-reduced-motion: reduce) {
       .bloom.is-active .bloom-svg, .open-control:checked ~ .bloom .bloom-svg { animation: bloomReduced 1.6s ease-out both !important; }
       .bloom.is-active::before, .open-control:checked ~ .bloom::before { animation: none !important; opacity: 0 !important; }
       .bloom.is-active .bp, .bloom.is-active .bloom-leaf, .open-control:checked ~ .bloom .bp, .open-control:checked ~ .bloom .bloom-leaf { animation: none !important; }
     }
     .petal-burst.is-active .petal,
-    .open-control:checked ~ .petal-burst .petal { animation: roseToss 1.88s cubic-bezier(.18,.68,.25,1) both; animation-delay: var(--delay, 0s); }
-    .petal:nth-child(1) { --tx:clamp(-235px,-43vw,-160px); --peak-y:-310px; --end-y:-210px; --r:-510deg; --delay:.01s; }
-    .petal:nth-child(2) { --tx:clamp(-210px,-37vw,-138px); --peak-y:-265px; --end-y:-130px; --r:430deg; --delay:.07s; }
-    .petal:nth-child(3) { --tx:clamp(-184px,-32vw,-112px); --peak-y:-335px; --end-y:-220px; --r:-420deg; --delay:.04s; }
-    .petal:nth-child(4) { --tx:clamp(-156px,-27vw,-92px); --peak-y:-230px; --end-y:-104px; --r:540deg; --delay:.09s; }
-    .petal:nth-child(5) { --tx:clamp(-132px,-22vw,-72px); --peak-y:-365px; --end-y:-248px; --r:-470deg; --delay:.02s; }
-    .petal:nth-child(6) { --tx:clamp(-104px,-17vw,-55px); --peak-y:-286px; --end-y:-150px; --r:380deg; --delay:.11s; }
-    .petal:nth-child(7) { --tx:-78px; --peak-y:-345px; --end-y:-216px; --r:-560deg; --delay:.05s; }
-    .petal:nth-child(8) { --tx:-48px; --peak-y:-255px; --end-y:-126px; --r:460deg; --delay:.08s; }
-    .petal:nth-child(9) { --tx:-20px; --peak-y:-385px; --end-y:-258px; --r:-430deg; --delay:.03s; }
-    .petal:nth-child(10) { --tx:14px; --peak-y:-300px; --end-y:-170px; --r:520deg; --delay:.1s; }
-    .petal:nth-child(11) { --tx:42px; --peak-y:-370px; --end-y:-235px; --r:-390deg; --delay:.06s; }
-    .petal:nth-child(12) { --tx:72px; --peak-y:-272px; --end-y:-142px; --r:470deg; --delay:.01s; }
-    .petal:nth-child(13) { --tx:clamp(55px,17vw,104px); --peak-y:-350px; --end-y:-220px; --r:-530deg; --delay:.09s; }
-    .petal:nth-child(14) { --tx:clamp(72px,22vw,132px); --peak-y:-242px; --end-y:-112px; --r:410deg; --delay:.04s; }
-    .petal:nth-child(15) { --tx:clamp(92px,27vw,156px); --peak-y:-330px; --end-y:-202px; --r:-480deg; --delay:.12s; }
-    .petal:nth-child(16) { --tx:clamp(112px,32vw,184px); --peak-y:-280px; --end-y:-144px; --r:550deg; --delay:.05s; }
-    .petal:nth-child(17) { --tx:clamp(138px,37vw,210px); --peak-y:-348px; --end-y:-214px; --r:-440deg; --delay:.08s; }
-    .petal:nth-child(18) { --tx:clamp(160px,43vw,235px); --peak-y:-250px; --end-y:-118px; --r:500deg; --delay:.02s; }
-    .petal:nth-child(19) { --tx:clamp(-230px,-42vw,-155px); --peak-y:-190px; --end-y:-34px; --r:420deg; --delay:.1s; }
-    .petal:nth-child(20) { --tx:clamp(-198px,-35vw,-125px); --peak-y:-210px; --end-y:-54px; --r:-500deg; --delay:.03s; }
-    .petal:nth-child(21) { --tx:clamp(-166px,-29vw,-98px); --peak-y:-170px; --end-y:-12px; --r:460deg; --delay:.07s; }
-    .petal:nth-child(22) { --tx:-122px; --peak-y:-206px; --end-y:-48px; --r:-570deg; --delay:.01s; }
-    .petal:nth-child(23) { --tx:-86px; --peak-y:-150px; --end-y:12px; --r:390deg; --delay:.11s; }
-    .petal:nth-child(24) { --tx:-52px; --peak-y:-194px; --end-y:-28px; --r:-450deg; --delay:.05s; }
-    .petal:nth-child(25) { --tx:-18px; --peak-y:-144px; --end-y:24px; --r:530deg; --delay:.08s; }
-    .petal:nth-child(26) { --tx:20px; --peak-y:-198px; --end-y:-30px; --r:-410deg; --delay:.02s; }
-    .petal:nth-child(27) { --tx:54px; --peak-y:-152px; --end-y:15px; --r:490deg; --delay:.1s; }
-    .petal:nth-child(28) { --tx:88px; --peak-y:-212px; --end-y:-52px; --r:-540deg; --delay:.04s; }
-    .petal:nth-child(29) { --tx:124px; --peak-y:-166px; --end-y:-4px; --r:430deg; --delay:.07s; }
-    .petal:nth-child(30) { --tx:clamp(98px,29vw,166px); --peak-y:-220px; --end-y:-60px; --r:-470deg; --delay:.01s; }
-    .petal:nth-child(31) { --tx:clamp(125px,35vw,198px); --peak-y:-178px; --end-y:-18px; --r:560deg; --delay:.09s; }
-    .petal:nth-child(32) { --tx:clamp(155px,42vw,230px); --peak-y:-205px; --end-y:-42px; --r:-400deg; --delay:.05s; }
-    .petal:nth-child(33) { --tx:clamp(-214px,-39vw,-145px); --peak-y:-292px; --end-y:-168px; --r:500deg; --delay:.12s; }
-    .petal:nth-child(34) { --tx:-145px; --peak-y:-318px; --end-y:-190px; --r:-430deg; --delay:.06s; }
-    .petal:nth-child(35) { --tx:146px; --peak-y:-306px; --end-y:-178px; --r:450deg; --delay:.03s; }
-    .petal:nth-child(36) { --tx:clamp(145px,39vw,214px); --peak-y:-286px; --end-y:-158px; --r:-520deg; --delay:.1s; }
+    .open-control:checked ~ .petal-burst .petal { animation: petalRadiate var(--dur) cubic-bezier(.16,.64,.26,1) both; animation-delay: var(--delay); }
+    /* Twelve directions: the petals leave the button as a full radial wreath, not only upward. */
+    .petal:nth-child(12n+1) { --ux: 0; --uy: -1; --tilt: 0deg; }
+    .petal:nth-child(12n+2) { --ux: .5; --uy: -.866; --tilt: 30deg; }
+    .petal:nth-child(12n+3) { --ux: .866; --uy: -.5; --tilt: 60deg; }
+    .petal:nth-child(12n+4) { --ux: 1; --uy: 0; --tilt: 90deg; }
+    .petal:nth-child(12n+5) { --ux: .866; --uy: .5; --tilt: 120deg; }
+    .petal:nth-child(12n+6) { --ux: .5; --uy: .866; --tilt: 150deg; }
+    .petal:nth-child(12n+7) { --ux: 0; --uy: 1; --tilt: 180deg; }
+    .petal:nth-child(12n+8) { --ux: -.5; --uy: .866; --tilt: -150deg; }
+    .petal:nth-child(12n+9) { --ux: -.866; --uy: .5; --tilt: -120deg; }
+    .petal:nth-child(12n+10) { --ux: -1; --uy: 0; --tilt: -90deg; }
+    .petal:nth-child(12n+11) { --ux: -.866; --uy: -.5; --tilt: -60deg; }
+    .petal:nth-child(12n) { --ux: -.5; --uy: -.866; --tilt: -30deg; }
+    /* Five distance rings keep the burst airy instead of a single dense circle. */
+    .petal:nth-child(5n+1) { --dist: clamp(118px, 29vmin, 225px); }
+    .petal:nth-child(5n+2) { --dist: clamp(158px, 38vmin, 300px); }
+    .petal:nth-child(5n+3) { --dist: clamp(198px, 47vmin, 370px); }
+    .petal:nth-child(5n+4) { --dist: clamp(238px, 56vmin, 440px); }
+    .petal:nth-child(5n) { --dist: clamp(272px, 65vmin, 505px); }
+    /* Independent size, timing, spin and landing drift so no two neighbouring petals move alike. */
+    .petal:nth-child(7n+1) { --size: 21px; --delay: .03s; --dur: 2.25s; --spin: 250deg; --sway: -16px; --fall: 78px; }
+    .petal:nth-child(7n+2) { --size: 27px; --delay: .13s; --dur: 2.45s; --spin: -300deg; --sway: 20px; --fall: 102px; }
+    .petal:nth-child(7n+3) { --size: 17px; --delay: .24s; --dur: 2.65s; --spin: 180deg; --sway: -28px; --fall: 118px; }
+    .petal:nth-child(7n+4) { --size: 30px; --delay: .06s; --dur: 2.3s; --spin: 330deg; --sway: 12px; --fall: 66px; }
+    .petal:nth-child(7n+5) { --size: 20px; --delay: .32s; --dur: 2.75s; --spin: -220deg; --sway: 30px; --fall: 108px; }
+    .petal:nth-child(7n+6) { --size: 24px; --delay: .19s; --dur: 2.55s; --spin: 275deg; --sway: -22px; --fall: 88px; }
+    .petal:nth-child(7n) { --size: 18px; --delay: .4s; --dur: 2.8s; --spin: -340deg; --sway: 6px; --fall: 126px; }
     .inside { background-color: var(--paper); background-image: linear-gradient(var(--lotus-soft-wash), var(--lotus-soft-wash)), var(--lotus-image); background-size: 100% auto; background-position: center top; }
     .inside.is-opening { animation: pageOpen .75s ease both; transform-origin: 50% 0; }
     .music-control { position: sticky; top: 12px; z-index: 12; width: max-content; margin: 0 12px 0 auto; transform: translateY(12px); border: 1px solid var(--line); border-radius: 999px; padding: 8px 12px; background: var(--veil); color: var(--ink); font-size: 10px; font-weight: 600; backdrop-filter: blur(8px); }
@@ -438,33 +437,52 @@
     .lightbox { position: fixed; inset: 0; z-index: 60; display: grid; place-items: center; padding: 18px; background: rgba(10, 12, 11, .9); }
     .lightbox img { max-width: min(96vw, 1000px); max-height: 86vh; object-fit: contain; }
     .lightbox button { position: absolute; top: max(16px, env(safe-area-inset-top)); right: 16px; width: 44px; height: 44px; border: 1px solid rgba(255,255,255,.5); border-radius: 50%; background: rgba(0,0,0,.28); color: #fff; font-size: 24px; }
-    @keyframes roseToss {
-      0% { opacity: 0; transform: translate3d(-50%, -50%, 0) rotate(0deg) scale(.12); }
-      8% { opacity: 1; }
-      22% { transform: translate3d(-50%, -82px, 0) rotate(95deg) scale(.9); }
-      63% { opacity: 1; transform: translate3d(calc(-50% + var(--tx)), var(--peak-y), 0) rotate(var(--r)) scale(1.08); }
-      82% { opacity: .96; }
-      100% { opacity: 0; transform: translate3d(calc(-50% + var(--tx)), var(--end-y), 0) rotate(var(--r)) scale(.78); }
+    @keyframes petalHalo {
+      0% { opacity: 0; transform: translate(-50%, -50%) scale(.18); }
+      16% { opacity: .88; }
+      58% { opacity: .42; transform: translate(-50%, -50%) scale(1.85); }
+      100% { opacity: 0; transform: translate(-50%, -50%) scale(3.05); }
     }
-    @keyframes roseTossReduced {
-      0%, 100% { opacity: 0; transform: translate3d(-50%, -50%, 0) scale(.72); }
+    @keyframes petalRing {
+      0% { opacity: 0; transform: translate(-50%, -50%) scale(.24); }
+      24% { opacity: .82; }
+      100% { opacity: 0; transform: translate(-50%, -50%) scale(4.35); }
+    }
+    @keyframes petalRadiate {
+      0% { opacity: 0; transform: translate3d(-50%, -50%, 0) rotate(var(--tilt)) scale(.16); }
+      7% { opacity: 1; }
+      34% { opacity: 1; transform: translate3d(calc(-50% + var(--ux) * var(--dist) * .62), calc(-50% + var(--uy) * var(--dist) * .62), 0) rotate(calc(var(--tilt) + var(--spin) * .38)) scale(1.05); }
+      68% { opacity: .96; transform: translate3d(calc(-50% + var(--ux) * var(--dist) + var(--sway) * .68), calc(-50% + var(--uy) * var(--dist) + var(--fall) * .42), 0) rotate(calc(var(--tilt) + var(--spin) * .74)) scale(.95); }
+      100% { opacity: 0; transform: translate3d(calc(-50% + var(--ux) * var(--dist) + var(--sway)), calc(-50% + var(--uy) * var(--dist) + var(--fall)), 0) rotate(calc(var(--tilt) + var(--spin))) scale(.74); }
+    }
+    @keyframes petalRadiateReduced {
+      0%, 100% { opacity: 0; transform: translate3d(-50%, -50%, 0) rotate(var(--tilt)) scale(.68); }
       18% { opacity: 1; }
-      52%, 76% { opacity: .96; transform: translate3d(-50%, -58px, 0) rotate(35deg) scale(1); }
+      52%, 76% { opacity: .96; transform: translate3d(calc(-50% + var(--ux) * 52px), calc(-50% + var(--uy) * 52px), 0) rotate(calc(var(--tilt) + 28deg)) scale(1); }
+    }
+    @keyframes envelopeRelease {
+      0% { opacity: 1; transform: translateY(0) scale(1); }
+      30% { opacity: 1; transform: translateY(-3px) scale(1.018); }
+      72% { opacity: .72; transform: translateY(-12px) scale(.992); }
+      100% { opacity: .18; transform: translateY(-22px) scale(.982); }
+    }
+    @keyframes openButtonRelease {
+      0% { transform: scale(1); filter: brightness(1); }
+      35% { transform: scale(.96); filter: brightness(1.12); }
+      100% { transform: scale(1.04); filter: brightness(1.05); }
     }
     @keyframes bloomGlow {
       0% { opacity: 0; transform: translate(-50%, -50%) scale(.05); }
-      8% { opacity: .85; }
-      62% { opacity: .9; transform: translate(-50%, -50%) scale(3.4); }
-      82% { opacity: .95; transform: translate(-50%, -50%) scale(8.6); }
-      100% { opacity: 0; transform: translate(-50%, -50%) scale(10); }
+      12% { opacity: .62; }
+      56% { opacity: .38; transform: translate(-50%, -50%) scale(1.55); }
+      100% { opacity: 0; transform: translate(-50%, -50%) scale(2.35); }
     }
     @keyframes bloomGrow {
-      0% { opacity: 0; transform: translate(-50%, -50%) rotate(-7deg) scale(.04); }
-      6% { opacity: 1; }
-      38% { transform: translate(-50%, -50%) rotate(0deg) scale(1.06); }
-      62% { transform: translate(-50%, -50%) rotate(1.5deg) scale(3.2); }
-      81% { opacity: 1; transform: translate(-50%, -50%) rotate(2deg) scale(7.8); }
-      100% { opacity: 0; transform: translate(-50%, -50%) rotate(2.5deg) scale(9.2); }
+      0% { opacity: 0; transform: translate(-50%, -50%) rotate(-6deg) scale(.08); }
+      10% { opacity: 1; }
+      42% { transform: translate(-50%, -50%) rotate(0deg) scale(.98); }
+      70% { opacity: 1; transform: translate(-50%, -50%) rotate(1deg) scale(1.28); }
+      100% { opacity: 0; transform: translate(-50%, -50%) rotate(2deg) scale(1.48); }
     }
     @keyframes bloomPetalCenter { 0% { transform: scaleY(.4); } 42%, 100% { transform: scaleY(1); } }
     @keyframes bloomPetalMidL { 0% { transform: rotate(34deg); } 42%, 100% { transform: rotate(0deg); } }
@@ -526,7 +544,9 @@
       *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
       .reveal, .reveal.is-pending, .reveal.is-visible { opacity: 1; transform: none; }
       .petal-burst.is-active .petal,
-      .open-control:checked ~ .petal-burst .petal { animation: roseTossReduced 1.88s ease-out both !important; animation-delay: var(--delay, 0s) !important; }
+      .open-control:checked ~ .petal-burst .petal { animation: petalRadiateReduced 1.35s ease-out both !important; animation-delay: 0s !important; }
+      .petal-burst.is-active::before, .petal-burst.is-active::after,
+      .open-control:checked ~ .petal-burst::before, .open-control:checked ~ .petal-burst::after { animation: none !important; opacity: 0 !important; }
     }
   </style>
 
@@ -633,7 +653,7 @@ Nhà gái: Xóm Chợ, xã Đại Từ, tỉnh Thái Nguyên</textarea></div>
       <p class="preview-label">Xem trước — khách sẽ thấy bìa và bấm mở thiệp</p>
       <article class="invitation" id="invitation">
         <input class="open-control" id="openControl" type="checkbox" tabindex="-1" aria-hidden="true" />
-        <div class="petal-burst" id="petalBurst" aria-hidden="true"><span class="petal"></span><span class="petal"></span><span class="petal"></span><span class="petal"></span><span class="petal"></span><span class="petal"></span><span class="petal"></span><span class="petal"></span><span class="petal"></span><span class="petal"></span><span class="petal"></span><span class="petal"></span><span class="petal"></span><span class="petal"></span><span class="petal"></span><span class="petal"></span><span class="petal"></span><span class="petal"></span><span class="petal"></span><span class="petal"></span><span class="petal"></span><span class="petal"></span><span class="petal"></span><span class="petal"></span><span class="petal"></span><span class="petal"></span><span class="petal"></span><span class="petal"></span><span class="petal"></span><span class="petal"></span><span class="petal"></span><span class="petal"></span><span class="petal"></span><span class="petal"></span><span class="petal"></span><span class="petal"></span></div>
+        <div class="petal-burst" id="petalBurst" aria-hidden="true"><span class="petal"></span><span class="petal"></span><span class="petal"></span><span class="petal"></span><span class="petal"></span><span class="petal"></span><span class="petal"></span><span class="petal"></span><span class="petal"></span><span class="petal"></span><span class="petal"></span><span class="petal"></span><span class="petal"></span><span class="petal"></span><span class="petal"></span><span class="petal"></span><span class="petal"></span><span class="petal"></span><span class="petal"></span><span class="petal"></span><span class="petal"></span><span class="petal"></span><span class="petal"></span><span class="petal"></span><span class="petal"></span><span class="petal"></span><span class="petal"></span><span class="petal"></span><span class="petal"></span><span class="petal"></span><span class="petal"></span><span class="petal"></span><span class="petal"></span><span class="petal"></span><span class="petal"></span><span class="petal"></span><span class="petal"></span><span class="petal"></span><span class="petal"></span><span class="petal"></span><span class="petal"></span><span class="petal"></span><span class="petal"></span><span class="petal"></span><span class="petal"></span><span class="petal"></span><span class="petal"></span><span class="petal"></span><span class="petal"></span><span class="petal"></span><span class="petal"></span><span class="petal"></span><span class="petal"></span><span class="petal"></span><span class="petal"></span><span class="petal"></span><span class="petal"></span><span class="petal"></span><span class="petal"></span><span class="petal"></span></div>
         <div class="bloom" id="bloom" aria-hidden="true">
           <svg class="bloom-svg" viewBox="0 0 200 200" focusable="false">
             <defs>
@@ -1221,13 +1241,13 @@ var QRCode;!function(){function a(a){this.mode=c.MODE_8BIT_BYTE,this.data=a,this
           invitation.classList.add('opened');
           cover.classList.add('is-open');
           inside.classList.add('is-opening');
-        }, 2000);
+        }, 1550);
         window.setTimeout(function () {
           petalBurst.classList.remove('is-active');
           bloom.classList.remove('is-active');
           invitation.classList.remove('is-opening-cover');
           openButton.removeAttribute('aria-disabled');
-        }, 2720);
+        }, 3350);
       });
       document.getElementById('openBtn').addEventListener('keydown', function (event) {
         if (event.key === 'Enter' || event.key === ' ') {
