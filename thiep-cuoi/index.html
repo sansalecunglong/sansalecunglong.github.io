@@ -233,6 +233,26 @@
     .petal:nth-child(4n) { --size: 29px; }
     .petal:nth-child(5n) { --size: 22px; filter: drop-shadow(0 4px 5px rgba(80, 8, 25, .25)) saturate(1.14); }
     .invitation.is-opening-cover .open-btn { pointer-events: none; }
+    .bloom { --burst-x: 50%; --burst-y: 52%; position: absolute; inset: 0; z-index: 46; overflow: hidden; pointer-events: none; contain: layout paint; }
+    .bloom::before { content: ""; position: absolute; left: var(--burst-x); top: var(--burst-y); width: 190px; height: 190px; border-radius: 50%; background: radial-gradient(circle, rgba(240, 130, 160, .9) 0%, rgba(214, 63, 101, .55) 52%, rgba(214, 63, 101, 0) 70%); opacity: 0; transform: translate(-50%, -50%) scale(.05); will-change: transform, opacity; }
+    .bloom-svg { position: absolute; left: var(--burst-x); top: var(--burst-y); width: 190px; height: 190px; opacity: 0; transform: translate(-50%, -50%) scale(.04); transform-origin: 50% 50%; filter: drop-shadow(0 10px 24px rgba(90, 8, 28, .35)); will-change: transform, opacity; }
+    .bloom .bp, .bloom .bloom-leaf { transform-box: fill-box; transform-origin: 50% 100%; }
+    .bloom.is-active::before, .open-control:checked ~ .bloom::before { animation: bloomGlow 2.6s ease-out both; }
+    .bloom.is-active .bloom-svg, .open-control:checked ~ .bloom .bloom-svg { animation: bloomGrow 2.6s cubic-bezier(.22,.61,.3,1) both; }
+    .bloom.is-active .bp-center, .open-control:checked ~ .bloom .bp-center { animation: bloomPetalCenter 2.6s ease-out both; }
+    .bloom.is-active .bp-mid-l, .open-control:checked ~ .bloom .bp-mid-l { animation: bloomPetalMidL 2.6s ease-out both; }
+    .bloom.is-active .bp-mid-r, .open-control:checked ~ .bloom .bp-mid-r { animation: bloomPetalMidR 2.6s ease-out both; }
+    .bloom.is-active .bp-outer-l, .open-control:checked ~ .bloom .bp-outer-l { animation: bloomPetalOuterL 2.6s ease-out both; }
+    .bloom.is-active .bp-outer-r, .open-control:checked ~ .bloom .bp-outer-r { animation: bloomPetalOuterR 2.6s ease-out both; }
+    .bloom.is-active .bp-front-l, .open-control:checked ~ .bloom .bp-front-l { animation: bloomPetalFrontL 2.6s ease-out both; }
+    .bloom.is-active .bp-front-r, .open-control:checked ~ .bloom .bp-front-r { animation: bloomPetalFrontR 2.6s ease-out both; }
+    .bloom.is-active .bloom-leaf-l, .open-control:checked ~ .bloom .bloom-leaf-l { animation: bloomLeafL 2.6s ease-out both; }
+    .bloom.is-active .bloom-leaf-r, .open-control:checked ~ .bloom .bloom-leaf-r { animation: bloomLeafR 2.6s ease-out both; }
+    @media (prefers-reduced-motion: reduce) {
+      .bloom.is-active .bloom-svg, .open-control:checked ~ .bloom .bloom-svg { animation: bloomReduced 1.6s ease-out both !important; }
+      .bloom.is-active::before, .open-control:checked ~ .bloom::before { animation: none !important; opacity: 0 !important; }
+      .bloom.is-active .bp, .bloom.is-active .bloom-leaf, .open-control:checked ~ .bloom .bp, .open-control:checked ~ .bloom .bloom-leaf { animation: none !important; }
+    }
     .petal-burst.is-active .petal,
     .open-control:checked ~ .petal-burst .petal { animation: roseToss 1.88s cubic-bezier(.18,.68,.25,1) both; animation-delay: var(--delay, 0s); }
     .petal:nth-child(1) { --tx:clamp(-235px,-43vw,-160px); --peak-y:-310px; --end-y:-210px; --r:-510deg; --delay:.01s; }
@@ -431,6 +451,36 @@
       18% { opacity: 1; }
       52%, 76% { opacity: .96; transform: translate3d(-50%, -58px, 0) rotate(35deg) scale(1); }
     }
+    @keyframes bloomGlow {
+      0% { opacity: 0; transform: translate(-50%, -50%) scale(.05); }
+      8% { opacity: .85; }
+      62% { opacity: .9; transform: translate(-50%, -50%) scale(3.4); }
+      82% { opacity: .95; transform: translate(-50%, -50%) scale(8.6); }
+      100% { opacity: 0; transform: translate(-50%, -50%) scale(10); }
+    }
+    @keyframes bloomGrow {
+      0% { opacity: 0; transform: translate(-50%, -50%) rotate(-7deg) scale(.04); }
+      6% { opacity: 1; }
+      38% { transform: translate(-50%, -50%) rotate(0deg) scale(1.06); }
+      62% { transform: translate(-50%, -50%) rotate(1.5deg) scale(3.2); }
+      81% { opacity: 1; transform: translate(-50%, -50%) rotate(2deg) scale(7.8); }
+      100% { opacity: 0; transform: translate(-50%, -50%) rotate(2.5deg) scale(9.2); }
+    }
+    @keyframes bloomPetalCenter { 0% { transform: scaleY(.4); } 42%, 100% { transform: scaleY(1); } }
+    @keyframes bloomPetalMidL { 0% { transform: rotate(34deg); } 42%, 100% { transform: rotate(0deg); } }
+    @keyframes bloomPetalMidR { 0% { transform: rotate(-34deg); } 42%, 100% { transform: rotate(0deg); } }
+    @keyframes bloomPetalOuterL { 0% { transform: rotate(57deg); } 46%, 100% { transform: rotate(0deg); } }
+    @keyframes bloomPetalOuterR { 0% { transform: rotate(-57deg); } 46%, 100% { transform: rotate(0deg); } }
+    @keyframes bloomPetalFrontL { 0% { transform: rotate(17deg); } 42%, 100% { transform: rotate(0deg); } }
+    @keyframes bloomPetalFrontR { 0% { transform: rotate(-17deg); } 42%, 100% { transform: rotate(0deg); } }
+    @keyframes bloomLeafL { 0% { transform: rotate(14deg) scale(.75); } 46%, 100% { transform: rotate(0deg) scale(1); } }
+    @keyframes bloomLeafR { 0% { transform: rotate(-14deg) scale(.75); } 46%, 100% { transform: rotate(0deg) scale(1); } }
+    @keyframes bloomReduced {
+      0% { opacity: 0; transform: translate(-50%, -50%) scale(.35); }
+      25% { opacity: 1; }
+      70% { opacity: 1; transform: translate(-50%, -50%) scale(1.05); }
+      100% { opacity: 0; transform: translate(-50%, -50%) scale(1.2); }
+    }
     @keyframes revealIn { from { opacity: .18; transform: translateY(16px); } to { opacity: 1; transform: none; } }
     @keyframes pageOpen { from { opacity: .45; transform: perspective(900px) rotateX(-5deg) translateY(18px); } to { opacity: 1; transform: perspective(900px) rotateX(0) translateY(0); } }
     @keyframes unfold { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: translateY(0); } }
@@ -584,6 +634,26 @@ Nhà gái: Xóm Chợ, xã Đại Từ, tỉnh Thái Nguyên</textarea></div>
       <article class="invitation" id="invitation">
         <input class="open-control" id="openControl" type="checkbox" tabindex="-1" aria-hidden="true" />
         <div class="petal-burst" id="petalBurst" aria-hidden="true"><span class="petal"></span><span class="petal"></span><span class="petal"></span><span class="petal"></span><span class="petal"></span><span class="petal"></span><span class="petal"></span><span class="petal"></span><span class="petal"></span><span class="petal"></span><span class="petal"></span><span class="petal"></span><span class="petal"></span><span class="petal"></span><span class="petal"></span><span class="petal"></span><span class="petal"></span><span class="petal"></span><span class="petal"></span><span class="petal"></span><span class="petal"></span><span class="petal"></span><span class="petal"></span><span class="petal"></span><span class="petal"></span><span class="petal"></span><span class="petal"></span><span class="petal"></span><span class="petal"></span><span class="petal"></span><span class="petal"></span><span class="petal"></span><span class="petal"></span><span class="petal"></span><span class="petal"></span><span class="petal"></span></div>
+        <div class="bloom" id="bloom" aria-hidden="true">
+          <svg class="bloom-svg" viewBox="0 0 200 200" focusable="false">
+            <defs>
+              <linearGradient id="bloomGradDeep" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#d63a5f"/><stop offset="1" stop-color="#8e1230"/></linearGradient>
+              <linearGradient id="bloomGradMid" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f0567f"/><stop offset="1" stop-color="#b81f45"/></linearGradient>
+              <linearGradient id="bloomGradLight" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffb9cd"/><stop offset="1" stop-color="#ec5f85"/></linearGradient>
+              <linearGradient id="bloomLeafGrad" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#63906d"/><stop offset="1" stop-color="#2f4f3a"/></linearGradient>
+            </defs>
+            <path class="bloom-leaf bloom-leaf-l" d="M97 170C66 178 36 172 18 150 48 144 78 152 97 170Z" fill="url(#bloomLeafGrad)"/>
+            <path class="bloom-leaf bloom-leaf-r" d="M103 170C134 178 164 172 182 150 152 144 122 152 103 170Z" fill="url(#bloomLeafGrad)"/>
+            <path class="bp bp-outer-l" d="M95 164C58 156 27 129 16 88 51 92 84 122 95 164Z" fill="url(#bloomGradDeep)"/>
+            <path class="bp bp-outer-r" d="M105 164C142 156 173 129 184 88 149 92 116 122 105 164Z" fill="url(#bloomGradDeep)"/>
+            <path class="bp bp-mid-l" d="M97 161C65 139 45 101 45 57 77 73 95 111 97 161Z" fill="url(#bloomGradMid)"/>
+            <path class="bp bp-mid-r" d="M103 161C135 139 155 101 155 57 123 73 105 111 103 161Z" fill="url(#bloomGradMid)"/>
+            <path class="bp bp-center" d="M100 16C121 57 125 112 100 163 75 112 79 57 100 16Z" fill="url(#bloomGradLight)"/>
+            <ellipse cx="100" cy="146" rx="9" ry="12" fill="#e3a008"/>
+            <path class="bp bp-front-l" d="M98 166C81 151 71 129 73 104 89 118 97 141 98 166Z" fill="url(#bloomGradMid)"/>
+            <path class="bp bp-front-r" d="M102 166C119 151 129 129 127 104 111 118 103 141 102 166Z" fill="url(#bloomGradMid)"/>
+          </svg>
+        </div>
         <div class="cover" id="cover">
           <svg class="botanical-art botanical-top" viewBox="0 0 240 240" aria-hidden="true"><path d="M8 224C46 190 47 132 88 94S166 54 224 12" fill="none" stroke="currentColor" stroke-width="2"/><path d="M42 188c17-14 33-19 51-20M71 131c14 2 29-2 44-14M123 72c14 2 28-3 40-14M94 157c-6-17-5-32 2-47M148 83c-5-15-2-30 7-42" fill="none" stroke="currentColor" stroke-width="1.6"/><ellipse cx="54" cy="177" rx="18" ry="8" transform="rotate(-28 54 177)" fill="currentColor"/><ellipse cx="89" cy="128" rx="17" ry="8" transform="rotate(18 89 128)" fill="currentColor"/><ellipse cx="98" cy="147" rx="17" ry="8" transform="rotate(68 98 147)" fill="currentColor"/><ellipse cx="139" cy="75" rx="16" ry="7" transform="rotate(18 139 75)" fill="currentColor"/><ellipse cx="154" cy="66" rx="16" ry="7" transform="rotate(72 154 66)" fill="currentColor"/><circle cx="116" cy="105" r="5" fill="currentColor"/><circle cx="174" cy="51" r="4" fill="currentColor"/></svg>
           <svg class="botanical-art botanical-bottom" viewBox="0 0 240 240" aria-hidden="true"><path d="M8 224C46 190 47 132 88 94S166 54 224 12" fill="none" stroke="currentColor" stroke-width="2"/><path d="M42 188c17-14 33-19 51-20M71 131c14 2 29-2 44-14M123 72c14 2 28-3 40-14M94 157c-6-17-5-32 2-47M148 83c-5-15-2-30 7-42" fill="none" stroke="currentColor" stroke-width="1.6"/><ellipse cx="54" cy="177" rx="18" ry="8" transform="rotate(-28 54 177)" fill="currentColor"/><ellipse cx="89" cy="128" rx="17" ry="8" transform="rotate(18 89 128)" fill="currentColor"/><ellipse cx="98" cy="147" rx="17" ry="8" transform="rotate(68 98 147)" fill="currentColor"/><ellipse cx="139" cy="75" rx="16" ry="7" transform="rotate(18 139 75)" fill="currentColor"/><ellipse cx="154" cy="66" rx="16" ry="7" transform="rotate(72 154 66)" fill="currentColor"/><circle cx="116" cy="105" r="5" fill="currentColor"/><circle cx="174" cy="51" r="4" fill="currentColor"/></svg>
@@ -1129,16 +1199,22 @@ var QRCode;!function(){function a(a){this.mode=c.MODE_8BIT_BYTE,this.data=a,this
         if (invitation.classList.contains('is-opening-cover') || invitation.classList.contains('opened')) return;
         var openButton = this;
         var petalBurst = document.getElementById('petalBurst');
+        var bloom = document.getElementById('bloom');
         var buttonRect = openButton.getBoundingClientRect();
         var invitationRect = invitation.getBoundingClientRect();
         petalBurst.style.setProperty('--burst-x', (buttonRect.left + buttonRect.width / 2 - invitationRect.left) + 'px');
         petalBurst.style.setProperty('--burst-y', (buttonRect.top + buttonRect.height / 2 - invitationRect.top) + 'px');
+        bloom.style.setProperty('--burst-x', (buttonRect.left + buttonRect.width / 2 - invitationRect.left) + 'px');
+        bloom.style.setProperty('--burst-y', (buttonRect.top + buttonRect.height / 2 - invitationRect.top) + 'px');
         invitation.classList.add('is-opening-cover');
         openButton.setAttribute('aria-disabled', 'true');
         inside.classList.remove('is-opening');
         petalBurst.classList.remove('is-active');
         void petalBurst.offsetWidth;
         petalBurst.classList.add('is-active');
+        bloom.classList.remove('is-active');
+        void bloom.offsetWidth;
+        bloom.classList.add('is-active');
         startMusic();
         window.setTimeout(function () {
           document.getElementById('openControl').checked = true;
@@ -1148,6 +1224,7 @@ var QRCode;!function(){function a(a){this.mode=c.MODE_8BIT_BYTE,this.data=a,this
         }, 2000);
         window.setTimeout(function () {
           petalBurst.classList.remove('is-active');
+          bloom.classList.remove('is-active');
           invitation.classList.remove('is-opening-cover');
           openButton.removeAttribute('aria-disabled');
         }, 2720);
