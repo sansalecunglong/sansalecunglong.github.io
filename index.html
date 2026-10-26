@@ -223,15 +223,12 @@ body{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;text-r
   </section>
 
   <section class="hero">
-    <h1>🎟️ Săn Voucher Ở Đây</h1>
-    <p><b>Bước 1:</b> dán link sản phẩm Shopee vào ô dưới. Xong bấm vào một mã giảm giá kênh ở Bước 2 (Facebook, Instagram, YouTube, X…) — nút mở đúng sản phẩm của bạn trên Shopee qua link của shop, đồng thời tự sao chép sẵn mã giảm giá tốt nhất vào bộ nhớ tạm, sang Shopee bạn chỉ cần dán mã lúc thanh toán. Không cần sao chép link gì cả. Gõ tên sản phẩm cũng được, trang sẽ tìm deal qua link của shop.</p>
+    <h1>🎟️ Săn Sale Ở Đây</h1>
+    <p><b>Bước 1:</b> dán link sản phẩm Shopee vào ô dưới — trang đổi link qua link của shop rồi mở đúng sản phẩm của bạn. Muốn chắc sản phẩm có đáng mua không, bấm nút <b>Gửi link — shop tra cứu tự động</b> ở khung kết quả bên dưới: shop tự tra chất lượng sản phẩm và đăng kết luận ở mục <b>Kết quả tra cứu gần đây</b>. Gõ tên sản phẩm cũng được, trang sẽ tìm deal qua link của shop.</p>
     <div class="searchrow">
-      <input type="text" id="inLink" placeholder="Dán Link nhận voucher…" autocomplete="off">
+      <input type="text" id="inLink" placeholder="Dán link sản phẩm Shopee…" autocomplete="off">
       <button id="btnPaste">📋 Dán</button>
       <button id="btnConvert">Săn sale</button>
-    </div>
-    <div style="display:flex; gap:8px; margin-top:8px;">
-      <input type="number" id="inPrice" inputmode="numeric" placeholder="Giá sản phẩm (VD: 250000đ) — không bắt buộc, điền để trang xếp mã tiết kiệm nhất cho đúng đơn của bạn" style="flex:1; padding:10px 12px; font-size:14px; border:none; border-radius:12px; outline:none; min-width:0;">
     </div>
     <div id="result">
       <div id="prodDone" style="background:#f2fbf5; border:1px solid #bfe8cc; border-radius:10px; padding:9px 12px; margin-bottom:10px; font-size:13.5px;">
@@ -247,16 +244,15 @@ body{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;text-r
         <a id="askResearchBtn" class="dealbtn solo" target="_blank" rel="noopener" style="margin-top:7px; background:#e7f0fe; color:#0b57d0; border:1.5px solid #0b57d0;">🤝 Gửi link — shop tra cứu tự động &amp; đăng kết quả →</a>
         <div style="color:#555; margin-top:8px;"><b>Đọc nhanh để quyết định mua:</b> <b>①</b> trên Shopee, shop 4.5★+ và nhiều lượt đánh giá là tín hiệu tốt; <b>②</b> đọc vài đánh giá 1–3★ — nhiều người chê cùng một lỗi thì nên bỏ qua; <b>③</b> có ảnh/video thật của người mua càng đáng tin; <b>④</b> đối chiếu giá sau mã ở trang này với mặt bằng trong các bài/video review — rẻ hơn thì chốt.</div>
       </div>
-      <p style="font-size:12.5px; color:#555; margin:0;">✅ Chọn một mã giảm giá bên dưới — bấm vào là nút mở đúng sản phẩm của bạn trên Shopee qua link của shop, đồng thời tự sao chép sẵn mã giảm giá tốt nhất vào bộ nhớ tạm. Sang Shopee bạn chỉ cần dán mã ở bước thanh toán.</p>
-      <div id="topVoucher" style="display:none; margin-top:10px; background:#fff4ec; border:1.5px dashed var(--primary); border-radius:10px; padding:10px 12px; font-size:13.5px;">
-        <div style="font-weight:700;">🏷️ Mã THẬT tốt nhất cho SẢN PHẨM trong link của bạn — bấm nút là mã tự sao chép sẵn, dán lúc thanh toán:</div>
-        <div id="codeBtns"></div>
-        <div style="font-size:12px; color:#777; margin-top:6px;">Tất cả các nút đều mở đúng sản phẩm của bạn qua link của shop — mã chữ tự sao chép sẵn để dán lúc thanh toán. Thêm nhiều mã nữa (kể cả mã lưu-ví Instagram/Facebook/VIP/Xtra/YouTube) ở Bước 2 bên dưới.</div>
+      <p style="font-size:12.5px; color:#555; margin:0;">✅ Bấm nút bên dưới để mở đúng sản phẩm của bạn trên Shopee qua link của shop.</p>
+      <div id="topVoucher" style="display:none; margin-top:10px;">
+        <a id="openProdBtn" class="dealbtn solo" target="_blank" rel="noopener">🛒 Mở sản phẩm của bạn trên Shopee →</a>
+        <div style="font-size:12px; color:#777; margin-top:6px;">Nút mở đúng sản phẩm của bạn trên Shopee qua link của shop.</div>
       </div>
       <p class="warn" id="warnBox"></p>
     </div>
     <div id="history" style="display:none; margin-top:14px; background:#fff; color:var(--text); border-radius:12px; padding:12px 14px;">
-      <div style="font-weight:700; font-size:14.5px; text-decoration:underline;">Lịch Sử Săn Voucher</div>
+      <div style="font-weight:700; font-size:14.5px; text-decoration:underline;">Lịch Sử Săn Sale</div>
       <div id="histList"></div>
     </div>
     <div class="chips" id="chips"></div>
@@ -264,7 +260,7 @@ body{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;text-r
       <div style="font-weight:800; font-size:16px;">🔥 Mã Hot Sắp Lên Sóng</div>
       <div id="nextFrame" style="font-size:13.5px; margin-top:5px;"></div>
       <div id="upcomingList"></div>
-      <div style="font-size:12px; color:#777; margin-top:8px;">Mã cụ thể sẽ hiện ở Bước 2 ngay khi lên sóng — trang tự rà soát, cập nhật mỗi giờ.</div>
+      <div style="font-size:12px; color:#777; margin-top:8px;">Các khung giờ nhả mã và đợt sale lớn sắp tới — canh đúng giờ vào app Shopee để lưu mã tại banner nhé.</div>
     </div>
   </section>
 
@@ -279,22 +275,6 @@ body{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;text-r
   <div class="banners">
     <div class="banner b1" id="bnRank"><div class="ic">🏆</div><div class="t">Bảng xếp hạng sản phẩm</div><div class="s">Deal được săn nhiều nhất</div></div>
     <div class="banner b2" id="bnSuggest"><div class="ic">💡</div><div class="t">Gợi ý sản phẩm</div><div class="s">Shop chọn lọc mỗi ngày</div></div>
-  </div>
-
-  <div class="card" id="secStep2" style="display:none;">
-    <div style="text-align:center; color:var(--primary); font-weight:800; font-size:21px;">Bước 2</div>
-    <h2 style="text-align:center; margin-top:2px;">Chọn Voucher Mà Bạn Thích</h2>
-    <p class="sub" style="text-align:center;">Voucher kênh Facebook / Instagram / YouTube / X và mã toàn sàn cao nhất — bấm vào mã bạn thích là nút mở đúng sản phẩm của bạn trên Shopee qua link của shop, đồng thời tự sao chép sẵn mã giảm giá tốt nhất vào bộ nhớ tạm để bạn dán lúc thanh toán. Riêng mã lưu-ví: nút mở đúng sản phẩm của bạn, mã lưu tại banner trong app Shopee. Trang rà soát và cập nhật mỗi giờ.</p>
-    <p style="text-align:center; font-size:13px; color:#555; margin:-4px 0 2px;">ℹ️ Mã nào áp được cho đúng sản phẩm của bạn, Shopee sẽ hiển thị ngay ở trang thanh toán trong app — mã tốt nhất ở đây đã được sao chép sẵn, bạn chỉ cần dán vào là xong.</p>
-    <p id="vUpdated" style="display:none; text-align:center; font-size:12.5px; color:#1a9e4b; font-weight:700; margin:0 0 8px;"></p>
-    <div id="vouchers"></div>
-    <p style="text-align:center; font-size:13.5px; color:#c62828; font-weight:700; margin-top:18px;">Lỡ bị hết mã thì quay lại sau nhé</p>
-    <p style="text-align:center; font-size:13.5px; color:#555;">Voucher sẽ có lại lúc ➡️ <b>0h00 • 9h00 • 12h00 • 15h00 • 18h00 • 20h00</b></p>
-    <p style="font-size:12.5px; color:#7a5b00; background:#fffbe8; border:1px solid #f0dfa0; border-radius:10px; padding:9px 12px;">💡 Mã giảm giá là ưu đãi công khai, ai cũng lấy được. Để vừa săn được mã vừa ủng hộ shop, hãy luôn mở sản phẩm qua <b>các nút mã ở trang này</b> — hoa hồng của shop chỉ đến từ các nút đó.</p>
-    <div class="qa" style="margin-top:6px;">
-      <div class="q">🔥 Mã kênh và mã VIP/Xtra dùng thế nào?</div>
-      <div class="a">Mã kênh (Facebook, Instagram, YouTube, X…) có <b>dạng chữ</b>: bấm vào hàng voucher, nút mở đúng sản phẩm của bạn trên Shopee qua link của shop và mã tự được sao chép sẵn vào bộ nhớ tạm — bạn dán mã khi thanh toán. Mã <b>VIP / Xtra / YouTube</b> là mã lưu-ví: bấm vào hàng voucher, nút mở thẳng Kho voucher trong app Shopee — bấm "Lưu" banner tương ứng là xong (mã nhả theo khung giờ, nhiều mã lọc theo tài khoản). Mỗi đơn chồng được <b>1 mã của shop + 1 mã Shopee + 1 mã freeship</b>.</div>
-    </div>
   </div>
 
   <div class="card">
@@ -389,43 +369,13 @@ const PAGE_UPDATED = "26/10/2026";   // ← ngày cập nhật dữ liệu gần
 const RAPIDAPI_KEY = ""; /* TAM TAT 26/10/2026: goi free API v2 chi 5 luot/thang da het; cho Long quyet dinh nang goi hay doi nguon khac */
 const RAPIDAPI_HOST = "shopee-product-scraper2.p.rapidapi.com";
 
-/* Danh sách voucher cho Bước 2 — sắp xếp theo KHẢ NĂNG ÁP DỤNG THỰC TẾ, không theo % giảm:
-   mã toàn sàn (điều kiện nhẹ, hạn dài, áp rộng nhất) lên TRƯỚC; mã kênh % cao nhưng giới hạn
-   tài khoản/ngành hàng/lượt (METAPAR Instagram/Facebook, mã Hàn quốc tế chỉ áp hàng Hàn quốc tế,
-   mã lưu-ví VIP/Xtra/YouTube) xếp SAU. Hàng mã chữ ĐẦU TIÊN là mã mặc định ở kết quả Bước 1 và
-   là mã sao chép âm thầm khi khách ấn nút — nên phải là mã rộng nhất.
-   Mã kênh Facebook/Instagram là MÃ CHỮ thật, chỉ thêm lại khi nguồn tổng hợp liệt kê mã còn hiệu lực (dòng METAPAR tháng 10 đã hết hạn cuối 25/10);
-   VIP / Xtra / YouTube là mã LƯU-VÍ trong app (không có dạng chữ) — bấm vào mở Shopee để lưu.
-   type "code" = có mã chữ (mở sau khi đổi link); type "claim" = lưu trong app. */
-const VOUCHERS = [
-  { name: "Mã toàn sàn", icon: "🎟️", off: "-15%", type: "code", code: "2610TREND250KT1", cond: "Đơn từ 100K - Giảm tối đa 250K", note: "Toàn ngành hàng — hạn đến 31/10", badge: "Mã nhập tay toàn sàn" },
-  { name: "Mã toàn sàn", icon: "🎟️", off: "-25%", type: "code", code: "6311026GIAM500K18", cond: "Đơn từ 250K - Giảm tối đa 200K", note: "Toàn ngành hàng — hạn đến 31/10", badge: "Mã nhập tay toàn sàn" },
-  { name: "Mã toàn sàn", icon: "🎟️", off: "-15%", type: "code", code: "2610TREND250KT2", cond: "Đơn từ 100K - Giảm tối đa 250K", note: "Toàn ngành hàng — hạn đến 31/10; mã dự phòng khi mã đầu hết lượt", badge: "Mã nhập tay toàn sàn" },
-  { name: "Mã áp đa số", icon: "🎟️", off: "-35K", type: "code", code: "AFFV266", cond: "Đơn từ 129K - Giảm 35K", note: "Áp cho đa số sản phẩm trên Shopee (mã chương trình AFF) — kiểm tra lúc thanh toán", badge: "Mã nhập tay" },
-  { name: "Mã áp đa số", icon: "🎟️", off: "-40K", type: "code", code: "AFFANAN", cond: "Đơn từ 159K - Giảm 40K", note: "Áp cho đa số sản phẩm trên Shopee (mã chương trình AFF) — kiểm tra lúc thanh toán", badge: "Mã nhập tay" },
-  { name: "Mã áp đa số", icon: "🎟️", off: "-29K", type: "code", code: "AFFOCTT", cond: "Đơn từ 99K - Giảm 29K", note: "Áp cho đa số sản phẩm trên Shopee (mã chương trình AFF) — kiểm tra lúc thanh toán", badge: "Mã nhập tay" },
-  { name: "Mã toàn sàn", icon: "🎟️", off: "-19%", type: "code", code: "261026GIAM600K19", cond: "Đơn từ 1000K - Giảm tối đa 600K", note: "Toàn ngành hàng — chỉ dùng ngày 26/10", badge: "Chỉ hôm nay 26/10" },
-  { name: "Mã Hàn Quốc Tế", icon: "🌏", off: "-30%", type: "code", code: "OCTKMD3KR", cond: "Đơn từ 69K - Giảm tối đa 90K", note: "Chỉ áp danh sách Hàng Quốc Tế/Hàn — dùng được 3 lần", badge: "Mã nhập tay quốc tế" },
-  { name: "Mã Shopee VIP", icon: "👑", off: "-20%", type: "code", code: "SVIPDDVMU2610M0C1000", cond: "Đơn từ 0Đ - Giảm tối đa 1000K", note: "Chỉ thành viên Shopee VIP — chỉ dùng ngày 26/10", badge: "Mã nhập tay Shopee VIP" },
-  { name: "Voucher Shopee Mart", icon: "🛒", off: "-30%", type: "code", code: "MARTNEW230100150", cond: "Đơn từ 150K - Giảm tối đa 100K", note: "Chỉ áp Shopee Mart — hạn đến 31/10", badge: "Mã nhập tay Shopee Mart" },
-  { name: "Voucher Shopee Mall", icon: "🏬", off: "-20%", type: "code", code: "MUD20202610125", cond: "Đơn từ 1250K - Giảm tối đa 500K", note: "Chỉ áp sản phẩm Shopee Mall — chỉ dùng ngày 26/10", badge: "Mã nhập tay Shopee Mall" },
-  { name: "Voucher Bách hóa", icon: "🏪", off: "-24%", type: "code", code: "FNBMALLOCT26C", cond: "Đơn từ 500K - Giảm tối đa 130K", note: "Chỉ áp Bách hóa chính hãng — chỉ dùng ngày 26/10", badge: "Chỉ hôm nay 26/10" },
-  { name: "Voucher Bách hóa", icon: "🏪", off: "-24%", type: "code", code: "FNBMALLOCT26D", cond: "Đơn từ 260K - Giảm tối đa 70K", note: "Chỉ áp Bách hóa chính hãng — chỉ dùng ngày 26/10", badge: "Chỉ hôm nay 26/10" },
-  { name: "Mã Hàn Quốc Tế", icon: "🌏", off: "-1000K", type: "code", code: "OCTKMD1", cond: "Đơn từ 0Đ - Giảm 1000K", note: "Chỉ áp danh sách Hàng Quốc Tế/Hàn — số lượt cực ít, hết rất nhanh", badge: "Mã nhập tay quốc tế" },
-  { name: "Voucher Instagram", icon: "📸", off: "-50%", type: "claim", code: "", cond: "Đơn từ 50K - Giảm tối đa 50K", note: "Mã MXH mới ngày 26/10 — áp đa số sản phẩm, số lượt có hạn; bấm nút là sang đúng sản phẩm của bạn, mã lưu tại banner trong app Shopee", badge: "Mã mới 26/10" },
-  { name: "Voucher Facebook", icon: "👥", off: "-30%", type: "claim", code: "", cond: "Đơn từ 50K - Giảm tối đa 50K", note: "Mã MXH mới ngày 26/10 — áp đa số sản phẩm, số lượt có hạn; bấm nút là sang đúng sản phẩm của bạn, mã lưu tại banner trong app Shopee", badge: "Mã mới 26/10" },
-  { name: "Shopee VIP", icon: "👑", off: "-50%", type: "claim", code: "", cond: "Đơn từ 0Đ - Giảm tối đa 500K", note: "Lưu tại banner ShopeeVIP trong app; kèm mã VIP 25% tối đa 200K đơn từ 0Đ áp gần toàn sàn — cả hai đều back lượt các khung 12H-15H-18H-20H", badge: "Back lượt 0H - 9H - 12H - 15H - 18H - 20H" },
-  { name: "Voucher Xtra", icon: "⚡", off: "-25%", type: "claim", code: "", cond: "Đơn từ 100K - Giảm tối đa 100K", note: "Lưu trong app — chọn sản phẩm có tag Voucher Xtra; thêm mã 20% tối đa 300K đơn từ 500K và 20% tối đa 2 triệu đơn từ 2 triệu, back lượt các khung giờ", badge: "Back lượt 0H - 9H - 12H - 15H - 18H - 20H" },
-  { name: "Voucher YouTube", icon: "▶️", off: "-22%", type: "claim", code: "", cond: "Mã banner + mã gắn link sản phẩm YouTube", note: "Lưu trong app Shopee theo khung giờ — 22% tối đa 100K đơn từ 150K và 20% tối đa 2 triệu đơn từ 500K, back lượt 12H và 18H", badge: "Back lượt 12H - 18H" }
-];
-
 /* Mã hot SẮP lên sóng — hiển thị trong ô "Mã Hot Sắp Lên Sóng" ở hero.
    Chỉ ghi đợt/khung giờ có thật theo lịch sale Shopee và thông tin các nguồn tổng hợp đã đăng;
-   TUYỆT ĐỐI không ghi mã chữ cụ thể chưa lên sóng. Cập nhật cùng nhịp với VOUCHERS. */
+   TUYỆT ĐỐI không ghi mã chữ cụ thể chưa lên sóng. */
 const UPCOMING = [
   { icon: "👑", when: "Mỗi ngày", title: "Shopee VIP & Voucher Xtra back lượt", desc: "Nhả lại theo các khung 0H • 9H • 12H • 15H • 18H • 20H — canh đúng khung giờ, vào app Shopee bấm Lưu ở banner tương ứng." },
-  { icon: "🛍️", when: "11/11", title: "Siêu sale 11/11 — đợt sale lớn nhất năm của Shopee", desc: "Loạt mã toàn sàn và mã kênh mới dự kiến mở từ 0H 11/11. Trang sẽ cập nhật ngay khi mã lên sóng — quay lại săn sớm vì mã ngon hết lượt rất nhanh." },
-  { icon: "💸", when: "25/11", title: "Lương Về Sale To — sale ngày lương cuối tháng", desc: "Đợt sale ngày lương như hôm 25/10: có mã riêng theo ngày, chỉ dùng trong ngày sale. Trang cập nhật ngay khi có mã." },
+  { icon: "🛍️", when: "11/11", title: "Siêu sale 11/11 — đợt sale lớn nhất năm của Shopee", desc: "Loạt mã toàn sàn và mã kênh mới dự kiến mở từ 0H 11/11 — canh 0H vào app Shopee lưu mã sớm vì mã ngon hết lượt rất nhanh." },
+  { icon: "💸", when: "25/11", title: "Lương Về Sale To — sale ngày lương cuối tháng", desc: "Đợt sale ngày lương như hôm 25/10: có mã riêng theo ngày, chỉ dùng trong ngày sale — canh vào app Shopee lưu mã trong ngày." },
 ];
 
 /* Sản phẩm hot — 10 món đầu là BẢNG XẾP HẠNG, xếp theo độ BÁN CHẠY trên Shopee (sản phẩm xu hướng / lượt bán tăng / ngành dẫn đầu), các món sau là hot bổ sung; tuyển chọn mức giá rẻ nhất + ưu tiên shop đánh giá 4.5★+;
@@ -633,7 +583,7 @@ function searchAff(keyword, mode) {
    ƯỚC TÍNH mức tiết kiệm thật của từng mã cho đúng đơn này và xếp mã hợp nhất
    lên đầu. Shopee chốt mã áp được ở trang thanh toán — trang không có API của
    Shopee nên đây là mức soi sát nhất làm được từ phía ngoài. */
-let lastPrice = 0, lastCat = "", lastRawUrl = "", lastPicks = [];
+let lastCat = "", lastRawUrl = "";
 const CAT_RULES = [
   { cat: "Bách hóa & Siêu thị", kw: ["sua-", "gao-", "mi-goi", "banh-", "nuoc-mam", "dau-an", "ca-phe", "tra-", "snack", "thuc-pham", "gia-vi"] },
   { cat: "Nhà cửa & Đời sống", kw: ["khan-giay", "nuoc-giat", "bep-", "noi-", "chao-", "gia-dung", "ve-sinh", "tay-rua", "lau-bep", "hop-dung"] },
@@ -662,39 +612,6 @@ function slugName(url) {
     return name ? name.charAt(0).toUpperCase() + name.slice(1) : "";
   } catch (e) { return ""; }
 }
-function parseCondNum(str, label) {
-  const m = (str || "").match(new RegExp(label + "\\s*([\\d.,]+)\\s*(trieu|K|D)?", "i"));
-  if (!m) return null;
-  let n = parseFloat(m[1].replace(/\./g, "").replace(",", "."));
-  if (isNaN(n)) return null;
-  if (/trieu/i.test(m[2] || "")) n *= 1000;
-  return n;
-}
-function estimateSaving(v, priceK) {
-  if (!priceK || v.type !== "code") return null;
-  const cond = (v.cond || "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/Đ/g, "D").replace(/đ/g, "d");
-  const min = parseCondNum(cond, "Don tu") || 0;
-  if (priceK < min) return 0;
-  const pct = (v.off || "").match(/-(\d+(?:[.,]\d+)?)%/);
-  const fix = (v.off || "").match(/-(\d+(?:[.,]\d+)?)K/i);
-  const cap = parseCondNum(cond, "Giam toi da");
-  if (pct) { const s = priceK * parseFloat(pct[1].replace(",", ".")) / 100; return cap != null ? Math.min(s, cap) : s; }
-  if (fix) return parseFloat(fix[1].replace(",", "."));
-  return null;
-}
-function claimBoost(v, cat) {
-  if (!cat) return 0;
-  const c = cat.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-  if (/Shopee Mart/i.test(v.name) && c === "Bach hoa & Sieu thi") return 3;
-  if (/VIP/i.test(v.name) && ["Thoi trang", "Sac dep", "Suc khoe"].includes(c)) return 3;
-  if (/Xtra/i.test(v.name)) return 1;
-  return 0;
-}
-function fmtK(k) {
-  if (k >= 1000) { const x = k / 1000; return (x >= 10 ? Math.round(x) : x.toFixed(1).replace(".", ",").replace(",0", "")) + " trieu"; }
-  return Math.round(k) + "K";
-}
-
 /* Tự tra dữ liệu THẬT của sản phẩm qua API trung gian rồi chắt lọc thành
    khung "Đánh giá tổng quan" ngay trên trang (Long yêu cầu tối 26/10/2026).
    API v2 chạy việc nền: gửi yêu cầu -> nhận jobId -> hỏi lại /jobs/{id} tới
@@ -822,7 +739,6 @@ function doConvert(rawInput) {
       doneTxt.style.color = "#d35400";
       document.getElementById("topVoucher").style.display = "none";
       document.getElementById("reviewBox").style.display = "none";
-      document.getElementById("secStep2").style.display = "none";
       document.getElementById("result").style.display = "block";
       warnBox.textContent = "Link rút gọn (shope.ee/shp.ee) hoặc link đã gắn sẵn mã của người khác: Shopee sẽ báo lỗi \"không tìm thấy trang\" nếu gắn thêm mã nữa, nên trang không đổi link dạng này. Cách lấy link đổi được: mở link này bằng trình duyệt (Safari/Chrome) cho tới khi hiện đúng sản phẩm → sao chép link trên thanh địa chỉ (dạng shopee.vn/...) → dán lại vào đây là săn sale được ngay.";
       document.getElementById("result").scrollIntoView({behavior:"smooth", block:"nearest"});
@@ -830,33 +746,28 @@ function doConvert(rawInput) {
     }
     const warns = [];
     if (!isShopeeUrl(url)) warns.push("⚠️ Link này không phải của Shopee — vẫn đổi được nhưng hoa hồng có thể không được tính.");
-    const pv = parseFloat(((document.getElementById("inPrice") || {}).value || "").replace(/[^\d]/g, ""));
-    lastPrice = pv && pv > 0 ? pv / 1000 : 0;
     lastCat = detectCat(url);
     lastRawUrl = url;
     finishConvert(raw, buildAffiliateLink(cleanOriginParams(url), CONFIG.affiliateId, CONFIG.subId), true, warns);
     return;
   }
   /* Không phải link → coi như từ khóa tìm kiếm */
-  const pv2 = parseFloat(((document.getElementById("inPrice") || {}).value || "").replace(/[^\d]/g, ""));
-  lastPrice = pv2 && pv2 > 0 ? pv2 / 1000 : 0;
   lastCat = detectCat(raw);
   lastRawUrl = raw;
   finishConvert(raw, searchAff(raw), false, []);
 }
 
 /* Hoàn tất chuyển đổi: link săn sale KHÔNG hiển thị ra ngoài ở bất kỳ dạng nào —
-   link chỉ nằm trong href của các nút mã (Bước 1 + Bước 2), bấm nút là sang Shopee. */
-let convertTimer = null;
+   link chỉ nằm trong href của nút mở sản phẩm, bấm nút là sang Shopee. */
 function finishConvert(raw, aff, isUrl, warns) {
   lastAff = aff;
   const doneTxt = document.getElementById("prodDoneTxt");
   doneTxt.style.color = "#1a9e4b";
-  document.getElementById("secStep2").style.display = "block";
   doneTxt.textContent = isUrl ? "✔ Đã chuyển đổi xong" : "✔ Đã tạo link tìm kiếm săn sale";
   pushHistory(raw, aff);
-  setVoucherTargets(aff);
-  unlockCodes();
+  const opb = document.getElementById("openProdBtn");
+  if (opb) { opb.href = aff; opb.textContent = isUrl ? "🛒 Mở đúng sản phẩm của bạn trên Shopee →" : "🔎 Xem kết quả tìm kiếm trên Shopee →"; }
+  document.getElementById("topVoucher").style.display = "block";
   /* Khối TRA CỨU TỔNG QUAN SẢN PHẨM (Long yêu cầu 26/10/2026, nâng cấp tối
      26/10 từ khối soi nhanh): trang tĩnh không kéo được sao/nhận xét thật
      từ Shopee/Google (không API công khai, dữ liệu bị khóa với trang
@@ -883,45 +794,12 @@ function finishConvert(raw, aff, isUrl, warns) {
   }
   document.getElementById("result").style.display = "block";
   document.getElementById("warnBox").textContent = (warns || []).join(" ");
-  /* Hiệu ứng TẢI MÃ rõ ràng để khách thấy trang đang làm việc: hiện dòng
-     "đang tải mã…" trước, ~0.7 giây sau mới hiện các nút mã, đồng thời danh
-     sách mã ở Bước 2 chạy lại hiệu ứng + ghi rõ giờ vừa tải lại. */
-  const upd = document.getElementById("vUpdated");
-  const hasV = VOUCHERS.some(v => (v.type === "code" && v.code) || v.type === "claim");
-  if (hasV) {
-    document.getElementById("topVoucher").style.display = "block";
-    document.getElementById("codeBtns").innerHTML = '<div style="text-align:center; padding:12px 6px; font-weight:700; color:var(--primary); font-size:14px;">⏳ Đang tải mã thật tốt nhất cho sản phẩm của bạn…</div>';
-    if (upd) { upd.style.display = "block"; upd.textContent = "⏳ Đang tải lại danh sách mã cho bạn…"; }
+  const ins = document.getElementById("prodInsight");
+  if (ins) {
+    const msg = lastCat ? "🎯 Đã nhận diện sản phẩm trong link của bạn: thuộc nhóm " + lastCat + "." : "";
+    ins.textContent = msg;
+    ins.style.display = msg ? "block" : "none";
   }
-  document.getElementById("result").scrollIntoView({behavior:"smooth", block:"start"});
-  clearTimeout(convertTimer);
-  convertTimer = setTimeout(() => {
-    if (hasV) renderCodeButtons(aff);
-    const now = new Date();
-    const hh = String(now.getHours()).padStart(2, "0"), mm = String(now.getMinutes()).padStart(2, "0");
-    if (upd) upd.textContent = "✅ Mã vừa được tải lại lúc " + hh + ":" + mm + " — chọn mã bạn thích bên dưới";
-    const ins = document.getElementById("prodInsight");
-    if (ins) {
-      let msg = "";
-      if (lastCat) msg = "🎯 Đã soi sản phẩm trong link của bạn: thuộc nhóm " + lastCat + " — mã hợp ngành này" + (lastPrice ? " và tiết kiệm nhất cho đơn ~" + fmtK(lastPrice) : "") + " đã được xếp lên đầu. Shopee sẽ chốt mã áp được ở trang thanh toán.";
-      else if (lastPrice) msg = "🎯 Đã ước tính mức tiết kiệm của từng mã cho đơn ~" + fmtK(lastPrice) + " của bạn — mã tiết kiệm nhất xếp lên đầu. Shopee sẽ chốt mã áp được ở trang thanh toán.";
-      ins.textContent = msg;
-      ins.style.display = msg ? "block" : "none";
-    }
-    const vb = document.getElementById("vouchers");
-    if (vb && typeof gatedCards !== "undefined" && lastPicks.length) {
-      [...lastPicks].reverse().forEach(v => {
-        const g = gatedCards.find(x => x.v === v);
-        if (g && g.el) vb.insertBefore(g.el, vb.firstChild);
-      });
-    }
-    document.querySelectorAll("#vouchers .vrow").forEach((el, i) => {
-      el.classList.remove("refresh"); void el.offsetWidth;
-      el.style.animationDelay = (i * 45) + "ms"; el.classList.add("refresh");
-    });
-    const card = document.getElementById("secStep2");
-    card.classList.remove("pulse"); void card.offsetWidth; card.classList.add("pulse");
-  }, 700);
 }
 
 document.getElementById("inLink").addEventListener("paste", () => {
@@ -969,94 +847,9 @@ const FRAMES = [0, 9, 12, 15, 18, 20];
   }
 })();
 
-/* Cổng mở mã: bình thường voucher bị KHÓA — khách chỉ thấy tên kênh + % giảm.
-   Sau khi dán link và bấm "Săn sale" (đã tạo link gắn mã của shop) thì voucher mới mở. */
-let codesUnlocked = false;
 let lastAff = "";
-const gatedCards = [];
-function unlockCodes() {
-  codesUnlocked = true;
-  gatedCards.forEach(g => {
-    g.el.classList.remove("locked");
-    g.btn.textContent = g.v.type === "claim"
-      ? "🎁 Bấm để sang đúng sản phẩm — mã " + g.v.off + " lưu trong app"
-      : "🏷️ Bấm để sang Shopee kèm mã " + g.v.off;
-  });
-}
-/* Nút mã ở Bước 1: mỗi nút LÀ link Shopee đã gắn affiliate (href) — bấm là
-   trình duyệt tự chuyển sang đúng trang sản phẩm khách đang mua; mã giảm giá
-   của kênh được sao chép âm thầm kèm theo để khách dán lúc thanh toán.
-   Không hiển thị link, không hiển thị mã chữ, không nút sao chép. */
-/* Điểm xếp hạng cho nút kết quả: theo ước tính tiết kiệm, nhưng các họ mã
-   GIỚI HẠN (quốc tế / Mart / Mall / VIP nhập tay) chỉ được lên đầu khi sản
-   phẩm thật sự thuộc nhóm đó — tránh mã hẹp hiển thị như mã tốt nhất. */
-function rankScore(v) {
-  const s = estimateSaving(v, lastPrice);
-  if (s === 0) return -1;
-  let base = s === null ? 40 : s;
-  const n = v.name || "";
-  if (/Hàn Quốc Tế|Quốc Tế/i.test(n)) {
-    const intl = /quoc-te|han-quoc|korea|order|authentic/i.test((lastRawUrl || "") + " " + (lastCat || ""));
-    return intl ? base : -1;
-  }
-  if (/Shopee Mart|Bách hóa/i.test(n)) return (lastCat === "Bách hóa & Siêu thị" || lastCat === "Nhà cửa & Đời sống") ? base : base * 0.3;
-  if (/Shopee Mall/i.test(n)) return base * 0.5;
-  if (/Shopee VIP/i.test(n) && v.type === "code") return base * 0.6;
-  return base;
-}
 
-function renderCodeButtons(aff) {
-  const box = document.getElementById("codeBtns");
-  box.innerHTML = "";
-  /* Kết quả Bước 1 CHỈ gồm MÃ CHỮ THẬT (Long chốt 26/10/2026): khách bấm nút
-     là mã được sao chép thật để dán lúc thanh toán. KHÔNG đưa hàng lưu-ví
-     (claim: Instagram/Facebook/VIP/Xtra/YouTube) vào nút kết quả nữa — các
-     hàng đó không có mã chữ để đưa, trước đây đội lốt nút "-50%" làm khách
-     tưởng bấm là nhận được mã. Claim chỉ còn ở danh sách Bước 2 với ghi chú
-     rõ ràng. Chọn 3 mã theo ƯỚC TÍNH TIẾT KIỆM cho đúng sản phẩm/giá của
-     khách, ưu tiên đa dạng HỌ mã để khách có phương án dự phòng thật —
-     kết quả thay đổi theo sản phẩm, không cố định một bộ nút. */
-  const codes = VOUCHERS.filter(v => v.type === "code" && v.code);
-  const scored = codes.map(v => ({ v, s: estimateSaving(v, lastPrice), r: rankScore(v) }));
-  const eligible = scored.filter(x => x.r > -1).sort((a, b) => b.r - a.r);
-  const rest = scored.filter(x => x.r <= -1 && x.s !== 0).sort((a, b) => b.r - a.r);
-  const saveOf = v => { const f = scored.find(x => x.v === v); return f ? f.s : null; };
-  const famOf = v => { const m = (v.code || "").match(/[A-Z]{3,}/g); return m ? m.sort((a, b) => b.length - a.length)[0] : (v.name || ""); };
-  const picked = [], usedFam = new Set();
-  for (const x of eligible) { if (picked.length >= 3) break; const f = famOf(x.v); if (!usedFam.has(f)) { usedFam.add(f); picked.push(x.v); } }
-  for (const x of eligible) { if (picked.length >= 3) break; if (!picked.includes(x.v)) picked.push(x.v); }
-  for (const x of rest) { if (picked.length >= 3) break; if (!picked.includes(x.v)) picked.push(x.v); }
-  lastPicks = picked.slice(0, 3);
-  lastPicks.forEach(v => {
-    const a = document.createElement("a");
-    a.className = "btn codego";
-    a.target = "_blank"; a.rel = "noopener";
-    a.href = aff;
-    const s = saveOf(v);
-    a.innerHTML = '<span class="cicon">' + v.icon + '</span><span class="ctext"><span class="cname">' + v.name + '</span><span class="coff">' + v.off + '</span>' + (s ? '<span class="csave">Tiết kiệm ~' + fmtK(s) + ' cho đơn này</span>' : '<span class="csave">Bấm là sang Shopee — mã tự sao chép sẵn</span>') + '</span><span class="carrow">➜</span>';
-    a.addEventListener("click", () => {
-      silentCopy(v.code);
-      toast("Đang mở Shopee — dán mã " + v.code + " lúc thanh toán nhé");
-    });
-    box.appendChild(a);
-  });
-}
-/* Gán đích cho các nút mã ở Bước 2 sau khi khách đã đổi link: mã chữ trỏ tới
-   link săn sale của đúng sản phẩm khách đang mua; mã lưu-ví trỏ tới Kho
-   voucher trong app Shopee (lớp bảo hiểm toàn trang tự bọc affiliate). */
-function setVoucherTargets(aff) {
-  gatedCards.forEach(g => {
-    g.btn.href = aff;
-  });
-}
-function gateScroll() {
-  toast("Dán link sản phẩm vào ô Săn Voucher ở Bước 1 để mở voucher nhé");
-  const inp = document.getElementById("inLink");
-  inp.scrollIntoView({ behavior: "smooth", block: "center" });
-  setTimeout(() => inp.focus({ preventScroll: true }), 450);
-}
-
-/* Lịch sử săn voucher (lưu trên máy của khách) */
+/* Lịch sử săn sale (lưu trên máy của khách) */
 function renderHistory(h) {
   const box = document.getElementById("history");
   if (!h || !h.length) { box.style.display = "none"; return; }
@@ -1092,41 +885,6 @@ document.getElementById("btnPaste").addEventListener("click", async () => {
   } catch (e) {}
   toast("Không đọc được bộ nhớ tạm — bạn dán thủ công vào ô nhé");
   document.getElementById("inLink").focus();
-});
-
-/* Render Bước 2 — hàng voucher kiểu duyvuvar: badge khung giờ, tên kênh, Giảm %.
-   Nút của mỗi hàng là một THẺ LINK: sau khi khách đổi link ở Bước 1, href của
-   nút chính là link săn sale (mã chữ) hoặc Kho voucher Shopee (mã lưu-ví) —
-   bấm là sang Shopee luôn, mã chữ được sao chép âm thầm kèm theo. Trang không
-   hiển thị mã chữ, không hiển thị link, không có nút sao chép nào. */
-const vBox = document.getElementById("vouchers");
-VOUCHERS.forEach(v => {
-  const d = document.createElement("div");
-  d.className = "vrow locked";
-  d.innerHTML = '<div class="vbadge"></div>' +
-    '<div class="vmain"><div class="vname"><span class="vicon"></span> <span class="vnm"></span></div><div class="voff"></div></div>' +
-    '<div class="vcond"></div><div class="vnote"></div>' +
-    '<a class="vbtn" target="_blank" rel="noopener"></a>';
-  d.querySelector(".vbadge").textContent = v.badge;
-  d.querySelector(".vicon").textContent = v.icon;
-  d.querySelector(".vnm").textContent = v.name;
-  d.querySelector(".voff").textContent = "Giảm " + v.off.replace("-", "");
-  d.querySelector(".vcond").textContent = v.cond;
-  d.querySelector(".vnote").textContent = v.note;
-  const btn = d.querySelector(".vbtn");
-  const g = { el: d, btn: btn, v: v };
-  gatedCards.push(g);
-  btn.textContent = v.type === "claim" ? "🔒 Mở Shopee để lưu mã" : "🔒 Nhận mã " + v.off;
-  btn.addEventListener("click", e => {
-    if (!codesUnlocked) { e.preventDefault(); gateScroll(); return; }
-    if (v.type === "code") {
-      silentCopy(v.code);
-      toast("Đang mở Shopee — dán mã " + v.code + " lúc thanh toán nhé");
-    } else {
-      toast("Đang mở Kho voucher trong app Shopee — bấm Lưu mã nhé");
-    }
-  });
-  vBox.appendChild(d);
 });
 
 /* Nút phụ cho thẻ sản phẩm (yêu cầu của Long 26/10/2026, học theo mục Tư Vấn của trang đối thủ):
