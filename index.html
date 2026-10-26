@@ -177,6 +177,21 @@ body{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;text-r
 @keyframes cardPulse{0%{box-shadow:0 0 0 0 rgba(238,77,45,.45)}100%{box-shadow:0 0 0 16px rgba(238,77,45,0)}}
 #secStep2.pulse{animation:cardPulse .8s ease-out 2}
 </style>
+
+<style>
+/* Nút mã kiểu 3D clay như mẫu Long gửi (26/10/2026): nút cam đỏ phồng, chữ trắng đậm, icon lớn */
+#topVoucher{background:#fff7e8 !important;border:2.5px dotted #ee4d2d !important;border-radius:22px !important}
+#codeBtns .codego{display:flex;align-items:center;gap:12px;background:linear-gradient(145deg,#ff7847,#ee4d2d);
+  border-radius:26px;padding:14px 18px;margin-top:12px;border:3px solid #fff;text-align:left;
+  box-shadow:0 6px 0 #c93a1e,0 12px 22px rgba(238,77,45,.35),inset 0 2px 3px rgba(255,255,255,.5),inset 0 -4px 8px rgba(0,0,0,.12)}
+#codeBtns .codego:active{transform:translateY(3px);box-shadow:0 3px 0 #c93a1e,0 6px 12px rgba(238,77,45,.3)}
+#codeBtns .cicon{font-size:42px;line-height:1;flex-shrink:0;filter:drop-shadow(0 3px 3px rgba(0,0,0,.25))}
+#codeBtns .ctext{display:flex;flex-direction:column;line-height:1.12;min-width:0}
+#codeBtns .cname{font-size:17px;font-weight:800;color:#fff;text-shadow:0 2px 2px rgba(0,0,0,.18);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#codeBtns .coff{font-size:30px;font-weight:900;color:#fff;text-shadow:0 2px 3px rgba(0,0,0,.22)}
+#codeBtns .csave{font-size:12.5px;font-weight:700;color:#ffe9e2}
+#codeBtns .carrow{margin-left:auto;font-size:22px;color:#ffd93b;flex-shrink:0;text-shadow:0 2px 2px rgba(0,0,0,.2)}
+</style>
 </head>
 <body>
 <div class="wrap">
@@ -793,13 +808,13 @@ function renderCodeButtons(aff) {
     a.target = "_blank"; a.rel = "noopener";
     a.href = aff;
     if (v.type === "claim") {
-      a.textContent = v.icon + " " + v.name + " " + v.off + " — sang đúng sản phẩm →";
+      a.innerHTML = '<span class="cicon">' + v.icon + '</span><span class="ctext"><span class="cname">' + v.name.replace(/^Voucher\s+/, "") + '</span><span class="coff">' + v.off + '</span><span class="csave">Mã lưu trong app — bấm là sang đúng sản phẩm</span></span><span class="carrow">➜</span>';
       a.addEventListener("click", () => {
         toast("Đang mở đúng sản phẩm của bạn — mã " + v.name + " lưu tại banner trong app Shopee nhé");
       });
     } else {
       const s = saveOf(v);
-      a.textContent = v.icon + " Mã " + v.name.replace(/^(Voucher|Mã)\s+/, "") + " " + v.off + (s ? " — tiết kiệm ~" + fmtK(s) : "") + " — sang Shopee ngay →";
+      a.innerHTML = '<span class="cicon">' + v.icon + '</span><span class="ctext"><span class="cname">' + v.name + '</span><span class="coff">' + v.off + '</span>' + (s ? '<span class="csave">Tiết kiệm ~' + fmtK(s) + ' cho đơn này</span>' : '<span class="csave">Bấm là sang Shopee — mã tự sao chép sẵn</span>') + '</span><span class="carrow">➜</span>';
       a.addEventListener("click", () => {
         silentCopy(v.code);
         toast("Đang mở Shopee — dán mã " + v.code + " lúc thanh toán nhé");
