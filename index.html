@@ -6,8 +6,17 @@
 <meta name="color-scheme" content="light dark" />
 <!-- Empty inline icon: stops the browser fetching /favicon.ico, which
      lives outside the artifact's routes and 404s. -->
-<link rel="icon" href="data:," />
-<title>Săn Sale Cùng Long — Săn mã giảm giá Shopee</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E🎟️%3C/text%3E%3C/svg%3E" />
+<title>Săn Sale Cùng Long — Săn sale Shopee &amp; tra cứu sản phẩm trước khi mua</title>
+<meta name="description" content="Dán link Shopee để mở đúng sản phẩm qua link của shop, gửi link để shop tra cứu chất lượng sản phẩm từ review Google/YouTube, xem lịch sale và các sản phẩm đang bán chạy. Miễn phí, không cần đăng ký.">
+<link rel="canonical" href="https://sansalecunglong.github.io/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Săn Sale Cùng Long">
+<meta property="og:title" content="Săn Sale Cùng Long — Tra cứu sản phẩm &amp; săn sale Shopee">
+<meta property="og:description" content="Gửi link sản phẩm, shop tự tra cứu chất lượng từ review Google/YouTube rồi đăng kết luận. Kèm lịch sale và sản phẩm bán chạy mỗi ngày.">
+<meta property="og:url" content="https://sansalecunglong.github.io/">
+<meta property="og:image" content="https://sansalecunglong.github.io/og-cover.png">
+<meta name="twitter:card" content="summary_large_image">
 <style>
   :root{
     --primary:#e63e1f; --primary-dark:#c23215; --bg:#fff8f2; --card:#ffffff;
@@ -224,10 +233,10 @@ body{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;text-r
 
   <section class="hero">
     <h1>🎟️ Săn Sale Ở Đây</h1>
-    <p><b>Bước 1:</b> dán link sản phẩm Shopee vào ô dưới — trang đổi link qua link của shop rồi mở đúng sản phẩm của bạn. Muốn chắc sản phẩm có đáng mua không, bấm nút <b>Gửi link — shop tra cứu tự động</b> ở khung kết quả bên dưới: shop tự tra chất lượng sản phẩm và đăng kết luận ở mục <b>Kết quả tra cứu gần đây</b>. Gõ tên sản phẩm cũng được, trang sẽ tìm deal qua link của shop.</p>
+    <p><b>Bước 1:</b> dán link sản phẩm Shopee vào ô dưới — trang đổi link qua link của shop rồi mở đúng sản phẩm của bạn. Muốn chắc sản phẩm có đáng mua không, bấm nút <b>Tra cứu</b> ở khung kết quả bên dưới: shop tự tra chất lượng sản phẩm và đăng kết luận ở mục <b>Kết quả tra cứu gần đây</b>. Gõ tên sản phẩm cũng được, trang sẽ tìm deal qua link của shop.</p>
     <div class="searchrow">
       <input type="text" id="inLink" placeholder="Dán link sản phẩm Shopee…" autocomplete="off">
-      <button id="btnPaste">📋 Dán</button>
+      <button id="btnPaste">📋 Dán link</button>
       <button id="btnConvert">Săn sale</button>
     </div>
     <div id="result">
@@ -240,13 +249,13 @@ body{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;text-r
         <div style="font-weight:800;">🔎 Tra cứu tổng quan sản phẩm trước khi mua</div>
         <div id="reviewProd" style="margin-top:2px;"></div>
         <div id="apiSummary" style="display:none; background:#eef6ff; border:1px solid #b9d7f5; border-radius:9px; padding:8px 10px; margin-top:7px;"></div>
-        <div style="color:#555;">Bấm nút <b>Gửi link — shop tra cứu tự động</b> bên dưới: shop tự đọc sản phẩm, tra review trên Google và các trang khác rồi đăng kết quả ở mục <b>Kết quả tra cứu gần đây</b> trên trang này — mục “đang tra cứu” hiện sau khoảng 1–2 phút, kết luận đầy đủ sau khoảng 3–5 phút.</div>
-        <a id="askResearchBtn" class="dealbtn solo" target="_blank" rel="noopener" style="margin-top:7px; background:#e7f0fe; color:#0b57d0; border:1.5px solid #0b57d0;">🤝 Gửi link — shop tra cứu tự động &amp; đăng kết quả →</a>
+        <div style="color:#555;">Bấm nút <b>Tra cứu</b> bên dưới: shop tự đọc sản phẩm, tra review trên Google và các trang khác rồi đăng kết quả ở mục <b>Kết quả tra cứu gần đây</b> trên trang này — mục “đang tra cứu” hiện sau khoảng 1–2 phút, kết luận đầy đủ sau khoảng 3–5 phút.</div>
+        <a id="askResearchBtn" class="dealbtn solo" target="_blank" rel="noopener" style="margin-top:7px; background:#e7f0fe; color:#0b57d0; border:1.5px solid #0b57d0;">🤝 Tra cứu</a>
         <div style="color:#555; margin-top:8px;"><b>Đọc nhanh để quyết định mua:</b> <b>①</b> trên Shopee, shop 4.5★+ và nhiều lượt đánh giá là tín hiệu tốt; <b>②</b> đọc vài đánh giá 1–3★ — nhiều người chê cùng một lỗi thì nên bỏ qua; <b>③</b> có ảnh/video thật của người mua càng đáng tin; <b>④</b> đối chiếu giá sau mã ở trang này với mặt bằng trong các bài/video review — rẻ hơn thì chốt.</div>
       </div>
       <p style="font-size:12.5px; color:#555; margin:0;">✅ Bấm nút bên dưới để mở đúng sản phẩm của bạn trên Shopee qua link của shop.</p>
       <div id="topVoucher" style="display:none; margin-top:10px;">
-        <a id="openProdBtn" class="dealbtn solo" target="_blank" rel="noopener">🛒 Mở sản phẩm của bạn trên Shopee →</a>
+        <a id="openProdBtn" class="dealbtn solo" target="_blank" rel="sponsored nofollow noopener">🛒 Mở sản phẩm của bạn trên Shopee →</a>
         <div style="font-size:12px; color:#777; margin-top:6px;">Nút mở đúng sản phẩm của bạn trên Shopee qua link của shop.</div>
       </div>
       <p class="warn" id="warnBox"></p>
@@ -273,7 +282,7 @@ body{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;text-r
   </section>
 
   <div class="banners">
-    <div class="banner b1" id="bnRank"><div class="ic">🏆</div><div class="t">Bảng xếp hạng sản phẩm</div><div class="s">Deal được săn nhiều nhất</div></div>
+    <div class="banner b1" id="bnRank"><div class="ic">🏆</div><div class="t">Bảng xếp hạng sản phẩm</div><div class="s">Shop chọn theo xu hướng bán chạy</div></div>
     <div class="banner b2" id="bnSuggest"><div class="ic">💡</div><div class="t">Gợi ý sản phẩm</div><div class="s">Shop chọn lọc mỗi ngày</div></div>
   </div>
 
@@ -281,8 +290,8 @@ body{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;text-r
     <h2>🎬 Video Mới</h2>
     <p class="sub">Video mới nhất trên Facebook của shop — xem vui rồi quay lại săn sale tiếp nhé.</p>
     <div style="display:flex; gap:10px; flex-wrap:wrap;">
-      <a href="https://www.facebook.com/Levietlong95" target="_blank" rel="noopener" style="flex:1; min-width:140px; text-align:center; background:#fff4ec; border:1.5px solid #ffd9c7; border-radius:12px; padding:16px 10px; text-decoration:none; color:#333; font-weight:700;">🐃 Trâu Đen<br><span style="font-size:12.5px; color:#777; font-weight:400;">Video hài mới nhất</span></a>
-      <a href="https://www.facebook.com/Levietlong95" target="_blank" rel="noopener" style="flex:1; min-width:140px; text-align:center; background:#fff4ec; border:1.5px solid #ffd9c7; border-radius:12px; padding:16px 10px; text-decoration:none; color:#333; font-weight:700;">🎥 Kho Video<br><span style="font-size:12.5px; color:#777; font-weight:400;">Xem tất cả trên Facebook</span></a>
+      <a href="https://www.facebook.com/Levietlong95/reels" target="_blank" rel="noopener" style="flex:1; min-width:140px; text-align:center; background:#fff4ec; border:1.5px solid #ffd9c7; border-radius:12px; padding:16px 10px; text-decoration:none; color:#333; font-weight:700;">🐃 Trâu Đen<br><span style="font-size:12.5px; color:#777; font-weight:400;">Video hài mới nhất</span></a>
+      <a href="https://www.facebook.com/Levietlong95/videos" target="_blank" rel="noopener" style="flex:1; min-width:140px; text-align:center; background:#fff4ec; border:1.5px solid #ffd9c7; border-radius:12px; padding:16px 10px; text-decoration:none; color:#333; font-weight:700;">🎥 Kho Video<br><span style="font-size:12.5px; color:#777; font-weight:400;">Xem tất cả trên Facebook</span></a>
     </div>
   </div>
 
@@ -319,9 +328,9 @@ body{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;text-r
   <div class="card">
     <h2>❓ Dùng thế nào?</h2>
     <div class="steps">
-      <div class="step"><span class="n">1</span><br>Dán link Shopee hoặc chọn sản phẩm bên trên</div>
-      <div class="step"><span class="n">2</span><br>Chọn mã giảm giá kênh tốt nhất: Facebook, Instagram, YouTube, X…</div>
-      <div class="step"><span class="n">3</span><br>Bấm vào mã — nút mở đúng sản phẩm của bạn trên Shopee qua link của shop và tự sao chép sẵn mã, bạn dán mã lúc thanh toán là xong</div>
+      <div class="step"><span class="n">1</span><br>Dán link sản phẩm Shopee vào ô Săn Sale</div>
+      <div class="step"><span class="n">2</span><br>Bấm mở sản phẩm — hoặc gửi link để shop tra cứu chất lượng trước</div>
+      <div class="step"><span class="n">3</span><br>Mua trên Shopee như bình thường, giá không đổi</div>
     </div>
   </div>
 
@@ -340,11 +349,18 @@ body{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;text-r
     </div>
   </div>
 
-  <div class="note">💡 <b>Lưu ý:</b> Shopee không cho trang ngoài tự lấy mã giảm giá theo từng sản phẩm, nên danh sách mã do chủ shop cập nhật tay mỗi đợt sale (9.9, 10.10, 11.11…). Sản phẩm và giá trong trang là mục mẫu — chủ shop thay bằng sản phẩm thật của mình.</div>
+  <div class="card" id="secAbout">
+    <h2>ℹ️ Về Trang Này</h2>
+    <p class="sub" style="text-align:left;"><b>Shop là ai:</b> trang của Long — chủ kênh hài Trâu Đen trên Facebook (<a href="https://www.facebook.com/Levietlong95" target="_blank" rel="noopener">Lê Việt Long</a>). Trang giúp bạn mở đúng sản phẩm Shopee qua link của shop và tra cứu chất lượng sản phẩm trước khi mua.</p>
+    <p class="sub" style="text-align:left;"><b>Riêng tư:</b> link bạn gửi qua nút Tra cứu chỉ dùng để shop đọc sản phẩm và tổng hợp review từ các nguồn công khai. Kết quả đăng trên trang gồm tên sản phẩm và nhận xét tổng hợp — không đăng thông tin cá nhân của bạn; mục tên trong biểu mẫu là tùy chọn, để trống cũng được.</p>
+    <p class="sub" style="text-align:left;"><b>Minh bạch:</b> giá trên trang là giá tham khảo lúc cập nhật, giá cuối cùng theo Shopee lúc thanh toán. Khi bạn mua qua link của shop, Shopee có thể trả cho shop một khoản hoa hồng nhỏ từ phía người bán — bạn không phải trả thêm đồng nào.</p>
+  </div>
+
+  <div class="note">💡 <b>Lưu ý:</b> Sản phẩm trên trang do shop tuyển chọn; giá ghi “Từ ~” là giá tham khảo lúc cập nhật — giá cuối cùng theo Shopee lúc bạn thanh toán. Kết quả tra cứu được tổng hợp từ các nguồn công khai (Google, YouTube, các trang review) và chỉ hiển thị 3 kết quả gần nhất.</div>
 
   <footer>
     <div class="fname" id="footName">Săn Sale Cùng Long</div>
-    <div id="footContact">Liên hệ hợp tác: inbox page</div>
+    <div id="footContact">Liên hệ hợp tác: <a href="https://m.me/Levietlong95" target="_blank" rel="noopener">Facebook</a> · <a href="https://zalo.me/0395250965" target="_blank" rel="noopener">Zalo</a></div>
     <div style="margin-top:6px;"></div>
   </footer>
 </div>
@@ -381,7 +397,7 @@ const UPCOMING = [
 
 /* Sản phẩm hot — 10 món đầu là BẢNG XẾP HẠNG, xếp theo độ BÁN CHẠY trên Shopee (sản phẩm xu hướng / lượt bán tăng / ngành dẫn đầu), các món sau là hot bổ sung; tuyển chọn mức giá rẻ nhất + ưu tiên shop đánh giá 4.5★+;
    keyword = từ khóa tìm trên Shopee, price = giá tham khảo "từ", img = ảnh thật của loại sản phẩm */
-/* Kết quả tra cứu tự động: job nền tra-cuu-tu-dong ghi vào sau khi tra cứu link khách gửi qua form (mới nhất lên đầu, tối đa 20 mục). */
+/* Kết quả tra cứu tự động: job nền tra-cuu-tu-dong ghi vào sau khi tra cứu link khách gửi qua form (mới nhất lên đầu, tối đa 3 mục). */
 const TRA_CUU = [
   {
     "rid": "ACYDBNhSuMqxBRjUkV7VGBv5a5V31gBX_85lRB35cFPCOAlOHY9r11zpJ8Z4l6jBXu6yD-Q",
@@ -481,9 +497,10 @@ const CATEGORIES = [
 ];
 
 const QAS = [
-  { q: "Link săn sale khác gì link thường?", a: "Khác ở chỗ mã giảm giá. Link thường chỉ mở ra đúng sản phẩm, bạn phải tự đi tìm mã — dễ lỡ mã ngon, gặp mã hết hạn hoặc không áp được cho đơn của mình. Còn qua trang này, bạn được cung cấp sẵn những mã tốt nhất hiện có: trang rà soát và cập nhật mã mỗi giờ, xếp mã theo khả năng áp dụng thật (mã toàn sàn áp rộng nhất lên trước, mã kênh % cao ghi rõ điều kiện và giới hạn). Bấm vào nút mã là mã tự sao chép sẵn và mở đúng sản phẩm của bạn trên Shopee — sang đó bạn chỉ cần dán mã lúc thanh toán. Giá vẫn là giá trên Shopee, bạn không trả thêm đồng nào." },
-  { q: "Mã giảm giá nhập ở đâu?", a: "Bấm vào một mã ở trang này, mã sẽ tự được sao chép kèm theo. Sang Shopee, ở bước thanh toán chọn mục 'Shopee Voucher' → dán mã → áp dụng. Nhớ lưu mã trước khi đặt hàng." },
+  { q: "Link săn sale khác gì link thường?", a: "Link thường mở thẳng ra sản phẩm. Qua trang này, nút mở sản phẩm đi qua link giới thiệu của shop — giá vẫn là giá Shopee, bạn không trả thêm đồng nào — và bạn có thêm phần tra cứu: gửi link là shop tự đọc sản phẩm, tổng hợp review trên Google, YouTube và các trang khác rồi đăng kết luận ngay trên trang. Trang không đăng danh sách mã giảm giá nữa: mã Shopee bị khóa theo từng tài khoản nên khách thường không áp được; mã thật nằm trong app Shopee, canh các khung giờ ở ô Mã Hot Sắp Lên Sóng để lưu." },
+  { q: "Trang có thu phí không?", a: "Không. Trang miễn phí hoàn toàn, và mua qua link của shop bạn cũng không trả thêm đồng nào — Shopee trả cho shop một khoản hoa hồng nhỏ từ phía người bán." },
   { q: "Sao giá trong trang khác giá trên Shopee?", a: "Giá trong trang là giá tham khảo lúc cập nhật. Bấm 'Xem deal' để xem giá thật và khuyến mãi mới nhất trên Shopee." },
+  { q: "Mã giảm giá không áp được thì sao?", a: "Mã Shopee bị khóa theo tài khoản, ngành hàng và số lượt — cùng một mã, người này áp được người khác không, và quy tắc chồng mã thay đổi tùy từng đợt sale; mã nào áp được sẽ hiện ngay ở bước thanh toán trong app. Vì vậy trang không đăng mã nữa: bạn lưu mã trực tiếp trong app Shopee (banner trang chủ hoặc kho voucher) theo các khung giờ ở ô Mã Hot Sắp Lên Sóng." },
 ];
 
 /* === AUTO-DATA-END === */
@@ -516,6 +533,20 @@ function alreadyAffiliate(u) {
 }
 /* Pattern theo tài liệu chính thức của Shopee (Affiliate Short Link Guide):
    https://{domain}/an_redir?origin_link={ENCODED_URL}&affiliate_id={ID}&sub_id={...} */
+/* Sub ID theo nguồn khách đến (Shopee cho gắn Sub ID để xem hiệu quả theo nguồn
+   trong báo cáo Affiliate): ?src=fb → web-fb, ?src=zalo → web-zalo,
+   ?src=yt → web-yt, ?src=video → web-video; mặc định web-sanma. */
+function curSubId() {
+  try {
+    const p = new URLSearchParams(location.search);
+    const s = (p.get("src") || p.get("utm_source") || "").toLowerCase();
+    if (s === "fb" || s === "facebook") return "web-fb";
+    if (s === "zalo") return "web-zalo";
+    if (s === "yt" || s === "youtube") return "web-yt";
+    if (s === "video" || s === "trauden") return "web-video";
+  } catch (e) {}
+  return CONFIG.subId;
+}
 function buildAffiliateLink(productUrl, affiliateId, subId) {
   const encoded = encodeURIComponent(productUrl);
   let out = "https://s.shopee.vn/an_redir?origin_link=" + encoded
@@ -564,7 +595,7 @@ function affiliateWrap(url) {
   try {
     const u = new URL(url);
     if (/(^|\.)shopee\.(vn|com\.vn)$|(^|\.)shope\.ee$/i.test(u.hostname) && !alreadyAffiliate(url)) {
-      return buildAffiliateLink(url, CONFIG.affiliateId, CONFIG.subId);
+      return buildAffiliateLink(url, CONFIG.affiliateId, curSubId());
     }
   } catch (e) {}
   return url;
@@ -576,7 +607,7 @@ function searchAff(keyword, mode) {
   if (mode === "sales") q += "&sortBy=sales";
   else if (mode === "rated") q += "&ratingFilter=4&sortBy=sales";
   else q += "&sortBy=price&order=asc";
-  return buildAffiliateLink(q, CONFIG.affiliateId, CONFIG.subId);
+  return buildAffiliateLink(q, CONFIG.affiliateId, curSubId());
 }
 
 /* SOI SẢN PHẨM TRONG LINK (thêm 26/10/2026 theo yêu cầu của Long): đọc ngành
@@ -749,7 +780,7 @@ function doConvert(rawInput) {
     if (!isShopeeUrl(url)) warns.push("⚠️ Link này không phải của Shopee — vẫn đổi được nhưng hoa hồng có thể không được tính.");
     lastCat = detectCat(url);
     lastRawUrl = url;
-    finishConvert(raw, buildAffiliateLink(cleanOriginParams(url), CONFIG.affiliateId, CONFIG.subId), true, warns);
+    finishConvert(raw, buildAffiliateLink(cleanOriginParams(url), CONFIG.affiliateId, curSubId()), true, warns);
     return;
   }
   /* Không phải link → coi như từ khóa tìm kiếm */
@@ -1159,7 +1190,7 @@ QAS.forEach(item => {
   });
 })();
 
-document.querySelectorAll("a[href]").forEach(a => { a.href = affiliateWrap(a.href); });
+document.querySelectorAll("a[href]").forEach(a => { const w = affiliateWrap(a.href); a.href = w; if (w.indexOf("an_redir") !== -1) a.rel = "sponsored nofollow noopener"; });
 document.addEventListener("click", e => {
   const a = e.target.closest ? e.target.closest("a[href]") : null;
   if (a) a.href = affiliateWrap(a.href);
