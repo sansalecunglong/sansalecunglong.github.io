@@ -638,6 +638,7 @@ function slugName(url) {
   try {
     const u = new URL(url);
     const seg = (u.pathname.split("/").filter(Boolean).pop() || "").replace(/\.html$/, "");
+    if (seg === "search") { const kw = (u.searchParams.get("keyword") || "").trim(); return kw ? kw.charAt(0).toUpperCase() + kw.slice(1) : ""; }
     const m = seg.replace(/-i\.\d+\.\d+.*$/, "");
     if (!m || /^\d+$/.test(m)) return "";
     const name = decodeURIComponent(m).replace(/-/g, " ").trim();
