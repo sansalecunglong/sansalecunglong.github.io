@@ -171,9 +171,9 @@
       </div>
       <p style="font-size:12.5px; color:#555; margin:0;">✅ Chọn một mã giảm giá bên dưới — bấm vào là nút mở đúng sản phẩm của bạn trên Shopee qua link của shop, đồng thời tự sao chép sẵn mã giảm giá tốt nhất vào bộ nhớ tạm. Sang Shopee bạn chỉ cần dán mã ở bước thanh toán.</p>
       <div id="topVoucher" style="display:none; margin-top:10px; background:#fff4ec; border:1.5px dashed var(--primary); border-radius:10px; padding:10px 12px; font-size:13.5px;">
-        <div style="font-weight:700;">🏷️ Mã tốt nhất cho đơn này — bấm là sang Shopee:</div>
+        <div style="font-weight:700;">🏷️ Mã tốt nhất cho đơn này — tổng hợp từ Facebook, YouTube và các nguồn săn mã:</div>
         <div id="codeBtns"></div>
-        <div style="font-size:12px; color:#777; margin-top:6px;">Bấm nút mã nào thì Shopee mở đúng sản phẩm của bạn qua link của shop, mã đó được tự sao chép sẵn để bạn dán lúc thanh toán — hoặc xem thêm mã ở Bước 2 bên dưới.</div>
+        <div style="font-size:12px; color:#777; margin-top:6px;">Nút mã chữ: bấm là sang đúng sản phẩm của bạn qua link của shop, mã tự sao chép sẵn để dán lúc thanh toán. Nút mã Facebook/YouTube/Instagram: mở kho voucher Shopee để bạn lưu mã vào app trước khi mua. Xem thêm mã ở Bước 2 bên dưới.</div>
       </div>
       <p class="warn" id="warnBox"></p>
     </div>
@@ -538,7 +538,7 @@ function finishConvert(raw, aff, isUrl, warns) {
   document.getElementById("secStep2").style.display = "block";
   doneTxt.textContent = isUrl ? "✔ Đã chuyển đổi xong" : "✔ Đã tạo link tìm kiếm săn sale";
   pushHistory(raw, aff);
-  if (VOUCHERS.some(v => v.type === "code" && v.code)) {
+  if (VOUCHERS.some(v => (v.type === "code" && v.code) || v.type === "claim")) {
     document.getElementById("topVoucher").style.display = "block";
     renderCodeButtons(aff);
   }
@@ -549,6 +549,12 @@ function finishConvert(raw, aff, isUrl, warns) {
   document.getElementById("result").scrollIntoView({behavior:"smooth", block:"nearest"});
 }
 
+document.getElementById("inLink").addEventListener("paste", () => {
+  setTimeout(() => {
+    const v = document.getElementById("inLink").value.trim();
+    if (v) doConvert(v);
+  }, 60);
+});
 document.getElementById("btnConvert").addEventListener("click",
   () => doConvert(document.getElementById("inLink").value));
 document.getElementById("inLink").addEventListener("keydown", e => {
@@ -609,15 +615,37 @@ function unlockCodes() {
 function renderCodeButtons(aff) {
   const box = document.getElementById("codeBtns");
   box.innerHTML = "";
-  VOUCHERS.filter(v => v.type === "code" && v.code).slice(0, 3).forEach(v => {
+  /* Chọn 3 mã TỐT NHẤT từ NHIỀU NGUỒN khác nhau (không lấy 3 mã giống hệt nhau):
+     mã nhập tay áp rộng nhất + mã kênh MXH (Facebook/Instagram) + mã YouTube,
+     thiếu kênh nào thì bù bằng mã tốt tiếp theo. */
+  const codes = VOUCHERS.filter(v => v.type === "code" && v.code);
+  const claims = VOUCHERS.filter(v => v.type === "claim");
+  const picked = [];
+  const take = v => { if (v && !picked.includes(v)) picked.push(v); };
+  take(codes[0]);
+  take(claims.find(v => /instagram|facebook/i.test(v.name)));
+  take(claims.find(v => /youtube/i.test(v.name)));
+  take(codes.find(v => v !== codes[0]));
+  take(claims.find(v => /xtra|vip/i.test(v.name)));
+  take(codes[1]);
+  picked.slice(0, 3).forEach(v => {
     const a = document.createElement("a");
     a.className = "btn codego";
-    a.href = aff; a.target = "_blank"; a.rel = "noopener";
-    a.textContent = v.icon + " Mã " + v.name.replace(/^(Voucher|Mã)\s+/, "") + " " + v.off + " — sang Shopee ngay →";
-    a.addEventListener("click", () => {
-      silentCopy(v.code);
-      toast("Đang mở Shopee — dán mã " + v.code + " lúc thanh toán nhé");
-    });
+    a.target = "_blank"; a.rel = "noopener";
+    if (v.type === "claim") {
+      a.href = "https://shopee.vn/user/voucher-wallet";
+      a.textContent = v.icon + " " + v.name + " " + v.off + " — mở kho voucher lưu mã →";
+      a.addEventListener("click", () => {
+        toast("Đang mở kho voucher Shopee — bấm Lưu mã " + v.name + " trong app nhé");
+      });
+    } else {
+      a.href = aff;
+      a.textContent = v.icon + " Mã " + v.name.replace(/^(Voucher|Mã)\s+/, "") + " " + v.off + " — sang Shopee ngay →";
+      a.addEventListener("click", () => {
+        silentCopy(v.code);
+        toast("Đang mở Shopee — dán mã " + v.code + " lúc thanh toán nhé");
+      });
+    }
     box.appendChild(a);
   });
 }
