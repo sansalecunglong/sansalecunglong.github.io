@@ -223,7 +223,7 @@ body{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;text-r
       <p id="prodInsight" style="display:none; font-size:13px; color:#444; margin:0 0 8px;"></p>
       <p style="font-size:12.5px; color:#555; margin:0;">✅ Chọn một mã giảm giá bên dưới — bấm vào là nút mở đúng sản phẩm của bạn trên Shopee qua link của shop, đồng thời tự sao chép sẵn mã giảm giá tốt nhất vào bộ nhớ tạm. Sang Shopee bạn chỉ cần dán mã ở bước thanh toán.</p>
       <div id="topVoucher" style="display:none; margin-top:10px; background:#fff4ec; border:1.5px dashed var(--primary); border-radius:10px; padding:10px 12px; font-size:13.5px;">
-        <div style="font-weight:700;">🏷️ Mã tốt nhất cho SẢN PHẨM trong link của bạn — tổng hợp từ Facebook, YouTube và các nguồn săn mã:</div>
+        <div style="font-weight:700;">🏷️ Mã THẬT tốt nhất cho SẢN PHẨM trong link của bạn — bấm nút là mã tự sao chép sẵn, dán lúc thanh toán:</div>
         <div id="codeBtns"></div>
         <div style="font-size:12px; color:#777; margin-top:6px;">Tất cả các nút đều mở đúng sản phẩm của bạn qua link của shop — không phải qua bước trung gian nào. Nút mã chữ: mã tự sao chép sẵn để dán lúc thanh toán. Nút mã Facebook/YouTube/Instagram: đó là mã lưu trong app, mở sản phẩm rồi lưu mã tại banner trong app Shopee trước khi thanh toán. Xem thêm mã ở Bước 2 bên dưới.</div>
       </div>
@@ -578,7 +578,7 @@ function parseCondNum(str, label) {
 }
 function estimateSaving(v, priceK) {
   if (!priceK || v.type !== "code") return null;
-  const cond = (v.cond || "").normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+  const cond = (v.cond || "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/Đ/g, "D").replace(/đ/g, "d");
   const min = parseCondNum(cond, "Don tu") || 0;
   if (priceK < min) return 0;
   const pct = (v.off || "").match(/-(\d+(?:[.,]\d+)?)%/);
@@ -667,7 +667,7 @@ function finishConvert(raw, aff, isUrl, warns) {
   const hasV = VOUCHERS.some(v => (v.type === "code" && v.code) || v.type === "claim");
   if (hasV) {
     document.getElementById("topVoucher").style.display = "block";
-    document.getElementById("codeBtns").innerHTML = '<div style="text-align:center; padding:12px 6px; font-weight:700; color:var(--primary); font-size:14px;">⏳ Đang tải mã tốt nhất từ Facebook, YouTube và các nguồn săn mã…</div>';
+    document.getElementById("codeBtns").innerHTML = '<div style="text-align:center; padding:12px 6px; font-weight:700; color:var(--primary); font-size:14px;">⏳ Đang tải mã thật tốt nhất cho sản phẩm của bạn…</div>';
     if (upd) { upd.style.display = "block"; upd.textContent = "⏳ Đang tải lại danh sách mã cho bạn…"; }
   }
   document.getElementById("result").scrollIntoView({behavior:"smooth", block:"start"});
@@ -776,7 +776,7 @@ function rankScore(v) {
     const intl = /quoc-te|han-quoc|korea|order|authentic/i.test((lastRawUrl || "") + " " + (lastCat || ""));
     return intl ? base : -1;
   }
-  if (/Shopee Mart/i.test(n)) return (lastCat === "Bách hóa & Siêu thị" || lastCat === "Nhà cửa & Đời sống") ? base : base * 0.3;
+  if (/Shopee Mart|Bách hóa/i.test(n)) return (lastCat === "Bách hóa & Siêu thị" || lastCat === "Nhà cửa & Đời sống") ? base : base * 0.3;
   if (/Shopee Mall/i.test(n)) return base * 0.5;
   if (/Shopee VIP/i.test(n) && v.type === "code") return base * 0.6;
   return base;
@@ -785,43 +785,36 @@ function rankScore(v) {
 function renderCodeButtons(aff) {
   const box = document.getElementById("codeBtns");
   box.innerHTML = "";
-  /* Chọn mã THEO SẢN PHẨM trong link của khách: mã chữ xếp theo ƯỚC TÍNH
-     TIẾT KIỆM THẬT cho đơn này (nếu khách điền giá), mã lưu-ví của ngành
-     hàng khớp với sản phẩm được ưu tiên; vẫn giữ độ đa dạng nguồn (mã chữ
-     tốt nhất + mã kênh hợp ngành nhất + mã YouTube). */
+  /* Kết quả Bước 1 CHỈ gồm MÃ CHỮ THẬT (Long chốt 26/10/2026): khách bấm nút
+     là mã được sao chép thật để dán lúc thanh toán. KHÔNG đưa hàng lưu-ví
+     (claim: Instagram/Facebook/VIP/Xtra/YouTube) vào nút kết quả nữa — các
+     hàng đó không có mã chữ để đưa, trước đây đội lốt nút "-50%" làm khách
+     tưởng bấm là nhận được mã. Claim chỉ còn ở danh sách Bước 2 với ghi chú
+     rõ ràng. Chọn 3 mã theo ƯỚC TÍNH TIẾT KIỆM cho đúng sản phẩm/giá của
+     khách, ưu tiên đa dạng HỌ mã để khách có phương án dự phòng thật —
+     kết quả thay đổi theo sản phẩm, không cố định một bộ nút. */
   const codes = VOUCHERS.filter(v => v.type === "code" && v.code);
-  const claims = VOUCHERS.filter(v => v.type === "claim");
   const scored = codes.map(v => ({ v, s: estimateSaving(v, lastPrice), r: rankScore(v) }));
-  const eligible = scored.filter(x => x.r > -1);
-  eligible.sort((a, b) => b.r - a.r);
+  const eligible = scored.filter(x => x.r > -1).sort((a, b) => b.r - a.r);
+  const rest = scored.filter(x => x.r <= -1 && x.s !== 0).sort((a, b) => b.r - a.r);
   const saveOf = v => { const f = scored.find(x => x.v === v); return f ? f.s : null; };
-  const sortedClaims = [...claims].sort((a, b) => claimBoost(b, lastCat) - claimBoost(a, lastCat));
-  const picked = [];
-  const take = v => { if (v && !picked.includes(v)) picked.push(v); };
-  take(eligible.length ? eligible[0].v : codes[0]);
-  take(sortedClaims.find(v => claimBoost(v, lastCat) >= 3) || sortedClaims.find(v => /instagram|facebook/i.test(v.name)));
-  take(sortedClaims.find(v => /youtube/i.test(v.name)));
-  take(eligible.length > 1 ? eligible[1].v : null);
-  take(sortedClaims[0]);
+  const famOf = v => { const m = (v.code || "").match(/[A-Z]{3,}/g); return m ? m.sort((a, b) => b.length - a.length)[0] : (v.name || ""); };
+  const picked = [], usedFam = new Set();
+  for (const x of eligible) { if (picked.length >= 3) break; const f = famOf(x.v); if (!usedFam.has(f)) { usedFam.add(f); picked.push(x.v); } }
+  for (const x of eligible) { if (picked.length >= 3) break; if (!picked.includes(x.v)) picked.push(x.v); }
+  for (const x of rest) { if (picked.length >= 3) break; if (!picked.includes(x.v)) picked.push(x.v); }
   lastPicks = picked.slice(0, 3);
   lastPicks.forEach(v => {
     const a = document.createElement("a");
     a.className = "btn codego";
     a.target = "_blank"; a.rel = "noopener";
     a.href = aff;
-    if (v.type === "claim") {
-      a.innerHTML = '<span class="cicon">' + v.icon + '</span><span class="ctext"><span class="cname">' + v.name.replace(/^Voucher\s+/, "") + '</span><span class="coff">' + v.off + '</span><span class="csave">Mã lưu trong app — bấm là sang đúng sản phẩm</span></span><span class="carrow">➜</span>';
-      a.addEventListener("click", () => {
-        toast("Đang mở đúng sản phẩm của bạn — mã " + v.name + " lưu tại banner trong app Shopee nhé");
-      });
-    } else {
-      const s = saveOf(v);
-      a.innerHTML = '<span class="cicon">' + v.icon + '</span><span class="ctext"><span class="cname">' + v.name + '</span><span class="coff">' + v.off + '</span>' + (s ? '<span class="csave">Tiết kiệm ~' + fmtK(s) + ' cho đơn này</span>' : '<span class="csave">Bấm là sang Shopee — mã tự sao chép sẵn</span>') + '</span><span class="carrow">➜</span>';
-      a.addEventListener("click", () => {
-        silentCopy(v.code);
-        toast("Đang mở Shopee — dán mã " + v.code + " lúc thanh toán nhé");
-      });
-    }
+    const s = saveOf(v);
+    a.innerHTML = '<span class="cicon">' + v.icon + '</span><span class="ctext"><span class="cname">' + v.name + '</span><span class="coff">' + v.off + '</span>' + (s ? '<span class="csave">Tiết kiệm ~' + fmtK(s) + ' cho đơn này</span>' : '<span class="csave">Bấm là sang Shopee — mã tự sao chép sẵn</span>') + '</span><span class="carrow">➜</span>';
+    a.addEventListener("click", () => {
+      silentCopy(v.code);
+      toast("Đang mở Shopee — dán mã " + v.code + " lúc thanh toán nhé");
+    });
     box.appendChild(a);
   });
 }
