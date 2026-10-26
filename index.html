@@ -411,6 +411,15 @@ function normalizeUrl(raw) {
 function isShopeeUrl(u) {
   return /shopee?\.(vn|ee)|shp\.ee/i.test(u);
 }
+function cleanOriginParams(u) {
+  try {
+    const x = new URL(u);
+    [...x.searchParams.keys()].forEach(k => {
+      if (/^utm_/i.test(k) || ["mmp_pid", "uls_trackid", "credential_token"].includes(k)) x.searchParams.delete(k);
+    });
+    return x.toString();
+  } catch (e) { return u; }
+}
 function isShortLink(u) {
   try { return /(^|\.)shope\.ee$|(^|\.)shp\.ee$/i.test(new URL(u).hostname); }
   catch (e) { return /shope\.ee|shp\.ee/i.test(u); }
@@ -507,13 +516,13 @@ function doConvert(rawInput) {
       document.getElementById("topVoucher").style.display = "none";
       document.getElementById("secStep2").style.display = "none";
       document.getElementById("result").style.display = "block";
-      warnBox.textContent = "Link rút gọn (shope.ee/shp.ee) hoặc link đã gắn sẵn mã của người khác: Shopee sẽ báo lỗi \"không tìm thấy trang\" nếu gắn thêm mã nữa, nên trang không đổi link dạng này. Cách lấy link đổi được: mở link này trong app Shopee → vào đúng sản phẩm → bấm Chia sẻ → Sao chép link đầy đủ (dạng shopee.vn/...) → dán lại vào đây là săn sale được ngay.";
+      warnBox.textContent = "Link rút gọn (shope.ee/shp.ee) hoặc link đã gắn sẵn mã của người khác: Shopee sẽ báo lỗi \"không tìm thấy trang\" nếu gắn thêm mã nữa, nên trang không đổi link dạng này. Cách lấy link đổi được: mở link này bằng trình duyệt (Safari/Chrome) cho tới khi hiện đúng sản phẩm → sao chép link trên thanh địa chỉ (dạng shopee.vn/...) → dán lại vào đây là săn sale được ngay.";
       document.getElementById("result").scrollIntoView({behavior:"smooth", block:"nearest"});
       return;
     }
     const warns = [];
     if (!isShopeeUrl(url)) warns.push("⚠️ Link này không phải của Shopee — vẫn đổi được nhưng hoa hồng có thể không được tính.");
-    finishConvert(raw, buildAffiliateLink(url, CONFIG.affiliateId, CONFIG.subId), true, warns);
+    finishConvert(raw, buildAffiliateLink(cleanOriginParams(url), CONFIG.affiliateId, CONFIG.subId), true, warns);
     return;
   }
   /* Không phải link → coi như từ khóa tìm kiếm */
