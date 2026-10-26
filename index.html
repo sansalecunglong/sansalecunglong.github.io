@@ -144,6 +144,31 @@
     padding:10px 20px; border-radius:999px; font-size:14px; opacity:0; transition:opacity .25s; pointer-events:none; z-index:20;}
   .toast.show{opacity:1;}
 </style>
+
+<style>
+/* Tối ưu hiển thị điện thoại: chữ nét, icon rõ, nút dễ bấm (thêm 26/10/2026) */
+*{-webkit-tap-highlight-color:transparent}
+html{-webkit-text-size-adjust:100%}
+body{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;text-rendering:optimizeLegibility;
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif}
+@media (max-width:640px){
+  body{font-size:15.5px;line-height:1.55}
+  .card h2{font-size:19px;letter-spacing:-.2px}
+  .card .sub{font-size:13.5px}
+  .btn{font-size:15.5px;padding:13px 14px;border-radius:14px;box-shadow:0 2px 8px rgba(238,77,45,.22)}
+  #codeBtns .btn{margin-top:8px}
+  #codeBtns .btn:first-child{margin-top:4px}
+  .vrow .vicon{font-size:21px}
+  .vrow .vname{font-size:17px}
+  .vrow .voff{font-size:19px}
+  .vrow .vcond{font-size:13.5px}
+  .vrow .vnote{font-size:12.5px;line-height:1.45}
+  .vrow .vbtn{font-size:15px;padding:12px}
+  .searchrow input{font-size:16px}
+  .searchrow button{font-size:15.5px}
+  #topVoucher{font-size:14px}
+}
+</style>
 </head>
 <body>
 <div class="wrap">
@@ -173,7 +198,7 @@
       <div id="topVoucher" style="display:none; margin-top:10px; background:#fff4ec; border:1.5px dashed var(--primary); border-radius:10px; padding:10px 12px; font-size:13.5px;">
         <div style="font-weight:700;">🏷️ Mã tốt nhất cho đơn này — tổng hợp từ Facebook, YouTube và các nguồn săn mã:</div>
         <div id="codeBtns"></div>
-        <div style="font-size:12px; color:#777; margin-top:6px;">Nút mã chữ: bấm là sang đúng sản phẩm của bạn qua link của shop, mã tự sao chép sẵn để dán lúc thanh toán. Nút mã Facebook/YouTube/Instagram: mở kho voucher Shopee để bạn lưu mã vào app trước khi mua. Xem thêm mã ở Bước 2 bên dưới.</div>
+        <div style="font-size:12px; color:#777; margin-top:6px;">Tất cả các nút đều mở đúng sản phẩm của bạn qua link của shop — không phải qua bước trung gian nào. Nút mã chữ: mã tự sao chép sẵn để dán lúc thanh toán. Nút mã Facebook/YouTube/Instagram: đó là mã lưu trong app, mở sản phẩm rồi lưu mã tại banner trong app Shopee trước khi thanh toán. Xem thêm mã ở Bước 2 bên dưới.</div>
       </div>
       <p class="warn" id="warnBox"></p>
     </div>
@@ -319,8 +344,8 @@ const VOUCHERS = [
   { name: "Voucher Shopee Mart", icon: "🛒", off: "-30%", type: "code", code: "MARTNEW230100150", cond: "Đơn từ 150K - Giảm tối đa 100K", note: "Chỉ áp Shopee Mart — hạn đến 31/10", badge: "Mã nhập tay Shopee Mart" },
   { name: "Voucher Shopee Mall", icon: "🏬", off: "-20%", type: "code", code: "MUD20202610125", cond: "Đơn từ 1250K - Giảm tối đa 500K", note: "Chỉ áp sản phẩm Shopee Mall — chỉ dùng ngày 26/10", badge: "Mã nhập tay Shopee Mall" },
   { name: "Mã Hàn Quốc Tế", icon: "🌏", off: "-1000K", type: "code", code: "OCTKMD1", cond: "Đơn từ 0Đ - Giảm 1000K", note: "Chỉ áp danh sách Hàng Quốc Tế/Hàn — số lượt cực ít, hết rất nhanh", badge: "Mã nhập tay quốc tế" },
-  { name: "Voucher Instagram", icon: "📸", off: "-50%", type: "claim", code: "", cond: "Đơn từ 50K - Giảm tối đa 50K", note: "Mã MXH mới ngày 26/10 — bấm nút để mở kho voucher Shopee, rồi lưu mã Instagram tại banner trong app; áp đa số sản phẩm, số lượt có hạn", badge: "Mã mới 26/10" },
-  { name: "Voucher Facebook", icon: "👥", off: "-30%", type: "claim", code: "", cond: "Đơn từ 50K - Giảm tối đa 50K", note: "Mã MXH mới ngày 26/10 — bấm nút để mở kho voucher Shopee, rồi lưu mã Facebook tại banner trong app; áp đa số sản phẩm, số lượt có hạn", badge: "Mã mới 26/10" },
+  { name: "Voucher Instagram", icon: "📸", off: "-50%", type: "claim", code: "", cond: "Đơn từ 50K - Giảm tối đa 50K", note: "Mã MXH mới ngày 26/10 — áp đa số sản phẩm, số lượt có hạn; bấm nút là sang đúng sản phẩm của bạn, mã lưu tại banner trong app Shopee", badge: "Mã mới 26/10" },
+  { name: "Voucher Facebook", icon: "👥", off: "-30%", type: "claim", code: "", cond: "Đơn từ 50K - Giảm tối đa 50K", note: "Mã MXH mới ngày 26/10 — áp đa số sản phẩm, số lượt có hạn; bấm nút là sang đúng sản phẩm của bạn, mã lưu tại banner trong app Shopee", badge: "Mã mới 26/10" },
   { name: "Shopee VIP", icon: "👑", off: "-50%", type: "claim", code: "", cond: "Đơn từ 0Đ - Giảm tối đa 500K", note: "Lưu tại banner ShopeeVIP trong app; kèm mã VIP 25% tối đa 200K đơn từ 0Đ áp gần toàn sàn — cả hai đều back lượt các khung 12H-15H-18H-20H", badge: "Back lượt 0H - 9H - 12H - 15H - 18H - 20H" },
   { name: "Voucher Xtra", icon: "⚡", off: "-25%", type: "claim", code: "", cond: "Đơn từ 100K - Giảm tối đa 100K", note: "Lưu trong app — chọn sản phẩm có tag Voucher Xtra; thêm mã 20% tối đa 300K đơn từ 500K và 20% tối đa 2 triệu đơn từ 2 triệu, back lượt các khung giờ", badge: "Back lượt 0H - 9H - 12H - 15H - 18H - 20H" },
   { name: "Voucher YouTube", icon: "▶️", off: "-22% → -50%", type: "claim", code: "", cond: "Mã banner + mã gắn link sản phẩm YouTube", note: "Lưu trong app Shopee theo khung giờ — 22% tối đa 100K đơn từ 150K và 20% tối đa 2 triệu đơn từ 500K, back lượt 12H và 18H", badge: "Back lượt 12H - 18H" }
@@ -604,7 +629,7 @@ function unlockCodes() {
   gatedCards.forEach(g => {
     g.el.classList.remove("locked");
     g.btn.textContent = g.v.type === "claim"
-      ? "🎁 Mở Shopee để lưu mã " + g.v.off
+      ? "🎁 Bấm để sang đúng sản phẩm — mã " + g.v.off + " lưu trong app"
       : "🏷️ Bấm để sang Shopee kèm mã " + g.v.off;
   });
 }
@@ -633,10 +658,10 @@ function renderCodeButtons(aff) {
     a.className = "btn codego";
     a.target = "_blank"; a.rel = "noopener";
     if (v.type === "claim") {
-      a.href = "https://shopee.vn/user/voucher-wallet";
-      a.textContent = v.icon + " " + v.name + " " + v.off + " — mở kho voucher lưu mã →";
+      a.href = aff;
+      a.textContent = v.icon + " " + v.name + " " + v.off + " — sang đúng sản phẩm →";
       a.addEventListener("click", () => {
-        toast("Đang mở kho voucher Shopee — bấm Lưu mã " + v.name + " trong app nhé");
+        toast("Đang mở đúng sản phẩm của bạn — mã " + v.name + " lưu tại banner trong app Shopee nhé");
       });
     } else {
       a.href = aff;
@@ -654,7 +679,7 @@ function renderCodeButtons(aff) {
    voucher trong app Shopee (lớp bảo hiểm toàn trang tự bọc affiliate). */
 function setVoucherTargets(aff) {
   gatedCards.forEach(g => {
-    g.btn.href = g.v.type === "claim" ? "https://shopee.vn/user/voucher-wallet" : aff;
+    g.btn.href = aff;
   });
 }
 function gateScroll() {
