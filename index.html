@@ -169,6 +169,14 @@ body{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;text-r
   #topVoucher{font-size:14px}
 }
 </style>
+
+<style>
+/* Hiệu ứng tải lại mã (thêm 26/10/2026): danh sách mã hiện dần + thẻ Bước 2 nhấp nháy viền cam */
+@keyframes rowIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+#vouchers .vrow.refresh{animation:rowIn .45s ease both}
+@keyframes cardPulse{0%{box-shadow:0 0 0 0 rgba(238,77,45,.45)}100%{box-shadow:0 0 0 16px rgba(238,77,45,0)}}
+#secStep2.pulse{animation:cardPulse .8s ease-out 2}
+</style>
 </head>
 <body>
 <div class="wrap">
@@ -225,6 +233,7 @@ body{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;text-r
     <h2 style="text-align:center; margin-top:2px;">Chọn Voucher Mà Bạn Thích</h2>
     <p class="sub" style="text-align:center;">Voucher kênh Facebook / Instagram / YouTube / X và mã toàn sàn cao nhất — bấm vào mã bạn thích là nút mở đúng sản phẩm của bạn trên Shopee qua link của shop, đồng thời tự sao chép sẵn mã giảm giá tốt nhất vào bộ nhớ tạm để bạn dán lúc thanh toán. Riêng mã lưu-ví thì nút mở thẳng Kho voucher trong app Shopee. Trang rà soát và cập nhật mỗi giờ.</p>
     <p style="text-align:center; font-size:13px; color:#555; margin:-4px 0 2px;">ℹ️ Mã nào áp được cho đúng sản phẩm của bạn, Shopee sẽ hiển thị ngay ở trang thanh toán trong app — mã tốt nhất ở đây đã được sao chép sẵn, bạn chỉ cần dán vào là xong.</p>
+    <p id="vUpdated" style="display:none; text-align:center; font-size:12.5px; color:#1a9e4b; font-weight:700; margin:0 0 8px;"></p>
     <div id="vouchers"></div>
     <p style="text-align:center; font-size:13.5px; color:#c62828; font-weight:700; margin-top:18px;">Lỡ bị hết mã thì quay lại sau nhé</p>
     <p style="text-align:center; font-size:13.5px; color:#555;">Voucher sẽ có lại lúc ➡️ <b>0h00 • 9h00 • 12h00 • 15h00 • 18h00 • 20h00</b></p>
@@ -556,6 +565,7 @@ function doConvert(rawInput) {
 
 /* Hoàn tất chuyển đổi: link săn sale KHÔNG hiển thị ra ngoài ở bất kỳ dạng nào —
    link chỉ nằm trong href của các nút mã (Bước 1 + Bước 2), bấm nút là sang Shopee. */
+let convertTimer = null;
 function finishConvert(raw, aff, isUrl, warns) {
   lastAff = aff;
   const doneTxt = document.getElementById("prodDoneTxt");
@@ -563,15 +573,34 @@ function finishConvert(raw, aff, isUrl, warns) {
   document.getElementById("secStep2").style.display = "block";
   doneTxt.textContent = isUrl ? "✔ Đã chuyển đổi xong" : "✔ Đã tạo link tìm kiếm săn sale";
   pushHistory(raw, aff);
-  if (VOUCHERS.some(v => (v.type === "code" && v.code) || v.type === "claim")) {
-    document.getElementById("topVoucher").style.display = "block";
-    renderCodeButtons(aff);
-  }
   setVoucherTargets(aff);
   unlockCodes();
   document.getElementById("result").style.display = "block";
   document.getElementById("warnBox").textContent = (warns || []).join(" ");
-  document.getElementById("result").scrollIntoView({behavior:"smooth", block:"nearest"});
+  /* Hiệu ứng TẢI MÃ rõ ràng để khách thấy trang đang làm việc: hiện dòng
+     "đang tải mã…" trước, ~0.7 giây sau mới hiện các nút mã, đồng thời danh
+     sách mã ở Bước 2 chạy lại hiệu ứng + ghi rõ giờ vừa tải lại. */
+  const upd = document.getElementById("vUpdated");
+  const hasV = VOUCHERS.some(v => (v.type === "code" && v.code) || v.type === "claim");
+  if (hasV) {
+    document.getElementById("topVoucher").style.display = "block";
+    document.getElementById("codeBtns").innerHTML = '<div style="text-align:center; padding:12px 6px; font-weight:700; color:var(--primary); font-size:14px;">⏳ Đang tải mã tốt nhất từ Facebook, YouTube và các nguồn săn mã…</div>';
+    if (upd) { upd.style.display = "block"; upd.textContent = "⏳ Đang tải lại danh sách mã cho bạn…"; }
+  }
+  document.getElementById("result").scrollIntoView({behavior:"smooth", block:"start"});
+  clearTimeout(convertTimer);
+  convertTimer = setTimeout(() => {
+    if (hasV) renderCodeButtons(aff);
+    const now = new Date();
+    const hh = String(now.getHours()).padStart(2, "0"), mm = String(now.getMinutes()).padStart(2, "0");
+    if (upd) upd.textContent = "✅ Mã vừa được tải lại lúc " + hh + ":" + mm + " — chọn mã bạn thích bên dưới";
+    document.querySelectorAll("#vouchers .vrow").forEach((el, i) => {
+      el.classList.remove("refresh"); void el.offsetWidth;
+      el.style.animationDelay = (i * 45) + "ms"; el.classList.add("refresh");
+    });
+    const card = document.getElementById("secStep2");
+    card.classList.remove("pulse"); void card.offsetWidth; card.classList.add("pulse");
+  }, 700);
 }
 
 document.getElementById("inLink").addEventListener("paste", () => {
