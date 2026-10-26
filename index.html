@@ -242,7 +242,8 @@ body{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;text-r
       <div id="reviewBox" style="display:none; background:#fffbe8; border:1px solid #f0dfa0; border-radius:10px; padding:9px 12px; margin:0 0 10px; font-size:13px; line-height:1.55;">
         <div style="font-weight:800;">🔎 Tra cứu tổng quan sản phẩm trước khi mua</div>
         <div id="reviewProd" style="margin-top:2px;"></div>
-        <div style="color:#555;">Trang đã chuẩn bị sẵn tra cứu cho đúng sản phẩm này ở 3 nơi đáng tin nhất — dữ liệu sao/nhận xét nằm trong Shopee/Google/YouTube nên trang không tự kéo về hiển thị được, bấm từng nút là xem tận nơi:</div>
+        <div id="apiSummary" style="display:none; background:#eef6ff; border:1px solid #b9d7f5; border-radius:9px; padding:8px 10px; margin-top:7px;"></div>
+        <div style="color:#555;">Trang <b>tự tra số liệu đánh giá</b> của sản phẩm này ở khung xanh bên dưới (thường mất 1–4 phút) — hoặc bấm các nút sau để xem tận nơi tại Shopee, Google và YouTube:</div>
         <a id="reviewBtn" class="dealbtn solo" target="_blank" rel="noopener" style="margin-top:7px;">⭐ Đánh giá người mua trên Shopee →</a>
         <a id="googleBtn" class="dealbtn solo" target="_blank" rel="noopener" style="margin-top:7px; background:#fff; color:#1a73e8; border:1.5px solid #1a73e8;">🔎 Tra review trên Google →</a>
         <a id="ytBtn" class="dealbtn solo" target="_blank" rel="noopener" style="margin-top:7px; background:#fff; color:#cc0000; border:1.5px solid #cc0000;">🎬 Xem video review trên YouTube →</a>
@@ -377,6 +378,10 @@ const CONFIG = {
 
 /* === AUTO-DATA-START: khu vực Muse tự cập nhật định kỳ — chỉ sửa trong 2 mốc này === */
 const PAGE_UPDATED = "26/10/2026";   // ← ngày cập nhật dữ liệu gần nhất
+/* API dữ liệu sản phẩm Shopee qua RapidAPI (Long duyệt tối 26/10/2026):
+   khóa do Long đăng ký gói miễn phí rồi gắn vào đây; để trống = tính năng tự tra tắt. */
+const RAPIDAPI_KEY = "449f0373d3msh114d4dcfe871365p1741a5jsn551964e231d4";
+const RAPIDAPI_HOST = "shopee-product-scraper2.p.rapidapi.com";
 
 /* Danh sách voucher cho Bước 2 — sắp xếp theo KHẢ NĂNG ÁP DỤNG THỰC TẾ, không theo % giảm:
    mã toàn sàn (điều kiện nhẹ, hạn dài, áp rộng nhất) lên TRƯỚC; mã kênh % cao nhưng giới hạn
@@ -641,6 +646,110 @@ function fmtK(k) {
   return Math.round(k) + "K";
 }
 
+/* Tự tra dữ liệu THẬT của sản phẩm qua API trung gian rồi chắt lọc thành
+   khung "Đánh giá tổng quan" ngay trên trang (Long yêu cầu tối 26/10/2026).
+   API v2 chạy việc nền: gửi yêu cầu -> nhận jobId -> hỏi lại /jobs/{id} tới
+   khi xong (thường 1–4 phút). Khớp ƯU TIÊN đúng itemId/shopId trong link
+   khách dán; không khớp tuyệt đối thì ghi rõ là sản phẩm gần giống nhất.
+   Chỉ hiển thị số liệu API trả về thật; tra không được thì báo rõ, KHÔNG bịa. */
+function _normTxt(s) { return (s || "").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/đ/g, "d").replace(/Đ/g, "D"); }
+function _fmtNum(n) { n = Number(n); if (!isFinite(n)) return ""; return n >= 1000 ? (Math.round(n / 100) / 10).toString().replace(".", ",") + "k" : String(Math.round(n)); }
+function _fmtVND(n) { n = Number(n); if (!isFinite(n)) return ""; return String(Math.round(n)).replace(/\B(?=(\d{3})+(?!\d))/g, "."); }
+function _escHtml(s) { return (s || "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;"); }
+let _apiSeq = 0;
+function loadApiSummary(nm, rawUrl) {
+  const box = document.getElementById("apiSummary");
+  if (!box) return;
+  if (!RAPIDAPI_KEY) { box.style.display = "none"; return; }
+  const seq = ++_apiSeq;
+  let shopId = "", itemId = "";
+  const mIds = (rawUrl || "").match(/i\.(\d+)\.(\d+)/);
+  if (mIds) { shopId = mIds[1]; itemId = mIds[2]; }
+  const cacheKey = itemId ? "sssum_" + shopId + "_" + itemId : (nm ? "sssum_q_" + _normTxt(nm).slice(0, 60) : "");
+  function render(d, exact) {
+    if (seq !== _apiSeq) return;
+    if (!d) { box.innerHTML = "📊 Chưa tra được dữ liệu sản phẩm lúc này — bạn xem đánh giá qua các nút bên dưới nhé."; box.style.display = "block"; return; }
+    let h = "<b>📊 Đánh giá tổng quan (dữ liệu Shopee vừa tra):</b><br>";
+    if (!exact) h += "<span style=\"color:#b26a00;\">⚠️ Chưa thấy đúng sản phẩm trong link ở kết quả tra — đây là số liệu của sản phẩm gần giống nhất theo tên:</span><br>";
+    if (d.name) h += "<b>" + _escHtml(d.name) + "</b><br>";
+    const bits = [];
+    if (d.rating) bits.push("⭐ " + d.rating + "/5");
+    if (d.ratingCount) bits.push(d.ratingCount + " lượt đánh giá");
+    if (d.sold) bits.push("đã bán " + _escHtml(d.sold));
+    if (d.price) bits.push("giá hiện tại " + d.price + "đ");
+    if (bits.length) h += bits.join(" · ") + "<br>";
+    if (d.shop) h += "Shop: " + _escHtml(d.shop) + "<br>";
+    h += "<b>" + d.verdict + "</b>";
+    box.innerHTML = h;
+    box.style.display = "block";
+  }
+  if (cacheKey) {
+    try {
+      const c = JSON.parse(localStorage.getItem(cacheKey) || "null");
+      if (c && Date.now() - c.t < 24 * 3600 * 1000) { render(c.d, c.exact); return; }
+    } catch (e) {}
+  }
+  box.innerHTML = "⏳ Đang tự tra dữ liệu sản phẩm trên Shopee… (thường mất 1–4 phút, bạn cứ xem mã bên dưới trước)";
+  box.style.display = "block";
+  const headers = { "x-rapidapi-key": RAPIDAPI_KEY, "x-rapidapi-host": RAPIDAPI_HOST };
+  function summarize(list) {
+    if (!Array.isArray(list) || !list.length) { render(null); return; }
+    let exact = null, best = null, bestScore = -1;
+    const target = _normTxt(nm).split(/\s+/).filter(w => w.length > 2);
+    list.forEach(it => {
+      if (itemId && String(it.itemId) === itemId) exact = it;
+      const hay = _normTxt(it.name || "");
+      let sc = 0; target.forEach(w => { if (hay.includes(w)) sc++; });
+      if (sc > bestScore) { bestScore = sc; best = it; }
+    });
+    const p = exact || best;
+    if (!p) { render(null); return; }
+    const rating = parseFloat(p.rating || 0) || 0;
+    const ratingCount = Number(p.reviewCount || 0) || 0;
+    let verdict;
+    if (!rating) verdict = "Chưa đủ dữ liệu đánh giá để kết luận — hãy đọc nhận xét ở nút Shopee bên dưới.";
+    else if (rating >= 4.7 && ratingCount >= 100) verdict = "✅ Tín hiệu rất tốt: người mua chấm cao và đánh giá nhiều — đáng chốt khi áp thêm mã bên dưới.";
+    else if (rating >= 4.5) verdict = "✅ Đánh giá tốt: có thể yên tâm, nhất là khi giá sau mã đang rẻ.";
+    else if (rating >= 4.0) verdict = "⚠️ Đánh giá mức trung bình: nên đọc kỹ vài nhận xét 1–3★ ở nút Shopee bên dưới trước khi mua.";
+    else verdict = "⛔ Điểm đánh giá thấp: cân nhắc kỹ, nên ưu tiên sản phẩm/shop khác cùng loại.";
+    if (rating && ratingCount > 0 && ratingCount < 20) verdict += " (Còn ít lượt đánh giá nên độ tin cậy chưa cao.)";
+    if (p.isOnSale && p.discountPercent) verdict += " Sản phẩm đang giảm " + p.discountPercent + "% so với giá gốc.";
+    const d = {
+      name: String(p.name || ""),
+      rating: rating ? rating.toFixed(2).replace(".", ",") : "",
+      ratingCount: ratingCount ? _fmtVND(ratingCount) : "",
+      sold: String(p.historicalSoldEstimated || (p.sold ? _fmtNum(p.sold) : "")),
+      price: p.price ? _fmtVND(p.price) : "",
+      shop: String(p.shopName || ""),
+      verdict: verdict
+    };
+    if (cacheKey) { try { localStorage.setItem(cacheKey, JSON.stringify({ t: Date.now(), d: d, exact: !!exact })); } catch (e) {} }
+    render(d, !!exact);
+  }
+  function poll(jobId, tries) {
+    if (seq !== _apiSeq) return;
+    fetch("https://" + RAPIDAPI_HOST + "/jobs/" + jobId, { headers: headers })
+      .then(r => r.json())
+      .then(j => {
+        if (seq !== _apiSeq) return;
+        if (j && j.status === "done") summarize(j.results || j.data || []);
+        else if (j && (j.status === "failed" || j.status === "error")) render(null);
+        else if (tries < 33) setTimeout(() => poll(jobId, tries + 1), 10000);
+        else render(null);
+      })
+      .catch(() => { if (tries < 33 && seq === _apiSeq) setTimeout(() => poll(jobId, tries + 1), 10000); else render(null); });
+  }
+  fetch("https://" + RAPIDAPI_HOST + "/shopee?country=VN&priceSlicing=false&maxItems=10&keywords=" + encodeURIComponent(nm), { headers: headers })
+    .then(r => r.json())
+    .then(j => {
+      if (seq !== _apiSeq) return;
+      if (j && j.jobId) poll(j.jobId, 0);
+      else if (j && (j.results || j.data)) summarize(j.results || j.data);
+      else render(null);
+    })
+    .catch(() => render(null));
+}
+
 function doConvert(rawInput) {
   const warnBox = document.getElementById("warnBox");
   warnBox.textContent = "";
@@ -721,6 +830,7 @@ function finishConvert(raw, aff, isUrl, warns) {
       document.getElementById("googleBtn").href = "https://www.google.com/search?q=" + encodeURIComponent(nm + " review đánh giá có tốt không");
       document.getElementById("ytBtn").href = "https://www.youtube.com/results?search_query=" + encodeURIComponent(nm + " review");
       rb.style.display = "block";
+      loadApiSummary(nm, lastRawUrl);
     } else rb.style.display = "none";
   }
   document.getElementById("result").style.display = "block";
