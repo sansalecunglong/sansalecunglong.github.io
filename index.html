@@ -525,8 +525,8 @@ function cleanOriginParams(u) {
   } catch (e) { return u; }
 }
 function isShortLink(u) {
-  try { return /(^|\.)shope\.ee$|(^|\.)shp\.ee$/i.test(new URL(u).hostname); }
-  catch (e) { return /shope\.ee|shp\.ee/i.test(u); }
+  try { return /(^|\.)shope\.ee$|(^|\.)shp\.ee$|^s\.shopee\.vn$/i.test(new URL(u).hostname); }
+  catch (e) { return /shope\.ee|shp\.ee|s\.shopee\.vn/i.test(u); }
 }
 function alreadyAffiliate(u) {
   return /an_redir|affiliate_id/i.test(u);
@@ -773,7 +773,7 @@ function doConvert(rawInput) {
       document.getElementById("topVoucher").style.display = "none";
       document.getElementById("reviewBox").style.display = "none";
       document.getElementById("result").style.display = "block";
-      warnBox.textContent = "Link rút gọn (shope.ee/shp.ee) hoặc link đã gắn sẵn mã của người khác: Shopee sẽ báo lỗi \"không tìm thấy trang\" nếu gắn thêm mã nữa, nên trang không đổi link dạng này. Cách lấy link đổi được: mở link này bằng trình duyệt (Safari/Chrome) cho tới khi hiện đúng sản phẩm → sao chép link trên thanh địa chỉ (dạng shopee.vn/...) → dán lại vào đây là săn sale được ngay.";
+      warnBox.textContent = "Link rút gọn (shope.ee/shp.ee/s.shopee.vn) hoặc link đã gắn sẵn mã của người khác: Shopee sẽ báo lỗi \"không tìm thấy trang\" nếu gắn thêm mã nữa, nên trang không đổi link dạng này. Cách lấy link đổi được: mở link này bằng trình duyệt (Safari/Chrome) cho tới khi hiện đúng sản phẩm → sao chép link trên thanh địa chỉ (dạng shopee.vn/...) → dán lại vào đây là săn sale được ngay.";
       document.getElementById("result").scrollIntoView({behavior:"smooth", block:"nearest"});
       return;
     }
