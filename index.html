@@ -103,6 +103,10 @@
   .prod a.dealbtn{margin-top:auto; padding:9px; border-radius:9px; background:var(--primary); display:block;
     color:#fff; font-weight:700; font-size:13.5px; text-align:center; text-decoration:none; cursor:pointer;}
   .prod a.dealbtn:active{background:var(--primary-dark);}
+  .prod a.askbtn{margin-top:7px; padding:8px; border-radius:9px; background:#fff; border:1.5px solid var(--primary); color:var(--primary); display:block; text-align:center; text-decoration:none; font-weight:700; font-size:13.5px;}
+  .prod a.askbtn:active{background:#fff1e8;}
+  .prod a.videobtn{margin-top:7px; padding:8px; border-radius:9px; background:#1877F2; color:#fff; display:block; text-align:center; text-decoration:none; font-weight:700; font-size:13.5px;}
+  a.asklink{display:inline-block; margin-top:2px; font-size:12.5px; color:var(--primary); font-weight:700; text-decoration:none;}
   a.dealbtn.solo{padding:9px 14px; border-radius:9px; background:var(--primary); display:inline-block;
     color:#fff; font-weight:700; font-size:13.5px; text-align:center; text-decoration:none; cursor:pointer;}
   a.dealbtn.solo:active{background:var(--primary-dark);}
@@ -960,6 +964,29 @@ VOUCHERS.forEach(v => {
   vBox.appendChild(d);
 });
 
+/* Nút phụ cho thẻ sản phẩm (yêu cầu của Long 26/10/2026, học theo mục Tư Vấn của trang đối thủ):
+   - “Hỏi về món này”: mở chat Facebook của shop với câu hỏi điền sẵn về đúng sản phẩm đó;
+   - “Xem review”: chỉ hiện khi sản phẩm có trường video (link reel review của shop). */
+function askHref(p) {
+  return "https://m.me/Levietlong95?text=" + encodeURIComponent("Chào shop, mình muốn hỏi về sản phẩm \u201C" + p.name + "\u201D (" + p.price + ") trên trang Săn Sale Cùng Long.");
+}
+function extraBtns(d, p) {
+  const body = d.querySelector(".body");
+  if (!body) return;
+  const a = document.createElement("a");
+  a.className = "askbtn"; a.target = "_blank"; a.rel = "noopener";
+  a.textContent = "💬 Hỏi về món này";
+  a.href = askHref(p);
+  body.appendChild(a);
+  if (p.video) {
+    const v = document.createElement("a");
+    v.className = "videobtn"; v.target = "_blank"; v.rel = "noopener";
+    v.textContent = "🎬 Xem review";
+    v.href = p.video;
+    body.appendChild(v);
+  }
+}
+
 /* Render thẻ sản phẩm (dùng chung cho Sản Phẩm Hot + Đồ gia dụng) */
 function renderProducts(boxId, list) {
   const box = document.getElementById(boxId);
@@ -968,7 +995,7 @@ function renderProducts(boxId, list) {
     d.className = "prod";
     d.innerHTML = '<div class="thumb"></div><div class="body"><div class="pname"></div>' +
       '<div class="price"></div><div class="stars">⭐ Ưu tiên shop 4.5★+ khi mở deal</div>' +
-      '<div class="pnote">Giá tham khảo trên Shopee • Cập nhật ' + PAGE_UPDATED + '</div>' +
+      '<div class="pnote">Giá tham khảo trên Shopee • Cập nhật ngày ' + PAGE_UPDATED + '</div>' +
       '<a class="dealbtn" target="_blank" rel="noopener">Xem deal →</a></div>';
     if (boxId === "products" && idx < 3) {
       const rb = document.createElement("div");
@@ -989,6 +1016,7 @@ function renderProducts(boxId, list) {
     d.querySelector(".pname").textContent = p.name;
     d.querySelector(".price").textContent = p.price;
     d.querySelector("a.dealbtn").href = searchAff(p.keyword);
+    extraBtns(d, p);
     box.appendChild(d);
   });
 }
@@ -1065,7 +1093,7 @@ const PICK_META = {
       d.style.position = "relative";
       d.innerHTML = '<div class="thumb"></div><div class="body"><div class="pname"></div>' +
         '<div class="price"></div><div class="stars">⭐ Ưu tiên shop 4.5★+ khi mở deal</div>' +
-        '<div class="pnote">Giá tham khảo trên Shopee • Cập nhật ' + PAGE_UPDATED + '</div>' +
+        '<div class="pnote">Giá tham khảo trên Shopee • Cập nhật ngày ' + PAGE_UPDATED + '</div>' +
         '<a class="dealbtn" target="_blank" rel="noopener">Xem deal →</a></div>';
       const rb = document.createElement("div");
       rb.textContent = meta.badge;
@@ -1083,6 +1111,7 @@ const PICK_META = {
       d.querySelector(".pname").textContent = prod.name;
       d.querySelector(".price").textContent = prod.price;
       d.querySelector("a.dealbtn").href = searchAff(prod.keyword, meta.mode);
+      extraBtns(d, prod);
       grid.appendChild(d);
     });
   });
@@ -1114,6 +1143,15 @@ renderProducts("household", HOUSEHOLD);
     row.querySelector(".rankname").textContent = p.name;
     row.querySelector(".rankcmt").textContent = RANK_NOTES[i] || "";
     row.querySelector(".rankprice").textContent = p.price;
+    const rp = document.createElement("div");
+    rp.style.cssText = "font-size:11.5px; color:var(--muted);";
+    rp.textContent = "Giá tham khảo \u2022 Cập nhật ngày " + PAGE_UPDATED;
+    row.querySelector(".rankbody").appendChild(rp);
+    const ra = document.createElement("a");
+    ra.className = "asklink"; ra.target = "_blank"; ra.rel = "noopener";
+    ra.textContent = "💬 Hỏi về món này";
+    ra.href = askHref(p);
+    row.querySelector(".rankbody").appendChild(ra);
     row.querySelector("a.rankbtn").href = searchAff(p.keyword);
     box.appendChild(row);
   });
