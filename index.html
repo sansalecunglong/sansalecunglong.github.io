@@ -197,14 +197,18 @@ body{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;text-r
       <button id="btnPaste">📋 Dán</button>
       <button id="btnConvert">Săn sale</button>
     </div>
+    <div style="display:flex; gap:8px; margin-top:8px;">
+      <input type="number" id="inPrice" inputmode="numeric" placeholder="Giá sản phẩm (VD: 250000đ) — không bắt buộc, điền để trang xếp mã tiết kiệm nhất cho đúng đơn của bạn" style="flex:1; padding:10px 12px; font-size:14px; border:none; border-radius:12px; outline:none; min-width:0;">
+    </div>
     <div id="result">
       <div id="prodDone" style="background:#f2fbf5; border:1px solid #bfe8cc; border-radius:10px; padding:9px 12px; margin-bottom:10px; font-size:13.5px;">
         🛍️ Đã nhận link sản phẩm của bạn
         <div id="prodDoneTxt" style="color:#1a9e4b; font-weight:700; margin-top:2px;">✔ Đã chuyển đổi xong</div>
       </div>
+      <p id="prodInsight" style="display:none; font-size:13px; color:#444; margin:0 0 8px;"></p>
       <p style="font-size:12.5px; color:#555; margin:0;">✅ Chọn một mã giảm giá bên dưới — bấm vào là nút mở đúng sản phẩm của bạn trên Shopee qua link của shop, đồng thời tự sao chép sẵn mã giảm giá tốt nhất vào bộ nhớ tạm. Sang Shopee bạn chỉ cần dán mã ở bước thanh toán.</p>
       <div id="topVoucher" style="display:none; margin-top:10px; background:#fff4ec; border:1.5px dashed var(--primary); border-radius:10px; padding:10px 12px; font-size:13.5px;">
-        <div style="font-weight:700;">🏷️ Mã tốt nhất cho đơn này — tổng hợp từ Facebook, YouTube và các nguồn săn mã:</div>
+        <div style="font-weight:700;">🏷️ Mã tốt nhất cho SẢN PHẨM trong link của bạn — tổng hợp từ Facebook, YouTube và các nguồn săn mã:</div>
         <div id="codeBtns"></div>
         <div style="font-size:12px; color:#777; margin-top:6px;">Tất cả các nút đều mở đúng sản phẩm của bạn qua link của shop — không phải qua bước trung gian nào. Nút mã chữ: mã tự sao chép sẵn để dán lúc thanh toán. Nút mã Facebook/YouTube/Instagram: đó là mã lưu trong app, mở sản phẩm rồi lưu mã tại banner trong app Shopee trước khi thanh toán. Xem thêm mã ở Bước 2 bên dưới.</div>
       </div>
@@ -357,7 +361,7 @@ const VOUCHERS = [
   { name: "Voucher Facebook", icon: "👥", off: "-30%", type: "claim", code: "", cond: "Đơn từ 50K - Giảm tối đa 50K", note: "Mã MXH mới ngày 26/10 — áp đa số sản phẩm, số lượt có hạn; bấm nút là sang đúng sản phẩm của bạn, mã lưu tại banner trong app Shopee", badge: "Mã mới 26/10" },
   { name: "Shopee VIP", icon: "👑", off: "-50%", type: "claim", code: "", cond: "Đơn từ 0Đ - Giảm tối đa 500K", note: "Lưu tại banner ShopeeVIP trong app; kèm mã VIP 25% tối đa 200K đơn từ 0Đ áp gần toàn sàn — cả hai đều back lượt các khung 12H-15H-18H-20H", badge: "Back lượt 0H - 9H - 12H - 15H - 18H - 20H" },
   { name: "Voucher Xtra", icon: "⚡", off: "-25%", type: "claim", code: "", cond: "Đơn từ 100K - Giảm tối đa 100K", note: "Lưu trong app — chọn sản phẩm có tag Voucher Xtra; thêm mã 20% tối đa 300K đơn từ 500K và 20% tối đa 2 triệu đơn từ 2 triệu, back lượt các khung giờ", badge: "Back lượt 0H - 9H - 12H - 15H - 18H - 20H" },
-  { name: "Voucher YouTube", icon: "▶️", off: "-22% → -50%", type: "claim", code: "", cond: "Mã banner + mã gắn link sản phẩm YouTube", note: "Lưu trong app Shopee theo khung giờ — 22% tối đa 100K đơn từ 150K và 20% tối đa 2 triệu đơn từ 500K, back lượt 12H và 18H", badge: "Back lượt 12H - 18H" }
+  { name: "Voucher YouTube", icon: "▶️", off: "-22%", type: "claim", code: "", cond: "Mã banner + mã gắn link sản phẩm YouTube", note: "Lưu trong app Shopee theo khung giờ — 22% tối đa 100K đơn từ 150K và 20% tối đa 2 triệu đơn từ 500K, back lượt 12H và 18H", badge: "Back lượt 12H - 18H" }
 ];
 
 /* Mã hot SẮP lên sóng — hiển thị trong ô "Mã Hot Sắp Lên Sóng" ở hero.
@@ -526,6 +530,60 @@ function searchAff(keyword, mode) {
   return buildAffiliateLink(q, CONFIG.affiliateId, CONFIG.subId);
 }
 
+/* SOI SẢN PHẨM TRONG LINK (thêm 26/10/2026 theo yêu cầu của Long): đọc ngành
+   hàng từ chính link sản phẩm khách dán + giá khách điền (không bắt buộc) để
+   ƯỚC TÍNH mức tiết kiệm thật của từng mã cho đúng đơn này và xếp mã hợp nhất
+   lên đầu. Shopee chốt mã áp được ở trang thanh toán — trang không có API của
+   Shopee nên đây là mức soi sát nhất làm được từ phía ngoài. */
+let lastPrice = 0, lastCat = "", lastRawUrl = "", lastPicks = [];
+const CAT_RULES = [
+  { cat: "Bách hóa & Siêu thị", kw: ["sua-", "gao-", "mi-goi", "banh-", "nuoc-mam", "dau-an", "ca-phe", "tra-", "snack", "thuc-pham", "gia-vi"] },
+  { cat: "Nhà cửa & Đời sống", kw: ["khan-giay", "nuoc-giat", "bep-", "noi-", "chao-", "gia-dung", "ve-sinh", "tay-rua", "lau-bep", "hop-dung"] },
+  { cat: "Sắc đẹp", kw: ["son-", "kem-", "serum", "tay-trang", "duong-", "my-pham", "nuoc-hoa", "mascara", "skincare", "dau-goi", "sua-rua-mat", "chong-nang", "bong-tay-trang", "tay-te-bao"] },
+  { cat: "Điện tử & Phụ kiện", kw: ["tai-nghe", "sac-nhanh", "sac-du-phong", "dien-thoai", "loa-", "chuot-", "ban-phim", "cap-sac", "pin-du-phong", "op-lung", "dong-ho-thong-minh"] },
+  { cat: "Sức khỏe", kw: ["vitamin", "massage", "xong-tinh-dau", "khau-trang", "nhiet-ke", "thuc-pham-chuc-nang"] },
+  { cat: "Thời trang", kw: ["ao-", "quan-", "vay-", "dep-", "tui-", "kinh-", "dong-ho", "thoi-trang", "sandal", "dam-", "hoodie", "jeans", "giay-the-thao", "giay-sneaker", "giay-cao-got", "giay-luoi"] }
+];
+function detectCat(text) {
+  let s = "";
+  try { s = decodeURIComponent(text || ""); } catch (e) { s = text || ""; }
+  s = s.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/\s+/g, "-");
+  for (const r of CAT_RULES) if (r.kw.some(k => s.includes(k))) return r.cat;
+  return "";
+}
+function parseCondNum(str, label) {
+  const m = (str || "").match(new RegExp(label + "\\s*([\\d.,]+)\\s*(trieu|K|D)?", "i"));
+  if (!m) return null;
+  let n = parseFloat(m[1].replace(/\./g, "").replace(",", "."));
+  if (isNaN(n)) return null;
+  if (/trieu/i.test(m[2] || "")) n *= 1000;
+  return n;
+}
+function estimateSaving(v, priceK) {
+  if (!priceK || v.type !== "code") return null;
+  const cond = (v.cond || "").normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+  const min = parseCondNum(cond, "Don tu") || 0;
+  if (priceK < min) return 0;
+  const pct = (v.off || "").match(/-(\d+(?:[.,]\d+)?)%/);
+  const fix = (v.off || "").match(/-(\d+(?:[.,]\d+)?)K/i);
+  const cap = parseCondNum(cond, "Giam toi da");
+  if (pct) { const s = priceK * parseFloat(pct[1].replace(",", ".")) / 100; return cap != null ? Math.min(s, cap) : s; }
+  if (fix) return parseFloat(fix[1].replace(",", "."));
+  return null;
+}
+function claimBoost(v, cat) {
+  if (!cat) return 0;
+  const c = cat.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+  if (/Shopee Mart/i.test(v.name) && c === "Bach hoa & Sieu thi") return 3;
+  if (/VIP/i.test(v.name) && ["Thoi trang", "Sac dep", "Suc khoe"].includes(c)) return 3;
+  if (/Xtra/i.test(v.name)) return 1;
+  return 0;
+}
+function fmtK(k) {
+  if (k >= 1000) { const x = k / 1000; return (x >= 10 ? Math.round(x) : x.toFixed(1).replace(".", ",").replace(",0", "")) + " trieu"; }
+  return Math.round(k) + "K";
+}
+
 function doConvert(rawInput) {
   const warnBox = document.getElementById("warnBox");
   warnBox.textContent = "";
@@ -556,10 +614,18 @@ function doConvert(rawInput) {
     }
     const warns = [];
     if (!isShopeeUrl(url)) warns.push("⚠️ Link này không phải của Shopee — vẫn đổi được nhưng hoa hồng có thể không được tính.");
+    const pv = parseFloat(((document.getElementById("inPrice") || {}).value || "").replace(/[^\d]/g, ""));
+    lastPrice = pv && pv > 0 ? pv / 1000 : 0;
+    lastCat = detectCat(url);
+    lastRawUrl = url;
     finishConvert(raw, buildAffiliateLink(cleanOriginParams(url), CONFIG.affiliateId, CONFIG.subId), true, warns);
     return;
   }
   /* Không phải link → coi như từ khóa tìm kiếm */
+  const pv2 = parseFloat(((document.getElementById("inPrice") || {}).value || "").replace(/[^\d]/g, ""));
+  lastPrice = pv2 && pv2 > 0 ? pv2 / 1000 : 0;
+  lastCat = detectCat(raw);
+  lastRawUrl = raw;
   finishConvert(raw, searchAff(raw), false, []);
 }
 
@@ -594,6 +660,21 @@ function finishConvert(raw, aff, isUrl, warns) {
     const now = new Date();
     const hh = String(now.getHours()).padStart(2, "0"), mm = String(now.getMinutes()).padStart(2, "0");
     if (upd) upd.textContent = "✅ Mã vừa được tải lại lúc " + hh + ":" + mm + " — chọn mã bạn thích bên dưới";
+    const ins = document.getElementById("prodInsight");
+    if (ins) {
+      let msg = "";
+      if (lastCat) msg = "🎯 Đã soi sản phẩm trong link của bạn: thuộc nhóm " + lastCat + " — mã hợp ngành này" + (lastPrice ? " và tiết kiệm nhất cho đơn ~" + fmtK(lastPrice) : "") + " đã được xếp lên đầu. Shopee sẽ chốt mã áp được ở trang thanh toán.";
+      else if (lastPrice) msg = "🎯 Đã ước tính mức tiết kiệm của từng mã cho đơn ~" + fmtK(lastPrice) + " của bạn — mã tiết kiệm nhất xếp lên đầu. Shopee sẽ chốt mã áp được ở trang thanh toán.";
+      ins.textContent = msg;
+      ins.style.display = msg ? "block" : "none";
+    }
+    const vb = document.getElementById("vouchers");
+    if (vb && typeof gatedCards !== "undefined" && lastPicks.length) {
+      [...lastPicks].reverse().forEach(v => {
+        const g = gatedCards.find(x => x.v === v);
+        if (g && g.el) vb.insertBefore(g.el, vb.firstChild);
+      });
+    }
     document.querySelectorAll("#vouchers .vrow").forEach((el, i) => {
       el.classList.remove("refresh"); void el.offsetWidth;
       el.style.animationDelay = (i * 45) + "ms"; el.classList.add("refresh");
@@ -666,35 +747,59 @@ function unlockCodes() {
    trình duyệt tự chuyển sang đúng trang sản phẩm khách đang mua; mã giảm giá
    của kênh được sao chép âm thầm kèm theo để khách dán lúc thanh toán.
    Không hiển thị link, không hiển thị mã chữ, không nút sao chép. */
+/* Điểm xếp hạng cho nút kết quả: theo ước tính tiết kiệm, nhưng các họ mã
+   GIỚI HẠN (quốc tế / Mart / Mall / VIP nhập tay) chỉ được lên đầu khi sản
+   phẩm thật sự thuộc nhóm đó — tránh mã hẹp hiển thị như mã tốt nhất. */
+function rankScore(v) {
+  const s = estimateSaving(v, lastPrice);
+  if (s === 0) return -1;
+  let base = s === null ? 40 : s;
+  const n = v.name || "";
+  if (/Hàn Quốc Tế|Quốc Tế/i.test(n)) {
+    const intl = /quoc-te|han-quoc|korea|order|authentic/i.test((lastRawUrl || "") + " " + (lastCat || ""));
+    return intl ? base : -1;
+  }
+  if (/Shopee Mart/i.test(n)) return (lastCat === "Bách hóa & Siêu thị" || lastCat === "Nhà cửa & Đời sống") ? base : base * 0.3;
+  if (/Shopee Mall/i.test(n)) return base * 0.5;
+  if (/Shopee VIP/i.test(n) && v.type === "code") return base * 0.6;
+  return base;
+}
+
 function renderCodeButtons(aff) {
   const box = document.getElementById("codeBtns");
   box.innerHTML = "";
-  /* Chọn 3 mã TỐT NHẤT từ NHIỀU NGUỒN khác nhau (không lấy 3 mã giống hệt nhau):
-     mã nhập tay áp rộng nhất + mã kênh MXH (Facebook/Instagram) + mã YouTube,
-     thiếu kênh nào thì bù bằng mã tốt tiếp theo. */
+  /* Chọn mã THEO SẢN PHẨM trong link của khách: mã chữ xếp theo ƯỚC TÍNH
+     TIẾT KIỆM THẬT cho đơn này (nếu khách điền giá), mã lưu-ví của ngành
+     hàng khớp với sản phẩm được ưu tiên; vẫn giữ độ đa dạng nguồn (mã chữ
+     tốt nhất + mã kênh hợp ngành nhất + mã YouTube). */
   const codes = VOUCHERS.filter(v => v.type === "code" && v.code);
   const claims = VOUCHERS.filter(v => v.type === "claim");
+  const scored = codes.map(v => ({ v, s: estimateSaving(v, lastPrice), r: rankScore(v) }));
+  const eligible = scored.filter(x => x.r > -1);
+  eligible.sort((a, b) => b.r - a.r);
+  const saveOf = v => { const f = scored.find(x => x.v === v); return f ? f.s : null; };
+  const sortedClaims = [...claims].sort((a, b) => claimBoost(b, lastCat) - claimBoost(a, lastCat));
   const picked = [];
   const take = v => { if (v && !picked.includes(v)) picked.push(v); };
-  take(codes[0]);
-  take(claims.find(v => /instagram|facebook/i.test(v.name)));
-  take(claims.find(v => /youtube/i.test(v.name)));
-  take(codes.find(v => v !== codes[0]));
-  take(claims.find(v => /xtra|vip/i.test(v.name)));
-  take(codes[1]);
-  picked.slice(0, 3).forEach(v => {
+  take(eligible.length ? eligible[0].v : codes[0]);
+  take(sortedClaims.find(v => claimBoost(v, lastCat) >= 3) || sortedClaims.find(v => /instagram|facebook/i.test(v.name)));
+  take(sortedClaims.find(v => /youtube/i.test(v.name)));
+  take(eligible.length > 1 ? eligible[1].v : null);
+  take(sortedClaims[0]);
+  lastPicks = picked.slice(0, 3);
+  lastPicks.forEach(v => {
     const a = document.createElement("a");
     a.className = "btn codego";
     a.target = "_blank"; a.rel = "noopener";
+    a.href = aff;
     if (v.type === "claim") {
-      a.href = aff;
       a.textContent = v.icon + " " + v.name + " " + v.off + " — sang đúng sản phẩm →";
       a.addEventListener("click", () => {
         toast("Đang mở đúng sản phẩm của bạn — mã " + v.name + " lưu tại banner trong app Shopee nhé");
       });
     } else {
-      a.href = aff;
-      a.textContent = v.icon + " Mã " + v.name.replace(/^(Voucher|Mã)\s+/, "") + " " + v.off + " — sang Shopee ngay →";
+      const s = saveOf(v);
+      a.textContent = v.icon + " Mã " + v.name.replace(/^(Voucher|Mã)\s+/, "") + " " + v.off + (s ? " — tiết kiệm ~" + fmtK(s) : "") + " — sang Shopee ngay →";
       a.addEventListener("click", () => {
         silentCopy(v.code);
         toast("Đang mở Shopee — dán mã " + v.code + " lúc thanh toán nhé");
