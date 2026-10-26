@@ -243,10 +243,7 @@ body{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;text-r
         <div style="font-weight:800;">🔎 Tra cứu tổng quan sản phẩm trước khi mua</div>
         <div id="reviewProd" style="margin-top:2px;"></div>
         <div id="apiSummary" style="display:none; background:#eef6ff; border:1px solid #b9d7f5; border-radius:9px; padding:8px 10px; margin-top:7px;"></div>
-        <div style="color:#555;">Bấm các nút sau để tự xem tận nơi tại Shopee, Google và YouTube — hoặc bấm nút <b>Gửi link — shop tra cứu tự động</b>: shop đọc sản phẩm, tra review trên Google và các trang khác rồi đăng kết quả ở mục <b>Kết quả tra cứu gần đây</b> trên trang này sau khoảng 5–10 phút.</div>
-        <a id="reviewBtn" class="dealbtn solo" target="_blank" rel="noopener" style="margin-top:7px;">⭐ Đánh giá người mua trên Shopee →</a>
-        <a id="googleBtn" class="dealbtn solo" target="_blank" rel="noopener" style="margin-top:7px; background:#fff; color:#1a73e8; border:1.5px solid #1a73e8;">🔎 Tra review trên Google →</a>
-        <a id="ytBtn" class="dealbtn solo" target="_blank" rel="noopener" style="margin-top:7px; background:#fff; color:#cc0000; border:1.5px solid #cc0000;">🎬 Xem video review trên YouTube →</a>
+        <div style="color:#555;">Bấm nút <b>Gửi link — shop tra cứu tự động</b> bên dưới: shop tự đọc sản phẩm, tra review trên Google và các trang khác rồi đăng kết quả ở mục <b>Kết quả tra cứu gần đây</b> trên trang này — mục “đang tra cứu” hiện sau khoảng 1–2 phút, kết luận đầy đủ sau khoảng 3–5 phút.</div>
         <a id="askResearchBtn" class="dealbtn solo" target="_blank" rel="noopener" style="margin-top:7px; background:#e7f0fe; color:#0b57d0; border:1.5px solid #0b57d0;">🤝 Gửi link — shop tra cứu tự động &amp; đăng kết quả →</a>
         <div style="color:#555; margin-top:8px;"><b>Đọc nhanh để quyết định mua:</b> <b>①</b> trên Shopee, shop 4.5★+ và nhiều lượt đánh giá là tín hiệu tốt; <b>②</b> đọc vài đánh giá 1–3★ — nhiều người chê cùng một lỗi thì nên bỏ qua; <b>③</b> có ảnh/video thật của người mua càng đáng tin; <b>④</b> đối chiếu giá sau mã ở trang này với mặt bằng trong các bài/video review — rẻ hơn thì chốt.</div>
       </div>
@@ -885,9 +882,7 @@ function finishConvert(raw, aff, isUrl, warns) {
      26/10 từ khối soi nhanh): trang tĩnh không kéo được sao/nhận xét thật
      từ Shopee/Google (không API công khai, dữ liệu bị khóa với trang
      ngoài) nên khối này hiện tên sản phẩm đọc từ chính link khách dán và
-     chuẩn bị sẵn 3 nút tra cứu đúng sản phẩm đó: đánh giá người mua trên
-     Shopee (qua link của shop), tìm review trên Google, video review
-     trên YouTube, nút Gửi link tra cứu tự động (Google Form đã điền
+     chuẩn bị sẵn nút Gửi link tra cứu tự động (Google Form đã điền
      sẵn link khách dán — job nền đọc form, tra và đăng kết quả vào
      mục Kết quả tra cứu gần đây; mô hình Long chốt tối 26/10/2026), kèm
      khung đọc nhanh để khách tự quyết định mua.
@@ -902,9 +897,6 @@ function finishConvert(raw, aff, isUrl, warns) {
       const bEl = document.createElement("b");
       bEl.textContent = nm;
       rp.appendChild(bEl);
-      document.getElementById("reviewBtn").href = aff;
-      document.getElementById("googleBtn").href = "https://www.google.com/search?q=" + encodeURIComponent(nm + " review đánh giá có tốt không");
-      document.getElementById("ytBtn").href = "https://www.youtube.com/results?search_query=" + encodeURIComponent(nm + " review");
       document.getElementById("askResearchBtn").href = "https://docs.google.com/forms/d/e/1FAIpQLSfEbbNQ6sUJk4ExL9H-bCIptlaSqaxl-6DTvttz968rFOjJ_Q/viewform?entry.651707015=" + encodeURIComponent(lastRawUrl);
       rb.style.display = "block";
       loadApiSummary(nm, lastRawUrl);
