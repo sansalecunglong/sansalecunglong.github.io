@@ -277,6 +277,27 @@ body{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;text-r
     </div>
   </section>
 
+  <section class="card" id="secAccount" style="max-width:860px; margin:18px auto 0;">
+    <h2>💰 Mã hoàn hoa hồng của bạn</h2>
+    <div id="accNone">
+      <p class="sub" style="text-align:left;">Tạo mã riêng của bạn — miễn phí, chỉ 10 giây. Từ lúc có mã, <b>mọi đơn bạn mua qua trang này được ghi theo đúng mã của bạn</b>: hoa hồng Shopee trả về cho shop, shop đối soát theo mã và <b>trả lại bạn 80% hoa hồng của chính đơn đó</b>. Chia sẻ link kèm mã của bạn cho bạn bè thì đơn của họ cũng ghi cho bạn.</p>
+      <div style="display:grid; gap:8px; margin-top:8px;">
+        <input type="text" id="accName" placeholder="Tên của bạn" autocomplete="name" style="padding:11px 12px; border:1.5px solid #ddd; border-radius:10px; font-size:15px; width:100%; box-sizing:border-box;">
+        <input type="text" id="accContact" placeholder="Số Zalo, hoặc STK + tên ngân hàng (để shop trả tiền)" autocomplete="tel" style="padding:11px 12px; border:1.5px solid #ddd; border-radius:10px; font-size:15px; width:100%; box-sizing:border-box;">
+        <button id="accCreate" style="background:#ee4d2d; color:#fff; border:none; border-radius:10px; padding:12px; font-size:16px; font-weight:800; cursor:pointer;">Tạo mã của tôi</button>
+      </div>
+    </div>
+    <div id="accHave" style="display:none;">
+      <p style="margin:0 0 4px;">Mã của bạn: <b id="accCode" style="font-size:24px; letter-spacing:1.5px; color:#ee4d2d;"></b></p>
+      <p class="sub" style="text-align:left; margin-top:0;">Mọi link Shopee bạn mở hoặc tạo trên máy này đã tự gắn mã của bạn rồi — cứ mua như bình thường. Link chia sẻ của bạn (đơn của bạn bè qua link này cũng ghi cho bạn):</p>
+      <div style="display:flex; gap:8px; flex-wrap:wrap;">
+        <input type="text" id="accShare" readonly style="flex:1; min-width:200px; padding:10px 12px; border:1.5px solid #ddd; border-radius:10px; font-size:13.5px; box-sizing:border-box;">
+        <button id="accCopy" style="background:#0b57d0; color:#fff; border:none; border-radius:10px; padding:10px 16px; font-weight:700; cursor:pointer;">📋 Sao chép</button>
+      </div>
+      <p class="sub" id="accBalance" style="text-align:left;">Số dư hoàn hoa hồng: chưa có kỳ đối soát nào — sau mỗi kỳ shop đối soát, số tiền của bạn sẽ hiện tại đây.</p>
+    </div>
+  </section>
+
   <section id="myResearch" style="display:none; max-width:860px; margin:18px auto 0; padding:0 14px;">
     <div style="background:#fff; border-radius:14px; padding:14px 16px; box-shadow:0 1px 4px rgba(0,0,0,.06);">
       <div style="font-weight:800; font-size:17px;">🔎 Kết quả tra cứu của bạn</div>
@@ -515,6 +536,20 @@ function alreadyAffiliate(u) {
    trong báo cáo Affiliate): ?src=fb → web-fb, ?src=zalo → web-zalo,
    ?src=yt → web-yt, ?src=video → web-video; mặc định web-sanma. */
 function curSubId() {
+  /* ƯU TIÊN 1 — tài khoản của chính chủ máy (từ 27/10/2026, mô hình mỗi người
+     một mã hoàn hoa hồng): người đã tạo mã thì mọi đơn từ máy này ghi theo mã
+     của họ để shop đối soát và trả 80% hoa hồng đúng người. */
+  try { const a = JSON.parse(localStorage.getItem("sscl_account") || "null"); if (a && a.code) return a.code; } catch (e) {}
+  /* ƯU TIÊN 2 — mã người chia sẻ link: ?ref=<mã> (lưu lại trên máy): khách
+     chưa có tài khoản đi qua link của ai thì đơn ghi theo mã người đó. */
+  try {
+    const p = new URLSearchParams(location.search);
+    const ref = (p.get("ref") || "").toLowerCase().replace(/[^a-z0-9]/g, "");
+    if (ref) { try { localStorage.setItem("sscl_ref", ref); } catch (e) {} return ref; }
+    const savedRef = localStorage.getItem("sscl_ref");
+    if (savedRef) return savedRef;
+  } catch (e) {}
+  /* ƯU TIÊN 3 — nguồn traffic của shop như cũ. */
   try {
     const p = new URLSearchParams(location.search);
     const s = (p.get("src") || p.get("utm_source") || "").toLowerCase();
@@ -1256,6 +1291,70 @@ function myResearchLoad() {
 function myResearchSave(list) {
   try { localStorage.setItem("sscl_myresearch", JSON.stringify(list.slice(0, 8))); } catch (err) {}
 }
+/* === TÀI KHOẢN KHÁCH — MỖI NGƯỜI MỘT MÃ HOÀN HOA HỒNG (thêm 27/10/2026
+   theo mô hình Long chốt: mỗi người 1 mã; đơn ghi nhận theo mã nào thì shop
+   đối soát hoa hồng Shopee theo mã đó và trả 80% cho chủ mã). Tài khoản lưu
+   trên máy khách (localStorage sscl_account); đăng ký được gửi ẨN về Google
+   Form "Tài khoản Săn Sale Cùng Long" của shop — khách không phải điền form.
+   Số dư đọc từ doisat.json (shop ghi sau mỗi kỳ đối soát). === */
+const ACC_FORM_URL = "https://docs.google.com/forms/d/e/1FAIpQLSfSfA2jaK5Bhnrm9M3QSR10La4-90as3XtZSjearkNd-lvgjw/formResponse";
+const ACC_E_NAME = "entry.1986508600", ACC_E_CODE = "entry.1579327606", ACC_E_CONTACT = "entry.34481018";
+function myAccount() { try { return JSON.parse(localStorage.getItem("sscl_account") || "null"); } catch (e) { return null; } }
+function genAccCode() {
+  const A = "ABCDEFGHJKMNPQRSTUVWXYZ23456789"; let s = "";
+  for (let i = 0; i < 6; i++) s += A[Math.floor(Math.random() * A.length)];
+  return s.toLowerCase();
+}
+function submitAccountHidden(a) {
+  try {
+    const body = new URLSearchParams();
+    body.set(ACC_E_NAME, a.name); body.set(ACC_E_CODE, a.code); body.set(ACC_E_CONTACT, a.contact);
+    fetch(ACC_FORM_URL, { method: "POST", mode: "no-cors", headers: { "Content-Type": "application/x-www-form-urlencoded" }, body: body.toString() }).catch(() => {});
+  } catch (e) {}
+}
+/* Sau khi có mã mới: gắn lại sub_id vào mọi link affiliate đã dựng trên trang */
+function refreshSubIds() {
+  const sid = curSubId(); if (!sid) return;
+  document.querySelectorAll('a[href*="sub_id="]').forEach(a => {
+    try { a.href = a.href.replace(/sub_id=[^&]+/, "sub_id=" + encodeURIComponent(sid)); } catch (e) {}
+  });
+}
+function fmtVnd(n) { return (Math.round(Number(n) || 0)).toLocaleString("vi-VN") + "₫"; }
+function renderAccount() {
+  const sec = document.getElementById("secAccount"); if (!sec) return;
+  const a = myAccount();
+  document.getElementById("accNone").style.display = a ? "none" : "";
+  document.getElementById("accHave").style.display = a ? "" : "none";
+  if (!a) return;
+  document.getElementById("accCode").textContent = a.code.toUpperCase();
+  document.getElementById("accShare").value = "https://sansalecunglong.github.io/?ref=" + a.code;
+  fetch("doisat.json?_=" + Date.now(), { cache: "no-store" }).then(r => r.json()).then(d => {
+    const row = d && d[a.code];
+    const bal = document.getElementById("accBalance");
+    if (row && bal) bal.innerHTML = "Số dư hoàn hoa hồng" + (row.ky ? " (kỳ " + row.ky + ")" : "") + ": tạm tính <b>" + fmtVnd(row.tamTinh) + "</b> · đã đối soát, chờ shop trả <b>" + fmtVnd(row.khaDung) + "</b>.";
+  }).catch(() => {});
+}
+function createAccount() {
+  const name = (document.getElementById("accName").value || "").trim();
+  const contact = (document.getElementById("accContact").value || "").trim();
+  if (!name) { toast("Bạn nhập tên của bạn nhé"); return; }
+  if (!contact) { toast("Bạn nhập số Zalo hoặc STK để shop trả tiền nhé"); return; }
+  const a = { name, contact, code: genAccCode(), createdAt: Date.now() };
+  try { localStorage.setItem("sscl_account", JSON.stringify(a)); } catch (e) {}
+  submitAccountHidden(a);
+  renderAccount(); refreshSubIds();
+  toast("Đã tạo mã " + a.code.toUpperCase() + " — từ giờ đơn của bạn ghi theo mã này!");
+  const sec = document.getElementById("secAccount");
+  if (sec) sec.scrollIntoView({ behavior: "smooth", block: "center" });
+}
+(function initAccount() {
+  const btn = document.getElementById("accCreate");
+  if (btn) btn.addEventListener("click", createAccount);
+  const cp = document.getElementById("accCopy");
+  if (cp) cp.addEventListener("click", () => { const s = document.getElementById("accShare"); if (s) copyText(s.value, "Đã sao chép link chia sẻ của bạn!"); });
+  renderAccount();
+})();
+
 function renderMyResearch() {
   const sec = document.getElementById("myResearch");
   const box = document.getElementById("myResearchList");
