@@ -278,14 +278,6 @@ body{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;text-r
     </div>
   </section>
 
-  <section id="secVoucher" style="max-width:860px; margin:18px auto 0; padding:0 14px;">
-    <div style="background:#fff; border-radius:14px; padding:16px;">
-      <div style="font-weight:800; font-size:17px;">🎟️ Mã Giảm Giá Đang Có Hiệu Lực</div>
-      <div style="font-size:12.5px; color:#777; margin-top:4px;">Cập nhật lúc <span id="voucherUpdated"></span> · Nguồn: ANM — hệ thống tra mã Shopee. Mã có thể hết lượt bất cứ lúc nào; áp được hay không do Shopee quyết ở bước thanh toán (tùy tài khoản, ngành hàng và từng đợt sale).</div>
-      <div id="voucherList" style="display:grid; gap:10px; margin-top:12px;"></div>
-    </div>
-  </section>
-
   <section id="researchResults" style="max-width:860px; margin:18px auto 0; padding:0 14px;">
     <div style="background:#fff; border-radius:14px; padding:14px 16px; box-shadow:0 1px 4px rgba(0,0,0,.06);">
       <div style="font-weight:800; font-size:17px;">🔎 Kết quả tra cứu gần đây</div>
@@ -1351,53 +1343,6 @@ function fallbackCopy(text, done) {
     done();
   } catch (e) { toast("Không tự sao chép được — bạn ghi lại mã: " + text); }
 }
-function copyVoucherCode(code, btn) {
-  const done = () => {
-    toast("Đã sao chép mã " + code);
-    if (btn) { const o = btn.textContent; btn.textContent = "✅ Đã sao chép"; setTimeout(() => { btn.textContent = o; }, 1600); }
-  };
-  if (navigator.clipboard && navigator.clipboard.writeText) {
-    navigator.clipboard.writeText(code).then(done).catch(() => fallbackCopy(code, done));
-  } else fallbackCopy(code, done);
-}
-(function renderVouchers() {
-  const box = document.getElementById("voucherList");
-  if (!box) return;
-  const upd = document.getElementById("voucherUpdated");
-  if (upd) upd.textContent = VOUCHER_UPDATED;
-  VOUCHERS.forEach(v => {
-    const card = document.createElement("div");
-    card.style.cssText = "border:1.5px solid #ffd9c7; border-radius:12px; padding:12px 14px; background:#fffaf7;";
-    const code = document.createElement("div");
-    code.style.cssText = "font-size:20px; font-weight:800; letter-spacing:.5px; color:#d35400; word-break:break-all;";
-    code.textContent = v.code;
-    card.appendChild(code);
-    const off = document.createElement("div");
-    off.style.cssText = "font-size:15px; font-weight:700; margin-top:2px;";
-    off.textContent = v.off + " · " + v.cond;
-    card.appendChild(off);
-    const meta = document.createElement("div");
-    meta.style.cssText = "font-size:12.5px; color:#777; margin-top:3px;";
-    meta.textContent = v.fam + " · " + v.exp + " · Kiểm tra lần cuối: " + v.chk;
-    card.appendChild(meta);
-    const row = document.createElement("div");
-    row.style.cssText = "display:flex; gap:10px; align-items:center; margin-top:9px; flex-wrap:wrap;";
-    const btn = document.createElement("button");
-    btn.style.cssText = "background:var(--primary); color:#fff; border:none; border-radius:10px; padding:9px 16px; font-weight:700; font-size:14px; cursor:pointer;";
-    btn.textContent = "📋 Sao chép mã";
-    btn.addEventListener("click", () => copyVoucherCode(v.code, btn));
-    row.appendChild(btn);
-    const rep = document.createElement("a");
-    rep.href = "https://m.me/Levietlong95?text=" + encodeURIComponent("Shop ơi, mã " + v.code + " hình như hết hạn hoặc hết lượt rồi.");
-    rep.target = "_blank"; rep.rel = "noopener";
-    rep.style.cssText = "font-size:13px; color:#888;";
-    rep.textContent = "⚠️ Báo mã hết hạn";
-    row.appendChild(rep);
-    card.appendChild(row);
-    box.appendChild(card);
-  });
-})();
-
 /* Lịch Sử Săn Sale: thu gọn mặc định, ấn vào tiêu đề mới mở */
 (function () {
   const head = document.getElementById("histHead");
