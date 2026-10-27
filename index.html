@@ -208,6 +208,26 @@ body{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;text-r
 #codeBtns .csave{font-size:12.5px;font-weight:700;color:#ffe9e2}
 #codeBtns .carrow{margin-left:auto;font-size:22px;color:#ffd93b;flex-shrink:0;text-shadow:0 2px 2px rgba(0,0,0,.2)}
 </style>
+
+<style>
+/* Nut tai khoan goc phai tren cung - thanh topbar chuyen nghiep (them 27/10/2026) */
+.topauth{margin-left:auto; display:flex; align-items:center; gap:8px; flex-shrink:0;}
+.topauth button{font-family:inherit; cursor:pointer; border-radius:999px; font-weight:800; font-size:13.5px; padding:9px 15px; line-height:1.1; transition:transform .08s ease, background .15s ease;}
+.topauth button:active{transform:scale(.96);}
+#topLogin{background:#fff; color:var(--primary-dark); border:none; box-shadow:0 2px 8px rgba(0,0,0,.20);}
+#topRegister{background:rgba(255,255,255,.14); color:#fff; border:1.5px solid rgba(255,255,255,.85);}
+#topDash{display:none; background:#fff; color:var(--primary-dark); border:none; max-width:190px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; box-shadow:0 2px 8px rgba(0,0,0,.20);}
+#topLogout{display:none; background:rgba(255,255,255,.14); color:#fff; border:1.5px solid rgba(255,255,255,.55); font-weight:700;}
+#secAccount.flash{box-shadow:0 0 0 3px rgba(238,77,45,.55), 0 4px 14px rgba(230,62,31,.10);}
+@media (max-width:640px){
+  header.topbar .tag{display:none;}
+  header.topbar .name{font-size:15px;}
+  header.topbar{padding:10px 12px;}
+  .topauth{gap:6px;}
+  .topauth button{font-size:12.5px; padding:8px 11px;}
+  #topDash{max-width:118px;}
+}
+</style>
 </head>
 <body>
 <div class="wrap">
@@ -217,6 +237,12 @@ body{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;text-r
     <div>
       <div class="name" id="pageName">Săn Sale Cùng Long</div>
       <div class="tag" id="pageTagline">Săn mã giảm giá Shopee mỗi ngày</div>
+    </div>
+    <div class="topauth">
+      <button id="topLogin" type="button">Đăng nhập</button>
+      <button id="topRegister" type="button">Đăng ký</button>
+      <button id="topDash" type="button"></button>
+      <button id="topLogout" type="button">Đăng xuất</button>
     </div>
   </header>
 
@@ -1417,6 +1443,33 @@ async function sbLoadDashboard() {
     }).catch(() => {});
   }
 }
+function updateTopAuth() {
+  const L = document.getElementById("topLogin"), R = document.getElementById("topRegister"), D = document.getElementById("topDash"), O = document.getElementById("topLogout");
+  if (!L || !R || !D || !O) return;
+  let label = "";
+  if (sb && sbUser && sbProfile) label = sbProfile.name || sbUser.email || "Tài khoản";
+  else if (!sb) { const a = myAccount(); if (a) label = a.name || "Tài khoản"; }
+  if (label) {
+    L.style.display = "none"; R.style.display = "none";
+    D.style.display = ""; O.style.display = "";
+    D.textContent = "\u{1F464} " + label;
+  } else {
+    L.style.display = ""; R.style.display = "";
+    D.style.display = "none"; O.style.display = "none";
+  }
+}
+function gotoAccount(mode) {
+  const sec = document.getElementById("secAccount"); if (!sec) return;
+  sec.scrollIntoView({ behavior: "smooth", block: "center" });
+  sec.classList.add("flash");
+  setTimeout(() => sec.classList.remove("flash"), 1800);
+  if (sbUser && sbProfile) return;
+  setTimeout(() => {
+    if (mode === "register") accMsg("👉 Điền email, mật khẩu, tên và liên hệ nhận tiền, rồi bấm Đăng ký mới — xong là có mã cá nhân ngay.");
+    else accMsg("👉 Nhập email + mật khẩu rồi bấm Đăng nhập. Chưa có tài khoản thì bấm Đăng ký mới.");
+    const e = document.getElementById("accEmail"); if (e) e.focus({ preventScroll: true });
+  }, 450);
+}
 function renderAuthUI() {
   const sec = document.getElementById("secAccount"); if (!sec) return;
   const auth = document.getElementById("accAuth"), none = document.getElementById("accNone"), have = document.getElementById("accHave");
@@ -1426,6 +1479,7 @@ function renderAuthUI() {
     if (none) none.style.display = a ? "none" : "";
     if (have) have.style.display = a ? "" : "none";
     if (a) fillDashboardLocal(a);
+    updateTopAuth();
     return;
   }
   if (sbUser && sbProfile) {
@@ -1439,10 +1493,12 @@ function renderAuthUI() {
     const nd = document.getElementById("accNameD"); if (nd && document.activeElement !== nd) nd.value = sbProfile.name || "";
     const ct = document.getElementById("accContactD"); if (ct && document.activeElement !== ct) ct.value = sbProfile.contact || "";
     sbLoadDashboard();
+    updateTopAuth();
   } else {
     if (auth) auth.style.display = "";
     if (none) none.style.display = "none";
     if (have) have.style.display = "none";
+    updateTopAuth();
   }
 }
 function fillDashboardLocal(a) {
@@ -1550,6 +1606,14 @@ async function sbLogout() {
   if (bs) bs.addEventListener("click", sbSaveProfile);
   const bo = document.getElementById("accLogout");
   if (bo) bo.addEventListener("click", sbLogout);
+  const tl = document.getElementById("topLogin");
+  if (tl) tl.addEventListener("click", () => gotoAccount("login"));
+  const tr = document.getElementById("topRegister");
+  if (tr) tr.addEventListener("click", () => gotoAccount("register"));
+  const td = document.getElementById("topDash");
+  if (td) td.addEventListener("click", () => gotoAccount("dash"));
+  const to = document.getElementById("topLogout");
+  if (to) to.addEventListener("click", sbLogout);
   const cp = document.getElementById("accCopy");
   if (cp) cp.addEventListener("click", () => { const s = document.getElementById("accShare"); if (s) copyText(s.value, "Đã sao chép link chia sẻ của bạn!"); });
   renderAuthUI();
