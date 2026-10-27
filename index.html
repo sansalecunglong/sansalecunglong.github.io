@@ -228,6 +228,11 @@ body{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;text-r
   #topDash{max-width:118px;}
 }
 </style>
+
+<style>
+@keyframes authPop{from{opacity:0; transform:translateY(12px) scale(.985);} to{opacity:1; transform:none;}}
+.toast{z-index:1300 !important;}
+</style>
 </head>
 <body>
 <div class="wrap">
@@ -354,6 +359,12 @@ body{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;text-r
       </div>
     </div>
   </section>
+
+  <div id="authModal" style="display:none; position:fixed; inset:0; z-index:999; background:rgba(24,10,4,.55); overflow-y:auto; padding:20px 10px 30px;">
+    <div id="authModalBox" style="position:relative; max-width:880px; margin:0 auto; animation:authPop .18s ease-out;">
+      <button id="authModalClose" type="button" aria-label="Dong" style="position:absolute; top:10px; right:10px; z-index:3; width:36px; height:36px; border-radius:50%; border:none; background:#fff; color:#c23215; font-size:17px; font-weight:900; cursor:pointer; box-shadow:0 2px 8px rgba(0,0,0,.28);">&#10005;</button>
+    </div>
+  </div>
 
   <section id="myResearch" style="display:none; max-width:860px; margin:18px auto 0; padding:0 14px;">
     <div style="background:#fff; border-radius:14px; padding:14px 16px; box-shadow:0 1px 4px rgba(0,0,0,.06);">
@@ -1458,18 +1469,37 @@ function updateTopAuth() {
     D.style.display = "none"; O.style.display = "none";
   }
 }
-function gotoAccount(mode) {
-  const sec = document.getElementById("secAccount"); if (!sec) return;
-  sec.scrollIntoView({ behavior: "smooth", block: "center" });
-  sec.classList.add("flash");
-  setTimeout(() => sec.classList.remove("flash"), 1800);
+let accHome = null;
+function openAuthModal(mode) {
+  const modal = document.getElementById("authModal"), box = document.getElementById("authModalBox"), sec = document.getElementById("secAccount");
+  if (!modal || !box || !sec) {
+    if (sec) sec.scrollIntoView({ behavior: "smooth", block: "center" });
+    return;
+  }
+  if (!accHome) accHome = { parent: sec.parentNode, next: sec.nextSibling };
+  box.appendChild(sec);
+  sec.style.marginTop = "0";
+  modal.style.display = "block";
+  document.body.style.overflow = "hidden";
   if (sbUser && sbProfile) return;
   setTimeout(() => {
     if (mode === "register") accMsg("👉 Điền email, mật khẩu, tên và liên hệ nhận tiền, rồi bấm Đăng ký mới — xong là có mã cá nhân ngay.");
-    else accMsg("👉 Nhập email + mật khẩu rồi bấm Đăng nhập. Chưa có tài khoản thì bấm Đăng ký mới.");
+    else if (mode === "login") accMsg("👉 Nhập email + mật khẩu rồi bấm Đăng nhập. Chưa có tài khoản thì bấm Đăng ký mới.");
     const e = document.getElementById("accEmail"); if (e) e.focus({ preventScroll: true });
-  }, 450);
+  }, 60);
 }
+function closeAuthModal() {
+  const modal = document.getElementById("authModal"), sec = document.getElementById("secAccount");
+  if (!modal || !sec) return;
+  modal.style.display = "none";
+  document.body.style.overflow = "";
+  sec.style.marginTop = "";
+  if (accHome && accHome.parent) {
+    if (accHome.next && accHome.next.parentNode === accHome.parent) accHome.parent.insertBefore(sec, accHome.next);
+    else accHome.parent.appendChild(sec);
+  }
+}
+function gotoAccount(mode) { openAuthModal(mode); }
 function renderAuthUI() {
   const sec = document.getElementById("secAccount"); if (!sec) return;
   const auth = document.getElementById("accAuth"), none = document.getElementById("accNone"), have = document.getElementById("accHave");
@@ -1606,6 +1636,11 @@ async function sbLogout() {
   if (bs) bs.addEventListener("click", sbSaveProfile);
   const bo = document.getElementById("accLogout");
   if (bo) bo.addEventListener("click", sbLogout);
+  const mc = document.getElementById("authModalClose");
+  if (mc) mc.addEventListener("click", closeAuthModal);
+  const mm = document.getElementById("authModal");
+  if (mm) mm.addEventListener("click", (ev) => { if (ev.target === mm) closeAuthModal(); });
+  document.addEventListener("keydown", (ev) => { if (ev.key === "Escape") closeAuthModal(); });
   const tl = document.getElementById("topLogin");
   if (tl) tl.addEventListener("click", () => gotoAccount("login"));
   const tr = document.getElementById("topRegister");
