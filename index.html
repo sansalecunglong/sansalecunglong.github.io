@@ -308,10 +308,14 @@ body{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;text-r
     </div>
   </section>
 
-  <section class="card" id="secAccount" style="max-width:860px; margin:18px auto 0;">
-    <h2>💰 Tài Khoản &amp; Mã Hoàn Hoa Hồng</h2>
+  
 
-    <div id="accAuth">
+  <div id="authModal" style="display:none; position:fixed; inset:0; z-index:999; background:rgba(24,10,4,.55); overflow-y:auto; padding:20px 10px 30px;">
+    <div id="authModalBox" style="position:relative; max-width:880px; margin:0 auto; animation:authPop .18s ease-out;">
+      <button id="authModalClose" type="button" aria-label="Dong" style="position:absolute; top:10px; right:10px; z-index:3; width:36px; height:36px; border-radius:50%; border:none; background:#fff; color:#c23215; font-size:17px; font-weight:900; cursor:pointer; box-shadow:0 2px 8px rgba(0,0,0,.28);">&#10005;</button>
+      <div class="card" id="accModalCard" style="margin-top:0;">
+        <h2>💰 Tài Khoản &amp; Mã Hoàn Hoa Hồng</h2>
+<div id="accAuth">
       <p class="sub" style="text-align:left;">Đăng nhập để xem <b>bảng điều khiển của bạn</b>: mã hoàn hoa hồng cá nhân, số dư shop đã đối soát và lịch sử shop trả tiền. Chưa đăng nhập vẫn săn sale bình thường — chỉ bảng điều khiển mới cần tài khoản. Mỗi tài khoản có <b>một mã riêng</b>: đơn mua qua trang này ghi theo đúng mã của bạn, hoa hồng Shopee trả về cho shop, shop đối soát và <b>trả lại bạn 80% hoa hồng của chính đơn đó</b>.</p>
       <div style="display:grid; gap:8px; margin-top:8px;">
         <input type="email" id="accEmail" placeholder="Email của bạn" autocomplete="email" style="padding:11px 12px; border:1.5px solid #ddd; border-radius:10px; font-size:15px; width:100%; box-sizing:border-box;">
@@ -328,8 +332,7 @@ body{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;text-r
         <p class="sub" id="accMsg" style="text-align:left; margin:2px 0 0;"></p>
       </div>
     </div>
-
-    <div id="accNone" style="display:none;">
+<div id="accNone" style="display:none;">
       <p class="sub" style="text-align:left;">Hệ thống đăng nhập đang bận — bạn vẫn tạo mã theo cách cũ trên máy này được:</p>
       <div style="display:grid; gap:8px; margin-top:8px;">
         <input type="text" id="accNameF" placeholder="Tên của bạn" autocomplete="name" style="padding:11px 12px; border:1.5px solid #ddd; border-radius:10px; font-size:15px; width:100%; box-sizing:border-box;">
@@ -337,8 +340,7 @@ body{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;text-r
         <button id="accCreateF" style="background:#ee4d2d; color:#fff; border:none; border-radius:10px; padding:12px; font-size:16px; font-weight:800; cursor:pointer;">Tạo mã của tôi</button>
       </div>
     </div>
-
-    <div id="accHave" style="display:none;">
+<div id="accHave" style="display:none;">
       <p style="margin:0 0 2px;">Xin chào <b id="accUserName"></b> <span id="accUserEmail" style="color:#777; font-size:13px;"></span></p>
       <p style="margin:0 0 4px;">Mã của bạn: <b id="accCode" style="font-size:24px; letter-spacing:1.5px; color:#ee4d2d;"></b></p>
       <p class="sub" style="text-align:left; margin-top:0;">Mọi link Shopee bạn mở hoặc tạo trên máy này đã tự gắn mã của bạn rồi — cứ mua như bình thường. Link chia sẻ của bạn (đơn của bạn bè qua link này cũng ghi cho bạn):</p>
@@ -358,11 +360,7 @@ body{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;text-r
         <p class="sub" style="text-align:left; margin:0;">Đăng xuất chỉ ẩn bảng điều khiển — mã vẫn gắn trên máy này để đơn của bạn tiếp tục được ghi nhận.</p>
       </div>
     </div>
-  </section>
-
-  <div id="authModal" style="display:none; position:fixed; inset:0; z-index:999; background:rgba(24,10,4,.55); overflow-y:auto; padding:20px 10px 30px;">
-    <div id="authModalBox" style="position:relative; max-width:880px; margin:0 auto; animation:authPop .18s ease-out;">
-      <button id="authModalClose" type="button" aria-label="Dong" style="position:absolute; top:10px; right:10px; z-index:3; width:36px; height:36px; border-radius:50%; border:none; background:#fff; color:#c23215; font-size:17px; font-weight:900; cursor:pointer; box-shadow:0 2px 8px rgba(0,0,0,.28);">&#10005;</button>
+      </div>
     </div>
   </div>
 
@@ -450,6 +448,19 @@ body{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;text-r
   </div>
 
   <div class="note">💡 <b>Lưu ý:</b> Sản phẩm trên trang do shop tuyển chọn; giá ghi “Từ ~” là giá tham khảo lúc cập nhật — giá cuối cùng theo Shopee lúc bạn thanh toán. Kết quả tra cứu được tổng hợp từ các nguồn công khai (Google, YouTube, các trang review) và chỉ hiển thị 3 kết quả gần nhất.</div>
+
+  <section class="card" id="secAccount" style="max-width:860px; margin:18px auto 0;">
+    <h2>💰 Tài Khoản &amp; Mã Hoàn Hoa Hồng</h2>
+    <p class="sub" style="text-align:left;">Mỗi khách một mã riêng — đơn mua qua trang này ghi theo đúng mã của bạn, shop đối soát hoa hồng Shopee và trả lại bạn <b>80% hoa hồng của đơn đó</b>. Đăng nhập để xem mã của bạn, số dư và lịch sử shop trả tiền trong bảng điều khiển.</p>
+    <div id="accCtaOut" style="display:flex; gap:10px; flex-wrap:wrap;">
+      <button id="ctaLogin" type="button" style="flex:1; min-width:140px; background:#ee4d2d; color:#fff; border:none; border-radius:12px; padding:13px; font-size:16px; font-weight:800; cursor:pointer;">Đăng nhập</button>
+      <button id="ctaRegister" type="button" style="flex:1; min-width:140px; background:#fff; color:#ee4d2d; border:2px solid #ee4d2d; border-radius:12px; padding:13px; font-size:16px; font-weight:800; cursor:pointer;">Đăng ký</button>
+    </div>
+    <div id="accCtaIn" style="display:none;">
+      <p style="margin:0 0 10px;">Xin chào <b id="ctaName"></b> — mã hoàn hoa hồng của bạn: <b id="ctaCode" style="color:#ee4d2d; letter-spacing:1px;"></b></p>
+      <button id="ctaDash" type="button" style="width:100%; background:#0b57d0; color:#fff; border:none; border-radius:12px; padding:13px; font-size:15.5px; font-weight:800; cursor:pointer;">👤 Mở bảng điều khiển của tôi</button>
+    </div>
+  </section>
 
   <footer>
     <div class="fname" id="footName">Săn Sale Cùng Long</div>
@@ -1469,16 +1480,9 @@ function updateTopAuth() {
     D.style.display = "none"; O.style.display = "none";
   }
 }
-let accHome = null;
 function openAuthModal(mode) {
-  const modal = document.getElementById("authModal"), box = document.getElementById("authModalBox"), sec = document.getElementById("secAccount");
-  if (!modal || !box || !sec) {
-    if (sec) sec.scrollIntoView({ behavior: "smooth", block: "center" });
-    return;
-  }
-  if (!accHome) accHome = { parent: sec.parentNode, next: sec.nextSibling };
-  box.appendChild(sec);
-  sec.style.marginTop = "0";
+  const modal = document.getElementById("authModal");
+  if (!modal) return;
   modal.style.display = "block";
   document.body.style.overflow = "hidden";
   if (sbUser && sbProfile) return;
@@ -1489,14 +1493,23 @@ function openAuthModal(mode) {
   }, 60);
 }
 function closeAuthModal() {
-  const modal = document.getElementById("authModal"), sec = document.getElementById("secAccount");
-  if (!modal || !sec) return;
+  const modal = document.getElementById("authModal");
+  if (!modal) return;
   modal.style.display = "none";
   document.body.style.overflow = "";
-  sec.style.marginTop = "";
-  if (accHome && accHome.parent) {
-    if (accHome.next && accHome.next.parentNode === accHome.parent) accHome.parent.insertBefore(sec, accHome.next);
-    else accHome.parent.appendChild(sec);
+}
+function updateAccCta() {
+  const out = document.getElementById("accCtaOut"), inn = document.getElementById("accCtaIn");
+  if (!out || !inn) return;
+  let name = "", code = "";
+  if (sb && sbUser && sbProfile) { name = sbProfile.name || sbUser.email || ""; code = sbProfile.code || ""; }
+  else if (!sb) { const a = myAccount(); if (a) { name = a.name || ""; code = a.code || ""; } }
+  if (code) {
+    out.style.display = "none"; inn.style.display = "";
+    const n = document.getElementById("ctaName"); if (n) n.textContent = name;
+    const c = document.getElementById("ctaCode"); if (c) c.textContent = code.toUpperCase();
+  } else {
+    out.style.display = "flex"; inn.style.display = "none";
   }
 }
 function gotoAccount(mode) { openAuthModal(mode); }
@@ -1509,7 +1522,7 @@ function renderAuthUI() {
     if (none) none.style.display = a ? "none" : "";
     if (have) have.style.display = a ? "" : "none";
     if (a) fillDashboardLocal(a);
-    updateTopAuth();
+    updateTopAuth(); updateAccCta();
     return;
   }
   if (sbUser && sbProfile) {
@@ -1523,12 +1536,12 @@ function renderAuthUI() {
     const nd = document.getElementById("accNameD"); if (nd && document.activeElement !== nd) nd.value = sbProfile.name || "";
     const ct = document.getElementById("accContactD"); if (ct && document.activeElement !== ct) ct.value = sbProfile.contact || "";
     sbLoadDashboard();
-    updateTopAuth();
+    updateTopAuth(); updateAccCta();
   } else {
     if (auth) auth.style.display = "";
     if (none) none.style.display = "none";
     if (have) have.style.display = "none";
-    updateTopAuth();
+    updateTopAuth(); updateAccCta();
   }
 }
 function fillDashboardLocal(a) {
@@ -1641,6 +1654,12 @@ async function sbLogout() {
   const mm = document.getElementById("authModal");
   if (mm) mm.addEventListener("click", (ev) => { if (ev.target === mm) closeAuthModal(); });
   document.addEventListener("keydown", (ev) => { if (ev.key === "Escape") closeAuthModal(); });
+  const cl = document.getElementById("ctaLogin");
+  if (cl) cl.addEventListener("click", () => gotoAccount("login"));
+  const cr = document.getElementById("ctaRegister");
+  if (cr) cr.addEventListener("click", () => gotoAccount("register"));
+  const cd2 = document.getElementById("ctaDash");
+  if (cd2) cd2.addEventListener("click", () => gotoAccount("dash"));
   const tl = document.getElementById("topLogin");
   if (tl) tl.addEventListener("click", () => gotoAccount("login"));
   const tr = document.getElementById("topRegister");
