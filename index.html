@@ -749,6 +749,40 @@ function loadApiSummary(nm, rawUrl) {
     .catch(() => render(null));
 }
 
+/* Bộ giải link đã qua tay người khác (Long chốt 27/10/2026: luôn lọc mọi link
+   thành link affiliate của shop). Link affiliate của người khác bóc được ngay
+   trong trang (unwrapAffiliate: đọc tham số origin_link). Link rút gọn thì
+   trang tĩnh KHÔNG tự đọc được đích (trình duyệt chặn đọc chuyển hướng khác
+   nguồn) — cần backend nhỏ: RESOLVER_URL là URL Web App Google Apps Script
+   của shop (mã nguồn resolver-apps-script.gs); để trống thì link rút gọn
+   hiện hướng dẫn như cũ. */
+const RESOLVER_URL = "";
+function unwrapAffiliate(u) {
+  try {
+    const o = new URL(u).searchParams.get("origin_link");
+    return o ? normalizeUrl(o) : "";
+  } catch (e) { return ""; }
+}
+function resolveShortLink(shortUrl) {
+  const ctrl = new AbortController();
+  const t = setTimeout(() => ctrl.abort(), 9000);
+  return fetch(RESOLVER_URL + "?u=" + encodeURIComponent(shortUrl), { signal: ctrl.signal })
+    .then(r => r.json())
+    .then(j => { clearTimeout(t); return (j && j.ok && j.final) ? String(j.final) : ""; })
+    .catch(() => { clearTimeout(t); return ""; });
+}
+function showBlockedGuidance() {
+  const doneTxt = document.getElementById("prodDoneTxt");
+  doneTxt.textContent = "⚠️ Link này chưa đổi được";
+  doneTxt.style.color = "#d35400";
+  document.getElementById("topVoucher").style.display = "none";
+  document.getElementById("reviewBox").style.display = "none";
+  document.getElementById("openGuide").style.display = "none";
+  document.getElementById("result").style.display = "block";
+  document.getElementById("warnBox").textContent = "Link rút gọn (shope.ee/shp.ee/s.shopee.vn) hoặc link đã gắn sẵn mã của người khác: Shopee sẽ báo lỗi \"không tìm thấy trang\" nếu gắn thêm mã nữa, nên trang không đổi link dạng này. Cách lấy link đổi được: mở link này bằng trình duyệt (Safari/Chrome) cho tới khi hiện đúng sản phẩm → sao chép link trên thanh địa chỉ (dạng shopee.vn/...) → dán lại vào đây là săn sale được ngay.";
+  document.getElementById("result").scrollIntoView({behavior:"smooth", block:"nearest"});
+}
+
 function doConvert(rawInput) {
   const warnBox = document.getElementById("warnBox");
   warnBox.textContent = "";
@@ -761,21 +795,45 @@ function doConvert(rawInput) {
   const isUrl = /^https?:\/\//i.test(raw) || /^shopee?\.(vn|ee)/i.test(raw) || /^shope\.ee/i.test(raw) || /^shp\.ee/i.test(raw);
   if (isUrl) {
     const url = normalizeUrl(raw);
-    /* Link rút gọn (shope.ee/shp.ee) và link đã chứa sẵn an_redir/affiliate_id là link
-       ĐÃ qua tay người khác. Gắn thêm mã của shop vào thì Shopee văng ra trang lỗi
-       "Oops!! The page you are looking for cannot be found" (đã kiểm chứng thực tế
-       ngày 26/10/2026) — nên KHÔNG đổi các link dạng này, mà hướng dẫn khách lấy
-       link gốc đầy đủ của sản phẩm. */
-    if (isShortLink(url) || alreadyAffiliate(url)) {
-      const doneTxt = document.getElementById("prodDoneTxt");
-      doneTxt.textContent = "⚠️ Link này chưa đổi được";
-      doneTxt.style.color = "#d35400";
-      document.getElementById("topVoucher").style.display = "none";
-      document.getElementById("reviewBox").style.display = "none";
-      document.getElementById("openGuide").style.display = "none";
-      document.getElementById("result").style.display = "block";
-      warnBox.textContent = "Link rút gọn (shope.ee/shp.ee/s.shopee.vn) hoặc link đã gắn sẵn mã của người khác: Shopee sẽ báo lỗi \"không tìm thấy trang\" nếu gắn thêm mã nữa, nên trang không đổi link dạng này. Cách lấy link đổi được: mở link này bằng trình duyệt (Safari/Chrome) cho tới khi hiện đúng sản phẩm → sao chép link trên thanh địa chỉ (dạng shopee.vn/...) → dán lại vào đây là săn sale được ngay.";
-      document.getElementById("result").scrollIntoView({behavior:"smooth", block:"nearest"});
+    /* Link đã qua tay người khác (rút gọn / chứa sẵn mã affiliate): TUYỆT ĐỐI
+       không bọc thêm mã (bọc chồng → Shopee báo lỗi "Oops!!", đã kiểm chứng
+       26/10/2026). Xử lý đúng (Long chốt 27/10/2026): lấy link gốc rồi gắn mã
+       của shop như link thường — link affiliate bóc ngay trong trang; link
+       rút gọn nhờ backend giải (RESOLVER_URL), chưa có backend hoặc giải lỗi
+       thì mới hiện hướng dẫn khách lấy link đầy đủ. */
+    if (alreadyAffiliate(url)) {
+      const origin = unwrapAffiliate(url);
+      if (origin && isShopeeUrl(origin) && !isShortLink(origin) && !alreadyAffiliate(origin)) {
+        lastCat = detectCat(origin);
+        lastRawUrl = origin;
+        finishConvert(raw, buildAffiliateLink(cleanOriginParams(origin), CONFIG.affiliateId, curSubId()), true,
+          ["ℹ️ Link bạn dán đã gắn mã của người khác — trang đã lọc lại thành link của shop, yên tâm săn sale."]);
+        return;
+      }
+      showBlockedGuidance();
+      return;
+    }
+    if (isShortLink(url)) {
+      if (RESOLVER_URL) {
+        const doneTxt = document.getElementById("prodDoneTxt");
+        doneTxt.textContent = "⏳ Đang lấy link gốc từ link rút gọn…";
+        doneTxt.style.color = "#d35400";
+        document.getElementById("topVoucher").style.display = "none";
+        document.getElementById("reviewBox").style.display = "none";
+        document.getElementById("openGuide").style.display = "none";
+        document.getElementById("result").style.display = "block";
+        document.getElementById("result").scrollIntoView({behavior:"smooth", block:"nearest"});
+        resolveShortLink(url).then(finalUrl => {
+          const f = finalUrl ? normalizeUrl(finalUrl) : "";
+          if (f && isShopeeUrl(f) && !isShortLink(f) && !alreadyAffiliate(f)) {
+            lastCat = detectCat(f);
+            lastRawUrl = f;
+            finishConvert(raw, buildAffiliateLink(cleanOriginParams(f), CONFIG.affiliateId, curSubId()), true, []);
+          } else showBlockedGuidance();
+        });
+        return;
+      }
+      showBlockedGuidance();
       return;
     }
     const warns = [];
