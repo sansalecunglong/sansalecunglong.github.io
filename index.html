@@ -261,8 +261,8 @@ body{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;text-r
       <p class="warn" id="warnBox"></p>
     </div>
     <div id="history" style="display:none; margin-top:14px; background:#fff; color:var(--text); border-radius:12px; padding:12px 14px;">
-      <div style="font-weight:700; font-size:14.5px; text-decoration:underline;">Lịch Sử Săn Sale</div>
-      <div id="histList"></div>
+      <div id="histHead" style="font-weight:700; font-size:14.5px; text-decoration:underline; cursor:pointer;">Lịch Sử Săn Sale <span id="histChevron">▸</span></div>
+      <div id="histList" style="display:none;"></div>
     </div>
     <div class="chips" id="chips"></div>
     <div id="upcomingBox" style="margin-top:14px; background:#fff; color:var(--text); border:1.5px dashed var(--primary); border-radius:12px; padding:12px 14px;">
@@ -270,6 +270,14 @@ body{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;text-r
       <div id="nextFrame" style="font-size:13.5px; margin-top:5px;"></div>
       <div id="upcomingList"></div>
       <div style="font-size:12px; color:#777; margin-top:8px;">Các khung giờ nhả mã và đợt sale lớn sắp tới — canh đúng giờ vào app Shopee để lưu mã tại banner nhé.</div>
+    </div>
+  </section>
+
+  <section id="secVoucher" style="max-width:860px; margin:18px auto 0; padding:0 14px;">
+    <div style="background:#fff; border-radius:14px; padding:16px;">
+      <div style="font-weight:800; font-size:17px;">🎟️ Mã Giảm Giá Đang Có Hiệu Lực</div>
+      <div style="font-size:12.5px; color:#777; margin-top:4px;">Cập nhật lúc <span id="voucherUpdated"></span> · Nguồn: ANM — hệ thống tra mã Shopee. Mã có thể hết lượt bất cứ lúc nào; áp được hay không do Shopee quyết ở bước thanh toán (tùy tài khoản, ngành hàng và từng đợt sale).</div>
+      <div id="voucherList" style="display:grid; gap:10px; margin-top:12px;"></div>
     </div>
   </section>
 
@@ -398,6 +406,22 @@ const UPCOMING = [
 /* Sản phẩm hot — 10 món đầu là BẢNG XẾP HẠNG, xếp theo độ BÁN CHẠY trên Shopee (sản phẩm xu hướng / lượt bán tăng / ngành dẫn đầu), các món sau là hot bổ sung; tuyển chọn mức giá rẻ nhất + ưu tiên shop đánh giá 4.5★+;
    keyword = từ khóa tìm trên Shopee, price = giá tham khảo "từ", img = ảnh thật của loại sản phẩm */
 /* Kết quả tra cứu tự động: job nền tra-cuu-tu-dong ghi vào sau khi tra cứu link khách gửi qua form (mới nhất lên đầu, tối đa 3 mục). */
+/* MÃ GIẢM GIÁ ĐANG CÓ HIỆU LỰC (Long khôi phục 27/10/2026 — dạng thẻ đầy đủ):
+   mỗi mã phải có mặt trên nguồn tổng hợp (ANM tra mã / noti.sale) trong cửa sổ
+   còn hiệu lực; TUYỆT ĐỐI không bịa mã, không bịa số lượt còn. Job nền mỗi giờ
+   rà lại: mã nào nguồn không còn liệt kê hoặc đã hết hạn thì gỡ. */
+const VOUCHER_UPDATED = "08:15 27/10/2026";
+const VOUCHERS = [
+  { code: "VNM250KOCT", off: "Giảm 12% tối đa 250K", cond: "Đơn từ 200K", fam: "Toàn sàn Shopee", exp: "Hết hạn 31/10/2026", chk: "ANM, 08:15 27/10" },
+  { code: "WASTON150K", off: "Giảm 14% tối đa 150K", cond: "Đơn từ 150K", fam: "Toàn sàn Shopee", exp: "Hết hạn 31/10/2026", chk: "ANM, 08:15 27/10" },
+  { code: "VIDEO-1530863982120960", off: "Giảm 18% tối đa 99K", cond: "Đơn từ 99K", fam: "Shopee Video — Siêu Sale Quốc Tế", exp: "Hết hạn 31/10/2026", chk: "ANM, 08:15 27/10" },
+  { code: "VIDEO-1530863982383108", off: "Giảm 16% tối đa 150K", cond: "Đơn từ 99K", fam: "Shopee Video — Siêu Sale Quốc Tế", exp: "Hết hạn 31/10/2026", chk: "ANM, 08:15 27/10" },
+  { code: "VIDEO-1530863990116360", off: "Giảm 16% tối đa 150K", cond: "Đơn từ 150K", fam: "Shopee Video — Siêu Sale Quốc Tế", exp: "Hết hạn 31/10/2026", chk: "ANM, 08:15 27/10" },
+  { code: "VIDEO-1530863988936708", off: "Giảm 15% tối đa 80K", cond: "Đơn từ 99K", fam: "Shopee Video — Siêu Sale Quốc Tế", exp: "Hết hạn 31/10/2026", chk: "ANM, 08:15 27/10" },
+  { code: "VIDEO-1532309800783872", off: "Giảm 20% tối đa 140K", cond: "Đơn từ 250K", fam: "Shopee Video — Thời Trang", exp: "Hết hạn 31/10/2026", chk: "ANM, 08:15 27/10" },
+  { code: "VIDEO-1532309799997440", off: "Giảm 21% tối đa 400K", cond: "Đơn từ 700K", fam: "Shopee Video — Thời Trang", exp: "Hết hạn 31/10/2026", chk: "ANM, 08:15 27/10" }
+];
+
 const TRA_CUU = [
   {
     "rid": "ACYDBNhSuMqxBRjUkV7VGBv5a5V31gBX_85lRB35cFPCOAlOHY9r11zpJ8Z4l6jBXu6yD-Q",
@@ -1251,6 +1275,78 @@ QAS.forEach(item => {
   });
 })();
 
+/* Render MỤC MÃ GIẢM GIÁ (thẻ đầy đủ: mã to, nút Sao chép + xác nhận, báo hết hạn) */
+function fallbackCopy(text, done) {
+  try {
+    const ta = document.createElement("textarea");
+    ta.value = text;
+    ta.style.cssText = "position:fixed; opacity:0;";
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand("copy");
+    document.body.removeChild(ta);
+    done();
+  } catch (e) { toast("Không tự sao chép được — bạn ghi lại mã: " + text); }
+}
+function copyVoucherCode(code, btn) {
+  const done = () => {
+    toast("Đã sao chép mã " + code);
+    if (btn) { const o = btn.textContent; btn.textContent = "✅ Đã sao chép"; setTimeout(() => { btn.textContent = o; }, 1600); }
+  };
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(code).then(done).catch(() => fallbackCopy(code, done));
+  } else fallbackCopy(code, done);
+}
+(function renderVouchers() {
+  const box = document.getElementById("voucherList");
+  if (!box) return;
+  const upd = document.getElementById("voucherUpdated");
+  if (upd) upd.textContent = VOUCHER_UPDATED;
+  VOUCHERS.forEach(v => {
+    const card = document.createElement("div");
+    card.style.cssText = "border:1.5px solid #ffd9c7; border-radius:12px; padding:12px 14px; background:#fffaf7;";
+    const code = document.createElement("div");
+    code.style.cssText = "font-size:20px; font-weight:800; letter-spacing:.5px; color:#d35400; word-break:break-all;";
+    code.textContent = v.code;
+    card.appendChild(code);
+    const off = document.createElement("div");
+    off.style.cssText = "font-size:15px; font-weight:700; margin-top:2px;";
+    off.textContent = v.off + " · " + v.cond;
+    card.appendChild(off);
+    const meta = document.createElement("div");
+    meta.style.cssText = "font-size:12.5px; color:#777; margin-top:3px;";
+    meta.textContent = v.fam + " · " + v.exp + " · Kiểm tra lần cuối: " + v.chk;
+    card.appendChild(meta);
+    const row = document.createElement("div");
+    row.style.cssText = "display:flex; gap:10px; align-items:center; margin-top:9px; flex-wrap:wrap;";
+    const btn = document.createElement("button");
+    btn.style.cssText = "background:var(--primary); color:#fff; border:none; border-radius:10px; padding:9px 16px; font-weight:700; font-size:14px; cursor:pointer;";
+    btn.textContent = "📋 Sao chép mã";
+    btn.addEventListener("click", () => copyVoucherCode(v.code, btn));
+    row.appendChild(btn);
+    const rep = document.createElement("a");
+    rep.href = "https://m.me/Levietlong95?text=" + encodeURIComponent("Shop ơi, mã " + v.code + " hình như hết hạn hoặc hết lượt rồi.");
+    rep.target = "_blank"; rep.rel = "noopener";
+    rep.style.cssText = "font-size:13px; color:#888;";
+    rep.textContent = "⚠️ Báo mã hết hạn";
+    row.appendChild(rep);
+    card.appendChild(row);
+    box.appendChild(card);
+  });
+})();
+
+/* Lịch Sử Săn Sale: thu gọn mặc định, ấn vào tiêu đề mới mở */
+(function () {
+  const head = document.getElementById("histHead");
+  if (!head) return;
+  head.addEventListener("click", () => {
+    const l = document.getElementById("histList");
+    const open = l.style.display !== "none";
+    l.style.display = open ? "none" : "block";
+    document.getElementById("histChevron").textContent = open ? "▸" : "▾";
+  });
+})();
+
 document.querySelectorAll("a[href]").forEach(a => { const w = affiliateWrap(a.href); a.href = w; if (w.indexOf("an_redir") !== -1) a.rel = "sponsored nofollow noopener"; });
 document.addEventListener("click", e => {
   const a = e.target.closest ? e.target.closest("a[href]") : null;
@@ -1261,9 +1357,7 @@ document.addEventListener("click", e => {
 document.getElementById("pageName").textContent = CONFIG.pageName;
 document.getElementById("pageTagline").textContent = CONFIG.tagline;
 document.getElementById("footName").textContent = CONFIG.pageName;
-document.getElementById("footContact").textContent = CONFIG.contact;
 document.getElementById("updStamp").textContent = "Cập nhật: " + PAGE_UPDATED + ".";
-document.title = CONFIG.pageName + " — Săn mã giảm giá Shopee";
 </script>
 </body>
 </html>
