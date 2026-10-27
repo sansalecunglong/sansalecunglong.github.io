@@ -258,7 +258,7 @@ body{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;text-r
         <div style="font-weight:800;">🔎 Bước 3: Tra cứu độ tin cậy</div>
         <div id="reviewProd" style="margin-top:2px;"></div>
         <div id="apiSummary" style="display:none; background:#eef6ff; border:1px solid #b9d7f5; border-radius:9px; padding:8px 10px; margin-top:7px;"></div>
-        <div style="color:#555;">Ấn nút <b>Tra cứu</b>: shop tự tra thông tin sản phẩm — có đáng mua hay không, ưu điểm và khuyết điểm rõ ràng, ngắn gọn — rồi đăng kết luận ở mục <b>Kết quả tra cứu gần đây</b> trên trang này sau khoảng 3–5 phút.</div>
+        <div style="color:#555;">Ấn nút <b>Tra cứu</b>: shop tự tra thông tin sản phẩm — có đáng mua hay không, ưu điểm và khuyết điểm rõ ràng, ngắn gọn — rồi gửi kết luận về mục <b>Kết quả tra cứu của bạn</b> ở phía dưới — chỉ máy của bạn mới xem được — sau khoảng 3–5 phút.</div>
         <a id="askResearchBtn" class="dealbtn solo" target="_blank" rel="noopener" style="margin-top:7px; background:#e7f0fe; color:#0b57d0; border:1.5px solid #0b57d0;">🤝 Tra cứu</a>
         <div style="color:#555; margin-top:8px;"><b>Đọc nhanh:</b> shop 4.5★+ và nhiều đánh giá là tín hiệu tốt · nhiều người chê cùng một lỗi thì bỏ qua · có ảnh/video thật của người mua càng đáng tin.</div>
       </div>
@@ -277,11 +277,11 @@ body{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;text-r
     </div>
   </section>
 
-  <section id="researchResults" style="max-width:860px; margin:18px auto 0; padding:0 14px;">
+  <section id="myResearch" style="display:none; max-width:860px; margin:18px auto 0; padding:0 14px;">
     <div style="background:#fff; border-radius:14px; padding:14px 16px; box-shadow:0 1px 4px rgba(0,0,0,.06);">
-      <div style="font-weight:800; font-size:17px;">🔎 Kết quả tra cứu gần đây</div>
-      <div style="font-size:13px; color:#666; margin-top:3px;">Khách gửi link ở Bước 1, shop tự tra cứu chất lượng sản phẩm (thông tin sản phẩm, đánh giá trên Google, YouTube và các trang review) rồi đăng kết quả tại đây — mới nhất xếp trên cùng.</div>
-      <div id="traCuuList" style="margin-top:10px;"></div>
+      <div style="font-weight:800; font-size:17px;">🔎 Kết quả tra cứu của bạn</div>
+      <div style="font-size:13px; color:#666; margin-top:3px;">Chỉ máy của bạn mới thấy mục này — shop gửi kết quả riêng về đúng máy đã gửi link tra cứu.</div>
+      <div id="myResearchList" style="margin-top:10px;"></div>
     </div>
   </section>
 
@@ -416,48 +416,6 @@ const VOUCHERS = [
   { code: "VIDEO-1530863988936708", off: "Giảm 15% tối đa 80K", cond: "Đơn từ 99K", fam: "Shopee Video — Siêu Sale Quốc Tế", exp: "Hết hạn 31/10/2026", chk: "ANM, 08:15 27/10" },
   { code: "VIDEO-1532309800783872", off: "Giảm 20% tối đa 140K", cond: "Đơn từ 250K", fam: "Shopee Video — Thời Trang", exp: "Hết hạn 31/10/2026", chk: "ANM, 08:15 27/10" },
   { code: "VIDEO-1532309799997440", off: "Giảm 21% tối đa 400K", cond: "Đơn từ 700K", fam: "Shopee Video — Thời Trang", exp: "Hết hạn 31/10/2026", chk: "ANM, 08:15 27/10" }
-];
-
-const TRA_CUU = [
-  {
-    "rid": "ACYDBNje6qqqBq3MoHhvUebwt3WT6k3QprR-YW4WCNikuTParfnAY9yEccjohVo1CcxOEy4",
-    "name": "Sản phẩm qua link rút gọn",
-    "link": "https://shopee.vn/opaanlp/961271685/28987236948",
-    "verdict": "⚠️ Link rút gọn nên chưa đọc được tên sản phẩm — bạn gửi lại link đầy đủ shopee.vn để shop tra cứu chi tiết.",
-    "points": [
-      "Link bạn gửi là link dạng opaanlp (không có tên sản phẩm) nên shop chưa đọc được tên sản phẩm từ link.",
-      "Bạn mở link trong app Shopee, bấm Chia sẻ → Sao chép liên kết để lấy link đầy đủ dạng shopee.vn/…-i.<mã shop>.<mã sản phẩm>, rồi gửi lại qua form để shop tra cứu.",
-      "Link đầy đủ cũng giúp shop thấy đúng tên, giá và đánh giá của sản phẩm trước khi kết luận."
-    ],
-    "time": "08:52 27/10",
-    "asker": ""
-  },
-  {
-    "rid": "ACYDBNhSuMqxBRjUkV7VGBv5a5V31gBX_85lRB35cFPCOAlOHY9r11zpJ8Z4l6jBXu6yD-Q",
-    "name": "Sản phẩm qua link rút gọn",
-    "link": "https://shopee.vn/opaanlp/958778013/56208488536",
-    "verdict": "⚠️ Link rút gọn nên chưa đọc được tên sản phẩm — bạn gửi lại link đầy đủ shopee.vn để shop tra cứu chi tiết.",
-    "points": [
-      "Link bạn gửi là link rút gọn (s.shopee.vn) nên shop chưa đọc được tên sản phẩm từ link.",
-      "Bạn mở link trong app Shopee, bấm Chia sẻ → Sao chép liên kết để lấy link đầy đủ dạng shopee.vn/…-i.<mã shop>.<mã sản phẩm>, rồi gửi lại qua form để shop tra cứu.",
-      "Link đầy đủ cũng giúp shop thấy đúng tên, giá và đánh giá của sản phẩm trước khi kết luận."
-    ],
-    "time": "06:28 27/10",
-    "asker": ""
-  },
-  {
-    "rid": "ACYDBNiVrn602iMD-SGNPC7Xl3vmxroH6Vj8QcmmsMdAAoYC2Iahdz9blvwqtzh59pzYlNw",
-    "name": "Sản phẩm qua link rút gọn",
-    "link": "https://shopee.vn/opaanlp/1479292231/24743390528",
-    "verdict": "⚠️ Link rút gọn nên chưa đọc được tên sản phẩm — bạn gửi lại link đầy đủ shopee.vn để shop tra cứu chi tiết.",
-    "points": [
-      "Link bạn gửi là link rút gọn (s.shopee.vn) nên shop chưa đọc được tên sản phẩm từ link.",
-      "Bạn mở link trong app Shopee, bấm Chia sẻ → Sao chép liên kết để lấy link đầy đủ dạng shopee.vn/…-i.<mã shop>.<mã sản phẩm>, rồi gửi lại qua form để shop tra cứu.",
-      "Link đầy đủ cũng giúp shop thấy đúng tên, giá và đánh giá của sản phẩm trước khi kết luận."
-    ],
-    "time": "23:06 26/10",
-    "asker": ""
-  }
 ];
 
 const PRODUCTS = [
@@ -961,7 +919,7 @@ function finishConvert(raw, aff, isUrl, warns) {
     const bEl = document.createElement("b");
     bEl.textContent = nm || "theo link bạn vừa dán";
     rp.appendChild(bEl);
-    document.getElementById("askResearchBtn").href = "https://docs.google.com/forms/d/e/1FAIpQLSfEbbNQ6sUJk4ExL9H-bCIptlaSqaxl-6DTvttz968rFOjJ_Q/viewform?entry.651707015=" + encodeURIComponent(lastRawUrl);
+    document.getElementById("askResearchBtn").href = "https://docs.google.com/forms/d/e/1FAIpQLSfEbbNQ6sUJk4ExL9H-bCIptlaSqaxl-6DTvttz968rFOjJ_Q/viewform?entry.651707015=" + encodeURIComponent(lastRawUrl) + "&entry.1845022065=" + encodeURIComponent(myToken());
     rb.style.display = "block";
     if (nm) loadApiSummary(nm, lastRawUrl);
   }
@@ -1279,34 +1237,64 @@ QAS.forEach(item => {
 
 /* Lớp bảo hiểm toàn trang: quét mọi thẻ <a> trỏ tới Shopee và bọc mã affiliate;
    đồng thời chặn ở thời điểm bấm cho cả link được thêm vào sau (nội dung động). */
-/* Mục KẾT QUẢ TRA CỨU GẦN ĐÂY: render từ mảng TRA_CUU (job nền ghi vào).
-   Mọi chữ đều từ dữ liệu tra cứu thật, chèn bằng textContent cho an toàn;
-   link sản phẩm để nguyên dạng gốc, vòng quét affiliate cuối trang tự bọc mã. */
-(function renderTraCuu() {
-  const box = document.getElementById("traCuuList");
-  if (!box) return;
-  box.textContent = "";
-  if (!TRA_CUU.length) {
-    const e = document.createElement("div");
-    e.style.cssText = "font-size:13.5px; color:#777; padding:8px 0 2px;";
-    e.textContent = "Chưa có kết quả nào — hãy là người đầu tiên gửi link tra cứu ở Bước 1 phía trên!";
-    box.appendChild(e);
-    return;
+/* KẾT QUẢ TRA CỨU RIÊNG THEO MÁY (Long chốt 27/10/2026): mỗi máy có một mã
+   riêng lưu trong localStorage; khi gửi form, mã đi kèm link. Job nền ghi kết
+   quả vào file tracuu.json theo mã; trang tự tải về và chỉ hiện kết quả của
+   đúng máy này trong mục "Kết quả tra cứu của bạn" rồi lưu lại trên máy. */
+function myToken() {
+  let t = "";
+  try { t = localStorage.getItem("sscl_token") || ""; } catch (err) {}
+  if (!t) {
+    t = "m" + Date.now().toString(36) + Math.random().toString(36).slice(2, 10);
+    try { localStorage.setItem("sscl_token", t); } catch (err) {}
   }
-  TRA_CUU.forEach(t => {
+  return t;
+}
+function myResearchLoad() {
+  try { return JSON.parse(localStorage.getItem("sscl_myresearch") || "[]"); } catch (err) { return []; }
+}
+function myResearchSave(list) {
+  try { localStorage.setItem("sscl_myresearch", JSON.stringify(list.slice(0, 8))); } catch (err) {}
+}
+function renderMyResearch() {
+  const sec = document.getElementById("myResearch");
+  const box = document.getElementById("myResearchList");
+  if (!sec || !box) return;
+  const list = myResearchLoad();
+  if (!list.length) { sec.style.display = "none"; return; }
+  sec.style.display = "block";
+  box.textContent = "";
+  list.forEach(t => {
     const card = document.createElement("div");
     card.style.cssText = "border:1px solid #eee; border-radius:10px; padding:10px 12px; margin-bottom:9px; background:#fffdf7;";
     const h = document.createElement("div");
     h.style.cssText = "font-weight:700; font-size:14.5px;";
     h.textContent = t.name || "Sản phẩm";
     card.appendChild(h);
-    if (t.time || t.asker) {
+    if (t.time) {
       const meta = document.createElement("div");
       meta.style.cssText = "font-size:12px; color:#888; margin-top:1px;";
-      meta.textContent = (t.time ? "🕒 " + t.time : "") + (t.asker ? " · theo yêu cầu của " + t.asker : "");
+      meta.textContent = "🕒 " + t.time;
       card.appendChild(meta);
     }
-    if (t.verdict) {
+    if (t.status === "pending") {
+      const v = document.createElement("div");
+      v.style.cssText = "font-size:13.5px; margin-top:5px; font-weight:700; color:#8a6d00;";
+      const sp = document.createElement("span");
+      sp.textContent = "⏳";
+      sp.style.cssText = "display:inline-block; animation:ssclspin 1.2s linear infinite;";
+      v.appendChild(sp);
+      const tx = document.createElement("span");
+      tx.className = "sscl-elapsed";
+      tx.setAttribute("data-started", String(t.startedAt || Date.now()));
+      tx.textContent = " Đang tra cứu… 00:00";
+      v.appendChild(tx);
+      const sub = document.createElement("div");
+      sub.style.cssText = "font-size:12.5px; color:#777; font-weight:400; margin-top:2px;";
+      sub.textContent = "Shop đang đọc sản phẩm và rà review — kết quả sẽ tự hiện tại đây, bạn cứ để trang mở hoặc quay lại sau.";
+      v.appendChild(sub);
+      card.appendChild(v);
+    } else if (t.verdict) {
       const v = document.createElement("div");
       v.style.cssText = "font-size:13.5px; margin-top:5px; font-weight:700; color:#14532d;";
       v.textContent = t.verdict;
@@ -1328,6 +1316,71 @@ QAS.forEach(item => {
       card.appendChild(a);
     }
     box.appendChild(card);
+  });
+}
+async function pollMyResearch(force) {
+  const list = myResearchLoad();
+  if (!force && !list.some(t => t.status === "pending")) return;
+  try {
+    const r = await fetch("tracuu.json?_=" + Date.now(), { cache: "no-store" });
+    if (!r.ok) return;
+    const all = await r.json();
+    const mine = (all && all[myToken()]) || [];
+    if (!mine.length) return;
+    let changed = false;
+    mine.forEach(srv => {
+      let i = list.findIndex(t => t.rid && srv.rid && t.rid === srv.rid);
+      if (i < 0) i = list.findIndex(t => t.status === "pending" && t.link === srv.link);
+      if (i >= 0) { const mg = Object.assign({}, list[i], srv); if (mg.status === "pending" && !mg.startedAt) mg.startedAt = list[i].startedAt || Date.now(); list[i] = mg; changed = true; }
+      else if (!list.some(t => t.rid === srv.rid)) { if (srv.status === "pending" && !srv.startedAt) srv.startedAt = Date.now(); list.unshift(srv); changed = true; }
+    });
+    if (changed) { myResearchSave(list); renderMyResearch(); }
+  } catch (err) {}
+}
+/* Gửi yêu cầu tra cứu THẲNG vào hệ thống của shop (Google Form chạy ẩn —
+   khách không thấy form, không phải điền gì thêm; Long chốt 27/10/2026). */
+function submitResearchHidden(link) {
+  try {
+    const body = new URLSearchParams();
+    body.set("entry.651707015", link);
+    body.set("entry.1845022065", myToken());
+    fetch("https://docs.google.com/forms/d/e/1FAIpQLSfEbbNQ6sUJk4ExL9H-bCIptlaSqaxl-6DTvttz968rFOjJ_Q/formResponse", { method: "POST", mode: "no-cors", headers: { "Content-Type": "application/x-www-form-urlencoded" }, body: body.toString() }).catch(() => {});
+  } catch (err) {}
+}
+(function initMyResearch() {
+  const st = document.createElement("style");
+  st.textContent = "@keyframes ssclspin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }";
+  document.head.appendChild(st);
+  myToken();
+  renderMyResearch();
+  pollMyResearch(true);
+  setInterval(() => pollMyResearch(false), 30000);
+  setInterval(() => {
+    document.querySelectorAll(".sscl-elapsed").forEach(el => {
+      const stMs = parseInt(el.getAttribute("data-started") || "0", 10);
+      if (!stMs) return;
+      const s = Math.max(0, Math.floor((Date.now() - stMs) / 1000));
+      const mm = String(Math.floor(s / 60)).padStart(2, "0"), ss = String(s % 60).padStart(2, "0");
+      el.textContent = " Đang tra cứu… " + mm + ":" + ss;
+    });
+  }, 1000);
+  const arb = document.getElementById("askResearchBtn");
+  if (arb) arb.addEventListener("click", ev => {
+    ev.preventDefault();
+    const list = myResearchLoad();
+    if (!list.some(t => t.status === "pending" && t.link === lastRawUrl)) {
+      submitResearchHidden(lastRawUrl);
+      const now = new Date();
+      const hhmm = now.toLocaleTimeString("vi-VN", { hour: "2-digit", minute: "2-digit" });
+      const ddmm = now.toLocaleDateString("vi-VN", { day: "2-digit", month: "2-digit" });
+      const nm2 = slugName(lastRawUrl) || (lastRawUrl || "").trim();
+      list.unshift({ rid: "", name: nm2 || "Sản phẩm bạn vừa gửi", link: lastRawUrl, verdict: "", points: [], time: hhmm + " " + ddmm, status: "pending", startedAt: Date.now() });
+      myResearchSave(list);
+    }
+    renderMyResearch();
+    const sec = document.getElementById("myResearch");
+    if (sec) sec.scrollIntoView({ behavior: "smooth", block: "center" });
+    setTimeout(() => pollMyResearch(false), 25000);
   });
 })();
 
