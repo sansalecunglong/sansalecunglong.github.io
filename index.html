@@ -278,16 +278,37 @@ body{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;text-r
   </section>
 
   <section class="card" id="secAccount" style="max-width:860px; margin:18px auto 0;">
-    <h2>💰 Mã hoàn hoa hồng của bạn</h2>
-    <div id="accNone">
-      <p class="sub" style="text-align:left;">Tạo mã riêng của bạn — miễn phí, chỉ 10 giây. Từ lúc có mã, <b>mọi đơn bạn mua qua trang này được ghi theo đúng mã của bạn</b>: hoa hồng Shopee trả về cho shop, shop đối soát theo mã và <b>trả lại bạn 80% hoa hồng của chính đơn đó</b>. Chia sẻ link kèm mã của bạn cho bạn bè thì đơn của họ cũng ghi cho bạn.</p>
+    <h2>💰 Tài Khoản &amp; Mã Hoàn Hoa Hồng</h2>
+
+    <div id="accAuth">
+      <p class="sub" style="text-align:left;">Đăng nhập để xem <b>bảng điều khiển của bạn</b>: mã hoàn hoa hồng cá nhân, số dư shop đã đối soát và lịch sử shop trả tiền. Chưa đăng nhập vẫn săn sale bình thường — chỉ bảng điều khiển mới cần tài khoản. Mỗi tài khoản có <b>một mã riêng</b>: đơn mua qua trang này ghi theo đúng mã của bạn, hoa hồng Shopee trả về cho shop, shop đối soát và <b>trả lại bạn 80% hoa hồng của chính đơn đó</b>.</p>
       <div style="display:grid; gap:8px; margin-top:8px;">
-        <input type="text" id="accName" placeholder="Tên của bạn" autocomplete="name" style="padding:11px 12px; border:1.5px solid #ddd; border-radius:10px; font-size:15px; width:100%; box-sizing:border-box;">
-        <input type="text" id="accContact" placeholder="Số Zalo, hoặc STK + tên ngân hàng (để shop trả tiền)" autocomplete="tel" style="padding:11px 12px; border:1.5px solid #ddd; border-radius:10px; font-size:15px; width:100%; box-sizing:border-box;">
-        <button id="accCreate" style="background:#ee4d2d; color:#fff; border:none; border-radius:10px; padding:12px; font-size:16px; font-weight:800; cursor:pointer;">Tạo mã của tôi</button>
+        <input type="email" id="accEmail" placeholder="Email của bạn" autocomplete="email" style="padding:11px 12px; border:1.5px solid #ddd; border-radius:10px; font-size:15px; width:100%; box-sizing:border-box;">
+        <input type="password" id="accPass" placeholder="Mật khẩu (ít nhất 6 ký tự)" autocomplete="current-password" style="padding:11px 12px; border:1.5px solid #ddd; border-radius:10px; font-size:15px; width:100%; box-sizing:border-box;">
+        <div id="accRegFields" style="display:grid; gap:8px;">
+          <input type="text" id="accName" placeholder="Tên của bạn (chỉ cần khi đăng ký)" autocomplete="name" style="padding:11px 12px; border:1.5px solid #ddd; border-radius:10px; font-size:15px; width:100%; box-sizing:border-box;">
+          <input type="text" id="accContact" placeholder="Số Zalo, hoặc STK + tên ngân hàng để shop trả tiền (chỉ cần khi đăng ký)" autocomplete="tel" style="padding:11px 12px; border:1.5px solid #ddd; border-radius:10px; font-size:15px; width:100%; box-sizing:border-box;">
+        </div>
+        <div style="display:flex; gap:8px; flex-wrap:wrap;">
+          <button id="accLogin" style="flex:1; min-width:140px; background:#ee4d2d; color:#fff; border:none; border-radius:10px; padding:12px; font-size:16px; font-weight:800; cursor:pointer;">Đăng nhập</button>
+          <button id="accRegister" style="flex:1; min-width:140px; background:#fff; color:#ee4d2d; border:2px solid #ee4d2d; border-radius:10px; padding:12px; font-size:16px; font-weight:800; cursor:pointer;">Đăng ký mới</button>
+        </div>
+        <button id="accGoogle" style="background:#fff; color:#333; border:1.5px solid #ccc; border-radius:10px; padding:11px; font-size:15px; font-weight:700; cursor:pointer;">🔵 Đăng nhập bằng Google</button>
+        <p class="sub" id="accMsg" style="text-align:left; margin:2px 0 0;"></p>
       </div>
     </div>
+
+    <div id="accNone" style="display:none;">
+      <p class="sub" style="text-align:left;">Hệ thống đăng nhập đang bận — bạn vẫn tạo mã theo cách cũ trên máy này được:</p>
+      <div style="display:grid; gap:8px; margin-top:8px;">
+        <input type="text" id="accNameF" placeholder="Tên của bạn" autocomplete="name" style="padding:11px 12px; border:1.5px solid #ddd; border-radius:10px; font-size:15px; width:100%; box-sizing:border-box;">
+        <input type="text" id="accContactF" placeholder="Số Zalo, hoặc STK + tên ngân hàng (để shop trả tiền)" autocomplete="tel" style="padding:11px 12px; border:1.5px solid #ddd; border-radius:10px; font-size:15px; width:100%; box-sizing:border-box;">
+        <button id="accCreateF" style="background:#ee4d2d; color:#fff; border:none; border-radius:10px; padding:12px; font-size:16px; font-weight:800; cursor:pointer;">Tạo mã của tôi</button>
+      </div>
+    </div>
+
     <div id="accHave" style="display:none;">
+      <p style="margin:0 0 2px;">Xin chào <b id="accUserName"></b> <span id="accUserEmail" style="color:#777; font-size:13px;"></span></p>
       <p style="margin:0 0 4px;">Mã của bạn: <b id="accCode" style="font-size:24px; letter-spacing:1.5px; color:#ee4d2d;"></b></p>
       <p class="sub" style="text-align:left; margin-top:0;">Mọi link Shopee bạn mở hoặc tạo trên máy này đã tự gắn mã của bạn rồi — cứ mua như bình thường. Link chia sẻ của bạn (đơn của bạn bè qua link này cũng ghi cho bạn):</p>
       <div style="display:flex; gap:8px; flex-wrap:wrap;">
@@ -295,6 +316,16 @@ body{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;text-r
         <button id="accCopy" style="background:#0b57d0; color:#fff; border:none; border-radius:10px; padding:10px 16px; font-weight:700; cursor:pointer;">📋 Sao chép</button>
       </div>
       <p class="sub" id="accBalance" style="text-align:left;">Số dư hoàn hoa hồng: chưa có kỳ đối soát nào — sau mỗi kỳ shop đối soát, số tiền của bạn sẽ hiện tại đây.</p>
+      <div id="accPayouts" style="text-align:left;"></div>
+      <div style="display:grid; gap:8px; margin-top:10px;">
+        <input type="text" id="accNameD" placeholder="Tên của bạn" autocomplete="name" style="padding:10px 12px; border:1.5px solid #ddd; border-radius:10px; font-size:14.5px; width:100%; box-sizing:border-box;">
+        <input type="text" id="accContactD" placeholder="Số Zalo, hoặc STK + tên ngân hàng để shop trả tiền" autocomplete="tel" style="padding:10px 12px; border:1.5px solid #ddd; border-radius:10px; font-size:14.5px; width:100%; box-sizing:border-box;">
+        <div style="display:flex; gap:8px; flex-wrap:wrap;">
+          <button id="accSaveProfile" style="flex:1; min-width:140px; background:#0b57d0; color:#fff; border:none; border-radius:10px; padding:11px; font-weight:700; cursor:pointer;">💾 Lưu thông tin nhận tiền</button>
+          <button id="accLogout" style="background:#fff; color:#555; border:1.5px solid #ccc; border-radius:10px; padding:11px 16px; font-weight:700; cursor:pointer;">Đăng xuất</button>
+        </div>
+        <p class="sub" style="text-align:left; margin:0;">Đăng xuất chỉ ẩn bảng điều khiển — mã vẫn gắn trên máy này để đơn của bạn tiếp tục được ghi nhận.</p>
+      </div>
     </div>
   </section>
 
@@ -391,6 +422,7 @@ body{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;text-r
 </div>
 <div class="toast" id="toast"></div>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <script>
 /* ============================================================
    CẤU HÌNH TRANG — chủ shop điền thông tin của mình ở đây
@@ -1291,14 +1323,21 @@ function myResearchLoad() {
 function myResearchSave(list) {
   try { localStorage.setItem("sscl_myresearch", JSON.stringify(list.slice(0, 8))); } catch (err) {}
 }
-/* === TÀI KHOẢN KHÁCH — MỖI NGƯỜI MỘT MÃ HOÀN HOA HỒNG (thêm 27/10/2026
-   theo mô hình Long chốt: mỗi người 1 mã; đơn ghi nhận theo mã nào thì shop
-   đối soát hoa hồng Shopee theo mã đó và trả 80% cho chủ mã). Tài khoản lưu
-   trên máy khách (localStorage sscl_account); đăng ký được gửi ẨN về Google
-   Form "Tài khoản Săn Sale Cùng Long" của shop — khách không phải điền form.
-   Số dư đọc từ doisat.json (shop ghi sau mỗi kỳ đối soát). === */
+/* === TÀI KHOẢN KHÁCH — ĐĂNG NHẬP SUPABASE + MỖI NGƯỜI MỘT MÃ HOÀN HOA HỒNG
+   (nâng cấp 27/10/2026 theo quyết định của Long: đăng nhập thật bằng email+mật
+   khẩu và Google; chỉ người đã đăng nhập mới vào được bảng điều khiển gồm mã
+   cá nhân, số dư đối soát, lịch sử chi trả. Mua sắm vẫn công khai. Mã cá nhân
+   gắn với TÀI KHOẢN (bảng profiles trên Supabase) và được đồng bộ xuống
+   localStorage sscl_account để cơ chế sub_id cũ chạy như trước. Đăng ký cũng
+   được gửi ẨN về Google Form "Tài khoản Săn Sale Cùng Long" như bản ghi dự
+   phòng cho shop. Nếu thư viện Supabase không tải được, trang tự rơi về cách
+   tạo mã cũ trên máy (accNone). === */
 const ACC_FORM_URL = "https://docs.google.com/forms/d/e/1FAIpQLSfSfA2jaK5Bhnrm9M3QSR10La4-90as3XtZSjearkNd-lvgjw/formResponse";
 const ACC_E_NAME = "entry.1986508600", ACC_E_CODE = "entry.1579327606", ACC_E_CONTACT = "entry.34481018";
+const SB_URL = "https://lfkqtojdhelnlkskkhhw.supabase.co";
+const SB_KEY = "sb_publishable_XVS4Qg1klhp8UskLGo6yZw_F-FgjJTy";
+let sb = null, sbUser = null, sbProfile = null;
+try { if (window.supabase && window.supabase.createClient) sb = window.supabase.createClient(SB_URL, SB_KEY); } catch (e) { sb = null; }
 function myAccount() { try { return JSON.parse(localStorage.getItem("sscl_account") || "null"); } catch (e) { return null; } }
 function genAccCode() {
   const A = "ABCDEFGHJKMNPQRSTUVWXYZ23456789"; let s = "";
@@ -1320,41 +1359,214 @@ function refreshSubIds() {
   });
 }
 function fmtVnd(n) { return (Math.round(Number(n) || 0)).toLocaleString("vi-VN") + "₫"; }
-function renderAccount() {
+function accMsg(t) { const m = document.getElementById("accMsg"); if (m) m.textContent = t || ""; }
+function syncLocalAccount(p) {
+  if (!p) return;
+  try { localStorage.setItem("sscl_account", JSON.stringify({ name: p.name || "", contact: p.contact || "", code: p.code, createdAt: Date.now() })); } catch (e) {}
+  refreshSubIds();
+}
+async function sbEnsureProfile() {
+  if (!sb || !sbUser) return null;
+  const got = await sb.from("profiles").select("*").eq("user_id", sbUser.id).maybeSingle();
+  if (got.data) { sbProfile = got.data; syncLocalAccount(sbProfile); return sbProfile; }
+  if (got.error) { accMsg("Chưa tải được hồ sơ của bạn — shop đang hoàn thiện hệ thống, bạn thử lại sau ít phút nhé."); return null; }
+  let draft = {};
+  try { draft = JSON.parse(localStorage.getItem("sscl_regdraft") || "{}"); } catch (e) {}
+  const meta = (sbUser.user_metadata || {});
+  const local = myAccount();
+  let name = draft.name || meta.name || (local && local.name) || "";
+  let contact = draft.contact || meta.contact || (local && local.contact) || "";
+  let code = (local && local.code) || genAccCode();
+  for (let i = 0; i < 6; i++) {
+    const ins = await sb.from("profiles").insert({ user_id: sbUser.id, code: code, name: name, contact: contact });
+    if (!ins.error) {
+      sbProfile = { user_id: sbUser.id, code: code, name: name, contact: contact };
+      submitAccountHidden(sbProfile);
+      try { localStorage.removeItem("sscl_regdraft"); } catch (e) {}
+      syncLocalAccount(sbProfile);
+      return sbProfile;
+    }
+    if (ins.error && (ins.error.code === "23505" || /duplicate|unique/i.test(ins.error.message || ""))) { code = genAccCode(); continue; }
+    accMsg("Chưa tạo được mã cho tài khoản — shop đang hoàn thiện hệ thống, bạn thử lại sau ít phút nhé.");
+    return null;
+  }
+  accMsg("Chưa tạo được mã cho tài khoản — bạn thử đăng nhập lại giúp shop nhé.");
+  return null;
+}
+async function sbLoadDashboard() {
+  const balEl = document.getElementById("accBalance");
+  const payEl = document.getElementById("accPayouts");
+  if (payEl) payEl.innerHTML = "";
+  let shown = false;
+  try {
+    const b = await sb.from("balances").select("*").eq("user_id", sbUser.id).maybeSingle();
+    if (b.data && balEl) {
+      balEl.innerHTML = "Số dư hoàn hoa hồng" + (b.data.period ? " (kỳ " + b.data.period + ")" : "") + ": tạm tính <b>" + fmtVnd(b.data.estimated) + "</b> · đã đối soát, chờ shop trả <b>" + fmtVnd(b.data.available) + "</b> · đã trả <b>" + fmtVnd(b.data.paid_total) + "</b>.";
+      shown = true;
+    }
+    const p = await sb.from("payouts").select("*").eq("user_id", sbUser.id).order("paid_at", { ascending: false }).limit(10);
+    if (p.data && p.data.length && payEl) {
+      payEl.innerHTML = "<div style='font-weight:700; font-size:14px; margin-top:4px;'>🧾 Lịch sử shop trả tiền</div>" + p.data.map(x => "<div style='font-size:13.5px; color:#444; margin-top:3px;'>• " + new Date(x.paid_at).toLocaleDateString("vi-VN") + " — <b>" + fmtVnd(x.amount) + "</b>" + (x.note ? " (" + x.note + ")" : "") + "</div>").join("");
+    }
+  } catch (e) {}
+  if (!shown && balEl) {
+    /* Dự phòng: kỳ đối soát cũ ghi trong doisat.json theo mã */
+    fetch("doisat.json?_=" + Date.now(), { cache: "no-store" }).then(r => r.json()).then(d => {
+      const row = d && sbProfile && d[sbProfile.code];
+      if (row) balEl.innerHTML = "Số dư hoàn hoa hồng" + (row.ky ? " (kỳ " + row.ky + ")" : "") + ": tạm tính <b>" + fmtVnd(row.tamTinh) + "</b> · đã đối soát, chờ shop trả <b>" + fmtVnd(row.khaDung) + "</b>.";
+    }).catch(() => {});
+  }
+}
+function renderAuthUI() {
   const sec = document.getElementById("secAccount"); if (!sec) return;
-  const a = myAccount();
-  document.getElementById("accNone").style.display = a ? "none" : "";
-  document.getElementById("accHave").style.display = a ? "" : "none";
-  if (!a) return;
-  document.getElementById("accCode").textContent = a.code.toUpperCase();
-  document.getElementById("accShare").value = "https://sansalecunglong.github.io/?ref=" + a.code;
+  const auth = document.getElementById("accAuth"), none = document.getElementById("accNone"), have = document.getElementById("accHave");
+  if (!sb) { /* Không tải được Supabase: rơi về cách tạo mã cũ */
+    if (auth) auth.style.display = "none";
+    const a = myAccount();
+    if (none) none.style.display = a ? "none" : "";
+    if (have) have.style.display = a ? "" : "none";
+    if (a) fillDashboardLocal(a);
+    return;
+  }
+  if (sbUser && sbProfile) {
+    if (auth) auth.style.display = "none";
+    if (none) none.style.display = "none";
+    if (have) have.style.display = "";
+    const un = document.getElementById("accUserName"); if (un) un.textContent = sbProfile.name || "";
+    const ue = document.getElementById("accUserEmail"); if (ue) ue.textContent = sbUser.email ? "(" + sbUser.email + ")" : "";
+    const cd = document.getElementById("accCode"); if (cd) cd.textContent = sbProfile.code.toUpperCase();
+    const sh = document.getElementById("accShare"); if (sh) sh.value = "https://sansalecunglong.github.io/?ref=" + sbProfile.code;
+    const nd = document.getElementById("accNameD"); if (nd && document.activeElement !== nd) nd.value = sbProfile.name || "";
+    const ct = document.getElementById("accContactD"); if (ct && document.activeElement !== ct) ct.value = sbProfile.contact || "";
+    sbLoadDashboard();
+  } else {
+    if (auth) auth.style.display = "";
+    if (none) none.style.display = "none";
+    if (have) have.style.display = "none";
+  }
+}
+function fillDashboardLocal(a) {
+  const cd = document.getElementById("accCode"); if (cd) cd.textContent = a.code.toUpperCase();
+  const sh = document.getElementById("accShare"); if (sh) sh.value = "https://sansalecunglong.github.io/?ref=" + a.code;
+  const un = document.getElementById("accUserName"); if (un) un.textContent = a.name || "";
   fetch("doisat.json?_=" + Date.now(), { cache: "no-store" }).then(r => r.json()).then(d => {
     const row = d && d[a.code];
     const bal = document.getElementById("accBalance");
     if (row && bal) bal.innerHTML = "Số dư hoàn hoa hồng" + (row.ky ? " (kỳ " + row.ky + ")" : "") + ": tạm tính <b>" + fmtVnd(row.tamTinh) + "</b> · đã đối soát, chờ shop trả <b>" + fmtVnd(row.khaDung) + "</b>.";
   }).catch(() => {});
 }
-function createAccount() {
-  const name = (document.getElementById("accName").value || "").trim();
-  const contact = (document.getElementById("accContact").value || "").trim();
+function renderAccount() { renderAuthUI(); }
+function createAccountFallback() {
+  const name = (document.getElementById("accNameF").value || "").trim();
+  const contact = (document.getElementById("accContactF").value || "").trim();
   if (!name) { toast("Bạn nhập tên của bạn nhé"); return; }
   if (!contact) { toast("Bạn nhập số Zalo hoặc STK để shop trả tiền nhé"); return; }
   const a = { name, contact, code: genAccCode(), createdAt: Date.now() };
   try { localStorage.setItem("sscl_account", JSON.stringify(a)); } catch (e) {}
   submitAccountHidden(a);
-  renderAccount(); refreshSubIds();
+  renderAuthUI(); refreshSubIds();
   toast("Đã tạo mã " + a.code.toUpperCase() + " — từ giờ đơn của bạn ghi theo mã này!");
-  const sec = document.getElementById("secAccount");
-  if (sec) sec.scrollIntoView({ behavior: "smooth", block: "center" });
+}
+function sbErrText(err) {
+  const m = (err && err.message) || "";
+  if (/invalid login credentials/i.test(m)) return "Email hoặc mật khẩu chưa đúng — bạn kiểm tra lại nhé.";
+  if (/already registered/i.test(m)) return "Email này đã có tài khoản — bạn bấm Đăng nhập nhé.";
+  if (/password should be at least/i.test(m)) return "Mật khẩu cần ít nhất 6 ký tự.";
+  if (/email not confirmed/i.test(m)) return "Email chưa được xác nhận — bạn mở hộp thư, bấm link xác nhận của Supabase rồi quay lại đăng nhập nhé.";
+  if (/provider is not enabled|unsupported provider/i.test(m)) return "Đăng nhập Google chưa được bật — bạn dùng email + mật khẩu trước nhé, shop đang mở thêm Google.";
+  return m || "Có lỗi xảy ra, bạn thử lại giúp shop nhé.";
+}
+async function sbRegister() {
+  if (!sb) return;
+  const email = (document.getElementById("accEmail").value || "").trim();
+  const pass = document.getElementById("accPass").value || "";
+  const name = (document.getElementById("accName").value || "").trim();
+  const contact = (document.getElementById("accContact").value || "").trim();
+  if (!email) { toast("Bạn nhập email nhé"); return; }
+  if (pass.length < 6) { toast("Mật khẩu cần ít nhất 6 ký tự"); return; }
+  if (!name) { toast("Bạn nhập tên của bạn nhé"); return; }
+  if (!contact) { toast("Bạn nhập số Zalo hoặc STK để shop trả tiền nhé"); return; }
+  try { localStorage.setItem("sscl_regdraft", JSON.stringify({ name, contact })); } catch (e) {}
+  accMsg("⏳ Đang tạo tài khoản…");
+  const r = await sb.auth.signUp({ email: email, password: pass, options: { data: { name: name, contact: contact }, emailRedirectTo: "https://sansalecunglong.github.io/" } });
+  if (r.error) { accMsg("⚠️ " + sbErrText(r.error)); return; }
+  if (r.data && r.data.session) {
+    sbUser = r.data.session.user;
+    await sbEnsureProfile();
+    renderAuthUI(); refreshSubIds();
+    toast("Đăng ký xong! Mã của bạn đã sẵn sàng trong bảng điều khiển.");
+  } else {
+    accMsg("✅ Đã đăng ký! Bạn mở email, bấm link xác nhận rồi quay lại đây đăng nhập để nhận mã cá nhân nhé.");
+  }
+}
+async function sbLogin() {
+  if (!sb) return;
+  const email = (document.getElementById("accEmail").value || "").trim();
+  const pass = document.getElementById("accPass").value || "";
+  if (!email) { toast("Bạn nhập email nhé"); return; }
+  if (!pass) { toast("Bạn nhập mật khẩu nhé"); return; }
+  accMsg("⏳ Đang đăng nhập…");
+  const r = await sb.auth.signInWithPassword({ email: email, password: pass });
+  if (r.error) { accMsg("⚠️ " + sbErrText(r.error)); return; }
+  sbUser = r.data.user;
+  await sbEnsureProfile();
+  renderAuthUI(); refreshSubIds();
+  accMsg("");
+  toast("Đăng nhập thành công — bảng điều khiển của bạn ở ngay đây!");
+}
+async function sbGoogle() {
+  if (!sb) return;
+  const r = await sb.auth.signInWithOAuth({ provider: "google", options: { redirectTo: "https://sansalecunglong.github.io/" } });
+  if (r.error) accMsg("⚠️ " + sbErrText(r.error));
+}
+async function sbSaveProfile() {
+  if (!sb || !sbUser || !sbProfile) return;
+  const name = (document.getElementById("accNameD").value || "").trim();
+  const contact = (document.getElementById("accContactD").value || "").trim();
+  if (!name) { toast("Bạn nhập tên của bạn nhé"); return; }
+  if (!contact) { toast("Bạn nhập số Zalo hoặc STK để shop trả tiền nhé"); return; }
+  const r = await sb.from("profiles").update({ name: name, contact: contact }).eq("user_id", sbUser.id);
+  if (r.error) { toast("Lưu chưa được — bạn thử lại sau ít phút nhé"); return; }
+  sbProfile.name = name; sbProfile.contact = contact;
+  syncLocalAccount(sbProfile);
+  toast("Đã lưu thông tin nhận tiền của bạn!");
+}
+async function sbLogout() {
+  if (sb) { try { await sb.auth.signOut(); } catch (e) {} }
+  sbUser = null; sbProfile = null;
+  renderAuthUI();
+  toast("Đã đăng xuất — bảng điều khiển đã ẩn.");
 }
 (function initAccount() {
-  const btn = document.getElementById("accCreate");
-  if (btn) btn.addEventListener("click", createAccount);
+  const bf = document.getElementById("accCreateF");
+  if (bf) bf.addEventListener("click", createAccountFallback);
+  const bl = document.getElementById("accLogin");
+  if (bl) bl.addEventListener("click", sbLogin);
+  const br = document.getElementById("accRegister");
+  if (br) br.addEventListener("click", sbRegister);
+  const bg = document.getElementById("accGoogle");
+  if (bg) bg.addEventListener("click", sbGoogle);
+  const bs = document.getElementById("accSaveProfile");
+  if (bs) bs.addEventListener("click", sbSaveProfile);
+  const bo = document.getElementById("accLogout");
+  if (bo) bo.addEventListener("click", sbLogout);
   const cp = document.getElementById("accCopy");
   if (cp) cp.addEventListener("click", () => { const s = document.getElementById("accShare"); if (s) copyText(s.value, "Đã sao chép link chia sẻ của bạn!"); });
-  renderAccount();
+  renderAuthUI();
+  if (sb) {
+    sb.auth.getSession().then(async (res) => {
+      const sess = res && res.data && res.data.session;
+      if (sess) { sbUser = sess.user; await sbEnsureProfile(); }
+      renderAuthUI(); refreshSubIds();
+    }).catch(() => {});
+    sb.auth.onAuthStateChange(async (ev, sess) => {
+      sbUser = sess ? sess.user : null;
+      if (sbUser && !sbProfile) await sbEnsureProfile();
+      if (!sbUser) sbProfile = null;
+      renderAuthUI();
+    });
+  }
 })();
-
 function renderMyResearch() {
   const sec = document.getElementById("myResearch");
   const box = document.getElementById("myResearchList");
