@@ -258,7 +258,7 @@ body{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;text-r
         <a id="openProdBtn" class="dealbtn solo" target="_blank" rel="sponsored nofollow noopener">🛒 Mở sản phẩm của bạn trên Shopee →</a>
         <div style="font-size:12px; color:#777; margin-top:6px;">Nút mở đúng sản phẩm của bạn trên Shopee qua link của shop.</div>
         <div id="resultCodes" style="display:none; margin-top:14px;">
-          <div style="font-weight:800; font-size:15px;">🎟️ Mã đang có — bấm vào mã để sao chép &amp; mở sản phẩm:</div>
+          <div style="font-weight:800; font-size:15px;">🎟️ 3 mã giảm cao nhất — bấm vào mã để sao chép &amp; mở sản phẩm:</div>
           <div id="resultCodeList" style="display:grid; gap:8px; margin-top:8px;"></div>
           <div style="font-size:12px; color:#777; margin-top:6px;">Dán mã ở bước thanh toán trên Shopee. Mã áp được hay không do Shopee quyết (tùy tài khoản, ngành hàng, từng đợt sale).</div>
         </div>
@@ -889,7 +889,12 @@ function renderResultCodes() {
   if (!wrap || !list) return;
   list.textContent = "";
   if (!VOUCHERS.length) { wrap.style.display = "none"; return; }
-  VOUCHERS.forEach(v => {
+  /* Chỉ hiện 3 mã giảm cao nhất (Long chốt 27/10/2026): xếp theo mức giảm
+     tối đa (số K trong "tối đa …K"), hòa thì theo % giảm. */
+  const capOf = v => { const m = String(v.off).match(/tối đa\s+([\d.,]+)K/i); return m ? parseFloat(m[1].replace(".", "").replace(",", ".")) : 0; };
+  const pctOf = v => { const m = String(v.off).match(/^(?:Giảm\s+)?([\d.,]+)%/i); return m ? parseFloat(m[1].replace(",", ".")) : 0; };
+  const top3 = VOUCHERS.slice().sort((a, b) => (capOf(b) - capOf(a)) || (pctOf(b) - pctOf(a))).slice(0, 3);
+  top3.forEach(v => {
     const a = document.createElement("a");
     a.href = lastAff;
     a.target = "_blank";
