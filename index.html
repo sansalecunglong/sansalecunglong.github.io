@@ -316,21 +316,24 @@ body{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;text-r
       <div class="card" id="accModalCard" style="margin-top:0;">
         <h2>💰 Tài Khoản &amp; Mã Hoàn Hoa Hồng</h2>
 <div id="accAuth">
-      <p class="sub" style="text-align:left;">Đăng nhập để xem <b>bảng điều khiển của bạn</b>: mã hoàn hoa hồng cá nhân, số dư shop đã đối soát và lịch sử shop trả tiền. Chưa đăng nhập vẫn săn sale bình thường — chỉ bảng điều khiển mới cần tài khoản. Mỗi tài khoản có <b>một mã riêng</b>: đơn mua qua trang này ghi theo đúng mã của bạn, hoa hồng Shopee trả về cho shop, shop đối soát và <b>trả lại bạn 80% hoa hồng của chính đơn đó</b>.</p>
-      <div style="display:grid; gap:8px; margin-top:8px;">
+      <p class="sub" style="text-align:left;">Đăng nhập để xem <b>bảng điều khiển của bạn</b>: mã hoàn hoa hồng cá nhân, số dư shop đã đối soát và lịch sử shop trả tiền. Mỗi tài khoản có <b>một mã riêng</b> — đơn mua qua trang này ghi theo đúng mã của bạn, shop đối soát và <b>trả lại bạn 80% hoa hồng của đơn đó</b>. Chưa đăng nhập vẫn săn sale bình thường.</p>
+      <div id="accLoginView" style="display:grid; gap:8px; margin-top:8px;">
         <input type="email" id="accEmail" placeholder="Email của bạn" autocomplete="email" style="padding:11px 12px; border:1.5px solid #ddd; border-radius:10px; font-size:15px; width:100%; box-sizing:border-box;">
-        <input type="password" id="accPass" placeholder="Mật khẩu (ít nhất 6 ký tự)" autocomplete="current-password" style="padding:11px 12px; border:1.5px solid #ddd; border-radius:10px; font-size:15px; width:100%; box-sizing:border-box;">
-        <div id="accRegFields" style="display:grid; gap:8px;">
-          <input type="text" id="accName" placeholder="Tên của bạn (chỉ cần khi đăng ký)" autocomplete="name" style="padding:11px 12px; border:1.5px solid #ddd; border-radius:10px; font-size:15px; width:100%; box-sizing:border-box;">
-          <input type="text" id="accContact" placeholder="Số Zalo, hoặc STK + tên ngân hàng để shop trả tiền (chỉ cần khi đăng ký)" autocomplete="tel" style="padding:11px 12px; border:1.5px solid #ddd; border-radius:10px; font-size:15px; width:100%; box-sizing:border-box;">
-        </div>
-        <div style="display:flex; gap:8px; flex-wrap:wrap;">
-          <button id="accLogin" style="flex:1; min-width:140px; background:#ee4d2d; color:#fff; border:none; border-radius:10px; padding:12px; font-size:16px; font-weight:800; cursor:pointer;">Đăng nhập</button>
-          <button id="accRegister" style="flex:1; min-width:140px; background:#fff; color:#ee4d2d; border:2px solid #ee4d2d; border-radius:10px; padding:12px; font-size:16px; font-weight:800; cursor:pointer;">Đăng ký mới</button>
-        </div>
-        <button id="accGoogle" style="background:#fff; color:#333; border:1.5px solid #ccc; border-radius:10px; padding:11px; font-size:15px; font-weight:700; cursor:pointer;">🔵 Đăng nhập bằng Google</button>
-        <p class="sub" id="accMsg" style="text-align:left; margin:2px 0 0;"></p>
+        <input type="password" id="accPass" placeholder="Mật khẩu" autocomplete="current-password" style="padding:11px 12px; border:1.5px solid #ddd; border-radius:10px; font-size:15px; width:100%; box-sizing:border-box;">
+        <button id="accLogin" style="background:#ee4d2d; color:#fff; border:none; border-radius:10px; padding:12px; font-size:16px; font-weight:800; cursor:pointer;">Đăng nhập</button>
+        <p class="sub" style="text-align:center; margin:2px 0 0;">Chưa có tài khoản? <a href="#" id="accToRegister" style="color:#ee4d2d; font-weight:800; text-decoration:none;">Đăng ký ngay</a></p>
       </div>
+      <div id="accRegView" style="display:none; gap:8px; margin-top:8px;">
+        <input type="email" id="accEmailR" placeholder="Email của bạn" autocomplete="email" style="padding:11px 12px; border:1.5px solid #ddd; border-radius:10px; font-size:15px; width:100%; box-sizing:border-box;">
+        <input type="password" id="accPassR" placeholder="Mật khẩu (ít nhất 6 ký tự)" autocomplete="new-password" style="padding:11px 12px; border:1.5px solid #ddd; border-radius:10px; font-size:15px; width:100%; box-sizing:border-box;">
+        <input type="text" id="accName" placeholder="Tên của bạn" autocomplete="name" style="padding:11px 12px; border:1.5px solid #ddd; border-radius:10px; font-size:15px; width:100%; box-sizing:border-box;">
+        <input type="text" id="accContact" placeholder="Số Zalo, hoặc STK + tên ngân hàng để shop trả tiền" autocomplete="tel" style="padding:11px 12px; border:1.5px solid #ddd; border-radius:10px; font-size:15px; width:100%; box-sizing:border-box;">
+        <button id="accRegister" style="background:#ee4d2d; color:#fff; border:none; border-radius:10px; padding:12px; font-size:16px; font-weight:800; cursor:pointer;">Đăng ký tài khoản</button>
+        <p class="sub" style="text-align:center; margin:2px 0 0;">Đã có tài khoản? <a href="#" id="accToLogin" style="color:#ee4d2d; font-weight:800; text-decoration:none;">Đăng nhập</a></p>
+      </div>
+      <div style="display:flex; align-items:center; gap:10px; margin:12px 0 8px;"><span style="flex:1; height:1px; background:#eee;"></span><span style="font-size:12.5px; color:#999;">hoặc</span><span style="flex:1; height:1px; background:#eee;"></span></div>
+      <button id="accGoogle" style="width:100%; background:#fff; color:#333; border:1.5px solid #ccc; border-radius:10px; padding:11px; font-size:15px; font-weight:700; cursor:pointer;">🔵 Đăng nhập bằng Google</button>
+      <p class="sub" id="accMsg" style="text-align:left; margin:8px 0 0;"></p>
     </div>
 <div id="accNone" style="display:none;">
       <p class="sub" style="text-align:left;">Hệ thống đăng nhập đang bận — bạn vẫn tạo mã theo cách cũ trên máy này được:</p>
@@ -1480,6 +1483,12 @@ function updateTopAuth() {
     D.style.display = "none"; O.style.display = "none";
   }
 }
+function setAuthMode(mode) {
+  const lv = document.getElementById("accLoginView"), rv = document.getElementById("accRegView");
+  if (!lv || !rv) return;
+  if (mode === "register") { lv.style.display = "none"; rv.style.display = "grid"; }
+  else { lv.style.display = "grid"; rv.style.display = "none"; }
+}
 function openAuthModal(mode) {
   const modal = document.getElementById("authModal");
   if (!modal) return;
@@ -1487,9 +1496,9 @@ function openAuthModal(mode) {
   document.body.style.overflow = "hidden";
   if (sbUser && sbProfile) return;
   setTimeout(() => {
-    if (mode === "register") accMsg("👉 Điền email, mật khẩu, tên và liên hệ nhận tiền, rồi bấm Đăng ký mới — xong là có mã cá nhân ngay.");
-    else if (mode === "login") accMsg("👉 Nhập email + mật khẩu rồi bấm Đăng nhập. Chưa có tài khoản thì bấm Đăng ký mới.");
-    const e = document.getElementById("accEmail"); if (e) e.focus({ preventScroll: true });
+    setAuthMode(mode === "register" ? "register" : "login");
+    accMsg("");
+    const e = document.getElementById(mode === "register" ? "accEmailR" : "accEmail"); if (e) e.focus({ preventScroll: true });
   }, 60);
 }
 function closeAuthModal() {
@@ -1577,8 +1586,8 @@ function sbErrText(err) {
 }
 async function sbRegister() {
   if (!sb) return;
-  const email = (document.getElementById("accEmail").value || "").trim();
-  const pass = document.getElementById("accPass").value || "";
+  const email = (document.getElementById("accEmailR").value || "").trim();
+  const pass = document.getElementById("accPassR").value || "";
   const name = (document.getElementById("accName").value || "").trim();
   const contact = (document.getElementById("accContact").value || "").trim();
   if (!email) { toast("Bạn nhập email nhé"); return; }
@@ -1654,6 +1663,10 @@ async function sbLogout() {
   const mm = document.getElementById("authModal");
   if (mm) mm.addEventListener("click", (ev) => { if (ev.target === mm) closeAuthModal(); });
   document.addEventListener("keydown", (ev) => { if (ev.key === "Escape") closeAuthModal(); });
+  const sw1 = document.getElementById("accToRegister");
+  if (sw1) sw1.addEventListener("click", (e) => { e.preventDefault(); setAuthMode("register"); accMsg(""); const f = document.getElementById("accEmailR"); if (f) f.focus({ preventScroll: true }); });
+  const sw2 = document.getElementById("accToLogin");
+  if (sw2) sw2.addEventListener("click", (e) => { e.preventDefault(); setAuthMode("login"); accMsg(""); const f = document.getElementById("accEmail"); if (f) f.focus({ preventScroll: true }); });
   const cl = document.getElementById("ctaLogin");
   if (cl) cl.addEventListener("click", () => gotoAccount("login"));
   const cr = document.getElementById("ctaRegister");
