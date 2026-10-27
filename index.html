@@ -240,15 +240,14 @@ body{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;text-r
       <button id="btnConvert">Săn sale</button>
     </div>
     <div id="result">
-      <div id="prodDone" style="background:#f2fbf5; border:1px solid #bfe8cc; border-radius:10px; padding:9px 12px; margin-bottom:10px; font-size:13.5px;">
+      <div id="prodDone" style="display:none; background:#f2fbf5; border:1px solid #bfe8cc; border-radius:10px; padding:9px 12px; margin-bottom:10px; font-size:13.5px;">
         🛍️ Đã nhận link sản phẩm của bạn
         <div id="prodDoneTxt" style="color:#1a9e4b; font-weight:700; margin-top:2px;">✔ Đã chuyển đổi xong</div>
       </div>
       <p id="prodInsight" style="display:none; font-size:13px; color:#444; margin:0 0 8px;"></p>
-      <p id="openGuide" style="font-size:12.5px; color:#555; margin:0;">✅ Bấm nút bên dưới để mở đúng sản phẩm của bạn trên Shopee qua link của shop.</p>
+      <p id="openGuide" style="display:none; font-size:12.5px; color:#555; margin:0;">✅ Bấm nút bên dưới để mở đúng sản phẩm của bạn trên Shopee qua link của shop.</p>
       <div id="topVoucher" style="display:none; margin-top:10px;">
         <a id="openProdBtn" class="dealbtn solo" target="_blank" rel="sponsored nofollow noopener">🛒 Mở sản phẩm của bạn trên Shopee →</a>
-        <div style="font-size:12px; color:#777; margin-top:6px;">Nút mở đúng sản phẩm của bạn trên Shopee qua link của shop.</div>
         <div id="resultCodes" style="display:none; margin-top:14px;">
           <div style="font-weight:800; font-size:15px;">🎟️ Bước 2: Mã giảm giá</div>
           <div id="resultCodeList" style="display:grid; gap:8px; margin-top:8px;"></div>
@@ -931,7 +930,7 @@ function renderResultCodes() {
 
 function finishConvert(raw, aff, isUrl, warns) {
   lastAff = aff;
-  document.getElementById("openGuide").style.display = "block";
+  document.getElementById("openGuide").style.display = "none";
   const doneTxt = document.getElementById("prodDoneTxt");
   doneTxt.style.color = "#1a9e4b";
   doneTxt.textContent = isUrl ? "✔ Đã chuyển đổi xong" : "✔ Đã tạo link tìm kiếm săn sale";
