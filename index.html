@@ -951,17 +951,19 @@ function finishConvert(raw, aff, isUrl, warns) {
   const rb = document.getElementById("reviewBox");
   if (rb) {
     const nm = isUrl ? slugName(lastRawUrl) : (lastRawUrl || "").trim();
-    if (nm) {
-      const rp = document.getElementById("reviewProd");
-      rp.textContent = "";
-      rp.appendChild(document.createTextNode("Sản phẩm trong link của bạn: "));
-      const bEl = document.createElement("b");
-      bEl.textContent = nm;
-      rp.appendChild(bEl);
-      document.getElementById("askResearchBtn").href = "https://docs.google.com/forms/d/e/1FAIpQLSfEbbNQ6sUJk4ExL9H-bCIptlaSqaxl-6DTvttz968rFOjJ_Q/viewform?entry.651707015=" + encodeURIComponent(lastRawUrl);
-      rb.style.display = "block";
-      loadApiSummary(nm, lastRawUrl);
-    } else rb.style.display = "none";
+    /* Bước 3 luôn hiện khi đổi link thành công (Long báo 27/10/2026: dán
+       link rút gọn thì không ra phần tra cứu) — link rút gọn hay link không
+       có tên trong URL vẫn gửi tra cứu được; hệ thống tra cứu tự khôi phục
+       tên sản phẩm từ link ở phía xử lý. */
+    const rp = document.getElementById("reviewProd");
+    rp.textContent = "";
+    rp.appendChild(document.createTextNode("Sản phẩm trong link của bạn: "));
+    const bEl = document.createElement("b");
+    bEl.textContent = nm || "theo link bạn vừa dán";
+    rp.appendChild(bEl);
+    document.getElementById("askResearchBtn").href = "https://docs.google.com/forms/d/e/1FAIpQLSfEbbNQ6sUJk4ExL9H-bCIptlaSqaxl-6DTvttz968rFOjJ_Q/viewform?entry.651707015=" + encodeURIComponent(lastRawUrl);
+    rb.style.display = "block";
+    if (nm) loadApiSummary(nm, lastRawUrl);
   }
   document.getElementById("result").style.display = "block";
   document.getElementById("warnBox").textContent = (warns || []).join(" ");
