@@ -326,7 +326,6 @@ body{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;text-r
       <div id="accRegView" style="display:none; gap:8px; margin-top:8px;">
         <input type="email" id="accEmailR" placeholder="Email của bạn" autocomplete="email" style="padding:11px 12px; border:1.5px solid #ddd; border-radius:10px; font-size:15px; width:100%; box-sizing:border-box;">
         <input type="password" id="accPassR" placeholder="Mật khẩu (ít nhất 6 ký tự)" autocomplete="new-password" style="padding:11px 12px; border:1.5px solid #ddd; border-radius:10px; font-size:15px; width:100%; box-sizing:border-box;">
-        <input type="tel" id="accContact" placeholder="Số điện thoại của bạn" autocomplete="tel" inputmode="tel" style="padding:11px 12px; border:1.5px solid #ddd; border-radius:10px; font-size:15px; width:100%; box-sizing:border-box;">
         <button id="accRegister" style="background:#ee4d2d; color:#fff; border:none; border-radius:10px; padding:12px; font-size:16px; font-weight:800; cursor:pointer;">Đăng ký tài khoản</button>
         <p class="sub" style="text-align:center; margin:2px 0 0;">Đã có tài khoản? <a href="#" id="accToLogin" style="color:#ee4d2d; font-weight:800; text-decoration:none;">Đăng nhập</a></p>
       </div>
@@ -1587,15 +1586,12 @@ async function sbRegister() {
   if (!sb) return;
   const email = (document.getElementById("accEmailR").value || "").trim();
   const pass = document.getElementById("accPassR").value || "";
-  let contact = (document.getElementById("accContact").value || "").replace(/\D/g, "");
-  if (/^84\d{9}$/.test(contact)) contact = "0" + contact.slice(2);
   const name = email.split("@")[0] || "";
   if (!email) { toast("Bạn nhập email nhé"); return; }
   if (pass.length < 6) { toast("Mật khẩu cần ít nhất 6 ký tự"); return; }
-  if (!/^0\d{9}$/.test(contact)) { toast("Bạn nhập đúng số điện thoại 10 số, bắt đầu bằng 0 nhé"); return; }
-  try { localStorage.setItem("sscl_regdraft", JSON.stringify({ name, contact })); } catch (e) {}
+  try { localStorage.setItem("sscl_regdraft", JSON.stringify({ name: name, contact: "" })); } catch (e) {}
   accMsg("⏳ Đang tạo tài khoản…");
-  const r = await sb.auth.signUp({ email: email, password: pass, options: { data: { name: name, contact: contact }, emailRedirectTo: "https://sansalecunglong.github.io/" } });
+  const r = await sb.auth.signUp({ email: email, password: pass, options: { data: { name: name }, emailRedirectTo: "https://sansalecunglong.github.io/" } });
   if (r.error) { accMsg("⚠️ " + sbErrText(r.error)); return; }
   if (r.data && r.data.session) {
     sbUser = r.data.session.user;
