@@ -252,7 +252,7 @@ body{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;text-r
         <div id="resultCodes" style="display:none; margin-top:14px;">
           <div style="font-weight:800; font-size:15px;">🎟️ Bước 2: Mã giảm giá</div>
           <div id="resultCodeList" style="display:grid; gap:8px; margin-top:8px;"></div>
-          <div style="font-size:12px; color:#777; margin-top:6px;">Dán mã ở bước thanh toán trên Shopee. Mã áp được hay không do Shopee quyết (tùy tài khoản, ngành hàng, từng đợt sale).</div>
+          <div style="font-size:12px; color:#777; margin-top:6px;">Đã chọn 3 mã hợp nhất với sản phẩm của bạn. Dán mã ở bước thanh toán — Shopee chốt mã áp được theo tài khoản và ngành hàng.</div>
         </div>
       </div>
       <div id="reviewBox" style="display:none; background:#fffbe8; border:1px solid #f0dfa0; border-radius:10px; padding:9px 12px; margin:0 0 10px; font-size:13px; line-height:1.55;">
@@ -889,11 +889,24 @@ function renderResultCodes() {
   if (!wrap || !list) return;
   list.textContent = "";
   if (!VOUCHERS.length) { wrap.style.display = "none"; return; }
-  /* Chỉ hiện 3 mã giảm cao nhất (Long chốt 27/10/2026): xếp theo mức giảm
-     tối đa (số K trong "tối đa …K"), hòa thì theo % giảm. */
+  /* Chỉ hiện 3 mã HỢP NHẤT với sản phẩm khách dán (Long chốt 27/10/2026):
+     ưu tiên mã đúng ngành hàng của sản phẩm (fam nhắc đúng nhóm lastCat trang
+     đã nhận diện), rồi mã toàn sàn, rồi mã Video phổ thông; mã Video khóa
+     ngành khác xếp cuối. Trong cùng hạng: mức giảm tối đa cao hơn lên trước,
+     hòa thì % giảm cao hơn. Giá sản phẩm không đọc được từ link nên độ hợp
+     theo giá không tính được — Shopee chốt ở bước thanh toán. */
   const capOf = v => { const m = String(v.off).match(/tối đa\s+([\d.,]+)K/i); return m ? parseFloat(m[1].replace(".", "").replace(",", ".")) : 0; };
   const pctOf = v => { const m = String(v.off).match(/^(?:Giảm\s+)?([\d.,]+)%/i); return m ? parseFloat(m[1].replace(",", ".")) : 0; };
-  const top3 = VOUCHERS.slice().sort((a, b) => (capOf(b) - capOf(a)) || (pctOf(b) - pctOf(a))).slice(0, 3);
+  const CAT_FAM = { "Thời trang": /thời trang/i, "Sắc đẹp": /(sắc đẹp|mỹ phẩm|watson)/i, "Sức khỏe": /(sức khỏe|watson)/i, "Điện tử & Phụ kiện": /(điện tử|công nghệ)/i, "Nhà cửa & Đời sống": /(nhà cửa|gia dụng|đời sống)/i, "Bách hóa & Siêu thị": /(bách hóa|siêu thị)/i };
+  const famTier = v => {
+    const f = v.fam || "";
+    const re = lastCat ? CAT_FAM[lastCat] : null;
+    if (re && re.test(f)) return 0;
+    if (/toàn sàn/i.test(f)) return 1;
+    if (/video/i.test(f) && !/thời trang|sắc đẹp|điện tử|sức khỏe|nhà cửa|bách hóa/i.test(f)) return 2;
+    return 3;
+  };
+  const top3 = VOUCHERS.slice().sort((a, b) => (famTier(a) - famTier(b)) || (capOf(b) - capOf(a)) || (pctOf(b) - pctOf(a))).slice(0, 3);
   top3.forEach(v => {
     const a = document.createElement("a");
     a.href = lastAff;
