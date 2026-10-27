@@ -257,6 +257,11 @@ body{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;text-r
       <div id="topVoucher" style="display:none; margin-top:10px;">
         <a id="openProdBtn" class="dealbtn solo" target="_blank" rel="sponsored nofollow noopener">🛒 Mở sản phẩm của bạn trên Shopee →</a>
         <div style="font-size:12px; color:#777; margin-top:6px;">Nút mở đúng sản phẩm của bạn trên Shopee qua link của shop.</div>
+        <div id="resultCodes" style="display:none; margin-top:14px;">
+          <div style="font-weight:800; font-size:15px;">🎟️ Mã đang có — bấm vào mã để sao chép &amp; mở sản phẩm:</div>
+          <div id="resultCodeList" style="display:grid; gap:8px; margin-top:8px;"></div>
+          <div style="font-size:12px; color:#777; margin-top:6px;">Dán mã ở bước thanh toán trên Shopee. Mã áp được hay không do Shopee quyết (tùy tài khoản, ngành hàng, từng đợt sale).</div>
+        </div>
       </div>
       <p class="warn" id="warnBox"></p>
     </div>
@@ -875,6 +880,45 @@ function doConvert(rawInput) {
 
 /* Hoàn tất chuyển đổi: link săn sale KHÔNG hiển thị ra ngoài ở bất kỳ dạng nào —
    link chỉ nằm trong href của nút mở sản phẩm, bấm nút là sang Shopee. */
+/* Mã gắn kèm kết quả chuyển đổi (Long yêu cầu 27/10/2026 "như trước"): dùng
+   chung mảng VOUCHERS với mục mã riêng; bấm vào một mã = sao chép mã đó và mở
+   sản phẩm qua link affiliate của shop (href của thẻ). */
+function renderResultCodes() {
+  const wrap = document.getElementById("resultCodes");
+  const list = document.getElementById("resultCodeList");
+  if (!wrap || !list) return;
+  list.textContent = "";
+  if (!VOUCHERS.length) { wrap.style.display = "none"; return; }
+  VOUCHERS.forEach(v => {
+    const a = document.createElement("a");
+    a.href = lastAff;
+    a.target = "_blank";
+    a.rel = "sponsored nofollow noopener";
+    a.style.cssText = "display:flex; justify-content:space-between; align-items:center; gap:10px; border:1.5px dashed var(--primary); border-radius:10px; padding:9px 12px; text-decoration:none; color:#333; background:#fff;";
+    const left = document.createElement("span");
+    const c = document.createElement("b");
+    c.style.cssText = "color:#d35400; letter-spacing:.4px;";
+    c.textContent = v.code;
+    left.appendChild(c);
+    const d = document.createElement("span");
+    d.style.cssText = "display:block; font-size:12.5px; color:#666;";
+    d.textContent = v.off + " · " + v.cond;
+    left.appendChild(d);
+    a.appendChild(left);
+    const right = document.createElement("span");
+    right.style.cssText = "font-size:12.5px; font-weight:700; color:var(--primary); white-space:nowrap;";
+    right.textContent = "Sao chép & mở →";
+    a.appendChild(right);
+    a.addEventListener("click", () => {
+      const ok = () => toast("Đã sao chép mã " + v.code);
+      if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(v.code).then(ok).catch(() => fallbackCopy(v.code, ok));
+      else fallbackCopy(v.code, ok);
+    });
+    list.appendChild(a);
+  });
+  wrap.style.display = "block";
+}
+
 function finishConvert(raw, aff, isUrl, warns) {
   lastAff = aff;
   document.getElementById("openGuide").style.display = "block";
@@ -885,6 +929,7 @@ function finishConvert(raw, aff, isUrl, warns) {
   const opb = document.getElementById("openProdBtn");
   if (opb) { opb.href = aff; opb.textContent = isUrl ? "🛒 Mở đúng sản phẩm của bạn trên Shopee →" : "🔎 Xem kết quả tìm kiếm trên Shopee →"; }
   document.getElementById("topVoucher").style.display = "block";
+  renderResultCodes();
   /* Khối TRA CỨU TỔNG QUAN SẢN PHẨM (Long yêu cầu 26/10/2026, nâng cấp tối
      26/10 từ khối soi nhanh): trang tĩnh không kéo được sao/nhận xét thật
      từ Shopee/Google (không API công khai, dữ liệu bị khóa với trang
