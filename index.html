@@ -1697,6 +1697,7 @@ function updateAccCta() {
 function gotoAccount(mode) { openAuthModal(mode); }
 
 let infoRevealed = false;
+let infoSetPinMode = false;
 async function unlockInfo() {
   if (!sbProfile || !sbProfile.pin_hash) return;
   const pin = prompt("Nhập mã rút tiền của bạn để xem thông tin:");
@@ -1705,42 +1706,61 @@ async function unlockInfo() {
   if (h && h === sbProfile.pin_hash) { infoRevealed = true; applyInfoMask(); }
   else { accMsg("⚠️ Mã rút tiền chưa đúng — chưa mở được thông tin."); toast("Mã rút tiền chưa đúng"); }
 }
+function infoBar(id, grid, text, btnLabel, btnFn) {
+  let bar = document.getElementById(id);
+  if (!bar) {
+    bar = document.createElement("div");
+    bar.id = id;
+    bar.style.cssText = "margin-top:6px; border:1.5px dashed #d6d3d1; border-radius:10px; padding:10px 12px; background:#fafaf9; display:flex; align-items:center; gap:8px; flex-wrap:wrap;";
+    grid.parentNode.insertBefore(bar, grid);
+  }
+  bar.style.display = "";
+  bar.innerHTML = "";
+  const span = document.createElement("span");
+  span.style.cssText = "font-size:13.5px; color:#555;";
+  span.textContent = text;
+  bar.appendChild(span);
+  if (btnLabel) {
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.style.cssText = "background:#0b57d0; color:#fff; border:none; border-radius:8px; padding:7px 12px; font-weight:700; cursor:pointer; font-size:13.5px;";
+    btn.textContent = btnLabel;
+    btn.onclick = btnFn;
+    bar.appendChild(btn);
+  }
+  return bar;
+}
 function applyInfoMask() {
   const fn = document.getElementById("accFullName"), bn = document.getElementById("accBankName");
   if (!fn || !bn) return;
   const cust = fn.parentElement, bank = bn.parentElement;
-  const locked = !!(sbUser && sbProfile && sbProfile.pin_hash);
-  const show = !locked || infoRevealed;
-  cust.style.display = show ? "" : "none";
-  bank.style.display = show ? "" : "none";
-  [["custLockBar", cust, "Thông tin khách hàng"], ["bankLockBar", bank, "Thông tin nhận tiền"]].forEach(function (cfg) {
-    const id = cfg[0], grid = cfg[1], label = cfg[2];
-    let bar = document.getElementById(id);
-    if (!locked) { if (bar) bar.style.display = "none"; return; }
-    if (!bar) {
-      bar = document.createElement("div");
-      bar.id = id;
-      bar.style.cssText = "margin-top:6px; border:1.5px dashed #d6d3d1; border-radius:10px; padding:10px 12px; background:#fafaf9; display:flex; align-items:center; gap:8px; flex-wrap:wrap;";
-      grid.parentNode.insertBefore(bar, grid);
-    }
-    bar.style.display = "";
-    bar.innerHTML = "";
-    const span = document.createElement("span");
-    span.style.cssText = "font-size:13.5px; color:#555;";
-    span.textContent = infoRevealed ? ("👁 " + label + " đang hiện.") : ("🔒 " + label + " đã lưu và đang ẩn.");
-    const btn = document.createElement("button");
-    btn.type = "button";
-    btn.style.cssText = "background:#0b57d0; color:#fff; border:none; border-radius:8px; padding:7px 12px; font-weight:700; cursor:pointer; font-size:13.5px;";
-    if (infoRevealed) { btn.textContent = "🙈 Ẩn lại"; btn.onclick = function () { infoRevealed = false; applyInfoMask(); }; }
-    else { btn.textContent = "👁 Nhập mã rút tiền để xem"; btn.onclick = unlockInfo; }
-    bar.appendChild(span); bar.appendChild(btn);
-  });
+  const prof = (sbUser && sbProfile) ? sbProfile : null;
+  const hasPin = !!(prof && prof.pin_hash);
+  if (hasPin) infoSetPinMode = false;
+  const hasData = !!(prof && (hasPin || (prof.full_name || "").trim() || (prof.phone || "").trim() || (prof.bank_name || "").trim() || (prof.bank_account || "").trim() || (prof.bank_holder || "").trim()));
+  cust.style.display = (!hasData || infoRevealed) ? "" : "none";
+  bank.style.display = (!hasData || infoRevealed || infoSetPinMode) ? "" : "none";
+  const hideBar = function (id) { const b = document.getElementById(id); if (b) b.style.display = "none"; };
+  if (!hasData) { hideBar("custLockBar"); hideBar("bankLockBar"); }
+  else if (infoRevealed) {
+    infoBar("custLockBar", cust, "👁 Thông tin khách hàng đang hiện.", "🙈 Ẩn lại", function () { infoRevealed = false; applyInfoMask(); });
+    infoBar("bankLockBar", bank, "👁 Thông tin nhận tiền đang hiện.", "🙈 Ẩn lại", function () { infoRevealed = false; applyInfoMask(); });
+  } else if (hasPin) {
+    infoBar("custLockBar", cust, "🔒 Thông tin khách hàng đã lưu và đang ẩn.", "👁 Nhập mã rút tiền để xem", unlockInfo);
+    infoBar("bankLockBar", bank, "🔒 Thông tin nhận tiền đã lưu và đang ẩn.", "👁 Nhập mã rút tiền để xem", unlockInfo);
+  } else if (infoSetPinMode) {
+    infoBar("custLockBar", cust, "🔒 Thông tin khách hàng đã lưu và đang ẩn — đặt mã rút tiền xong sẽ mở xem bằng mã đó.", null, null);
+    infoBar("bankLockBar", bank, "🔓 Đang hiện để bạn đặt mã rút tiền: nhập mã vào ô mật khẩu rút tiền rồi bấm Lưu, trang sẽ tự ẩn lại.", "🙈 Ẩn lại", function () { infoSetPinMode = false; applyInfoMask(); });
+  } else {
+    infoBar("custLockBar", cust, "🔒 Thông tin khách hàng đã lưu và đang ẩn — hãy đặt mã rút tiền ở mục Thông tin nhận tiền để mở xem.", null, null);
+    infoBar("bankLockBar", bank, "🔒 Thông tin nhận tiền đã lưu và đang ẩn.", "🔐 Đặt mã rút tiền để mở xem", function () { infoSetPinMode = true; applyInfoMask(); });
+  }
   if (!document.__infoMaskHooks) {
     document.__infoMaskHooks = true;
     document.addEventListener("click", function (e) {
-      if (!infoRevealed) return;
+      if (!infoRevealed && !infoSetPinMode) return;
       const t = e.target;
-      if ((t.closest && t.closest("#authModalClose")) || (t.closest && t.closest(".atab"))) { infoRevealed = false; applyInfoMask(); }
+      if ((t.closest && t.closest("#authModalClose")) || (t.closest && t.closest(".atab"))) { infoRevealed = false; infoSetPinMode = false; applyInfoMask(); }
     });
   }
 }
