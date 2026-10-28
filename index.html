@@ -389,6 +389,13 @@ body{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;text-r
       <div id="accOrders" style="text-align:left;"><p class="sub" style="text-align:left; margin:4px 0 0;">Chưa có đơn hàng nào được ghi nhận — khi có người mua qua link của bạn, đơn sẽ hiện tại đây.</p></div>
       <div style="font-weight:800; font-size:15px; margin-top:16px; text-align:left;">💸 Lịch sử nhận tiền</div>
       <div id="accPayouts" style="text-align:left;"><p class="sub" style="text-align:left; margin:4px 0 0;">Chưa có lần nhận tiền nào.</p></div>
+      <div style="font-weight:800; font-size:15px; margin-top:16px; text-align:left;">👤 Thông tin khách hàng</div>
+      <div style="display:grid; gap:8px; margin-top:6px;">
+        <input type="text" id="accFullName" placeholder="Họ và tên theo CCCD (ví dụ: Nguyễn Văn A)" autocomplete="name" style="padding:10px 12px; border:1.5px solid #ddd; border-radius:10px; font-size:14.5px; width:100%; box-sizing:border-box;">
+        <input type="text" id="accPhone" placeholder="Số điện thoại (ví dụ: 0912345678)" inputmode="tel" autocomplete="tel" style="padding:10px 12px; border:1.5px solid #ddd; border-radius:10px; font-size:14.5px; width:100%; box-sizing:border-box;">
+        <button id="accSaveCustomer" style="background:#0b57d0; color:#fff; border:none; border-radius:10px; padding:11px; font-weight:700; cursor:pointer;">💾 Lưu thông tin khách hàng</button>
+        <p class="sub" id="accCustNote" style="text-align:left; margin:0;">Thông tin này chỉ nhập 1 lần và không tự sửa được — họ tên phải trùng với tên chủ tài khoản ngân hàng của bạn. Cần sửa, bạn liên hệ shop nhé.</p>
+      </div>
       <div style="font-weight:800; font-size:15px; margin-top:16px; text-align:left;">🏦 Thông tin nhận tiền</div>
       <div style="display:grid; gap:8px; margin-top:6px;">
         <input type="text" id="accNameD" placeholder="Tên của bạn" autocomplete="name" style="padding:10px 12px; border:1.5px solid #ddd; border-radius:10px; font-size:14.5px; width:100%; box-sizing:border-box;">
@@ -1678,6 +1685,13 @@ function renderAuthUI() {
     const ba = document.getElementById("accBankAccount"); if (ba && document.activeElement !== ba) ba.value = sbProfile.bank_account || "";
     const bh = document.getElementById("accBankHolder"); if (bh && document.activeElement !== bh) bh.value = sbProfile.bank_holder || "";
     const pn = document.getElementById("accPinNote"); if (pn) pn.textContent = sbProfile.pin_hash ? "✅ Đã đặt mật khẩu rút tiền — muốn đổi thì nhập mật khẩu mới vào ô trên, để trống là giữ nguyên." : "Bạn chưa đặt mật khẩu rút tiền — đặt ở ô trên (4–8 chữ số) rồi bấm Lưu; mỗi lần rút tiền phải nhập đúng mật khẩu này.";
+    const fn = document.getElementById("accFullName"); if (fn && document.activeElement !== fn) fn.value = sbProfile.full_name || "";
+    const ph = document.getElementById("accPhone"); if (ph && document.activeElement !== ph) ph.value = sbProfile.phone || "";
+    const custLocked = !!((sbProfile.full_name || "").trim());
+    if (fn) fn.disabled = custLocked;
+    if (ph) ph.disabled = custLocked;
+    const scb = document.getElementById("accSaveCustomer"); if (scb) scb.style.display = custLocked ? "none" : "";
+    const cnn = document.getElementById("accCustNote"); if (cnn && custLocked) cnn.textContent = "🔒 Thông tin khách hàng đã khóa — cần sửa, bạn liên hệ shop nhé.";
     sbLoadDashboard();
     updateTopAuth(); updateAccCta();
   } else {
@@ -1760,6 +1774,22 @@ async function sbGoogle() {
   const r = await sb.auth.signInWithOAuth({ provider: "google", options: { redirectTo: "https://sansalecunglong.github.io/" } });
   if (r.error) accMsg("⚠️ " + sbErrText(r.error));
 }
+function normName(s) {
+  return (s || "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/Đ/g, "D").replace(/đ/g, "d").toUpperCase().replace(/\s+/g, " ").trim();
+}
+async function sbSaveCustomer() {
+  if (!sb || !sbUser || !sbProfile) { toast("Bạn đăng nhập bằng tài khoản để lưu thông tin nhé"); return; }
+  if ((sbProfile.full_name || "").trim()) { toast("Thông tin khách hàng đã khóa — cần sửa, bạn liên hệ shop nhé."); return; }
+  const fullName = (document.getElementById("accFullName").value || "").trim().replace(/\s+/g, " ");
+  const phone = (document.getElementById("accPhone").value || "").replace(/[\s.]/g, "");
+  if (fullName.length < 5 || !fullName.includes(" ")) { toast("Bạn nhập họ và tên đầy đủ theo CCCD nhé"); return; }
+  if (!/^0\d{9}$/.test(phone)) { toast("Số điện thoại chưa đúng — nhập 10 số bắt đầu bằng 0 nhé"); return; }
+  const r = await sb.from("profiles").update({ full_name: fullName, phone: phone }).eq("user_id", sbUser.id);
+  if (r.error) { toast("Lưu chưa được — hệ thống đang cập nhật, bạn thử lại sau ít phút nhé"); return; }
+  sbProfile.full_name = fullName; sbProfile.phone = phone;
+  renderAuthUI();
+  toast("Đã lưu và khóa thông tin khách hàng của bạn!");
+}
 async function sbSaveProfile() {
   if (!sb || !sbUser || !sbProfile) return;
   const name = (document.getElementById("accNameD").value || "").trim();
@@ -1770,6 +1800,8 @@ async function sbSaveProfile() {
   if (!name) { toast("Bạn nhập tên của bạn nhé"); return; }
   if (!bankName || !bankAcc || !bankHolder) { toast("Bạn điền đủ tên ngân hàng, số tài khoản và tên chủ tài khoản nhé"); return; }
   if (!/^\d{5,}$/.test(bankAcc)) { toast("Số tài khoản hình như chưa đúng — bạn kiểm tra lại nhé"); return; }
+  if (!(sbProfile.full_name || "").trim()) { toast("Bạn lưu Thông tin khách hàng ở mục phía trên trước nhé"); const f = document.getElementById("accFullName"); if (f) f.focus(); return; }
+  if (normName(bankHolder) !== normName(sbProfile.full_name)) { accMsg("⚠️ Tên chủ tài khoản không trùng khớp với thông tin khách hàng (" + sbProfile.full_name + ") — bạn kiểm tra lại nhé."); toast("Tên chủ tài khoản không trùng khớp với thông tin khách hàng"); return; }
   let pinHash = "";
   if (pin) {
     if (!/^\d{4,8}$/.test(pin)) { toast("Mật khẩu rút tiền phải là 4–8 chữ số"); return; }
@@ -1815,6 +1847,8 @@ async function sbLogout() {
   if (bg) bg.addEventListener("click", sbGoogle);
   const bs = document.getElementById("accSaveProfile");
   if (bs) bs.addEventListener("click", sbSaveProfile);
+  const scu = document.getElementById("accSaveCustomer");
+  if (scu) scu.addEventListener("click", sbSaveCustomer);
   const bw = document.getElementById("accWithdraw");
   if (bw) bw.addEventListener("click", sbWithdraw);
   const bo = document.getElementById("accLogout");
