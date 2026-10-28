@@ -1798,6 +1798,10 @@ function renderAuthUI() {
     const scb = document.getElementById("accSaveCustomer"); if (scb) scb.style.display = custLocked ? "none" : "";
     const cnn = document.getElementById("accCustNote"); if (cnn && custLocked) cnn.textContent = "🔒 Thông tin khách hàng đã khóa — cần sửa, bạn liên hệ shop nhé.";
     const fp = document.getElementById("accForgotPin"); if (fp) fp.style.display = sbProfile.pin_hash ? "" : "none";
+    const bankLocked = !!(((sbProfile.bank_name || "").trim()) || ((sbProfile.bank_account || "").trim()) || ((sbProfile.bank_holder || "").trim()));
+    ["accNameD", "accBankName", "accBankAccount", "accBankHolder", "accPin"].forEach(function (id) { const el = document.getElementById(id); if (el) el.disabled = bankLocked; });
+    const spb = document.getElementById("accSaveProfile"); if (spb) spb.style.display = bankLocked ? "none" : "";
+    if (bankLocked) { const pn2 = document.getElementById("accPinNote"); if (pn2) pn2.textContent = "🔒 Thông tin nhận tiền đã khóa — cần thay đổi, bạn liên hệ shop nhé. Quên mã rút tiền thì bấm nút đặt lại qua email ở bên dưới."; }
     checkPinReset();
     applyInfoMask();
     sbLoadDashboard();
@@ -1906,6 +1910,8 @@ async function sbSaveProfile() {
   const bankAcc = (document.getElementById("accBankAccount").value || "").replace(/\s+/g, "");
   const bankHolder = (document.getElementById("accBankHolder").value || "").trim().toUpperCase();
   const pin = (document.getElementById("accPin").value || "").trim();
+  const bankLockedNow = !!(((sbProfile.bank_name || "").trim()) || ((sbProfile.bank_account || "").trim()) || ((sbProfile.bank_holder || "").trim()));
+  if (bankLockedNow && (bankName !== (sbProfile.bank_name || "") || bankAcc !== (sbProfile.bank_account || "") || bankHolder !== (sbProfile.bank_holder || ""))) { accMsg("⚠️ Thông tin nhận tiền đã khóa — cần thay đổi, bạn liên hệ shop nhé."); toast("Thông tin nhận tiền đã khóa — liên hệ shop để thay đổi"); return; }
   if (!name) { toast("Bạn nhập tên của bạn nhé"); return; }
   if (!bankName || !bankAcc || !bankHolder) { toast("Bạn điền đủ tên ngân hàng, số tài khoản và tên chủ tài khoản nhé"); return; }
   if (!/^\d{5,}$/.test(bankAcc)) { toast("Số tài khoản hình như chưa đúng — bạn kiểm tra lại nhé"); return; }
