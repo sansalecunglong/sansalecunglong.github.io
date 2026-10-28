@@ -407,6 +407,7 @@ body{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;text-r
         <input type="text" id="accBankHolder" placeholder="Tên chủ tài khoản (viết hoa như trên thẻ, ví dụ: NGUYEN VAN A)" autocomplete="off" style="padding:10px 12px; border:1.5px solid #ddd; border-radius:10px; font-size:14.5px; width:100%; box-sizing:border-box;">
         <input type="password" id="accPin" placeholder="Mật khẩu rút tiền (4–8 chữ số, tự đặt)" inputmode="numeric" autocomplete="new-password" maxlength="8" style="padding:10px 12px; border:1.5px solid #ddd; border-radius:10px; font-size:14.5px; width:100%; box-sizing:border-box;">
         <p class="sub" id="accPinNote" style="text-align:left; margin:0;">Mật khẩu rút tiền dùng để khóa nút rút tiền — mỗi lần rút bạn phải nhập đúng mật khẩu này.</p>
+        <button id="accForgotPin" style="display:none; background:none; border:none; color:#0b57d0; font-weight:700; cursor:pointer; text-align:left; padding:0; font-size:13.5px;">Quên mật khẩu rút tiền? Bấm để nhận email đặt lại</button>
         <div style="display:flex; gap:8px; flex-wrap:wrap;">
           <button id="accSaveProfile" style="flex:1; min-width:140px; background:#0b57d0; color:#fff; border:none; border-radius:10px; padding:11px; font-weight:700; cursor:pointer;">💾 Lưu thông tin nhận tiền</button>
           <button id="accLogout" style="background:#fff; color:#555; border:1.5px solid #ccc; border-radius:10px; padding:11px 16px; font-weight:700; cursor:pointer;">Đăng xuất</button>
@@ -1573,6 +1574,37 @@ async function pinHashOf(pin) {
     return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, "0")).join("");
   } catch (e) { return ""; }
 }
+async function sbForgotPin() {
+  if (!sb || !sbUser) { toast("Bạn đăng nhập trước nhé"); return; }
+  const email = (sbUser.email || "").trim();
+  if (!email) { toast("Tài khoản chưa có email để gửi xác nhận"); return; }
+  try { sessionStorage.setItem("sscl_pin_reset", "1"); } catch (e) {}
+  const r = await sb.auth.signInWithOtp({ email: email, options: { shouldCreateUser: false, emailRedirectTo: "https://sansalecunglong.github.io/" } });
+  if (r.error) { try { sessionStorage.removeItem("sscl_pin_reset"); } catch (e) {} accMsg("⚠️ " + sbErrText(r.error)); return; }
+  accMsg("📧 Đã gửi email xác nhận tới " + email + ". Bạn mở hộp thư trên cùng trình duyệt này, bấm vào link trong email để quay lại đặt mật khẩu rút tiền mới.");
+}
+let pinResetAsked = false;
+async function checkPinReset() {
+  if (pinResetAsked || !sb || !sbUser || !sbProfile) return;
+  let flag = "";
+  try { flag = sessionStorage.getItem("sscl_pin_reset") || ""; } catch (e) {}
+  if (!flag) return;
+  pinResetAsked = true;
+  const p1 = window.prompt("Bạn vừa xác nhận qua email. Nhập mật khẩu rút tiền MỚI (4–8 chữ số):");
+  if (p1 === null) { pinResetAsked = false; return; }
+  if (!/^\d{4,8}$/.test(p1.trim())) { toast("Mật khẩu rút tiền phải là 4–8 chữ số"); pinResetAsked = false; return; }
+  const p2 = window.prompt("Nhập lại mật khẩu rút tiền mới để xác nhận:");
+  if (p2 === null) { pinResetAsked = false; return; }
+  if (p2.trim() !== p1.trim()) { toast("Hai lần nhập chưa khớp — bạn thử lại nhé"); pinResetAsked = false; return; }
+  const h = await pinHashOf(p1.trim());
+  if (!h) { toast("Trình duyệt chưa hỗ trợ — bạn thử mở bằng Chrome nhé"); pinResetAsked = false; return; }
+  const r = await sb.from("profiles").update({ pin_hash: h }).eq("user_id", sbUser.id);
+  if (r.error) { toast("Đặt lại chưa được — bạn thử lại sau ít phút nhé"); pinResetAsked = false; return; }
+  sbProfile.pin_hash = h;
+  try { sessionStorage.removeItem("sscl_pin_reset"); } catch (e) {}
+  renderAuthUI();
+  accMsg("✅ Đã đặt lại mật khẩu rút tiền mới — từ giờ dùng mật khẩu này khi rút tiền và khi đổi mật khẩu.");
+}
 async function sbWithdraw() {
   if (!sb || !sbUser || !sbProfile) return;
   if (sbAvailNow < 10000) { toast("Số dư khả dụng cần từ 10.000₫ mới rút được"); return; }
@@ -1692,6 +1724,8 @@ function renderAuthUI() {
     if (ph) ph.disabled = custLocked;
     const scb = document.getElementById("accSaveCustomer"); if (scb) scb.style.display = custLocked ? "none" : "";
     const cnn = document.getElementById("accCustNote"); if (cnn && custLocked) cnn.textContent = "🔒 Thông tin khách hàng đã khóa — cần sửa, bạn liên hệ shop nhé.";
+    const fp = document.getElementById("accForgotPin"); if (fp) fp.style.display = sbProfile.pin_hash ? "" : "none";
+    checkPinReset();
     sbLoadDashboard();
     updateTopAuth(); updateAccCta();
   } else {
@@ -1809,7 +1843,7 @@ async function sbSaveProfile() {
       const oldPin = window.prompt("Bạn đang ĐỔI mật khẩu rút tiền. Nhập mật khẩu rút tiền HIỆN TẠI để xác nhận:");
       if (oldPin === null) return;
       const oldHash = await pinHashOf(oldPin.trim());
-      if (!oldHash || oldHash !== sbProfile.pin_hash) { accMsg("⚠️ Mật khẩu rút tiền hiện tại chưa đúng — không đổi được mật khẩu. Nếu quên mật khẩu, bạn liên hệ shop để được đặt lại."); toast("Mật khẩu hiện tại chưa đúng — không đổi được"); return; }
+      if (!oldHash || oldHash !== sbProfile.pin_hash) { accMsg("⚠️ Mật khẩu rút tiền hiện tại chưa đúng — không đổi được mật khẩu. Nếu quên mật khẩu, bạn dùng nút 'Quên mật khẩu rút tiền' ở mục này để nhận email đặt lại."); toast("Mật khẩu hiện tại chưa đúng — không đổi được"); return; }
     }
     pinHash = await pinHashOf(pin);
     if (!pinHash) { toast("Trình duyệt chưa hỗ trợ đặt mật khẩu — bạn thử mở bằng Chrome nhé"); return; }
@@ -1855,6 +1889,8 @@ async function sbLogout() {
   if (bs) bs.addEventListener("click", sbSaveProfile);
   const scu = document.getElementById("accSaveCustomer");
   if (scu) scu.addEventListener("click", sbSaveCustomer);
+  const fpn = document.getElementById("accForgotPin");
+  if (fpn) fpn.addEventListener("click", sbForgotPin);
   const bw = document.getElementById("accWithdraw");
   if (bw) bw.addEventListener("click", sbWithdraw);
   const bo = document.getElementById("accLogout");
