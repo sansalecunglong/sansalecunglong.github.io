@@ -1684,7 +1684,7 @@ function renderAuthUI() {
     const bn = document.getElementById("accBankName"); if (bn && document.activeElement !== bn) bn.value = sbProfile.bank_name || "";
     const ba = document.getElementById("accBankAccount"); if (ba && document.activeElement !== ba) ba.value = sbProfile.bank_account || "";
     const bh = document.getElementById("accBankHolder"); if (bh && document.activeElement !== bh) bh.value = sbProfile.bank_holder || "";
-    const pn = document.getElementById("accPinNote"); if (pn) pn.textContent = sbProfile.pin_hash ? "✅ Đã đặt mật khẩu rút tiền — muốn đổi thì nhập mật khẩu mới vào ô trên, để trống là giữ nguyên." : "Bạn chưa đặt mật khẩu rút tiền — đặt ở ô trên (4–8 chữ số) rồi bấm Lưu; mỗi lần rút tiền phải nhập đúng mật khẩu này.";
+    const pn = document.getElementById("accPinNote"); if (pn) pn.textContent = sbProfile.pin_hash ? "✅ Đã đặt mật khẩu rút tiền — muốn đổi phải nhập đúng mật khẩu hiện tại, quên thì liên hệ shop; để trống ô là giữ nguyên." : "Bạn chưa đặt mật khẩu rút tiền — đặt ở ô trên (4–8 chữ số) rồi bấm Lưu; mỗi lần rút tiền phải nhập đúng mật khẩu này.";
     const fn = document.getElementById("accFullName"); if (fn && document.activeElement !== fn) fn.value = sbProfile.full_name || "";
     const ph = document.getElementById("accPhone"); if (ph && document.activeElement !== ph) ph.value = sbProfile.phone || "";
     const custLocked = !!((sbProfile.full_name || "").trim());
@@ -1805,6 +1805,12 @@ async function sbSaveProfile() {
   let pinHash = "";
   if (pin) {
     if (!/^\d{4,8}$/.test(pin)) { toast("Mật khẩu rút tiền phải là 4–8 chữ số"); return; }
+    if (sbProfile.pin_hash) {
+      const oldPin = window.prompt("Bạn đang ĐỔI mật khẩu rút tiền. Nhập mật khẩu rút tiền HIỆN TẠI để xác nhận:");
+      if (oldPin === null) return;
+      const oldHash = await pinHashOf(oldPin.trim());
+      if (!oldHash || oldHash !== sbProfile.pin_hash) { accMsg("⚠️ Mật khẩu rút tiền hiện tại chưa đúng — không đổi được mật khẩu. Nếu quên mật khẩu, bạn liên hệ shop để được đặt lại."); toast("Mật khẩu hiện tại chưa đúng — không đổi được"); return; }
+    }
     pinHash = await pinHashOf(pin);
     if (!pinHash) { toast("Trình duyệt chưa hỗ trợ đặt mật khẩu — bạn thử mở bằng Chrome nhé"); return; }
   } else if (!sbProfile.pin_hash) {
