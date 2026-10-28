@@ -342,35 +342,55 @@ body{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;text-r
       </div>
     </div>
 <div id="accHave" style="display:none;">
-      <p style="margin:0 0 2px;">Xin chào <b id="accUserName"></b> <span id="accUserEmail" style="color:#777; font-size:13px;"></span></p>
-      <p style="margin:0 0 4px;">Mã của bạn: <b id="accCode" style="font-size:24px; letter-spacing:1.5px; color:#ee4d2d;"></b></p>
-      <p class="sub" style="text-align:left; margin-top:0;">Mọi link Shopee bạn mở hoặc tạo trên máy này đã tự gắn mã của bạn rồi — cứ mua như bình thường. Link chia sẻ của bạn (đơn của bạn bè qua link này cũng ghi cho bạn):</p>
+      <div style="display:flex; align-items:center; gap:12px; background:linear-gradient(135deg,#ee4d2d,#f97316); border-radius:14px; padding:14px; color:#fff;">
+        <div id="accAvatar" style="width:48px; height:48px; border-radius:50%; background:rgba(255,255,255,.25); border:2px solid rgba(255,255,255,.7); display:flex; align-items:center; justify-content:center; font-size:22px; font-weight:800; flex:none;">👤</div>
+        <div style="min-width:0;">
+          <div style="font-size:16px;">Xin chào <b id="accUserName"></b></div>
+          <div id="accUserEmail" style="font-size:12.5px; opacity:.92;"></div>
+          <div style="margin-top:5px; font-size:12px;">Mã hoàn hoa hồng: <b id="accCode" style="font-size:16px; letter-spacing:1.5px; background:#fff; color:#ee4d2d; border-radius:6px; padding:1px 8px;"></b></div>
+        </div>
+      </div>
+      <div id="accWallet" style="margin-top:12px; border:1.5px solid #e5e7eb; border-radius:14px; padding:12px; background:#fff;">
+        <div style="text-align:center;">
+          <div style="font-size:12px; font-weight:700; color:#666;">💰 SỐ DƯ KHẢ DỤNG — RÚT ĐƯỢC</div>
+          <div id="accWalAvail" style="font-size:32px; font-weight:800; color:#15803d; line-height:1.15;">0₫</div>
+        </div>
+        <div style="display:flex; gap:8px; flex-wrap:wrap; margin-top:6px;">
+          <div style="flex:1; min-width:120px; background:#fff7ed; border:1.5px solid #fed7aa; border-radius:12px; padding:9px 6px; text-align:center;">
+            <div style="font-size:11.5px; color:#9a3412; font-weight:700;">⏳ TẠM TÍNH (CHỜ ĐỐI SOÁT)</div>
+            <div id="accWalEst" style="font-size:17px; font-weight:800; color:#c2410c;">0₫</div>
+          </div>
+          <div style="flex:1; min-width:120px; background:#eff6ff; border:1.5px solid #bfdbfe; border-radius:12px; padding:9px 6px; text-align:center;">
+            <div style="font-size:11.5px; color:#1e40af; font-weight:700;">✅ SHOP ĐÃ TRẢ</div>
+            <div id="accWalPaid" style="font-size:17px; font-weight:800; color:#1d4ed8;">0₫</div>
+          </div>
+        </div>
+        <button id="accWithdraw" style="width:100%; margin-top:10px; background:#16a34a; color:#fff; border:none; border-radius:10px; padding:12px; font-size:16px; font-weight:800; cursor:pointer;">💸 Yêu cầu rút tiền</button>
+        <p class="sub" id="accWithdrawNote" style="text-align:left; margin:4px 0 0;">Rút được khi số dư khả dụng từ 10.000₫. Shop trả theo thông tin nhận tiền bạn đã lưu bên dưới.</p>
+        <p class="sub" id="accBalance" style="text-align:left; margin:6px 0 0;">Chưa có kỳ đối soát nào — sau mỗi kỳ shop đối soát, số dư của bạn sẽ hiện tại đây.</p>
+      </div>
+      <div style="display:flex; gap:8px; flex-wrap:wrap; margin-top:10px;">
+        <div style="flex:1; min-width:120px; background:#fafafa; border:1.5px solid #e5e7eb; border-radius:12px; padding:9px 6px; text-align:center;">
+          <div style="font-size:11.5px; color:#555; font-weight:700;">🧾 TỔNG ĐƠN ĐÃ GHI</div>
+          <div id="accStatOrders" style="font-size:18px; font-weight:800; color:#111;">0</div>
+        </div>
+        <div style="flex:1; min-width:120px; background:#fafafa; border:1.5px solid #e5e7eb; border-radius:12px; padding:9px 6px; text-align:center;">
+          <div style="font-size:11.5px; color:#555; font-weight:700;">🎁 TỔNG HOÀN ĐÃ GHI</div>
+          <div id="accStatShare" style="font-size:18px; font-weight:800; color:#111;">0₫</div>
+        </div>
+      </div>
+      <div style="font-weight:800; font-size:15px; margin-top:16px; text-align:left;">🔗 Link giới thiệu của bạn</div>
+      <p class="sub" style="text-align:left; margin:2px 0 6px;">Bạn bè mua qua link này thì đơn được ghi cho bạn. Mọi link Shopee bạn mở hoặc tạo trên máy này cũng đã tự gắn mã của bạn rồi — cứ mua như bình thường.</p>
       <div style="display:flex; gap:8px; flex-wrap:wrap;">
         <input type="text" id="accShare" readonly style="flex:1; min-width:200px; padding:10px 12px; border:1.5px solid #ddd; border-radius:10px; font-size:13.5px; box-sizing:border-box;">
         <button id="accCopy" style="background:#0b57d0; color:#fff; border:none; border-radius:10px; padding:10px 16px; font-weight:700; cursor:pointer;">📋 Sao chép</button>
       </div>
-      <p class="sub" id="accBalance" style="text-align:left;">Số dư hoàn hoa hồng: chưa có kỳ đối soát nào — sau mỗi kỳ shop đối soát, số tiền của bạn sẽ hiện tại đây.</p>
-      <div id="accWallet" style="display:none; margin-top:8px;">
-        <div style="display:flex; gap:8px; flex-wrap:wrap;">
-          <div style="flex:1; min-width:96px; background:#fff7ed; border:1.5px solid #fed7aa; border-radius:12px; padding:10px 6px; text-align:center;">
-            <div style="font-size:11.5px; color:#9a3412; font-weight:700;">⏳ TẠM TÍNH</div>
-            <div id="accWalEst" style="font-size:17px; font-weight:800; color:#c2410c;">0₫</div>
-          </div>
-          <div style="flex:1; min-width:96px; background:#f0fdf4; border:1.5px solid #bbf7d0; border-radius:12px; padding:10px 6px; text-align:center;">
-            <div style="font-size:11.5px; color:#166534; font-weight:700;">💰 KHẢ DỤNG</div>
-            <div id="accWalAvail" style="font-size:17px; font-weight:800; color:#15803d;">0₫</div>
-          </div>
-          <div style="flex:1; min-width:96px; background:#eff6ff; border:1.5px solid #bfdbfe; border-radius:12px; padding:10px 6px; text-align:center;">
-            <div style="font-size:11.5px; color:#1e40af; font-weight:700;">✅ ĐÃ TRẢ</div>
-            <div id="accWalPaid" style="font-size:17px; font-weight:800; color:#1d4ed8;">0₫</div>
-          </div>
-        </div>
-        <button id="accWithdraw" style="width:100%; margin-top:8px; background:#16a34a; color:#fff; border:none; border-radius:10px; padding:11px; font-size:15px; font-weight:800; cursor:pointer;">💸 Yêu cầu rút tiền</button>
-        <p class="sub" id="accWithdrawNote" style="text-align:left; margin:4px 0 0;">Rút được khi số dư khả dụng từ 10.000₫. Shop trả theo thông tin nhận tiền bạn đã lưu bên dưới.</p>
-      </div>
-      <div id="accOrders" style="text-align:left;"></div>
-      <div id="accPayouts" style="text-align:left;"></div>
-      <div style="display:grid; gap:8px; margin-top:10px;">
+      <div style="font-weight:800; font-size:15px; margin-top:16px; text-align:left;">🧾 Đơn hàng của tôi</div>
+      <div id="accOrders" style="text-align:left;"><p class="sub" style="text-align:left; margin:4px 0 0;">Chưa có đơn hàng nào được ghi nhận — khi có người mua qua link của bạn, đơn sẽ hiện tại đây.</p></div>
+      <div style="font-weight:800; font-size:15px; margin-top:16px; text-align:left;">💸 Lịch sử nhận tiền</div>
+      <div id="accPayouts" style="text-align:left;"><p class="sub" style="text-align:left; margin:4px 0 0;">Chưa có lần nhận tiền nào.</p></div>
+      <div style="font-weight:800; font-size:15px; margin-top:16px; text-align:left;">🏦 Thông tin nhận tiền</div>
+      <div style="display:grid; gap:8px; margin-top:6px;">
         <input type="text" id="accNameD" placeholder="Tên của bạn" autocomplete="name" style="padding:10px 12px; border:1.5px solid #ddd; border-radius:10px; font-size:14.5px; width:100%; box-sizing:border-box;">
         <input type="text" id="accContactD" placeholder="Số Zalo, hoặc STK + tên ngân hàng để shop trả tiền" autocomplete="tel" style="padding:10px 12px; border:1.5px solid #ddd; border-radius:10px; font-size:14.5px; width:100%; box-sizing:border-box;">
         <div style="display:flex; gap:8px; flex-wrap:wrap;">
@@ -1469,8 +1489,11 @@ async function sbLoadDashboard() {
   const ordEl = document.getElementById("accOrders");
   const wdBtn = document.getElementById("accWithdraw");
   const wdNote = document.getElementById("accWithdrawNote");
-  if (payEl) payEl.innerHTML = "";
-  if (ordEl) ordEl.innerHTML = "";
+  if (walEl) walEl.style.display = "block";
+  const stO0 = document.getElementById("accStatOrders"); if (stO0) stO0.textContent = "0";
+  const stS0 = document.getElementById("accStatShare"); if (stS0) stS0.textContent = "0₫";
+  if (ordEl) ordEl.innerHTML = "<p class='sub' style='text-align:left; margin:4px 0 0;'>Chưa có đơn hàng nào được ghi nhận — khi có người mua qua link của bạn, đơn sẽ hiện tại đây.</p>";
+  if (payEl) payEl.innerHTML = "<p class='sub' style='text-align:left; margin:4px 0 0;'>Chưa có lần nhận tiền nào.</p>";
   sbAvailNow = 0;
   let shown = false;
   try {
@@ -1509,7 +1532,9 @@ async function sbLoadDashboard() {
       const o = await sb.from("orders").select("*").eq("user_id", sbUser.id).order("created_at", { ascending: false }).limit(20);
       if (!o.error && o.data && o.data.length && ordEl) {
         const st = { pending: "⏳ Chờ đối soát", completed: "✅ Đã đối soát", cancelled: "❌ Đã hủy" };
-        ordEl.innerHTML = "<div style='font-weight:700; font-size:14px; margin-top:10px;'>🧾 Đơn hàng của tôi</div>" + o.data.map(x => {
+        const so = document.getElementById("accStatOrders"); if (so) so.textContent = String(o.data.length);
+        const ss = document.getElementById("accStatShare"); if (ss) ss.textContent = fmtVnd(o.data.reduce((s, x) => s + (Number(x.member_share) || 0), 0));
+        ordEl.innerHTML = o.data.map(x => {
           const d = x.order_time || x.created_at;
           return "<div style='font-size:13.5px; color:#444; margin-top:4px; border-bottom:1px dashed #eee; padding-bottom:4px;'>• " + new Date(d).toLocaleDateString("vi-VN") + " — " + (x.item_name ? x.item_name : "Đơn Shopee") + "<br>&nbsp;&nbsp;Hoàn của bạn: <b>" + fmtVnd(x.member_share) + "</b> · " + (st[x.status] || x.status) + "</div>";
         }).join("");
@@ -1517,7 +1542,7 @@ async function sbLoadDashboard() {
     } catch (e) {}
     const p = await sb.from("payouts").select("*").eq("user_id", sbUser.id).order("paid_at", { ascending: false }).limit(10);
     if (p.data && p.data.length && payEl) {
-      payEl.innerHTML = "<div style='font-weight:700; font-size:14px; margin-top:4px;'>🧾 Lịch sử shop trả tiền</div>" + p.data.map(x => "<div style='font-size:13.5px; color:#444; margin-top:3px;'>• " + new Date(x.paid_at).toLocaleDateString("vi-VN") + " — <b>" + fmtVnd(x.amount) + "</b>" + (x.note ? " (" + x.note + ")" : "") + "</div>").join("");
+      payEl.innerHTML = p.data.map(x => "<div style='font-size:13.5px; color:#444; margin-top:3px;'>• " + new Date(x.paid_at).toLocaleDateString("vi-VN") + " — <b>" + fmtVnd(x.amount) + "</b>" + (x.note ? " (" + x.note + ")" : "") + "</div>").join("");
     }
   } catch (e) {}
   if (!shown && balEl) {
@@ -1619,7 +1644,8 @@ function renderAuthUI() {
     if (none) none.style.display = "none";
     if (have) have.style.display = "";
     const un = document.getElementById("accUserName"); if (un) un.textContent = sbProfile.name || "";
-    const ue = document.getElementById("accUserEmail"); if (ue) ue.textContent = sbUser.email ? "(" + sbUser.email + ")" : "";
+    const ue = document.getElementById("accUserEmail"); if (ue) ue.textContent = sbUser.email || "";
+    const av = document.getElementById("accAvatar"); if (av) av.textContent = (sbProfile.name || sbUser.email || "S").trim().charAt(0).toUpperCase();
     const cd = document.getElementById("accCode"); if (cd) cd.textContent = sbProfile.code.toUpperCase();
     const sh = document.getElementById("accShare"); if (sh) sh.value = "https://sansalecunglong.github.io/?ref=" + sbProfile.code;
     const nd = document.getElementById("accNameD"); if (nd && document.activeElement !== nd) nd.value = sbProfile.name || "";
@@ -1634,6 +1660,8 @@ function renderAuthUI() {
   }
 }
 function fillDashboardLocal(a) {
+  const w = document.getElementById("accWallet"); if (w) w.style.display = "none";
+  const av2 = document.getElementById("accAvatar"); if (av2) av2.textContent = (a.name || "S").trim().charAt(0).toUpperCase();
   const cd = document.getElementById("accCode"); if (cd) cd.textContent = a.code.toUpperCase();
   const sh = document.getElementById("accShare"); if (sh) sh.value = "https://sansalecunglong.github.io/?ref=" + a.code;
   const un = document.getElementById("accUserName"); if (un) un.textContent = a.name || "";
