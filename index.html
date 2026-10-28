@@ -350,6 +350,25 @@ body{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;text-r
         <button id="accCopy" style="background:#0b57d0; color:#fff; border:none; border-radius:10px; padding:10px 16px; font-weight:700; cursor:pointer;">📋 Sao chép</button>
       </div>
       <p class="sub" id="accBalance" style="text-align:left;">Số dư hoàn hoa hồng: chưa có kỳ đối soát nào — sau mỗi kỳ shop đối soát, số tiền của bạn sẽ hiện tại đây.</p>
+      <div id="accWallet" style="display:none; margin-top:8px;">
+        <div style="display:flex; gap:8px; flex-wrap:wrap;">
+          <div style="flex:1; min-width:96px; background:#fff7ed; border:1.5px solid #fed7aa; border-radius:12px; padding:10px 6px; text-align:center;">
+            <div style="font-size:11.5px; color:#9a3412; font-weight:700;">⏳ TẠM TÍNH</div>
+            <div id="accWalEst" style="font-size:17px; font-weight:800; color:#c2410c;">0₫</div>
+          </div>
+          <div style="flex:1; min-width:96px; background:#f0fdf4; border:1.5px solid #bbf7d0; border-radius:12px; padding:10px 6px; text-align:center;">
+            <div style="font-size:11.5px; color:#166534; font-weight:700;">💰 KHẢ DỤNG</div>
+            <div id="accWalAvail" style="font-size:17px; font-weight:800; color:#15803d;">0₫</div>
+          </div>
+          <div style="flex:1; min-width:96px; background:#eff6ff; border:1.5px solid #bfdbfe; border-radius:12px; padding:10px 6px; text-align:center;">
+            <div style="font-size:11.5px; color:#1e40af; font-weight:700;">✅ ĐÃ TRẢ</div>
+            <div id="accWalPaid" style="font-size:17px; font-weight:800; color:#1d4ed8;">0₫</div>
+          </div>
+        </div>
+        <button id="accWithdraw" style="width:100%; margin-top:8px; background:#16a34a; color:#fff; border:none; border-radius:10px; padding:11px; font-size:15px; font-weight:800; cursor:pointer;">💸 Yêu cầu rút tiền</button>
+        <p class="sub" id="accWithdrawNote" style="text-align:left; margin:4px 0 0;">Rút được khi số dư khả dụng từ 10.000₫. Shop trả theo thông tin nhận tiền bạn đã lưu bên dưới.</p>
+      </div>
+      <div id="accOrders" style="text-align:left;"></div>
       <div id="accPayouts" style="text-align:left;"></div>
       <div style="display:grid; gap:8px; margin-top:10px;">
         <input type="text" id="accNameD" placeholder="Tên của bạn" autocomplete="name" style="padding:10px 12px; border:1.5px solid #ddd; border-radius:10px; font-size:14.5px; width:100%; box-sizing:border-box;">
@@ -1442,17 +1461,60 @@ async function sbEnsureProfile() {
   accMsg("Chưa tạo được mã cho tài khoản — bạn thử đăng nhập lại giúp shop nhé.");
   return null;
 }
+let sbAvailNow = 0;
 async function sbLoadDashboard() {
   const balEl = document.getElementById("accBalance");
   const payEl = document.getElementById("accPayouts");
+  const walEl = document.getElementById("accWallet");
+  const ordEl = document.getElementById("accOrders");
+  const wdBtn = document.getElementById("accWithdraw");
+  const wdNote = document.getElementById("accWithdrawNote");
   if (payEl) payEl.innerHTML = "";
+  if (ordEl) ordEl.innerHTML = "";
+  sbAvailNow = 0;
   let shown = false;
   try {
     const b = await sb.from("balances").select("*").eq("user_id", sbUser.id).maybeSingle();
     if (b.data && balEl) {
       balEl.innerHTML = "Số dư hoàn hoa hồng" + (b.data.period ? " (kỳ " + b.data.period + ")" : "") + ": tạm tính <b>" + fmtVnd(b.data.estimated) + "</b> · đã đối soát, chờ shop trả <b>" + fmtVnd(b.data.available) + "</b> · đã trả <b>" + fmtVnd(b.data.paid_total) + "</b>.";
       shown = true;
+      sbAvailNow = Number(b.data.available) || 0;
+      if (walEl) {
+        walEl.style.display = "block";
+        document.getElementById("accWalEst").textContent = fmtVnd(b.data.estimated);
+        document.getElementById("accWalAvail").textContent = fmtVnd(b.data.available);
+        document.getElementById("accWalPaid").textContent = fmtVnd(b.data.paid_total);
+      }
     }
+    /* Yêu cầu rút tiền đang chờ xử lý? */
+    let hasPendingReq = false;
+    try {
+      const rq = await sb.from("payout_requests").select("id").eq("user_id", sbUser.id).eq("status", "requested").limit(1);
+      if (!rq.error && rq.data && rq.data.length) hasPendingReq = true;
+    } catch (e) {}
+    if (wdBtn) {
+      if (hasPendingReq) {
+        wdBtn.disabled = true; wdBtn.style.opacity = "0.55"; wdBtn.textContent = "⏳ Đã gửi yêu cầu — shop đang xử lý";
+        if (wdNote) wdNote.textContent = "Yêu cầu rút tiền của bạn đang chờ shop xử lý. Shop trả xong sẽ hiện ở lịch sử bên dưới.";
+      } else if (sbAvailNow >= 10000) {
+        wdBtn.disabled = false; wdBtn.style.opacity = "1"; wdBtn.textContent = "💸 Yêu cầu rút " + fmtVnd(sbAvailNow);
+        if (wdNote) wdNote.textContent = "Bấm nút là gửi yêu cầu rút toàn bộ số dư khả dụng. Shop trả theo thông tin nhận tiền bạn đã lưu bên dưới.";
+      } else {
+        wdBtn.disabled = true; wdBtn.style.opacity = "0.55"; wdBtn.textContent = "💸 Yêu cầu rút tiền";
+        if (wdNote) wdNote.textContent = "Rút được khi số dư khả dụng từ 10.000₫ (hiện có " + fmtVnd(sbAvailNow) + ").";
+      }
+    }
+    /* Đơn hàng của tôi */
+    try {
+      const o = await sb.from("orders").select("*").eq("user_id", sbUser.id).order("created_at", { ascending: false }).limit(20);
+      if (!o.error && o.data && o.data.length && ordEl) {
+        const st = { pending: "⏳ Chờ đối soát", completed: "✅ Đã đối soát", cancelled: "❌ Đã hủy" };
+        ordEl.innerHTML = "<div style='font-weight:700; font-size:14px; margin-top:10px;'>🧾 Đơn hàng của tôi</div>" + o.data.map(x => {
+          const d = x.order_time || x.created_at;
+          return "<div style='font-size:13.5px; color:#444; margin-top:4px; border-bottom:1px dashed #eee; padding-bottom:4px;'>• " + new Date(d).toLocaleDateString("vi-VN") + " — " + (x.item_name ? x.item_name : "Đơn Shopee") + "<br>&nbsp;&nbsp;Hoàn của bạn: <b>" + fmtVnd(x.member_share) + "</b> · " + (st[x.status] || x.status) + "</div>";
+        }).join("");
+      }
+    } catch (e) {}
     const p = await sb.from("payouts").select("*").eq("user_id", sbUser.id).order("paid_at", { ascending: false }).limit(10);
     if (p.data && p.data.length && payEl) {
       payEl.innerHTML = "<div style='font-weight:700; font-size:14px; margin-top:4px;'>🧾 Lịch sử shop trả tiền</div>" + p.data.map(x => "<div style='font-size:13.5px; color:#444; margin-top:3px;'>• " + new Date(x.paid_at).toLocaleDateString("vi-VN") + " — <b>" + fmtVnd(x.amount) + "</b>" + (x.note ? " (" + x.note + ")" : "") + "</div>").join("");
@@ -1465,6 +1527,26 @@ async function sbLoadDashboard() {
       if (row) balEl.innerHTML = "Số dư hoàn hoa hồng" + (row.ky ? " (kỳ " + row.ky + ")" : "") + ": tạm tính <b>" + fmtVnd(row.tamTinh) + "</b> · đã đối soát, chờ shop trả <b>" + fmtVnd(row.khaDung) + "</b>.";
     }).catch(() => {});
   }
+}
+async function sbWithdraw() {
+  if (!sb || !sbUser || !sbProfile) return;
+  if (sbAvailNow < 10000) { toast("Số dư khả dụng cần từ 10.000₫ mới rút được"); return; }
+  const contact = (sbProfile.contact || "").trim();
+  if (!contact) {
+    accMsg("Bạn điền thông tin nhận tiền (số Zalo hoặc STK + ngân hàng) ở ô bên dưới rồi bấm Lưu trước nhé.");
+    const c = document.getElementById("accContactD"); if (c) c.focus();
+    return;
+  }
+  const btn = document.getElementById("accWithdraw");
+  if (btn) { btn.disabled = true; btn.textContent = "⏳ Đang gửi yêu cầu…"; }
+  const r = await sb.from("payout_requests").insert({ user_id: sbUser.id, code: sbProfile.code, amount: Math.round(sbAvailNow), contact: contact });
+  if (r.error) {
+    accMsg("⚠️ " + sbErrText(r.error));
+    if (btn) { btn.disabled = false; }
+    return;
+  }
+  accMsg("✅ Đã gửi yêu cầu rút " + fmtVnd(sbAvailNow) + " — shop sẽ trả theo thông tin bạn đã lưu.");
+  sbLoadDashboard();
 }
 function updateTopAuth() {
   const L = document.getElementById("topLogin"), R = document.getElementById("topRegister"), D = document.getElementById("topDash"), O = document.getElementById("topLogout");
@@ -1651,6 +1733,8 @@ async function sbLogout() {
   if (bg) bg.addEventListener("click", sbGoogle);
   const bs = document.getElementById("accSaveProfile");
   if (bs) bs.addEventListener("click", sbSaveProfile);
+  const bw = document.getElementById("accWithdraw");
+  if (bw) bw.addEventListener("click", sbWithdraw);
   const bo = document.getElementById("accLogout");
   if (bo) bo.addEventListener("click", sbLogout);
   const mc = document.getElementById("authModalClose");
