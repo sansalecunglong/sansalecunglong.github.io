@@ -1419,7 +1419,7 @@ function myToken() {
   let t = "";
   try { t = localStorage.getItem("sscl_token") || ""; } catch (err) {}
   if (!t) {
-    t = "m" + Date.now().toString(36) + Math.random().toString(36).slice(2, 10);
+    try { t = "m" + Array.from(crypto.getRandomValues(new Uint8Array(12))).map(function (b) { return ("0" + b.toString(16)).slice(-2); }).join(""); } catch (err) { t = "m" + Date.now().toString(36) + Math.random().toString(36).slice(2, 10); }
     try { localStorage.setItem("sscl_token", t); } catch (err) {}
   }
   return t;
