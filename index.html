@@ -1695,6 +1695,55 @@ function updateAccCta() {
   }
 }
 function gotoAccount(mode) { openAuthModal(mode); }
+
+let infoRevealed = false;
+async function unlockInfo() {
+  if (!sbProfile || !sbProfile.pin_hash) return;
+  const pin = prompt("Nhập mã rút tiền của bạn để xem thông tin:");
+  if (pin === null) return;
+  const h = await pinHashOf(pin.trim());
+  if (h && h === sbProfile.pin_hash) { infoRevealed = true; applyInfoMask(); }
+  else { accMsg("⚠️ Mã rút tiền chưa đúng — chưa mở được thông tin."); toast("Mã rút tiền chưa đúng"); }
+}
+function applyInfoMask() {
+  const fn = document.getElementById("accFullName"), bn = document.getElementById("accBankName");
+  if (!fn || !bn) return;
+  const cust = fn.parentElement, bank = bn.parentElement;
+  const locked = !!(sbUser && sbProfile && sbProfile.pin_hash);
+  const show = !locked || infoRevealed;
+  cust.style.display = show ? "" : "none";
+  bank.style.display = show ? "" : "none";
+  [["custLockBar", cust, "Thông tin khách hàng"], ["bankLockBar", bank, "Thông tin nhận tiền"]].forEach(function (cfg) {
+    const id = cfg[0], grid = cfg[1], label = cfg[2];
+    let bar = document.getElementById(id);
+    if (!locked) { if (bar) bar.style.display = "none"; return; }
+    if (!bar) {
+      bar = document.createElement("div");
+      bar.id = id;
+      bar.style.cssText = "margin-top:6px; border:1.5px dashed #d6d3d1; border-radius:10px; padding:10px 12px; background:#fafaf9; display:flex; align-items:center; gap:8px; flex-wrap:wrap;";
+      grid.parentNode.insertBefore(bar, grid);
+    }
+    bar.style.display = "";
+    bar.innerHTML = "";
+    const span = document.createElement("span");
+    span.style.cssText = "font-size:13.5px; color:#555;";
+    span.textContent = infoRevealed ? ("👁 " + label + " đang hiện.") : ("🔒 " + label + " đã lưu và đang ẩn.");
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.style.cssText = "background:#0b57d0; color:#fff; border:none; border-radius:8px; padding:7px 12px; font-weight:700; cursor:pointer; font-size:13.5px;";
+    if (infoRevealed) { btn.textContent = "🙈 Ẩn lại"; btn.onclick = function () { infoRevealed = false; applyInfoMask(); }; }
+    else { btn.textContent = "👁 Nhập mã rút tiền để xem"; btn.onclick = unlockInfo; }
+    bar.appendChild(span); bar.appendChild(btn);
+  });
+  if (!document.__infoMaskHooks) {
+    document.__infoMaskHooks = true;
+    document.addEventListener("click", function (e) {
+      if (!infoRevealed) return;
+      const t = e.target;
+      if ((t.closest && t.closest("#authModalClose")) || (t.closest && t.closest(".atab"))) { infoRevealed = false; applyInfoMask(); }
+    });
+  }
+}
 function renderAuthUI() {
   const sec = document.getElementById("secAccount"); if (!sec) return;
   const auth = document.getElementById("accAuth"), none = document.getElementById("accNone"), have = document.getElementById("accHave");
@@ -1730,12 +1779,14 @@ function renderAuthUI() {
     const cnn = document.getElementById("accCustNote"); if (cnn && custLocked) cnn.textContent = "🔒 Thông tin khách hàng đã khóa — cần sửa, bạn liên hệ shop nhé.";
     const fp = document.getElementById("accForgotPin"); if (fp) fp.style.display = sbProfile.pin_hash ? "" : "none";
     checkPinReset();
+    applyInfoMask();
     sbLoadDashboard();
     updateTopAuth(); updateAccCta();
   } else {
     if (auth) auth.style.display = "";
     if (none) none.style.display = "none";
     if (have) have.style.display = "none";
+    infoRevealed = false;
     updateTopAuth(); updateAccCta();
   }
 }
