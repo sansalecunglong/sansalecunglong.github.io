@@ -392,7 +392,14 @@ body{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;text-r
       <div style="font-weight:800; font-size:15px; margin-top:16px; text-align:left;">🏦 Thông tin nhận tiền</div>
       <div style="display:grid; gap:8px; margin-top:6px;">
         <input type="text" id="accNameD" placeholder="Tên của bạn" autocomplete="name" style="padding:10px 12px; border:1.5px solid #ddd; border-radius:10px; font-size:14.5px; width:100%; box-sizing:border-box;">
-        <input type="text" id="accContactD" placeholder="Số Zalo, hoặc STK + tên ngân hàng để shop trả tiền" autocomplete="tel" style="padding:10px 12px; border:1.5px solid #ddd; border-radius:10px; font-size:14.5px; width:100%; box-sizing:border-box;">
+        <input type="text" id="accBankName" placeholder="Tên ngân hàng (ví dụ: MB Bank, Vietcombank…)" list="bankList" autocomplete="off" style="padding:10px 12px; border:1.5px solid #ddd; border-radius:10px; font-size:14.5px; width:100%; box-sizing:border-box;">
+        <datalist id="bankList">
+          <option value="MB Bank"></option><option value="Vietcombank"></option><option value="VietinBank"></option><option value="BIDV"></option><option value="Agribank"></option><option value="Techcombank"></option><option value="ACB"></option><option value="VPBank"></option><option value="TPBank"></option><option value="Sacombank"></option><option value="HDBank"></option><option value="VIB"></option><option value="SHB"></option><option value="MSB"></option><option value="OCB"></option><option value="Eximbank"></option><option value="LPBank"></option><option value="SeABank"></option><option value="Nam A Bank"></option><option value="PvcomBank"></option>
+        </datalist>
+        <input type="text" id="accBankAccount" placeholder="Số tài khoản ngân hàng" inputmode="numeric" autocomplete="off" style="padding:10px 12px; border:1.5px solid #ddd; border-radius:10px; font-size:14.5px; width:100%; box-sizing:border-box;">
+        <input type="text" id="accBankHolder" placeholder="Tên chủ tài khoản (viết hoa như trên thẻ, ví dụ: NGUYEN VAN A)" autocomplete="off" style="padding:10px 12px; border:1.5px solid #ddd; border-radius:10px; font-size:14.5px; width:100%; box-sizing:border-box;">
+        <input type="password" id="accPin" placeholder="Mật khẩu rút tiền (4–8 chữ số, tự đặt)" inputmode="numeric" autocomplete="new-password" maxlength="8" style="padding:10px 12px; border:1.5px solid #ddd; border-radius:10px; font-size:14.5px; width:100%; box-sizing:border-box;">
+        <p class="sub" id="accPinNote" style="text-align:left; margin:0;">Mật khẩu rút tiền dùng để khóa nút rút tiền — mỗi lần rút bạn phải nhập đúng mật khẩu này.</p>
         <div style="display:flex; gap:8px; flex-wrap:wrap;">
           <button id="accSaveProfile" style="flex:1; min-width:140px; background:#0b57d0; color:#fff; border:none; border-radius:10px; padding:11px; font-weight:700; cursor:pointer;">💾 Lưu thông tin nhận tiền</button>
           <button id="accLogout" style="background:#fff; color:#555; border:1.5px solid #ccc; border-radius:10px; padding:11px 16px; font-weight:700; cursor:pointer;">Đăng xuất</button>
@@ -1553,15 +1560,33 @@ async function sbLoadDashboard() {
     }).catch(() => {});
   }
 }
+async function pinHashOf(pin) {
+  try {
+    const buf = await crypto.subtle.digest("SHA-256", new TextEncoder().encode("sscl|" + (sbUser ? sbUser.id : "") + "|" + pin));
+    return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, "0")).join("");
+  } catch (e) { return ""; }
+}
 async function sbWithdraw() {
   if (!sb || !sbUser || !sbProfile) return;
   if (sbAvailNow < 10000) { toast("Số dư khả dụng cần từ 10.000₫ mới rút được"); return; }
-  const contact = (sbProfile.contact || "").trim();
+  const bankOk = (sbProfile.bank_name || "").trim() && (sbProfile.bank_account || "").trim() && (sbProfile.bank_holder || "").trim();
+  const contact = bankOk
+    ? (sbProfile.bank_name.trim() + " · STK " + sbProfile.bank_account.trim() + " · " + sbProfile.bank_holder.trim())
+    : (sbProfile.contact || "").trim();
   if (!contact) {
-    accMsg("Bạn điền thông tin nhận tiền (số Zalo hoặc STK + ngân hàng) ở ô bên dưới rồi bấm Lưu trước nhé.");
-    const c = document.getElementById("accContactD"); if (c) c.focus();
+    accMsg("Bạn điền đầy đủ thông tin nhận tiền (tên ngân hàng, số tài khoản, tên chủ tài khoản) ở mục bên dưới rồi bấm Lưu trước nhé.");
+    const c = document.getElementById("accBankName"); if (c) c.focus();
     return;
   }
+  if (!sbProfile.pin_hash) {
+    accMsg("Bạn đặt mật khẩu rút tiền ở mục Thông tin nhận tiền bên dưới (ô Mật khẩu rút tiền) rồi bấm Lưu trước nhé.");
+    const p = document.getElementById("accPin"); if (p) p.focus();
+    return;
+  }
+  const pinIn = window.prompt("Nhập mật khẩu rút tiền của bạn để xác nhận rút " + fmtVnd(sbAvailNow) + ":");
+  if (pinIn === null) return;
+  const h = await pinHashOf(pinIn.trim());
+  if (!h || h !== sbProfile.pin_hash) { accMsg("⚠️ Mật khẩu rút tiền chưa đúng — bạn kiểm tra lại nhé."); return; }
   const btn = document.getElementById("accWithdraw");
   if (btn) { btn.disabled = true; btn.textContent = "⏳ Đang gửi yêu cầu…"; }
   const r = await sb.from("payout_requests").insert({ user_id: sbUser.id, code: sbProfile.code, amount: Math.round(sbAvailNow), contact: contact });
@@ -1649,7 +1674,10 @@ function renderAuthUI() {
     const cd = document.getElementById("accCode"); if (cd) cd.textContent = sbProfile.code.toUpperCase();
     const sh = document.getElementById("accShare"); if (sh) sh.value = "https://sansalecunglong.github.io/?ref=" + sbProfile.code;
     const nd = document.getElementById("accNameD"); if (nd && document.activeElement !== nd) nd.value = sbProfile.name || "";
-    const ct = document.getElementById("accContactD"); if (ct && document.activeElement !== ct) ct.value = sbProfile.contact || "";
+    const bn = document.getElementById("accBankName"); if (bn && document.activeElement !== bn) bn.value = sbProfile.bank_name || "";
+    const ba = document.getElementById("accBankAccount"); if (ba && document.activeElement !== ba) ba.value = sbProfile.bank_account || "";
+    const bh = document.getElementById("accBankHolder"); if (bh && document.activeElement !== bh) bh.value = sbProfile.bank_holder || "";
+    const pn = document.getElementById("accPinNote"); if (pn) pn.textContent = sbProfile.pin_hash ? "✅ Đã đặt mật khẩu rút tiền — muốn đổi thì nhập mật khẩu mới vào ô trên, để trống là giữ nguyên." : "Bạn chưa đặt mật khẩu rút tiền — đặt ở ô trên (4–8 chữ số) rồi bấm Lưu; mỗi lần rút tiền phải nhập đúng mật khẩu này.";
     sbLoadDashboard();
     updateTopAuth(); updateAccCta();
   } else {
@@ -1735,13 +1763,39 @@ async function sbGoogle() {
 async function sbSaveProfile() {
   if (!sb || !sbUser || !sbProfile) return;
   const name = (document.getElementById("accNameD").value || "").trim();
-  const contact = (document.getElementById("accContactD").value || "").trim();
+  const bankName = (document.getElementById("accBankName").value || "").trim();
+  const bankAcc = (document.getElementById("accBankAccount").value || "").replace(/\s+/g, "");
+  const bankHolder = (document.getElementById("accBankHolder").value || "").trim().toUpperCase();
+  const pin = (document.getElementById("accPin").value || "").trim();
   if (!name) { toast("Bạn nhập tên của bạn nhé"); return; }
-  if (!contact) { toast("Bạn nhập số Zalo hoặc STK để shop trả tiền nhé"); return; }
-  const r = await sb.from("profiles").update({ name: name, contact: contact }).eq("user_id", sbUser.id);
-  if (r.error) { toast("Lưu chưa được — bạn thử lại sau ít phút nhé"); return; }
+  if (!bankName || !bankAcc || !bankHolder) { toast("Bạn điền đủ tên ngân hàng, số tài khoản và tên chủ tài khoản nhé"); return; }
+  if (!/^\d{5,}$/.test(bankAcc)) { toast("Số tài khoản hình như chưa đúng — bạn kiểm tra lại nhé"); return; }
+  let pinHash = "";
+  if (pin) {
+    if (!/^\d{4,8}$/.test(pin)) { toast("Mật khẩu rút tiền phải là 4–8 chữ số"); return; }
+    pinHash = await pinHashOf(pin);
+    if (!pinHash) { toast("Trình duyệt chưa hỗ trợ đặt mật khẩu — bạn thử mở bằng Chrome nhé"); return; }
+  } else if (!sbProfile.pin_hash) {
+    toast("Bạn đặt mật khẩu rút tiền (4–8 chữ số) để khóa nút rút tiền nhé"); return;
+  }
+  const contact = bankName + " · STK " + bankAcc + " · " + bankHolder;
+  const upd = { name: name, contact: contact, bank_name: bankName, bank_account: bankAcc, bank_holder: bankHolder };
+  if (pinHash) upd.pin_hash = pinHash;
+  let r = await sb.from("profiles").update(upd).eq("user_id", sbUser.id);
+  if (r.error) {
+    r = await sb.from("profiles").update({ name: name, contact: contact }).eq("user_id", sbUser.id);
+    if (r.error) { toast("Lưu chưa được — bạn thử lại sau ít phút nhé"); return; }
+    sbProfile.name = name; sbProfile.contact = contact;
+    syncLocalAccount(sbProfile);
+    toast("Đã lưu tạm thông tin — hệ thống đang cập nhật, bạn quay lại lưu lại sau ít phút để bật mật khẩu rút tiền nhé.");
+    return;
+  }
   sbProfile.name = name; sbProfile.contact = contact;
+  sbProfile.bank_name = bankName; sbProfile.bank_account = bankAcc; sbProfile.bank_holder = bankHolder;
+  if (pinHash) sbProfile.pin_hash = pinHash;
+  const pf = document.getElementById("accPin"); if (pf) pf.value = "";
   syncLocalAccount(sbProfile);
+  renderAuthUI();
   toast("Đã lưu thông tin nhận tiền của bạn!");
 }
 async function sbLogout() {
