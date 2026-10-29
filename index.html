@@ -1856,7 +1856,18 @@ function sbErrText(err) {
   if (/password should be at least/i.test(m)) return "Mật khẩu cần ít nhất 6 ký tự.";
   if (/email not confirmed/i.test(m)) return "Email chưa được xác nhận — bạn mở hộp thư, bấm link xác nhận của Supabase rồi quay lại đăng nhập nhé.";
   if (/provider is not enabled|unsupported provider/i.test(m)) return "Đăng nhập Google chưa được bật — bạn dùng email + mật khẩu trước nhé, shop đang mở thêm Google.";
+  const sec = m.match(/only request this after (\d+) seconds/i);
+  if (sec) return "Bạn bấm hơi nhanh nên hệ thống tạm dừng gửi email — đợi khoảng " + sec[1] + " giây rồi bấm lại MỘT lần thôi nhé. Nếu bạn vừa đăng ký, email xác nhận có thể đã được gửi rồi — cứ mở hộp thư (cả mục Spam) kiểm tra trước.";
+  if (/rate limit|too many requests|over_email_send/i.test(m)) return "Hệ thống đang gửi quá nhiều email cùng lúc — bạn đợi khoảng 1 phút rồi thử lại nhé.";
+  if (/invalid email|validate email|email address is invalid/i.test(m)) return "Email chưa đúng định dạng — bạn kiểm tra lại nhé.";
+  if (/signups not allowed|signup.*disabled/i.test(m)) return "Đăng ký đang tạm khóa — bạn nhắn shop để được hỗ trợ nhé.";
   return m || "Có lỗi xảy ra, bạn thử lại giúp shop nhé.";
+}
+function authBusy(on) {
+  ["accLogin", "accRegister", "accGoogle"].forEach(function (id) {
+    const b = document.getElementById(id);
+    if (b) { b.disabled = on; b.style.opacity = on ? "0.6" : ""; b.style.pointerEvents = on ? "none" : ""; }
+  });
 }
 async function sbRegister() {
   if (!sb) return;
@@ -1867,9 +1878,14 @@ async function sbRegister() {
   if (pass.length < 6) { toast("Mật khẩu cần ít nhất 6 ký tự"); return; }
   const agreeEl = document.getElementById("accTermsAgree");
   if (!agreeEl || !agreeEl.checked) { accMsg("⚠️ Bạn tích chọn đồng ý Điều khoản sử dụng & Chính sách bảo mật trước khi đăng ký nhé."); return; }
+  const cdUntil = +(localStorage.getItem("sscl_signup_cd") || 0);
+  if (Date.now() < cdUntil) { accMsg("⏳ Bạn vừa gửi đăng ký rồi — đợi " + Math.ceil((cdUntil - Date.now()) / 1000) + " giây, trong lúc đó kiểm tra hộp thư (cả mục Spam) giúp shop nhé."); return; }
   try { localStorage.setItem("sscl_regdraft", JSON.stringify({ name: name, contact: "" })); } catch (e) {}
   accMsg("⏳ Đang tạo tài khoản…");
+  authBusy(true);
   const r = await sb.auth.signUp({ email: email, password: pass, options: { data: { name: name, terms_accepted_at: new Date().toISOString(), terms_version: "1.0" }, emailRedirectTo: "https://sansalecunglong.github.io/" } });
+  authBusy(false);
+  try { localStorage.setItem("sscl_signup_cd", String(Date.now() + 60000)); } catch (e) {}
   if (r.error) { accMsg("⚠️ " + sbErrText(r.error)); return; }
   if (r.data && r.data.session) {
     sbUser = r.data.session.user;
@@ -1887,7 +1903,9 @@ async function sbLogin() {
   if (!email) { toast("Bạn nhập email nhé"); return; }
   if (!pass) { toast("Bạn nhập mật khẩu nhé"); return; }
   accMsg("⏳ Đang đăng nhập…");
+  authBusy(true);
   const r = await sb.auth.signInWithPassword({ email: email, password: pass });
+  authBusy(false);
   if (r.error) { accMsg("⚠️ " + sbErrText(r.error)); return; }
   sbUser = r.data.user;
   await sbEnsureProfile();
@@ -1897,7 +1915,13 @@ async function sbLogin() {
 }
 async function sbGoogle() {
   if (!sb) return;
+  if (/(Zalo|FBAN|FBAV|FB_IAB|Instagram|Messenger)/i.test(navigator.userAgent || "")) {
+    accMsg("⚠️ Bạn đang mở trang trong Zalo/Facebook — Google không cho đăng nhập trong khung này. Hãy bấm nút ⋮ ở góc màn hình, chọn 'Mở bằng trình duyệt/Chrome' rồi bấm lại nút Google; hoặc đăng ký bằng email + mật khẩu ngay tại đây, dùng bình thường.");
+    return;
+  }
+  authBusy(true);
   const r = await sb.auth.signInWithOAuth({ provider: "google", options: { redirectTo: "https://sansalecunglong.github.io/" } });
+  authBusy(false);
   if (r.error) accMsg("⚠️ " + sbErrText(r.error));
 }
 function normName(s) {
