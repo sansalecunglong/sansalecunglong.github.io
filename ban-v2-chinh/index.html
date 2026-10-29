@@ -1,0 +1,2407 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="color-scheme" content="light dark" />
+<!-- Empty inline icon: stops the browser fetching /favicon.ico, which
+     lives outside the artifact's routes and 404s. -->
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E🎟️%3C/text%3E%3C/svg%3E" />
+<title>Săn Sale Cùng Long — Săn sale Shopee &amp; tra cứu sản phẩm trước khi mua</title>
+<meta name="description" content="Dán link Shopee để mở đúng sản phẩm qua link của shop, gửi link để shop tra cứu chất lượng sản phẩm từ review Google/YouTube, xem lịch sale và các sản phẩm đang bán chạy. Miễn phí, không cần đăng ký.">
+<link rel="canonical" href="https://sansalecunglong.github.io/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Săn Sale Cùng Long">
+<meta property="og:title" content="Săn Sale Cùng Long — Tra cứu sản phẩm &amp; săn sale Shopee">
+<meta property="og:description" content="Gửi link sản phẩm, shop tự tra cứu chất lượng từ review Google/YouTube rồi đăng kết luận. Kèm lịch sale và sản phẩm bán chạy mỗi ngày.">
+<meta property="og:url" content="https://sansalecunglong.github.io/">
+<meta property="og:image" content="https://sansalecunglong.github.io/og-cover.png">
+<meta name="twitter:card" content="summary_large_image">
+<style>
+  :root{
+    --primary:#d63c1e; --primary-dark:#c23215; --bg:#f4f4f4; --card:#ffffff; --ink:#16110d; --vivid:#ff6a2b;
+    --text:#211d19; --muted:#6e6e6e; --border:#e3ddd2; --green:#0f9d58; --gold:#f5a623;
+  }
+  *{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
+  body{margin:0; font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+       background:var(--bg); color:var(--text); line-height:1.55;}
+  .wrap{max-width:720px; margin:0 auto; padding:0 14px 48px;}
+  header.topbar{position:sticky; top:0; z-index:10; background:linear-gradient(135deg,#2a1c10,#130d09);
+    color:#fff; padding:12px 16px; margin:0 -14px; display:flex; align-items:center; gap:10px;
+    box-shadow:0 2px 12px rgba(0,0,0,.35);}
+  header.topbar .logo{font-size:26px;}
+  header.topbar .name{font-weight:800; font-size:17px; line-height:1.2;}
+  header.topbar .tag{font-size:12px; opacity:1;}
+  .hero{background:linear-gradient(150deg,#3a2413,#241a12 45%,#130d09); color:#fff; margin:0 -14px;
+    padding:22px 16px 24px; border-radius:0 0 28px 28px;}
+  .hero h1{margin:0 0 4px; font-size:24px; font-weight:800; letter-spacing:-.2px;}
+  .hero p{margin:0 0 14px; font-size:13.5px; opacity:1;}
+  .searchrow{display:flex; gap:8px;}
+  .searchrow input{flex:1; padding:13px 14px; font-size:15px; border:none; border-radius:12px; outline:none; min-width:0;}
+  .searchrow button{flex-shrink:0; padding:13px 16px; font-size:15px; font-weight:800; color:#1d1206;
+    background:var(--vivid); border:none; border-radius:12px; cursor:pointer;}
+  .searchrow button:active{transform:scale(.98);}
+  #result{display:none; margin-top:12px; background:#fff; color:var(--text); border-radius:12px; padding:12px 14px;}
+  #result .warn{font-size:12.5px; color:#b06000; margin:6px 0 0;}
+  .btn{display:block; width:100%; padding:12px; font-size:15px; font-weight:700; color:#fff;
+    background:var(--primary); border:none; border-radius:12px; cursor:pointer;}
+  .btn.ghost{background:#fff; color:var(--primary); border:2px solid var(--primary);}
+  .btn.codego{margin-top:8px; text-decoration:none; text-align:center;}
+  .chips{display:flex; flex-wrap:wrap; gap:8px; margin-top:12px;}
+  .chip{padding:7px 13px; background:rgba(255,255,255,.18); border:1.5px solid rgba(255,255,255,.55); color:#fff;
+    border-radius:999px; font-size:13px; cursor:pointer;}
+  .chip:active{background:#fff; color:var(--primary);}
+  .banners{display:grid; grid-template-columns:1fr 1fr; gap:10px; margin:16px 0 4px;}
+  .banner{border-radius:16px; padding:16px 14px; color:#fff; cursor:pointer; min-height:92px;
+    display:flex; flex-direction:column; justify-content:flex-end; box-shadow:0 4px 12px rgba(0,0,0,.10);}
+  .banner .ic{font-size:26px; margin-bottom:4px;}
+  .banner .t{font-weight:800; font-size:15.5px; line-height:1.25;}
+  .banner .s{font-size:12px; opacity:.92;}
+  .banner.b1{background:linear-gradient(135deg,#f5a623,#f76b1c); color:#3a2000;}
+  .banner.b2{background:linear-gradient(135deg,#7b2ff7,#c1067c);}
+  .card{background:var(--card); border:1px solid var(--border); border-radius:20px;
+    padding:18px; margin-top:16px; box-shadow:0 6px 20px rgba(30,20,10,.07);}
+  .card h2{margin:0 0 4px; font-size:19px; letter-spacing:-.2px; padding-left:10px; border-left:4px solid var(--vivid); border-radius:2px;}
+  .card .sub{color:var(--muted); font-size:13px; margin:0 0 14px;}
+  .voucher{border:2px dashed var(--primary); border-radius:14px; padding:13px 14px; margin-bottom:11px; background:#fffdf9;}
+  .voucher .code{font-family:ui-monospace,Menlo,monospace; font-weight:800; font-size:17px; letter-spacing:1px; color:var(--primary);}
+  .voucher .desc{font-size:13.5px; margin:3px 0;}
+  .voucher .exp{font-size:12px; color:var(--muted);}
+  .voucher .row{display:flex; align-items:center; justify-content:space-between; gap:10px;}
+  .voucher button{flex-shrink:0; padding:9px 15px; border:none; border-radius:10px; background:var(--primary);
+    color:#fff; font-weight:700; font-size:13.5px; cursor:pointer;}
+  .voucher button.copied{background:var(--green);}
+  .voucher .vtop{display:flex; align-items:center; gap:8px; margin-bottom:6px;}
+  .voucher .off{font-size:22px; font-weight:800; color:var(--primary); line-height:1;}
+  .voucher .plat{font-size:11px; font-weight:700; background:#ffe9e2; color:var(--primary-dark);
+    padding:3px 9px; border-radius:999px; text-transform:uppercase; letter-spacing:.4px;}
+  .voucher .vbtn{width:100%; margin-top:10px; padding:11px; font-size:14.5px;}
+  /* Hàng voucher kiểu Bước 2 (duyvuvar): badge khung giờ + tên kênh + Giảm % */
+  .vrow{position:relative; border:1.5px solid #ffd9c7; background:#fff8f3; border-radius:14px;
+    padding:14px 14px 12px; margin-top:24px;}
+  .vrow .vbadge{position:absolute; top:-11px; left:12px; background:#fff; border:1px solid #ffcfbc;
+    color:#d84315; font-size:11px; font-weight:700; padding:2px 10px; border-radius:999px; white-space:nowrap;
+    max-width:92%; overflow:hidden; text-overflow:ellipsis;}
+  .vrow .vmain{display:flex; justify-content:space-between; align-items:baseline; gap:10px;}
+  .vrow .vname{font-size:16.5px; font-weight:700;}
+  .vrow .voff{color:var(--primary); font-weight:800; font-size:18px; white-space:nowrap;}
+  .vrow .vcond{font-size:13px; color:#666; text-align:center; margin-top:2px;}
+  .vrow .vnote{font-size:12px; color:#6e6e6e; text-align:center;}
+  .vrow .vbtn{display:block; width:100%; margin-top:10px; padding:11px; border:none; border-radius:10px; background:var(--primary);
+    color:#fff; font-weight:700; font-size:14.5px; cursor:pointer; text-align:center; text-decoration:none;}
+  .vrow.locked{opacity:.72;}
+  .hrow{display:flex; gap:8px; align-items:center; font-size:12.5px; padding:6px 0; border-bottom:1px dashed #eee;}
+  .hrow .ht{color:#6e6e6e; flex-shrink:0;}
+  .hrow .hr{flex:1; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; color:#555;}
+  .hrow a{color:var(--primary); font-weight:700; text-decoration:none; flex-shrink:0;}
+  #btnPaste{flex-shrink:0; padding:0 14px; border:1.5px solid var(--primary); border-radius:12px; background:#fff;
+    color:var(--primary); font-weight:700; font-size:14px; cursor:pointer;}
+  .grid{display:grid; grid-template-columns:1fr 1fr; gap:11px;}
+  .prod{border:1px solid var(--border); border-radius:16px; overflow:hidden; background:#fff; display:flex; flex-direction:column; box-shadow:0 3px 10px rgba(30,20,10,.05);}
+  .prod .thumb{height:118px; display:flex; align-items:center; justify-content:center; font-size:46px;
+    background:linear-gradient(135deg,#f7f3ec,#ece4d4); overflow:hidden;}
+  .prod .thumb img{width:100%; height:100%; object-fit:cover; display:block;}
+  .prod .stars{font-size:12.5px; color:#e8a13a; font-weight:600;}
+  .prod .body{padding:10px 11px 12px; display:flex; flex-direction:column; gap:3px; flex:1;}
+  .prod .pname{font-weight:700; font-size:14px; line-height:1.3;}
+  .prod .price{color:var(--primary); font-weight:800; font-size:15px;}
+  .prod .pnote{font-size:12.5px; color:var(--muted);}
+  .prod button{margin-top:auto; padding:9px; border:none; border-radius:9px; background:var(--primary);
+    color:#fff; font-weight:700; font-size:13.5px; cursor:pointer;}
+  .prod button:active{background:var(--primary-dark);}
+  .prod a.dealbtn{margin-top:auto; padding:9px; border-radius:9px; background:var(--primary); display:block;
+    color:#fff; font-weight:700; font-size:13.5px; text-align:center; text-decoration:none; cursor:pointer;}
+  .prod a.dealbtn:active{background:var(--primary-dark);}
+  .prod a.askbtn{margin-top:7px; padding:8px; border-radius:9px; background:#fff; border:1.5px solid var(--primary); color:var(--primary); display:block; text-align:center; text-decoration:none; font-weight:700; font-size:13.5px;}
+  .prod a.askbtn:active{background:#fff1e8;}
+  .prod a.videobtn{margin-top:7px; padding:8px; border-radius:9px; background:#166fe5; color:#fff; display:block; text-align:center; text-decoration:none; font-weight:700; font-size:13.5px;}
+  a.asklink{display:inline-block; margin-top:2px; font-size:12.5px; color:var(--primary); font-weight:700; text-decoration:none;}
+  a.dealbtn.solo{padding:9px 14px; border-radius:9px; background:var(--primary); display:inline-block;
+    color:#fff; font-weight:700; font-size:13.5px; text-align:center; text-decoration:none; cursor:pointer;}
+  a.dealbtn.solo:active{background:var(--primary-dark);}
+  a.chip{text-decoration:none;}
+  a.cat{text-decoration:none; color:inherit; display:block;}
+  /* Bảng xếp hạng: hàng ngang có số hạng, ảnh nhỏ, nhận xét ngắn */
+  .rankrow{display:flex; gap:11px; align-items:center; padding:11px 0; border-bottom:1px dashed var(--border);}
+  .rankrow:last-child{border-bottom:none; padding-bottom:2px;}
+  .rankrow:first-child{padding-top:2px;}
+  .ranknum{flex-shrink:0; width:34px; height:34px; border-radius:50%; display:flex; align-items:center; justify-content:center;
+    font-weight:800; font-size:16px; background:#ffe9e2; color:var(--primary-dark);}
+  .ranknum.r1{background:linear-gradient(135deg,#f5a623,#f76b1c); color:#3a2000; box-shadow:0 3px 8px rgba(0,0,0,.18);}
+  .ranknum.r2{background:#e9e9e9; color:#666;}
+  .ranknum.r3{background:#f3d9c8; color:#a05a2c;}
+  .rankthumb{width:56px; height:56px; border-radius:12px; overflow:hidden; flex-shrink:0;
+    background:linear-gradient(135deg,#f7f3ec,#ece4d4); display:flex;} align-items:center; justify-content:center; font-size:28px;}
+  .rankthumb img{width:100%; height:100%; object-fit:cover; display:block;}
+  .rankbody{flex:1; min-width:0;}
+  .rankname{font-weight:700; font-size:14.5px; line-height:1.3;}
+  .rankcmt{font-size:12.5px; color:#666; margin-top:1px; line-height:1.4;}
+  .rankprice{color:var(--primary); font-weight:800; font-size:14px; margin-top:1px;}
+  a.rankbtn{flex-shrink:0; padding:9px 12px; border-radius:9px; background:var(--primary); color:#fff;
+    font-weight:700; font-size:13px; text-align:center; text-decoration:none; white-space:nowrap;}
+  a.rankbtn:active{background:var(--primary-dark);}
+  .cats{display:grid; grid-template-columns:repeat(3,1fr); gap:10px;}
+  .cat{border:1.5px solid var(--border); border-radius:16px; padding:14px 6px 11px; text-align:center; cursor:pointer; background:#fff;}
+  .cat .ic{font-size:28px;}
+  .cat .ct{font-size:13px; font-weight:600; margin-top:4px; line-height:1.25;}
+  .cat:active{border-color:var(--primary);}
+  .qa{border:1px solid var(--border); border-radius:12px; padding:12px 14px; margin-bottom:10px; background:#fffdf9;}
+  .qa .q{font-weight:700; font-size:14px;}
+  .qa .a{font-size:13.5px; color:#444; margin-top:3px;}
+  .steps{display:flex; gap:10px; margin-top:6px;}
+  .step{flex:1; text-align:center; font-size:12.5px; color:#555;}
+  .step .n{display:inline-flex; width:29px; height:29px; border-radius:50%; background:var(--primary);
+    color:#fff; font-weight:700; align-items:center; justify-content:center; margin-bottom:5px;}
+  .note{background:#fffbe8; border:1px solid #f0dfa0; border-radius:12px; padding:12px 14px;
+    font-size:13px; color:#7a5b00; margin-top:16px;}
+  footer{margin-top:28px; text-align:center; color:#cfc6bb; font-size:13px; background:#16110d; padding:24px 16px; border-radius:20px;}
+  footer .fname{font-weight:800; color:#fff; font-size:14.5px;}
+  .toast{position:fixed; left:50%; bottom:26px; transform:translateX(-50%); background:#16110d; color:#fff;
+    padding:10px 20px; border-radius:999px; font-size:14px; opacity:0; transition:opacity .25s; pointer-events:none; z-index:20;}
+  .toast.show{opacity:1;}
+</style>
+
+<style>
+/* Tối ưu hiển thị điện thoại: chữ nét, icon rõ, nút dễ bấm (thêm 26/10/2026) */
+*{-webkit-tap-highlight-color:transparent}
+html{-webkit-text-size-adjust:100%}
+body{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;text-rendering:optimizeLegibility;
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif}
+@media (max-width:640px){
+  body{font-size:15.5px;line-height:1.55}
+  .card h2{font-size:19px;letter-spacing:-.2px}
+  .card .sub{font-size:13.5px}
+  .btn{font-size:15.5px;padding:13px 14px;border-radius:14px;box-shadow:0 2px 8px rgba(0,0,0,.16)}
+  #codeBtns .btn{margin-top:8px}
+  #codeBtns .btn:first-child{margin-top:4px}
+  .vrow .vicon{font-size:21px}
+  .vrow .vname{font-size:17px}
+  .vrow .voff{font-size:19px}
+  .vrow .vcond{font-size:13.5px}
+  .vrow .vnote{font-size:12.5px;line-height:1.45}
+  .vrow .vbtn{font-size:15px;padding:12px}
+  .searchrow input{font-size:16px}
+  .searchrow button{font-size:15.5px}
+  #topVoucher{font-size:14px}
+}
+</style>
+
+<style>
+/* Hiệu ứng tải lại mã (thêm 26/10/2026): danh sách mã hiện dần + thẻ Bước 2 nhấp nháy viền cam */
+@keyframes rowIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+#vouchers .vrow.refresh{animation:rowIn .45s ease both}
+@keyframes cardPulse{0%{box-shadow:0 0 0 0 rgba(0,0,0,.35)}100%{box-shadow:0 0 0 16px rgba(0,0,0,0)}}
+#secStep2.pulse{animation:cardPulse .8s ease-out 2}
+</style>
+
+<style>
+/* Nút mã kiểu 3D clay như mẫu Long gửi (26/10/2026): nút cam đỏ phồng, chữ trắng đậm, icon lớn */
+#topVoucher{background:#fff7e8 !important;border:2.5px dotted #d63c1e !important;border-radius:22px !important}
+#codeBtns .codego{display:flex;align-items:center;gap:12px;background:linear-gradient(145deg,#ff7847,#d63c1e);
+  border-radius:26px;padding:14px 18px;margin-top:12px;border:3px solid #fff;text-align:left;
+  box-shadow:0 6px 0 #c93a1e,0 12px 22px rgba(0,0,0,.25),inset 0 2px 3px rgba(255,255,255,.5),inset 0 -4px 8px rgba(0,0,0,.12)}
+#codeBtns .codego:active{transform:translateY(3px);box-shadow:0 3px 0 #c93a1e,0 6px 12px rgba(0,0,0,.22)}
+#codeBtns .cicon{font-size:42px;line-height:1;flex-shrink:0;filter:drop-shadow(0 3px 3px rgba(0,0,0,.25))}
+#codeBtns .ctext{display:flex;flex-direction:column;line-height:1.12;min-width:0}
+#codeBtns .cname{font-size:17px;font-weight:800;color:#fff;text-shadow:0 2px 2px rgba(0,0,0,.18);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#codeBtns .coff{font-size:30px;font-weight:900;color:#fff;text-shadow:0 2px 3px rgba(0,0,0,.22)}
+#codeBtns .csave{font-size:12.5px;font-weight:700;color:#ffe9e2}
+#codeBtns .carrow{margin-left:auto;font-size:22px;color:#ffd93b;flex-shrink:0;text-shadow:0 2px 2px rgba(0,0,0,.2)}
+</style>
+
+<style>
+/* Nut tai khoan goc phai tren cung - thanh topbar chuyen nghiep (them 27/10/2026) */
+.topauth{margin-left:auto; display:flex; align-items:center; gap:8px; flex-shrink:0;}
+.topauth button{font-family:inherit; cursor:pointer; border-radius:999px; font-weight:800; font-size:13.5px; padding:9px 15px; line-height:1.1; transition:transform .08s ease, background .15s ease;}
+.topauth button:active{transform:scale(.96);}
+#topLogin{background:#fff; color:var(--primary-dark); border:none; box-shadow:0 2px 8px rgba(0,0,0,.20);}
+#topRegister{background:rgba(0,0,0,.18); color:#fff; border:1.5px solid rgba(255,255,255,.85);}
+#topDash{display:none; background:#fff; color:var(--primary-dark); border:none; max-width:190px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; box-shadow:0 2px 8px rgba(0,0,0,.20);}
+#topLogout{display:none; background:rgba(0,0,0,.18); color:#fff; border:1.5px solid rgba(255,255,255,.55); font-weight:700;}
+#secAccount.flash{box-shadow:0 0 0 3px rgba(0,0,0,.35), 0 4px 14px rgba(0,0,0,.10);}
+@media (max-width:640px){
+  header.topbar .tag{display:none;}
+  header.topbar .name{font-size:15px;}
+  header.topbar{padding:10px 12px;}
+  .topauth{gap:6px;}
+  .topauth button{font-size:12.5px; padding:8px 11px;}
+  #topDash{max-width:118px;}
+}
+</style>
+
+<style>
+@keyframes authPop{from{opacity:0; transform:translateY(12px) scale(.985);} to{opacity:1; transform:none;}}
+.toast{z-index:1300 !important;}
+</style>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;600;700;800;900&display=swap" rel="stylesheet"></head>
+<body>
+<div class="wrap">
+
+  <header class="topbar">
+    <div class="logo">🛒</div>
+    <div>
+      <div class="name" id="pageName">Săn Sale Cùng Long</div>
+      <div class="tag" id="pageTagline">Săn mã giảm giá Shopee mỗi ngày</div>
+    </div>
+    <div class="topauth">
+      <button id="topLogin" type="button">Đăng nhập</button>
+      <button id="topRegister" type="button">Đăng ký</button>
+      <button id="topDash" type="button"></button>
+      <button id="topLogout" type="button">Đăng xuất</button>
+    </div>
+  </header>
+
+  <section class="card" id="secSearch" style="padding:14px 16px; margin-bottom:14px;">
+    <div style="font-weight:800; font-size:17px;">🔎 Tìm sản phẩm bạn thích</div>
+    <p style="display:none; font-size:13px; color:#555; margin:5px 0 9px;">Gõ tên sản phẩm — trang lọc ngay trong các mục gợi ý của shop bên dưới (gõ không dấu cũng được). Bấm "Xem deal" là sang Shopee qua link của shop. Chưa có món bạn cần? Trang đưa nút tìm thẳng trên Shopee luôn.</p>
+    <div class="searchrow">
+      <input type="text" id="inSearch" placeholder="Ví dụ: tai nghe, khăn giấy, kem chống nắng…" autocomplete="off">
+      <button id="btnSearch">Tìm</button>
+    </div>
+    <div id="searchMsg" style="display:none; font-size:13.5px; margin-top:10px; line-height:1.5;"></div>
+    <div class="grid" id="searchResults" style="display:none; margin-top:10px;"></div>
+  </section>
+
+  <section class="hero" id="secConvert">
+    <h1>🎟️ Săn Sale Ở Đây</h1>
+    <p><b>Bước 1:</b> Dán link sản phẩm Shopee vào ô dưới</p>
+    <ul class="v2checks">
+      <li>Hoàn 80% hoa hồng thực nhận — rõ ràng, không mập mờ</li>
+      <li>Đối soát theo báo cáo chính thức của Shopee</li>
+      <li>Rút nhanh về ngân hàng từ 10.000đ</li>
+    </ul>
+    <div class="searchrow">
+      <input type="text" id="inLink" placeholder="Dán link sản phẩm Shopee…" autocomplete="off">
+      <button id="btnPaste">📋 Dán link</button>
+      <button id="btnConvert">Săn sale</button>
+    </div>
+    <div id="result">
+      <div id="prodDone" style="display:none; background:#f2fbf5; border:1px solid #bfe8cc; border-radius:10px; padding:9px 12px; margin-bottom:10px; font-size:13.5px;">
+        🛍️ Đã nhận link sản phẩm của bạn
+        <div id="prodDoneTxt" style="color:#15803d; font-weight:700; margin-top:2px;">✔ Đã chuyển đổi xong</div>
+      </div>
+      <p id="prodInsight" style="display:none; font-size:13px; color:#444; margin:0 0 8px;"></p>
+      <p id="openGuide" style="display:none; font-size:12.5px; color:#555; margin:0;">✅ Bấm nút bên dưới để mở đúng sản phẩm của bạn trên Shopee qua link của shop.</p>
+      <div id="topVoucher" style="display:none; margin-top:10px;">
+        <a id="openProdBtn" class="dealbtn solo" target="_blank" rel="sponsored nofollow noopener">🛒 Mở sản phẩm của bạn trên Shopee →</a>
+        <div id="resultCodes" style="display:none; margin-top:14px;">
+          <div style="font-weight:800; font-size:15px;">🎟️ Bước 2: Mã giảm giá</div>
+          <div id="resultCodeList" style="display:grid; gap:8px; margin-top:8px;"></div>
+          <div style="font-size:12px; color:#6e6e6e; margin-top:6px;">Đã chọn 3 mã hợp nhất với sản phẩm của bạn. Dán mã ở bước thanh toán — Shopee chốt mã áp được theo tài khoản và ngành hàng.</div>
+        </div>
+      </div>
+      <div id="reviewBox" style="display:none; background:#fffbe8; border:1px solid #f0dfa0; border-radius:10px; padding:9px 12px; margin:0 0 10px; font-size:13px; line-height:1.55;">
+        <div style="font-weight:800;">🔎 Bước 3: Tra cứu độ tin cậy</div>
+        <div id="reviewProd" style="margin-top:2px;"></div>
+        <div id="apiSummary" style="display:none; background:#eef6ff; border:1px solid #b9d7f5; border-radius:9px; padding:8px 10px; margin-top:7px;"></div>
+        <div style="color:#555;">Ấn nút <b>Tra cứu</b>: shop tự tra thông tin sản phẩm — có đáng mua hay không, ưu điểm và khuyết điểm rõ ràng, ngắn gọn — rồi gửi kết luận về mục <b>Kết quả tra cứu của bạn</b> ở phía dưới — chỉ máy của bạn mới xem được — sau khoảng 3–5 phút.</div>
+        <a id="askResearchBtn" class="dealbtn solo" target="_blank" rel="noopener" style="margin-top:7px; background:#e7f0fe; color:#0b57d0; border:1.5px solid #0b57d0;">🤝 Tra cứu</a>
+        <div style="color:#555; margin-top:8px;"><b>Đọc nhanh:</b> shop 4.5★+ và nhiều đánh giá là tín hiệu tốt · nhiều người chê cùng một lỗi thì bỏ qua · có ảnh/video thật của người mua càng đáng tin.</div>
+      </div>
+      <p class="warn" id="warnBox"></p>
+    </div>
+    <div id="history" style="display:none; margin-top:14px; background:#fff; color:var(--text); border-radius:12px; padding:12px 14px;">
+      <div id="histHead" style="font-weight:700; font-size:14.5px; text-decoration:underline; cursor:pointer;">Lịch Sử Săn Sale <span id="histChevron">▸</span></div>
+      <div id="histList" style="display:none;"></div>
+    </div>
+    <div class="chips" id="chips"></div>
+    <div id="upcomingBox" style="margin-top:14px; background:#fff; color:var(--text); border:1.5px dashed var(--primary); border-radius:12px; padding:12px 14px;">
+      <div style="font-weight:800; font-size:16px;">🔥 Mã Hot Sắp Lên Sóng</div>
+      <div id="nextFrame" style="font-size:13.5px; margin-top:5px;"></div>
+      <div id="upcomingList"></div>
+      <div style="font-size:12px; color:#6e6e6e; margin-top:8px;">Các khung giờ nhả mã và đợt sale lớn sắp tới — canh đúng giờ vào app Shopee để lưu mã tại banner nhé.</div>
+    </div>
+  </section>
+  <div class="v2tiles">
+    <a class="v2tile rank" href="#secRank"><span class="ic">🏆</span><b>Bảng xếp hạng</b><span>TOP sản phẩm bán chạy — shop lọc mỗi ngày</span></a>
+    <a class="v2tile gift" href="#secConvert"><span class="ic">🎁</span><b>Mã giảm giá</b><span>Dán link là hiện mã hợp nhất cho món của bạn</span></a>
+  </div>
+
+  
+
+  <div id="authModal" style="display:none; position:fixed; inset:0; z-index:999; background:rgba(24,10,4,.55); overflow-y:auto; padding:20px 10px 30px;">
+    <div id="authModalBox" style="position:relative; max-width:880px; margin:0 auto; animation:authPop .18s ease-out;">
+      <button id="authModalClose" type="button" aria-label="Dong" style="position:absolute; top:10px; right:10px; z-index:3; width:36px; height:36px; border-radius:50%; border:none; background:#fff; color:#c23215; font-size:17px; font-weight:900; cursor:pointer; box-shadow:0 2px 8px rgba(0,0,0,.28);">&#10005;</button>
+      <div class="card" id="accModalCard" style="margin-top:0;">
+        <h2>💰 Tài Khoản &amp; Mã Hoàn Hoa Hồng</h2>
+<div id="accAuth">
+      <p class="sub" style="text-align:left;">Đăng nhập để xem <b>bảng điều khiển của bạn</b>: mã hoàn hoa hồng cá nhân, số dư shop đã đối soát và lịch sử shop trả tiền. Mỗi tài khoản có <b>một mã riêng</b> — đơn mua qua trang này ghi theo đúng mã của bạn, shop đối soát và <b>trả lại bạn 80% hoa hồng của đơn đó</b>. Chưa đăng nhập vẫn săn sale bình thường.</p>
+      <div id="accLoginView" style="display:grid; gap:8px; margin-top:8px;">
+        <input type="email" id="accEmail" placeholder="Email của bạn" autocomplete="email" style="padding:11px 12px; border:1.5px solid #ddd; border-radius:10px; font-size:15px; width:100%; box-sizing:border-box;">
+        <input type="password" id="accPass" placeholder="Mật khẩu" autocomplete="current-password" style="padding:11px 12px; border:1.5px solid #ddd; border-radius:10px; font-size:15px; width:100%; box-sizing:border-box;">
+        <button id="accLogin" style="background:#d63c1e; color:#fff; border:none; border-radius:10px; padding:12px; font-size:16px; font-weight:800; cursor:pointer;">Đăng nhập</button>
+        <p class="sub" style="text-align:center; margin:2px 0 0;">Chưa có tài khoản? <a href="#" id="accToRegister" style="color:#d63c1e; font-weight:800; text-decoration:none;">Đăng ký ngay</a></p>
+      </div>
+      <div id="accRegView" style="display:none; gap:8px; margin-top:8px;">
+        <input type="email" id="accEmailR" placeholder="Email của bạn" autocomplete="email" style="padding:11px 12px; border:1.5px solid #ddd; border-radius:10px; font-size:15px; width:100%; box-sizing:border-box;">
+        <input type="password" id="accPassR" placeholder="Mật khẩu (ít nhất 6 ký tự)" autocomplete="new-password" style="padding:11px 12px; border:1.5px solid #ddd; border-radius:10px; font-size:15px; width:100%; box-sizing:border-box;">
+        <label style="display:flex; gap:8px; align-items:flex-start; font-size:13.5px; color:#333; text-align:left; cursor:pointer;">
+          <input type="checkbox" id="accTermsAgree" style="margin-top:2px; width:17px; height:17px; flex:none;">
+          <span>Tôi đã đọc và đồng ý với <a href="#" data-legal="terms" style="color:#d63c1e; font-weight:700;">Điều khoản sử dụng</a> và <a href="#" data-legal="privacy" style="color:#d63c1e; font-weight:700;">Chính sách bảo mật</a> của Săn Sale Cùng Long.</span>
+        </label>
+        <button id="accRegister" style="background:#d63c1e; color:#fff; border:none; border-radius:10px; padding:12px; font-size:16px; font-weight:800; cursor:pointer;">Đăng ký tài khoản</button>
+        <p class="sub" style="text-align:center; margin:2px 0 0;">Đã có tài khoản? <a href="#" id="accToLogin" style="color:#d63c1e; font-weight:800; text-decoration:none;">Đăng nhập</a></p>
+      </div>
+      <div style="display:flex; align-items:center; gap:10px; margin:12px 0 8px;"><span style="flex:1; height:1px; background:#eee;"></span><span style="font-size:12.5px; color:#6e6e6e;">hoặc</span><span style="flex:1; height:1px; background:#eee;"></span></div>
+      <div id="accWebviewWarn" style="display:none; background:#fff7e6; border:1.5px solid #f0c36d; color:#7a5200; border-radius:10px; padding:9px 11px; font-size:13.5px; text-align:left;">⚠️ Bạn đang mở trang trong <b>Zalo/Facebook</b> — đăng nhập Google ở chế độ này thường bị lỗi khi quay lại trang. Hãy bấm nút <b>⋮</b> ở góc màn hình, chọn <b>“Mở bằng trình duyệt / Chrome”</b> rồi đăng nhập Google lại nhé.</div>
+      <button id="accGoogle" style="width:100%; background:#fff; color:#333; border:1.5px solid #ccc; border-radius:10px; padding:11px; font-size:15px; font-weight:700; cursor:pointer;">🔵 Đăng nhập bằng Google</button>
+      <p class="sub" style="text-align:center; margin:4px 0 0;">Bằng việc tiếp tục với Google, bạn đồng ý với <a href="#" data-legal="terms" style="color:#d63c1e; font-weight:700;">Điều khoản sử dụng</a> và <a href="#" data-legal="privacy" style="color:#d63c1e; font-weight:700;">Chính sách bảo mật</a> của Săn Sale Cùng Long.</p>
+      <p class="sub" id="accMsg" style="text-align:left; margin:8px 0 0;"></p>
+    </div>
+<div id="accNone" style="display:none;">
+      <p class="sub" style="text-align:left;">Hệ thống đăng nhập đang bận — bạn vẫn tạo mã theo cách cũ trên máy này được:</p>
+      <div style="display:grid; gap:8px; margin-top:8px;">
+        <input type="text" id="accNameF" placeholder="Tên của bạn" autocomplete="name" style="padding:11px 12px; border:1.5px solid #ddd; border-radius:10px; font-size:15px; width:100%; box-sizing:border-box;">
+        <input type="text" id="accContactF" placeholder="Số Zalo, hoặc STK + tên ngân hàng (để shop trả tiền)" autocomplete="tel" style="padding:11px 12px; border:1.5px solid #ddd; border-radius:10px; font-size:15px; width:100%; box-sizing:border-box;">
+        <button id="accCreateF" style="background:#d63c1e; color:#fff; border:none; border-radius:10px; padding:12px; font-size:16px; font-weight:800; cursor:pointer;">Tạo mã của tôi</button>
+      </div>
+    </div>
+<div id="accHave" style="display:none;">
+      <div style="display:flex; align-items:center; gap:12px; background:linear-gradient(135deg,#d63c1e,#c2410c); border-radius:14px; padding:14px; color:#fff;">
+        <div id="accAvatar" style="width:48px; height:48px; border-radius:50%; background:rgba(255,255,255,.25); border:2px solid rgba(255,255,255,.7); display:flex; align-items:center; justify-content:center; font-size:22px; font-weight:800; flex:none;">👤</div>
+        <div style="min-width:0;">
+          <div style="font-size:16px;">Xin chào <b id="accUserName"></b></div>
+          <div id="accUserEmail" style="font-size:12.5px; opacity:.92;"></div>
+          <div style="margin-top:5px; font-size:12px;">Mã hoàn hoa hồng: <b id="accCode" style="font-size:16px; letter-spacing:1.5px; background:#fff; color:#d63c1e; border-radius:6px; padding:1px 8px;"></b></div>
+        </div>
+      </div>
+<div id="accTabs" style="display:flex; gap:6px; margin-top:12px;"><button type="button" class="atab" data-atab="accTabHome" style="flex:1; padding:10px 2px; border-radius:10px; font-weight:700; font-size:14px; cursor:pointer; background:#16110d; color:#fff; border:1.5px solid #16110d;">🏠 Tiền</button><button type="button" class="atab" data-atab="accTabOrders" style="flex:1; padding:10px 2px; border-radius:10px; font-weight:700; font-size:14px; cursor:pointer; background:#fff; color:#333; border:1.5px solid #ddd;">🧾 Đơn hàng</button><button type="button" class="atab" data-atab="accTabInfo" style="flex:1; padding:10px 2px; border-radius:10px; font-weight:700; font-size:14px; cursor:pointer; background:#fff; color:#333; border:1.5px solid #ddd;">📝 Thông tin</button></div><div id="accTabHome">
+      <div id="accWallet" style="margin-top:12px; border:1.5px solid #e5e7eb; border-radius:14px; padding:12px; background:#fff;">
+        <div style="text-align:center;">
+          <div style="font-size:12px; font-weight:700; color:#666;">💰 SỐ DƯ KHẢ DỤNG — RÚT ĐƯỢC</div>
+          <div id="accWalAvail" style="font-size:32px; font-weight:800; color:#15803d; line-height:1.15;">0₫</div>
+        </div>
+        <div style="display:flex; gap:8px; flex-wrap:wrap; margin-top:6px;">
+          <div style="flex:1; min-width:120px; background:#fff7ed; border:1.5px solid #fed7aa; border-radius:12px; padding:9px 6px; text-align:center;">
+            <div style="font-size:12.5px; color:#9a3412; font-weight:700;">⏳ TẠM TÍNH (CHỜ ĐỐI SOÁT)</div>
+            <div id="accWalEst" style="font-size:17px; font-weight:800; color:#c2410c;">0₫</div>
+          </div>
+          <div style="flex:1; min-width:120px; background:#eff6ff; border:1.5px solid #bfdbfe; border-radius:12px; padding:9px 6px; text-align:center;">
+            <div style="font-size:12.5px; color:#1e40af; font-weight:700;">✅ SHOP ĐÃ TRẢ</div>
+            <div id="accWalPaid" style="font-size:17px; font-weight:800; color:#1d4ed8;">0₫</div>
+          </div>
+        </div>
+        <button id="accWithdraw" style="width:100%; margin-top:10px; background:#15803d; color:#fff; border:none; border-radius:10px; padding:12px; font-size:16px; font-weight:800; cursor:pointer;">💸 Yêu cầu rút tiền</button>
+        <p class="sub" id="accWithdrawNote" style="text-align:left; margin:4px 0 0;">Rút được khi số dư khả dụng từ 10.000₫. Shop trả theo thông tin nhận tiền bạn đã lưu ở mục 📝 Thông tin.</p>
+        <p class="sub" id="accBalance" style="text-align:left; margin:6px 0 0;">Chưa có kỳ đối soát nào — sau mỗi kỳ shop đối soát, số dư của bạn sẽ hiện tại đây.</p>
+      </div>
+      <div style="display:flex; gap:8px; flex-wrap:wrap; margin-top:10px;">
+        <div style="flex:1; min-width:120px; background:#fafafa; border:1.5px solid #e5e7eb; border-radius:12px; padding:9px 6px; text-align:center;">
+          <div style="font-size:12.5px; color:#555; font-weight:700;">🧾 TỔNG ĐƠN ĐÃ GHI</div>
+          <div id="accStatOrders" style="font-size:18px; font-weight:800; color:#111;">0</div>
+        </div>
+        <div style="flex:1; min-width:120px; background:#fafafa; border:1.5px solid #e5e7eb; border-radius:12px; padding:9px 6px; text-align:center;">
+          <div style="font-size:12.5px; color:#555; font-weight:700;">🎁 TỔNG HOÀN ĐÃ GHI</div>
+          <div id="accStatShare" style="font-size:18px; font-weight:800; color:#111;">0₫</div>
+        </div>
+      </div>
+      <div style="font-weight:800; font-size:15px; margin-top:16px; text-align:left;">🔗 Link giới thiệu của bạn</div>
+      <p class="sub" style="text-align:left; margin:2px 0 6px;">Bạn bè mua qua link này thì đơn được ghi cho bạn. Mọi link Shopee bạn mở hoặc tạo trên máy này cũng đã tự gắn mã của bạn rồi — cứ mua như bình thường.</p>
+      <div style="display:flex; gap:8px; flex-wrap:wrap;">
+        <input type="text" id="accShare" readonly style="flex:1; min-width:200px; padding:10px 12px; border:1.5px solid #ddd; border-radius:10px; font-size:13.5px; box-sizing:border-box;">
+        <button id="accCopy" style="background:#0b57d0; color:#fff; border:none; border-radius:10px; padding:10px 16px; font-weight:700; cursor:pointer;">📋 Sao chép</button>
+      </div>
+      </div><div id="accTabOrders" style="display:none;">
+      <div style="font-weight:800; font-size:15px; margin-top:16px; text-align:left;">🧾 Đơn hàng của tôi</div>
+      <div id="accOrders" style="text-align:left;"><p class="sub" style="text-align:left; margin:4px 0 0;">Chưa có đơn hàng nào được ghi nhận — khi có người mua qua link của bạn, đơn sẽ hiện tại đây.</p></div>
+      <div style="font-weight:800; font-size:15px; margin-top:16px; text-align:left;">💸 Lịch sử nhận tiền</div>
+      <div id="accPayouts" style="text-align:left;"><p class="sub" style="text-align:left; margin:4px 0 0;">Chưa có lần nhận tiền nào.</p></div>
+      </div><div id="accTabInfo" style="display:none;">
+      <div style="font-weight:800; font-size:15px; margin-top:16px; text-align:left;">👤 Thông tin khách hàng</div>
+      <div style="display:grid; gap:8px; margin-top:6px;">
+        <input type="text" id="accFullName" placeholder="Họ và tên theo CCCD (ví dụ: Nguyễn Văn A)" autocomplete="name" style="padding:10px 12px; border:1.5px solid #ddd; border-radius:10px; font-size:14.5px; width:100%; box-sizing:border-box;">
+        <input type="text" id="accPhone" placeholder="Số điện thoại (ví dụ: 0912345678)" inputmode="tel" autocomplete="tel" style="padding:10px 12px; border:1.5px solid #ddd; border-radius:10px; font-size:14.5px; width:100%; box-sizing:border-box;">
+        <button id="accSaveCustomer" style="background:#0b57d0; color:#fff; border:none; border-radius:10px; padding:11px; font-weight:700; cursor:pointer;">💾 Lưu thông tin khách hàng</button>
+        <p class="sub" id="accCustNote" style="text-align:left; margin:0;">Thông tin này chỉ nhập 1 lần và không tự sửa được — họ tên phải trùng với tên chủ tài khoản ngân hàng của bạn. Cần sửa, bạn liên hệ shop nhé.</p>
+      </div>
+      <div style="font-weight:800; font-size:15px; margin-top:16px; text-align:left;">🏦 Thông tin nhận tiền</div>
+      <div style="display:grid; gap:8px; margin-top:6px;">
+        <input type="text" id="accNameD" placeholder="Tên của bạn" autocomplete="name" style="padding:10px 12px; border:1.5px solid #ddd; border-radius:10px; font-size:14.5px; width:100%; box-sizing:border-box;">
+        <input type="text" id="accBankName" placeholder="Tên ngân hàng (ví dụ: MB Bank, Vietcombank…)" list="bankList" autocomplete="off" style="padding:10px 12px; border:1.5px solid #ddd; border-radius:10px; font-size:14.5px; width:100%; box-sizing:border-box;">
+        <datalist id="bankList">
+          <option value="MB Bank"></option><option value="Vietcombank"></option><option value="VietinBank"></option><option value="BIDV"></option><option value="Agribank"></option><option value="Techcombank"></option><option value="ACB"></option><option value="VPBank"></option><option value="TPBank"></option><option value="Sacombank"></option><option value="HDBank"></option><option value="VIB"></option><option value="SHB"></option><option value="MSB"></option><option value="OCB"></option><option value="Eximbank"></option><option value="LPBank"></option><option value="SeABank"></option><option value="Nam A Bank"></option><option value="PvcomBank"></option>
+        </datalist>
+        <input type="text" id="accBankAccount" placeholder="Số tài khoản ngân hàng" inputmode="numeric" autocomplete="off" style="padding:10px 12px; border:1.5px solid #ddd; border-radius:10px; font-size:14.5px; width:100%; box-sizing:border-box;">
+        <input type="text" id="accBankHolder" placeholder="Tên chủ tài khoản (viết hoa như trên thẻ, ví dụ: NGUYEN VAN A)" autocomplete="off" style="padding:10px 12px; border:1.5px solid #ddd; border-radius:10px; font-size:14.5px; width:100%; box-sizing:border-box;">
+        <input type="password" id="accPin" placeholder="Mật khẩu rút tiền (4–8 chữ số, tự đặt)" inputmode="numeric" autocomplete="new-password" maxlength="8" style="padding:10px 12px; border:1.5px solid #ddd; border-radius:10px; font-size:14.5px; width:100%; box-sizing:border-box;">
+        <p class="sub" id="accPinNote" style="text-align:left; margin:0;">Mật khẩu rút tiền dùng để khóa nút rút tiền — mỗi lần rút bạn phải nhập đúng mật khẩu này.</p>
+        <button id="accForgotPin" style="display:none; background:none; border:none; color:#0b57d0; font-weight:700; cursor:pointer; text-align:left; padding:0; font-size:13.5px;">Quên mật khẩu rút tiền? Bấm để nhận email đặt lại</button>
+        <div style="display:flex; gap:8px; flex-wrap:wrap;">
+          <button id="accSaveProfile" style="flex:1; min-width:140px; background:#0b57d0; color:#fff; border:none; border-radius:10px; padding:11px; font-weight:700; cursor:pointer;">💾 Lưu thông tin nhận tiền</button>
+          <button id="accLogout" style="background:#fff; color:#555; border:1.5px solid #ccc; border-radius:10px; padding:11px 16px; font-weight:700; cursor:pointer;">Đăng xuất</button>
+        </div>
+        <p class="sub" style="text-align:left; margin:0;">Đăng xuất chỉ ẩn bảng điều khiển — mã vẫn gắn trên máy này để đơn của bạn tiếp tục được ghi nhận.</p>
+        <div style="margin-top:14px; border-top:1px dashed #e3ddd2; padding-top:12px;">
+          <div style="font-weight:800; color:#b3261e; font-size:14.5px; margin-bottom:4px;">🗑 Xóa tài khoản</div>
+          <p class="sub" style="text-align:left; margin:0 0 8px;">Gửi yêu cầu xóa tài khoản và dữ liệu cá nhân của bạn — Shop xử lý trong vòng 07 ngày làm việc. Hãy rút hết số dư khả dụng trước khi gửi: sau khi xóa, mã cá nhân và lịch sử đối soát của bạn sẽ bị hủy. Gửi yêu cầu xong, tài khoản sẽ đăng xuất ngay.</p>
+          <button id="accDeleteReq" type="button" style="background:#fff; color:#b3261e; border:1.5px solid #b3261e; border-radius:10px; padding:10px 16px; font-weight:800; cursor:pointer;">Yêu cầu xóa tài khoản</button>
+        </div>
+      </div>
+      </div>
+    </div>
+      </div>
+    </div>
+  </div>
+
+  <section id="myResearch" style="display:none; max-width:860px; margin:18px auto 0; padding:0 14px;">
+    <div style="background:#fff; border-radius:14px; padding:14px 16px; box-shadow:0 1px 4px rgba(0,0,0,.06);">
+      <div style="font-weight:800; font-size:17px;">🔎 Kết quả tra cứu của bạn</div>
+      <div style="font-size:13px; color:#666; margin-top:3px;">Chỉ máy của bạn mới thấy mục này — shop gửi kết quả riêng về đúng máy đã gửi link tra cứu.</div>
+      <div id="myResearchList" style="margin-top:10px;"></div>
+    </div>
+  </section>
+
+  <div class="banners">
+    <div class="banner b1" id="bnRank"><div class="ic">🏆</div><div class="t">Bảng xếp hạng sản phẩm</div><div class="s">Shop chọn theo xu hướng bán chạy</div></div>
+    <div class="banner b2" id="bnSuggest"><div class="ic">💡</div><div class="t">Gợi ý sản phẩm</div><div class="s">Shop chọn lọc mỗi ngày</div></div>
+  </div>
+
+  <div class="card">
+    <h2>🎬 Video Mới</h2>
+    <p class="sub">Video mới nhất trên Facebook của shop — xem vui rồi quay lại săn sale tiếp nhé.</p>
+    <div style="display:flex; gap:10px; flex-wrap:wrap;">
+      <a href="https://www.facebook.com/Levietlong95/reels" target="_blank" rel="noopener" style="flex:1; min-width:140px; text-align:center; background:#fff4ec; border:1.5px solid #ffd9c7; border-radius:12px; padding:16px 10px; text-decoration:none; color:#333; font-weight:700;">🐃 Trâu Đen<br><span style="font-size:12.5px; color:#6e6e6e; font-weight:400;">Video hài mới nhất</span></a>
+      <a href="https://www.facebook.com/Levietlong95/videos" target="_blank" rel="noopener" style="flex:1; min-width:140px; text-align:center; background:#fff4ec; border:1.5px solid #ffd9c7; border-radius:12px; padding:16px 10px; text-decoration:none; color:#333; font-weight:700;">🎥 Kho Video<br><span style="font-size:12.5px; color:#6e6e6e; font-weight:400;">Xem tất cả trên Facebook</span></a>
+    </div>
+  </div>
+
+  <div class="card" id="secRank">
+    <h2>🏆 Bảng Xếp Hạng Sản Phẩm</h2>
+    <p class="sub">TOP 10 xếp theo độ BÁN CHẠY trên Shopee — căn cứ sản phẩm xu hướng, lượt bán tăng và các ngành đang dẫn đầu trên Shopee (Nhà cửa &amp; Đời sống • Sắc đẹp • Thời trang nữ). Mỗi món kèm một dòng nhận xét ngắn để bạn chốt nhanh; giá “từ” là giá tham khảo khi mở deal. <span id="rankStamp"></span></p>
+    <div id="rankList"></div>
+  </div>
+
+  <div class="card" id="secHot">
+    <h2>🔥 Sản Phẩm Hot</h2>
+    <p class="sub">Xếp theo đúng ngành hàng trên Shopee — mỗi ngành shop chỉ chọn 3 món đáng mua nhất: 🔥 <b>bán chạy nhất</b>, ⭐ <b>đánh giá cao nhất</b> và 💸 <b>rẻ nhất</b>. Bấm "Xem deal" là mở Shopee đã sắp xếp/lọc đúng tiêu chí của món đó để bạn kiểm chứng và xem đánh giá thật; giá "từ" là giá tham khảo. <span id="updStamp"></span></p>
+    <div class="grid" id="products"></div>
+  </div>
+
+  <div class="card">
+    <h2>🧺 Đồ gia dụng rẻ hữu ích</h2>
+    <p class="sub">Món nào cũng rẻ mà nhà nào cũng cần — cùng chuẩn tuyển chọn giá rẻ nhất + shop 4.5★+ như trên.</p>
+    <div class="grid" id="household"></div>
+  </div>
+
+  <div class="card">
+    <h2>🗂️ Danh Mục Hot</h2>
+    <p class="sub">Bấm vào danh mục để xem deal trên Shopee:</p>
+    <div class="cats" id="cats"></div>
+  </div>
+
+  <div class="card">
+    <h2>💬 Tư Vấn Sản Phẩm</h2>
+    <p class="sub">Khách hỏi — shop đáp:</p>
+    <div id="qas"></div>
+  </div>
+
+  <div class="card">
+    <h2>❓ Dùng thế nào?</h2>
+    <div class="steps">
+      <div class="step"><span class="n">1</span><br>Dán link sản phẩm Shopee vào ô Săn Sale</div>
+      <div class="step"><span class="n">2</span><br>Bấm mở sản phẩm — hoặc gửi link để shop tra cứu chất lượng trước</div>
+      <div class="step"><span class="n">3</span><br>Mua trên Shopee như bình thường, giá không đổi</div>
+    </div>
+  </div>
+
+  <div class="card" id="secContact">
+    <h2>🤝 Liên Hệ Hợp Tác</h2>
+    <p class="sub">Cần shop săn mã riêng cho một món, hợp tác quảng bá hoặc góp ý về trang — nhắn trực tiếp cho shop qua một trong hai kênh dưới đây, bấm là mở khung chat ngay:</p>
+    <div style="display:flex; gap:10px; flex-wrap:wrap;">
+      <a href="https://m.me/Levietlong95" target="_blank" rel="noopener" style="flex:1; min-width:150px; display:flex; align-items:center; justify-content:center; gap:9px; background:#166fe5; color:#fff; border-radius:12px; padding:13px 10px; text-decoration:none; font-weight:800; font-size:15.5px;">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="#fff" aria-hidden="true"><path d="M13.5 21.9v-7.9h2.65l.4-3.1H13.5V8.9c0-.9.25-1.5 1.55-1.5h1.65V4.6c-.3-.04-1.3-.13-2.45-.13-2.4 0-4.05 1.47-4.05 4.17v2.33H7.5V14h2.7v7.9a10 10 0 0 0 3.3 0z"/></svg>
+        Nhắn qua Facebook
+      </a>
+      <a href="https://zalo.me/0395250965" target="_blank" rel="noopener" style="flex:1; min-width:150px; display:flex; align-items:center; justify-content:center; gap:9px; background:#0068FF; color:#fff; border-radius:12px; padding:13px 10px; text-decoration:none; font-weight:800; font-size:15.5px;">
+        <svg width="30" height="22" viewBox="0 0 40 24" aria-hidden="true"><rect x="0.75" y="1.75" width="38.5" height="18.5" rx="9.25" fill="#fff"/><text x="20" y="15.5" text-anchor="middle" font-family="Arial, sans-serif" font-size="10.5" font-weight="bold" fill="#0068FF">Zalo</text></svg>
+        Nhắn qua Zalo
+      </a>
+    </div>
+  </div>
+
+  <div class="card" id="secAbout">
+    <h2>ℹ️ Về Trang Này</h2>
+    <p class="sub" style="text-align:left;"><b>Shop là ai:</b> trang của Long — chủ kênh hài Trâu Đen trên Facebook (<a href="https://www.facebook.com/Levietlong95" target="_blank" rel="noopener">Lê Việt Long</a>). Trang giúp bạn mở đúng sản phẩm Shopee qua link của shop và tra cứu chất lượng sản phẩm trước khi mua.</p>
+    <p class="sub" style="text-align:left;"><b>Riêng tư:</b> link bạn gửi qua nút Tra cứu chỉ dùng để shop đọc sản phẩm và tổng hợp review từ các nguồn công khai. Kết quả đăng trên trang gồm tên sản phẩm và nhận xét tổng hợp — không đăng thông tin cá nhân của bạn; mục tên trong biểu mẫu là tùy chọn, để trống cũng được.</p>
+    <p class="sub" style="text-align:left;"><b>Minh bạch:</b> giá trên trang là giá tham khảo lúc cập nhật, giá cuối cùng theo Shopee lúc thanh toán. Khi bạn mua qua link của shop, Shopee có thể trả cho shop một khoản hoa hồng nhỏ từ phía người bán — bạn không phải trả thêm đồng nào.</p>
+  </div>
+
+  <div class="note">💡 <b>Lưu ý:</b> Sản phẩm trên trang do shop tuyển chọn; giá ghi “Từ ~” là giá tham khảo lúc cập nhật — giá cuối cùng theo Shopee lúc bạn thanh toán. Kết quả tra cứu được tổng hợp từ các nguồn công khai (Google, YouTube, các trang review) và chỉ hiển thị 3 kết quả gần nhất.</div>
+
+  <section class="card" id="secAccount" style="max-width:860px; margin:18px auto 0;">
+    <h2>💰 Tài Khoản &amp; Mã Hoàn Hoa Hồng</h2>
+    <p class="sub" style="text-align:left;">Mỗi khách một mã riêng — đơn mua qua trang này ghi theo đúng mã của bạn, shop đối soát hoa hồng Shopee và trả lại bạn <b>80% hoa hồng của đơn đó</b>. Đăng nhập để xem mã của bạn, số dư và lịch sử shop trả tiền trong bảng điều khiển.</p>
+    <div id="accCtaOut" style="display:flex; gap:10px; flex-wrap:wrap;">
+      <button id="ctaLogin" type="button" style="flex:1; min-width:140px; background:#d63c1e; color:#fff; border:none; border-radius:12px; padding:13px; font-size:16px; font-weight:800; cursor:pointer;">Đăng nhập</button>
+      <button id="ctaRegister" type="button" style="flex:1; min-width:140px; background:#fff; color:#d63c1e; border:2px solid #d63c1e; border-radius:12px; padding:13px; font-size:16px; font-weight:800; cursor:pointer;">Đăng ký</button>
+    </div>
+    <div id="accCtaIn" style="display:none;">
+      <p style="margin:0 0 10px;">Xin chào <b id="ctaName"></b> — mã hoàn hoa hồng của bạn: <b id="ctaCode" style="color:#d63c1e; letter-spacing:1px;"></b></p>
+      <button id="ctaDash" type="button" style="width:100%; background:#0b57d0; color:#fff; border:none; border-radius:12px; padding:13px; font-size:15.5px; font-weight:800; cursor:pointer;">👤 Mở bảng điều khiển của tôi</button>
+    </div>
+  </section>
+
+  <footer>
+    <div class="fname" id="footName">Săn Sale Cùng Long</div>
+    <div id="footContact">Liên hệ hợp tác: <a href="https://m.me/Levietlong95" target="_blank" rel="noopener">Facebook</a> · <a href="https://zalo.me/0395250965" target="_blank" rel="noopener">Zalo</a></div>
+    <div style="margin-top:6px;"><a href="#" data-legal="terms" style="color:#ffd9cc;">📜 Điều khoản sử dụng</a> · <a href="#" data-legal="privacy" style="color:#ffd9cc;">🔒 Chính sách bảo mật</a></div>
+    <div style="margin-top:6px;"></div>
+  </footer>
+</div>
+<div class="toast" id="toast"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script>
+/* ============================================================
+   CẤU HÌNH TRANG — chủ shop điền thông tin của mình ở đây
+   ============================================================ */
+const CONFIG = {
+  pageName: "Săn Sale Cùng Long",   // ← tên trang
+  tagline: "Săn mã giảm giá Shopee mỗi ngày",
+  affiliateId: "17399480595", // ← Affiliate ID của Lê Việt Long (cập nhật 23/10/2026)
+  subId: "web-sanma",               // ← mã theo dõi nguồn (tùy chọn)
+  contact: "Liên hệ hợp tác: nhắn qua Facebook / Zalo ở mục Liên Hệ Hợp Tác phía trên",
+};
+
+/* === AUTO-DATA-START: khu vực Muse tự cập nhật định kỳ — chỉ sửa trong 2 mốc này === */
+const PAGE_UPDATED = "29/10/2026";   // ← ngày cập nhật dữ liệu gần nhất
+/* API dữ liệu sản phẩm Shopee qua RapidAPI (Long duyệt tối 26/10/2026):
+   khóa do Long đăng ký gói miễn phí rồi gắn vào đây; để trống = tính năng tự tra tắt. */
+const RAPIDAPI_KEY = ""; /* TAM TAT 26/10/2026: goi free API v2 chi 5 luot/thang da het; cho Long quyet dinh nang goi hay doi nguon khac */
+const RAPIDAPI_HOST = "shopee-product-scraper2.p.rapidapi.com";
+
+/* Mã hot SẮP lên sóng — hiển thị trong ô "Mã Hot Sắp Lên Sóng" ở hero.
+   Chỉ ghi đợt/khung giờ có thật theo lịch sale Shopee và thông tin các nguồn tổng hợp đã đăng;
+   TUYỆT ĐỐI không ghi mã chữ cụ thể chưa lên sóng. */
+const UPCOMING = [
+  { icon: "👑", when: "Mỗi ngày", title: "Shopee VIP & Voucher Xtra back lượt", desc: "Nhả lại theo các khung 0H • 9H • 12H • 15H • 18H • 20H — canh đúng khung giờ, vào app Shopee bấm Lưu ở banner tương ứng." },
+  { icon: "🛍️", when: "11/11", title: "Siêu sale 11/11 — đợt sale lớn nhất năm của Shopee", desc: "Loạt mã toàn sàn và mã kênh mới dự kiến mở từ 0H 11/11 — canh 0H vào app Shopee lưu mã sớm vì mã ngon hết lượt rất nhanh." },
+  { icon: "🛒", when: "15/11", title: "Sale giữa tháng 15/11", desc: "Đợt sale giữa tháng theo lịch Shopee: mã toàn sàn và deal ngành hàng mở trong ngày 15/11 — canh vào app Shopee lưu mã từ đầu ngày." },
+  { icon: "💸", when: "25/11", title: "Lương Về Sale To — sale ngày lương cuối tháng", desc: "Đợt sale ngày lương như hôm 25/10: có mã riêng theo ngày, chỉ dùng trong ngày sale — canh vào app Shopee lưu mã trong ngày." },
+];
+
+/* Sản phẩm hot — 10 món đầu là BẢNG XẾP HẠNG, xếp theo độ BÁN CHẠY trên Shopee (sản phẩm xu hướng / lượt bán tăng / ngành dẫn đầu), các món sau là hot bổ sung; tuyển chọn mức giá rẻ nhất + ưu tiên shop đánh giá 4.5★+;
+   keyword = từ khóa tìm trên Shopee, price = giá tham khảo "từ", img = ảnh thật của loại sản phẩm */
+/* Kết quả tra cứu tự động: job nền tra-cuu-tu-dong ghi vào sau khi tra cứu link khách gửi qua form (mới nhất lên đầu, tối đa 3 mục). */
+/* MÃ GIẢM GIÁ ĐANG CÓ HIỆU LỰC (Long khôi phục 27/10/2026 — dạng thẻ đầy đủ):
+   mỗi mã phải có mặt trên nguồn tổng hợp (ANM tra mã / noti.sale) trong cửa sổ
+   còn hiệu lực; TUYỆT ĐỐI không bịa mã, không bịa số lượt còn. Job nền mỗi giờ
+   rà lại: mã nào nguồn không còn liệt kê hoặc đã hết hạn thì gỡ. */
+const VOUCHER_UPDATED = "12:17 29/10/2026";
+const VOUCHERS = [
+  { code: "VNM250KOCT", off: "Giảm 12% tối đa 250K", cond: "Đơn từ 200K", fam: "Toàn sàn Shopee", exp: "Hết hạn 31/10/2026", chk: "ANM, 12:17 29/10" },
+  { code: "WASTON150K", off: "Giảm 14% tối đa 150K", cond: "Đơn từ 150K", fam: "Toàn sàn Shopee", exp: "Hết hạn 31/10/2026", chk: "ANM, 12:17 29/10" },
+  { code: "VIDEO-1530863982120960", off: "Giảm 18% tối đa 99K", cond: "Đơn từ 99K", fam: "Shopee Video — Siêu Sale Quốc Tế", exp: "Hết hạn 31/10/2026", chk: "ANM, 12:17 29/10" },
+  { code: "VIDEO-1530863982383108", off: "Giảm 16% tối đa 150K", cond: "Đơn từ 99K", fam: "Shopee Video — Siêu Sale Quốc Tế", exp: "Hết hạn 31/10/2026", chk: "ANM, 12:17 29/10" },
+  { code: "VIDEO-1530863990116360", off: "Giảm 16% tối đa 150K", cond: "Đơn từ 150K", fam: "Shopee Video — Siêu Sale Quốc Tế", exp: "Hết hạn 31/10/2026", chk: "ANM, 12:17 29/10" },
+  { code: "VIDEO-1532309800783872", off: "Giảm 20% tối đa 140K", cond: "Đơn từ 250K", fam: "Shopee Video — Thời Trang", exp: "Hết hạn 31/10/2026", chk: "ANM, 12:17 29/10" },
+  { code: "VIDEO-1532309799997440", off: "Giảm 21% tối đa 400K", cond: "Đơn từ 700K", fam: "Shopee Video — Thời Trang", exp: "Hết hạn 31/10/2026", chk: "ANM, 12:17 29/10" }
+];
+
+const PRODUCTS = [
+  { icon: "🧺", name: "Bộ lọc rác thoát nước kiểu Nhật", keyword: "bộ lọc rác thoát nước", price: "Từ ~93K", img: "https://down-vn.img.susercontent.com/file/vn-11134207-81ztc-ms6ev4ymwuf4f9", cat: "home", pick: "best" },
+  { icon: "👕", name: "Áo thun unisex form rộng M@DENO", keyword: "áo thun form rộng in họa tiết", price: "Từ ~53K", img: "https://down-vn.img.susercontent.com/file/vn-11134207-81ztc-mmtnztgtz37p20", cat: "fashion", pick: "best" },
+  { icon: "🔌", name: "Cáp sạc nhanh DOSEN PD 20W Type-C", keyword: "cáp sạc nhanh type c 20w", price: "Từ ~87K", img: "https://down-vn.img.susercontent.com/file/vn-11134207-81ztc-mule0cdmifb47a", cat: "tech", pick: "best" },
+  { icon: "💆", name: "Gối massage hồng ngoại cổ vai gáy", keyword: "gối massage cổ vai gáy", price: "Từ ~245K", img: "https://down-vn.img.susercontent.com/file/vn-11134207-81ztc-mtdo0sb88o3kba", cat: "health", pick: "best" },
+  { icon: "🧖", name: "Mặt nạ YEKO Niacinamide (10 miếng)", keyword: "mặt nạ niacinamide", price: "Từ ~47K", img: "https://down-vn.img.susercontent.com/file/cn-11134207-820l4-ms13u5yreosn82", cat: "beauty", pick: "best" },
+  { icon: "🧴", name: "Kem dưỡng trắng da Niacinamide 30g", keyword: "kem dưỡng trắng da niacinamide", price: "Từ ~48K", img: "https://down-vn.img.susercontent.com/file/vn-11134207-7ras8-mcer4zmuf8vw59", cat: "beauty", pick: "rated" },
+  { icon: "👚", name: "Áo polo nữ thêu nơ Lista", keyword: "áo polo nữ thêu nơ", price: "Từ ~28K", img: "https://down-vn.img.susercontent.com/file/vn-11134207-81ztc-mqvhqkx67jeq3c", cat: "fashion", pick: "rated" },
+  { icon: "🦵", name: "Máy massage bắp chân không dây", keyword: "máy massage bắp chân", price: "Từ ~402K", img: "https://down-vn.img.susercontent.com/file/sg-11134301-8258c-ms3ttj764n44ea", cat: "health", pick: "rated" },
+  { icon: "📱", name: "Kẹp điện thoại đuôi khỉ xoay 360°", keyword: "kẹp điện thoại đuôi khỉ", price: "Từ ~36K", img: "https://down-vn.img.susercontent.com/file/vn-11134207-81ztc-mnf2ruoq0ydgd3", cat: "tech", pick: "rated" },
+  { icon: "📦", name: "Combo 2 kệ dán tường để remote", keyword: "kệ dán tường để remote", price: "Từ ~16K", img: "https://down-vn.img.susercontent.com/file/bd4130b7af544eeb208831114671b6de", cat: "home", pick: "rated" },
+  { icon: "✨", name: "Kem dưỡng trắng Queen Danzern 377", keyword: "kem dưỡng trắng da 377", price: "Từ ~31K", img: "https://down-vn.img.susercontent.com/file/cn-11134207-820l4-mmvaljcgkum874", cat: "beauty", pick: "cheap" },
+  { icon: "🧥", name: "Áo thun tay dài Raglan phối sọc", keyword: "áo thun tay dài raglan", price: "Từ ~39K", img: "https://down-vn.img.susercontent.com/file/vn-11134207-820l4-mj1jlbk5flkzfc", cat: "fashion", pick: "cheap" },
+  { icon: "🧲", name: "Miếng dán hít điện thoại silicon 2 mặt", keyword: "miếng dán hít điện thoại", price: "Từ ~15K", img: "https://down-vn.img.susercontent.com/file/vn-11134207-81ztc-mln68ybg12q758", cat: "tech", pick: "cheap" },
+  { icon: "🧽", name: "Giỏ đựng đồ rửa chén Goodtime", keyword: "giỏ đựng đồ rửa chén", price: "Từ ~11K", img: "https://down-vn.img.susercontent.com/file/sg-11134201-7rbnh-lq35kv8v0mneac", cat: "home", pick: "cheap" },
+  { icon: "💇", name: "Lược massage thư giãn cầm tay", keyword: "lược massage cầm tay", price: "Từ ~39K", img: "https://down-vn.img.susercontent.com/file/sg-11134201-7rdye-md1hxzk3rwwe2c", cat: "health", pick: "cheap" }
+];
+
+/* Nhận xét ngắn cho Bảng Xếp Hạng — theo đúng thứ tự của PRODUCTS ở trên
+   (bảng xếp hạng lấy TOP 10 món đầu của danh sách Sản Phẩm Hot) */
+const RANK_NOTES = [
+  "Đứng đầu lượt bán nhóm Nhà cửa trên Shopee hôm nay — lưới lọc xoay gom rác bồn rửa, chống tắc nghẽn, bếp nào cũng cần.",
+  "Áo thun boxy oversize bán chạy nhất Thời trang nữ hôm nay, đạt 4.8★ — form rộng dễ mặc, họa tiết trẻ trung.",
+  "Cáp sạc bán chạy nhất nhóm Phụ kiện hôm nay — chuẩn PD 20W sạc nhanh cho cả iPhone lẫn Android đời mới.",
+  "Gối massage cổ vai gáy dẫn đầu nhóm Sức khỏe — massage kèm hồng ngoại, dân văn phòng đau mỏi săn nhiều.",
+  "Mặt nạ giấy bán chạy nhất Sắc đẹp hôm nay — niacinamide dưỡng sáng, cấp ẩm, tính ra chưa tới 5K một miếng.",
+  "Được chấm trọn 5.0★ trên Shopee — kem dưỡng sáng da niacinamide, món skincare dễ dùng mà giá mềm.",
+  "Áo polo nữ đạt 4.9★ — cotton tổ ong mặc mát, thêu nơ tiểu thư, giá chưa tới 30K.",
+  "Đạt 5.0★ — máy massage nén khí cho bắp chân, ai đứng nhiều, đi lại cả ngày rất hợp.",
+  "Đạt 5.0★ — kẹp điện thoại uốn cong mọi vị trí, xem phim quay video rảnh tay.",
+  "Đạt 5.0★ — kệ dán tường để remote và đỡ sạc điện thoại, gọn góc bàn mà chỉ khoảng 16K."
+];
+
+/* Đồ gia dụng rẻ hữu ích — cùng chuẩn tuyển chọn như Sản Phẩm Hot */
+const HOUSEHOLD = [
+  { icon: "🧂", name: "Kệ gia vị 2 tầng nhựa đa năng", keyword: "kệ gia vị 2 tầng", price: "Từ ~16K", img: "https://down-vn.img.susercontent.com/file/sg-11134201-7rdw7-m0sxnau6aq9wdd" },
+  { icon: "🪝", name: "Giá treo rổ chậu gấp gọn NAGO", keyword: "giá treo rổ chậu", price: "Từ ~31K", img: "https://down-vn.img.susercontent.com/file/sg-11134201-7ra3m-m581it5z4x9411" },
+  { icon: "🧹", name: "Cây lau nhà xoay 360° kèm 2 bông", keyword: "cây lau nhà xoay 360", price: "Từ ~37K", img: "https://down-vn.img.susercontent.com/file/vn-11134207-7r98o-lt52rjnmpz9g62" },
+  { icon: "👣", name: "Bộ 2 thảm lau chân nhà bếp thấm nước", keyword: "thảm lau chân nhà bếp", price: "Từ ~40K", img: "https://down-vn.img.susercontent.com/file/vn-11134207-81ztc-mlzm1padrkzod1" },
+  { icon: "🔪", name: "Giá cài dao dán tường thép 316", keyword: "giá cài dao dán tường", price: "Từ ~51K", img: "https://down-vn.img.susercontent.com/file/vn-11134207-81ztc-mt6insyp1edde2" },
+  { icon: "🍳", name: "Bộ 2 thảm bếp BALI thấm nước", keyword: "thảm bếp thấm nước", price: "Từ ~65K", img: "https://down-vn.img.susercontent.com/file/vn-11134207-7ra0g-m9gqgyjxdzt300" },
+  { icon: "🏠", name: "Kệ đựng đồ đa năng Sunmix khay nhựa cao cấp ,", keyword: "kệ đựng đồ đa năng sunmix khay nhựa cao cấp ,", price: "Từ ~46K", img: "https://down-vn.img.susercontent.com/file/vn-11134207-7r98o-lmzcuug3eqxrb4" },
+  { icon: "🏠", name: "Kệ để đựng đồ đa năng (loại 1 ) Kệ bếp 3 - 4", keyword: "kệ để đựng đồ đa năng (loại 1 ) kệ bếp 3 - 4", price: "Từ ~11K", img: "https://down-vn.img.susercontent.com/file/vn-11134207-7r98o-lvu4i04fremzb8" }
+];
+
+const HOT_KEYWORDS = ["Khăn giấy treo tường", "Nước giặt xả", "Tẩy trang", "Dầu gội", "Kem chống nắng"];
+
+const CATEGORIES = [
+  { icon: "🌀", name: "Quạt cầm tay", keyword: "quạt cầm tay" },
+  { icon: "🥤", name: "Bình giữ nhiệt", keyword: "bình giữ nhiệt" },
+  { icon: "🏠", name: "Đồ gia dụng", keyword: "đồ gia dụng" },
+  { icon: "🔌", name: "Điện gia dụng", keyword: "điện gia dụng" },
+  { icon: "👶", name: "Mẹ & Bé", keyword: "mẹ và bé" },
+  { icon: "💄", name: "Làm đẹp", keyword: "làm đẹp" },
+];
+
+const QAS = [
+  { q: "Link săn sale khác gì link thường?", a: "Link thường mở thẳng ra sản phẩm. Qua trang này, nút mở sản phẩm đi qua link giới thiệu của shop — giá vẫn là giá Shopee, bạn không trả thêm đồng nào — và bạn có thêm phần tra cứu: gửi link là shop tự đọc sản phẩm, tổng hợp review trên Google, YouTube và các trang khác rồi đăng kết luận ngay trên trang. Trang không đăng danh sách mã giảm giá nữa: mã Shopee bị khóa theo từng tài khoản nên khách thường không áp được; mã thật nằm trong app Shopee, canh các khung giờ ở ô Mã Hot Sắp Lên Sóng để lưu." },
+  { q: "Trang có thu phí không?", a: "Không. Trang miễn phí hoàn toàn, và mua qua link của shop bạn cũng không trả thêm đồng nào — Shopee trả cho shop một khoản hoa hồng nhỏ từ phía người bán." },
+  { q: "Sao giá trong trang khác giá trên Shopee?", a: "Giá trong trang là giá tham khảo lúc cập nhật. Bấm 'Xem deal' để xem giá thật và khuyến mãi mới nhất trên Shopee." },
+  { q: "Mã giảm giá không áp được thì sao?", a: "Mã Shopee bị khóa theo tài khoản, ngành hàng và số lượt — cùng một mã, người này áp được người khác không, và quy tắc chồng mã thay đổi tùy từng đợt sale; mã nào áp được sẽ hiện ngay ở bước thanh toán trong app. Vì vậy trang không đăng mã nữa: bạn lưu mã trực tiếp trong app Shopee (banner trang chủ hoặc kho voucher) theo các khung giờ ở ô Mã Hot Sắp Lên Sóng." },
+];
+
+/* === AUTO-DATA-END === */
+
+/* === CORE-LOGIC-START: pure functions (testable) === */
+function normalizeUrl(raw) {
+  let u = (raw || "").trim();
+  if (!u) return "";
+  if (!/^https?:\/\//i.test(u)) u = "https://" + u;
+  return u;
+}
+function isShopeeUrl(u) {
+  return /shopee?\.(vn|ee)|shp\.ee/i.test(u);
+}
+function cleanOriginParams(u) {
+  try {
+    const x = new URL(u);
+    [...x.searchParams.keys()].forEach(k => {
+      if (/^utm_/i.test(k) || ["mmp_pid", "uls_trackid", "credential_token"].includes(k)) x.searchParams.delete(k);
+    });
+    return x.toString();
+  } catch (e) { return u; }
+}
+function isShortLink(u) {
+  try { return /(^|\.)shope\.ee$|(^|\.)shp\.ee$|^s\.shopee\.vn$/i.test(new URL(u).hostname); }
+  catch (e) { return /shope\.ee|shp\.ee|s\.shopee\.vn/i.test(u); }
+}
+function alreadyAffiliate(u) {
+  return /an_redir|affiliate_id/i.test(u);
+}
+/* Pattern theo tài liệu chính thức của Shopee (Affiliate Short Link Guide):
+   https://{domain}/an_redir?origin_link={ENCODED_URL}&affiliate_id={ID}&sub_id={...} */
+/* Sub ID theo nguồn khách đến (Shopee cho gắn Sub ID để xem hiệu quả theo nguồn
+   trong báo cáo Affiliate): ?src=fb → web-fb, ?src=zalo → web-zalo,
+   ?src=yt → web-yt, ?src=video → web-video; mặc định web-sanma. */
+function curSubId() {
+  /* ƯU TIÊN 1 — tài khoản của chính chủ máy (từ 27/10/2026, mô hình mỗi người
+     một mã hoàn hoa hồng): người đã tạo mã thì mọi đơn từ máy này ghi theo mã
+     của họ để shop đối soát và trả 80% hoa hồng đúng người. */
+  try { const a = JSON.parse(localStorage.getItem("sscl_account") || "null"); if (a && a.code) return a.code; } catch (e) {}
+  /* ƯU TIÊN 2 — mã người chia sẻ link: ?ref=<mã> (lưu lại trên máy): khách
+     chưa có tài khoản đi qua link của ai thì đơn ghi theo mã người đó. */
+  try {
+    const p = new URLSearchParams(location.search);
+    const ref = (p.get("ref") || "").toLowerCase().replace(/[^a-z0-9]/g, "");
+    if (ref) { try { localStorage.setItem("sscl_ref", ref); } catch (e) {} return ref; }
+    const savedRef = localStorage.getItem("sscl_ref");
+    if (savedRef) return savedRef;
+  } catch (e) {}
+  /* ƯU TIÊN 3 — nguồn traffic của shop như cũ. */
+  try {
+    const p = new URLSearchParams(location.search);
+    const s = (p.get("src") || p.get("utm_source") || "").toLowerCase();
+    if (s === "fb" || s === "facebook") return "web-fb";
+    if (s === "zalo") return "web-zalo";
+    if (s === "yt" || s === "youtube") return "web-yt";
+    if (s === "video" || s === "trauden") return "web-video";
+  } catch (e) {}
+  return CONFIG.subId;
+}
+function buildAffiliateLink(productUrl, affiliateId, subId) {
+  const encoded = encodeURIComponent(productUrl);
+  let out = "https://s.shopee.vn/an_redir?origin_link=" + encoded
+          + "&affiliate_id=" + encodeURIComponent(affiliateId);
+  if (subId) out += "&sub_id=" + encodeURIComponent(subId);
+  return out;
+}
+/* === CORE-LOGIC-END === */
+
+function toast(msg) {
+  const t = document.getElementById("toast");
+  t.textContent = msg; t.classList.add("show");
+  setTimeout(() => t.classList.remove("show"), 1800);
+}
+function copyText(txt, okMsg) {
+  const done = () => toast(okMsg || "Đã sao chép!");
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(txt).then(done).catch(() => fallbackCopy(txt, done));
+  } else fallbackCopy(txt, done);
+}
+function fallbackCopy(txt, done) {
+  const ta = document.createElement("textarea");
+  ta.value = txt; ta.style.position = "fixed"; ta.style.opacity = "0";
+  document.body.appendChild(ta); ta.select();
+  try { document.execCommand("copy"); done(); } catch(e){ toast("Không sao chép được, bạn copy tay nhé"); }
+  document.body.removeChild(ta);
+}
+/* Sao chép mã giảm giá ÂM THẦM kèm theo cú bấm sang Shopee — khách không
+   phải sao chép link hay thao tác gì thêm, sang Shopee chỉ việc dán mã. */
+function silentCopy(txt) {
+  if (!txt) return;
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(txt).catch(() => silentFallback(txt));
+  } else silentFallback(txt);
+}
+function silentFallback(txt) {
+  const ta = document.createElement("textarea");
+  ta.value = txt; ta.style.position = "fixed"; ta.style.opacity = "0";
+  document.body.appendChild(ta); ta.select();
+  try { document.execCommand("copy"); } catch (e) {}
+  document.body.removeChild(ta);
+}
+/* Bọc affiliate cho MỌI link Shopee: bất kỳ link nào trỏ tới Shopee mà chưa
+   gắn mã đều được bọc qua an_redir với mã của shop — kể cả link thêm sau này. */
+function affiliateWrap(url) {
+  try {
+    const u = new URL(url);
+    if (/(^|\.)shopee\.(vn|com\.vn)$|(^|\.)shope\.ee$/i.test(u.hostname) && !alreadyAffiliate(url)) {
+      return buildAffiliateLink(url, CONFIG.affiliateId, curSubId());
+    }
+  } catch (e) {}
+  return url;
+}
+function openAff(url) { window.open(affiliateWrap(url), "_blank"); }
+function searchAff(keyword, mode) {
+  /* mode theo tiêu chí chọn sản phẩm: sales = bán chạy nhất; rated = lọc shop 4★+ rồi xếp bán chạy (tiệm cận "đánh giá cao nhất" mà Shopee hỗ trợ); mặc định = giá tăng dần để khách thấy mức rẻ nhất trước */
+  let q = "https://shopee.vn/search?keyword=" + encodeURIComponent(keyword);
+  if (mode === "sales") q += "&sortBy=sales";
+  else if (mode === "rated") q += "&ratingFilter=4&sortBy=sales";
+  else q += "&sortBy=price&order=asc";
+  return buildAffiliateLink(q, CONFIG.affiliateId, curSubId());
+}
+
+/* SOI SẢN PHẨM TRONG LINK (thêm 26/10/2026 theo yêu cầu của Long): đọc ngành
+   hàng từ chính link sản phẩm khách dán + giá khách điền (không bắt buộc) để
+   ƯỚC TÍNH mức tiết kiệm thật của từng mã cho đúng đơn này và xếp mã hợp nhất
+   lên đầu. Shopee chốt mã áp được ở trang thanh toán — trang không có API của
+   Shopee nên đây là mức soi sát nhất làm được từ phía ngoài. */
+let lastCat = "", lastRawUrl = "";
+const CAT_RULES = [
+  { cat: "Bách hóa & Siêu thị", kw: ["sua-", "gao-", "mi-goi", "banh-", "nuoc-mam", "dau-an", "ca-phe", "tra-", "snack", "thuc-pham", "gia-vi"] },
+  { cat: "Nhà cửa & Đời sống", kw: ["khan-giay", "nuoc-giat", "bep-", "noi-", "chao-", "gia-dung", "ve-sinh", "tay-rua", "lau-bep", "hop-dung"] },
+  { cat: "Sắc đẹp", kw: ["son-", "kem-", "serum", "tay-trang", "duong-", "my-pham", "nuoc-hoa", "mascara", "skincare", "dau-goi", "sua-rua-mat", "chong-nang", "bong-tay-trang", "tay-te-bao"] },
+  { cat: "Điện tử & Phụ kiện", kw: ["tai-nghe", "sac-nhanh", "sac-du-phong", "dien-thoai", "loa-", "chuot-", "ban-phim", "cap-sac", "pin-du-phong", "op-lung", "dong-ho-thong-minh"] },
+  { cat: "Sức khỏe", kw: ["vitamin", "massage", "xong-tinh-dau", "khau-trang", "nhiet-ke", "thuc-pham-chuc-nang"] },
+  { cat: "Thời trang", kw: ["ao-", "quan-", "vay-", "dep-", "tui-", "kinh-", "dong-ho", "thoi-trang", "sandal", "dam-", "hoodie", "jeans", "giay-the-thao", "giay-sneaker", "giay-cao-got", "giay-luoi"] }
+];
+function detectCat(text) {
+  let s = "";
+  try { s = decodeURIComponent(text || ""); } catch (e) { s = text || ""; }
+  s = s.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/\s+/g, "-");
+  for (const r of CAT_RULES) if (r.kw.some(k => s.includes(k))) return r.cat;
+  return "";
+}
+/* Tên sản phẩm đọc từ chính slug trong link khách dán (link Shopee dạng
+   /ten-san-pham-i.shopid.itemid) — chỉ là thông tin có sẵn trong link,
+   KHÔNG phải dữ liệu kéo từ Shopee. */
+function slugName(url) {
+  try {
+    const u = new URL(url);
+    const seg = (u.pathname.split("/").filter(Boolean).pop() || "").replace(/\.html$/, "");
+    if (seg === "search") { const kw = (u.searchParams.get("keyword") || "").trim(); return kw ? kw.charAt(0).toUpperCase() + kw.slice(1) : ""; }
+    const m = seg.replace(/-i\.\d+\.\d+.*$/, "");
+    if (!m || /^\d+$/.test(m)) return "";
+    const name = decodeURIComponent(m).replace(/-/g, " ").trim();
+    return name ? name.charAt(0).toUpperCase() + name.slice(1) : "";
+  } catch (e) { return ""; }
+}
+/* Tự tra dữ liệu THẬT của sản phẩm qua API trung gian rồi chắt lọc thành
+   khung "Đánh giá tổng quan" ngay trên trang (Long yêu cầu tối 26/10/2026).
+   API v2 chạy việc nền: gửi yêu cầu -> nhận jobId -> hỏi lại /jobs/{id} tới
+   khi xong (thường 1–4 phút). Khớp ƯU TIÊN đúng itemId/shopId trong link
+   khách dán; không khớp tuyệt đối thì ghi rõ là sản phẩm gần giống nhất.
+   Chỉ hiển thị số liệu API trả về thật; tra không được thì báo rõ, KHÔNG bịa. */
+function _normTxt(s) { return (s || "").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/đ/g, "d").replace(/Đ/g, "D"); }
+function _fmtNum(n) { n = Number(n); if (!isFinite(n)) return ""; return n >= 1000 ? (Math.round(n / 100) / 10).toString().replace(".", ",") + "k" : String(Math.round(n)); }
+function _fmtVND(n) { n = Number(n); if (!isFinite(n)) return ""; return String(Math.round(n)).replace(/\B(?=(\d{3})+(?!\d))/g, "."); }
+function _escHtml(s) { return (s || "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;"); }
+let _apiSeq = 0;
+function loadApiSummary(nm, rawUrl) {
+  const box = document.getElementById("apiSummary");
+  if (!box) return;
+  if (!RAPIDAPI_KEY) { box.style.display = "none"; return; }
+  const seq = ++_apiSeq;
+  let shopId = "", itemId = "";
+  const mIds = (rawUrl || "").match(/i\.(\d+)\.(\d+)/);
+  if (mIds) { shopId = mIds[1]; itemId = mIds[2]; }
+  const cacheKey = itemId ? "sssum_" + shopId + "_" + itemId : (nm ? "sssum_q_" + _normTxt(nm).slice(0, 60) : "");
+  function render(d, exact) {
+    if (seq !== _apiSeq) return;
+    if (!d) { box.innerHTML = "📊 Chưa tra được dữ liệu sản phẩm lúc này — bạn xem đánh giá qua các nút bên dưới nhé."; box.style.display = "block"; return; }
+    let h = "<b>📊 Đánh giá tổng quan (dữ liệu Shopee vừa tra):</b><br>";
+    if (!exact) h += "<span style=\"color:#b26a00;\">⚠️ Chưa thấy đúng sản phẩm trong link ở kết quả tra — đây là số liệu của sản phẩm gần giống nhất theo tên:</span><br>";
+    if (d.name) h += "<b>" + _escHtml(d.name) + "</b><br>";
+    const bits = [];
+    if (d.rating) bits.push("⭐ " + d.rating + "/5");
+    if (d.ratingCount) bits.push(d.ratingCount + " lượt đánh giá");
+    if (d.sold) bits.push("đã bán " + _escHtml(d.sold));
+    if (d.price) bits.push("giá hiện tại " + d.price + "đ");
+    if (bits.length) h += bits.join(" · ") + "<br>";
+    if (d.shop) h += "Shop: " + _escHtml(d.shop) + "<br>";
+    h += "<b>" + d.verdict + "</b>";
+    box.innerHTML = h;
+    box.style.display = "block";
+  }
+  if (cacheKey) {
+    try {
+      const c = JSON.parse(localStorage.getItem(cacheKey) || "null");
+      if (c && Date.now() - c.t < 24 * 3600 * 1000) { render(c.d, c.exact); return; }
+    } catch (e) {}
+  }
+  box.innerHTML = "⏳ Đang tự tra dữ liệu sản phẩm trên Shopee… (thường mất 1–4 phút, bạn cứ xem mã bên dưới trước)";
+  box.style.display = "block";
+  const headers = { "x-rapidapi-key": RAPIDAPI_KEY, "x-rapidapi-host": RAPIDAPI_HOST };
+  function summarize(list) {
+    if (!Array.isArray(list) || !list.length) { render(null); return; }
+    let exact = null, best = null, bestScore = -1;
+    const target = _normTxt(nm).split(/\s+/).filter(w => w.length > 2);
+    list.forEach(it => {
+      if (itemId && String(it.itemId) === itemId) exact = it;
+      const hay = _normTxt(it.name || "");
+      let sc = 0; target.forEach(w => { if (hay.includes(w)) sc++; });
+      if (sc > bestScore) { bestScore = sc; best = it; }
+    });
+    const p = exact || best;
+    if (!p) { render(null); return; }
+    const rating = parseFloat(p.rating || 0) || 0;
+    const ratingCount = Number(p.reviewCount || 0) || 0;
+    let verdict;
+    if (!rating) verdict = "Chưa đủ dữ liệu đánh giá để kết luận — hãy đọc nhận xét ở nút Shopee bên dưới.";
+    else if (rating >= 4.7 && ratingCount >= 100) verdict = "✅ Tín hiệu rất tốt: người mua chấm cao và đánh giá nhiều — đáng chốt khi áp thêm mã bên dưới.";
+    else if (rating >= 4.5) verdict = "✅ Đánh giá tốt: có thể yên tâm, nhất là khi giá sau mã đang rẻ.";
+    else if (rating >= 4.0) verdict = "⚠️ Đánh giá mức trung bình: nên đọc kỹ vài nhận xét 1–3★ ở nút Shopee bên dưới trước khi mua.";
+    else verdict = "⛔ Điểm đánh giá thấp: cân nhắc kỹ, nên ưu tiên sản phẩm/shop khác cùng loại.";
+    if (rating && ratingCount > 0 && ratingCount < 20) verdict += " (Còn ít lượt đánh giá nên độ tin cậy chưa cao.)";
+    if (p.isOnSale && p.discountPercent) verdict += " Sản phẩm đang giảm " + p.discountPercent + "% so với giá gốc.";
+    const d = {
+      name: String(p.name || ""),
+      rating: rating ? rating.toFixed(2).replace(".", ",") : "",
+      ratingCount: ratingCount ? _fmtVND(ratingCount) : "",
+      sold: String(p.historicalSoldEstimated || (p.sold ? _fmtNum(p.sold) : "")),
+      price: p.price ? _fmtVND(p.price) : "",
+      shop: String(p.shopName || ""),
+      verdict: verdict
+    };
+    if (cacheKey) { try { localStorage.setItem(cacheKey, JSON.stringify({ t: Date.now(), d: d, exact: !!exact })); } catch (e) {} }
+    render(d, !!exact);
+  }
+  function poll(jobId, tries) {
+    if (seq !== _apiSeq) return;
+    fetch("https://" + RAPIDAPI_HOST + "/jobs/" + jobId, { headers: headers })
+      .then(r => r.json())
+      .then(j => {
+        if (seq !== _apiSeq) return;
+        if (j && j.status === "done") summarize(j.results || j.data || []);
+        else if (j && (j.status === "failed" || j.status === "error")) render(null);
+        else if (tries < 33) setTimeout(() => poll(jobId, tries + 1), 10000);
+        else render(null);
+      })
+      .catch(() => { if (tries < 33 && seq === _apiSeq) setTimeout(() => poll(jobId, tries + 1), 10000); else render(null); });
+  }
+  fetch("https://" + RAPIDAPI_HOST + "/shopee?country=VN&priceSlicing=false&maxItems=10&keywords=" + encodeURIComponent(nm), { headers: headers })
+    .then(r => r.json())
+    .then(j => {
+      if (seq !== _apiSeq) return;
+      if (j && j.jobId) poll(j.jobId, 0);
+      else if (j && (j.results || j.data)) summarize(j.results || j.data);
+      else render(null);
+    })
+    .catch(() => render(null));
+}
+
+/* Bộ giải link đã qua tay người khác (Long chốt 27/10/2026: luôn lọc mọi link
+   thành link affiliate của shop). Link affiliate của người khác bóc được ngay
+   trong trang (unwrapAffiliate: đọc tham số origin_link). Link rút gọn thì
+   trang tĩnh KHÔNG tự đọc được đích (trình duyệt chặn đọc chuyển hướng khác
+   nguồn) — cần backend nhỏ: RESOLVER_URL là URL Web App Google Apps Script
+   của shop (mã nguồn resolver-apps-script.gs); để trống thì link rút gọn
+   hiện hướng dẫn như cũ. */
+const RESOLVER_URL = "https://script.google.com/macros/s/AKfycbx2GeGFKMz1r30yiE6jmc83PUNzlrV3NNAJjC-Y0Gfo1qrlA-IlXz6BnQzH5P_Oj-2U/exec";
+function unwrapAffiliate(u) {
+  try {
+    const o = new URL(u).searchParams.get("origin_link");
+    return o ? normalizeUrl(o) : "";
+  } catch (e) { return ""; }
+}
+function resolveShortLink(shortUrl) {
+  const ctrl = new AbortController();
+  const t = setTimeout(() => ctrl.abort(), 9000);
+  return fetch(RESOLVER_URL + "?u=" + encodeURIComponent(shortUrl), { signal: ctrl.signal })
+    .then(r => r.json())
+    .then(j => { clearTimeout(t); return (j && j.ok && j.final) ? String(j.final) : ""; })
+    .catch(() => { clearTimeout(t); return ""; });
+}
+function showBlockedGuidance() {
+  const doneTxt = document.getElementById("prodDoneTxt");
+  doneTxt.textContent = "⚠️ Link này chưa đổi được";
+  doneTxt.style.color = "#d35400";
+  document.getElementById("topVoucher").style.display = "none";
+  document.getElementById("reviewBox").style.display = "none";
+  document.getElementById("openGuide").style.display = "none";
+  document.getElementById("result").style.display = "block";
+  document.getElementById("warnBox").textContent = "Link rút gọn (shope.ee/shp.ee/s.shopee.vn) hoặc link đã gắn sẵn mã của người khác: Shopee sẽ báo lỗi \"không tìm thấy trang\" nếu gắn thêm mã nữa, nên trang không đổi link dạng này. Cách lấy link đổi được: mở link này bằng trình duyệt (Safari/Chrome) cho tới khi hiện đúng sản phẩm → sao chép link trên thanh địa chỉ (dạng shopee.vn/...) → dán lại vào đây là săn sale được ngay.";
+  document.getElementById("result").scrollIntoView({behavior:"smooth", block:"nearest"});
+}
+
+function doConvert(rawInput) {
+  const warnBox = document.getElementById("warnBox");
+  warnBox.textContent = "";
+  const raw = (rawInput || "").trim();
+  if (!raw) { toast("Bạn dán link hoặc gõ tên sản phẩm trước nhé"); return; }
+  if (CONFIG.affiliateId === "YOUR_AFFILIATE_ID") {
+    toast("Trang đang chờ chủ shop nhập Affiliate ID");
+    return;
+  }
+  const isUrl = /^https?:\/\//i.test(raw) || /^shopee?\.(vn|ee)/i.test(raw) || /^shope\.ee/i.test(raw) || /^shp\.ee/i.test(raw);
+  if (isUrl) {
+    const url = normalizeUrl(raw);
+    /* Link đã qua tay người khác (rút gọn / chứa sẵn mã affiliate): TUYỆT ĐỐI
+       không bọc thêm mã (bọc chồng → Shopee báo lỗi "Oops!!", đã kiểm chứng
+       26/10/2026). Xử lý đúng (Long chốt 27/10/2026): lấy link gốc rồi gắn mã
+       của shop như link thường — link affiliate bóc ngay trong trang; link
+       rút gọn nhờ backend giải (RESOLVER_URL), chưa có backend hoặc giải lỗi
+       thì mới hiện hướng dẫn khách lấy link đầy đủ. */
+    if (alreadyAffiliate(url)) {
+      const origin = unwrapAffiliate(url);
+      if (origin && isShopeeUrl(origin) && !isShortLink(origin) && !alreadyAffiliate(origin)) {
+        lastCat = detectCat(origin);
+        lastRawUrl = origin;
+        finishConvert(raw, buildAffiliateLink(cleanOriginParams(origin), CONFIG.affiliateId, curSubId()), true,
+          ["ℹ️ Link bạn dán đã gắn mã của người khác — trang đã lọc lại thành link của shop, yên tâm săn sale."]);
+        return;
+      }
+      showBlockedGuidance();
+      return;
+    }
+    if (isShortLink(url)) {
+      if (RESOLVER_URL) {
+        const doneTxt = document.getElementById("prodDoneTxt");
+        doneTxt.textContent = "⏳ Đang lấy link gốc từ link rút gọn…";
+        doneTxt.style.color = "#d35400";
+        document.getElementById("topVoucher").style.display = "none";
+        document.getElementById("reviewBox").style.display = "none";
+        document.getElementById("openGuide").style.display = "none";
+        document.getElementById("result").style.display = "block";
+        document.getElementById("result").scrollIntoView({behavior:"smooth", block:"nearest"});
+        resolveShortLink(url).then(finalUrl => {
+          const f = finalUrl ? normalizeUrl(finalUrl) : "";
+          if (f && isShopeeUrl(f) && !isShortLink(f) && !alreadyAffiliate(f)) {
+            lastCat = detectCat(f);
+            lastRawUrl = f;
+            finishConvert(raw, buildAffiliateLink(cleanOriginParams(f), CONFIG.affiliateId, curSubId()), true, []);
+          } else showBlockedGuidance();
+        });
+        return;
+      }
+      showBlockedGuidance();
+      return;
+    }
+    const warns = [];
+    if (!isShopeeUrl(url)) warns.push("⚠️ Link này không phải của Shopee — vẫn đổi được nhưng hoa hồng có thể không được tính.");
+    lastCat = detectCat(url);
+    lastRawUrl = url;
+    finishConvert(raw, buildAffiliateLink(cleanOriginParams(url), CONFIG.affiliateId, curSubId()), true, warns);
+    return;
+  }
+  /* Không phải link → coi như từ khóa tìm kiếm */
+  lastCat = detectCat(raw);
+  lastRawUrl = raw;
+  finishConvert(raw, searchAff(raw), false, []);
+}
+
+/* Hoàn tất chuyển đổi: link săn sale KHÔNG hiển thị ra ngoài ở bất kỳ dạng nào —
+   link chỉ nằm trong href của nút mở sản phẩm, bấm nút là sang Shopee. */
+/* Mã gắn kèm kết quả chuyển đổi (Long yêu cầu 27/10/2026 "như trước"): dùng
+   chung mảng VOUCHERS với mục mã riêng; bấm vào một mã = sao chép mã đó và mở
+   sản phẩm qua link affiliate của shop (href của thẻ). */
+function renderResultCodes() {
+  const wrap = document.getElementById("resultCodes");
+  const list = document.getElementById("resultCodeList");
+  if (!wrap || !list) return;
+  list.textContent = "";
+  if (!VOUCHERS.length) { wrap.style.display = "none"; return; }
+  /* Chỉ hiện 3 mã HỢP NHẤT với sản phẩm khách dán (Long chốt 27/10/2026):
+     ưu tiên mã đúng ngành hàng của sản phẩm (fam nhắc đúng nhóm lastCat trang
+     đã nhận diện), rồi mã toàn sàn, rồi mã Video phổ thông; mã Video khóa
+     ngành khác xếp cuối. Trong cùng hạng: mức giảm tối đa cao hơn lên trước,
+     hòa thì % giảm cao hơn. Giá sản phẩm không đọc được từ link nên độ hợp
+     theo giá không tính được — Shopee chốt ở bước thanh toán. */
+  const capOf = v => { const m = String(v.off).match(/tối đa\s+([\d.,]+)K/i); return m ? parseFloat(m[1].replace(".", "").replace(",", ".")) : 0; };
+  const pctOf = v => { const m = String(v.off).match(/^(?:Giảm\s+)?([\d.,]+)%/i); return m ? parseFloat(m[1].replace(",", ".")) : 0; };
+  const CAT_FAM = { "Thời trang": /thời trang/i, "Sắc đẹp": /(sắc đẹp|mỹ phẩm|watson)/i, "Sức khỏe": /(sức khỏe|watson)/i, "Điện tử & Phụ kiện": /(điện tử|công nghệ)/i, "Nhà cửa & Đời sống": /(nhà cửa|gia dụng|đời sống)/i, "Bách hóa & Siêu thị": /(bách hóa|siêu thị)/i };
+  const famTier = v => {
+    const f = v.fam || "";
+    const re = lastCat ? CAT_FAM[lastCat] : null;
+    if (re && re.test(f)) return 0;
+    if (/toàn sàn/i.test(f)) return 1;
+    if (/video/i.test(f) && !/thời trang|sắc đẹp|điện tử|sức khỏe|nhà cửa|bách hóa/i.test(f)) return 2;
+    return 3;
+  };
+  const top3 = VOUCHERS.slice().sort((a, b) => (famTier(a) - famTier(b)) || (capOf(b) - capOf(a)) || (pctOf(b) - pctOf(a))).slice(0, 3);
+  top3.forEach(v => {
+    const a = document.createElement("a");
+    a.href = lastAff;
+    a.target = "_blank";
+    a.rel = "sponsored nofollow noopener";
+    a.style.cssText = "display:flex; justify-content:space-between; align-items:center; gap:10px; border:1.5px dashed var(--primary); border-radius:10px; padding:9px 12px; text-decoration:none; color:#333; background:#fff;";
+    const left = document.createElement("span");
+    const c = document.createElement("b");
+    c.style.cssText = "color:#d35400; letter-spacing:.4px;";
+    c.textContent = v.code;
+    left.appendChild(c);
+    const d = document.createElement("span");
+    d.style.cssText = "display:block; font-size:12.5px; color:#666;";
+    d.textContent = v.off + " · " + v.cond;
+    left.appendChild(d);
+    a.appendChild(left);
+    const right = document.createElement("span");
+    right.style.cssText = "font-size:12.5px; font-weight:700; color:var(--primary); white-space:nowrap;";
+    right.textContent = "Sao chép & mở →";
+    a.appendChild(right);
+    a.addEventListener("click", () => {
+      const ok = () => toast("Đã sao chép mã " + v.code);
+      if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(v.code).then(ok).catch(() => fallbackCopy(v.code, ok));
+      else fallbackCopy(v.code, ok);
+    });
+    list.appendChild(a);
+  });
+  wrap.style.display = "block";
+}
+
+function finishConvert(raw, aff, isUrl, warns) {
+  lastAff = aff;
+  document.getElementById("openGuide").style.display = "none";
+  const doneTxt = document.getElementById("prodDoneTxt");
+  doneTxt.style.color = "#15803d";
+  doneTxt.textContent = isUrl ? "✔ Đã chuyển đổi xong" : "✔ Đã tạo link tìm kiếm săn sale";
+  pushHistory(raw, aff);
+  const opb = document.getElementById("openProdBtn");
+  if (opb) { opb.href = aff; opb.textContent = isUrl ? "🛒 Mở đúng sản phẩm của bạn trên Shopee →" : "🔎 Xem kết quả tìm kiếm trên Shopee →"; }
+  document.getElementById("topVoucher").style.display = "block";
+  renderResultCodes();
+  /* Khối TRA CỨU TỔNG QUAN SẢN PHẨM (Long yêu cầu 26/10/2026, nâng cấp tối
+     26/10 từ khối soi nhanh): trang tĩnh không kéo được sao/nhận xét thật
+     từ Shopee/Google (không API công khai, dữ liệu bị khóa với trang
+     ngoài) nên khối này hiện tên sản phẩm đọc từ chính link khách dán và
+     chuẩn bị sẵn nút Gửi link tra cứu tự động (Google Form đã điền
+     sẵn link khách dán — job nền đọc form, tra và đăng kết quả vào
+     mục Kết quả tra cứu gần đây; mô hình Long chốt tối 26/10/2026), kèm
+     khung đọc nhanh để khách tự quyết định mua.
+     TUYỆT ĐỐI không bịa số sao hay nội dung nhận xét. */
+  const rb = document.getElementById("reviewBox");
+  if (rb) {
+    const nm = isUrl ? slugName(lastRawUrl) : (lastRawUrl || "").trim();
+    /* Bước 3 luôn hiện khi đổi link thành công (Long báo 27/10/2026: dán
+       link rút gọn thì không ra phần tra cứu) — link rút gọn hay link không
+       có tên trong URL vẫn gửi tra cứu được; hệ thống tra cứu tự khôi phục
+       tên sản phẩm từ link ở phía xử lý. */
+    const rp = document.getElementById("reviewProd");
+    rp.textContent = "";
+    rp.appendChild(document.createTextNode("Sản phẩm trong link của bạn: "));
+    const bEl = document.createElement("b");
+    bEl.textContent = nm || "theo link bạn vừa dán";
+    rp.appendChild(bEl);
+    document.getElementById("askResearchBtn").href = "https://docs.google.com/forms/d/e/1FAIpQLSfEbbNQ6sUJk4ExL9H-bCIptlaSqaxl-6DTvttz968rFOjJ_Q/viewform?entry.651707015=" + encodeURIComponent(lastRawUrl) + "&entry.1845022065=" + encodeURIComponent(myToken());
+    rb.style.display = "block";
+    if (nm) loadApiSummary(nm, lastRawUrl);
+  }
+  document.getElementById("result").style.display = "block";
+  document.getElementById("warnBox").textContent = (warns || []).join(" ");
+  const ins = document.getElementById("prodInsight");
+  if (ins) {
+    const msg = lastCat ? "🎯 Đã nhận diện sản phẩm trong link của bạn: thuộc nhóm " + lastCat + "." : "";
+    ins.textContent = msg;
+    ins.style.display = msg ? "block" : "none";
+  }
+}
+
+document.getElementById("inLink").addEventListener("paste", () => {
+  setTimeout(() => {
+    const v = document.getElementById("inLink").value.trim();
+    if (v) doConvert(v);
+  }, 60);
+});
+document.getElementById("btnConvert").addEventListener("click",
+  () => doConvert(document.getElementById("inLink").value));
+document.getElementById("inLink").addEventListener("keydown", e => {
+  if (e.key === "Enter") doConvert(e.target.value);
+});
+document.getElementById("bnRank").addEventListener("click", () =>
+  document.getElementById("secRank").scrollIntoView({behavior:"smooth"}));
+document.getElementById("bnSuggest").addEventListener("click", () =>
+  document.getElementById("secHot").scrollIntoView({behavior:"smooth"}));
+
+/* Chips từ khóa hot → mở trang tìm kiếm đã gắn mã */
+const chipsBox = document.getElementById("chips");
+HOT_KEYWORDS.forEach(kw => {
+  const c = document.createElement("a");
+  c.className = "chip"; c.textContent = kw;
+  c.href = searchAff(kw); c.target = "_blank"; c.rel = "noopener";
+  chipsBox.appendChild(c);
+});
+
+/* Khối "Mã Hot Sắp Lên Sóng" trong hero — khung nhả mã tiếp theo tính theo đồng hồ của khách */
+const FRAMES = [0, 9, 12, 15, 18, 20];
+(function renderUpcoming(){
+  const nfEl = document.getElementById("nextFrame");
+  if (nfEl) {
+    const h = new Date().getHours();
+    const nf = FRAMES.find(f => f > h);
+    nfEl.innerHTML = "⏰ Khung nhả mã tiếp theo: <b>" + (nf === undefined ? "0h00 ngày mai" : nf + "h00 hôm nay") + "</b> — các khung trong ngày: 0h00 • 9h00 • 12h00 • 15h00 • 18h00 • 20h00";
+  }
+  const listEl = document.getElementById("upcomingList");
+  if (listEl) {
+    UPCOMING.forEach(u => {
+      const d = document.createElement("div");
+      d.style.cssText = "margin-top:9px; font-size:13.5px; line-height:1.45;";
+      d.innerHTML = u.icon + " <b>" + u.when + " — " + u.title + "</b><br><span style=\"color:#555;\">" + u.desc + "</span>";
+      listEl.appendChild(d);
+    });
+  }
+})();
+
+let lastAff = "";
+
+/* Lịch sử săn sale (lưu trên máy của khách) */
+function renderHistory(h) {
+  const box = document.getElementById("history");
+  if (!h || !h.length) { box.style.display = "none"; return; }
+  box.style.display = "block";
+  const list = document.getElementById("histList");
+  list.innerHTML = "";
+  h.forEach(it => {
+    const r = document.createElement("div");
+    r.className = "hrow";
+    r.innerHTML = '<span class="ht"></span><span class="hr"></span><a target="_blank" rel="noopener">Mở lại</a>';
+    r.querySelector(".ht").textContent = it.t;
+    r.querySelector(".hr").textContent = it.raw;
+    r.querySelector("a").href = it.aff;
+    list.appendChild(r);
+  });
+}
+function pushHistory(raw, aff) {
+  try {
+    let h = JSON.parse(localStorage.getItem("ssl_hist") || "[]");
+    h.unshift({ raw: raw, aff: aff, t: new Date().toLocaleTimeString("vi-VN", { hour: "2-digit", minute: "2-digit" }) });
+    h = h.slice(0, 8);
+    localStorage.setItem("ssl_hist", JSON.stringify(h));
+    renderHistory(h);
+  } catch (e) {}
+}
+try { renderHistory(JSON.parse(localStorage.getItem("ssl_hist") || "[]")); } catch (e) {}
+
+/* Nút Dán: đọc bộ nhớ tạm rồi chuyển đổi luôn */
+document.getElementById("btnPaste").addEventListener("click", async () => {
+  try {
+    const t = await navigator.clipboard.readText();
+    if (t && t.trim()) { document.getElementById("inLink").value = t.trim(); doConvert(t); return; }
+  } catch (e) {}
+  toast("Không đọc được bộ nhớ tạm — bạn dán thủ công vào ô nhé");
+  document.getElementById("inLink").focus();
+});
+
+/* Nút phụ cho thẻ sản phẩm (yêu cầu của Long 26/10/2026, học theo mục Tư Vấn của trang đối thủ):
+   - “Hỏi về món này”: mở chat Facebook của shop với câu hỏi điền sẵn về đúng sản phẩm đó;
+   - “Xem review”: chỉ hiện khi sản phẩm có trường video (link reel review của shop). */
+function askHref(p) {
+  return "https://m.me/Levietlong95?text=" + encodeURIComponent("Chào shop, mình muốn hỏi về sản phẩm \u201C" + p.name + "\u201D (" + p.price + ") trên trang Săn Sale Cùng Long.");
+}
+function extraBtns(d, p) {
+  const body = d.querySelector(".body");
+  if (!body) return;
+  const a = document.createElement("a");
+  a.className = "askbtn"; a.target = "_blank"; a.rel = "noopener";
+  a.textContent = "💬 Hỏi về món này";
+  a.href = askHref(p);
+  body.appendChild(a);
+  if (p.video) {
+    const v = document.createElement("a");
+    v.className = "videobtn"; v.target = "_blank"; v.rel = "noopener";
+    v.textContent = "🎬 Xem review";
+    v.href = p.video;
+    body.appendChild(v);
+  }
+}
+
+/* Render thẻ sản phẩm (dùng chung cho Sản Phẩm Hot + Đồ gia dụng) */
+function renderProducts(boxId, list) {
+  const box = document.getElementById(boxId);
+  list.forEach((p, idx) => {
+    const d = document.createElement("div");
+    d.className = "prod";
+    d.innerHTML = '<div class="thumb"></div><div class="body"><div class="pname"></div>' +
+      '<div class="price"></div><div class="stars">⭐ Ưu tiên shop 4.5★+ khi mở deal</div>' +
+      '<div class="pnote">Giá tham khảo trên Shopee • Cập nhật ngày ' + PAGE_UPDATED + '</div>' +
+      '<a class="dealbtn" target="_blank" rel="noopener">Xem deal →</a></div>';
+    if (boxId === "products" && idx < 3) {
+      const rb = document.createElement("div");
+      rb.textContent = "🏆 Hạng " + (idx + 1);
+      rb.style.cssText = "position:absolute; top:8px; left:8px; background:#ff9800; color:#fff; font-size:12.5px; font-weight:800; padding:3px 9px; border-radius:999px; z-index:2;";
+      d.style.position = "relative";
+      d.appendChild(rb);
+    }
+    const thumb = d.querySelector(".thumb");
+    if (p.img) {
+      const im = document.createElement("img");
+      im.src = p.img; im.alt = p.name; im.loading = "lazy";
+      im.onerror = () => { thumb.textContent = p.icon; };
+      thumb.appendChild(im);
+    } else {
+      thumb.textContent = p.icon;
+    }
+    d.querySelector(".pname").textContent = p.name;
+    d.querySelector(".price").textContent = p.price;
+    d.querySelector("a.dealbtn").href = searchAff(p.keyword);
+    extraBtns(d, p);
+    box.appendChild(d);
+  });
+}
+/* Ô TÌM SẢN PHẨM ở đầu trang (Long yêu cầu 26/10/2026): lọc ngay trong danh
+   mục sản phẩm của trang (PRODUCTS + HOUSEHOLD), khớp tên/từ khóa không dấu;
+   không có món khớp thì đưa nút tìm thẳng trên Shopee qua link của shop. */
+(function initSearch() {
+  const inp = document.getElementById("inSearch");
+  const btn = document.getElementById("btnSearch");
+  const msg = document.getElementById("searchMsg");
+  const box = document.getElementById("searchResults");
+  if (!inp || !box) return;
+  const norm = s => (s || "").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/đ/g, "d").replace(/Đ/g, "D");
+  const esc = s => (s || "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+  const ALL = [];
+  const seen = new Set();
+  [...PRODUCTS, ...HOUSEHOLD].forEach(p => { const k = norm(p.name); if (!seen.has(k)) { seen.add(k); ALL.push(p); } });
+  let timer = null;
+  function run() {
+    const q = inp.value.trim();
+    box.innerHTML = "";
+    if (q.length < 2) { box.style.display = "none"; msg.style.display = "none"; return; }
+    const nq = norm(q);
+    const hits = ALL.filter(p => norm(p.name).includes(nq) || norm(p.keyword).includes(nq)).slice(0, 9);
+    if (hits.length) {
+      msg.style.display = "block";
+      msg.innerHTML = "✅ Tìm thấy <b>" + hits.length + "</b> sản phẩm khớp “" + esc(q) + "” trong gợi ý của shop:";
+      box.style.display = "grid";
+      renderProducts("searchResults", hits);
+    } else {
+      box.style.display = "none";
+      msg.style.display = "block";
+      msg.innerHTML = "Chưa có món “" + esc(q) + "” trong gợi ý sẵn của shop — bấm nút dưới để tìm thẳng trên Shopee (vẫn qua link của shop):<br><a class=\"dealbtn solo\" target=\"_blank\" rel=\"noopener\" href=\"" + searchAff(q) + "\" style=\"margin-top:8px;\">🔎 Tìm “" + esc(q) + "” trên Shopee →</a>";
+    }
+  }
+  inp.addEventListener("input", () => { clearTimeout(timer); timer = setTimeout(run, 160); });
+  inp.addEventListener("keydown", e => { if (e.key === "Enter") { e.preventDefault(); run(); } });
+  btn.addEventListener("click", run);
+})();
+
+/* Render Sản Phẩm Hot theo NGÀNH HÀNG Shopee — mỗi ngành đúng 3 món theo 3 tiêu chí:
+   bán chạy nhất (best), đánh giá cao nhất (rated), rẻ nhất (cheap). Nút "Xem deal" mở
+   Shopee đã sắp xếp/lọc đúng tiêu chí của món đó. */
+const HOT_CATS = [
+  { key: "home", label: "🏠 Nhà cửa & Đời sống" },
+  { key: "beauty", label: "💄 Sắc đẹp" },
+  { key: "fashion", label: "👗 Thời trang nữ" },
+  { key: "tech", label: "🎧 Điện tử & Phụ kiện" },
+  { key: "health", label: "🧘 Sức khỏe & Tiện ích" }
+];
+const PICK_META = {
+  best:  { badge: "🔥 Bán chạy nhất ngành", mode: "sales", bg: "#e53935" },
+  rated: { badge: "⭐ Đánh giá cao nhất ngành", mode: "rated", bg: "#fb8c00" },
+  cheap: { badge: "💸 Rẻ nhất ngành", mode: "price", bg: "#43a047" }
+};
+(function renderHot() {
+  const box = document.getElementById("products");
+  box.classList.remove("grid");
+  box.style.display = "block";
+  HOT_CATS.forEach(c => {
+    const items = ["best", "rated", "cheap"].map(pk => PRODUCTS.find(x => x.cat === c.key && x.pick === pk)).filter(Boolean);
+    if (!items.length) return;
+    const h = document.createElement("div");
+    h.textContent = c.label;
+    h.style.cssText = "font-size:17px; font-weight:800; margin:16px 0 4px;";
+    box.appendChild(h);
+    const grid = document.createElement("div");
+    grid.className = "grid";
+    box.appendChild(grid);
+    items.forEach(prod => {
+      const meta = PICK_META[prod.pick];
+      const d = document.createElement("div");
+      d.className = "prod";
+      d.style.position = "relative";
+      d.innerHTML = '<div class="thumb"></div><div class="body"><div class="pname"></div>' +
+        '<div class="price"></div><div class="stars">⭐ Ưu tiên shop 4.5★+ khi mở deal</div>' +
+        '<div class="pnote">Giá tham khảo trên Shopee • Cập nhật ngày ' + PAGE_UPDATED + '</div>' +
+        '<a class="dealbtn" target="_blank" rel="noopener">Xem deal →</a></div>';
+      const rb = document.createElement("div");
+      rb.textContent = meta.badge;
+      rb.style.cssText = "position:absolute; top:8px; left:8px; background:" + meta.bg + "; color:#fff; font-size:12.5px; font-weight:800; padding:3px 9px; border-radius:999px; z-index:2;";
+      d.appendChild(rb);
+      const thumb = d.querySelector(".thumb");
+      if (prod.img) {
+        const im = document.createElement("img");
+        im.src = prod.img; im.alt = prod.name; im.loading = "lazy";
+        im.onerror = () => { thumb.textContent = prod.icon; };
+        thumb.appendChild(im);
+      } else {
+        thumb.textContent = prod.icon;
+      }
+      d.querySelector(".pname").textContent = prod.name;
+      d.querySelector(".price").textContent = prod.price;
+      d.querySelector("a.dealbtn").href = searchAff(prod.keyword, meta.mode);
+      extraBtns(d, prod);
+      grid.appendChild(d);
+    });
+  });
+})();
+renderProducts("household", HOUSEHOLD);
+
+/* Render Bảng Xếp Hạng — TOP 10 của Sản Phẩm Hot, kèm nhận xét ngắn của shop.
+   Nút "Xem deal" dùng cùng link tìm kiếm đã gắn mã affiliate như thẻ sản phẩm. */
+(function renderRanking() {
+  const box = document.getElementById("rankList");
+  PRODUCTS.slice(0, 10).forEach((p, i) => {
+    const row = document.createElement("div");
+    row.className = "rankrow";
+    row.innerHTML = '<div class="ranknum"></div><div class="rankthumb"></div>' +
+      '<div class="rankbody"><div class="rankname"></div><div class="rankcmt"></div><div class="rankprice"></div></div>' +
+      '<a class="rankbtn" target="_blank" rel="noopener">Xem deal →</a>';
+    const num = row.querySelector(".ranknum");
+    num.textContent = i + 1;
+    if (i < 3) num.classList.add("r" + (i + 1));
+    const thumb = row.querySelector(".rankthumb");
+    if (p.img) {
+      const im = document.createElement("img");
+      im.src = p.img; im.alt = p.name; im.loading = "lazy";
+      im.onerror = () => { thumb.textContent = p.icon; };
+      thumb.appendChild(im);
+    } else {
+      thumb.textContent = p.icon;
+    }
+    row.querySelector(".rankname").textContent = p.name;
+    row.querySelector(".rankcmt").textContent = RANK_NOTES[i] || "";
+    row.querySelector(".rankprice").textContent = p.price;
+    const rp = document.createElement("div");
+    rp.style.cssText = "font-size:12.5px; color:var(--muted);";
+    rp.textContent = "Giá tham khảo \u2022 Cập nhật ngày " + PAGE_UPDATED;
+    row.querySelector(".rankbody").appendChild(rp);
+    const ra = document.createElement("a");
+    ra.className = "asklink"; ra.target = "_blank"; ra.rel = "noopener";
+    ra.textContent = "💬 Hỏi về món này";
+    ra.href = askHref(p);
+    row.querySelector(".rankbody").appendChild(ra);
+    row.querySelector("a.rankbtn").href = searchAff(p.keyword);
+    box.appendChild(row);
+  });
+  document.getElementById("rankStamp").textContent = "Cập nhật: " + PAGE_UPDATED + ".";
+})();
+
+/* Render danh mục */
+const cBox = document.getElementById("cats");
+CATEGORIES.forEach(cat => {
+  const d = document.createElement("a");
+  d.className = "cat";
+  d.href = searchAff(cat.keyword); d.target = "_blank"; d.rel = "noopener";
+  d.innerHTML = '<div class="ic"></div><div class="ct"></div>';
+  d.querySelector(".ic").textContent = cat.icon;
+  d.querySelector(".ct").textContent = cat.name;
+  cBox.appendChild(d);
+});
+
+/* Render tư vấn */
+const qBox = document.getElementById("qas");
+QAS.forEach(item => {
+  const d = document.createElement("div");
+  d.className = "qa";
+  d.innerHTML = '<div class="q"></div><div class="a"></div>';
+  d.querySelector(".q").textContent = "❓ " + item.q;
+  d.querySelector(".a").textContent = item.a;
+  qBox.appendChild(d);
+});
+
+/* Lớp bảo hiểm toàn trang: quét mọi thẻ <a> trỏ tới Shopee và bọc mã affiliate;
+   đồng thời chặn ở thời điểm bấm cho cả link được thêm vào sau (nội dung động). */
+/* KẾT QUẢ TRA CỨU RIÊNG THEO MÁY (Long chốt 27/10/2026): mỗi máy có một mã
+   riêng lưu trong localStorage; khi gửi form, mã đi kèm link. Job nền ghi kết
+   quả vào file tracuu.json theo mã; trang tự tải về và chỉ hiện kết quả của
+   đúng máy này trong mục "Kết quả tra cứu của bạn" rồi lưu lại trên máy. */
+function myToken() {
+  let t = "";
+  try { t = localStorage.getItem("sscl_token") || ""; } catch (err) {}
+  if (!t) {
+    try { t = "m" + Array.from(crypto.getRandomValues(new Uint8Array(12))).map(function (b) { return ("0" + b.toString(16)).slice(-2); }).join(""); } catch (err) { t = "m" + Date.now().toString(36) + Math.random().toString(36).slice(2, 10); }
+    try { localStorage.setItem("sscl_token", t); } catch (err) {}
+  }
+  return t;
+}
+function myResearchLoad() {
+  try { return JSON.parse(localStorage.getItem("sscl_myresearch") || "[]"); } catch (err) { return []; }
+}
+function myResearchSave(list) {
+  try { localStorage.setItem("sscl_myresearch", JSON.stringify(list.slice(0, 8))); } catch (err) {}
+}
+/* === TÀI KHOẢN KHÁCH — ĐĂNG NHẬP SUPABASE + MỖI NGƯỜI MỘT MÃ HOÀN HOA HỒNG
+   (nâng cấp 27/10/2026 theo quyết định của Long: đăng nhập thật bằng email+mật
+   khẩu và Google; chỉ người đã đăng nhập mới vào được bảng điều khiển gồm mã
+   cá nhân, số dư đối soát, lịch sử chi trả. Mua sắm vẫn công khai. Mã cá nhân
+   gắn với TÀI KHOẢN (bảng profiles trên Supabase) và được đồng bộ xuống
+   localStorage sscl_account để cơ chế sub_id cũ chạy như trước. Đăng ký cũng
+   được gửi ẨN về Google Form "Tài khoản Săn Sale Cùng Long" như bản ghi dự
+   phòng cho shop. Nếu thư viện Supabase không tải được, trang tự rơi về cách
+   tạo mã cũ trên máy (accNone). === */
+const ACC_FORM_URL = "https://docs.google.com/forms/d/e/1FAIpQLSfSfA2jaK5Bhnrm9M3QSR10La4-90as3XtZSjearkNd-lvgjw/formResponse";
+const ACC_E_NAME = "entry.1986508600", ACC_E_CODE = "entry.1579327606", ACC_E_CONTACT = "entry.34481018";
+const SB_URL = "https://lfkqtojdhelnlkskkhhw.supabase.co";
+const SB_KEY = "sb_publishable_XVS4Qg1klhp8UskLGo6yZw_F-FgjJTy";
+let sb = null, sbUser = null, sbProfile = null;
+try { if (window.supabase && window.supabase.createClient) sb = window.supabase.createClient(SB_URL, SB_KEY); } catch (e) { sb = null; }
+function myAccount() { try { return JSON.parse(localStorage.getItem("sscl_account") || "null"); } catch (e) { return null; } }
+function genAccCode() {
+  const A = "ABCDEFGHJKMNPQRSTUVWXYZ23456789"; let s = "";
+  for (let i = 0; i < 6; i++) s += A[Math.floor(Math.random() * A.length)];
+  return s.toLowerCase();
+}
+function submitAccountHidden(a) {
+  try {
+    const body = new URLSearchParams();
+    body.set(ACC_E_NAME, a.name); body.set(ACC_E_CODE, a.code); body.set(ACC_E_CONTACT, a.contact);
+    fetch(ACC_FORM_URL, { method: "POST", mode: "no-cors", headers: { "Content-Type": "application/x-www-form-urlencoded" }, body: body.toString() }).catch(() => {});
+  } catch (e) {}
+}
+/* Sau khi có mã mới: gắn lại sub_id vào mọi link affiliate đã dựng trên trang */
+function refreshSubIds() {
+  const sid = curSubId(); if (!sid) return;
+  document.querySelectorAll('a[href*="sub_id="]').forEach(a => {
+    try { a.href = a.href.replace(/sub_id=[^&]+/, "sub_id=" + encodeURIComponent(sid)); } catch (e) {}
+  });
+}
+function fmtVnd(n) { return (Math.round(Number(n) || 0)).toLocaleString("vi-VN") + "₫"; }
+function accMsg(t) { const m = document.getElementById("accMsg"); if (m) m.textContent = t || ""; }
+function syncLocalAccount(p) {
+  if (!p) return;
+  try { localStorage.setItem("sscl_account", JSON.stringify({ name: p.name || "", contact: p.contact || "", code: p.code, createdAt: Date.now() })); } catch (e) {}
+  refreshSubIds();
+}
+async function sbEnsureProfile() {
+  if (!sb || !sbUser) return null;
+  const got = await sb.from("profiles").select("*").eq("user_id", sbUser.id).maybeSingle();
+  if (got.data) { sbProfile = got.data; syncLocalAccount(sbProfile); return sbProfile; }
+  if (got.error) { accMsg("Chưa tải được hồ sơ của bạn — shop đang hoàn thiện hệ thống, bạn thử lại sau ít phút nhé."); return null; }
+  let draft = {};
+  try { draft = JSON.parse(localStorage.getItem("sscl_regdraft") || "{}"); } catch (e) {}
+  const meta = (sbUser.user_metadata || {});
+  const local = myAccount();
+  let name = draft.name || meta.name || (local && local.name) || "";
+  let contact = draft.contact || meta.contact || (local && local.contact) || "";
+  let code = (local && local.code) || genAccCode();
+  for (let i = 0; i < 6; i++) {
+    const ins = await sb.from("profiles").insert({ user_id: sbUser.id, code: code, name: name, contact: contact });
+    if (!ins.error) {
+      sbProfile = { user_id: sbUser.id, code: code, name: name, contact: contact };
+      submitAccountHidden(sbProfile);
+      try { localStorage.removeItem("sscl_regdraft"); } catch (e) {}
+      syncLocalAccount(sbProfile);
+      return sbProfile;
+    }
+    if (ins.error && (ins.error.code === "23505" || /duplicate|unique/i.test(ins.error.message || ""))) { code = genAccCode(); continue; }
+    accMsg("Chưa tạo được mã cho tài khoản — shop đang hoàn thiện hệ thống, bạn thử lại sau ít phút nhé.");
+    return null;
+  }
+  accMsg("Chưa tạo được mã cho tài khoản — bạn thử đăng nhập lại giúp shop nhé.");
+  return null;
+}
+let sbAvailNow = 0;
+async function sbLoadDashboard() {
+  const balEl = document.getElementById("accBalance");
+  const payEl = document.getElementById("accPayouts");
+  const walEl = document.getElementById("accWallet");
+  const ordEl = document.getElementById("accOrders");
+  const wdBtn = document.getElementById("accWithdraw");
+  const wdNote = document.getElementById("accWithdrawNote");
+  if (walEl) walEl.style.display = "block";
+  const stO0 = document.getElementById("accStatOrders"); if (stO0) stO0.textContent = "0";
+  const stS0 = document.getElementById("accStatShare"); if (stS0) stS0.textContent = "0₫";
+  if (ordEl) ordEl.innerHTML = "<p class='sub' style='text-align:left; margin:4px 0 0;'>Chưa có đơn hàng nào được ghi nhận — khi có người mua qua link của bạn, đơn sẽ hiện tại đây.</p>";
+  if (payEl) payEl.innerHTML = "<p class='sub' style='text-align:left; margin:4px 0 0;'>Chưa có lần nhận tiền nào.</p>";
+  sbAvailNow = 0;
+  let shown = false;
+  try {
+    const b = await sb.from("balances").select("*").eq("user_id", sbUser.id).maybeSingle();
+    if (b.data && balEl) {
+      balEl.innerHTML = "Số dư hoàn hoa hồng" + (b.data.period ? " (kỳ " + b.data.period + ")" : "") + ": tạm tính <b>" + fmtVnd(b.data.estimated) + "</b> · đã đối soát, chờ shop trả <b>" + fmtVnd(b.data.available) + "</b> · đã trả <b>" + fmtVnd(b.data.paid_total) + "</b>.";
+      shown = true;
+      sbAvailNow = Number(b.data.available) || 0;
+      if (walEl) {
+        walEl.style.display = "block";
+        document.getElementById("accWalEst").textContent = fmtVnd(b.data.estimated);
+        document.getElementById("accWalAvail").textContent = fmtVnd(b.data.available);
+        document.getElementById("accWalPaid").textContent = fmtVnd(b.data.paid_total);
+      }
+    }
+    /* Yêu cầu rút tiền đang chờ xử lý? */
+    let hasPendingReq = false;
+    try {
+      const rq = await sb.from("payout_requests").select("id").eq("user_id", sbUser.id).eq("status", "requested").limit(1);
+      if (!rq.error && rq.data && rq.data.length) hasPendingReq = true;
+    } catch (e) {}
+    if (wdBtn) {
+      if (hasPendingReq) {
+        wdBtn.disabled = true; wdBtn.style.opacity = "0.55"; wdBtn.textContent = "⏳ Đã gửi yêu cầu — shop đang xử lý";
+        if (wdNote) wdNote.textContent = "Yêu cầu rút tiền của bạn đang chờ shop xử lý. Shop trả xong sẽ hiện ở lịch sử bên dưới.";
+      } else if (sbAvailNow >= 10000) {
+        wdBtn.disabled = false; wdBtn.style.opacity = "1"; wdBtn.textContent = "💸 Yêu cầu rút " + fmtVnd(sbAvailNow);
+        if (wdNote) wdNote.textContent = "Bấm nút là gửi yêu cầu rút toàn bộ số dư khả dụng. Shop trả theo thông tin nhận tiền bạn đã lưu bên dưới.";
+      } else {
+        wdBtn.disabled = true; wdBtn.style.opacity = "0.55"; wdBtn.textContent = "💸 Yêu cầu rút tiền";
+        if (wdNote) wdNote.textContent = "Rút được khi số dư khả dụng từ 10.000₫ (hiện có " + fmtVnd(sbAvailNow) + ").";
+      }
+    }
+    /* Đơn hàng của tôi */
+    try {
+      const o = await sb.from("orders").select("*").eq("user_id", sbUser.id).order("created_at", { ascending: false }).limit(20);
+      if (!o.error && o.data && o.data.length && ordEl) {
+        const st = { pending: "⏳ Chờ đối soát", completed: "✅ Đã đối soát", cancelled: "❌ Đã hủy" };
+        const so = document.getElementById("accStatOrders"); if (so) so.textContent = String(o.data.length);
+        const ss = document.getElementById("accStatShare"); if (ss) ss.textContent = fmtVnd(o.data.reduce((s, x) => s + (Number(x.member_share) || 0), 0));
+        ordEl.innerHTML = o.data.map(x => {
+          const d = x.order_time || x.created_at;
+          return "<div style='font-size:13.5px; color:#444; margin-top:4px; border-bottom:1px dashed #eee; padding-bottom:4px;'>• " + new Date(d).toLocaleDateString("vi-VN") + " — " + (x.item_name ? x.item_name : "Đơn Shopee") + "<br>&nbsp;&nbsp;Hoàn của bạn: <b>" + fmtVnd(x.member_share) + "</b> · " + (st[x.status] || x.status) + "</div>";
+        }).join("");
+      }
+    } catch (e) {}
+    const p = await sb.from("payouts").select("*").eq("user_id", sbUser.id).order("paid_at", { ascending: false }).limit(10);
+    if (p.data && p.data.length && payEl) {
+      payEl.innerHTML = p.data.map(x => "<div style='font-size:13.5px; color:#444; margin-top:3px;'>• " + new Date(x.paid_at).toLocaleDateString("vi-VN") + " — <b>" + fmtVnd(x.amount) + "</b>" + (x.note ? " (" + x.note + ")" : "") + "</div>").join("");
+    }
+  } catch (e) {}
+  if (!shown && balEl) {
+    /* Dự phòng: kỳ đối soát cũ ghi trong doisat.json theo mã */
+    fetch("doisat.json?_=" + Date.now(), { cache: "no-store" }).then(r => r.json()).then(d => {
+      const row = d && sbProfile && d[sbProfile.code];
+      if (row) balEl.innerHTML = "Số dư hoàn hoa hồng" + (row.ky ? " (kỳ " + row.ky + ")" : "") + ": tạm tính <b>" + fmtVnd(row.tamTinh) + "</b> · đã đối soát, chờ shop trả <b>" + fmtVnd(row.khaDung) + "</b>.";
+    }).catch(() => {});
+  }
+}
+async function pinHashOf(pin) {
+  try {
+    const buf = await crypto.subtle.digest("SHA-256", new TextEncoder().encode("sscl|" + (sbUser ? sbUser.id : "") + "|" + pin));
+    return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, "0")).join("");
+  } catch (e) { return ""; }
+}
+async function sbForgotPin() {
+  if (!sb || !sbUser) { toast("Bạn đăng nhập trước nhé"); return; }
+  const email = (sbUser.email || "").trim();
+  if (!email) { toast("Tài khoản chưa có email để gửi xác nhận"); return; }
+  try { sessionStorage.setItem("sscl_pin_reset", "1"); } catch (e) {}
+  const r = await sb.auth.signInWithOtp({ email: email, options: { shouldCreateUser: false, emailRedirectTo: "https://sansalecunglong.github.io/" } });
+  if (r.error) { try { sessionStorage.removeItem("sscl_pin_reset"); } catch (e) {} accMsg("⚠️ " + sbErrText(r.error)); return; }
+  accMsg("📧 Đã gửi email xác nhận tới " + email + ". Bạn mở hộp thư trên cùng trình duyệt này, bấm vào link trong email để quay lại đặt mật khẩu rút tiền mới.");
+}
+let pinResetAsked = false;
+async function checkPinReset() {
+  if (pinResetAsked || !sb || !sbUser || !sbProfile) return;
+  let flag = "";
+  try { flag = sessionStorage.getItem("sscl_pin_reset") || ""; } catch (e) {}
+  if (!flag) return;
+  pinResetAsked = true;
+  const p1 = window.prompt("Bạn vừa xác nhận qua email. Nhập mật khẩu rút tiền MỚI (4–8 chữ số):");
+  if (p1 === null) { pinResetAsked = false; return; }
+  if (!/^\d{4,8}$/.test(p1.trim())) { toast("Mật khẩu rút tiền phải là 4–8 chữ số"); pinResetAsked = false; return; }
+  const p2 = window.prompt("Nhập lại mật khẩu rút tiền mới để xác nhận:");
+  if (p2 === null) { pinResetAsked = false; return; }
+  if (p2.trim() !== p1.trim()) { toast("Hai lần nhập chưa khớp — bạn thử lại nhé"); pinResetAsked = false; return; }
+  const h = await pinHashOf(p1.trim());
+  if (!h) { toast("Trình duyệt chưa hỗ trợ — bạn thử mở bằng Chrome nhé"); pinResetAsked = false; return; }
+  const r = await sb.from("profiles").update({ pin_hash: h }).eq("user_id", sbUser.id);
+  if (r.error) { toast("Đặt lại chưa được — bạn thử lại sau ít phút nhé"); pinResetAsked = false; return; }
+  sbProfile.pin_hash = h;
+  try { sessionStorage.removeItem("sscl_pin_reset"); } catch (e) {}
+  renderAuthUI();
+  accMsg("✅ Đã đặt lại mật khẩu rút tiền mới — từ giờ dùng mật khẩu này khi rút tiền và khi đổi mật khẩu.");
+}
+async function sbWithdraw() {
+  if (!sb || !sbUser || !sbProfile) return;
+  if (sbAvailNow < 10000) { toast("Số dư khả dụng cần từ 10.000₫ mới rút được"); return; }
+  const bankOk = (sbProfile.bank_name || "").trim() && (sbProfile.bank_account || "").trim() && (sbProfile.bank_holder || "").trim();
+  const contact = bankOk
+    ? (sbProfile.bank_name.trim() + " · STK " + sbProfile.bank_account.trim() + " · " + sbProfile.bank_holder.trim())
+    : (sbProfile.contact || "").trim();
+  if (!contact) {
+    accMsg("Bạn điền đầy đủ thông tin nhận tiền (tên ngân hàng, số tài khoản, tên chủ tài khoản) ở mục bên dưới rồi bấm Lưu trước nhé.");
+    const c = document.getElementById("accBankName"); if (c) c.focus();
+    return;
+  }
+  if (!sbProfile.pin_hash) {
+    accMsg("Bạn đặt mật khẩu rút tiền ở mục Thông tin nhận tiền bên dưới (ô Mật khẩu rút tiền) rồi bấm Lưu trước nhé.");
+    const p = document.getElementById("accPin"); if (p) p.focus();
+    return;
+  }
+  const pinIn = window.prompt("Nhập mật khẩu rút tiền của bạn để xác nhận rút " + fmtVnd(sbAvailNow) + ":");
+  if (pinIn === null) return;
+  const h = await pinHashOf(pinIn.trim());
+  if (!h || h !== sbProfile.pin_hash) { accMsg("⚠️ Mật khẩu rút tiền chưa đúng — bạn kiểm tra lại nhé."); return; }
+  const btn = document.getElementById("accWithdraw");
+  if (btn) { btn.disabled = true; btn.textContent = "⏳ Đang gửi yêu cầu…"; }
+  const r = await sb.from("payout_requests").insert({ user_id: sbUser.id, code: sbProfile.code, amount: Math.round(sbAvailNow), contact: contact });
+  if (r.error) {
+    accMsg("⚠️ " + sbErrText(r.error));
+    if (btn) { btn.disabled = false; }
+    return;
+  }
+  accMsg("✅ Đã gửi yêu cầu rút " + fmtVnd(sbAvailNow) + " — shop sẽ trả theo thông tin bạn đã lưu.");
+  sbLoadDashboard();
+}
+function updateTopAuth() {
+  const L = document.getElementById("topLogin"), R = document.getElementById("topRegister"), D = document.getElementById("topDash"), O = document.getElementById("topLogout");
+  if (!L || !R || !D || !O) return;
+  let label = "";
+  if (sb && sbUser && sbProfile) label = sbProfile.name || sbUser.email || "Tài khoản";
+  else if (!sb) { const a = myAccount(); if (a) label = a.name || "Tài khoản"; }
+  if (label) {
+    L.style.display = "none"; R.style.display = "none";
+    D.style.display = ""; O.style.display = "";
+    D.textContent = "\u{1F464} " + label;
+  } else {
+    L.style.display = ""; R.style.display = "";
+    D.style.display = "none"; O.style.display = "none";
+  }
+}
+function setAuthMode(mode) {
+  const lv = document.getElementById("accLoginView"), rv = document.getElementById("accRegView");
+  if (!lv || !rv) return;
+  if (mode === "register") { lv.style.display = "none"; rv.style.display = "grid"; }
+  else { lv.style.display = "grid"; rv.style.display = "none"; }
+}
+function openAuthModal(mode) {
+  const modal = document.getElementById("authModal");
+  if (!modal) return;
+  modal.style.display = "block";
+  document.body.style.overflow = "hidden";
+  if (sbUser && sbProfile) return;
+  setTimeout(() => {
+    setAuthMode(mode === "register" ? "register" : "login");
+    accMsg("");
+    const e = document.getElementById(mode === "register" ? "accEmailR" : "accEmail"); if (e) e.focus({ preventScroll: true });
+  }, 60);
+}
+function closeAuthModal() {
+  const modal = document.getElementById("authModal");
+  if (!modal) return;
+  modal.style.display = "none";
+  document.body.style.overflow = "";
+}
+function updateAccCta() {
+  const out = document.getElementById("accCtaOut"), inn = document.getElementById("accCtaIn");
+  if (!out || !inn) return;
+  let name = "", code = "";
+  if (sb && sbUser && sbProfile) { name = sbProfile.name || sbUser.email || ""; code = sbProfile.code || ""; }
+  else if (!sb) { const a = myAccount(); if (a) { name = a.name || ""; code = a.code || ""; } }
+  if (code) {
+    out.style.display = "none"; inn.style.display = "";
+    const n = document.getElementById("ctaName"); if (n) n.textContent = name;
+    const c = document.getElementById("ctaCode"); if (c) c.textContent = code.toUpperCase();
+  } else {
+    out.style.display = "flex"; inn.style.display = "none";
+  }
+}
+function gotoAccount(mode) { openAuthModal(mode); }
+
+let infoRevealed = false;
+let infoSetPinMode = false;
+async function unlockInfo() {
+  if (!sbProfile || !sbProfile.pin_hash) return;
+  const pin = prompt("Nhập mã rút tiền của bạn để xem thông tin:");
+  if (pin === null) return;
+  const h = await pinHashOf(pin.trim());
+  if (h && h === sbProfile.pin_hash) { infoRevealed = true; applyInfoMask(); }
+  else { accMsg("⚠️ Mã rút tiền chưa đúng — chưa mở được thông tin."); toast("Mã rút tiền chưa đúng"); }
+}
+function infoBar(id, grid, text, btnLabel, btnFn) {
+  let bar = document.getElementById(id);
+  if (!bar) {
+    bar = document.createElement("div");
+    bar.id = id;
+    bar.style.cssText = "margin-top:6px; border:1.5px dashed #d6d3d1; border-radius:10px; padding:10px 12px; background:#fafaf9; display:flex; align-items:center; gap:8px; flex-wrap:wrap;";
+    grid.parentNode.insertBefore(bar, grid);
+  }
+  bar.style.display = "";
+  bar.innerHTML = "";
+  const span = document.createElement("span");
+  span.style.cssText = "font-size:13.5px; color:#555;";
+  span.textContent = text;
+  bar.appendChild(span);
+  if (btnLabel) {
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.style.cssText = "background:#0b57d0; color:#fff; border:none; border-radius:8px; padding:7px 12px; font-weight:700; cursor:pointer; font-size:13.5px;";
+    btn.textContent = btnLabel;
+    btn.onclick = btnFn;
+    bar.appendChild(btn);
+  }
+  return bar;
+}
+function applyInfoMask() {
+  const fn = document.getElementById("accFullName"), bn = document.getElementById("accBankName");
+  if (!fn || !bn) return;
+  const cust = fn.parentElement, bank = bn.parentElement;
+  const prof = (sbUser && sbProfile) ? sbProfile : null;
+  const hasPin = !!(prof && prof.pin_hash);
+  if (hasPin) infoSetPinMode = false;
+  const hasData = !!(prof && (hasPin || (prof.full_name || "").trim() || (prof.phone || "").trim() || (prof.bank_name || "").trim() || (prof.bank_account || "").trim() || (prof.bank_holder || "").trim()));
+  cust.style.display = (!hasData || infoRevealed) ? "" : "none";
+  bank.style.display = (!hasData || infoRevealed || infoSetPinMode) ? "" : "none";
+  const hideBar = function (id) { const b = document.getElementById(id); if (b) b.style.display = "none"; };
+  if (!hasData) { hideBar("custLockBar"); hideBar("bankLockBar"); }
+  else if (infoRevealed) {
+    infoBar("custLockBar", cust, "👁 Thông tin khách hàng đang hiện.", "🙈 Ẩn lại", function () { infoRevealed = false; applyInfoMask(); });
+    infoBar("bankLockBar", bank, "👁 Thông tin nhận tiền đang hiện.", "🙈 Ẩn lại", function () { infoRevealed = false; applyInfoMask(); });
+  } else if (hasPin) {
+    infoBar("custLockBar", cust, "🔒 Thông tin khách hàng đã lưu và đang ẩn.", "👁 Nhập mã rút tiền để xem", unlockInfo);
+    infoBar("bankLockBar", bank, "🔒 Thông tin nhận tiền đã lưu và đang ẩn.", "👁 Nhập mã rút tiền để xem", unlockInfo);
+  } else if (infoSetPinMode) {
+    infoBar("custLockBar", cust, "🔒 Thông tin khách hàng đã lưu và đang ẩn — đặt mã rút tiền xong sẽ mở xem bằng mã đó.", null, null);
+    infoBar("bankLockBar", bank, "🔓 Đang hiện để bạn đặt mã rút tiền: nhập mã vào ô mật khẩu rút tiền rồi bấm Lưu, trang sẽ tự ẩn lại.", "🙈 Ẩn lại", function () { infoSetPinMode = false; applyInfoMask(); });
+  } else {
+    infoBar("custLockBar", cust, "🔒 Thông tin khách hàng đã lưu và đang ẩn — hãy đặt mã rút tiền ở mục Thông tin nhận tiền để mở xem.", null, null);
+    infoBar("bankLockBar", bank, "🔒 Thông tin nhận tiền đã lưu và đang ẩn.", "🔐 Đặt mã rút tiền để mở xem", function () { infoSetPinMode = true; applyInfoMask(); });
+  }
+  if (!document.__infoMaskHooks) {
+    document.__infoMaskHooks = true;
+    document.addEventListener("click", function (e) {
+      if (!infoRevealed && !infoSetPinMode) return;
+      const t = e.target;
+      if ((t.closest && t.closest("#authModalClose")) || (t.closest && t.closest(".atab"))) { infoRevealed = false; infoSetPinMode = false; applyInfoMask(); }
+    });
+  }
+}
+function renderAuthUI() {
+  const sec = document.getElementById("secAccount"); if (!sec) return;
+  const auth = document.getElementById("accAuth"), none = document.getElementById("accNone"), have = document.getElementById("accHave");
+  if (!sb) { /* Không tải được Supabase: rơi về cách tạo mã cũ */
+    if (auth) auth.style.display = "none";
+    const a = myAccount();
+    if (none) none.style.display = a ? "none" : "";
+    if (have) have.style.display = a ? "" : "none";
+    if (a) fillDashboardLocal(a);
+    updateTopAuth(); updateAccCta();
+    return;
+  }
+  if (sbUser && sbProfile) {
+    if (auth) auth.style.display = "none";
+    if (none) none.style.display = "none";
+    if (have) have.style.display = "";
+    const un = document.getElementById("accUserName"); if (un) un.textContent = sbProfile.name || "";
+    const ue = document.getElementById("accUserEmail"); if (ue) ue.textContent = sbUser.email || "";
+    const av = document.getElementById("accAvatar"); if (av) av.textContent = (sbProfile.name || sbUser.email || "S").trim().charAt(0).toUpperCase();
+    const cd = document.getElementById("accCode"); if (cd) cd.textContent = sbProfile.code.toUpperCase();
+    const sh = document.getElementById("accShare"); if (sh) sh.value = "https://sansalecunglong.github.io/?ref=" + sbProfile.code;
+    const nd = document.getElementById("accNameD"); if (nd && document.activeElement !== nd) nd.value = sbProfile.name || "";
+    const bn = document.getElementById("accBankName"); if (bn && document.activeElement !== bn) bn.value = sbProfile.bank_name || "";
+    const ba = document.getElementById("accBankAccount"); if (ba && document.activeElement !== ba) ba.value = sbProfile.bank_account || "";
+    const bh = document.getElementById("accBankHolder"); if (bh && document.activeElement !== bh) bh.value = sbProfile.bank_holder || "";
+    const pn = document.getElementById("accPinNote"); if (pn) pn.textContent = sbProfile.pin_hash ? "✅ Đã đặt mật khẩu rút tiền — muốn đổi phải nhập đúng mật khẩu hiện tại, quên thì liên hệ shop; để trống ô là giữ nguyên." : "Bạn chưa đặt mật khẩu rút tiền — đặt ở ô trên (4–8 chữ số) rồi bấm Lưu; mỗi lần rút tiền phải nhập đúng mật khẩu này.";
+    const fn = document.getElementById("accFullName"); if (fn && document.activeElement !== fn) fn.value = sbProfile.full_name || "";
+    const ph = document.getElementById("accPhone"); if (ph && document.activeElement !== ph) ph.value = sbProfile.phone || "";
+    const custLocked = !!((sbProfile.full_name || "").trim());
+    if (fn) fn.disabled = custLocked;
+    if (ph) ph.disabled = custLocked;
+    const scb = document.getElementById("accSaveCustomer"); if (scb) scb.style.display = custLocked ? "none" : "";
+    const cnn = document.getElementById("accCustNote"); if (cnn && custLocked) cnn.textContent = "🔒 Thông tin khách hàng đã khóa — cần sửa, bạn liên hệ shop nhé.";
+    const fp = document.getElementById("accForgotPin"); if (fp) fp.style.display = sbProfile.pin_hash ? "" : "none";
+    const bankLocked = !!(((sbProfile.bank_name || "").trim()) || ((sbProfile.bank_account || "").trim()) || ((sbProfile.bank_holder || "").trim()));
+    ["accNameD", "accBankName", "accBankAccount", "accBankHolder", "accPin"].forEach(function (id) { const el = document.getElementById(id); if (el) el.disabled = bankLocked; });
+    const spb = document.getElementById("accSaveProfile"); if (spb) spb.style.display = bankLocked ? "none" : "";
+    if (bankLocked) { const pn2 = document.getElementById("accPinNote"); if (pn2) pn2.textContent = "🔒 Thông tin nhận tiền đã khóa — cần thay đổi, bạn liên hệ shop nhé. Quên mã rút tiền thì bấm nút đặt lại qua email ở bên dưới."; }
+    checkPinReset();
+    applyInfoMask();
+    sbLoadDashboard();
+    updateTopAuth(); updateAccCta();
+  } else {
+    if (auth) auth.style.display = "";
+    if (none) none.style.display = "none";
+    if (have) have.style.display = "none";
+    infoRevealed = false;
+    updateTopAuth(); updateAccCta();
+  }
+}
+function fillDashboardLocal(a) {
+  const w = document.getElementById("accWallet"); if (w) w.style.display = "none";
+  const av2 = document.getElementById("accAvatar"); if (av2) av2.textContent = (a.name || "S").trim().charAt(0).toUpperCase();
+  const cd = document.getElementById("accCode"); if (cd) cd.textContent = a.code.toUpperCase();
+  const sh = document.getElementById("accShare"); if (sh) sh.value = "https://sansalecunglong.github.io/?ref=" + a.code;
+  const un = document.getElementById("accUserName"); if (un) un.textContent = a.name || "";
+  fetch("doisat.json?_=" + Date.now(), { cache: "no-store" }).then(r => r.json()).then(d => {
+    const row = d && d[a.code];
+    const bal = document.getElementById("accBalance");
+    if (row && bal) bal.innerHTML = "Số dư hoàn hoa hồng" + (row.ky ? " (kỳ " + row.ky + ")" : "") + ": tạm tính <b>" + fmtVnd(row.tamTinh) + "</b> · đã đối soát, chờ shop trả <b>" + fmtVnd(row.khaDung) + "</b>.";
+  }).catch(() => {});
+}
+function renderAccount() { renderAuthUI(); }
+function createAccountFallback() {
+  const name = (document.getElementById("accNameF").value || "").trim();
+  const contact = (document.getElementById("accContactF").value || "").trim();
+  if (!name) { toast("Bạn nhập tên của bạn nhé"); return; }
+  if (!contact) { toast("Bạn nhập số Zalo hoặc STK để shop trả tiền nhé"); return; }
+  const a = { name, contact, code: genAccCode(), createdAt: Date.now() };
+  try { localStorage.setItem("sscl_account", JSON.stringify(a)); } catch (e) {}
+  submitAccountHidden(a);
+  renderAuthUI(); refreshSubIds();
+  toast("Đã tạo mã " + a.code.toUpperCase() + " — từ giờ đơn của bạn ghi theo mã này!");
+}
+function sbErrText(err) {
+  const m = (err && err.message) || "";
+  if (/invalid login credentials/i.test(m)) return "Email hoặc mật khẩu chưa đúng — bạn kiểm tra lại nhé.";
+  if (/already registered/i.test(m)) return "Email này đã có tài khoản — bạn bấm Đăng nhập nhé.";
+  if (/password should be at least/i.test(m)) return "Mật khẩu cần ít nhất 6 ký tự.";
+  if (/email not confirmed/i.test(m)) return "Email chưa được xác nhận — bạn mở hộp thư, bấm link xác nhận của Supabase rồi quay lại đăng nhập nhé.";
+  if (/provider is not enabled|unsupported provider/i.test(m)) return "Đăng nhập Google chưa được bật — bạn dùng email + mật khẩu trước nhé, shop đang mở thêm Google.";
+  const sec = m.match(/only request this after (\d+) seconds/i);
+  if (sec) return "Bạn bấm hơi nhanh nên hệ thống tạm dừng gửi email — đợi khoảng " + sec[1] + " giây rồi bấm lại MỘT lần thôi nhé. Nếu bạn vừa đăng ký, email xác nhận có thể đã được gửi rồi — cứ mở hộp thư (cả mục Spam) kiểm tra trước.";
+  if (/rate limit|too many requests|over_email_send/i.test(m)) return "Hệ thống đang gửi quá nhiều email cùng lúc — bạn đợi khoảng 1 phút rồi thử lại nhé.";
+  if (/invalid email|validate email|email address is invalid/i.test(m)) return "Email chưa đúng định dạng — bạn kiểm tra lại nhé.";
+  if (/signups not allowed|signup.*disabled/i.test(m)) return "Đăng ký đang tạm khóa — bạn nhắn shop để được hỗ trợ nhé.";
+  return m || "Có lỗi xảy ra, bạn thử lại giúp shop nhé.";
+}
+function authBusy(on) {
+  ["accLogin", "accRegister", "accGoogle"].forEach(function (id) {
+    const b = document.getElementById(id);
+    if (b) { b.disabled = on; b.style.opacity = on ? "0.6" : ""; b.style.pointerEvents = on ? "none" : ""; }
+  });
+}
+async function sbRegister() {
+  if (!sb) return;
+  const email = (document.getElementById("accEmailR").value || "").trim();
+  const pass = document.getElementById("accPassR").value || "";
+  const name = email.split("@")[0] || "";
+  if (!email) { toast("Bạn nhập email nhé"); return; }
+  if (pass.length < 6) { toast("Mật khẩu cần ít nhất 6 ký tự"); return; }
+  const agreeEl = document.getElementById("accTermsAgree");
+  if (!agreeEl || !agreeEl.checked) { accMsg("⚠️ Bạn tích chọn đồng ý Điều khoản sử dụng & Chính sách bảo mật trước khi đăng ký nhé."); return; }
+  const cdUntil = +(localStorage.getItem("sscl_signup_cd") || 0);
+  if (Date.now() < cdUntil) { accMsg("⏳ Bạn vừa gửi đăng ký rồi — đợi " + Math.ceil((cdUntil - Date.now()) / 1000) + " giây, trong lúc đó kiểm tra hộp thư (cả mục Spam) giúp shop nhé."); return; }
+  try { localStorage.setItem("sscl_regdraft", JSON.stringify({ name: name, contact: "" })); } catch (e) {}
+  accMsg("⏳ Đang tạo tài khoản…");
+  authBusy(true);
+  const r = await sb.auth.signUp({ email: email, password: pass, options: { data: { name: name, terms_accepted_at: new Date().toISOString(), terms_version: "1.0" }, emailRedirectTo: "https://sansalecunglong.github.io/" } });
+  authBusy(false);
+  try { localStorage.setItem("sscl_signup_cd", String(Date.now() + 60000)); } catch (e) {}
+  if (r.error) { accMsg("⚠️ " + sbErrText(r.error)); return; }
+  if (r.data && r.data.session) {
+    sbUser = r.data.session.user;
+    await sbEnsureProfile();
+    renderAuthUI(); refreshSubIds();
+    toast("Đăng ký xong! Mã của bạn đã sẵn sàng trong bảng điều khiển.");
+  } else {
+    accMsg("✅ Đã đăng ký! Bạn mở email, bấm link xác nhận rồi quay lại đây đăng nhập để nhận mã cá nhân nhé.");
+  }
+}
+async function sbLogin() {
+  if (!sb) return;
+  const email = (document.getElementById("accEmail").value || "").trim();
+  const pass = document.getElementById("accPass").value || "";
+  if (!email) { toast("Bạn nhập email nhé"); return; }
+  if (!pass) { toast("Bạn nhập mật khẩu nhé"); return; }
+  accMsg("⏳ Đang đăng nhập…");
+  authBusy(true);
+  const r = await sb.auth.signInWithPassword({ email: email, password: pass });
+  authBusy(false);
+  if (r.error) { accMsg("⚠️ " + sbErrText(r.error)); return; }
+  sbUser = r.data.user;
+  await sbEnsureProfile();
+  renderAuthUI(); refreshSubIds();
+  accMsg("");
+  toast("Đăng nhập thành công — bảng điều khiển của bạn ở ngay đây!");
+}
+async function sbGoogle() {
+  if (!sb) return;
+  if (/(Zalo|FBAN|FBAV|FB_IAB|Instagram|Messenger)/i.test(navigator.userAgent || "")) {
+    accMsg("⚠️ Bạn đang mở trang trong Zalo/Facebook — Google không cho đăng nhập trong khung này. Hãy bấm nút ⋮ ở góc màn hình, chọn 'Mở bằng trình duyệt/Chrome' rồi bấm lại nút Google; hoặc đăng ký bằng email + mật khẩu ngay tại đây, dùng bình thường.");
+    return;
+  }
+  authBusy(true);
+  const r = await sb.auth.signInWithOAuth({ provider: "google", options: { redirectTo: "https://sansalecunglong.github.io/" } });
+  authBusy(false);
+  if (r.error) accMsg("⚠️ " + sbErrText(r.error));
+}
+function normName(s) {
+  return (s || "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/Đ/g, "D").replace(/đ/g, "d").toUpperCase().replace(/\s+/g, " ").trim();
+}
+async function sbSaveCustomer() {
+  if (!sb || !sbUser || !sbProfile) { toast("Bạn đăng nhập bằng tài khoản để lưu thông tin nhé"); return; }
+  if ((sbProfile.full_name || "").trim()) { toast("Thông tin khách hàng đã khóa — cần sửa, bạn liên hệ shop nhé."); return; }
+  const fullName = (document.getElementById("accFullName").value || "").trim().replace(/\s+/g, " ");
+  const phone = (document.getElementById("accPhone").value || "").replace(/[\s.]/g, "");
+  if (fullName.length < 5 || !fullName.includes(" ")) { toast("Bạn nhập họ và tên đầy đủ theo CCCD nhé"); return; }
+  if (!/^0\d{9}$/.test(phone)) { toast("Số điện thoại chưa đúng — nhập 10 số bắt đầu bằng 0 nhé"); return; }
+  const r = await sb.from("profiles").update({ full_name: fullName, phone: phone }).eq("user_id", sbUser.id);
+  if (r.error) { toast("Lưu chưa được — hệ thống đang cập nhật, bạn thử lại sau ít phút nhé"); return; }
+  sbProfile.full_name = fullName; sbProfile.phone = phone;
+  renderAuthUI();
+  toast("Đã lưu và khóa thông tin khách hàng của bạn!");
+}
+async function sbSaveProfile() {
+  if (!sb || !sbUser || !sbProfile) return;
+  const name = (document.getElementById("accNameD").value || "").trim();
+  const bankName = (document.getElementById("accBankName").value || "").trim();
+  const bankAcc = (document.getElementById("accBankAccount").value || "").replace(/\s+/g, "");
+  const bankHolder = (document.getElementById("accBankHolder").value || "").trim().toUpperCase();
+  const pin = (document.getElementById("accPin").value || "").trim();
+  const bankLockedNow = !!(((sbProfile.bank_name || "").trim()) || ((sbProfile.bank_account || "").trim()) || ((sbProfile.bank_holder || "").trim()));
+  if (bankLockedNow && (bankName !== (sbProfile.bank_name || "") || bankAcc !== (sbProfile.bank_account || "") || bankHolder !== (sbProfile.bank_holder || ""))) { accMsg("⚠️ Thông tin nhận tiền đã khóa — cần thay đổi, bạn liên hệ shop nhé."); toast("Thông tin nhận tiền đã khóa — liên hệ shop để thay đổi"); return; }
+  if (!name) { toast("Bạn nhập tên của bạn nhé"); return; }
+  if (!bankName || !bankAcc || !bankHolder) { toast("Bạn điền đủ tên ngân hàng, số tài khoản và tên chủ tài khoản nhé"); return; }
+  if (!/^\d{5,}$/.test(bankAcc)) { toast("Số tài khoản hình như chưa đúng — bạn kiểm tra lại nhé"); return; }
+  if (!(sbProfile.full_name || "").trim()) { toast("Bạn lưu Thông tin khách hàng ở mục phía trên trước nhé"); const f = document.getElementById("accFullName"); if (f) f.focus(); return; }
+  if (normName(bankHolder) !== normName(sbProfile.full_name)) { accMsg("⚠️ Tên chủ tài khoản không trùng khớp với thông tin khách hàng (" + sbProfile.full_name + ") — bạn kiểm tra lại nhé."); toast("Tên chủ tài khoản không trùng khớp với thông tin khách hàng"); return; }
+  let pinHash = "";
+  if (pin) {
+    if (!/^\d{4,8}$/.test(pin)) { toast("Mật khẩu rút tiền phải là 4–8 chữ số"); return; }
+    if (sbProfile.pin_hash) {
+      const oldPin = window.prompt("Bạn đang ĐỔI mật khẩu rút tiền. Nhập mật khẩu rút tiền HIỆN TẠI để xác nhận:");
+      if (oldPin === null) return;
+      const oldHash = await pinHashOf(oldPin.trim());
+      if (!oldHash || oldHash !== sbProfile.pin_hash) { accMsg("⚠️ Mật khẩu rút tiền hiện tại chưa đúng — không đổi được mật khẩu. Nếu quên mật khẩu, bạn dùng nút 'Quên mật khẩu rút tiền' ở mục này để nhận email đặt lại."); toast("Mật khẩu hiện tại chưa đúng — không đổi được"); return; }
+    }
+    pinHash = await pinHashOf(pin);
+    if (!pinHash) { toast("Trình duyệt chưa hỗ trợ đặt mật khẩu — bạn thử mở bằng Chrome nhé"); return; }
+  } else if (!sbProfile.pin_hash) {
+    toast("Bạn đặt mật khẩu rút tiền (4–8 chữ số) để khóa nút rút tiền nhé"); return;
+  }
+  const contact = bankName + " · STK " + bankAcc + " · " + bankHolder;
+  const upd = { name: name, contact: contact, bank_name: bankName, bank_account: bankAcc, bank_holder: bankHolder };
+  if (pinHash) upd.pin_hash = pinHash;
+  let r = await sb.from("profiles").update(upd).eq("user_id", sbUser.id);
+  if (r.error) {
+    r = await sb.from("profiles").update({ name: name, contact: contact }).eq("user_id", sbUser.id);
+    if (r.error) { toast("Lưu chưa được — bạn thử lại sau ít phút nhé"); return; }
+    sbProfile.name = name; sbProfile.contact = contact;
+    syncLocalAccount(sbProfile);
+    toast("Đã lưu tạm thông tin — hệ thống đang cập nhật, bạn quay lại lưu lại sau ít phút để bật mật khẩu rút tiền nhé.");
+    return;
+  }
+  sbProfile.name = name; sbProfile.contact = contact;
+  sbProfile.bank_name = bankName; sbProfile.bank_account = bankAcc; sbProfile.bank_holder = bankHolder;
+  if (pinHash) sbProfile.pin_hash = pinHash;
+  const pf = document.getElementById("accPin"); if (pf) pf.value = "";
+  syncLocalAccount(sbProfile);
+  renderAuthUI();
+  toast("Đã lưu thông tin nhận tiền của bạn!");
+}
+async function sbLogout() {
+  if (sb) { try { await sb.auth.signOut(); } catch (e) {} }
+  sbUser = null; sbProfile = null;
+  renderAuthUI();
+  toast("Đã đăng xuất — bảng điều khiển đã ẩn.");
+}
+async function sbDeleteRequest() {
+  if (!sb || !sbUser) { toast("Bạn cần đăng nhập để gửi yêu cầu xóa tài khoản"); return; }
+  if (!confirm("Bạn chắc chắn muốn yêu cầu XÓA tài khoản?\n\nShop sẽ xử lý trong vòng 07 ngày làm việc. Mã cá nhân, số dư chưa rút và lịch sử đối soát của bạn sẽ bị hủy.")) return;
+  if (!confirm("Xác nhận lần cuối: gửi yêu cầu xóa tài khoản ngay bây giờ?")) return;
+  const r = await sb.auth.updateUser({ data: { delete_requested_at: new Date().toISOString() } });
+  if (r.error) { toast("⚠️ " + sbErrText(r.error)); return; }
+  toast("Đã ghi nhận yêu cầu xóa tài khoản — Shop sẽ xử lý trong 07 ngày làm việc.");
+  await sbLogout();
+}
+(function initAccount() {
+  const bf = document.getElementById("accCreateF");
+  if (bf) bf.addEventListener("click", createAccountFallback);
+  const bl = document.getElementById("accLogin");
+  if (bl) bl.addEventListener("click", sbLogin);
+  const br = document.getElementById("accRegister");
+  if (br) br.addEventListener("click", sbRegister);
+  const bg = document.getElementById("accGoogle");
+  if (bg) bg.addEventListener("click", sbGoogle);
+  const bs = document.getElementById("accSaveProfile");
+  if (bs) bs.addEventListener("click", sbSaveProfile);
+  const scu = document.getElementById("accSaveCustomer");
+  if (scu) scu.addEventListener("click", sbSaveCustomer);
+  const fpn = document.getElementById("accForgotPin");
+  if (fpn) fpn.addEventListener("click", sbForgotPin);
+  const bw = document.getElementById("accWithdraw");
+  if (bw) bw.addEventListener("click", sbWithdraw);
+  const bo = document.getElementById("accLogout");
+  if (bo) bo.addEventListener("click", sbLogout);
+  const bd = document.getElementById("accDeleteReq");
+  if (bd) bd.addEventListener("click", sbDeleteRequest);
+  const mc = document.getElementById("authModalClose");
+  if (mc) mc.addEventListener("click", closeAuthModal);
+  const mm = document.getElementById("authModal");
+  if (mm) mm.addEventListener("click", (ev) => { if (ev.target === mm) closeAuthModal(); });
+  document.addEventListener("keydown", (ev) => { if (ev.key === "Escape") closeAuthModal(); });
+  const sw1 = document.getElementById("accToRegister");
+  if (sw1) sw1.addEventListener("click", (e) => { e.preventDefault(); setAuthMode("register"); accMsg(""); const f = document.getElementById("accEmailR"); if (f) f.focus({ preventScroll: true }); });
+  const sw2 = document.getElementById("accToLogin");
+  if (sw2) sw2.addEventListener("click", (e) => { e.preventDefault(); setAuthMode("login"); accMsg(""); const f = document.getElementById("accEmail"); if (f) f.focus({ preventScroll: true }); });
+  const cl = document.getElementById("ctaLogin");
+  if (cl) cl.addEventListener("click", () => gotoAccount("login"));
+  const cr = document.getElementById("ctaRegister");
+  if (cr) cr.addEventListener("click", () => gotoAccount("register"));
+  const cd2 = document.getElementById("ctaDash");
+  if (cd2) cd2.addEventListener("click", () => gotoAccount("dash"));
+  const tl = document.getElementById("topLogin");
+  if (tl) tl.addEventListener("click", () => gotoAccount("login"));
+  const tr = document.getElementById("topRegister");
+  if (tr) tr.addEventListener("click", () => gotoAccount("register"));
+  const td = document.getElementById("topDash");
+  if (td) td.addEventListener("click", () => gotoAccount("dash"));
+  const to = document.getElementById("topLogout");
+  if (to) to.addEventListener("click", sbLogout);
+  const cp = document.getElementById("accCopy");
+  if (cp) cp.addEventListener("click", () => { const s = document.getElementById("accShare"); if (s) copyText(s.value, "Đã sao chép link chia sẻ của bạn!"); });
+  renderAuthUI();
+  if (sb) {
+    sb.auth.getSession().then(async (res) => {
+      const sess = res && res.data && res.data.session;
+      if (sess) { sbUser = sess.user; await sbEnsureProfile(); }
+      renderAuthUI(); refreshSubIds();
+    }).catch(() => {});
+    sb.auth.onAuthStateChange(async (ev, sess) => {
+      sbUser = sess ? sess.user : null;
+      if (sbUser && !sbProfile) await sbEnsureProfile();
+      if (!sbUser) sbProfile = null;
+      renderAuthUI();
+    });
+  }
+})();
+function renderMyResearch() {
+  const sec = document.getElementById("myResearch");
+  const box = document.getElementById("myResearchList");
+  if (!sec || !box) return;
+  const list = myResearchLoad();
+  if (!list.length) { sec.style.display = "none"; return; }
+  sec.style.display = "block";
+  box.textContent = "";
+  const SHOW_N = 3;
+  let moreBox = null;
+  list.forEach((t, idx) => {
+    const card = document.createElement("div");
+    card.style.cssText = "border:1px solid #eee; border-radius:10px; padding:10px 12px; margin-bottom:9px; background:#fffdf7;";
+    const h = document.createElement("div");
+    h.style.cssText = "font-weight:700; font-size:14.5px;";
+    h.textContent = (t.name && t.name.indexOf("http") !== 0) ? t.name : "Sản phẩm bạn vừa gửi";
+    card.appendChild(h);
+    if (t.time) {
+      const meta = document.createElement("div");
+      meta.style.cssText = "font-size:12px; color:#6e6e6e; margin-top:1px;";
+      meta.textContent = "🕒 " + t.time;
+      card.appendChild(meta);
+    }
+    if (t.status === "pending") {
+      const v = document.createElement("div");
+      v.style.cssText = "font-size:13.5px; margin-top:5px; font-weight:700; color:#8a6d00;";
+      const sp = document.createElement("span");
+      sp.textContent = "⏳";
+      sp.style.cssText = "display:inline-block; animation:ssclspin 1.2s linear infinite;";
+      v.appendChild(sp);
+      const tx = document.createElement("span");
+      tx.className = "sscl-elapsed";
+      tx.setAttribute("data-started", String(t.startedAt || Date.now()));
+      tx.textContent = " Đang tra cứu… 00:00";
+      v.appendChild(tx);
+      const sub = document.createElement("div");
+      sub.style.cssText = "font-size:12.5px; color:#6e6e6e; font-weight:400; margin-top:2px;";
+      sub.className = "sscl-stage";
+      sub.setAttribute("data-started", String(t.startedAt || Date.now()));
+      sub.textContent = "Đã nhận yêu cầu — đang đọc thông tin sản phẩm… (thường xong trong 1–3 phút, kết quả tự hiện tại đây)";
+      v.appendChild(sub);
+      card.appendChild(v);
+    } else if (t.verdict) {
+      const v = document.createElement("div");
+      v.style.cssText = "font-size:13.5px; margin-top:5px; font-weight:700; color:#14532d;";
+      v.textContent = t.verdict;
+      card.appendChild(v);
+    }
+    (t.points || []).forEach(pt => {
+      const p = document.createElement("div");
+      p.style.cssText = "font-size:13.5px; color:#444; margin-top:3px;";
+      p.textContent = "• " + pt;
+      card.appendChild(p);
+    });
+    if (t.link) {
+      const a = document.createElement("a");
+      a.className = "dealbtn solo";
+      a.style.marginTop = "8px";
+      a.target = "_blank"; a.rel = "noopener";
+      a.href = t.link;
+      a.textContent = "🛒 Xem sản phẩm trên Shopee →";
+      card.appendChild(a);
+    }
+    if (idx < SHOW_N) { box.appendChild(card); }
+    else {
+      if (!moreBox) {
+        moreBox = document.createElement("div");
+        moreBox.style.display = "none";
+        moreBox.id = "myResearchMore";
+        const tg = document.createElement("button");
+        tg.type = "button";
+        tg.style.cssText = "width:100%; margin:2px 0 4px; font-size:13.5px; padding:8px; cursor:pointer; background:#fff; border:1px solid #e3ddd2; border-radius:10px; color:#211d19;";
+        tg.textContent = "▸ Xem thêm " + (list.length - SHOW_N) + " kết quả cũ hơn";
+        tg.addEventListener("click", () => {
+          const open = moreBox.style.display !== "none";
+          moreBox.style.display = open ? "none" : "block";
+          tg.textContent = open ? ("▸ Xem thêm " + (list.length - SHOW_N) + " kết quả cũ hơn") : "▾ Ẩn bớt kết quả cũ";
+        });
+        box.appendChild(tg);
+        box.appendChild(moreBox);
+      }
+      moreBox.appendChild(card);
+    }
+  });
+}
+async function pollMyResearch(force) {
+  const list = myResearchLoad();
+  if (!force && !list.some(t => t.status === "pending")) return;
+  let mine = [];
+  try {
+    if (sb) {
+      const q = await sb.from("research_results").select("rid,name,link,verdict,points,time_label,status").eq("device_token", myToken()).order("id", { ascending: false }).limit(8);
+      if (!q.error && Array.isArray(q.data)) mine = q.data.map(x => ({ rid: x.rid, name: x.name, link: x.link, verdict: x.verdict, points: x.points || [], time: x.time_label, status: x.status }));
+    }
+  } catch (e) {}
+  try {
+    const r = await fetch("tracuu.json?_=" + Date.now(), { cache: "no-store" });
+    if (r.ok) {
+      const all = await r.json();
+      const fromFile = (all && all[myToken()]) || [];
+      const seenRid = new Set(mine.map(x => x.rid));
+      fromFile.forEach(x => { if (!seenRid.has(x.rid)) mine.push(x); });
+    }
+  } catch (e) {}
+  try {
+    if (!mine.length) return;
+    let changed = false;
+    const usedSrv = new Set();
+    mine.forEach(srv => {
+      let i = list.findIndex(t => t.rid && srv.rid && t.rid === srv.rid);
+      if (i < 0) i = list.findIndex(t => t.status === "pending" && t.link === srv.link);
+      if (i >= 0) { const mg = Object.assign({}, list[i], srv); if (mg.status === "pending" && !mg.startedAt) mg.startedAt = list[i].startedAt || Date.now(); list[i] = mg; usedSrv.add(srv.rid || srv.link); changed = true; }
+    });
+    mine.forEach(srv => {
+      if (usedSrv.has(srv.rid || srv.link)) return;
+      if (srv.rid && list.some(t => t.rid === srv.rid)) return;
+      let i = -1;
+      for (let k = list.length - 1; k >= 0; k--) { if (list[k].status === "pending" && !list[k].rid) { i = k; break; } }
+      if (i >= 0) { list[i] = Object.assign({}, list[i], srv); usedSrv.add(srv.rid || srv.link); changed = true; }
+      else if (!list.some(t => t.rid === srv.rid)) { if (srv.status === "pending" && !srv.startedAt) srv.startedAt = Date.now(); list.unshift(srv); changed = true; }
+    });
+    if (changed) { myResearchSave(list); renderMyResearch(); }
+  } catch (err) {}
+}
+/* Gửi yêu cầu tra cứu THẲNG vào hệ thống của shop (Google Form chạy ẩn —
+   khách không thấy form, không phải điền gì thêm; Long chốt 27/10/2026). */
+function submitResearchHidden(link) {
+  try {
+    const body = new URLSearchParams();
+    body.set("entry.651707015", link);
+    body.set("entry.1845022065", myToken());
+    fetch("https://docs.google.com/forms/d/e/1FAIpQLSfEbbNQ6sUJk4ExL9H-bCIptlaSqaxl-6DTvttz968rFOjJ_Q/formResponse", { method: "POST", mode: "no-cors", headers: { "Content-Type": "application/x-www-form-urlencoded" }, body: body.toString() }).catch(() => {});
+  } catch (err) {}
+}
+(function initMyResearch() {
+  const st = document.createElement("style");
+  st.textContent = "@keyframes ssclspin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }";
+  document.head.appendChild(st);
+  myToken();
+  renderMyResearch();
+  pollMyResearch(true);
+  setInterval(() => pollMyResearch(false), 15000);
+  setInterval(() => {
+    document.querySelectorAll(".sscl-elapsed").forEach(el => {
+      const stMs = parseInt(el.getAttribute("data-started") || "0", 10);
+      if (!stMs) return;
+      const s = Math.max(0, Math.floor((Date.now() - stMs) / 1000));
+      const mm = String(Math.floor(s / 60)).padStart(2, "0"), ss = String(s % 60).padStart(2, "0");
+      el.textContent = " Đang tra cứu… " + mm + ":" + ss;
+    });
+    document.querySelectorAll(".sscl-stage").forEach(el => {
+      const stMs = parseInt(el.getAttribute("data-started") || "0", 10);
+      if (!stMs) return;
+      const s = Math.max(0, Math.floor((Date.now() - stMs) / 1000));
+      el.textContent = s < 45 ? "Đã nhận yêu cầu — đang đọc thông tin sản phẩm… (thường xong trong 1–3 phút, kết quả tự hiện tại đây)" : (s < 150 ? "Đang rà review của người đã mua…" : "Đang tổng hợp kết luận — sắp xong rồi, bạn đợi thêm chút nhé.");
+    });
+  }, 1000);
+  const arb = document.getElementById("askResearchBtn");
+  if (arb) arb.addEventListener("click", ev => {
+    ev.preventDefault();
+    const list = myResearchLoad();
+    if (!list.some(t => t.status === "pending" && t.link === lastRawUrl)) {
+      submitResearchHidden(lastRawUrl);
+      const now = new Date();
+      const hhmm = now.toLocaleTimeString("vi-VN", { hour: "2-digit", minute: "2-digit" });
+      const ddmm = now.toLocaleDateString("vi-VN", { day: "2-digit", month: "2-digit" });
+      const nm2 = slugName(lastRawUrl) || "Sản phẩm bạn vừa gửi";
+      list.unshift({ rid: "", name: nm2 || "Sản phẩm bạn vừa gửi", link: lastRawUrl, verdict: "", points: [], time: hhmm + " " + ddmm, status: "pending", startedAt: Date.now() });
+      myResearchSave(list);
+    }
+    renderMyResearch();
+    const sec = document.getElementById("myResearch");
+    if (sec) sec.scrollIntoView({ behavior: "smooth", block: "center" });
+    setTimeout(() => pollMyResearch(false), 12000);
+  });
+})();
+
+/* Render MỤC MÃ GIẢM GIÁ (thẻ đầy đủ: mã to, nút Sao chép + xác nhận, báo hết hạn) */
+function fallbackCopy(text, done) {
+  try {
+    const ta = document.createElement("textarea");
+    ta.value = text;
+    ta.style.cssText = "position:fixed; opacity:0;";
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand("copy");
+    document.body.removeChild(ta);
+    done();
+  } catch (e) { toast("Không tự sao chép được — bạn ghi lại mã: " + text); }
+}
+/* Lịch Sử Săn Sale: thu gọn mặc định, ấn vào tiêu đề mới mở */
+(function () {
+  const head = document.getElementById("histHead");
+  if (!head) return;
+  head.addEventListener("click", () => {
+    const l = document.getElementById("histList");
+    const open = l.style.display !== "none";
+    l.style.display = open ? "none" : "block";
+    document.getElementById("histChevron").textContent = open ? "▸" : "▾";
+  });
+})();
+
+document.querySelectorAll("a[href]").forEach(a => { const w = affiliateWrap(a.href); a.href = w; if (w.indexOf("an_redir") !== -1) a.rel = "sponsored nofollow noopener"; });
+document.addEventListener("click", e => {
+  const a = e.target.closest ? e.target.closest("a[href]") : null;
+  if (a) a.href = affiliateWrap(a.href);
+}, true);
+
+/* Apply config */
+document.getElementById("pageName").textContent = CONFIG.pageName;
+document.getElementById("pageTagline").textContent = CONFIG.tagline;
+document.getElementById("footName").textContent = CONFIG.pageName;
+document.getElementById("updStamp").textContent = "Cập nhật: " + PAGE_UPDATED + ".";
+</script>
+
+<div id="legalModal" style="display:none; position:fixed; inset:0; z-index:1001; background:rgba(24,10,4,.6); overflow-y:auto; padding:20px 10px 30px;">
+  <div style="position:relative; max-width:760px; margin:0 auto; background:#fff; border-radius:16px; padding:20px 18px 24px; box-shadow:0 8px 30px rgba(0,0,0,.3);">
+    <button id="legalClose" type="button" aria-label="Dong" style="position:absolute; top:10px; right:10px; width:36px; height:36px; border-radius:50%; border:none; background:#f4f4f4; color:#c23215; font-size:17px; font-weight:900; cursor:pointer;">&#10005;</button>
+    <h2 style="font-size:19px; margin:0 30px 4px 0; color:#16110d;">📜 Điều khoản &amp; Bảo mật</h2>
+    <p style="font-size:12.5px; color:#6e6e6e; margin:0 0 12px;">Săn Sale Cùng Long — Phiên bản 1.0, hiệu lực từ 29/10/2026</p>
+    <div style="display:flex; gap:8px; margin-bottom:12px;">
+      <button type="button" id="legalTabT" style="flex:1; padding:9px; border-radius:10px; border:1.5px solid #16110d; background:#16110d; color:#fff; font-size:14px; font-weight:800; cursor:pointer;">Điều khoản sử dụng</button>
+      <button type="button" id="legalTabP" style="flex:1; padding:9px; border-radius:10px; border:1.5px solid #ddd; background:#fff; color:#333; font-size:14px; font-weight:800; cursor:pointer;">Chính sách bảo mật</button>
+    </div>
+    <div id="legalTerms" style="font-size:13.5px; line-height:1.55; color:#211d19; text-align:left;">
+      <h3 style="font-size:15px; margin:12px 0 4px;">Điều 1. Giới thiệu dịch vụ</h3>
+      <p>1.1. Săn Sale Cùng Long ("Trang", "Shop") là trang hỗ trợ mua sắm do cá nhân vận hành, cung cấp: (a) chuyển đổi liên kết sản phẩm Shopee thành liên kết tiếp thị liên kết của Shop; (b) gợi ý mã giảm giá công khai; (c) tra cứu thông tin sản phẩm mang tính tham khảo; (d) chương trình hoàn một phần hoa hồng tiếp thị liên kết cho người dùng có tài khoản.</p>
+      <p>1.2. Trang không phải là Shopee, không bán hàng trực tiếp và không phải đại diện của Shopee. Mọi giao dịch mua bán diễn ra giữa người dùng và người bán trên nền tảng Shopee.</p>
+      <h3 style="font-size:15px; margin:12px 0 4px;">Điều 2. Tài khoản và điều kiện sử dụng</h3>
+      <p>2.1. Khi đăng ký, người dùng xác nhận thông tin cung cấp là đúng sự thật và chịu trách nhiệm với thông tin đó.</p>
+      <p>2.2. Mỗi người dùng chỉ được hưởng hoa hồng trên một tài khoản chính. Nghiêm cấm: (a) tạo nhiều tài khoản để gian lận hoa hồng; (b) tự mua hàng qua liên kết/mã của chính mình hoặc của người trong cùng hộ/thiết bị nhằm trục lợi hoa hồng; (c) dùng công cụ tự động gây quá tải, phá hoại Trang; (d) mạo danh Shop hoặc người dùng khác.</p>
+      <h3 style="font-size:15px; margin:12px 0 4px;">Điều 3. Cơ chế hoa hồng và hoàn tiền</h3>
+      <p>3.1. Hoa hồng của một đơn hàng chỉ phát sinh khi đơn hàng được hệ thống của Shopee (hoặc đối tác ghi nhận hoa hồng của Shop) ghi nhận hợp lệ gắn với mã cá nhân của người dùng, và Shop đã thực nhận khoản hoa hồng đó.</p>
+      <p>3.2. Phần người dùng được hoàn = 80% của hoa hồng thực nhận sau khi trừ thuế thu nhập cá nhân 10% do Shopee khấu trừ (tương đương 72% số hoa hồng thể hiện trên báo cáo). Đây là khoản Shop tự nguyện chia sẻ từ hoa hồng của Shop, không phải hoa hồng Shopee trả cho người dùng.</p>
+      <p>3.3. Căn cứ đối soát duy nhất là báo cáo chính thức của Shopee/đối tác ghi nhận. Số liệu hiển thị "tạm tính" trên Trang chỉ là ước tính, không phải là cam kết chi trả; số "khả dụng" sau đối soát mới là căn cứ rút tiền.</p>
+      <p>3.4. Đơn hàng bị hủy, bị trả hàng/hoàn tiền, bị Shopee xác định gian lận hoặc không hợp lệ thì không phát sinh khoản hoàn. Nếu khoản hoàn đã chi mà sau đó Shopee truy thu/hủy hoa hồng tương ứng, Shop được quyền trừ vào số dư khả dụng tiếp theo của người dùng.</p>
+      <p>3.5. Shop có quyền điều chỉnh tỷ lệ hoàn cho các đơn hàng phát sinh SAU thời điểm thông báo trên Trang. Đơn hàng đã được ghi nhận giữ nguyên tỷ lệ tại thời điểm ghi nhận.</p>
+      <h3 style="font-size:15px; margin:12px 0 4px;">Điều 4. Rút tiền</h3>
+      <p>4.1. Ngưỡng rút tối thiểu: 10.000đ mỗi yêu cầu, rút toàn bộ số dư khả dụng tại thời điểm yêu cầu.</p>
+      <p>4.2. Điều kiện rút: đã điền đầy đủ và đúng thông tin khách hàng (họ tên theo giấy tờ tùy thân) và thông tin nhận tiền; họ tên chủ tài khoản ngân hàng phải trùng khớp họ tên khách hàng đã đăng ký; nhập đúng mã PIN rút tiền.</p>
+      <p>4.3. Thông tin khách hàng và thông tin nhận tiền sau khi lưu sẽ bị khóa để bảo vệ người dùng; việc thay đổi chỉ thực hiện qua Shop sau khi xác minh. Người dùng chịu trách nhiệm nếu cung cấp sai thông tin dẫn đến chuyển tiền thất bại hoặc chậm trễ.</p>
+      <p>4.4. Shop xử lý yêu cầu rút trong vòng 07 ngày làm việc kể từ khi yêu cầu hợp lệ. Khi phát hiện dấu hiệu bất thường hoặc nghi ngờ gian lận, Shop có quyền tạm giữ khoản chi để kiểm tra và sẽ thông báo lý do cho người dùng; phần hoa hồng phát sinh từ hành vi gian lận sẽ bị hủy và không được chi trả.</p>
+      <h3 style="font-size:15px; margin:12px 0 4px;">Điều 5. Mã giảm giá và tra cứu sản phẩm</h3>
+      <p>5.1. Mã giảm giá và kết quả tra cứu trên Trang chỉ mang tính tham khảo, được tổng hợp từ nguồn công khai và có thể thay đổi/hết hiệu lực bất cứ lúc nào theo chính sách của Shopee và người bán.</p>
+      <p>5.2. Shop không cam kết mã giảm giá áp dụng thành công cho mọi tài khoản/đơn hàng. Người dùng tự kiểm tra điều kiện áp dụng tại trang thanh toán của Shopee trước khi mua.</p>
+      <h3 style="font-size:15px; margin:12px 0 4px;">Điều 6. Giới hạn trách nhiệm</h3>
+      <p>6.1. Dịch vụ được cung cấp "theo hiện trạng". Shop không chịu trách nhiệm về: chất lượng, giá cả, giao hàng, bảo hành của sản phẩm (thuộc trách nhiệm của người bán và Shopee); quyết định mua hàng của người dùng; thiệt hại gián tiếp phát sinh từ việc sử dụng hoặc không sử dụng được Trang.</p>
+      <p>6.2. Trong mọi trường hợp, trách nhiệm tối đa của Shop với một người dùng không vượt quá tổng số tiền Shop đã thực trả cho người dùng đó trong 03 tháng gần nhất.</p>
+      <h3 style="font-size:15px; margin:12px 0 4px;">Điều 7. Tạm khóa và chấm dứt tài khoản</h3>
+      <p>7.1. Shop có quyền tạm khóa hoặc chấm dứt tài khoản vi phạm Điều khoản này. Với hành vi gian lận rõ ràng, Shop có thể khóa ngay để ngăn thiệt hại, sau đó thông báo cho người dùng.</p>
+      <p>7.2. Người dùng có thể yêu cầu đóng tài khoản bất cứ lúc nào qua kênh liên hệ của Shop; số dư khả dụng hợp lệ sẽ được quyết toán trước khi đóng, trừ phần liên quan đến gian lận theo Điều 4.4.</p>
+      <h3 style="font-size:15px; margin:12px 0 4px;">Điều 8. Thay đổi Điều khoản</h3>
+      <p>Shop có thể sửa đổi Điều khoản và sẽ thông báo phiên bản mới trên Trang trước khi áp dụng. Việc người dùng tiếp tục sử dụng Trang sau thời điểm hiệu lực của phiên bản mới được coi là chấp nhận phiên bản đó.</p>
+      <h3 style="font-size:15px; margin:12px 0 4px;">Điều 9. Luật áp dụng và giải quyết tranh chấp</h3>
+      <p>Điều khoản này được điều chỉnh bởi pháp luật Việt Nam. Tranh chấp (nếu có) ưu tiên giải quyết bằng thương lượng; trường hợp không thương lượng được, tranh chấp sẽ được giải quyết tại Tòa án có thẩm quyền theo quy định pháp luật.</p>
+    </div>
+    <div id="legalPrivacy" style="display:none; font-size:13.5px; line-height:1.55; color:#211d19; text-align:left;">
+      <h3 style="font-size:15px; margin:12px 0 4px;">1. Dữ liệu thu thập và mục đích</h3>
+      <p>Shop chỉ thu thập những thông tin tối thiểu cần thiết để vận hành tài khoản và <b>chi trả hoa hồng cho bạn</b>. Mật khẩu đăng nhập và mã PIN rút tiền chỉ được lưu dưới dạng mã băm — Shop không lưu và không đọc được giá trị gốc. Việc thu thập, xử lý dữ liệu tuân thủ <b>Nghị định 13/2023/NĐ-CP</b> về bảo vệ dữ liệu cá nhân.</p>
+      <h3 style="font-size:15px; margin:12px 0 4px;">2. Chia sẻ dữ liệu</h3>
+      <p>Shop <b>không bán hay trao đổi</b> dữ liệu cá nhân của bạn cho bên thứ ba. Dữ liệu chỉ được chia sẻ cho ngân hàng khi thực hiện chuyển tiền cho bạn, và cung cấp cho cơ quan nhà nước khi có yêu cầu hợp pháp.</p>
+      <h3 style="font-size:15px; margin:12px 0 4px;">3. Bảo mật và lưu trữ</h3>
+      <p>Dữ liệu được phân quyền theo từng tài khoản — bạn chỉ truy cập được dữ liệu của chính mình; tài khoản quản trị của Shop bật xác thực hai lớp. Dữ liệu được lưu trong thời gian tài khoản còn hoạt động, cộng thêm thời gian cần thiết cho đối soát và nghĩa vụ pháp lý. Trang cũng lưu một ít dữ liệu trên chính trình duyệt của bạn (mã máy tra cứu, lịch sử săn sale) để tính năng hoạt động; bạn có thể xóa bất cứ lúc nào trong cài đặt trình duyệt.</p>
+      <h3 style="font-size:15px; margin:12px 0 4px;">4. Quyền của bạn</h3>
+      <p>Theo Nghị định 13/2023/NĐ-CP, bạn có quyền được biết, truy cập, yêu cầu chỉnh sửa hoặc xóa dữ liệu của mình và rút lại sự đồng ý. Chỉ cần liên hệ Shop qua mục "Liên Hệ Hợp Tác" trên Trang — Shop phản hồi trong vòng 07 ngày làm việc.</p>
+      <h3 style="font-size:15px; margin:12px 0 4px;">5. Thay đổi Chính sách</h3>
+      <p>Khi Chính sách có thay đổi, phiên bản mới sẽ được thông báo trên Trang trước khi áp dụng; việc tiếp tục sử dụng Trang đồng nghĩa bạn chấp nhận phiên bản mới.</p>
+      <p style="margin-top:14px; font-weight:700;">Bằng việc tích chọn đồng ý và đăng ký tài khoản, bạn xác nhận đã đọc, hiểu và đồng ý với toàn bộ Điều khoản sử dụng và Chính sách bảo mật này.</p>
+    </div>
+  </div>
+</div>
+<script>(function(){var m=document.getElementById("legalModal");if(!m)return;var tT=document.getElementById("legalTerms"),tP=document.getElementById("legalPrivacy"),bT=document.getElementById("legalTabT"),bP=document.getElementById("legalTabP");function tab(which){var terms=which!=="privacy";tT.style.display=terms?"":"none";tP.style.display=terms?"none":"";bT.style.background=terms?"#16110d":"#fff";bT.style.color=terms?"#fff":"#333";bT.style.borderColor=terms?"#16110d":"#ddd";bP.style.background=terms?"#fff":"#16110d";bP.style.color=terms?"#333":"#fff";bP.style.borderColor=terms?"#ddd":"#16110d";}function open(which){tab(which);m.style.display="block";m.scrollTop=0;}function close(){m.style.display="none";}document.addEventListener("click",function(e){var a=e.target&&e.target.closest?e.target.closest("[data-legal]"):null;if(a){e.preventDefault();open(a.getAttribute("data-legal"));}});bT.addEventListener("click",function(){tab("terms");});bP.addEventListener("click",function(){tab("privacy");});document.getElementById("legalClose").addEventListener("click",close);m.addEventListener("click",function(e){if(e.target===m)close();});})();</script>
+
+<script>(function(){var ua=navigator.userAgent||"";var wv=/(Zalo|FBAN|FBAV|FB_IAB|Instagram|Messenger)/i.test(ua);if(wv){var w=document.getElementById("accWebviewWarn");if(w)w.style.display="block";}try{var q=(location.search||"")+"#"+(location.hash||"");if(q.indexOf("error")!==-1){var sp=new URLSearchParams(location.search);var hp=new URLSearchParams((location.hash||"").replace(/^#/,""));var desc=sp.get("error_description")||hp.get("error_description")||sp.get("error")||hp.get("error");if(desc){setTimeout(function(){if(window.openAuthModal)openAuthModal("login");if(window.accMsg)accMsg("\u26a0\ufe0f Google b\u00e1o l\u1ed7i: "+decodeURIComponent(String(desc).replace(/\+/g," "))+" \u2014 b\u1ea1n ch\u1ee5p m\u00e0n h\u00ecnh d\u00f2ng n\u00e0y g\u1eedi shop \u0111\u1ec3 \u0111\u01b0\u1ee3c h\u1ed7 tr\u1ee3 nh\u00e9.");try{history.replaceState(null,"",location.pathname);}catch(e){}},400);}}}catch(e){}})();</script>
+<div id="scrollBtns" style="position:fixed;right:10px;bottom:10px;display:none;flex-direction:column;gap:6px;z-index:900"><button type="button" title="Lên đầu trang" onclick="window.scrollTo({top:0,behavior:'smooth'})" style="width:40px;height:40px;border:none;border-radius:50%;font-size:17px;font-weight:700;background:#c21807;color:#fff;box-shadow:0 2px 8px rgba(0,0,0,.25);cursor:pointer;opacity:.92;padding:0">⬆</button><button type="button" title="Xuống cuối trang" onclick="window.scrollTo({top:document.body.scrollHeight,behavior:'smooth'})" style="width:40px;height:40px;border:none;border-radius:50%;font-size:17px;font-weight:700;background:#c21807;color:#fff;box-shadow:0 2px 8px rgba(0,0,0,.25);cursor:pointer;opacity:.92;padding:0">⬇</button></div><script>(function(){var box=document.getElementById("scrollBtns");var modal=document.getElementById("authModal");function modalOpen(){return modal&&getComputedStyle(modal).display!=="none";}function upd(){var max=document.documentElement.scrollHeight-window.innerHeight;var past=max>0&&window.scrollY>max/3;box.style.display=(past&&!modalOpen())?"flex":"none";}window.addEventListener("scroll",upd,{passive:true});window.addEventListener("resize",upd);if(modal&&window.MutationObserver)new MutationObserver(upd).observe(modal,{attributes:true,attributeFilter:["style","class"]});upd();})();</script><script>(function(){function show(id){["accTabHome","accTabOrders","accTabInfo"].forEach(function(p){var el=document.getElementById(p);if(el)el.style.display=(p===id)?"":"none";});document.querySelectorAll(".atab").forEach(function(b){var on=b.getAttribute("data-atab")===id;b.style.background=on?"#16110d":"#fff";b.style.color=on?"#fff":"#333";b.style.borderColor=on?"#16110d":"#ddd";});}document.addEventListener("click",function(e){var b=e.target&&e.target.closest?e.target.closest(".atab"):null;if(b)show(b.getAttribute("data-atab"));});show("accTabHome");})();</script>
+
+<style id="eccThemeV2">
+/* ===== GIAO DIEN V2 "VI HOAN TIEN" (ECC) — ap 29/10/2026 theo duyet cua chu trang.
+   He thong: xanh tien #0B3D2E lam chu dao, kem #FAF7F0 nen, cam chi cho nut mua Shopee.
+   Chi la lop CSS override + checklist/tiles; co che trang giu nguyen 100%. ===== */
+:root{
+  --bg:#FAF7F0; --card:#ffffff; --border:#E7DFCE; --ink:#132019; --text:#232d26;
+  --muted:#68766C; --green:#0B3D2E; --green-dark:#082C21; --green-soft:#DFF2E4; --gold:#F5A623;
+  --primary:#d63c1e; --primary-dark:#c23215; --vivid:#EE4D2D;
+}
+body{font-family:"Be Vietnam Pro",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;}
+h1,h2{text-wrap:balance;}
+header.topbar{background:#fffdf8; color:var(--ink); border-bottom:3px solid var(--green);
+  box-shadow:0 1px 0 rgba(19,32,25,.05),0 10px 26px rgba(19,32,25,.05);}
+header.topbar .tag{color:var(--muted);}
+#topLogin{background:#fff; color:var(--green); border:1.5px solid var(--green); box-shadow:none;}
+#topRegister{background:var(--green); color:#fff; border:1.5px solid var(--green);}
+#topDash{background:var(--ink); color:#fff; box-shadow:none;}
+#topLogout{background:#fff; color:var(--ink); border:1.5px solid var(--border);}
+.hero{background:var(--green); color:#fff; border-radius:26px; margin-top:14px;
+  box-shadow:0 18px 44px rgba(11,61,46,.28);}
+.hero h1{font-weight:900; letter-spacing:-.4px;}
+.hero p{color:#D7E8DC;}
+.hero .searchrow{background:#fff; padding:10px; border-radius:16px;}
+.hero .searchrow input{border:2px solid var(--ink); background:#fff; color:var(--ink);}
+.searchrow button{background:var(--ink); color:#fff;}
+#btnPaste{background:var(--green-soft); color:var(--green);}
+.v2checks{list-style:none; margin:0 0 14px; padding:0; display:grid; gap:6px;}
+.v2checks li{font-size:13.5px; color:#EAF4EC; font-weight:600;}
+.v2checks li::before{content:"✓"; display:inline-flex; align-items:center; justify-content:center;
+  width:19px; height:19px; border-radius:50%; background:var(--gold); color:#3A2A00; font-weight:900;
+  font-size:12px; margin-right:8px; vertical-align:-4px;}
+.v2tiles{display:grid; grid-template-columns:1fr 1fr; gap:11px; margin-top:16px;}
+.v2tile{text-decoration:none; border-radius:20px; padding:16px 14px; display:block; border:1px solid var(--border);}
+.v2tile .ic{font-size:26px;}
+.v2tile b{display:block; font-size:16px; margin-top:5px; color:var(--ink);}
+.v2tile span{font-size:12.5px; color:var(--muted);}
+.v2tile.rank{background:var(--green-soft);}
+.v2tile.gift{background:#FFF3E2;}
+.card{border-radius:22px; box-shadow:0 1px 2px rgba(19,32,25,.05),0 12px 32px rgba(19,32,25,.06);}
+.card h2{border-left:none; padding-left:0;}
+.prod{border-radius:16px;}
+.prod .thumb{background:#F3EDDD;}
+.price{font-variant-numeric:tabular-nums;}
+.voucher .code{font-variant-numeric:tabular-nums;}
+#askResearchBtn{background:var(--green);}
+footer{background:var(--green-dark);}
+#accHave > div:first-child{background:#0B3D2E !important;}
+#accWalAvail{font-variant-numeric:tabular-nums;}
+#ctaLogin{background:var(--green) !important;}
+#ctaRegister{color:var(--green) !important; border-color:var(--green) !important;}
+#ctaCode{color:var(--green) !important;}
+#ctaDash{background:var(--green) !important;}
+#accCreateF{background:var(--green) !important;}
+</style>
+</body>
+</html>
