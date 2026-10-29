@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>[CONCEPT ECC] Săn Sale Cùng Long — Ví hoàn tiền Shopee</title>
+<meta name="description" content="Bản concept thiết kế mới: dán link Shopee, nhận hoàn 80% hoa hồng, mã giảm giá mỗi ngày và tra cứu sản phẩm trước khi mua.">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#FAF7F0;--surface:#fff;--ink:#132019;--muted:#68766C;--green:#0B3D2E;--green-dark:#082C21;
+--green-soft:#DFF2E4;--orange:#EE4D2D;--orange-dark:#D63C1E;--gold:#F5A623;--border:#E7DFCE;--danger:#C62828;}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{margin:0;background:var(--bg);color:var(--ink);line-height:1.55;
+font-family:"Be Vietnam Pro",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
+-webkit-font-smoothing:antialiased;}
+.wrap{max-width:760px;margin:0 auto;padding:0 14px 56px;}
+h1,h2{text-wrap:balance;}
+.num{font-variant-numeric:tabular-nums;}
+.topbar{position:sticky;top:0;z-index:50;background:rgba(250,247,240,.94);backdrop-filter:blur(8px);
+display:flex;align-items:center;gap:10px;padding:10px 2px;border-bottom:1px solid var(--border);}
+.logo{width:38px;height:38px;border-radius:12px;background:var(--green);color:#fff;display:flex;
+align-items:center;justify-content:center;font-size:20px;flex-shrink:0;}
+.topbar .name{font-weight:900;font-size:16.5px;letter-spacing:-.3px;line-height:1.15;}
+.topbar .tag{font-size:12px;color:var(--muted);}
+.topbar a.main{margin-left:auto;flex-shrink:0;text-decoration:none;font-weight:700;font-size:13px;
+color:var(--green);border:1.5px solid var(--green);padding:8px 13px;border-radius:999px;background:#fff;}
+.hero{margin-top:14px;background:var(--green);color:#fff;border-radius:26px;padding:22px 18px 18px;
+box-shadow:0 18px 44px rgba(11,61,46,.28);}
+.hero .kick{font-size:12px;font-weight:800;letter-spacing:1.2px;color:#9fd8b4;}
+.hero h1{margin:6px 0 4px;font-size:27px;font-weight:900;letter-spacing:-.5px;line-height:1.22;}
+.hero h1 .hl{color:var(--gold);}
+.hero p{margin:0 0 16px;font-size:14px;color:#d7e8dc;}
+.conv{background:#fff;color:var(--ink);border-radius:16px;padding:12px;}
+.conv label{font-size:12.5px;font-weight:800;letter-spacing:.4px;color:var(--green);display:block;margin-bottom:8px;}
+.convrow{display:flex;gap:8px;}
+.convrow input{flex:1;min-width:0;padding:13px 12px;font-size:15px;font-family:inherit;
+border:2px solid var(--ink);border-radius:12px;outline:none;}
+.convrow input:focus{border-color:var(--green);}
+.btn{border:none;cursor:pointer;font-family:inherit;font-weight:800;border-radius:12px;
+padding:13px 15px;font-size:15px;transition:transform .08s ease;}
+.btn:active{transform:scale(.97);}
+.btn.paste{background:var(--green-soft);color:var(--green);flex-shrink:0;}
+.btn.go{background:var(--ink);color:#fff;flex-shrink:0;}
+.msg{font-size:13px;margin-top:9px;min-height:18px;}
+.msg.err{color:var(--danger);font-weight:600;}
+.result{display:none;margin-top:12px;}
+.openbtn{display:block;text-align:center;text-decoration:none;background:var(--orange);color:#fff;
+font-weight:800;font-size:16px;padding:14px;border-radius:12px;transition:transform .08s ease;}
+.openbtn:active{transform:scale(.98);background:var(--orange-dark);}
+.result .note{font-size:12.5px;color:var(--muted);margin-top:8px;text-align:center;}
+.miniCodes{margin-top:12px;display:grid;gap:8px;}
+.miniCode{display:flex;align-items:center;gap:10px;width:100%;text-align:left;cursor:pointer;
+font-family:inherit;background:#FFF8EC;border:1.5px dashed var(--orange-dark);border-radius:12px;padding:9px 12px;}
+.miniCode .off{font-weight:900;color:var(--orange-dark);font-size:14px;white-space:nowrap;}
+.miniCode .cd{font-family:ui-monospace,Menlo,monospace;font-weight:700;font-size:12.5px;color:var(--ink);
+overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.miniCode .cp{margin-left:auto;font-size:11.5px;font-weight:800;color:var(--green);white-space:nowrap;}
+.stats{display:flex;gap:8px;margin-top:16px;}
+.stat{flex:1;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.16);
+border-radius:14px;padding:10px 8px;text-align:center;}
+.stat b{display:block;font-size:16px;font-weight:900;}
+.stat span{font-size:11.5px;color:#cfe3d5;}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:22px;
+padding:18px;margin-top:16px;box-shadow:0 1px 2px rgba(19,32,25,.05),0 12px 32px rgba(19,32,25,.06);}
+.card h2{margin:0 0 4px;font-size:20px;font-weight:800;letter-spacing:-.3px;}
+.card .sub{color:var(--muted);font-size:13.5px;margin:0 0 14px;}
+.steps{display:grid;gap:10px;}
+.step{display:flex;gap:13px;align-items:flex-start;background:#FCFAF4;border:1px solid var(--border);
+border-radius:16px;padding:13px 14px;}
+.step .n{font-size:26px;font-weight:900;color:var(--green);line-height:1;min-width:34px;}
+.step b{font-size:15px;}
+.step p{margin:2px 0 0;font-size:13.5px;color:var(--muted);}
+.ticket{display:flex;align-items:stretch;gap:0;width:100%;text-align:left;cursor:pointer;
+font-family:inherit;background:#fff;border:1.5px solid var(--border);border-radius:16px;
+padding:0;margin-bottom:10px;overflow:hidden;transition:transform .08s ease;}
+.ticket:active{transform:scale(.99);}
+.stub{background:#FFF3E2;padding:11px 12px;min-width:128px;display:flex;flex-direction:column;justify-content:center;}
+.stub .off{font-weight:900;color:var(--orange-dark);font-size:15px;line-height:1.25;}
+.stub .fam{font-size:11.5px;color:var(--muted);margin-top:2px;}
+.tbody{flex:1;padding:11px 12px;border-left:2px dashed var(--border);min-width:0;}
+.tbody .code{display:block;font-family:ui-monospace,Menlo,monospace;font-weight:800;font-size:14.5px;
+letter-spacing:.4px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.tbody .cond{font-size:12.5px;color:var(--muted);}
+.ticket .copy{align-self:center;margin:0 12px 0 4px;font-size:11.5px;font-weight:900;color:var(--green);
+background:var(--green-soft);padding:7px 9px;border-radius:8px;white-space:nowrap;}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:11px;}
+.prod{border:1px solid var(--border);border-radius:16px;overflow:hidden;background:#fff;
+display:flex;flex-direction:column;}
+.prod .thumb{aspect-ratio:1/1;background:#F3EDDD;display:flex;align-items:center;justify-content:center;
+font-size:44px;overflow:hidden;}
+.prod .thumb img{width:100%;height:100%;object-fit:cover;display:block;}
+.pbody{padding:10px 11px 12px;display:flex;flex-direction:column;gap:3px;flex:1;}
+.pname{font-weight:700;font-size:14px;line-height:1.3;}
+.pprice{color:var(--orange-dark);font-weight:900;font-size:15.5px;}
+.deal{margin-top:auto;display:block;text-align:center;text-decoration:none;background:var(--orange);
+color:#fff;font-weight:800;font-size:13.5px;padding:9px;border-radius:9px;}
+.mint{background:var(--green-soft);border-color:#BFE6CC;}
+.walletMock{display:flex;gap:10px;margin:4px 0 14px;}
+.wtile{flex:1;background:#FCFAF4;border:1px solid var(--border);border-radius:14px;padding:11px;text-align:center;}
+.wtile b{display:block;font-size:19px;font-weight:900;color:var(--green);}
+.wtile span{font-size:12px;color:var(--muted);}
+.cta{display:block;text-align:center;text-decoration:none;background:var(--green);color:#fff;
+font-weight:800;font-size:15.5px;padding:13px;border-radius:12px;transition:transform .08s ease;}
+.cta:active{transform:scale(.98);}
+details{border:1px solid var(--border);border-radius:14px;padding:12px 14px;margin-bottom:9px;background:#FCFAF4;}
+details summary{font-weight:700;font-size:14.5px;cursor:pointer;}
+details p{margin:8px 0 2px;font-size:13.5px;color:var(--muted);}
+footer{margin-top:26px;background:var(--green-dark);color:#cfe3d5;border-radius:22px;padding:22px 18px;text-align:center;}
+footer .fname{color:#fff;font-weight:900;font-size:16px;}
+footer p{font-size:13px;margin:8px 0 14px;}
+.fbtns{display:flex;gap:9px;justify-content:center;flex-wrap:wrap;}
+.fbtns a{text-decoration:none;font-weight:800;font-size:13.5px;padding:10px 16px;border-radius:999px;}
+.fbtns .fb{background:#166FE5;color:#fff;}
+.fbtns .zl{background:#fff;color:var(--green);}
+footer .tiny{font-size:11.5px;color:#8fae9b;margin-top:14px;}
+body::after{content:"BẢN CONCEPT ECC — CHƯA PHẢI TRANG CHÍNH";position:fixed;left:10px;bottom:10px;z-index:2000;
+background:var(--ink);color:#fff;font-size:11px;font-weight:700;letter-spacing:.4px;
+padding:6px 10px;border-radius:999px;opacity:.93;pointer-events:none;}
+.toast{position:fixed;left:50%;bottom:26px;transform:translateX(-50%) translateY(20px);background:var(--ink);
+color:#fff;font-size:14px;font-weight:700;padding:11px 18px;border-radius:999px;opacity:0;
+pointer-events:none;transition:all .25s ease;z-index:3000;max-width:92vw;text-align:center;}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+@media (max-width:420px){.stub{min-width:108px}.hero h1{font-size:24px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="topbar">
+    <div class="logo">🛒</div>
+    <div><div class="name">Săn Sale Cùng Long</div><div class="tag">Ví hoàn tiền Shopee — bản concept</div></div>
+    <a class="main" href="https://sansalecunglong.github.io/">Trang chính</a>
+  </header>
+
+  <section class="hero">
+    <div class="kick">VÍ HOÀN TIỀN SHOPEE</div>
+    <h1>Dán link Shopee vào đây,<br>nhận lại <span class="hl num">80%</span> hoa hồng</h1>
+    <p>Mua như bình thường trên Shopee — shop hoàn lại 80% hoa hồng của đơn vào ví của bạn, rút về ngân hàng từ 10.000đ.</p>
+    <div class="conv">
+      <label for="linkIn">BƯỚC 1 — DÁN LINK SẢN PHẨM SHOPEE</label>
+      <div class="convrow">
+        <input id="linkIn" type="url" inputmode="url" placeholder="Dán link sản phẩm Shopee vào đây…" autocomplete="off">
+        <button class="btn paste" id="btnPaste" type="button">Dán</button>
+        <button class="btn go" id="btnGo" type="button">Săn sale</button>
+      </div>
+      <div class="msg" id="msg"></div>
+      <div class="result" id="result">
+        <a class="openbtn" id="openBtn" href="#" target="_blank" rel="sponsored nofollow noopener">🛒 Mở đúng sản phẩm của bạn trên Shopee →</a>
+        <div class="note">Bước 2 — áp thêm mã dưới đây ở bước thanh toán Shopee để rẻ hơn nữa:</div>
+        <div class="miniCodes" id="miniCodes"></div>
+      </div>
+    </div>
+    <div class="stats">
+      <div class="stat"><b class="num">80%</b><span>hoàn hoa hồng</span></div>
+      <div class="stat"><b class="num">10.000đ</b><span>rút tối thiểu</span></div>
+      <div class="stat"><b>Mỗi ngày</b><span>mã mới + deal mới</span></div>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>Cách hoạt động</h2>
+    <p class="sub">Ba bước, không cần cài app, không đổi thói quen mua sắm của bạn.</p>
+    <div class="steps">
+      <div class="step"><div class="n num">1</div><div><b>Dán link vào ô trên</b><p>Link sản phẩm Shopee bất kỳ — trang gắn mã của shop để Shopee ghi nhận đơn cho bạn.</p></div></div>
+      <div class="step"><div class="n num">2</div><div><b>Mua như bình thường</b><p>Đơn mở ngay trong app Shopee của bạn, thanh toán và nhận hàng như mọi lần.</p></div></div>
+      <div class="step"><div class="n num">3</div><div><b>Nhận hoàn vào ví</b><p>Đơn hoàn tất, 80% hoa hồng (trên phần shop thực nhận sau thuế) vào ví — đủ 10.000đ là rút về ngân hàng.</p></div></div>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>🎟️ Mã giảm giá hôm nay</h2>
+    <p class="sub">Bấm vào vé để chép mã, rồi áp ở bước thanh toán trên Shopee. Mã kiểm chứng trên ANM, cập nhật 29/10/2026.</p>
+    
+      <button class="ticket" data-code="VNM250KOCT" type="button">
+        <span class="stub"><span class="off">Giảm 12% tối đa 250K</span><span class="fam">Toàn sàn Shopee</span></span>
+        <span class="tbody"><span class="code">VNM250KOCT</span>
+        <span class="cond">Đơn từ 200K • Hết hạn 31/10/2026</span></span>
+        <span class="copy">CHÉP</span>
+      </button>
+      <button class="ticket" data-code="WASTON150K" type="button">
+        <span class="stub"><span class="off">Giảm 14% tối đa 150K</span><span class="fam">Toàn sàn Shopee</span></span>
+        <span class="tbody"><span class="code">WASTON150K</span>
+        <span class="cond">Đơn từ 150K • Hết hạn 31/10/2026</span></span>
+        <span class="copy">CHÉP</span>
+      </button>
+      <button class="ticket" data-code="VIDEO-1530863982120960" type="button">
+        <span class="stub"><span class="off">Giảm 18% tối đa 99K</span><span class="fam">Shopee Video — Siêu Sale Quốc Tế</span></span>
+        <span class="tbody"><span class="code">VIDEO-1530863982120960</span>
+        <span class="cond">Đơn từ 99K • Hết hạn 31/10/2026</span></span>
+        <span class="copy">CHÉP</span>
+      </button>
+      <button class="ticket" data-code="VIDEO-1530863982383108" type="button">
+        <span class="stub"><span class="off">Giảm 16% tối đa 150K</span><span class="fam">Shopee Video — Siêu Sale Quốc Tế</span></span>
+        <span class="tbody"><span class="code">VIDEO-1530863982383108</span>
+        <span class="cond">Đơn từ 99K • Hết hạn 31/10/2026</span></span>
+        <span class="copy">CHÉP</span>
+      </button>
+      <button class="ticket" data-code="VIDEO-1530863990116360" type="button">
+        <span class="stub"><span class="off">Giảm 16% tối đa 150K</span><span class="fam">Shopee Video — Siêu Sale Quốc Tế</span></span>
+        <span class="tbody"><span class="code">VIDEO-1530863990116360</span>
+        <span class="cond">Đơn từ 150K • Hết hạn 31/10/2026</span></span>
+        <span class="copy">CHÉP</span>
+      </button>
+      <button class="ticket" data-code="VIDEO-1532309800783872" type="button">
+        <span class="stub"><span class="off">Giảm 20% tối đa 140K</span><span class="fam">Shopee Video — Thời Trang</span></span>
+        <span class="tbody"><span class="code">VIDEO-1532309800783872</span>
+        <span class="cond">Đơn từ 250K • Hết hạn 31/10/2026</span></span>
+        <span class="copy">CHÉP</span>
+      </button>
+      <button class="ticket" data-code="VIDEO-1532309799997440" type="button">
+        <span class="stub"><span class="off">Giảm 21% tối đa 400K</span><span class="fam">Shopee Video — Thời Trang</span></span>
+        <span class="tbody"><span class="code">VIDEO-1532309799997440</span>
+        <span class="cond">Đơn từ 700K • Hết hạn 31/10/2026</span></span>
+        <span class="copy">CHÉP</span>
+      </button>
+  </section>
+
+  <section class="card">
+    <h2>🔥 Sản phẩm đang hot</h2>
+    <p class="sub">Shop lọc theo xu hướng bán chạy trên Shopee — giá là giá tham khảo khi mở deal.</p>
+    <div class="grid">
+      <div class="prod">
+        <div class="thumb"><img src="https://down-vn.img.susercontent.com/file/vn-11134207-81ztc-ms6ev4ymwuf4f9" alt="" loading="lazy" onerror="this.parentNode.textContent='🛍️'"></div>
+        <div class="pbody">
+          <div class="pname">Bộ lọc rác thoát nước kiểu Nhật</div>
+          <div class="pprice">Từ ~93K</div>
+          <a class="deal" href="https://s.shopee.vn/an_redir?origin_link=https%3A%2F%2Fshopee.vn%2Fsearch%3Fkeyword%3Db%25E1%25BB%2599%2520l%25E1%25BB%258Dc%2520r%25C3%25A1c%2520tho%25C3%25A1t%2520n%25C6%25B0%25E1%25BB%259Bc&amp;affiliate_id=17399480595&amp;sub_id=web-sanma" target="_blank" rel="sponsored nofollow noopener">Xem deal →</a>
+        </div>
+      </div>
+      <div class="prod">
+        <div class="thumb"><img src="https://down-vn.img.susercontent.com/file/vn-11134207-81ztc-mmtnztgtz37p20" alt="" loading="lazy" onerror="this.parentNode.textContent='🛍️'"></div>
+        <div class="pbody">
+          <div class="pname">Áo thun unisex form rộng M@DENO</div>
+          <div class="pprice">Từ ~53K</div>
+          <a class="deal" href="https://s.shopee.vn/an_redir?origin_link=https%3A%2F%2Fshopee.vn%2Fsearch%3Fkeyword%3D%25C3%25A1o%2520thun%2520form%2520r%25E1%25BB%2599ng%2520in%2520h%25E1%25BB%258Da%2520ti%25E1%25BA%25BFt&amp;affiliate_id=17399480595&amp;sub_id=web-sanma" target="_blank" rel="sponsored nofollow noopener">Xem deal →</a>
+        </div>
+      </div>
+      <div class="prod">
+        <div class="thumb"><img src="https://down-vn.img.susercontent.com/file/vn-11134207-81ztc-mule0cdmifb47a" alt="" loading="lazy" onerror="this.parentNode.textContent='🛍️'"></div>
+        <div class="pbody">
+          <div class="pname">Cáp sạc nhanh DOSEN PD 20W Type-C</div>
+          <div class="pprice">Từ ~87K</div>
+          <a class="deal" href="https://s.shopee.vn/an_redir?origin_link=https%3A%2F%2Fshopee.vn%2Fsearch%3Fkeyword%3Dc%25C3%25A1p%2520s%25E1%25BA%25A1c%2520nhanh%2520type%2520c%252020w&amp;affiliate_id=17399480595&amp;sub_id=web-sanma" target="_blank" rel="sponsored nofollow noopener">Xem deal →</a>
+        </div>
+      </div>
+      <div class="prod">
+        <div class="thumb"><img src="https://down-vn.img.susercontent.com/file/vn-11134207-81ztc-mtdo0sb88o3kba" alt="" loading="lazy" onerror="this.parentNode.textContent='🛍️'"></div>
+        <div class="pbody">
+          <div class="pname">Gối massage hồng ngoại cổ vai gáy</div>
+          <div class="pprice">Từ ~245K</div>
+          <a class="deal" href="https://s.shopee.vn/an_redir?origin_link=https%3A%2F%2Fshopee.vn%2Fsearch%3Fkeyword%3Dg%25E1%25BB%2591i%2520massage%2520c%25E1%25BB%2595%2520vai%2520g%25C3%25A1y&amp;affiliate_id=17399480595&amp;sub_id=web-sanma" target="_blank" rel="sponsored nofollow noopener">Xem deal →</a>
+        </div>
+      </div>
+      <div class="prod">
+        <div class="thumb"><img src="https://down-vn.img.susercontent.com/file/cn-11134207-820l4-ms13u5yreosn82" alt="" loading="lazy" onerror="this.parentNode.textContent='🛍️'"></div>
+        <div class="pbody">
+          <div class="pname">Mặt nạ YEKO Niacinamide (10 miếng)</div>
+          <div class="pprice">Từ ~47K</div>
+          <a class="deal" href="https://s.shopee.vn/an_redir?origin_link=https%3A%2F%2Fshopee.vn%2Fsearch%3Fkeyword%3Dm%25E1%25BA%25B7t%2520n%25E1%25BA%25A1%2520niacinamide&amp;affiliate_id=17399480595&amp;sub_id=web-sanma" target="_blank" rel="sponsored nofollow noopener">Xem deal →</a>
+        </div>
+      </div>
+      <div class="prod">
+        <div class="thumb"><img src="https://down-vn.img.susercontent.com/file/vn-11134207-7ras8-mcer4zmuf8vw59" alt="" loading="lazy" onerror="this.parentNode.textContent='🛍️'"></div>
+        <div class="pbody">
+          <div class="pname">Kem dưỡng trắng da Niacinamide 30g</div>
+          <div class="pprice">Từ ~48K</div>
+          <a class="deal" href="https://s.shopee.vn/an_redir?origin_link=https%3A%2F%2Fshopee.vn%2Fsearch%3Fkeyword%3Dkem%2520d%25C6%25B0%25E1%25BB%25A1ng%2520tr%25E1%25BA%25AFng%2520da%2520niacinamide&amp;affiliate_id=17399480595&amp;sub_id=web-sanma" target="_blank" rel="sponsored nofollow noopener">Xem deal →</a>
+        </div>
+      </div></div>
+  </section>
+
+  <section class="card mint">
+    <h2>🔎 Tra cứu trước khi mua</h2>
+    <p class="sub">Sợ món đồ không đáng tiền? Gửi link, shop đọc thông tin sản phẩm và rà đánh giá thật của người đã mua trên Shopee rồi kết luận đáng mua hay không — kết quả hiện ngay trên chính thiết bị của bạn, thường trong 1–3 phút.</p>
+    <a class="cta" href="https://sansalecunglong.github.io/">Mở tra cứu ở trang chính →</a>
+  </section>
+
+  <section class="card">
+    <h2>👛 Ví của bạn</h2>
+    <p class="sub">Đăng ký miễn phí bằng email — mỗi tài khoản có một mã riêng để shop đối soát đúng đơn của bạn.</p>
+    <div class="walletMock">
+      <div class="wtile"><b class="num">0đ</b><span>khả dụng</span></div>
+      <div class="wtile"><b class="num">0đ</b><span>tạm tính</span></div>
+      <div class="wtile"><b class="num">0đ</b><span>đã nhận</span></div>
+    </div>
+    <a class="cta" href="https://sansalecunglong.github.io/">Đăng ký / đăng nhập ở trang chính →</a>
+  </section>
+
+  <section class="card">
+    <h2>Hỏi nhanh</h2>
+    <p class="sub">Ba câu khách hỏi nhiều nhất.</p>
+    <details><summary>Tiền hoàn tính thế nào?</summary><p>Mỗi đơn qua link của trang sinh hoa hồng cho shop. Shop hoàn lại 80% phần hoa hồng thực nhận (sau thuế Shopee khấu trừ) cho chính người mua, ghi vào ví theo mã tài khoản của bạn.</p></details>
+    <details><summary>Khi nào rút được?</summary><p>Khi đơn đã hoàn tất trên Shopee và số dư khả dụng đủ 10.000đ. Shop chuyển khoản thủ công theo thông tin ngân hàng bạn đã lưu.</p></details>
+    <details><summary>Trang có phải của Shopee không?</summary><p>Không. Đây là trang của shop Săn Sale Cùng Long — mọi giao dịch mua bán vẫn diễn ra trên Shopee như bình thường.</p></details>
+  </section>
+
+  <footer>
+    <div class="fname">Săn Sale Cùng Long</div>
+    <p>Săn mã mỗi ngày — mua qua trang, nhận hoàn 80% hoa hồng.</p>
+    <div class="fbtns">
+      <a class="fb" href="https://m.me/Levietlong95" target="_blank" rel="noopener">💬 Chat Facebook</a>
+      <a class="zl" href="https://zalo.me/0395250965" target="_blank" rel="noopener">Chat Zalo</a>
+    </div>
+    <div class="tiny">Bản concept thiết kế theo quy trình ECC — trang chính thức: sansalecunglong.github.io</div>
+  </footer>
+</div>
+<div class="toast" id="toast"></div>
+<script>
+var AFF_ID = "17399480595";
+var VOUCHERS = [{"code": "VNM250KOCT", "off": "Giảm 12% tối đa 250K", "cond": "Đơn từ 200K", "fam": "Toàn sàn Shopee", "exp": "Hết hạn 31/10/2026", "chk": "ANM, 12:17 29/10"}, {"code": "WASTON150K", "off": "Giảm 14% tối đa 150K", "cond": "Đơn từ 150K", "fam": "Toàn sàn Shopee", "exp": "Hết hạn 31/10/2026", "chk": "ANM, 12:17 29/10"}, {"code": "VIDEO-1530863982120960", "off": "Giảm 18% tối đa 99K", "cond": "Đơn từ 99K", "fam": "Shopee Video — Siêu Sale Quốc Tế", "exp": "Hết hạn 31/10/2026", "chk": "ANM, 12:17 29/10"}, {"code": "VIDEO-1530863982383108", "off": "Giảm 16% tối đa 150K", "cond": "Đơn từ 99K", "fam": "Shopee Video — Siêu Sale Quốc Tế", "exp": "Hết hạn 31/10/2026", "chk": "ANM, 12:17 29/10"}, {"code": "VIDEO-1530863990116360", "off": "Giảm 16% tối đa 150K", "cond": "Đơn từ 150K", "fam": "Shopee Video — Siêu Sale Quốc Tế", "exp": "Hết hạn 31/10/2026", "chk": "ANM, 12:17 29/10"}, {"code": "VIDEO-1532309800783872", "off": "Giảm 20% tối đa 140K", "cond": "Đơn từ 250K", "fam": "Shopee Video — Thời Trang", "exp": "Hết hạn 31/10/2026", "chk": "ANM, 12:17 29/10"}, {"code": "VIDEO-1532309799997440", "off": "Giảm 21% tối đa 400K", "cond": "Đơn từ 700K", "fam": "Shopee Video — Thời Trang", "exp": "Hết hạn 31/10/2026", "chk": "ANM, 12:17 29/10"}];
+function wrapAff(u){ return "https://s.shopee.vn/an_redir?origin_link=" + encodeURIComponent(u) + "&affiliate_id=" + AFF_ID + "&sub_id=web-sanma"; }
+function toast(t){ var el=document.getElementById('toast'); el.textContent=t; el.classList.add('show'); setTimeout(function(){el.classList.remove('show');},2200); }
+function copyText(t, ok){ if(navigator.clipboard && navigator.clipboard.writeText){ navigator.clipboard.writeText(t).then(function(){toast(ok);}, function(){toast(t);}); } else { toast(t); } }
+function isShopee(u){ try { var h=new URL(u).hostname; return /shopee|shp\.ee|shope\.ee/.test(h); } catch(e){ return /shopee|shp\.ee|shope\.ee/.test(u); } }
+function doConvert(){
+  var v=document.getElementById('linkIn').value.trim();
+  var msg=document.getElementById('msg'); var res=document.getElementById('result');
+  if(!v){ msg.className='msg err'; msg.textContent='Bạn chưa dán link — hãy dán link sản phẩm Shopee vào ô trên.'; res.style.display='none'; return; }
+  if(!isShopee(v)){ msg.className='msg err'; msg.textContent='Link này chưa phải link Shopee — kiểm tra lại giúp shop nhé.'; res.style.display='none'; return; }
+  msg.className='msg'; msg.textContent='';
+  document.getElementById('openBtn').href = wrapAff(v);
+  var box=document.getElementById('miniCodes'); box.innerHTML='';
+  VOUCHERS.slice(0,3).forEach(function(vv){
+    var b=document.createElement('button'); b.type='button'; b.className='miniCode';
+    b.innerHTML='<span class="off"></span><span class="cd"></span><span class="cp">CHÉP MÃ</span>';
+    b.querySelector('.off').textContent=vv.off; b.querySelector('.cd').textContent=vv.code;
+    b.addEventListener('click', function(){ copyText(vv.code, 'Đã chép mã ' + vv.code); });
+    box.appendChild(b);
+  });
+  res.style.display='block';
+  res.scrollIntoView({behavior:'smooth', block:'nearest'});
+}
+document.getElementById('btnGo').addEventListener('click', doConvert);
+document.getElementById('linkIn').addEventListener('keydown', function(e){ if(e.key==='Enter'){ e.preventDefault(); doConvert(); } });
+document.getElementById('btnPaste').addEventListener('click', function(){
+  if(navigator.clipboard && navigator.clipboard.readText){ navigator.clipboard.readText().then(function(t){ if(t){ document.getElementById('linkIn').value=t; doConvert(); } else { toast('Chưa có gì trong bộ nhớ tạm'); } }, function(){ toast('Trình duyệt chưa cho dán tự động — bạn giữ ô và chọn Dán nhé'); }); }
+  else { toast('Bạn giữ ô nhập và chọn Dán nhé'); }
+});
+document.querySelectorAll('.ticket').forEach(function(t){ t.addEventListener('click', function(){ copyText(t.getAttribute('data-code'), 'Đã chép mã ' + t.getAttribute('data-code')); }); });
+</script>
+</body>
+</html>
