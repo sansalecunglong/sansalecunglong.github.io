@@ -19,23 +19,23 @@
 <meta name="twitter:card" content="summary_large_image">
 <style>
   :root{
-    --primary:#e63e1f; --primary-dark:#c23215; --bg:#fff8f2; --card:#ffffff;
-    --text:#222; --muted:#8a8a8a; --border:#f0e2d6; --green:#0f9d58; --gold:#f5a623;
+    --primary:#d63c1e; --primary-dark:#c23215; --bg:#ffffff; --card:#ffffff;
+    --text:#222; --muted:#6e6e6e; --border:#f0e2d6; --green:#0f9d58; --gold:#f5a623;
   }
   *{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
   body{margin:0; font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
        background:var(--bg); color:var(--text); line-height:1.55;}
   .wrap{max-width:720px; margin:0 auto; padding:0 14px 48px;}
-  header.topbar{position:sticky; top:0; z-index:10; background:linear-gradient(135deg,var(--primary),#f66a2d);
+  header.topbar{position:sticky; top:0; z-index:10; background:linear-gradient(135deg,var(--primary),#c93a1d);
     color:#fff; padding:12px 16px; margin:0 -14px; display:flex; align-items:center; gap:10px;
-    box-shadow:0 2px 10px rgba(230,62,31,.25);}
+    box-shadow:0 2px 10px rgba(0,0,0,.18);}
   header.topbar .logo{font-size:26px;}
   header.topbar .name{font-weight:800; font-size:17px; line-height:1.2;}
-  header.topbar .tag{font-size:12px; opacity:.92;}
-  .hero{background:linear-gradient(135deg,var(--primary),#f66a2d); color:#fff; margin:0 -14px;
+  header.topbar .tag{font-size:12px; opacity:1;}
+  .hero{background:linear-gradient(135deg,var(--primary),#c93a1d); color:#fff; margin:0 -14px;
     padding:20px 16px 22px; border-radius:0 0 24px 24px;}
   .hero h1{margin:0 0 4px; font-size:21px;}
-  .hero p{margin:0 0 14px; font-size:13.5px; opacity:.95;}
+  .hero p{margin:0 0 14px; font-size:13.5px; opacity:1;}
   .searchrow{display:flex; gap:8px;}
   .searchrow input{flex:1; padding:13px 14px; font-size:15px; border:none; border-radius:12px; outline:none; min-width:0;}
   .searchrow button{flex-shrink:0; padding:13px 16px; font-size:15px; font-weight:700; color:var(--primary);
@@ -57,8 +57,8 @@
   .banner .ic{font-size:26px; margin-bottom:4px;}
   .banner .t{font-weight:800; font-size:15.5px; line-height:1.25;}
   .banner .s{font-size:12px; opacity:.92;}
-  .banner.b1{background:linear-gradient(135deg,#f5a623,#f76b1c);}
-  .banner.b2{background:linear-gradient(135deg,#7b2ff7,#f107a3);}
+  .banner.b1{background:linear-gradient(135deg,#f5a623,#f76b1c); color:#3a2000;}
+  .banner.b2{background:linear-gradient(135deg,#7b2ff7,#c1067c);}
   .card{background:var(--card); border:1px solid var(--border); border-radius:18px;
     padding:18px; margin-top:16px; box-shadow:0 4px 14px rgba(230,62,31,.06);}
   .card h2{margin:0 0 4px; font-size:18px;}
@@ -86,12 +86,12 @@
   .vrow .vname{font-size:16.5px; font-weight:700;}
   .vrow .voff{color:var(--primary); font-weight:800; font-size:18px; white-space:nowrap;}
   .vrow .vcond{font-size:13px; color:#666; text-align:center; margin-top:2px;}
-  .vrow .vnote{font-size:12px; color:#999; text-align:center;}
+  .vrow .vnote{font-size:12px; color:#6e6e6e; text-align:center;}
   .vrow .vbtn{display:block; width:100%; margin-top:10px; padding:11px; border:none; border-radius:10px; background:var(--primary);
     color:#fff; font-weight:700; font-size:14.5px; cursor:pointer; text-align:center; text-decoration:none;}
   .vrow.locked{opacity:.72;}
   .hrow{display:flex; gap:8px; align-items:center; font-size:12.5px; padding:6px 0; border-bottom:1px dashed #eee;}
-  .hrow .ht{color:#999; flex-shrink:0;}
+  .hrow .ht{color:#6e6e6e; flex-shrink:0;}
   .hrow .hr{flex:1; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; color:#555;}
   .hrow a{color:var(--primary); font-weight:700; text-decoration:none; flex-shrink:0;}
   #btnPaste{flex-shrink:0; padding:0 14px; border:1.5px solid var(--primary); border-radius:12px; background:#fff;
@@ -101,11 +101,11 @@
   .prod .thumb{height:118px; display:flex; align-items:center; justify-content:center; font-size:46px;
     background:linear-gradient(135deg,#fff1e6,#ffe3d1); overflow:hidden;}
   .prod .thumb img{width:100%; height:100%; object-fit:cover; display:block;}
-  .prod .stars{font-size:11.5px; color:#e8a13a; font-weight:600;}
+  .prod .stars{font-size:12.5px; color:#e8a13a; font-weight:600;}
   .prod .body{padding:10px 11px 12px; display:flex; flex-direction:column; gap:3px; flex:1;}
   .prod .pname{font-weight:700; font-size:14px; line-height:1.3;}
   .prod .price{color:var(--primary); font-weight:800; font-size:15px;}
-  .prod .pnote{font-size:11.5px; color:var(--muted);}
+  .prod .pnote{font-size:12.5px; color:var(--muted);}
   .prod button{margin-top:auto; padding:9px; border:none; border-radius:9px; background:var(--primary);
     color:#fff; font-weight:700; font-size:13.5px; cursor:pointer;}
   .prod button:active{background:var(--primary-dark);}
@@ -114,7 +114,7 @@
   .prod a.dealbtn:active{background:var(--primary-dark);}
   .prod a.askbtn{margin-top:7px; padding:8px; border-radius:9px; background:#fff; border:1.5px solid var(--primary); color:var(--primary); display:block; text-align:center; text-decoration:none; font-weight:700; font-size:13.5px;}
   .prod a.askbtn:active{background:#fff1e8;}
-  .prod a.videobtn{margin-top:7px; padding:8px; border-radius:9px; background:#1877F2; color:#fff; display:block; text-align:center; text-decoration:none; font-weight:700; font-size:13.5px;}
+  .prod a.videobtn{margin-top:7px; padding:8px; border-radius:9px; background:#166fe5; color:#fff; display:block; text-align:center; text-decoration:none; font-weight:700; font-size:13.5px;}
   a.asklink{display:inline-block; margin-top:2px; font-size:12.5px; color:var(--primary); font-weight:700; text-decoration:none;}
   a.dealbtn.solo{padding:9px 14px; border-radius:9px; background:var(--primary); display:inline-block;
     color:#fff; font-weight:700; font-size:13.5px; text-align:center; text-decoration:none; cursor:pointer;}
@@ -127,7 +127,7 @@
   .rankrow:first-child{padding-top:2px;}
   .ranknum{flex-shrink:0; width:34px; height:34px; border-radius:50%; display:flex; align-items:center; justify-content:center;
     font-weight:800; font-size:16px; background:#ffe9e2; color:var(--primary-dark);}
-  .ranknum.r1{background:linear-gradient(135deg,#f5a623,#f76b1c); color:#fff; box-shadow:0 3px 8px rgba(245,166,35,.4);}
+  .ranknum.r1{background:linear-gradient(135deg,#f5a623,#f76b1c); color:#3a2000; box-shadow:0 3px 8px rgba(0,0,0,.18);}
   .ranknum.r2{background:#e9e9e9; color:#666;}
   .ranknum.r3{background:#f3d9c8; color:#a05a2c;}
   .rankthumb{width:56px; height:56px; border-radius:12px; overflow:hidden; flex-shrink:0;
@@ -171,7 +171,7 @@ body{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;text-r
   body{font-size:15.5px;line-height:1.55}
   .card h2{font-size:19px;letter-spacing:-.2px}
   .card .sub{font-size:13.5px}
-  .btn{font-size:15.5px;padding:13px 14px;border-radius:14px;box-shadow:0 2px 8px rgba(238,77,45,.22)}
+  .btn{font-size:15.5px;padding:13px 14px;border-radius:14px;box-shadow:0 2px 8px rgba(0,0,0,.16)}
   #codeBtns .btn{margin-top:8px}
   #codeBtns .btn:first-child{margin-top:4px}
   .vrow .vicon{font-size:21px}
@@ -190,17 +190,17 @@ body{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;text-r
 /* Hiệu ứng tải lại mã (thêm 26/10/2026): danh sách mã hiện dần + thẻ Bước 2 nhấp nháy viền cam */
 @keyframes rowIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
 #vouchers .vrow.refresh{animation:rowIn .45s ease both}
-@keyframes cardPulse{0%{box-shadow:0 0 0 0 rgba(238,77,45,.45)}100%{box-shadow:0 0 0 16px rgba(238,77,45,0)}}
+@keyframes cardPulse{0%{box-shadow:0 0 0 0 rgba(0,0,0,.35)}100%{box-shadow:0 0 0 16px rgba(0,0,0,0)}}
 #secStep2.pulse{animation:cardPulse .8s ease-out 2}
 </style>
 
 <style>
 /* Nút mã kiểu 3D clay như mẫu Long gửi (26/10/2026): nút cam đỏ phồng, chữ trắng đậm, icon lớn */
-#topVoucher{background:#fff7e8 !important;border:2.5px dotted #ee4d2d !important;border-radius:22px !important}
-#codeBtns .codego{display:flex;align-items:center;gap:12px;background:linear-gradient(145deg,#ff7847,#ee4d2d);
+#topVoucher{background:#fff7e8 !important;border:2.5px dotted #d63c1e !important;border-radius:22px !important}
+#codeBtns .codego{display:flex;align-items:center;gap:12px;background:linear-gradient(145deg,#ff7847,#d63c1e);
   border-radius:26px;padding:14px 18px;margin-top:12px;border:3px solid #fff;text-align:left;
-  box-shadow:0 6px 0 #c93a1e,0 12px 22px rgba(238,77,45,.35),inset 0 2px 3px rgba(255,255,255,.5),inset 0 -4px 8px rgba(0,0,0,.12)}
-#codeBtns .codego:active{transform:translateY(3px);box-shadow:0 3px 0 #c93a1e,0 6px 12px rgba(238,77,45,.3)}
+  box-shadow:0 6px 0 #c93a1e,0 12px 22px rgba(0,0,0,.25),inset 0 2px 3px rgba(255,255,255,.5),inset 0 -4px 8px rgba(0,0,0,.12)}
+#codeBtns .codego:active{transform:translateY(3px);box-shadow:0 3px 0 #c93a1e,0 6px 12px rgba(0,0,0,.22)}
 #codeBtns .cicon{font-size:42px;line-height:1;flex-shrink:0;filter:drop-shadow(0 3px 3px rgba(0,0,0,.25))}
 #codeBtns .ctext{display:flex;flex-direction:column;line-height:1.12;min-width:0}
 #codeBtns .cname{font-size:17px;font-weight:800;color:#fff;text-shadow:0 2px 2px rgba(0,0,0,.18);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
@@ -215,10 +215,10 @@ body{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;text-r
 .topauth button{font-family:inherit; cursor:pointer; border-radius:999px; font-weight:800; font-size:13.5px; padding:9px 15px; line-height:1.1; transition:transform .08s ease, background .15s ease;}
 .topauth button:active{transform:scale(.96);}
 #topLogin{background:#fff; color:var(--primary-dark); border:none; box-shadow:0 2px 8px rgba(0,0,0,.20);}
-#topRegister{background:rgba(255,255,255,.14); color:#fff; border:1.5px solid rgba(255,255,255,.85);}
+#topRegister{background:rgba(0,0,0,.18); color:#fff; border:1.5px solid rgba(255,255,255,.85);}
 #topDash{display:none; background:#fff; color:var(--primary-dark); border:none; max-width:190px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; box-shadow:0 2px 8px rgba(0,0,0,.20);}
-#topLogout{display:none; background:rgba(255,255,255,.14); color:#fff; border:1.5px solid rgba(255,255,255,.55); font-weight:700;}
-#secAccount.flash{box-shadow:0 0 0 3px rgba(238,77,45,.55), 0 4px 14px rgba(230,62,31,.10);}
+#topLogout{display:none; background:rgba(0,0,0,.18); color:#fff; border:1.5px solid rgba(255,255,255,.55); font-weight:700;}
+#secAccount.flash{box-shadow:0 0 0 3px rgba(0,0,0,.35), 0 4px 14px rgba(0,0,0,.10);}
 @media (max-width:640px){
   header.topbar .tag{display:none;}
   header.topbar .name{font-size:15px;}
@@ -273,7 +273,7 @@ body{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;text-r
     <div id="result">
       <div id="prodDone" style="display:none; background:#f2fbf5; border:1px solid #bfe8cc; border-radius:10px; padding:9px 12px; margin-bottom:10px; font-size:13.5px;">
         🛍️ Đã nhận link sản phẩm của bạn
-        <div id="prodDoneTxt" style="color:#1a9e4b; font-weight:700; margin-top:2px;">✔ Đã chuyển đổi xong</div>
+        <div id="prodDoneTxt" style="color:#15803d; font-weight:700; margin-top:2px;">✔ Đã chuyển đổi xong</div>
       </div>
       <p id="prodInsight" style="display:none; font-size:13px; color:#444; margin:0 0 8px;"></p>
       <p id="openGuide" style="display:none; font-size:12.5px; color:#555; margin:0;">✅ Bấm nút bên dưới để mở đúng sản phẩm của bạn trên Shopee qua link của shop.</p>
@@ -282,7 +282,7 @@ body{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;text-r
         <div id="resultCodes" style="display:none; margin-top:14px;">
           <div style="font-weight:800; font-size:15px;">🎟️ Bước 2: Mã giảm giá</div>
           <div id="resultCodeList" style="display:grid; gap:8px; margin-top:8px;"></div>
-          <div style="font-size:12px; color:#777; margin-top:6px;">Đã chọn 3 mã hợp nhất với sản phẩm của bạn. Dán mã ở bước thanh toán — Shopee chốt mã áp được theo tài khoản và ngành hàng.</div>
+          <div style="font-size:12px; color:#6e6e6e; margin-top:6px;">Đã chọn 3 mã hợp nhất với sản phẩm của bạn. Dán mã ở bước thanh toán — Shopee chốt mã áp được theo tài khoản và ngành hàng.</div>
         </div>
       </div>
       <div id="reviewBox" style="display:none; background:#fffbe8; border:1px solid #f0dfa0; border-radius:10px; padding:9px 12px; margin:0 0 10px; font-size:13px; line-height:1.55;">
@@ -304,7 +304,7 @@ body{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;text-r
       <div style="font-weight:800; font-size:16px;">🔥 Mã Hot Sắp Lên Sóng</div>
       <div id="nextFrame" style="font-size:13.5px; margin-top:5px;"></div>
       <div id="upcomingList"></div>
-      <div style="font-size:12px; color:#777; margin-top:8px;">Các khung giờ nhả mã và đợt sale lớn sắp tới — canh đúng giờ vào app Shopee để lưu mã tại banner nhé.</div>
+      <div style="font-size:12px; color:#6e6e6e; margin-top:8px;">Các khung giờ nhả mã và đợt sale lớn sắp tới — canh đúng giờ vào app Shopee để lưu mã tại banner nhé.</div>
     </div>
   </section>
 
@@ -320,16 +320,16 @@ body{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;text-r
       <div id="accLoginView" style="display:grid; gap:8px; margin-top:8px;">
         <input type="email" id="accEmail" placeholder="Email của bạn" autocomplete="email" style="padding:11px 12px; border:1.5px solid #ddd; border-radius:10px; font-size:15px; width:100%; box-sizing:border-box;">
         <input type="password" id="accPass" placeholder="Mật khẩu" autocomplete="current-password" style="padding:11px 12px; border:1.5px solid #ddd; border-radius:10px; font-size:15px; width:100%; box-sizing:border-box;">
-        <button id="accLogin" style="background:#ee4d2d; color:#fff; border:none; border-radius:10px; padding:12px; font-size:16px; font-weight:800; cursor:pointer;">Đăng nhập</button>
-        <p class="sub" style="text-align:center; margin:2px 0 0;">Chưa có tài khoản? <a href="#" id="accToRegister" style="color:#ee4d2d; font-weight:800; text-decoration:none;">Đăng ký ngay</a></p>
+        <button id="accLogin" style="background:#d63c1e; color:#fff; border:none; border-radius:10px; padding:12px; font-size:16px; font-weight:800; cursor:pointer;">Đăng nhập</button>
+        <p class="sub" style="text-align:center; margin:2px 0 0;">Chưa có tài khoản? <a href="#" id="accToRegister" style="color:#d63c1e; font-weight:800; text-decoration:none;">Đăng ký ngay</a></p>
       </div>
       <div id="accRegView" style="display:none; gap:8px; margin-top:8px;">
         <input type="email" id="accEmailR" placeholder="Email của bạn" autocomplete="email" style="padding:11px 12px; border:1.5px solid #ddd; border-radius:10px; font-size:15px; width:100%; box-sizing:border-box;">
         <input type="password" id="accPassR" placeholder="Mật khẩu (ít nhất 6 ký tự)" autocomplete="new-password" style="padding:11px 12px; border:1.5px solid #ddd; border-radius:10px; font-size:15px; width:100%; box-sizing:border-box;">
-        <button id="accRegister" style="background:#ee4d2d; color:#fff; border:none; border-radius:10px; padding:12px; font-size:16px; font-weight:800; cursor:pointer;">Đăng ký tài khoản</button>
-        <p class="sub" style="text-align:center; margin:2px 0 0;">Đã có tài khoản? <a href="#" id="accToLogin" style="color:#ee4d2d; font-weight:800; text-decoration:none;">Đăng nhập</a></p>
+        <button id="accRegister" style="background:#d63c1e; color:#fff; border:none; border-radius:10px; padding:12px; font-size:16px; font-weight:800; cursor:pointer;">Đăng ký tài khoản</button>
+        <p class="sub" style="text-align:center; margin:2px 0 0;">Đã có tài khoản? <a href="#" id="accToLogin" style="color:#d63c1e; font-weight:800; text-decoration:none;">Đăng nhập</a></p>
       </div>
-      <div style="display:flex; align-items:center; gap:10px; margin:12px 0 8px;"><span style="flex:1; height:1px; background:#eee;"></span><span style="font-size:12.5px; color:#999;">hoặc</span><span style="flex:1; height:1px; background:#eee;"></span></div>
+      <div style="display:flex; align-items:center; gap:10px; margin:12px 0 8px;"><span style="flex:1; height:1px; background:#eee;"></span><span style="font-size:12.5px; color:#6e6e6e;">hoặc</span><span style="flex:1; height:1px; background:#eee;"></span></div>
       <button id="accGoogle" style="width:100%; background:#fff; color:#333; border:1.5px solid #ccc; border-radius:10px; padding:11px; font-size:15px; font-weight:700; cursor:pointer;">🔵 Đăng nhập bằng Google</button>
       <p class="sub" id="accMsg" style="text-align:left; margin:8px 0 0;"></p>
     </div>
@@ -338,19 +338,19 @@ body{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;text-r
       <div style="display:grid; gap:8px; margin-top:8px;">
         <input type="text" id="accNameF" placeholder="Tên của bạn" autocomplete="name" style="padding:11px 12px; border:1.5px solid #ddd; border-radius:10px; font-size:15px; width:100%; box-sizing:border-box;">
         <input type="text" id="accContactF" placeholder="Số Zalo, hoặc STK + tên ngân hàng (để shop trả tiền)" autocomplete="tel" style="padding:11px 12px; border:1.5px solid #ddd; border-radius:10px; font-size:15px; width:100%; box-sizing:border-box;">
-        <button id="accCreateF" style="background:#ee4d2d; color:#fff; border:none; border-radius:10px; padding:12px; font-size:16px; font-weight:800; cursor:pointer;">Tạo mã của tôi</button>
+        <button id="accCreateF" style="background:#d63c1e; color:#fff; border:none; border-radius:10px; padding:12px; font-size:16px; font-weight:800; cursor:pointer;">Tạo mã của tôi</button>
       </div>
     </div>
 <div id="accHave" style="display:none;">
-      <div style="display:flex; align-items:center; gap:12px; background:linear-gradient(135deg,#ee4d2d,#f97316); border-radius:14px; padding:14px; color:#fff;">
+      <div style="display:flex; align-items:center; gap:12px; background:linear-gradient(135deg,#d63c1e,#c2410c); border-radius:14px; padding:14px; color:#fff;">
         <div id="accAvatar" style="width:48px; height:48px; border-radius:50%; background:rgba(255,255,255,.25); border:2px solid rgba(255,255,255,.7); display:flex; align-items:center; justify-content:center; font-size:22px; font-weight:800; flex:none;">👤</div>
         <div style="min-width:0;">
           <div style="font-size:16px;">Xin chào <b id="accUserName"></b></div>
           <div id="accUserEmail" style="font-size:12.5px; opacity:.92;"></div>
-          <div style="margin-top:5px; font-size:12px;">Mã hoàn hoa hồng: <b id="accCode" style="font-size:16px; letter-spacing:1.5px; background:#fff; color:#ee4d2d; border-radius:6px; padding:1px 8px;"></b></div>
+          <div style="margin-top:5px; font-size:12px;">Mã hoàn hoa hồng: <b id="accCode" style="font-size:16px; letter-spacing:1.5px; background:#fff; color:#d63c1e; border-radius:6px; padding:1px 8px;"></b></div>
         </div>
       </div>
-<div id="accTabs" style="display:flex; gap:6px; margin-top:12px;"><button type="button" class="atab" data-atab="accTabHome" style="flex:1; padding:10px 2px; border-radius:10px; font-weight:700; font-size:14px; cursor:pointer; background:#ee4d2d; color:#fff; border:1.5px solid #ee4d2d;">🏠 Tiền</button><button type="button" class="atab" data-atab="accTabOrders" style="flex:1; padding:10px 2px; border-radius:10px; font-weight:700; font-size:14px; cursor:pointer; background:#fff; color:#333; border:1.5px solid #ddd;">🧾 Đơn hàng</button><button type="button" class="atab" data-atab="accTabInfo" style="flex:1; padding:10px 2px; border-radius:10px; font-weight:700; font-size:14px; cursor:pointer; background:#fff; color:#333; border:1.5px solid #ddd;">📝 Thông tin</button></div><div id="accTabHome">
+<div id="accTabs" style="display:flex; gap:6px; margin-top:12px;"><button type="button" class="atab" data-atab="accTabHome" style="flex:1; padding:10px 2px; border-radius:10px; font-weight:700; font-size:14px; cursor:pointer; background:#d63c1e; color:#fff; border:1.5px solid #d63c1e;">🏠 Tiền</button><button type="button" class="atab" data-atab="accTabOrders" style="flex:1; padding:10px 2px; border-radius:10px; font-weight:700; font-size:14px; cursor:pointer; background:#fff; color:#333; border:1.5px solid #ddd;">🧾 Đơn hàng</button><button type="button" class="atab" data-atab="accTabInfo" style="flex:1; padding:10px 2px; border-radius:10px; font-weight:700; font-size:14px; cursor:pointer; background:#fff; color:#333; border:1.5px solid #ddd;">📝 Thông tin</button></div><div id="accTabHome">
       <div id="accWallet" style="margin-top:12px; border:1.5px solid #e5e7eb; border-radius:14px; padding:12px; background:#fff;">
         <div style="text-align:center;">
           <div style="font-size:12px; font-weight:700; color:#666;">💰 SỐ DƯ KHẢ DỤNG — RÚT ĐƯỢC</div>
@@ -358,25 +358,25 @@ body{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;text-r
         </div>
         <div style="display:flex; gap:8px; flex-wrap:wrap; margin-top:6px;">
           <div style="flex:1; min-width:120px; background:#fff7ed; border:1.5px solid #fed7aa; border-radius:12px; padding:9px 6px; text-align:center;">
-            <div style="font-size:11.5px; color:#9a3412; font-weight:700;">⏳ TẠM TÍNH (CHỜ ĐỐI SOÁT)</div>
+            <div style="font-size:12.5px; color:#9a3412; font-weight:700;">⏳ TẠM TÍNH (CHỜ ĐỐI SOÁT)</div>
             <div id="accWalEst" style="font-size:17px; font-weight:800; color:#c2410c;">0₫</div>
           </div>
           <div style="flex:1; min-width:120px; background:#eff6ff; border:1.5px solid #bfdbfe; border-radius:12px; padding:9px 6px; text-align:center;">
-            <div style="font-size:11.5px; color:#1e40af; font-weight:700;">✅ SHOP ĐÃ TRẢ</div>
+            <div style="font-size:12.5px; color:#1e40af; font-weight:700;">✅ SHOP ĐÃ TRẢ</div>
             <div id="accWalPaid" style="font-size:17px; font-weight:800; color:#1d4ed8;">0₫</div>
           </div>
         </div>
-        <button id="accWithdraw" style="width:100%; margin-top:10px; background:#16a34a; color:#fff; border:none; border-radius:10px; padding:12px; font-size:16px; font-weight:800; cursor:pointer;">💸 Yêu cầu rút tiền</button>
+        <button id="accWithdraw" style="width:100%; margin-top:10px; background:#15803d; color:#fff; border:none; border-radius:10px; padding:12px; font-size:16px; font-weight:800; cursor:pointer;">💸 Yêu cầu rút tiền</button>
         <p class="sub" id="accWithdrawNote" style="text-align:left; margin:4px 0 0;">Rút được khi số dư khả dụng từ 10.000₫. Shop trả theo thông tin nhận tiền bạn đã lưu ở mục 📝 Thông tin.</p>
         <p class="sub" id="accBalance" style="text-align:left; margin:6px 0 0;">Chưa có kỳ đối soát nào — sau mỗi kỳ shop đối soát, số dư của bạn sẽ hiện tại đây.</p>
       </div>
       <div style="display:flex; gap:8px; flex-wrap:wrap; margin-top:10px;">
         <div style="flex:1; min-width:120px; background:#fafafa; border:1.5px solid #e5e7eb; border-radius:12px; padding:9px 6px; text-align:center;">
-          <div style="font-size:11.5px; color:#555; font-weight:700;">🧾 TỔNG ĐƠN ĐÃ GHI</div>
+          <div style="font-size:12.5px; color:#555; font-weight:700;">🧾 TỔNG ĐƠN ĐÃ GHI</div>
           <div id="accStatOrders" style="font-size:18px; font-weight:800; color:#111;">0</div>
         </div>
         <div style="flex:1; min-width:120px; background:#fafafa; border:1.5px solid #e5e7eb; border-radius:12px; padding:9px 6px; text-align:center;">
-          <div style="font-size:11.5px; color:#555; font-weight:700;">🎁 TỔNG HOÀN ĐÃ GHI</div>
+          <div style="font-size:12.5px; color:#555; font-weight:700;">🎁 TỔNG HOÀN ĐÃ GHI</div>
           <div id="accStatShare" style="font-size:18px; font-weight:800; color:#111;">0₫</div>
         </div>
       </div>
@@ -440,8 +440,8 @@ body{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;text-r
     <h2>🎬 Video Mới</h2>
     <p class="sub">Video mới nhất trên Facebook của shop — xem vui rồi quay lại săn sale tiếp nhé.</p>
     <div style="display:flex; gap:10px; flex-wrap:wrap;">
-      <a href="https://www.facebook.com/Levietlong95/reels" target="_blank" rel="noopener" style="flex:1; min-width:140px; text-align:center; background:#fff4ec; border:1.5px solid #ffd9c7; border-radius:12px; padding:16px 10px; text-decoration:none; color:#333; font-weight:700;">🐃 Trâu Đen<br><span style="font-size:12.5px; color:#777; font-weight:400;">Video hài mới nhất</span></a>
-      <a href="https://www.facebook.com/Levietlong95/videos" target="_blank" rel="noopener" style="flex:1; min-width:140px; text-align:center; background:#fff4ec; border:1.5px solid #ffd9c7; border-radius:12px; padding:16px 10px; text-decoration:none; color:#333; font-weight:700;">🎥 Kho Video<br><span style="font-size:12.5px; color:#777; font-weight:400;">Xem tất cả trên Facebook</span></a>
+      <a href="https://www.facebook.com/Levietlong95/reels" target="_blank" rel="noopener" style="flex:1; min-width:140px; text-align:center; background:#fff4ec; border:1.5px solid #ffd9c7; border-radius:12px; padding:16px 10px; text-decoration:none; color:#333; font-weight:700;">🐃 Trâu Đen<br><span style="font-size:12.5px; color:#6e6e6e; font-weight:400;">Video hài mới nhất</span></a>
+      <a href="https://www.facebook.com/Levietlong95/videos" target="_blank" rel="noopener" style="flex:1; min-width:140px; text-align:center; background:#fff4ec; border:1.5px solid #ffd9c7; border-radius:12px; padding:16px 10px; text-decoration:none; color:#333; font-weight:700;">🎥 Kho Video<br><span style="font-size:12.5px; color:#6e6e6e; font-weight:400;">Xem tất cả trên Facebook</span></a>
     </div>
   </div>
 
@@ -488,7 +488,7 @@ body{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;text-r
     <h2>🤝 Liên Hệ Hợp Tác</h2>
     <p class="sub">Cần shop săn mã riêng cho một món, hợp tác quảng bá hoặc góp ý về trang — nhắn trực tiếp cho shop qua một trong hai kênh dưới đây, bấm là mở khung chat ngay:</p>
     <div style="display:flex; gap:10px; flex-wrap:wrap;">
-      <a href="https://m.me/Levietlong95" target="_blank" rel="noopener" style="flex:1; min-width:150px; display:flex; align-items:center; justify-content:center; gap:9px; background:#1877F2; color:#fff; border-radius:12px; padding:13px 10px; text-decoration:none; font-weight:800; font-size:15.5px;">
+      <a href="https://m.me/Levietlong95" target="_blank" rel="noopener" style="flex:1; min-width:150px; display:flex; align-items:center; justify-content:center; gap:9px; background:#166fe5; color:#fff; border-radius:12px; padding:13px 10px; text-decoration:none; font-weight:800; font-size:15.5px;">
         <svg width="22" height="22" viewBox="0 0 24 24" fill="#fff" aria-hidden="true"><path d="M13.5 21.9v-7.9h2.65l.4-3.1H13.5V8.9c0-.9.25-1.5 1.55-1.5h1.65V4.6c-.3-.04-1.3-.13-2.45-.13-2.4 0-4.05 1.47-4.05 4.17v2.33H7.5V14h2.7v7.9a10 10 0 0 0 3.3 0z"/></svg>
         Nhắn qua Facebook
       </a>
@@ -512,11 +512,11 @@ body{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;text-r
     <h2>💰 Tài Khoản &amp; Mã Hoàn Hoa Hồng</h2>
     <p class="sub" style="text-align:left;">Mỗi khách một mã riêng — đơn mua qua trang này ghi theo đúng mã của bạn, shop đối soát hoa hồng Shopee và trả lại bạn <b>80% hoa hồng của đơn đó</b>. Đăng nhập để xem mã của bạn, số dư và lịch sử shop trả tiền trong bảng điều khiển.</p>
     <div id="accCtaOut" style="display:flex; gap:10px; flex-wrap:wrap;">
-      <button id="ctaLogin" type="button" style="flex:1; min-width:140px; background:#ee4d2d; color:#fff; border:none; border-radius:12px; padding:13px; font-size:16px; font-weight:800; cursor:pointer;">Đăng nhập</button>
-      <button id="ctaRegister" type="button" style="flex:1; min-width:140px; background:#fff; color:#ee4d2d; border:2px solid #ee4d2d; border-radius:12px; padding:13px; font-size:16px; font-weight:800; cursor:pointer;">Đăng ký</button>
+      <button id="ctaLogin" type="button" style="flex:1; min-width:140px; background:#d63c1e; color:#fff; border:none; border-radius:12px; padding:13px; font-size:16px; font-weight:800; cursor:pointer;">Đăng nhập</button>
+      <button id="ctaRegister" type="button" style="flex:1; min-width:140px; background:#fff; color:#d63c1e; border:2px solid #d63c1e; border-radius:12px; padding:13px; font-size:16px; font-weight:800; cursor:pointer;">Đăng ký</button>
     </div>
     <div id="accCtaIn" style="display:none;">
-      <p style="margin:0 0 10px;">Xin chào <b id="ctaName"></b> — mã hoàn hoa hồng của bạn: <b id="ctaCode" style="color:#ee4d2d; letter-spacing:1px;"></b></p>
+      <p style="margin:0 0 10px;">Xin chào <b id="ctaName"></b> — mã hoàn hoa hồng của bạn: <b id="ctaCode" style="color:#d63c1e; letter-spacing:1px;"></b></p>
       <button id="ctaDash" type="button" style="width:100%; background:#0b57d0; color:#fff; border:none; border-radius:12px; padding:13px; font-size:15.5px; font-weight:800; cursor:pointer;">👤 Mở bảng điều khiển của tôi</button>
     </div>
   </section>
@@ -1064,7 +1064,7 @@ function finishConvert(raw, aff, isUrl, warns) {
   lastAff = aff;
   document.getElementById("openGuide").style.display = "none";
   const doneTxt = document.getElementById("prodDoneTxt");
-  doneTxt.style.color = "#1a9e4b";
+  doneTxt.style.color = "#15803d";
   doneTxt.textContent = isUrl ? "✔ Đã chuyển đổi xong" : "✔ Đã tạo link tìm kiếm săn sale";
   pushHistory(raw, aff);
   const opb = document.getElementById("openProdBtn");
@@ -1228,7 +1228,7 @@ function renderProducts(boxId, list) {
     if (boxId === "products" && idx < 3) {
       const rb = document.createElement("div");
       rb.textContent = "🏆 Hạng " + (idx + 1);
-      rb.style.cssText = "position:absolute; top:8px; left:8px; background:#ff9800; color:#fff; font-size:11.5px; font-weight:800; padding:3px 9px; border-radius:999px; z-index:2;";
+      rb.style.cssText = "position:absolute; top:8px; left:8px; background:#ff9800; color:#fff; font-size:12.5px; font-weight:800; padding:3px 9px; border-radius:999px; z-index:2;";
       d.style.position = "relative";
       d.appendChild(rb);
     }
@@ -1325,7 +1325,7 @@ const PICK_META = {
         '<a class="dealbtn" target="_blank" rel="noopener">Xem deal →</a></div>';
       const rb = document.createElement("div");
       rb.textContent = meta.badge;
-      rb.style.cssText = "position:absolute; top:8px; left:8px; background:" + meta.bg + "; color:#fff; font-size:11.5px; font-weight:800; padding:3px 9px; border-radius:999px; z-index:2;";
+      rb.style.cssText = "position:absolute; top:8px; left:8px; background:" + meta.bg + "; color:#fff; font-size:12.5px; font-weight:800; padding:3px 9px; border-radius:999px; z-index:2;";
       d.appendChild(rb);
       const thumb = d.querySelector(".thumb");
       if (prod.img) {
@@ -1372,7 +1372,7 @@ renderProducts("household", HOUSEHOLD);
     row.querySelector(".rankcmt").textContent = RANK_NOTES[i] || "";
     row.querySelector(".rankprice").textContent = p.price;
     const rp = document.createElement("div");
-    rp.style.cssText = "font-size:11.5px; color:var(--muted);";
+    rp.style.cssText = "font-size:12.5px; color:var(--muted);";
     rp.textContent = "Giá tham khảo \u2022 Cập nhật ngày " + PAGE_UPDATED;
     row.querySelector(".rankbody").appendChild(rp);
     const ra = document.createElement("a");
@@ -2033,7 +2033,7 @@ function renderMyResearch() {
     card.appendChild(h);
     if (t.time) {
       const meta = document.createElement("div");
-      meta.style.cssText = "font-size:12px; color:#888; margin-top:1px;";
+      meta.style.cssText = "font-size:12px; color:#6e6e6e; margin-top:1px;";
       meta.textContent = "🕒 " + t.time;
       card.appendChild(meta);
     }
@@ -2050,7 +2050,7 @@ function renderMyResearch() {
       tx.textContent = " Đang tra cứu… 00:00";
       v.appendChild(tx);
       const sub = document.createElement("div");
-      sub.style.cssText = "font-size:12.5px; color:#777; font-weight:400; margin-top:2px;";
+      sub.style.cssText = "font-size:12.5px; color:#6e6e6e; font-weight:400; margin-top:2px;";
       sub.textContent = "Shop đang đọc sản phẩm và rà review — kết quả sẽ tự hiện tại đây, bạn cứ để trang mở hoặc quay lại sau.";
       v.appendChild(sub);
       card.appendChild(v);
@@ -2182,6 +2182,6 @@ document.getElementById("footName").textContent = CONFIG.pageName;
 document.getElementById("updStamp").textContent = "Cập nhật: " + PAGE_UPDATED + ".";
 </script>
 
-<div id="scrollBtns" style="position:fixed;right:10px;bottom:10px;display:none;flex-direction:column;gap:6px;z-index:900"><button type="button" title="Lên đầu trang" onclick="window.scrollTo({top:0,behavior:'smooth'})" style="width:40px;height:40px;border:none;border-radius:50%;font-size:17px;font-weight:700;background:#c21807;color:#fff;box-shadow:0 2px 8px rgba(0,0,0,.25);cursor:pointer;opacity:.92;padding:0">⬆</button><button type="button" title="Xuống cuối trang" onclick="window.scrollTo({top:document.body.scrollHeight,behavior:'smooth'})" style="width:40px;height:40px;border:none;border-radius:50%;font-size:17px;font-weight:700;background:#c21807;color:#fff;box-shadow:0 2px 8px rgba(0,0,0,.25);cursor:pointer;opacity:.92;padding:0">⬇</button></div><script>(function(){var box=document.getElementById("scrollBtns");var modal=document.getElementById("authModal");function modalOpen(){return modal&&getComputedStyle(modal).display!=="none";}function upd(){var max=document.documentElement.scrollHeight-window.innerHeight;var past=max>0&&window.scrollY>max/3;box.style.display=(past&&!modalOpen())?"flex":"none";}window.addEventListener("scroll",upd,{passive:true});window.addEventListener("resize",upd);if(modal&&window.MutationObserver)new MutationObserver(upd).observe(modal,{attributes:true,attributeFilter:["style","class"]});upd();})();</script><script>(function(){function show(id){["accTabHome","accTabOrders","accTabInfo"].forEach(function(p){var el=document.getElementById(p);if(el)el.style.display=(p===id)?"":"none";});document.querySelectorAll(".atab").forEach(function(b){var on=b.getAttribute("data-atab")===id;b.style.background=on?"#ee4d2d":"#fff";b.style.color=on?"#fff":"#333";b.style.borderColor=on?"#ee4d2d":"#ddd";});}document.addEventListener("click",function(e){var b=e.target&&e.target.closest?e.target.closest(".atab"):null;if(b)show(b.getAttribute("data-atab"));});show("accTabHome");})();</script>
+<div id="scrollBtns" style="position:fixed;right:10px;bottom:10px;display:none;flex-direction:column;gap:6px;z-index:900"><button type="button" title="Lên đầu trang" onclick="window.scrollTo({top:0,behavior:'smooth'})" style="width:40px;height:40px;border:none;border-radius:50%;font-size:17px;font-weight:700;background:#c21807;color:#fff;box-shadow:0 2px 8px rgba(0,0,0,.25);cursor:pointer;opacity:.92;padding:0">⬆</button><button type="button" title="Xuống cuối trang" onclick="window.scrollTo({top:document.body.scrollHeight,behavior:'smooth'})" style="width:40px;height:40px;border:none;border-radius:50%;font-size:17px;font-weight:700;background:#c21807;color:#fff;box-shadow:0 2px 8px rgba(0,0,0,.25);cursor:pointer;opacity:.92;padding:0">⬇</button></div><script>(function(){var box=document.getElementById("scrollBtns");var modal=document.getElementById("authModal");function modalOpen(){return modal&&getComputedStyle(modal).display!=="none";}function upd(){var max=document.documentElement.scrollHeight-window.innerHeight;var past=max>0&&window.scrollY>max/3;box.style.display=(past&&!modalOpen())?"flex":"none";}window.addEventListener("scroll",upd,{passive:true});window.addEventListener("resize",upd);if(modal&&window.MutationObserver)new MutationObserver(upd).observe(modal,{attributes:true,attributeFilter:["style","class"]});upd();})();</script><script>(function(){function show(id){["accTabHome","accTabOrders","accTabInfo"].forEach(function(p){var el=document.getElementById(p);if(el)el.style.display=(p===id)?"":"none";});document.querySelectorAll(".atab").forEach(function(b){var on=b.getAttribute("data-atab")===id;b.style.background=on?"#d63c1e":"#fff";b.style.color=on?"#fff":"#333";b.style.borderColor=on?"#d63c1e":"#ddd";});}document.addEventListener("click",function(e){var b=e.target&&e.target.closest?e.target.closest(".atab"):null;if(b)show(b.getAttribute("data-atab"));});show("accTabHome");})();</script>
 </body>
 </html>
