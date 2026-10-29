@@ -564,7 +564,7 @@ const CONFIG = {
 };
 
 /* === AUTO-DATA-START: khu vực Muse tự cập nhật định kỳ — chỉ sửa trong 2 mốc này === */
-const PAGE_UPDATED = "29/10/2026";   // ← ngày cập nhật dữ liệu gần nhất
+const PAGE_UPDATED = "30/10/2026";   // ← ngày cập nhật dữ liệu gần nhất
 /* API dữ liệu sản phẩm Shopee qua RapidAPI (Long duyệt tối 26/10/2026):
    khóa do Long đăng ký gói miễn phí rồi gắn vào đây; để trống = tính năng tự tra tắt. */
 const RAPIDAPI_KEY = ""; /* TAM TAT 26/10/2026: goi free API v2 chi 5 luot/thang da het; cho Long quyet dinh nang goi hay doi nguon khac */
@@ -587,63 +587,67 @@ const UPCOMING = [
    mỗi mã phải có mặt trên nguồn tổng hợp (ANM tra mã / noti.sale) trong cửa sổ
    còn hiệu lực; TUYỆT ĐỐI không bịa mã, không bịa số lượt còn. Job nền mỗi giờ
    rà lại: mã nào nguồn không còn liệt kê hoặc đã hết hạn thì gỡ. */
-const VOUCHER_UPDATED = "12:17 29/10/2026";
+const VOUCHER_UPDATED = "04:25 30/10/2026";
 const VOUCHERS = [
-  { code: "VNM250KOCT", off: "Giảm 12% tối đa 250K", cond: "Đơn từ 200K", fam: "Toàn sàn Shopee", exp: "Hết hạn 31/10/2026", chk: "ANM, 12:17 29/10" },
-  { code: "WASTON150K", off: "Giảm 14% tối đa 150K", cond: "Đơn từ 150K", fam: "Toàn sàn Shopee", exp: "Hết hạn 31/10/2026", chk: "ANM, 12:17 29/10" },
-  { code: "VIDEO-1530863982120960", off: "Giảm 18% tối đa 99K", cond: "Đơn từ 99K", fam: "Shopee Video — Siêu Sale Quốc Tế", exp: "Hết hạn 31/10/2026", chk: "ANM, 12:17 29/10" },
-  { code: "VIDEO-1530863982383108", off: "Giảm 16% tối đa 150K", cond: "Đơn từ 99K", fam: "Shopee Video — Siêu Sale Quốc Tế", exp: "Hết hạn 31/10/2026", chk: "ANM, 12:17 29/10" },
-  { code: "VIDEO-1530863990116360", off: "Giảm 16% tối đa 150K", cond: "Đơn từ 150K", fam: "Shopee Video — Siêu Sale Quốc Tế", exp: "Hết hạn 31/10/2026", chk: "ANM, 12:17 29/10" },
-  { code: "VIDEO-1532309800783872", off: "Giảm 20% tối đa 140K", cond: "Đơn từ 250K", fam: "Shopee Video — Thời Trang", exp: "Hết hạn 31/10/2026", chk: "ANM, 12:17 29/10" },
-  { code: "VIDEO-1532309799997440", off: "Giảm 21% tối đa 400K", cond: "Đơn từ 700K", fam: "Shopee Video — Thời Trang", exp: "Hết hạn 31/10/2026", chk: "ANM, 12:17 29/10" }
+  { code: "VNM250KOCT", off: "Giảm 12% tối đa 250K", cond: "Đơn từ 200K", fam: "Toàn sàn Shopee", exp: "Hết hạn 31/10/2026", chk: "ANM, 04:25 30/10" },
+  { code: "WASTON150K", off: "Giảm 14% tối đa 150K", cond: "Đơn từ 150K", fam: "Toàn sàn Shopee", exp: "Hết hạn 31/10/2026", chk: "ANM, 04:25 30/10" },
+  { code: "30301026GIAM100K17", off: "Giảm 17% tối đa 100K", cond: "Đơn từ 200K", fam: "Toàn sàn Shopee", exp: "Hết hạn 31/10/2026", chk: "ANM, 04:25 30/10" },
+  { code: "30301026GIAM250K18", off: "Giảm 18% tối đa 250K", cond: "Đơn từ 750K", fam: "Toàn sàn Shopee", exp: "Hết hạn 31/10/2026", chk: "ANM, 04:25 30/10" },
+  { code: "30301026GIAM600K19", off: "Giảm 19% tối đa 600K", cond: "Đơn từ 1000K", fam: "Toàn sàn Shopee", exp: "Hết hạn 31/10/2026", chk: "ANM, 04:25 30/10" },
+  { code: "30301026GIAM2000K19", off: "Giảm 19% tối đa 2000K", cond: "Đơn từ 3000K", fam: "Toàn sàn Shopee", exp: "Hết hạn 31/10/2026", chk: "ANM, 04:25 30/10" },
+  { code: "VIDEO-1530863982120960", off: "Giảm 18% tối đa 99K", cond: "Đơn từ 99K", fam: "Shopee Video — Siêu Sale Quốc Tế", exp: "Hết hạn 31/10/2026", chk: "ANM, 04:25 30/10" },
+  { code: "VIDEO-1530863982383108", off: "Giảm 16% tối đa 150K", cond: "Đơn từ 99K", fam: "Shopee Video — Siêu Sale Quốc Tế", exp: "Hết hạn 31/10/2026", chk: "ANM, 04:25 30/10" },
+  { code: "VIDEO-1530863990116360", off: "Giảm 16% tối đa 150K", cond: "Đơn từ 150K", fam: "Shopee Video — Siêu Sale Quốc Tế", exp: "Hết hạn 31/10/2026", chk: "ANM, 04:25 30/10" },
+  { code: "VIDEO-1532309800783872", off: "Giảm 20% tối đa 140K", cond: "Đơn từ 250K", fam: "Shopee Video — Thời Trang", exp: "Hết hạn 31/10/2026", chk: "ANM, 04:25 30/10" },
+  { code: "VIDEO-1532309799997440", off: "Giảm 21% tối đa 400K", cond: "Đơn từ 700K", fam: "Shopee Video — Thời Trang", exp: "Hết hạn 31/10/2026", chk: "ANM, 04:25 30/10" }
 ];
 
 const PRODUCTS = [
+  { icon: "🧖", name: "Mặt nạ giấy Collagen (30 miếng)", keyword: "mặt nạ giấy collagen 30 miếng", price: "Từ ~70K", img: "https://down-vn.img.susercontent.com/file/sg-11134253-7rdy2-mdmqgcnwhgtmd4", cat: "beauty", pick: "best" },
   { icon: "🧺", name: "Bộ lọc rác thoát nước kiểu Nhật", keyword: "bộ lọc rác thoát nước", price: "Từ ~93K", img: "https://down-vn.img.susercontent.com/file/vn-11134207-81ztc-ms6ev4ymwuf4f9", cat: "home", pick: "best" },
-  { icon: "👕", name: "Áo thun unisex form rộng M@DENO", keyword: "áo thun form rộng in họa tiết", price: "Từ ~53K", img: "https://down-vn.img.susercontent.com/file/vn-11134207-81ztc-mmtnztgtz37p20", cat: "fashion", pick: "best" },
-  { icon: "🔌", name: "Cáp sạc nhanh DOSEN PD 20W Type-C", keyword: "cáp sạc nhanh type c 20w", price: "Từ ~87K", img: "https://down-vn.img.susercontent.com/file/vn-11134207-81ztc-mule0cdmifb47a", cat: "tech", pick: "best" },
-  { icon: "💆", name: "Gối massage hồng ngoại cổ vai gáy", keyword: "gối massage cổ vai gáy", price: "Từ ~245K", img: "https://down-vn.img.susercontent.com/file/vn-11134207-81ztc-mtdo0sb88o3kba", cat: "health", pick: "best" },
-  { icon: "🧖", name: "Mặt nạ YEKO Niacinamide (10 miếng)", keyword: "mặt nạ niacinamide", price: "Từ ~47K", img: "https://down-vn.img.susercontent.com/file/cn-11134207-820l4-ms13u5yreosn82", cat: "beauty", pick: "best" },
-  { icon: "🧴", name: "Kem dưỡng trắng da Niacinamide 30g", keyword: "kem dưỡng trắng da niacinamide", price: "Từ ~48K", img: "https://down-vn.img.susercontent.com/file/vn-11134207-7ras8-mcer4zmuf8vw59", cat: "beauty", pick: "rated" },
-  { icon: "👚", name: "Áo polo nữ thêu nơ Lista", keyword: "áo polo nữ thêu nơ", price: "Từ ~28K", img: "https://down-vn.img.susercontent.com/file/vn-11134207-81ztc-mqvhqkx67jeq3c", cat: "fashion", pick: "rated" },
-  { icon: "🦵", name: "Máy massage bắp chân không dây", keyword: "máy massage bắp chân", price: "Từ ~402K", img: "https://down-vn.img.susercontent.com/file/sg-11134301-8258c-ms3ttj764n44ea", cat: "health", pick: "rated" },
-  { icon: "📱", name: "Kẹp điện thoại đuôi khỉ xoay 360°", keyword: "kẹp điện thoại đuôi khỉ", price: "Từ ~36K", img: "https://down-vn.img.susercontent.com/file/vn-11134207-81ztc-mnf2ruoq0ydgd3", cat: "tech", pick: "rated" },
-  { icon: "📦", name: "Combo 2 kệ dán tường để remote", keyword: "kệ dán tường để remote", price: "Từ ~16K", img: "https://down-vn.img.susercontent.com/file/bd4130b7af544eeb208831114671b6de", cat: "home", pick: "rated" },
-  { icon: "✨", name: "Kem dưỡng trắng Queen Danzern 377", keyword: "kem dưỡng trắng da 377", price: "Từ ~31K", img: "https://down-vn.img.susercontent.com/file/cn-11134207-820l4-mmvaljcgkum874", cat: "beauty", pick: "cheap" },
-  { icon: "🧥", name: "Áo thun tay dài Raglan phối sọc", keyword: "áo thun tay dài raglan", price: "Từ ~39K", img: "https://down-vn.img.susercontent.com/file/vn-11134207-820l4-mj1jlbk5flkzfc", cat: "fashion", pick: "cheap" },
-  { icon: "🧲", name: "Miếng dán hít điện thoại silicon 2 mặt", keyword: "miếng dán hít điện thoại", price: "Từ ~15K", img: "https://down-vn.img.susercontent.com/file/vn-11134207-81ztc-mln68ybg12q758", cat: "tech", pick: "cheap" },
-  { icon: "🧽", name: "Giỏ đựng đồ rửa chén Goodtime", keyword: "giỏ đựng đồ rửa chén", price: "Từ ~11K", img: "https://down-vn.img.susercontent.com/file/sg-11134201-7rbnh-lq35kv8v0mneac", cat: "home", pick: "cheap" },
-  { icon: "💇", name: "Lược massage thư giãn cầm tay", keyword: "lược massage cầm tay", price: "Từ ~39K", img: "https://down-vn.img.susercontent.com/file/sg-11134201-7rdye-md1hxzk3rwwe2c", cat: "health", pick: "cheap" }
+  { icon: "👚", name: "Sơ mi nữ tay bồng cổ cách điệu", keyword: "sơ mi nữ tay bồng cổ cách điệu", price: "Từ ~74K", img: "https://down-vn.img.susercontent.com/file/vn-11134207-81ztc-mso8si7b4vlt59", cat: "fashion", pick: "best" },
+  { icon: "💆", name: "Dụng cụ massage mặt đa chức năng", keyword: "dụng cụ massage mặt", price: "Từ ~12K", img: "https://down-vn.img.susercontent.com/file/vn-11134211-7ras8-mcdbqlig51s5fa", cat: "health", pick: "best" },
+  { icon: "📱", name: "Giá đỡ điện thoại hình mèo gấp gọn", keyword: "giá đỡ điện thoại hình mèo", price: "Từ ~20K", img: "https://down-vn.img.susercontent.com/file/sg-11134201-7ratl-mae3h89ttv1e1c", cat: "tech", pick: "best" },
+  { icon: "🧴", name: "Serum giảm mụn thâm Seimy 10ml", keyword: "serum giảm mụn thâm Seimy", price: "Từ ~112K", img: "https://down-vn.img.susercontent.com/file/sg-11134253-824g4-mf0qgya1rwuhb6", cat: "beauty", pick: "rated" },
+  { icon: "👕", name: "Áo polo nữ thêu nơ Lista", keyword: "áo polo nữ thêu nơ", price: "Từ ~51K", img: "https://down-vn.img.susercontent.com/file/vn-11134207-81ztc-mqvi1mhcmfia47", cat: "fashion", pick: "rated" },
+  { icon: "🧽", name: "Giá để đồ thoát nước bồn rửa inox", keyword: "giá để đồ thoát nước bồn rửa", price: "Từ ~37K", img: "https://down-vn.img.susercontent.com/file/sg-11134201-82590-mtqhw289s9hk92", cat: "home", pick: "rated" },
+  { icon: "🦵", name: "Máy massage bắp chân không dây", keyword: "máy massage bắp chân", price: "Từ ~439K", img: "https://down-vn.img.susercontent.com/file/sg-11134301-8258c-ms3ttj764n44ea", cat: "health", pick: "rated" },
+  { icon: "📲", name: "Giá đỡ điện thoại COMET gấp gọn", keyword: "giá đỡ điện thoại COMET", price: "Từ ~21K", img: "https://down-vn.img.susercontent.com/file/vn-11134201-7r98o-lmx0f89n0qu739", cat: "tech", pick: "rated" },
+  { icon: "🫧", name: "Gel lột mụn than tre SADOER", keyword: "gel lột mụn than tre SADOER", price: "Từ ~26K", img: "https://down-vn.img.susercontent.com/file/sg-11134253-824ip-mf0hps83fh8u99", cat: "beauty", pick: "cheap" },
+  { icon: "👕", name: "Áo croptop thun cotton form rộng", keyword: "áo croptop thun cotton form rộng", price: "Từ ~36K", img: "https://down-vn.img.susercontent.com/file/vn-11134207-7ras8-mc2z0vmlje6mbe", cat: "fashion", pick: "cheap" },
+  { icon: "🔗", name: "Kẹp dây buộc điện thoại chống thất lạc", keyword: "kẹp dây buộc điện thoại chống thất lạc", price: "Từ ~9K", img: "https://down-vn.img.susercontent.com/file/cn-11134211-7ras8-m4xc9ca8yioh9c", cat: "tech", pick: "cheap" },
+  { icon: "📦", name: "Giá đỡ dán tường để sạc điện thoại", keyword: "giá đỡ dán tường sạc điện thoại", price: "Từ ~9K", img: "https://down-vn.img.susercontent.com/file/vn-11134207-7qukw-lg1vt2pjvu5m4c", cat: "home", pick: "cheap" },
+  { icon: "⚡", name: "Combo 2 miếng dán massage xung điện", keyword: "miếng dán massage xung điện", price: "Từ ~37K", img: "https://down-vn.img.susercontent.com/file/vn-11134207-81ztc-msmzeq19yio59f", cat: "health", pick: "cheap" }
 ];
 
 /* Nhận xét ngắn cho Bảng Xếp Hạng — theo đúng thứ tự của PRODUCTS ở trên
    (bảng xếp hạng lấy TOP 10 món đầu của danh sách Sản Phẩm Hot) */
 const RANK_NOTES = [
-  "Đứng đầu lượt bán nhóm Nhà cửa trên Shopee hôm nay — lưới lọc xoay gom rác bồn rửa, chống tắc nghẽn, bếp nào cũng cần.",
-  "Áo thun boxy oversize bán chạy nhất Thời trang nữ hôm nay, đạt 4.8★ — form rộng dễ mặc, họa tiết trẻ trung.",
-  "Cáp sạc bán chạy nhất nhóm Phụ kiện hôm nay — chuẩn PD 20W sạc nhanh cho cả iPhone lẫn Android đời mới.",
-  "Gối massage cổ vai gáy dẫn đầu nhóm Sức khỏe — massage kèm hồng ngoại, dân văn phòng đau mỏi săn nhiều.",
-  "Mặt nạ giấy bán chạy nhất Sắc đẹp hôm nay — niacinamide dưỡng sáng, cấp ẩm, tính ra chưa tới 5K một miếng.",
-  "Được chấm trọn 5.0★ trên Shopee — kem dưỡng sáng da niacinamide, món skincare dễ dùng mà giá mềm.",
-  "Áo polo nữ đạt 4.9★ — cotton tổ ong mặc mát, thêu nơ tiểu thư, giá chưa tới 30K.",
+  "Bán chạy nhất nhóm Sắc đẹp hôm nay trong tìm kiếm ‘chăm sóc da mặt’ — mặt nạ collagen cấp ẩm sâu, đạt 4.9★, tính ra chưa tới 2,5K một miếng.",
+  "Đứng đầu tìm kiếm đồ gia dụng hôm nay — lưới lọc xoay gom rác bồn rửa, chống tắc nghẽn, đạt 4.8★.",
+  "Bán chạy nhất Thời trang nữ hôm nay — sơ mi tay bồng cổ cách điệu ôm eo, đạt 4.8★.",
+  "Dẫn đầu tìm kiếm máy massage hôm nay — dụng cụ massage mặt, cổ, hàm, mắt đa chức năng, giá chỉ từ ~12K.",
+  "Bán chạy nhất nhóm phụ kiện điện thoại hôm nay — giá đỡ hình mèo gấp gọn, đạt 4.7★.",
+  "Được chấm trọn 5.0★ — serum giảm mụn thâm 10ml, món skincare bán chạy nhóm Sắc đẹp.",
+  "Áo polo nữ đạt 4.9★ — thêu nơ, cổ phối sang, giá từ ~51K.",
+  "Được chấm trọn 5.0★ — giá để đồ thoát nước bồn rửa bằng thép không gỉ, gọn góc bếp.",
   "Đạt 5.0★ — máy massage nén khí cho bắp chân, ai đứng nhiều, đi lại cả ngày rất hợp.",
-  "Đạt 5.0★ — kẹp điện thoại uốn cong mọi vị trí, xem phim quay video rảnh tay.",
-  "Đạt 5.0★ — kệ dán tường để remote và đỡ sạc điện thoại, gọn góc bàn mà chỉ khoảng 16K."
+  "Đạt 5.0★ — giá đỡ COMET gấp gọn, chống tê mỏi tay khi xem phim, livestream."
 ];
 
 /* Đồ gia dụng rẻ hữu ích — cùng chuẩn tuyển chọn như Sản Phẩm Hot */
 const HOUSEHOLD = [
-  { icon: "🧂", name: "Kệ gia vị 2 tầng nhựa đa năng", keyword: "kệ gia vị 2 tầng", price: "Từ ~16K", img: "https://down-vn.img.susercontent.com/file/sg-11134201-7rdw7-m0sxnau6aq9wdd" },
-  { icon: "🪝", name: "Giá treo rổ chậu gấp gọn NAGO", keyword: "giá treo rổ chậu", price: "Từ ~31K", img: "https://down-vn.img.susercontent.com/file/sg-11134201-7ra3m-m581it5z4x9411" },
-  { icon: "🧹", name: "Cây lau nhà xoay 360° kèm 2 bông", keyword: "cây lau nhà xoay 360", price: "Từ ~37K", img: "https://down-vn.img.susercontent.com/file/vn-11134207-7r98o-lt52rjnmpz9g62" },
-  { icon: "👣", name: "Bộ 2 thảm lau chân nhà bếp thấm nước", keyword: "thảm lau chân nhà bếp", price: "Từ ~40K", img: "https://down-vn.img.susercontent.com/file/vn-11134207-81ztc-mlzm1padrkzod1" },
-  { icon: "🔪", name: "Giá cài dao dán tường thép 316", keyword: "giá cài dao dán tường", price: "Từ ~51K", img: "https://down-vn.img.susercontent.com/file/vn-11134207-81ztc-mt6insyp1edde2" },
-  { icon: "🍳", name: "Bộ 2 thảm bếp BALI thấm nước", keyword: "thảm bếp thấm nước", price: "Từ ~65K", img: "https://down-vn.img.susercontent.com/file/vn-11134207-7ra0g-m9gqgyjxdzt300" },
-  { icon: "🏠", name: "Kệ đựng đồ đa năng Sunmix khay nhựa cao cấp ,", keyword: "kệ đựng đồ đa năng sunmix khay nhựa cao cấp ,", price: "Từ ~46K", img: "https://down-vn.img.susercontent.com/file/vn-11134207-7r98o-lmzcuug3eqxrb4" },
-  { icon: "🏠", name: "Kệ để đựng đồ đa năng (loại 1 ) Kệ bếp 3 - 4", keyword: "kệ để đựng đồ đa năng (loại 1 ) kệ bếp 3 - 4", price: "Từ ~11K", img: "https://down-vn.img.susercontent.com/file/vn-11134207-7r98o-lvu4i04fremzb8" }
+  { icon: "🔪", name: "Dụng cụ mài dao kéo đa năng", keyword: "dụng cụ mài dao kéo", price: "Từ ~19K", img: "https://down-vn.img.susercontent.com/file/vn-11134207-81ztc-ms9l1ol179c930" },
+  { icon: "🪝", name: "Giá treo rổ chậu gấp gọn NAGO", keyword: "giá treo rổ chậu", price: "Từ ~32K", img: "https://down-vn.img.susercontent.com/file/sg-11134201-7ra3m-m581it5z4x9411" },
+  { icon: "🗡️", name: "Giá cài dao dán tường thép 316", keyword: "giá cài dao dán tường", price: "Từ ~46K", img: "https://down-vn.img.susercontent.com/file/vn-11134207-81ztc-mt6insyp1edde2" },
+  { icon: "🍽️", name: "Giá cài dao inox có móc treo", keyword: "giá cài dao inox", price: "Từ ~48K", img: "https://down-vn.img.susercontent.com/file/d1e38b6c64b905606f74a29759e94b0a" },
+  { icon: "🍳", name: "Giá cài vung nồi đa năng 3 tầng", keyword: "giá cài vung nồi", price: "Từ ~50K", img: "https://down-vn.img.susercontent.com/file/sg-11134201-8259a-mrgrf2evklc4b7" },
+  { icon: "🧽", name: "Giá để đồ rửa chén thép không gỉ", keyword: "giá để đồ rửa chén", price: "Từ ~53K", img: "https://down-vn.img.susercontent.com/file/vn-11134207-7r98o-lxkvesvmbbob2f" },
+  { icon: "👣", name: "Bộ 2 thảm lau chân nhà bếp", keyword: "thảm lau chân nhà bếp", price: "Từ ~53K", img: "https://down-vn.img.susercontent.com/file/vn-11134207-81ztc-mrrlqczo1qfb0d" },
+  { icon: "🏠", name: "Giá treo dao nhà bếp kèm ống đựng đũa", keyword: "giá treo dao nhà bếp", price: "Từ ~65K", img: "https://down-vn.img.susercontent.com/file/vn-11134207-81ztc-mtp46ihsp3wn88" }
 ];
 
-const HOT_KEYWORDS = ["Khăn giấy treo tường", "Nước giặt xả", "Tẩy trang", "Dầu gội", "Kem chống nắng"];
+const HOT_KEYWORDS = ["Mặt nạ giấy", "Giá đỡ điện thoại", "Sơ mi nữ", "Máy massage bắp chân", "Bộ lọc rác thoát nước"];
 
 const CATEGORIES = [
   { icon: "🌀", name: "Quạt cầm tay", keyword: "quạt cầm tay" },
