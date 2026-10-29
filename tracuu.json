@@ -116,10 +116,15 @@
       "rid": "ACYDBNih9SXAsHXi58ApCgQxBJpV-5uIXrirqW_XsC_UrDyZlZN4wN5rwVVHZIW0I3CbJOA",
       "name": "Áo thun nữ in mèo cam ba khung truyện tranh chữ Great, cổ tròn tay ngắn form rộng, màu trắng, đen, trắng kem",
       "link": "https://shopee.vn/opaanlp/1604463635/47969806216",
-      "verdict": "",
-      "points": [],
+      "verdict": "⚠️ CÂN NHẮC KỸ — điểm Shopee 4,8/5 và đang giảm 25%, nhưng chưa có đánh giá độc lập nào kiểm chứng chất vải và độ bền hình in",
+      "points": [
+        "Ưu điểm: Shopee (qua Apify) niêm yết 375.000₫, đang giảm 25%, điểm 4,8/5",
+        "Ưu điểm: form rộng, cổ tròn tay ngắn, có 3 màu trắng, đen, trắng kem để chọn theo listing",
+        "Khuyết điểm: không tìm thấy đánh giá độc lập nào về đúng mẫu áo này nên chưa kiểm chứng được chất vải, độ bền hình in và form thật",
+        "Khuyết điểm: giá 375.000₫ không rẻ so với áo thun nữ phổ thông — nên đối chiếu bảng size và chất liệu trong listing trước khi mua"
+      ],
       "time": "21:44 29/10",
-      "status": "pending"
+      "status": "done"
     },
     {
       "rid": "ACYDBNhItBYT8DyLDuC_uDCfcw83s05meZ9GmLi0zF91lZg07LFH0YJmuv1tC-ld1njDF-c",
