@@ -2101,7 +2101,9 @@ function renderMyResearch() {
       v.appendChild(tx);
       const sub = document.createElement("div");
       sub.style.cssText = "font-size:12.5px; color:#6e6e6e; font-weight:400; margin-top:2px;";
-      sub.textContent = "Shop đang đọc sản phẩm và rà review — kết quả sẽ tự hiện tại đây, bạn cứ để trang mở hoặc quay lại sau.";
+      sub.className = "sscl-stage";
+      sub.setAttribute("data-started", String(t.startedAt || Date.now()));
+      sub.textContent = "Đã nhận yêu cầu — đang đọc thông tin sản phẩm… (thường xong trong 1–3 phút, kết quả tự hiện tại đây)";
       v.appendChild(sub);
       card.appendChild(v);
     } else if (t.verdict) {
@@ -2191,7 +2193,7 @@ function submitResearchHidden(link) {
   myToken();
   renderMyResearch();
   pollMyResearch(true);
-  setInterval(() => pollMyResearch(false), 30000);
+  setInterval(() => pollMyResearch(false), 15000);
   setInterval(() => {
     document.querySelectorAll(".sscl-elapsed").forEach(el => {
       const stMs = parseInt(el.getAttribute("data-started") || "0", 10);
@@ -2199,6 +2201,12 @@ function submitResearchHidden(link) {
       const s = Math.max(0, Math.floor((Date.now() - stMs) / 1000));
       const mm = String(Math.floor(s / 60)).padStart(2, "0"), ss = String(s % 60).padStart(2, "0");
       el.textContent = " Đang tra cứu… " + mm + ":" + ss;
+    });
+    document.querySelectorAll(".sscl-stage").forEach(el => {
+      const stMs = parseInt(el.getAttribute("data-started") || "0", 10);
+      if (!stMs) return;
+      const s = Math.max(0, Math.floor((Date.now() - stMs) / 1000));
+      el.textContent = s < 45 ? "Đã nhận yêu cầu — đang đọc thông tin sản phẩm… (thường xong trong 1–3 phút, kết quả tự hiện tại đây)" : (s < 150 ? "Đang rà review của người đã mua…" : "Đang tổng hợp kết luận — sắp xong rồi, bạn đợi thêm chút nhé.");
     });
   }, 1000);
   const arb = document.getElementById("askResearchBtn");
@@ -2217,7 +2225,7 @@ function submitResearchHidden(link) {
     renderMyResearch();
     const sec = document.getElementById("myResearch");
     if (sec) sec.scrollIntoView({ behavior: "smooth", block: "center" });
-    setTimeout(() => pollMyResearch(false), 25000);
+    setTimeout(() => pollMyResearch(false), 12000);
   });
 })();
 
