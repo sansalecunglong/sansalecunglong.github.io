@@ -118,6 +118,30 @@ footer .tiny{font-size:11.5px;color:#8fae9b;margin-top:14px;}
 body::after{content:"BẢN CONCEPT ECC — CHƯA PHẢI TRANG CHÍNH";position:fixed;left:10px;bottom:10px;z-index:2000;
 background:var(--ink);color:#fff;font-size:11px;font-weight:700;letter-spacing:.4px;
 padding:6px 10px;border-radius:999px;opacity:.93;pointer-events:none;}
+
+.checks{list-style:none;margin:0 0 16px;padding:0;display:grid;gap:6px;}
+.checks li{font-size:13.5px;color:#eaf4ec;font-weight:600;}
+.checks li::before{content:"✓";display:inline-flex;align-items:center;justify-content:center;
+width:19px;height:19px;border-radius:50%;background:var(--gold);color:#3a2a00;font-weight:900;
+font-size:12px;margin-right:8px;vertical-align:-4px;}
+.tiles{display:grid;grid-template-columns:1fr 1fr;gap:11px;margin-top:16px;}
+.tile{text-decoration:none;border-radius:20px;padding:16px 14px;display:block;border:1px solid var(--border);}
+.tile .ic{font-size:26px;}
+.tile b{display:block;font-size:16px;margin-top:5px;color:var(--ink);}
+.tile span{font-size:12.5px;color:var(--muted);}
+.tile.rank{background:var(--green-soft);}
+.tile.gift{background:#FFF3E2;}
+.chips{display:flex;flex-wrap:wrap;gap:7px;margin-top:11px;}
+.chips a{text-decoration:none;font-size:12.5px;font-weight:700;color:var(--green);
+background:#FCFAF4;border:1.5px solid var(--border);padding:7px 11px;border-radius:999px;}
+.chips a:active{background:var(--green-soft);}
+.qa{border:1px solid var(--border);border-radius:16px;padding:13px 14px;margin-bottom:10px;background:#FCFAF4;}
+.qa .q{font-weight:700;font-size:14.5px;}
+.qa .q::before{content:"Hỏi: ";color:var(--orange-dark);font-weight:900;}
+.qa .a{font-size:13.5px;color:var(--muted);margin-top:5px;}
+.qa .a::before{content:"Đáp: ";color:var(--green);font-weight:900;}
+.findrow{display:flex;gap:8px;}
+.findrow input{flex:1;min-width:0;padding:12px;font-size:15px;font-family:inherit;border:2px solid var(--ink);border-radius:12px;outline:none;}
 .toast{position:fixed;left:50%;bottom:26px;transform:translateX(-50%) translateY(20px);background:var(--ink);
 color:#fff;font-size:14px;font-weight:700;padding:11px 18px;border-radius:999px;opacity:0;
 pointer-events:none;transition:all .25s ease;z-index:3000;max-width:92vw;text-align:center;}
@@ -137,6 +161,11 @@ pointer-events:none;transition:all .25s ease;z-index:3000;max-width:92vw;text-al
     <div class="kick">VÍ HOÀN TIỀN SHOPEE</div>
     <h1>Dán link Shopee vào đây,<br>nhận lại <span class="hl num">80%</span> hoa hồng</h1>
     <p>Mua như bình thường trên Shopee — shop hoàn lại 80% hoa hồng của đơn vào ví của bạn, rút về ngân hàng từ 10.000đ.</p>
+    <ul class="checks">
+      <li>Hoàn 80% hoa hồng thực nhận — rõ ràng, không mập mờ</li>
+      <li>Đối soát theo báo cáo chính thức của Shopee</li>
+      <li>Rút nhanh về ngân hàng từ 10.000đ</li>
+    </ul>
     <div class="conv">
       <label for="linkIn">BƯỚC 1 — DÁN LINK SẢN PHẨM SHOPEE</label>
       <div class="convrow">
@@ -158,6 +187,21 @@ pointer-events:none;transition:all .25s ease;z-index:3000;max-width:92vw;text-al
     </div>
   </section>
 
+  <div class="tiles">
+    <a class="tile rank" href="#hot"><span class="ic">🏆</span><b>Bảng xếp hạng</b><span>TOP sản phẩm bán chạy — shop lọc mỗi ngày</span></a>
+    <a class="tile gift" href="#ma"><span class="ic">🎁</span><b>Mã giảm giá</b><span>Mã đang mở hôm nay — bấm là chép</span></a>
+  </div>
+
+  <section class="card">
+    <h2>🔍 Tìm sản phẩm bạn thích</h2>
+    <p class="sub">Gõ tên món bạn cần — trang mở Shopee qua link của shop để đơn vẫn được ghi nhận hoàn tiền.</p>
+    <div class="findrow">
+      <input id="findIn" type="text" placeholder="Ví dụ: tai nghe, khăn giấy, kem chống nắng…" autocomplete="off">
+      <button class="btn go" id="btnFind" type="button">Tìm</button>
+    </div>
+    <div class="chips" id="findChips"></div>
+  </section>
+
   <section class="card">
     <h2>Cách hoạt động</h2>
     <p class="sub">Ba bước, không cần cài app, không đổi thói quen mua sắm của bạn.</p>
@@ -168,7 +212,7 @@ pointer-events:none;transition:all .25s ease;z-index:3000;max-width:92vw;text-al
     </div>
   </section>
 
-  <section class="card">
+  <section class="card" id="ma">
     <h2>🎟️ Mã giảm giá hôm nay</h2>
     <p class="sub">Bấm vào vé để chép mã, rồi áp ở bước thanh toán trên Shopee. Mã kiểm chứng trên ANM, cập nhật 29/10/2026.</p>
     
@@ -216,7 +260,7 @@ pointer-events:none;transition:all .25s ease;z-index:3000;max-width:92vw;text-al
       </button>
   </section>
 
-  <section class="card">
+  <section class="card" id="hot">
     <h2>🔥 Sản phẩm đang hot</h2>
     <p class="sub">Shop lọc theo xu hướng bán chạy trên Shopee — giá là giá tham khảo khi mở deal.</p>
     <div class="grid">
@@ -288,6 +332,13 @@ pointer-events:none;transition:all .25s ease;z-index:3000;max-width:92vw;text-al
   </section>
 
   <section class="card">
+    <h2>💬 Tư vấn thật từ mục tra cứu</h2>
+    <p class="sub">Hai ca tra cứu gần nhất của shop — kết luận dựa trên đánh giá thật của người đã mua trên Shopee.</p>
+    <div class="qa"><div class="q">Gối massage cổ vai gáy BREO P2 có đáng mua không?</div><div class="a">Đáng mua — 4,9★ tại shop Mall, 942 lượt bán; người mua khen êm, lực mạnh, đỡ mỏi cổ vai. Lưu ý: hộp không kèm củ sạc và giá thuộc nhóm cao.</div></div>
+    <div class="qa"><div class="q">Bộ lọc rác thoát nước kiểu Nhật có vừa mọi chậu rửa không?</div><div class="a">Cân nhắc kỹ — lọc tóc và chống tắc tốt, nhưng hãy đo kích thước miệng thoát nước nhà bạn trước khi đặt để tránh mua về không vừa.</div></div>
+  </section>
+
+  <section class="card">
     <h2>Hỏi nhanh</h2>
     <p class="sub">Ba câu khách hỏi nhiều nhất.</p>
     <details><summary>Tiền hoàn tính thế nào?</summary><p>Mỗi đơn qua link của trang sinh hoa hồng cho shop. Shop hoàn lại 80% phần hoa hồng thực nhận (sau thuế Shopee khấu trừ) cho chính người mua, ghi vào ví theo mã tài khoản của bạn.</p></details>
@@ -337,6 +388,12 @@ document.getElementById('btnPaste').addEventListener('click', function(){
   if(navigator.clipboard && navigator.clipboard.readText){ navigator.clipboard.readText().then(function(t){ if(t){ document.getElementById('linkIn').value=t; doConvert(); } else { toast('Chưa có gì trong bộ nhớ tạm'); } }, function(){ toast('Trình duyệt chưa cho dán tự động — bạn giữ ô và chọn Dán nhé'); }); }
   else { toast('Bạn giữ ô nhập và chọn Dán nhé'); }
 });
+var FIND_WORDS = ['khăn giấy treo tường','nước giặt xả','tẩy trang','dầu gội','kem chống nắng'];
+function findGo(kw){ if(!kw) return; window.open(wrapAff('https://shopee.vn/search?keyword=' + encodeURIComponent(kw)), '_blank'); }
+var fc=document.getElementById('findChips');
+FIND_WORDS.forEach(function(w){ var a=document.createElement('a'); a.href='#'; a.textContent=w; a.addEventListener('click', function(e){ e.preventDefault(); findGo(w); }); fc.appendChild(a); });
+document.getElementById('btnFind').addEventListener('click', function(){ findGo(document.getElementById('findIn').value.trim()); });
+document.getElementById('findIn').addEventListener('keydown', function(e){ if(e.key==='Enter'){ e.preventDefault(); findGo(e.target.value.trim()); } });
 document.querySelectorAll('.ticket').forEach(function(t){ t.addEventListener('click', function(){ copyText(t.getAttribute('data-code'), 'Đã chép mã ' + t.getAttribute('data-code')); }); });
 </script>
 </body>
