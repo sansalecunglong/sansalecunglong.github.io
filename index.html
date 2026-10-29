@@ -422,6 +422,11 @@ body{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;text-r
           <button id="accLogout" style="background:#fff; color:#555; border:1.5px solid #ccc; border-radius:10px; padding:11px 16px; font-weight:700; cursor:pointer;">Đăng xuất</button>
         </div>
         <p class="sub" style="text-align:left; margin:0;">Đăng xuất chỉ ẩn bảng điều khiển — mã vẫn gắn trên máy này để đơn của bạn tiếp tục được ghi nhận.</p>
+        <div style="margin-top:14px; border-top:1px dashed #e3ddd2; padding-top:12px;">
+          <div style="font-weight:800; color:#b3261e; font-size:14.5px; margin-bottom:4px;">🗑 Xóa tài khoản</div>
+          <p class="sub" style="text-align:left; margin:0 0 8px;">Gửi yêu cầu xóa tài khoản và dữ liệu cá nhân của bạn — Shop xử lý trong vòng 07 ngày làm việc. Hãy rút hết số dư khả dụng trước khi gửi: sau khi xóa, mã cá nhân và lịch sử đối soát của bạn sẽ bị hủy. Gửi yêu cầu xong, tài khoản sẽ đăng xuất ngay.</p>
+          <button id="accDeleteReq" type="button" style="background:#fff; color:#b3261e; border:1.5px solid #b3261e; border-radius:10px; padding:10px 16px; font-weight:800; cursor:pointer;">Yêu cầu xóa tài khoản</button>
+        </div>
       </div>
       </div>
     </div>
@@ -1965,6 +1970,15 @@ async function sbLogout() {
   renderAuthUI();
   toast("Đã đăng xuất — bảng điều khiển đã ẩn.");
 }
+async function sbDeleteRequest() {
+  if (!sb || !sbUser) { toast("Bạn cần đăng nhập để gửi yêu cầu xóa tài khoản"); return; }
+  if (!confirm("Bạn chắc chắn muốn yêu cầu XÓA tài khoản?\n\nShop sẽ xử lý trong vòng 07 ngày làm việc. Mã cá nhân, số dư chưa rút và lịch sử đối soát của bạn sẽ bị hủy.")) return;
+  if (!confirm("Xác nhận lần cuối: gửi yêu cầu xóa tài khoản ngay bây giờ?")) return;
+  const r = await sb.auth.updateUser({ data: { delete_requested_at: new Date().toISOString() } });
+  if (r.error) { toast("⚠️ " + sbErrText(r.error)); return; }
+  toast("Đã ghi nhận yêu cầu xóa tài khoản — Shop sẽ xử lý trong 07 ngày làm việc.");
+  await sbLogout();
+}
 (function initAccount() {
   const bf = document.getElementById("accCreateF");
   if (bf) bf.addEventListener("click", createAccountFallback);
@@ -1984,6 +1998,8 @@ async function sbLogout() {
   if (bw) bw.addEventListener("click", sbWithdraw);
   const bo = document.getElementById("accLogout");
   if (bo) bo.addEventListener("click", sbLogout);
+  const bd = document.getElementById("accDeleteReq");
+  if (bd) bd.addEventListener("click", sbDeleteRequest);
   const mc = document.getElementById("authModalClose");
   if (mc) mc.addEventListener("click", closeAuthModal);
   const mm = document.getElementById("authModal");
