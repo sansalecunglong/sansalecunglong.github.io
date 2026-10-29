@@ -20,10 +20,14 @@
       "rid": "ACYDBNij3NZtQs-FG5gIyIQoW3F0BqqsKNSyIQpNXCfkSTyysDqg-y6li-JTYiW7wBsE2CA",
       "name": "Sản phẩm qua link rút gọn",
       "link": "https://shopee.vn/opaanlp/1545662422/46667546639",
-      "verdict": "",
-      "points": [],
+      "verdict": "⚠️ CÂN NHẮC KỸ — link chưa đọc được tên sản phẩm",
+      "points": [
+        "Ưu điểm: Link vẫn mở được tới đúng gian hàng Shopee để bạn xem trực tiếp giá và mô tả",
+        "Khuyết điểm: Link dạng opaanlp không chứa tên sản phẩm và tìm theo mã sản phẩm không ra kết quả khớp, nên chưa thể đánh giá chất lượng",
+        "Hướng dẫn: Bạn hãy copy link đầy đủ dạng shopee.vn/tên-sản-phẩm-i.<shopid>.<itemid> rồi gửi lại để tra cứu"
+      ],
       "time": "10:06 29/10",
-      "status": "pending"
+      "status": "done"
     },
     {
       "rid": "ACYDBNiH6njwj79yXgfLVkRJUma8agvoREawhf0bIf5UfPyCIsSJ9MKmJwV2uf23EkTyJQo",
