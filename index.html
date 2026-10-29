@@ -2152,11 +2152,23 @@ function renderMyResearch() {
 async function pollMyResearch(force) {
   const list = myResearchLoad();
   if (!force && !list.some(t => t.status === "pending")) return;
+  let mine = [];
+  try {
+    if (sb) {
+      const q = await sb.from("research_results").select("rid,name,link,verdict,points,time_label,status").eq("device_token", myToken()).order("id", { ascending: false }).limit(8);
+      if (!q.error && Array.isArray(q.data)) mine = q.data.map(x => ({ rid: x.rid, name: x.name, link: x.link, verdict: x.verdict, points: x.points || [], time: x.time_label, status: x.status }));
+    }
+  } catch (e) {}
   try {
     const r = await fetch("tracuu.json?_=" + Date.now(), { cache: "no-store" });
-    if (!r.ok) return;
-    const all = await r.json();
-    const mine = (all && all[myToken()]) || [];
+    if (r.ok) {
+      const all = await r.json();
+      const fromFile = (all && all[myToken()]) || [];
+      const seenRid = new Set(mine.map(x => x.rid));
+      fromFile.forEach(x => { if (!seenRid.has(x.rid)) mine.push(x); });
+    }
+  } catch (e) {}
+  try {
     if (!mine.length) return;
     let changed = false;
     const usedSrv = new Set();
