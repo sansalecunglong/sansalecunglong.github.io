@@ -2023,7 +2023,9 @@ function renderMyResearch() {
   if (!list.length) { sec.style.display = "none"; return; }
   sec.style.display = "block";
   box.textContent = "";
-  list.forEach(t => {
+  const SHOW_N = 3;
+  let moreBox = null;
+  list.forEach((t, idx) => {
     const card = document.createElement("div");
     card.style.cssText = "border:1px solid #eee; border-radius:10px; padding:10px 12px; margin-bottom:9px; background:#fffdf7;";
     const h = document.createElement("div");
@@ -2074,7 +2076,26 @@ function renderMyResearch() {
       a.textContent = "🛒 Xem sản phẩm trên Shopee →";
       card.appendChild(a);
     }
-    box.appendChild(card);
+    if (idx < SHOW_N) { box.appendChild(card); }
+    else {
+      if (!moreBox) {
+        moreBox = document.createElement("div");
+        moreBox.style.display = "none";
+        moreBox.id = "myResearchMore";
+        const tg = document.createElement("button");
+        tg.type = "button";
+        tg.style.cssText = "width:100%; margin:2px 0 4px; font-size:13.5px; padding:8px; cursor:pointer; background:#fff; border:1px solid #e3ddd2; border-radius:10px; color:#211d19;";
+        tg.textContent = "▸ Xem thêm " + (list.length - SHOW_N) + " kết quả cũ hơn";
+        tg.addEventListener("click", () => {
+          const open = moreBox.style.display !== "none";
+          moreBox.style.display = open ? "none" : "block";
+          tg.textContent = open ? ("▸ Xem thêm " + (list.length - SHOW_N) + " kết quả cũ hơn") : "▾ Ẩn bớt kết quả cũ";
+        });
+        box.appendChild(tg);
+        box.appendChild(moreBox);
+      }
+      moreBox.appendChild(card);
+    }
   });
 }
 async function pollMyResearch(force) {
