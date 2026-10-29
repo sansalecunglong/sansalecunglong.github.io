@@ -2029,7 +2029,7 @@ function renderMyResearch() {
     card.style.cssText = "border:1px solid #eee; border-radius:10px; padding:10px 12px; margin-bottom:9px; background:#fffdf7;";
     const h = document.createElement("div");
     h.style.cssText = "font-weight:700; font-size:14.5px;";
-    h.textContent = t.name || "Sản phẩm";
+    h.textContent = (t.name && t.name.indexOf("http") !== 0) ? t.name : "Sản phẩm bạn vừa gửi";
     card.appendChild(h);
     if (t.time) {
       const meta = document.createElement("div");
@@ -2141,7 +2141,7 @@ function submitResearchHidden(link) {
       const now = new Date();
       const hhmm = now.toLocaleTimeString("vi-VN", { hour: "2-digit", minute: "2-digit" });
       const ddmm = now.toLocaleDateString("vi-VN", { day: "2-digit", month: "2-digit" });
-      const nm2 = slugName(lastRawUrl) || (lastRawUrl || "").trim();
+      const nm2 = slugName(lastRawUrl) || "Sản phẩm bạn vừa gửi";
       list.unshift({ rid: "", name: nm2 || "Sản phẩm bạn vừa gửi", link: lastRawUrl, verdict: "", points: [], time: hhmm + " " + ddmm, status: "pending", startedAt: Date.now() });
       myResearchSave(list);
     }
