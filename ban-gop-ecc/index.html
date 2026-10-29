@@ -1,0 +1,325 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Săn Sale Cùng Long — CHECK TRƯỚC · HOÀN SAU (Bản gộp mẫu ECC)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#17140f;--red:#dc2626;--red-dark:#b91c1c;--amber:#FFBA00;--orange:#FF7A00;--navy:#1e2942;--navy-deep:#0f172a;--bg:#f4f3ef;--card:#fff;--line:#e5e1d8;--muted:#64748b;--green:#16a34a}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:"Be Vietnam Pro",system-ui,sans-serif;background:var(--bg);color:var(--ink);font-size:15px;line-height:1.5}
+.num{font-variant-numeric:tabular-nums}
+.wrap{max-width:1080px;margin:0 auto;padding:0 14px}
+.pill{position:fixed;left:50%;transform:translateX(-50%);bottom:14px;z-index:99;background:var(--ink);color:#fff;font-size:12px;font-weight:700;padding:8px 14px;border-radius:999px;box-shadow:0 6px 20px rgba(0,0,0,.35);white-space:nowrap}
+header{background:var(--ink);color:#fff;position:sticky;top:0;z-index:50}
+.top{display:flex;align-items:center;gap:12px;padding:12px 0}
+.logo{display:flex;align-items:center;gap:10px;font-weight:900;letter-spacing:.2px;font-size:17px}
+.logo .mark{background:var(--red);color:#fff;border-radius:9px;padding:5px 9px;font-size:15px}
+.logo small{display:block;font-weight:600;font-size:11px;color:#fbbf24;letter-spacing:1.6px}
+nav{margin-left:auto;display:flex;gap:4px;align-items:center}
+nav a{color:#e7e5e4;text-decoration:none;font-weight:600;font-size:13.5px;padding:8px 10px;border-radius:9px}
+nav a:hover{background:#292524;color:#fff}
+.btn-login{background:var(--red);color:#fff;border:0;font:inherit;font-weight:800;font-size:13.5px;padding:9px 16px;border-radius:10px;cursor:pointer}
+.btn-login:active{transform:scale(.97)}
+@media(max-width:760px){nav a{display:none}nav a.keep{display:block}}
+.hero{padding:26px 0 8px}
+.hero-grid{display:grid;grid-template-columns:1.25fr .9fr;gap:16px;align-items:stretch}
+@media(max-width:860px){.hero-grid{grid-template-columns:1fr}}
+.kicker{color:var(--red);font-weight:900;letter-spacing:2px;font-size:12px;text-transform:uppercase}
+h1{font-size:clamp(27px,5.4vw,44px);font-weight:900;line-height:1.12;text-wrap:balance;margin:6px 0 8px}
+h1 .r{color:var(--red)} h1 .a{color:#d97706}
+.sub{color:#44403c;max-width:52ch}
+.tool{background:var(--card);border:2px solid var(--ink);border-radius:14px;padding:14px;margin-top:16px;box-shadow:6px 6px 0 var(--ink)}
+.tool label{font-weight:800;font-size:13px;letter-spacing:.4px}
+.row{display:flex;gap:8px;margin-top:8px}
+.row input{flex:1;min-width:0;border:2px solid var(--ink);border-radius:10px;padding:12px;font:inherit;font-size:14px;background:#fff}
+.btn{border:0;font:inherit;font-weight:800;border-radius:10px;padding:12px 16px;cursor:pointer;white-space:nowrap}
+.btn:active{transform:scale(.97)}
+.btn-paste{background:var(--amber);color:var(--ink)}
+.duo{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
+.btn-check{background:var(--ink);color:#fff;font-size:15px;padding:14px}
+.btn-cash{background:var(--red);color:#fff;font-size:15px;padding:14px}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px;align-items:center}
+.chips span{font-size:12.5px;color:var(--muted);font-weight:600}
+.chip{border:1.5px solid var(--ink);background:#fff;border-radius:999px;padding:6px 12px;font:inherit;font-size:13px;font-weight:700;cursor:pointer}
+.chip:hover{background:var(--amber)}
+.demo{display:none;margin-top:12px;border-radius:12px;padding:12px 14px;font-size:14px}
+.demo.show{display:block}
+.demo-check{background:#fef9ec;border:1.5px dashed #d97706}
+.demo-cash{background:#ecfdf5;border:1.5px solid var(--green)}
+.demo b.t{font-size:15px}
+.wallet{background:linear-gradient(160deg,var(--navy) 0%,var(--navy-deep) 100%);color:#e2e8f0;border-radius:14px;padding:18px;display:flex;flex-direction:column;gap:10px;box-shadow:6px 6px 0 rgba(15,23,42,.35)}
+.wallet .wlab{font-size:12px;letter-spacing:2px;color:#93c5fd;font-weight:800}
+.wallet .big{font-size:44px;font-weight:900;color:#fff;line-height:1}
+.wallet .big small{font-size:16px;color:#fbbf24;font-weight:800}
+.wgrid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
+.wcell{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.14);border-radius:10px;padding:9px 10px}
+.wcell b{display:block;color:#fff;font-size:16px}
+.wcell span{font-size:11.5px;color:#94a3b8}
+.btn-withdraw{background:var(--amber);color:var(--navy-deep);width:100%;font-size:15px;padding:13px}
+.wallet .note{font-size:12px;color:#94a3b8}
+.strip{background:var(--red);color:#fff;margin:22px 0 6px}
+.strip .wrap{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;padding:14px}
+@media(max-width:760px){.strip .wrap{grid-template-columns:1fr 1fr}}
+.stat b{display:block;font-size:22px;font-weight:900}
+.stat span{font-size:12.5px;opacity:.92}
+section{padding:20px 0 4px}
+h2{font-size:21px;font-weight:900;text-transform:uppercase;letter-spacing:.3px;display:flex;align-items:center;gap:9px}
+h2::before{content:"";width:5px;height:22px;background:var(--red);border-radius:3px}
+h2 .more{margin-left:auto;font-size:13px;text-transform:none;letter-spacing:0}
+h2 .more a{color:var(--red);text-decoration:none;font-weight:700}
+.tiles{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px}
+@media(max-width:640px){.tiles{grid-template-columns:1fr}}
+.tile{border-radius:14px;padding:18px;color:#fff;text-decoration:none;display:block;border:2px solid var(--ink)}
+.tile.rank{background:linear-gradient(120deg,#292524,#17140f)}
+.tile.sale{background:linear-gradient(120deg,var(--red),#ea580c)}
+.tile b{font-size:19px;font-weight:900;display:block}
+.tile span{font-size:13px;opacity:.9}
+.cats{display:flex;gap:6px;flex-wrap:wrap;margin:12px 0 4px}
+.cat{border:1.5px solid var(--line);background:#fff;border-radius:999px;padding:7px 13px;font:inherit;font-size:13px;font-weight:700;cursor:pointer}
+.cat.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:10px}
+@media(max-width:860px){.grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:520px){.grid{grid-template-columns:1fr 1fr;gap:9px}}
+.pcard{background:#fff;border:1px solid var(--line);border-radius:14px;overflow:hidden;display:flex;flex-direction:column}
+.pimg{aspect-ratio:1/1;background:#f5f0e6;display:flex;align-items:center;justify-content:center;font-size:52px;overflow:hidden}
+.pimg img{width:100%;height:100%;object-fit:cover}
+.pbody{padding:11px 12px;display:flex;flex-direction:column;gap:5px;flex:1}
+.pname{font-weight:700;font-size:14px;line-height:1.35}
+.price{color:var(--red);font-weight:900;font-size:17px}
+.age{font-size:11.5px;color:var(--muted)}
+.pfoot{margin-top:auto;display:flex;gap:6px}
+.mini{flex:1;border:0;border-radius:9px;padding:9px;font:inherit;font-size:12.5px;font-weight:800;cursor:pointer}
+.mini.check{background:var(--ink);color:#fff}
+.mini.buy{background:var(--amber);color:var(--ink)}
+.src{font-size:12px;color:var(--muted);margin-top:8px}
+.qa{display:flex;flex-direction:column;gap:10px;margin-top:14px}
+.qacard{background:#fff;border:1px solid var(--line);border-left:5px solid var(--amber);border-radius:12px;padding:13px 15px}
+.qacard .q{font-weight:600}
+.qacard .meta{font-size:12.5px;color:var(--muted);margin-top:5px}
+.tag{display:inline-block;font-size:11px;font-weight:800;border-radius:999px;padding:3px 9px;margin-left:6px;vertical-align:1px}
+.tag.doing{background:#fef3c7;color:#92400e}
+.tag.done{background:#dcfce7;color:#166534}
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:14px}
+@media(max-width:760px){.steps{grid-template-columns:1fr}}
+.step{background:var(--navy);color:#e2e8f0;border-radius:14px;padding:16px}
+.step .n{width:30px;height:30px;border-radius:50%;background:var(--amber);color:var(--navy-deep);font-weight:900;display:flex;align-items:center;justify-content:center;margin-bottom:9px}
+.step b{color:#fff;display:block;font-size:15.5px;margin-bottom:4px}
+.step p{font-size:13.5px;color:#cbd5e1}
+details{background:#fff;border:1px solid var(--line);border-radius:12px;padding:12px 15px;margin-top:9px}
+summary{font-weight:700;cursor:pointer}
+details p{margin-top:7px;color:#44403c;font-size:14px}
+footer{background:var(--ink);color:#a8a29e;margin:30px 0 0;padding:22px 0 74px;font-size:13px}
+footer b{color:#fff}
+.modal{position:fixed;inset:0;background:rgba(15,23,42,.6);display:none;align-items:flex-end;justify-content:center;z-index:80}
+.modal.open{display:flex}
+.sheet{background:#fff;border-radius:18px 18px 0 0;width:100%;max-width:430px;padding:22px 20px 26px}
+.sheet h3{font-size:18px;font-weight:900;margin-bottom:4px}
+.sheet p{font-size:13.5px;color:var(--muted)}
+.gbtn{width:100%;margin-top:14px;background:#fff;border:1.5px solid var(--line);border-radius:11px;padding:12px;font:inherit;font-weight:700;cursor:pointer}
+.ebtn{width:100%;margin-top:9px;background:var(--navy);color:#fff;border:0;border-radius:11px;padding:12px;font:inherit;font-weight:800;cursor:pointer}
+.x{float:right;border:0;background:#f1f5f9;border-radius:8px;width:32px;height:32px;font-size:15px;cursor:pointer}
+</style>
+</head>
+<body>
+<div class="pill">🧪 BẢN GỘP MẪU ECC — TRANG XEM THỬ, CHƯA PHẢI TRANG CHÍNH</div>
+<header>
+  <div class="wrap top">
+    <div class="logo"><span class="mark">SS</span><span>SĂN SALE CÙNG LONG<small>CHECK &amp; HOÀN · GỘP 2 TRONG 1</small></span></div>
+    <nav>
+      <a href="#check" class="keep">Check sản phẩm</a>
+      <a href="#hot">Sản phẩm Hot</a>
+      <a href="#tuvan">Tư vấn</a>
+      <a href="#vi">Ví hoàn tiền</a>
+      <button class="btn-login" id="openLogin">Đăng nhập</button>
+    </nav>
+  </div>
+</header>
+
+<div class="wrap hero" id="check">
+  <div class="hero-grid">
+    <div>
+      <div class="kicker">Kiểu check var của Duy Vũ × ví hoàn tiền của Trần Huyền</div>
+      <h1>CHECK TRƯỚC KHI MUA.<br><span class="r">HOÀN TIỀN</span> <span class="a">SAU KHI MUA.</span></h1>
+      <p class="sub">Một ô dán link duy nhất làm cả hai việc: kiểm tra sản phẩm có đáng mua không, và gắn mã hoàn tiền cho chính đơn đó.</p>
+      <div class="tool">
+        <label for="linkIn">DÁN LINK SHOPEE VÀO ĐÂY</label>
+        <div class="row">
+          <input id="linkIn" type="url" inputmode="url" placeholder="https://shopee.vn/…">
+          <button class="btn btn-paste" id="btnPaste" type="button">📋 Dán link</button>
+        </div>
+        <div class="duo">
+          <button class="btn btn-check" id="btnCheck" type="button">🔎 Check sản phẩm</button>
+          <button class="btn btn-cash" id="btnCash" type="button">💰 Lấy link hoàn tiền</button>
+        </div>
+        <div class="demo demo-check" id="demoCheck">
+          <b class="t">🔎 Kết quả check (xem mẫu giao diện)</b><br>
+          <span id="demoCheckName">Sản phẩm của bạn</span> — <b>⚠️ CÂN NHẮC KỸ</b>: bản gộp đang ở dạng xem thử nên chưa tra thật; khi nối vào hệ thống tra cứu hiện có, verdict + ưu/khuyết điểm từ review thật sẽ hiện ngay tại khung này.
+        </div>
+        <div class="demo demo-cash" id="demoCash">
+          <b class="t">💰 Link hoàn tiền đã sẵn sàng (xem mẫu)</b><br>
+          Bấm nút dưới để mở đúng sản phẩm trên Shopee — hoa hồng của đơn sẽ được ghi về ví của bạn và hoàn lại <b class="num">80%</b> sau đối soát.
+          <div style="margin-top:9px"><button class="btn" style="background:var(--green);color:#fff" type="button" onclick="alert('Bản xem thử: nút này sẽ mở Shopee bằng link đã gắn mã hoàn tiền của bạn.')">🛒 Mở Shopee &amp; mua như thường →</button></div>
+        </div>
+        <div class="chips"><span>🔥 Đang được tìm nhiều:</span>
+          <button class="chip" type="button">Quạt Sạc</button>
+          <button class="chip" type="button">Bình Giữ Nhiệt</button>
+          <button class="chip" type="button">Sạc Dự Phòng</button>
+          <button class="chip" type="button">Củ Sạc</button>
+        </div>
+      </div>
+    </div>
+    <div class="wallet" id="viTop">
+      <div class="wlab">💼 VÍ HOÀN TIỀN CỦA BẠN</div>
+      <div class="big num">80% <small>hoa hồng được trả lại</small></div>
+      <div class="wgrid">
+        <div class="wcell"><b class="num">126.000₫</b><span>Khả dụng (số mẫu)</span></div>
+        <div class="wcell"><b class="num">38.000₫</b><span>Tạm tính (số mẫu)</span></div>
+        <div class="wcell"><b class="num">540.000₫</b><span>Đã nhận (số mẫu)</span></div>
+      </div>
+      <button class="btn btn-withdraw" type="button" onclick="alert('Bản xem thử: rút tiền thật chạy ở trang chính.')">Rút tiền về ngân hàng →</button>
+      <div class="note">Rút tối thiểu <b class="num" style="color:#e2e8f0">10.000₫</b> · Đối soát theo báo cáo chính thức của Shopee · Phần của bạn = 80% hoa hồng sau thuế.</div>
+    </div>
+  </div>
+</div>
+
+<div class="strip"><div class="wrap">
+  <div class="stat"><b class="num">80%</b><span>Hoa hồng trả lại cho khách</span></div>
+  <div class="stat"><b class="num">10.000₫</b><span>Mức rút tiền tối thiểu</span></div>
+  <div class="stat"><b>2 trong 1</b><span>Check var + hoàn tiền, một trang</span></div>
+  <div class="stat"><b>Review thật</b><span>Check dựa trên đánh giá người đã mua</span></div>
+</div></div>
+
+<div class="wrap">
+  <div class="tiles">
+    <a class="tile rank" href="#hot"><b>🏆 Bảng xếp hạng sản phẩm</b><span>Xếp hạng theo lượt mua + điểm đánh giá thật trên Shopee</span></a>
+    <a class="tile sale" href="#hot"><b>🎟️ Săn voucher hôm nay</b><span>Mã giảm giá gom mỗi ngày, bấm là sao chép</span></a>
+  </div>
+
+  <section id="hot">
+    <h2>Sản Phẩm Hot <span class="more"><a href="#hot">Xem thêm ›</a></span></h2>
+    <div class="cats" id="cats">
+      <button class="cat on" data-f="all" type="button">Mới nhất</button>
+      <button class="cat" data-f="dien" type="button">Điện Gia Dụng</button>
+      <button class="cat" data-f="gia" type="button">Gia dụng</button>
+      <button class="cat" data-f="nha" type="button">Nhà cửa &amp; Đời sống</button>
+    </div>
+    <div class="grid" id="grid">
+      <div class="pcard" data-cat="dien">
+        <div class="pimg"><img src="https://duyvuvar.vn/productImg/75_1783068016.webp" alt="Quạt Cầm Tay Jisulife 7" onerror="this.remove()"><span>🌀</span></div>
+        <div class="pbody"><div class="pname">Quạt Cầm Tay Jisulife 7</div>
+        <div class="price num">Khoảng 519K</div><div class="age">Giá của 36 ngày trước · theo duyvuvar.vn</div>
+        <div class="pfoot"><button class="mini check" type="button">🔎 Check</button><button class="mini buy" type="button">💰 Hoàn tiền</button></div></div>
+      </div>
+      <div class="pcard" data-cat="nha">
+        <div class="pimg"><img src="https://duyvuvar.vn/productImg/70_1774083473.webp" alt="Nồi Inox 14cm Mini" onerror="this.remove()"><span>🍲</span></div>
+        <div class="pbody"><div class="pname">Nồi Inox 14cm Mini</div>
+        <div class="price num">Khoảng 85K</div><div class="age">Giá của 36 ngày trước · theo duyvuvar.vn</div>
+        <div class="pfoot"><button class="mini check" type="button">🔎 Check</button><button class="mini buy" type="button">💰 Hoàn tiền</button></div></div>
+      </div>
+      <div class="pcard" data-cat="dien">
+        <div class="pimg"><img src="https://duyvuvar.vn/productImg/38.webp" alt="Quạt Sạc Tích Điện Lồng Sắt SOARFLY" onerror="this.remove()"><span>🔋</span></div>
+        <div class="pbody"><div class="pname">Quạt Sạc Tích Điện Lồng Sắt Chân Pin Phổ Thông SOARFLY</div>
+        <div class="price num">Khoảng 459K</div><div class="age">Giá của 36 ngày trước · theo duyvuvar.vn</div>
+        <div class="pfoot"><button class="mini check" type="button">🔎 Check</button><button class="mini buy" type="button">💰 Hoàn tiền</button></div></div>
+      </div>
+      <div class="pcard" data-cat="gia">
+        <div class="pimg"><img src="https://duyvuvar.vn/productImg/43_1773766884.webp" alt="Bình Giữ Nhiệt GERM CocaCola INOX 316" onerror="this.remove()"><span>🥤</span></div>
+        <div class="pbody"><div class="pname">Bình Giữ Nhiệt GERM — CocaCola INOX 316</div>
+        <div class="price num">Khoảng 779K</div><div class="age">Giá của 36 ngày trước · theo duyvuvar.vn</div>
+        <div class="pfoot"><button class="mini check" type="button">🔎 Check</button><button class="mini buy" type="button">💰 Hoàn tiền</button></div></div>
+      </div>
+      <div class="pcard" data-cat="dien">
+        <div class="pimg"><span>🌀</span></div>
+        <div class="pbody"><div class="pname">Quạt Cầm Tay Jamay F5 Pro Pin 6000mAh</div>
+        <div class="price num">Khoảng 299K</div><div class="age">Giá của 36 ngày trước · theo duyvuvar.vn</div>
+        <div class="pfoot"><button class="mini check" type="button">🔎 Check</button><button class="mini buy" type="button">💰 Hoàn tiền</button></div></div>
+      </div>
+      <div class="pcard" data-cat="gia">
+        <div class="pimg"><span>📍</span></div>
+        <div class="pbody"><div class="pname">Định Vị Không SIM Hệ Apple của Ugreen</div>
+        <div class="price num">Khoảng 206K</div><div class="age">Giá của 36 ngày trước · theo duyvuvar.vn</div>
+        <div class="pfoot"><button class="mini check" type="button">🔎 Check</button><button class="mini buy" type="button">💰 Hoàn tiền</button></div></div>
+      </div>
+    </div>
+    <p class="src">Sản phẩm + giá ở mục này lấy thẳng từ mục Sản Phẩm Hot của duyvuvar.vn tại thời điểm lấy mẫu (23:38, 29/10/2026) để anh xem bố cục gộp — chưa phải dữ liệu bán hàng của shop mình.</p>
+  </section>
+
+  <section id="tuvan">
+    <h2>Tư Vấn Sản Phẩm <span class="more"><a href="#tuvan">Hỏi shop ›</a></span></h2>
+    <div class="qa">
+      <div class="qacard">
+        <div class="q">Hỏi: Quạt cầm tay cho học sinh, mạnh một chút, pin trâu. Đặc biệt là êm để dùng trong lớp học</div>
+        <div class="meta">#001 · User 962 <span class="tag doing">Đang tư vấn</span></div>
+      </div>
+      <div class="qacard">
+        <div class="q">Hỏi: Nhà em đang dùng bếp ga, muốn chuyển qua bếp điện cho an toàn và tiết kiệm. Em tính mua bếp đôi có cả hồng ngoại và điện từ, giá khoảng 3 triệu đổ lại, có mã nào tốt không ạ?</div>
+        <div class="meta">#002 · Sếp Nhân <span class="tag done">Đã trả lời ✔</span></div>
+      </div>
+    </div>
+    <p class="src">Hai câu hỏi trên là mẫu thật trong mục Tư Vấn của duyvuvar.vn — bản gộp giữ đúng kiểu Hỏi–Đáp có đánh số này, khách gửi link thì shop check và trả lời ngay tại đây.</p>
+  </section>
+
+  <section id="vi">
+    <h2>Ví Hoàn Tiền — Cách Hoạt Động</h2>
+    <div class="steps">
+      <div class="step"><div class="n">1</div><b>Dán link, lấy link hoàn tiền</b><p>Dán link sản phẩm Shopee vào ô ở đầu trang, bấm "Lấy link hoàn tiền" rồi mua như bình thường.</p></div>
+      <div class="step"><div class="n">2</div><b>Đơn được ghi về ví của bạn</b><p>Mỗi tài khoản có một mã riêng; đơn mua qua link của bạn tự khớp về ví, chia rõ tạm tính và khả dụng.</p></div>
+      <div class="step"><div class="n">3</div><b>Đối soát xong là rút được</b><p>Shop đối soát theo báo cáo chính thức của Shopee, trả bạn 80% hoa hồng sau thuế. Đủ 10.000₫ là rút về ngân hàng.</p></div>
+    </div>
+    <details><summary>Tiền hoàn được tính thế nào?</summary><p>Hoa hồng Shopee trả về tài khoản của shop, trừ 10% thuế theo quy định, phần còn lại bạn nhận 80%. Ví dụ hoa hồng báo cáo 100.000₫ → bạn nhận 72.000₫.</p></details>
+    <details><summary>Khi nào tiền từ "tạm tính" thành "khả dụng"?</summary><p>Khi đơn đã giao thành công và qua thời gian đối soát của Shopee. Đơn bị hủy hoặc hoàn trả thì không được tính hoa hồng.</p></details>
+    <details><summary>Check sản phẩm có mất phí không?</summary><p>Không. Check var và tra cứu độ tin cậy miễn phí cho mọi khách, có tài khoản hay không đều dùng được ô dán link ở đầu trang.</p></details>
+  </section>
+</div>
+
+<footer>
+  <div class="wrap">
+    <b>SĂN SALE CÙNG LONG</b> — bản gộp mẫu do ECC dựng từ hai trang mẫu duyvuvar.vn (check var) và tranhuyen.io.vn (hoàn tiền), theo yêu cầu xem thử của chủ shop. Trang chính thức vẫn là sansalecunglong.github.io.
+  </div>
+</footer>
+
+<div class="modal" id="loginModal">
+  <div class="sheet">
+    <button class="x" id="closeLogin" type="button">✕</button>
+    <h3>Đăng nhập tài khoản</h3>
+    <p>Chào mừng bạn đến với Săn Sale Cùng Long — đăng nhập để thấy ví hoàn tiền của bạn.</p>
+    <button class="gbtn" type="button" onclick="alert('Bản xem thử: đăng nhập Google thật chạy ở trang chính.')">🔵 Đăng nhập bằng Google</button>
+    <button class="ebtn" type="button" onclick="alert('Bản xem thử: đăng nhập email thật chạy ở trang chính.')">Đăng nhập bằng Email</button>
+    <p style="margin-top:12px;font-size:12px">Bằng việc đăng nhập, bạn đồng ý với điều khoản sử dụng và chính sách bảo mật của shop.</p>
+  </div>
+</div>
+
+<script>
+(function(){
+  var inp=document.getElementById('linkIn');
+  document.getElementById('btnPaste').addEventListener('click',function(){
+    if(navigator.clipboard&&navigator.clipboard.readText){navigator.clipboard.readText().then(function(t){if(t)inp.value=t;inp.focus();}).catch(function(){inp.focus();});}
+    else inp.focus();
+  });
+  function slugName(u){try{var m=String(u).match(/\/([^\/]+)-i\.\d+\.\d+/);if(m)return m[1].replace(/-/g,' ');}catch(e){}return '';}
+  document.getElementById('btnCheck').addEventListener('click',function(){
+    var n=slugName(inp.value); if(n)document.getElementById('demoCheckName').textContent=n;
+    var d=document.getElementById('demoCheck'); d.classList.add('show'); d.scrollIntoView({behavior:'smooth',block:'center'});
+  });
+  document.getElementById('btnCash').addEventListener('click',function(){
+    var d=document.getElementById('demoCash'); d.classList.add('show'); d.scrollIntoView({behavior:'smooth',block:'center'});
+  });
+  document.querySelectorAll('.chip').forEach(function(c){c.addEventListener('click',function(){inp.value='';inp.placeholder='Tìm: '+c.textContent;inp.focus();window.scrollTo({top:0,behavior:'smooth'});});});
+  document.querySelectorAll('#cats .cat').forEach(function(c){c.addEventListener('click',function(){
+    document.querySelectorAll('#cats .cat').forEach(function(x){x.classList.remove('on')}); c.classList.add('on');
+    var f=c.getAttribute('data-f');
+    document.querySelectorAll('#grid .pcard').forEach(function(p){p.style.display=(f==='all'||p.getAttribute('data-cat')===f)?'':'none';});
+  });});
+  document.querySelectorAll('.mini.check').forEach(function(b){b.addEventListener('click',function(){window.scrollTo({top:0,behavior:'smooth'});document.getElementById('demoCheck').classList.add('show');});});
+  document.querySelectorAll('.mini.buy').forEach(function(b){b.addEventListener('click',function(){window.scrollTo({top:0,behavior:'smooth'});document.getElementById('demoCash').classList.add('show');});});
+  var m=document.getElementById('loginModal');
+  document.getElementById('openLogin').addEventListener('click',function(){m.classList.add('open');});
+  document.getElementById('closeLogin').addEventListener('click',function(){m.classList.remove('open');});
+  m.addEventListener('click',function(e){if(e.target===m)m.classList.remove('open');});
+})();
+</script>
+</body>
+</html>
