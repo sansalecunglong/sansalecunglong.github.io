@@ -2214,7 +2214,7 @@ function submitResearchHidden(link) {
   myToken();
   renderMyResearch();
   pollMyResearch(true);
-  setInterval(() => pollMyResearch(false), 15000);
+  setInterval(() => pollMyResearch(false), 5000);
   setInterval(() => {
     document.querySelectorAll(".sscl-elapsed").forEach(el => {
       const stMs = parseInt(el.getAttribute("data-started") || "0", 10);
@@ -2246,7 +2246,7 @@ function submitResearchHidden(link) {
     renderMyResearch();
     const sec = document.getElementById("myResearch");
     if (sec) sec.scrollIntoView({ behavior: "smooth", block: "center" });
-    setTimeout(() => pollMyResearch(false), 12000);
+    setTimeout(() => pollMyResearch(false), 3000);
   });
 })();
 
