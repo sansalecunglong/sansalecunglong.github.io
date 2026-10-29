@@ -71,18 +71,19 @@ border-radius:16px;padding:13px 14px;}
 .step .n{font-size:26px;font-weight:900;color:var(--green);line-height:1;min-width:34px;}
 .step b{font-size:15px;}
 .step p{margin:2px 0 0;font-size:13.5px;color:var(--muted);}
-.ticket{display:flex;align-items:stretch;gap:0;width:100%;text-align:left;cursor:pointer;
+.ticket{display:flex;flex-direction:column;align-items:stretch;gap:0;width:100%;text-align:left;cursor:pointer;
 font-family:inherit;background:#fff;border:1.5px solid var(--border);border-radius:16px;
 padding:0;margin-bottom:10px;overflow:hidden;transition:transform .08s ease;}
 .ticket:active{transform:scale(.99);}
-.stub{background:#FFF3E2;padding:11px 12px;min-width:128px;display:flex;flex-direction:column;justify-content:center;}
-.stub .off{font-weight:900;color:var(--orange-dark);font-size:15px;line-height:1.25;}
-.stub .fam{font-size:11.5px;color:var(--muted);margin-top:2px;}
-.tbody{flex:1;padding:11px 12px;border-left:2px dashed var(--border);min-width:0;}
+.stub{background:#FFF3E2;padding:10px 12px 8px;display:flex;flex-direction:row;align-items:baseline;gap:9px;}
+.stub .off{font-weight:900;color:var(--orange-dark);font-size:15.5px;line-height:1.25;white-space:nowrap;}
+.stub .fam{font-size:11.5px;color:var(--muted);}
+.tbody{display:flex;align-items:center;gap:10px;padding:9px 12px 11px;border-top:2px dashed var(--border);min-width:0;}
+.tinfo{flex:1;min-width:0;}
 .tbody .code{display:block;font-family:ui-monospace,Menlo,monospace;font-weight:800;font-size:14.5px;
 letter-spacing:.4px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
 .tbody .cond{font-size:12.5px;color:var(--muted);}
-.ticket .copy{align-self:center;margin:0 12px 0 4px;font-size:11.5px;font-weight:900;color:var(--green);
+.ticket .copy{font-size:11.5px;font-weight:900;color:var(--green);
 background:var(--green-soft);padding:7px 9px;border-radius:8px;white-space:nowrap;}
 .grid{display:grid;grid-template-columns:1fr 1fr;gap:11px;}
 .prod{border:1px solid var(--border);border-radius:16px;overflow:hidden;background:#fff;
@@ -121,7 +122,7 @@ padding:6px 10px;border-radius:999px;opacity:.93;pointer-events:none;}
 color:#fff;font-size:14px;font-weight:700;padding:11px 18px;border-radius:999px;opacity:0;
 pointer-events:none;transition:all .25s ease;z-index:3000;max-width:92vw;text-align:center;}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
-@media (max-width:420px){.stub{min-width:108px}.hero h1{font-size:24px}}
+@media (max-width:420px){.hero h1{font-size:24px}}
 </style>
 </head>
 <body>
@@ -139,7 +140,7 @@ pointer-events:none;transition:all .25s ease;z-index:3000;max-width:92vw;text-al
     <div class="conv">
       <label for="linkIn">BƯỚC 1 — DÁN LINK SẢN PHẨM SHOPEE</label>
       <div class="convrow">
-        <input id="linkIn" type="url" inputmode="url" placeholder="Dán link sản phẩm Shopee vào đây…" autocomplete="off">
+        <input id="linkIn" type="url" inputmode="url" placeholder="Dán link Shopee vào đây…" autocomplete="off">
         <button class="btn paste" id="btnPaste" type="button">Dán</button>
         <button class="btn go" id="btnGo" type="button">Săn sale</button>
       </div>
@@ -173,45 +174,45 @@ pointer-events:none;transition:all .25s ease;z-index:3000;max-width:92vw;text-al
     
       <button class="ticket" data-code="VNM250KOCT" type="button">
         <span class="stub"><span class="off">Giảm 12% tối đa 250K</span><span class="fam">Toàn sàn Shopee</span></span>
-        <span class="tbody"><span class="code">VNM250KOCT</span>
+        <span class="tbody"><span class="tinfo"><span class="code">VNM250KOCT</span>
         <span class="cond">Đơn từ 200K • Hết hạn 31/10/2026</span></span>
-        <span class="copy">CHÉP</span>
+        <span class="copy">CHÉP</span></span>
       </button>
       <button class="ticket" data-code="WASTON150K" type="button">
         <span class="stub"><span class="off">Giảm 14% tối đa 150K</span><span class="fam">Toàn sàn Shopee</span></span>
-        <span class="tbody"><span class="code">WASTON150K</span>
+        <span class="tbody"><span class="tinfo"><span class="code">WASTON150K</span>
         <span class="cond">Đơn từ 150K • Hết hạn 31/10/2026</span></span>
-        <span class="copy">CHÉP</span>
+        <span class="copy">CHÉP</span></span>
       </button>
       <button class="ticket" data-code="VIDEO-1530863982120960" type="button">
         <span class="stub"><span class="off">Giảm 18% tối đa 99K</span><span class="fam">Shopee Video — Siêu Sale Quốc Tế</span></span>
-        <span class="tbody"><span class="code">VIDEO-1530863982120960</span>
+        <span class="tbody"><span class="tinfo"><span class="code">VIDEO-1530863982120960</span>
         <span class="cond">Đơn từ 99K • Hết hạn 31/10/2026</span></span>
-        <span class="copy">CHÉP</span>
+        <span class="copy">CHÉP</span></span>
       </button>
       <button class="ticket" data-code="VIDEO-1530863982383108" type="button">
         <span class="stub"><span class="off">Giảm 16% tối đa 150K</span><span class="fam">Shopee Video — Siêu Sale Quốc Tế</span></span>
-        <span class="tbody"><span class="code">VIDEO-1530863982383108</span>
+        <span class="tbody"><span class="tinfo"><span class="code">VIDEO-1530863982383108</span>
         <span class="cond">Đơn từ 99K • Hết hạn 31/10/2026</span></span>
-        <span class="copy">CHÉP</span>
+        <span class="copy">CHÉP</span></span>
       </button>
       <button class="ticket" data-code="VIDEO-1530863990116360" type="button">
         <span class="stub"><span class="off">Giảm 16% tối đa 150K</span><span class="fam">Shopee Video — Siêu Sale Quốc Tế</span></span>
-        <span class="tbody"><span class="code">VIDEO-1530863990116360</span>
+        <span class="tbody"><span class="tinfo"><span class="code">VIDEO-1530863990116360</span>
         <span class="cond">Đơn từ 150K • Hết hạn 31/10/2026</span></span>
-        <span class="copy">CHÉP</span>
+        <span class="copy">CHÉP</span></span>
       </button>
       <button class="ticket" data-code="VIDEO-1532309800783872" type="button">
         <span class="stub"><span class="off">Giảm 20% tối đa 140K</span><span class="fam">Shopee Video — Thời Trang</span></span>
-        <span class="tbody"><span class="code">VIDEO-1532309800783872</span>
+        <span class="tbody"><span class="tinfo"><span class="code">VIDEO-1532309800783872</span>
         <span class="cond">Đơn từ 250K • Hết hạn 31/10/2026</span></span>
-        <span class="copy">CHÉP</span>
+        <span class="copy">CHÉP</span></span>
       </button>
       <button class="ticket" data-code="VIDEO-1532309799997440" type="button">
         <span class="stub"><span class="off">Giảm 21% tối đa 400K</span><span class="fam">Shopee Video — Thời Trang</span></span>
-        <span class="tbody"><span class="code">VIDEO-1532309799997440</span>
+        <span class="tbody"><span class="tinfo"><span class="code">VIDEO-1532309799997440</span>
         <span class="cond">Đơn từ 700K • Hết hạn 31/10/2026</span></span>
-        <span class="copy">CHÉP</span>
+        <span class="copy">CHÉP</span></span>
       </button>
   </section>
 
