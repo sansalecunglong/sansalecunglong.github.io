@@ -2088,10 +2088,18 @@ async function pollMyResearch(force) {
     const mine = (all && all[myToken()]) || [];
     if (!mine.length) return;
     let changed = false;
+    const usedSrv = new Set();
     mine.forEach(srv => {
       let i = list.findIndex(t => t.rid && srv.rid && t.rid === srv.rid);
       if (i < 0) i = list.findIndex(t => t.status === "pending" && t.link === srv.link);
-      if (i >= 0) { const mg = Object.assign({}, list[i], srv); if (mg.status === "pending" && !mg.startedAt) mg.startedAt = list[i].startedAt || Date.now(); list[i] = mg; changed = true; }
+      if (i >= 0) { const mg = Object.assign({}, list[i], srv); if (mg.status === "pending" && !mg.startedAt) mg.startedAt = list[i].startedAt || Date.now(); list[i] = mg; usedSrv.add(srv.rid || srv.link); changed = true; }
+    });
+    mine.forEach(srv => {
+      if (usedSrv.has(srv.rid || srv.link)) return;
+      if (srv.rid && list.some(t => t.rid === srv.rid)) return;
+      let i = -1;
+      for (let k = list.length - 1; k >= 0; k--) { if (list[k].status === "pending" && !list[k].rid) { i = k; break; } }
+      if (i >= 0) { list[i] = Object.assign({}, list[i], srv); usedSrv.add(srv.rid || srv.link); changed = true; }
       else if (!list.some(t => t.rid === srv.rid)) { if (srv.status === "pending" && !srv.startedAt) srv.startedAt = Date.now(); list.unshift(srv); changed = true; }
     });
     if (changed) { myResearchSave(list); renderMyResearch(); }
