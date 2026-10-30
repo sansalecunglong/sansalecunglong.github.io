@@ -461,11 +461,6 @@ body{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;text-r
     </div>
   </section>
 
-  <div class="banners">
-    <div class="banner b1" id="bnRank"><div class="ic">🏆</div><div class="t">Bảng xếp hạng sản phẩm</div><div class="s">Shop chọn theo xu hướng bán chạy</div></div>
-    <div class="banner b2" id="bnSuggest"><div class="ic">💡</div><div class="t">Gợi ý sản phẩm</div><div class="s">Shop chọn lọc mỗi ngày</div></div>
-  </div>
-
   <div class="card">
     <h2>🎬 Video Mới</h2>
     <p class="sub">Video mới nhất trên Facebook của shop — xem vui rồi quay lại săn sale tiếp nhé.</p>
@@ -1148,10 +1143,6 @@ document.getElementById("btnConvert").addEventListener("click",
 document.getElementById("inLink").addEventListener("keydown", e => {
   if (e.key === "Enter") doConvert(e.target.value);
 });
-document.getElementById("bnRank").addEventListener("click", () =>
-  document.getElementById("secRank").scrollIntoView({behavior:"smooth"}));
-document.getElementById("bnSuggest").addEventListener("click", () =>
-  document.getElementById("secHot").scrollIntoView({behavior:"smooth"}));
 
 /* Chips từ khóa hot → mở trang tìm kiếm đã gắn mã */
 const chipsBox = document.getElementById("chips");
