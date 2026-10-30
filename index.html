@@ -476,14 +476,10 @@ body{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;text-r
   </div>
 
   <div class="card" id="secRank">
-    <h2>🏆 Bảng Xếp Hạng Sản Phẩm</h2>
-    <p class="sub">TOP 10 xếp theo độ BÁN CHẠY trên Shopee — căn cứ sản phẩm xu hướng, lượt bán tăng và các ngành đang dẫn đầu trên Shopee (Nhà cửa &amp; Đời sống • Sắc đẹp • Thời trang nữ). Mỗi món kèm một dòng nhận xét ngắn để bạn chốt nhanh; giá “từ” là giá tham khảo khi mở deal. <span id="rankStamp"></span></p>
-    <div id="rankList"></div>
-  </div>
-
-  <div class="card" id="secHot">
-    <h2>🔥 Sản Phẩm Hot</h2>
-    <p class="sub">Xếp theo đúng ngành hàng trên Shopee — mỗi ngành shop chỉ chọn 3 món đáng mua nhất: 🔥 <b>bán chạy nhất</b>, ⭐ <b>đánh giá cao nhất</b> và 💸 <b>rẻ nhất</b>. Bấm "Xem deal" là mở Shopee đã sắp xếp/lọc đúng tiêu chí của món đó để bạn kiểm chứng và xem đánh giá thật; giá "từ" là giá tham khảo. <span id="updStamp"></span></p>
+    <span id="secHot"></span>
+    <h2>🏆 Bảng Xếp Hạng &amp; Sản Phẩm Hot</h2>
+    <p class="sub">Gộp hai mục làm một cho gọn như bản thử: <b>TOP 10</b> xếp theo độ <b>BÁN CHẠY</b> trên Shopee — huy hiệu 🏆 Hạng 1–10 ngay trên từng thẻ, kèm nhận xét ngắn của shop để bạn chốt nhanh. Đủ <b>15 món theo 5 ngành</b>, mỗi ngành 3 tiêu chí: 🔥 <b>bán chạy nhất</b>, ⭐ <b>đánh giá cao nhất</b>, 💸 <b>rẻ nhất</b>. Bấm chip để lọc nhanh theo ngành; bấm "Xem deal" là mở Shopee đã sắp xếp/lọc đúng tiêu chí của món đó. Giá "từ" là giá tham khảo. <span id="rankStamp"></span><span id="updStamp" hidden></span></p>
+    <div id="rankChips"></div>
     <div class="grid" id="products"></div>
   </div>
 
@@ -1334,66 +1330,39 @@ const PICK_META = {
   rated: { badge: "⭐ Đánh giá cao nhất ngành", mode: "rated", bg: "#fb8c00" },
   cheap: { badge: "💸 Rẻ nhất ngành", mode: "price", bg: "#43a047" }
 };
-(function renderHot() {
+/* Render GỘP Bảng Xếp Hạng + Sản Phẩm Hot (Long gộp 30/10/2026, kiểu bản thử
+   ban-gop-ecc: MỘT mục duy nhất, chip lọc theo ngành, lưới thẻ). TOP 10 = 10 món
+   đầu của PRODUCTS (5 best + 5 rated; thứ tự mảng = thứ hạng bán chạy, kèm
+   RANK_NOTES ngay trên thẻ), 5 món cheap ở vị trí 11–15 không mang số hạng.
+   Nút "Xem deal" vẫn tự sắp xếp/lọc theo pick của món như trước. */
+(function renderMerged() {
   const box = document.getElementById("products");
-  box.classList.remove("grid");
-  box.style.display = "block";
-  HOT_CATS.forEach(c => {
-    const items = ["best", "rated", "cheap"].map(pk => PRODUCTS.find(x => x.cat === c.key && x.pick === pk)).filter(Boolean);
-    if (!items.length) return;
-    const h = document.createElement("div");
-    h.textContent = c.label;
-    h.style.cssText = "font-size:17px; font-weight:800; margin:16px 0 4px;";
-    box.appendChild(h);
-    const grid = document.createElement("div");
-    grid.className = "grid";
-    box.appendChild(grid);
-    items.forEach(prod => {
-      const meta = PICK_META[prod.pick];
-      const d = document.createElement("div");
-      d.className = "prod";
-      d.style.position = "relative";
-      d.innerHTML = '<div class="thumb"></div><div class="body"><div class="pname"></div>' +
-        '<div class="price"></div><div class="stars">⭐ Ưu tiên shop 4.5★+ khi mở deal</div>' +
-        '<div class="pnote">Giá tham khảo trên Shopee • Cập nhật ngày ' + PAGE_UPDATED + '</div>' +
-        '<a class="dealbtn" target="_blank" rel="noopener">Xem deal →</a></div>';
+  const chipsBox = document.getElementById("rankChips");
+  function cardFor(p, rank) {
+    const meta = PICK_META[p.pick] || PICK_META.best;
+    const d = document.createElement("div");
+    d.className = "prod";
+    d.style.position = "relative";
+    d.innerHTML = '<div class="thumb"></div><div class="body"><div class="pname"></div>' +
+      '<div class="price"></div><div class="stars">⭐ Ưu tiên shop 4.5★+ khi mở deal</div>' +
+      (rank && RANK_NOTES[rank - 1] ? '<div class="rankcmt"></div>' : '') +
+      '<div class="pnote">Giá tham khảo trên Shopee \u2022 Cập nhật ngày ' + PAGE_UPDATED + '</div>' +
+      '<a class="dealbtn" target="_blank" rel="noopener">Xem deal →</a></div>';
+    if (rank) {
       const rb = document.createElement("div");
-      rb.textContent = meta.badge;
-      rb.style.cssText = "position:absolute; top:8px; left:8px; background:" + meta.bg + "; color:#fff; font-size:12.5px; font-weight:800; padding:3px 9px; border-radius:999px; z-index:2;";
+      rb.textContent = "🏆 Hạng " + rank;
+      rb.style.cssText = "position:absolute; top:8px; left:8px; background:" +
+        (rank === 1 ? "#b45309" : rank === 2 ? "#6b7280" : rank === 3 ? "#c47b4a" : "#1a1a1a") +
+        "; color:#fff; font-size:12.5px; font-weight:800; padding:3px 9px; border-radius:999px; z-index:2;";
       d.appendChild(rb);
-      const thumb = d.querySelector(".thumb");
-      if (prod.img) {
-        const im = document.createElement("img");
-        im.src = prod.img; im.alt = prod.name; im.loading = "lazy";
-        im.onerror = () => { thumb.textContent = prod.icon; };
-        thumb.appendChild(im);
-      } else {
-        thumb.textContent = prod.icon;
-      }
-      d.querySelector(".pname").textContent = prod.name;
-      d.querySelector(".price").textContent = prod.price;
-      d.querySelector("a.dealbtn").href = searchAff(prod.keyword, meta.mode);
-      extraBtns(d, prod);
-      grid.appendChild(d);
-    });
-  });
-})();
-renderProducts("household", HOUSEHOLD);
-
-/* Render Bảng Xếp Hạng — TOP 10 của Sản Phẩm Hot, kèm nhận xét ngắn của shop.
-   Nút "Xem deal" dùng cùng link tìm kiếm đã gắn mã affiliate như thẻ sản phẩm. */
-(function renderRanking() {
-  const box = document.getElementById("rankList");
-  PRODUCTS.slice(0, 10).forEach((p, i) => {
-    const row = document.createElement("div");
-    row.className = "rankrow";
-    row.innerHTML = '<div class="ranknum"></div><div class="rankthumb"></div>' +
-      '<div class="rankbody"><div class="rankname"></div><div class="rankcmt"></div><div class="rankprice"></div></div>' +
-      '<a class="rankbtn" target="_blank" rel="noopener">Xem deal →</a>';
-    const num = row.querySelector(".ranknum");
-    num.textContent = i + 1;
-    if (i < 3) num.classList.add("r" + (i + 1));
-    const thumb = row.querySelector(".rankthumb");
+    }
+    const pb = document.createElement("div");
+    pb.textContent = meta.badge;
+    pb.style.cssText = "position:absolute; top:" + (rank ? "36px" : "8px") +
+      "; left:8px; background:" + meta.bg +
+      "; color:#fff; font-size:11.5px; font-weight:800; padding:3px 9px; border-radius:999px; z-index:2;";
+    d.appendChild(pb);
+    const thumb = d.querySelector(".thumb");
     if (p.img) {
       const im = document.createElement("img");
       im.src = p.img; im.alt = p.name; im.loading = "lazy";
@@ -1402,23 +1371,38 @@ renderProducts("household", HOUSEHOLD);
     } else {
       thumb.textContent = p.icon;
     }
-    row.querySelector(".rankname").textContent = p.name;
-    row.querySelector(".rankcmt").textContent = RANK_NOTES[i] || "";
-    row.querySelector(".rankprice").textContent = p.price;
-    const rp = document.createElement("div");
-    rp.style.cssText = "font-size:12.5px; color:var(--muted);";
-    rp.textContent = "Giá tham khảo \u2022 Cập nhật ngày " + PAGE_UPDATED;
-    row.querySelector(".rankbody").appendChild(rp);
-    const ra = document.createElement("a");
-    ra.className = "asklink"; ra.target = "_blank"; ra.rel = "noopener";
-    ra.textContent = "💬 Hỏi về món này";
-    ra.href = askHref(p);
-    row.querySelector(".rankbody").appendChild(ra);
-    row.querySelector("a.rankbtn").href = searchAff(p.keyword);
-    box.appendChild(row);
+    d.querySelector(".pname").textContent = p.name;
+    d.querySelector(".price").textContent = p.price;
+    const cmt = d.querySelector(".rankcmt");
+    if (cmt) cmt.textContent = RANK_NOTES[rank - 1];
+    d.querySelector("a.dealbtn").href = searchAff(p.keyword, meta.mode);
+    extraBtns(d, p);
+    return d;
+  }
+  function draw(filter) {
+    box.innerHTML = "";
+    PRODUCTS.forEach((p, i) => {
+      if (filter !== "all" && p.cat !== filter) return;
+      box.appendChild(cardFor(p, i < 10 ? i + 1 : 0));
+    });
+  }
+  const chipDefs = [{ key: "all", label: "🏆 Tất cả" }].concat(HOT_CATS);
+  chipDefs.forEach((c, idx) => {
+    const b = document.createElement("button");
+    b.type = "button";
+    b.textContent = c.label;
+    b.className = "rankchip" + (idx === 0 ? " on" : "");
+    b.addEventListener("click", () => {
+      chipsBox.querySelectorAll(".rankchip").forEach(x => x.classList.remove("on"));
+      b.classList.add("on");
+      draw(c.key);
+    });
+    chipsBox.appendChild(b);
   });
+  draw("all");
   document.getElementById("rankStamp").textContent = "Cập nhật: " + PAGE_UPDATED + ".";
 })();
+renderProducts("household", HOUSEHOLD);
 
 /* Render danh mục */
 const cBox = document.getElementById("cats");
@@ -2440,6 +2424,11 @@ footer{background:#111111;}
 #ctaDash{background:var(--green) !important;}
 #accCreateF{background:var(--green) !important;}
 #accLogin{background:var(--green) !important;}
+
+#rankChips{display:flex; flex-wrap:wrap; gap:6px; margin:2px 0 12px;}
+.rankchip{border:1.5px solid #1a1a1a; background:#fff; color:#1a1a1a; border-radius:999px; padding:7px 13px; font-family:inherit; font-size:13px; font-weight:700; cursor:pointer;}
+.rankchip.on{background:#1a1a1a; color:#fff;}
+#secRank .prod .rankcmt{font-size:12.5px; color:#57534e; line-height:1.4;}
 </style>
 <script>
 /* HERO 2 NUT (ban gop, 30/10/2026): nut Check = chuyen doi link roi kich hoat
