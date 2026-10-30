@@ -263,8 +263,9 @@ body{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;text-r
   </section>
 
   <section class="hero" id="secConvert">
-    <h1>🎟️ Săn Sale Ở Đây</h1>
-    <p><b>Bước 1:</b> Dán link sản phẩm Shopee vào ô dưới</p>
+    <div class="gopkick">Săn Sale Cùng Long · Check &amp; Hoàn — Gộp 2 trong 1</div>
+    <h1>Check trước khi mua.<br><span class="gopred">Hoàn tiền sau khi mua.</span></h1>
+    <p>Một ô dán link làm cả hai việc: kiểm tra sản phẩm có đáng mua không, và lấy link hoàn <b>80% hoa hồng</b> cho chính đơn đó. Dán link Shopee vào ô dưới:</p>
     <ul class="v2checks">
       <li>Hoàn 80% hoa hồng thực nhận — rõ ràng, không mập mờ</li>
       <li>Đối soát theo báo cáo chính thức của Shopee</li>
@@ -273,7 +274,10 @@ body{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;text-r
     <div class="searchrow">
       <input type="text" id="inLink" placeholder="Dán link sản phẩm Shopee…" autocomplete="off">
       <button id="btnPaste">📋 Dán link</button>
-      <button id="btnConvert">Săn sale</button>
+    </div>
+    <div class="gopbtns">
+      <button id="btnCheck" type="button">🔎 Check sản phẩm</button>
+      <button id="btnConvert" type="button">💰 Lấy link hoàn tiền</button>
     </div>
     <div id="result">
       <div id="prodDone" style="display:none; background:#f2fbf5; border:1px solid #bfe8cc; border-radius:10px; padding:9px 12px; margin-bottom:10px; font-size:13.5px;">
@@ -312,6 +316,12 @@ body{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;text-r
       <div style="font-size:12px; color:#6e6e6e; margin-top:8px;">Các khung giờ nhả mã và đợt sale lớn sắp tới — canh đúng giờ vào app Shopee để lưu mã tại banner nhé.</div>
     </div>
   </section>
+  <div class="gopstats">
+    <div class="gs"><b>80%</b><span>Hoa hồng trả lại cho khách</span></div>
+    <div class="gs"><b>10.000₫</b><span>Mức rút tiền tối thiểu</span></div>
+    <div class="gs"><b>2 trong 1</b><span>Check sản phẩm + hoàn tiền, một trang</span></div>
+    <div class="gs"><b>Review thật</b><span>Check dựa trên đánh giá người đã mua</span></div>
+  </div>
   <div class="v2tiles">
     <a class="v2tile rank" href="#secRank"><span class="ic">🏆</span><b>Bảng xếp hạng</b><span>TOP sản phẩm bán chạy — shop lọc mỗi ngày</span></a>
     <a class="v2tile gift" href="#secConvert"><span class="ic">🎁</span><b>Mã giảm giá</b><span>Dán link là hiện mã hợp nhất cho món của bạn</span></a>
@@ -2353,63 +2363,104 @@ document.getElementById("updStamp").textContent = "Cập nhật: " + PAGE_UPDATE
 <script>(function(){var ua=navigator.userAgent||"";var wv=/(Zalo|FBAN|FBAV|FB_IAB|Instagram|Messenger)/i.test(ua);if(wv){var w=document.getElementById("accWebviewWarn");if(w)w.style.display="block";}try{var q=(location.search||"")+"#"+(location.hash||"");if(q.indexOf("error")!==-1){var sp=new URLSearchParams(location.search);var hp=new URLSearchParams((location.hash||"").replace(/^#/,""));var desc=sp.get("error_description")||hp.get("error_description")||sp.get("error")||hp.get("error");if(desc){setTimeout(function(){if(window.openAuthModal)openAuthModal("login");if(window.accMsg)accMsg("\u26a0\ufe0f Google b\u00e1o l\u1ed7i: "+decodeURIComponent(String(desc).replace(/\+/g," "))+" \u2014 b\u1ea1n ch\u1ee5p m\u00e0n h\u00ecnh d\u00f2ng n\u00e0y g\u1eedi shop \u0111\u1ec3 \u0111\u01b0\u1ee3c h\u1ed7 tr\u1ee3 nh\u00e9.");try{history.replaceState(null,"",location.pathname);}catch(e){}},400);}}}catch(e){}})();</script>
 <div id="scrollBtns" style="position:fixed;right:10px;bottom:10px;display:none;flex-direction:column;gap:6px;z-index:900"><button type="button" title="Lên đầu trang" onclick="window.scrollTo({top:0,behavior:'smooth'})" style="width:40px;height:40px;border:none;border-radius:50%;font-size:17px;font-weight:700;background:#c21807;color:#fff;box-shadow:0 2px 8px rgba(0,0,0,.25);cursor:pointer;opacity:.92;padding:0">⬆</button><button type="button" title="Xuống cuối trang" onclick="window.scrollTo({top:document.body.scrollHeight,behavior:'smooth'})" style="width:40px;height:40px;border:none;border-radius:50%;font-size:17px;font-weight:700;background:#c21807;color:#fff;box-shadow:0 2px 8px rgba(0,0,0,.25);cursor:pointer;opacity:.92;padding:0">⬇</button></div><script>(function(){var box=document.getElementById("scrollBtns");var modal=document.getElementById("authModal");function modalOpen(){return modal&&getComputedStyle(modal).display!=="none";}function upd(){var max=document.documentElement.scrollHeight-window.innerHeight;var past=max>0&&window.scrollY>max/3;box.style.display=(past&&!modalOpen())?"flex":"none";}window.addEventListener("scroll",upd,{passive:true});window.addEventListener("resize",upd);if(modal&&window.MutationObserver)new MutationObserver(upd).observe(modal,{attributes:true,attributeFilter:["style","class"]});upd();})();</script><script>(function(){function show(id){["accTabHome","accTabOrders","accTabInfo"].forEach(function(p){var el=document.getElementById(p);if(el)el.style.display=(p===id)?"":"none";});document.querySelectorAll(".atab").forEach(function(b){var on=b.getAttribute("data-atab")===id;b.style.background=on?"#16110d":"#fff";b.style.color=on?"#fff":"#333";b.style.borderColor=on?"#16110d":"#ddd";});}document.addEventListener("click",function(e){var b=e.target&&e.target.closest?e.target.closest(".atab"):null;if(b)show(b.getAttribute("data-atab"));});show("accTabHome");})();</script>
 
-<style id="eccThemeV2">
-/* ===== GIAO DIEN V2 "VI HOAN TIEN" (ECC) — ap 29/10/2026 theo duyet cua chu trang.
-   He thong: xanh tien #0B3D2E lam chu dao, kem #FAF7F0 nen, cam chi cho nut mua Shopee.
-   Chi la lop CSS override + checklist/tiles; co che trang giu nguyen 100%. ===== */
+<style id="eccThemeGop">
+/* ===== GIAO DIEN BAN GOP "CHECK TRUOC · HOAN SAU" (ECC) — ap 30/10/2026 theo duyet cua chu trang.
+   He thong: den #1a1a1a + do #dc2626 + vang #FFBA00 (kieu check var), vi navy #1e2942/#0f172a.
+   Chi la lop CSS override + hero 2 nut noi vao co che san co; logic trang giu nguyen 100%.
+   Ban v2 "Vi hoan tien" la diem hoi phuc o index.html.bak-20261030-gop. ===== */
 :root{
-  --bg:#FAF7F0; --card:#ffffff; --border:#E7DFCE; --ink:#132019; --text:#232d26;
-  --muted:#68766C; --green:#0B3D2E; --green-dark:#082C21; --green-soft:#DFF2E4; --gold:#F5A623;
-  --primary:#d63c1e; --primary-dark:#c23215; --vivid:#EE4D2D;
+  --bg:#f3f4f6; --card:#ffffff; --border:#e3e0d8; --ink:#1a1a1a; --text:#26221c;
+  --muted:#6b7280; --green:#1e2942; --green-dark:#0f172a; --green-soft:#e8ecf4; --gold:#FFBA00;
+  --primary:#dc2626; --primary-dark:#b91c1c; --vivid:#FF7A00;
 }
 body{font-family:"Be Vietnam Pro",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;}
 h1,h2{text-wrap:balance;}
-header.topbar{background:#fffdf8; color:var(--ink); border-bottom:3px solid var(--green);
-  box-shadow:0 1px 0 rgba(19,32,25,.05),0 10px 26px rgba(19,32,25,.05);}
-header.topbar .tag{color:var(--muted);}
-#topLogin{background:#fff; color:var(--green); border:1.5px solid var(--green); box-shadow:none;}
-#topRegister{background:var(--green); color:#fff; border:1.5px solid var(--green);}
-#topDash{background:var(--ink); color:#fff; box-shadow:none;}
-#topLogout{background:#fff; color:var(--ink); border:1.5px solid var(--border);}
-.hero{background:var(--green); color:#fff; border-radius:26px; margin-top:14px;
-  box-shadow:0 18px 44px rgba(11,61,46,.28);}
-.hero h1{font-weight:900; letter-spacing:-.4px;}
-.hero p{color:#D7E8DC;}
-.hero .searchrow{background:#fff; padding:10px; border-radius:16px;}
+header.topbar{background:#1a1a1a; color:#fff; border-bottom:4px solid var(--primary);
+  box-shadow:0 10px 26px rgba(26,26,26,.18);}
+header.topbar .name{color:#fff;}
+header.topbar .tag{color:var(--gold);}
+#topLogin{background:transparent; color:#fff; border:1.5px solid rgba(255,255,255,.85); box-shadow:none;}
+#topRegister{background:var(--primary); color:#fff; border:1.5px solid var(--primary); box-shadow:none;}
+#topDash{background:#fff; color:var(--ink); box-shadow:none;}
+#topLogout{background:transparent; color:#fff; border:1.5px solid rgba(255,255,255,.55); box-shadow:none;}
+.hero{background:#FFF7E8; color:var(--ink); border:2px solid var(--ink); border-radius:20px; margin-top:14px;
+  box-shadow:0 16px 38px rgba(26,26,26,.16);}
+.gopkick{font-size:11.5px; font-weight:800; letter-spacing:.13em; color:var(--primary); text-transform:uppercase; margin-bottom:6px;}
+.hero h1{font-weight:900; letter-spacing:-.4px; color:var(--ink); line-height:1.14;}
+.hero h1 .gopred{color:var(--primary);}
+.hero p{color:#4b4237;}
+.hero .searchrow{background:#fff; padding:10px; border-radius:14px; border:2px solid var(--ink);}
 .hero .searchrow input{border:2px solid var(--ink); background:#fff; color:var(--ink);}
 .searchrow button{background:var(--ink); color:#fff;}
-#btnPaste{background:var(--green-soft); color:var(--green);}
+#btnPaste{background:var(--gold); color:var(--ink);}
+.gopbtns{display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:10px;}
+.gopbtns button{border:none; border-radius:12px; padding:13px 8px; font-size:15.5px; font-weight:800; cursor:pointer; font-family:inherit; line-height:1.15;}
+#btnCheck{background:var(--ink); color:#fff;}
+#btnConvert{background:var(--primary); color:#fff;}
 .v2checks{list-style:none; margin:0 0 14px; padding:0; display:grid; gap:6px;}
-.v2checks li{font-size:13.5px; color:#EAF4EC; font-weight:600;}
+.v2checks li{font-size:13.5px; color:#3f3a30; font-weight:600;}
 .v2checks li::before{content:"✓"; display:inline-flex; align-items:center; justify-content:center;
-  width:19px; height:19px; border-radius:50%; background:var(--gold); color:#3A2A00; font-weight:900;
+  width:19px; height:19px; border-radius:50%; background:var(--primary); color:#fff; font-weight:900;
   font-size:12px; margin-right:8px; vertical-align:-4px;}
+.gopstats{display:grid; grid-template-columns:1fr 1fr; background:var(--primary); border-radius:16px; margin-top:16px; overflow:hidden;}
+.gopstats .gs{padding:13px 15px; color:#fff;}
+.gopstats .gs b{display:block; font-size:21px; font-weight:900; font-variant-numeric:tabular-nums;}
+.gopstats .gs span{font-size:12px; color:#ffffff;}
+@media(min-width:641px){.gopstats{grid-template-columns:repeat(4,1fr);}}
 .v2tiles{display:grid; grid-template-columns:1fr 1fr; gap:11px; margin-top:16px;}
 .v2tile{text-decoration:none; border-radius:20px; padding:16px 14px; display:block; border:1px solid var(--border);}
 .v2tile .ic{font-size:26px;}
 .v2tile b{display:block; font-size:16px; margin-top:5px; color:var(--ink);}
 .v2tile span{font-size:12.5px; color:var(--muted);}
-.v2tile.rank{background:var(--green-soft);}
-.v2tile.gift{background:#FFF3E2;}
+.v2tile.rank{background:#1a1a1a; border-color:#1a1a1a;}
+.v2tile.rank b{color:#fff;}
+.v2tile.rank span{color:#d1d5db;}
+.v2tile.gift{background:var(--primary); border-color:var(--primary);}
+.v2tile.gift b{color:#fff;}
+.v2tile.gift span{color:#ffffff;}
 .banner{border:1px solid var(--border); color:var(--ink);}
 .banner.b1{background:var(--green-soft);}
 .banner.b2{background:#FFF3E2;}
-.banner .s{color:var(--muted);}
-.card{border-radius:22px; box-shadow:0 1px 2px rgba(19,32,25,.05),0 12px 32px rgba(19,32,25,.06);}
+.banner .s{color:#4b5563;}
+.card{border-radius:20px; box-shadow:0 1px 2px rgba(26,26,26,.05),0 12px 32px rgba(26,26,26,.07);}
 .card h2{border-left:none; padding-left:0;}
 .prod{border-radius:16px;}
-.prod .thumb{background:#F3EDDD;}
+.prod .thumb{background:#f1eee6;}
 .price{font-variant-numeric:tabular-nums;}
 .voucher .code{font-variant-numeric:tabular-nums;}
+#openProdBtn{background:var(--vivid); color:#1a1a1a;}
 #askResearchBtn{background:var(--green);}
-footer{background:var(--green-dark);}
-#accHave > div:first-child{background:#0B3D2E !important;}
+.chip{background:#fff; border:1.5px solid var(--ink); color:var(--ink);}
+footer{background:#111111;}
+#accHave > div:first-child{background:linear-gradient(135deg,#1e2942,#0f172a) !important;}
 #accWalAvail{font-variant-numeric:tabular-nums;}
 #ctaLogin{background:var(--green) !important;}
 #ctaRegister{color:var(--green) !important; border-color:var(--green) !important;}
 #ctaCode{color:var(--green) !important;}
 #ctaDash{background:var(--green) !important;}
 #accCreateF{background:var(--green) !important;}
+#accLogin{background:var(--green) !important;}
 </style>
+<script>
+/* HERO 2 NUT (ban gop, 30/10/2026): nut Check = chuyen doi link roi kich hoat
+   ngay nut Tra cuu san co (#askResearchBtn) khi khoi Buoc 3 hien ra;
+   nut Hoan tien dung chinh #btnConvert goc. Khong doi logic goc cua trang. */
+(function(){
+  var bc = document.getElementById("btnCheck");
+  if(!bc) return;
+  bc.addEventListener("click", function(){
+    var rb = document.getElementById("reviewBox");
+    if(rb) rb.style.display = "none";
+    doConvert(document.getElementById("inLink").value);
+    var tries = 0;
+    var iv = setInterval(function(){
+      tries++;
+      var arb = document.getElementById("askResearchBtn");
+      if(rb && rb.style.display === "block" && arb){ clearInterval(iv); arb.click(); }
+      if(tries > 24) clearInterval(iv);
+    }, 500);
+  });
+})();
+</script>
 </body>
 </html>
