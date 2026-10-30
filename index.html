@@ -17,6 +17,8 @@
 <meta property="og:url" content="https://sansalecunglong.github.io/">
 <meta property="og:image" content="https://sansalecunglong.github.io/og-cover.png">
 <meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;600;700;800;900&display=swap" rel="stylesheet">
 <style>
   :root{
     --primary:#d63c1e; --primary-dark:#c23215; --bg:#f4f4f4; --card:#ffffff; --ink:#16110d; --vivid:#ff6a2b;
@@ -160,7 +162,6 @@
     padding:10px 20px; border-radius:999px; font-size:14px; opacity:0; transition:opacity .25s; pointer-events:none; z-index:20;}
   .toast.show{opacity:1;}
 </style>
-
 <style>
 /* Tối ưu hiển thị điện thoại: chữ nét, icon rõ, nút dễ bấm (thêm 26/10/2026) */
 *{-webkit-tap-highlight-color:transparent}
@@ -185,7 +186,6 @@ body{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;text-r
   #topVoucher{font-size:14px}
 }
 </style>
-
 <style>
 /* Hiệu ứng tải lại mã (thêm 26/10/2026): danh sách mã hiện dần + thẻ Bước 2 nhấp nháy viền cam */
 @keyframes rowIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
@@ -193,7 +193,6 @@ body{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;text-r
 @keyframes cardPulse{0%{box-shadow:0 0 0 0 rgba(0,0,0,.35)}100%{box-shadow:0 0 0 16px rgba(0,0,0,0)}}
 #secStep2.pulse{animation:cardPulse .8s ease-out 2}
 </style>
-
 <style>
 /* Nút mã kiểu 3D clay như mẫu Long gửi (26/10/2026): nút cam đỏ phồng, chữ trắng đậm, icon lớn */
 #topVoucher{background:#fff7e8 !important;border:2.5px dotted #d63c1e !important;border-radius:22px !important}
@@ -208,7 +207,6 @@ body{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;text-r
 #codeBtns .csave{font-size:12.5px;font-weight:700;color:#ffe9e2}
 #codeBtns .carrow{margin-left:auto;font-size:22px;color:#ffd93b;flex-shrink:0;text-shadow:0 2px 2px rgba(0,0,0,.2)}
 </style>
-
 <style>
 /* Nut tai khoan goc phai tren cung - thanh topbar chuyen nghiep (them 27/10/2026) */
 .topauth{margin-left:auto; display:flex; align-items:center; gap:8px; flex-shrink:0;}
@@ -228,58 +226,197 @@ body{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;text-r
   #topDash{max-width:118px;}
 }
 </style>
-
 <style>
 @keyframes authPop{from{opacity:0; transform:translateY(12px) scale(.985);} to{opacity:1; transform:none;}}
 .toast{z-index:1300 !important;}
 </style>
-<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;600;700;800;900&display=swap" rel="stylesheet"></head>
+<style id="eccConceptCss">
+
+:root{--ink:#17140f;--red:#dc2626;--red-dark:#b91c1c;--amber:#FFBA00;--orange:#FF7A00;--navy:#1e2942;--navy-deep:#0f172a;--bg:#f4f3ef;--card:#fff;--line:#e5e1d8;--muted:#64748b;--green:#16a34a}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:"Be Vietnam Pro",system-ui,sans-serif;background:var(--bg);color:var(--ink);font-size:15px;line-height:1.5}
+.num{font-variant-numeric:tabular-nums}
+.wrap{max-width:1080px;margin:0 auto;padding:0 14px}
+.pill{position:fixed;left:50%;transform:translateX(-50%);bottom:14px;z-index:99;background:var(--ink);color:#fff;font-size:12px;font-weight:700;padding:8px 14px;border-radius:999px;box-shadow:0 6px 20px rgba(0,0,0,.35);white-space:nowrap}
+header{background:var(--ink);color:#fff;position:sticky;top:0;z-index:50}
+.top{display:flex;align-items:center;gap:12px;padding:12px 0}
+.logo{display:flex;align-items:center;gap:10px;font-weight:900;letter-spacing:.2px;font-size:17px}
+.logo .mark{background:var(--red);color:#fff;border-radius:9px;padding:5px 9px;font-size:15px}
+.logo small{display:block;font-weight:600;font-size:12px;color:#fbbf24;letter-spacing:1.6px}
+nav{margin-left:auto;display:flex;gap:4px;align-items:center}
+nav a{color:#e7e5e4;text-decoration:none;font-weight:600;font-size:13.5px;padding:8px 10px;border-radius:9px}
+nav a:hover{background:#292524;color:#fff}
+.btn-login{background:var(--red);color:#fff;border:0;font:inherit;font-weight:800;font-size:13.5px;padding:9px 16px;border-radius:10px;cursor:pointer}
+.btn-login:active{transform:scale(.97)}
+@media(max-width:760px){nav a{display:none}nav a.keep{display:block}.logo{font-size:15px}.logo small{letter-spacing:1.1px}}
+.hero{padding:26px 0 8px}
+.hero-grid{display:grid;grid-template-columns:1.25fr .9fr;gap:16px;align-items:stretch}
+@media(max-width:860px){.hero-grid{grid-template-columns:1fr}}
+.kicker{color:var(--red-dark);font-weight:900;letter-spacing:2px;font-size:12px;text-transform:uppercase}
+h1{font-size:clamp(27px,5.4vw,44px);font-weight:900;line-height:1.12;text-wrap:balance;margin:6px 0 8px}
+h1 .r{color:var(--red)} h1 .a{color:#b45309}
+.sub{color:#44403c;max-width:52ch}
+.tool{background:var(--card);border:2px solid var(--ink);border-radius:14px;padding:14px;margin-top:16px;box-shadow:6px 6px 0 var(--ink)}
+.tool label{font-weight:800;font-size:13px;letter-spacing:.4px}
+.row{display:flex;gap:8px;margin-top:8px}
+.row input{flex:1;min-width:0;border:2px solid var(--ink);border-radius:10px;padding:12px;font:inherit;font-size:14px;background:#fff}
+.btn{border:0;font:inherit;font-weight:800;border-radius:10px;padding:12px 16px;cursor:pointer;white-space:nowrap}
+.btn:active{transform:scale(.97)}
+.btn-paste{background:var(--amber);color:var(--ink)}
+.duo{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
+.btn-check{background:var(--ink);color:#fff;font-size:15px;padding:14px}
+.btn-cash{background:var(--red);color:#fff;font-size:15px;padding:14px}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px;align-items:center}
+.chips span{font-size:12.5px;color:var(--muted);font-weight:600}
+.chip{border:1.5px solid var(--ink);background:#fff;border-radius:999px;padding:6px 12px;font:inherit;font-size:13px;font-weight:700;cursor:pointer}
+.chip:hover{background:var(--amber)}
+.demo{display:none;margin-top:12px;border-radius:12px;padding:12px 14px;font-size:14px}
+.demo.show{display:block}
+.demo-check{background:#fef9ec;border:1.5px dashed #d97706}
+.demo-cash{background:#ecfdf5;border:1.5px solid var(--green)}
+.demo b.t{font-size:15px}
+.wallet{background:linear-gradient(160deg,var(--navy) 0%,var(--navy-deep) 100%);color:#e2e8f0;border-radius:14px;padding:18px;display:flex;flex-direction:column;gap:10px;box-shadow:6px 6px 0 rgba(15,23,42,.35)}
+.wallet .wlab{font-size:12px;letter-spacing:2px;color:#93c5fd;font-weight:800}
+.wallet .big{font-size:44px;font-weight:900;color:#fff;line-height:1}
+.wallet .big small{font-size:16px;color:#fbbf24;font-weight:800}
+.wgrid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
+.wcell{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.14);border-radius:10px;padding:9px 10px}
+.wcell b{display:block;color:#fff;font-size:16px}
+.wcell span{font-size:12px;color:#94a3b8}
+.btn-withdraw{background:var(--amber);color:var(--navy-deep);width:100%;font-size:15px;padding:13px}
+.wallet .note{font-size:12px;color:#94a3b8}
+.strip{background:var(--red);color:#fff;margin:22px 0 6px}
+.strip .wrap{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;padding:14px}
+@media(max-width:760px){.strip .wrap{grid-template-columns:1fr 1fr}}
+.stat b{display:block;font-size:22px;font-weight:900}
+.stat span{font-size:12.5px;opacity:.92}
+section{padding:20px 0 4px}
+h2{font-size:21px;font-weight:900;text-transform:uppercase;letter-spacing:.3px;display:flex;align-items:center;gap:9px}
+h2::before{content:"";width:5px;height:22px;background:var(--red);border-radius:3px}
+h2 .more{margin-left:auto;font-size:13px;text-transform:none;letter-spacing:0}
+h2 .more a{color:var(--red-dark);text-decoration:none;font-weight:700}
+.tiles{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px}
+@media(max-width:640px){.tiles{grid-template-columns:1fr}}
+.tile{border-radius:14px;padding:18px;color:#fff;text-decoration:none;display:block;border:2px solid var(--ink)}
+.tile.rank{background:linear-gradient(120deg,#292524,#17140f)}
+.tile.sale{background:linear-gradient(120deg,#b91c1c,#7f1d1d)}
+.tile b{font-size:19px;font-weight:900;display:block}
+.tile span{font-size:13px;opacity:1}
+.cats{display:flex;gap:6px;flex-wrap:wrap;margin:12px 0 4px}
+.cat{border:1.5px solid var(--line);background:#fff;border-radius:999px;padding:7px 13px;font:inherit;font-size:13px;font-weight:700;cursor:pointer}
+.cat.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:10px}
+@media(max-width:860px){.grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:520px){.grid{grid-template-columns:1fr 1fr;gap:9px}}
+.pcard{background:#fff;border:1px solid var(--line);border-radius:14px;overflow:hidden;display:flex;flex-direction:column}
+.pimg{aspect-ratio:1/1;background:#f5f0e6;display:flex;align-items:center;justify-content:center;font-size:52px;overflow:hidden}
+.pimg img{width:100%;height:100%;object-fit:cover}
+.pbody{padding:11px 12px;display:flex;flex-direction:column;gap:5px;flex:1}
+.pname{font-weight:700;font-size:14px;line-height:1.35}
+.price{color:var(--red);font-weight:900;font-size:17px}
+.age{font-size:12px;color:var(--muted)}
+.pfoot{margin-top:auto;display:flex;gap:6px}
+.mini{flex:1;border:0;border-radius:9px;padding:9px 4px;font:inherit;font-size:12px;font-weight:800;cursor:pointer;white-space:nowrap}
+.mini.check{background:var(--ink);color:#fff}
+.mini.buy{background:var(--amber);color:var(--ink)}
+.src{font-size:12px;color:var(--muted);margin-top:8px}
+.qa{display:flex;flex-direction:column;gap:10px;margin-top:14px}
+.qacard{background:#fffdf4;border:1px solid var(--line);border-radius:12px;padding:13px 15px}
+.qacard .q{font-weight:600}
+.qacard .meta{font-size:12.5px;color:var(--muted);margin-top:5px}
+.tag{display:inline-block;font-size:12px;font-weight:800;border-radius:999px;padding:3px 9px;margin-left:6px;vertical-align:1px}
+.tag.doing{background:#fef3c7;color:#92400e}
+.tag.done{background:#dcfce7;color:#166534}
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:14px}
+@media(max-width:760px){.steps{grid-template-columns:1fr}}
+.step{background:var(--navy);color:#e2e8f0;border-radius:14px;padding:16px}
+.step .n{width:30px;height:30px;border-radius:50%;background:var(--amber);color:var(--navy-deep);font-weight:900;display:flex;align-items:center;justify-content:center;margin-bottom:9px}
+.step b{color:#fff;display:block;font-size:15.5px;margin-bottom:4px}
+.step p{font-size:13.5px;color:#cbd5e1}
+details{background:#fff;border:1px solid var(--line);border-radius:12px;padding:12px 15px;margin-top:9px}
+summary{font-weight:700;cursor:pointer}
+details p{margin-top:7px;color:#44403c;font-size:14px}
+footer{background:var(--ink);color:#a8a29e;margin:30px 0 0;padding:22px 0 74px;font-size:13px}
+footer b{color:#fff}
+.modal{position:fixed;inset:0;background:rgba(15,23,42,.6);display:none;align-items:flex-end;justify-content:center;z-index:80}
+.modal.open{display:flex}
+.sheet{background:#fff;border-radius:18px 18px 0 0;width:100%;max-width:430px;padding:22px 20px 26px}
+.sheet h3{font-size:18px;font-weight:900;margin-bottom:4px}
+.sheet p{font-size:13.5px;color:var(--muted)}
+.gbtn{width:100%;margin-top:14px;background:#fff;border:1.5px solid var(--line);border-radius:11px;padding:12px;font:inherit;font-weight:700;cursor:pointer}
+.ebtn{width:100%;margin-top:9px;background:var(--navy);color:#fff;border:0;border-radius:11px;padding:12px;font:inherit;font-weight:800;cursor:pointer}
+.x{flex:none;border:0;background:#f1f5f9;border-radius:8px;width:32px;height:32px;font-size:15px;cursor:pointer}
+
+</style>
+<style id="eccPortCss">
+.heroE{padding:26px 0 8px}
+.topauth{margin-left:auto; display:flex; align-items:center; gap:6px;}
+.topauth button{font-family:inherit; cursor:pointer; border-radius:999px; font-weight:800; font-size:13px; padding:8px 13px; line-height:1.1;}
+#topLogin{background:transparent; color:#fff; border:1.5px solid rgba(255,255,255,.85);}
+#topRegister{background:#dc2626; color:#fff; border:1.5px solid #dc2626;}
+#topDash{display:none; background:#fff; color:#1a1a1a; border:none; max-width:170px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+#topLogout{display:none; background:transparent; color:#fff; border:1.5px solid rgba(255,255,255,.55); font-weight:700;}
+@media(max-width:760px){.topauth button{padding:7px 10px; font-size:12.5px;} #topDash{max-width:108px;}}
+#pageTagline{text-transform:uppercase;}
+.tool #result{margin-top:12px;}
+#openProdBtn{display:block; text-align:center;}
+.tool #history{border:1.5px solid #e5e1d8;}
+.rankbadge{position:absolute; top:8px; left:8px; z-index:2; color:#fff; font-size:12.5px; font-weight:800; padding:3px 9px; border-radius:999px;}
+.pickbadge{position:absolute; left:8px; z-index:2; color:#fff; font-size:11.5px; font-weight:800; padding:3px 9px; border-radius:999px;}
+.pcard .rankcmt{font-size:12.5px; color:#57534e; line-height:1.4;}
+a.mini{text-decoration:none; display:flex; align-items:center; justify-content:center;}
+.catcards{display:grid; grid-template-columns:repeat(3,1fr); gap:10px;}
+a.catcard{text-decoration:none; color:inherit; display:block; border:1.5px solid #e5e1d8; border-radius:16px; padding:14px 6px 11px; text-align:center; background:#fff;}
+a.catcard .ic{font-size:28px;}
+a.catcard .ct{font-weight:700; font-size:14px; margin-top:2px;}
+#myResearch{max-width:none !important; padding:0 !important; margin:18px 0 0 !important;}
+#secAccount{max-width:none !important;}
+.card{margin-top:18px;}
+footer .fname{font-weight:900; color:#fff; font-size:16px;}
+footer a{color:#fca5a5;}
+.qacard .a{font-size:14px; line-height:1.55;}
+.tool .btn-paste{width:auto; flex-shrink:0;}
+#btnPaste{background:#FFBA00; color:#1a1a1a; border:2px solid #1a1a1a;}
+#chips .chip{color:#1a1a1a;}
+@media(max-width:760px){nav a.keep{display:none;} #topRegister{display:none;}}
+</style>
+</head>
 <body>
-<div class="wrap">
+<header>
+  <div class="wrap top">
+    <div class="logo"><span class="mark">SS</span><span><span id="pageName">Săn Sale Cùng Long</span><small id="pageTagline">Săn mã giảm giá Shopee mỗi ngày</small></span></div>
+    <nav>
+      <a href="#secConvert" class="keep">Check sản phẩm</a>
+      <a href="#hot">Sản phẩm Hot</a>
+      <a href="#tuvan">Tư vấn</a>
+      <a href="#vi">Ví hoàn tiền</a>
+      <span class="topauth">
+        <button id="topLogin" type="button">Đăng nhập</button>
+        <button id="topRegister" type="button">Đăng ký</button>
+        <button id="topDash" type="button"></button>
+        <button id="topLogout" type="button">Đăng xuất</button>
+      </span>
+    </nav>
+  </div>
+</header>
 
-  <header class="topbar">
-    <div class="logo">🛒</div>
+<div class="wrap heroE" id="secConvert">
+  <div class="hero-grid">
     <div>
-      <div class="name" id="pageName">Săn Sale Cùng Long</div>
-      <div class="tag" id="pageTagline">Săn mã giảm giá Shopee mỗi ngày</div>
-    </div>
-    <div class="topauth">
-      <button id="topLogin" type="button">Đăng nhập</button>
-      <button id="topRegister" type="button">Đăng ký</button>
-      <button id="topDash" type="button"></button>
-      <button id="topLogout" type="button">Đăng xuất</button>
-    </div>
-  </header>
-
-  <section class="card" id="secSearch" style="padding:14px 16px; margin-bottom:14px;">
-    <div style="font-weight:800; font-size:17px;">🔎 Tìm sản phẩm bạn thích</div>
-    <p style="display:none; font-size:13px; color:#555; margin:5px 0 9px;">Gõ tên sản phẩm — trang lọc ngay trong các mục gợi ý của shop bên dưới (gõ không dấu cũng được). Bấm "Xem deal" là sang Shopee qua link của shop. Chưa có món bạn cần? Trang đưa nút tìm thẳng trên Shopee luôn.</p>
-    <div class="searchrow">
-      <input type="text" id="inSearch" placeholder="Ví dụ: tai nghe, khăn giấy, kem chống nắng…" autocomplete="off">
-      <button id="btnSearch">Tìm</button>
-    </div>
-    <div id="searchMsg" style="display:none; font-size:13.5px; margin-top:10px; line-height:1.5;"></div>
-    <div class="grid" id="searchResults" style="display:none; margin-top:10px;"></div>
-  </section>
-
-  <section class="hero" id="secConvert">
-    <div class="gopkick">Săn Sale Cùng Long · Check &amp; Hoàn — Gộp 2 trong 1</div>
-    <h1>Check trước khi mua.<br><span class="gopred">Hoàn tiền sau khi mua.</span></h1>
-    <p>Một ô dán link làm cả hai việc: kiểm tra sản phẩm có đáng mua không, và lấy link hoàn <b>80% hoa hồng</b> cho chính đơn đó. Dán link Shopee vào ô dưới:</p>
-    <ul class="v2checks">
-      <li>Hoàn 80% hoa hồng thực nhận — rõ ràng, không mập mờ</li>
-      <li>Đối soát theo báo cáo chính thức của Shopee</li>
-      <li>Rút nhanh về ngân hàng từ 10.000đ</li>
-    </ul>
-    <div class="searchrow">
-      <input type="text" id="inLink" placeholder="Dán link sản phẩm Shopee…" autocomplete="off">
-      <button id="btnPaste">📋 Dán link</button>
-    </div>
-    <div class="gopbtns">
-      <button id="btnCheck" type="button">🔎 Check sản phẩm</button>
-      <button id="btnConvert" type="button">💰 Lấy link hoàn tiền</button>
-    </div>
-    <div id="result">
+      <div class="kicker">Săn Sale Cùng Long · Check &amp; Hoàn — Gộp 2 trong 1</div>
+      <h1>CHECK TRƯỚC KHI MUA.<br><span class="r">HOÀN TIỀN</span> <span class="a">SAU KHI MUA.</span></h1>
+      <p class="sub">Một ô dán link duy nhất làm cả hai việc: kiểm tra sản phẩm có đáng mua không, và gắn mã hoàn tiền cho chính đơn đó.</p>
+      <div class="tool" data-impeccable-ignore="hard-offset-shadow">
+        <label for="inLink">DÁN LINK SHOPEE VÀO ĐÂY</label>
+        <div class="row">
+          <input id="inLink" type="url" inputmode="url" placeholder="https://shopee.vn/…" autocomplete="off">
+          <button class="btn btn-paste" id="btnPaste" type="button">📋 Dán link</button>
+        </div>
+        <div class="duo">
+          <button class="btn btn-check" id="btnCheck" type="button">🔎 Check sản phẩm</button>
+          <button class="btn btn-cash" id="btnConvert" type="button">💰 Lấy link hoàn tiền</button>
+        </div>
+        <div id="result">
       <div id="prodDone" style="display:none; background:#f2fbf5; border:1px solid #bfe8cc; border-radius:10px; padding:9px 12px; margin-bottom:10px; font-size:13.5px;">
         🛍️ Đã nhận link sản phẩm của bạn
         <div id="prodDoneTxt" style="color:#15803d; font-weight:700; margin-top:2px;">✔ Đã chuyển đổi xong</div>
@@ -304,32 +441,163 @@ body{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;text-r
       </div>
       <p class="warn" id="warnBox"></p>
     </div>
-    <div id="history" style="display:none; margin-top:14px; background:#fff; color:var(--text); border-radius:12px; padding:12px 14px;">
+        <div class="chips" id="chips"><span>🔥 Đang được tìm nhiều:</span></div>
+        <div id="history" style="display:none; margin-top:14px; background:#fff; color:var(--text); border-radius:12px; padding:12px 14px;">
       <div id="histHead" style="font-weight:700; font-size:14.5px; text-decoration:underline; cursor:pointer;">Lịch Sử Săn Sale <span id="histChevron">▸</span></div>
       <div id="histList" style="display:none;"></div>
     </div>
-    <div class="chips" id="chips"></div>
-    <div id="upcomingBox" style="margin-top:14px; background:#fff; color:var(--text); border:1.5px dashed var(--primary); border-radius:12px; padding:12px 14px;">
+        <div id="upcomingBox" style="margin-top:14px; background:#fff; color:var(--text); border:1.5px dashed var(--primary); border-radius:12px; padding:12px 14px;">
       <div style="font-weight:800; font-size:16px;">🔥 Mã Hot Sắp Lên Sóng</div>
       <div id="nextFrame" style="font-size:13.5px; margin-top:5px;"></div>
       <div id="upcomingList"></div>
       <div style="font-size:12px; color:#6e6e6e; margin-top:8px;">Các khung giờ nhả mã và đợt sale lớn sắp tới — canh đúng giờ vào app Shopee để lưu mã tại banner nhé.</div>
     </div>
+      </div>
+    </div>
+    <div class="wallet" id="viTop" data-impeccable-ignore="hard-offset-shadow">
+      <div class="wlab">💼 VÍ HOÀN TIỀN CỦA BẠN</div>
+      <div class="big num"><span id="heroWalBig">80%</span> <small id="heroWalBigSub">hoa hồng được trả lại</small></div>
+      <div class="wgrid">
+        <div class="wcell"><b class="num" id="heroWalAvail">—</b><span>Khả dụng</span></div>
+        <div class="wcell"><b class="num" id="heroWalEst">—</b><span>Tạm tính</span></div>
+        <div class="wcell"><b class="num" id="heroWalPaid">—</b><span>Đã nhận</span></div>
+      </div>
+      <button class="btn btn-withdraw" id="heroWalletBtn" type="button">Đăng nhập để xem ví →</button>
+      <div class="note">Rút tối thiểu <b class="num" style="color:#e2e8f0">10.000₫</b> · Đối soát theo báo cáo chính thức của Shopee · Phần của bạn = 80% hoa hồng sau thuế.</div>
+    </div>
+  </div>
+</div>
+
+<div class="strip"><div class="wrap">
+  <div class="stat"><b class="num">80%</b><span>Hoa hồng trả lại cho khách</span></div>
+  <div class="stat"><b class="num">10.000₫</b><span>Mức rút tiền tối thiểu</span></div>
+  <div class="stat"><b>2 trong 1</b><span>Check var + hoàn tiền, một trang</span></div>
+  <div class="stat"><b>Review thật</b><span>Check dựa trên đánh giá người đã mua</span></div>
+</div></div>
+
+<div class="wrap">
+  <div class="tiles">
+    <a class="tile rank" href="#hot"><b>🏆 Bảng xếp hạng sản phẩm</b><span>Xếp hạng theo lượt mua + điểm đánh giá thật trên Shopee</span></a>
+    <a class="tile sale" href="#secConvert"><b>🎟️ Săn voucher hôm nay</b><span>Dán link là hiện mã hợp nhất cho món của bạn</span></a>
+  </div>
+
+  <section id="myResearch" style="display:none; max-width:860px; margin:18px auto 0; padding:0 14px;">
+    <div style="background:#fff; border-radius:14px; padding:14px 16px; box-shadow:0 1px 4px rgba(0,0,0,.06);">
+      <div style="font-weight:800; font-size:17px;">🔎 Kết quả tra cứu của bạn</div>
+      <div style="font-size:13px; color:#666; margin-top:3px;">Chỉ máy của bạn mới thấy mục này — shop gửi kết quả riêng về đúng máy đã gửi link tra cứu.</div>
+      <div id="myResearchList" style="margin-top:10px;"></div>
+    </div>
   </section>
-  <div class="gopstats">
-    <div class="gs"><b>80%</b><span>Hoa hồng trả lại cho khách</span></div>
-    <div class="gs"><b>10.000₫</b><span>Mức rút tiền tối thiểu</span></div>
-    <div class="gs"><b>2 trong 1</b><span>Check sản phẩm + hoàn tiền, một trang</span></div>
-    <div class="gs"><b>Review thật</b><span>Check dựa trên đánh giá người đã mua</span></div>
-  </div>
-  <div class="v2tiles">
-    <a class="v2tile rank" href="#secRank"><span class="ic">🏆</span><b>Bảng xếp hạng</b><span>TOP sản phẩm bán chạy — shop lọc mỗi ngày</span></a>
-    <a class="v2tile gift" href="#secConvert"><span class="ic">🎁</span><b>Mã giảm giá</b><span>Dán link là hiện mã hợp nhất cho món của bạn</span></a>
+
+  <section class="card" id="secSearch" style="padding:14px 16px; margin-bottom:14px;">
+    <div style="font-weight:800; font-size:17px;">🔎 Tìm sản phẩm bạn thích</div>
+    <p style="display:none; font-size:13px; color:#555; margin:5px 0 9px;">Gõ tên sản phẩm — trang lọc ngay trong các mục gợi ý của shop bên dưới (gõ không dấu cũng được). Bấm "Xem deal" là sang Shopee qua link của shop. Chưa có món bạn cần? Trang đưa nút tìm thẳng trên Shopee luôn.</p>
+    <div class="searchrow">
+      <input type="text" id="inSearch" placeholder="Ví dụ: tai nghe, khăn giấy, kem chống nắng…" autocomplete="off">
+      <button id="btnSearch">Tìm</button>
+    </div>
+    <div id="searchMsg" style="display:none; font-size:13.5px; margin-top:10px; line-height:1.5;"></div>
+    <div class="grid" id="searchResults" style="display:none; margin-top:10px;"></div>
+  </section>
+
+  <section id="hot">
+    <h2>Sản Phẩm Hot · Bảng Xếp Hạng <span class="more"><span id="rankStamp"></span></span></h2>
+    <span id="secHot"></span><span id="secRank"></span><span id="updStamp" hidden></span>
+    <div class="cats" id="cats"></div>
+    <div class="grid" id="grid"></div>
+    <p class="src">TOP 10 mang huy hiệu 🏆 Hạng 1–10 — xếp theo độ bán chạy trên Shopee, shop lọc lại mỗi ngày. Giá là giá tham khảo lúc cập nhật; bấm "💰 Hoàn tiền" để mở deal qua link của shop, bấm "🔎 Check" để hỏi shop về món đó trước khi mua.</p>
+  </section>
+
+  <div class="card">
+    <h2>🧺 Đồ gia dụng rẻ hữu ích</h2>
+    <p class="sub">Món nào cũng rẻ mà nhà nào cũng cần — cùng chuẩn tuyển chọn giá rẻ nhất + shop 4.5★+ như trên.</p>
+    <div class="grid" id="household"></div>
   </div>
 
+  <div class="card">
+    <h2>🗂️ Danh Mục Hot</h2>
+    <p class="sub">Bấm vào danh mục để xem deal trên Shopee:</p>
+    <div class="catcards" id="catsMain"></div>
+  </div>
+
+  <section id="tuvan">
+    <h2>Tư Vấn Sản Phẩm</h2>
+    <div class="qa" id="qas"></div>
+  </section>
+
+  <section id="vi">
+    <h2>Ví Hoàn Tiền — Cách Hoạt Động</h2>
+    
+    <div class="steps">
+      <div class="step"><div class="n">1</div><b>Dán link, lấy link hoàn tiền</b><p>Dán link sản phẩm Shopee vào ô ở đầu trang, bấm "Lấy link hoàn tiền" rồi mua như bình thường.</p></div>
+      <div class="step"><div class="n">2</div><b>Đơn được ghi về ví của bạn</b><p>Mỗi tài khoản có một mã riêng; đơn mua qua link của bạn tự khớp về ví, chia rõ tạm tính và khả dụng.</p></div>
+      <div class="step"><div class="n">3</div><b>Đối soát xong là rút được</b><p>Shop đối soát theo báo cáo chính thức của Shopee, trả bạn 80% hoa hồng sau thuế. Đủ 10.000₫ là rút về ngân hàng.</p></div>
+    </div>
+    <details><summary>Tiền hoàn được tính thế nào?</summary><p>Hoa hồng Shopee trả về tài khoản của shop, trừ 10% thuế theo quy định, phần còn lại bạn nhận 80%. Ví dụ hoa hồng báo cáo 100.000₫ → bạn nhận 72.000₫.</p></details>
+    <details><summary>Khi nào tiền từ "tạm tính" thành "khả dụng"?</summary><p>Khi đơn đã giao thành công và qua thời gian đối soát của Shopee. Đơn bị hủy hoặc hoàn trả thì không được tính hoa hồng.</p></details>
+    <details><summary>Check sản phẩm có mất phí không?</summary><p>Không. Check var và tra cứu độ tin cậy miễn phí cho mọi khách, có tài khoản hay không đều dùng được ô dán link ở đầu trang.</p></details>
   
+  </section>
 
-  <div id="authModal" style="display:none; position:fixed; inset:0; z-index:999; background:rgba(24,10,4,.55); overflow-y:auto; padding:20px 10px 30px;">
+  <div class="card">
+    <h2>🎬 Video Mới</h2>
+    <p class="sub">Video mới nhất trên Facebook của shop — xem vui rồi quay lại săn sale tiếp nhé.</p>
+    <div style="display:flex; gap:10px; flex-wrap:wrap;">
+      <a href="https://www.facebook.com/Levietlong95/reels" target="_blank" rel="noopener" style="flex:1; min-width:140px; text-align:center; background:#fff4ec; border:1.5px solid #ffd9c7; border-radius:12px; padding:16px 10px; text-decoration:none; color:#333; font-weight:700;">🐃 Trâu Đen<br><span style="font-size:12.5px; color:#6e6e6e; font-weight:400;">Video hài mới nhất</span></a>
+      <a href="https://www.facebook.com/Levietlong95/videos" target="_blank" rel="noopener" style="flex:1; min-width:140px; text-align:center; background:#fff4ec; border:1.5px solid #ffd9c7; border-radius:12px; padding:16px 10px; text-decoration:none; color:#333; font-weight:700;">🎥 Kho Video<br><span style="font-size:12.5px; color:#6e6e6e; font-weight:400;">Xem tất cả trên Facebook</span></a>
+    </div>
+  </div>
+
+  <div class="card" id="secContact">
+    <h2>🤝 Liên Hệ Hợp Tác</h2>
+    <p class="sub">Cần shop săn mã riêng cho một món, hợp tác quảng bá hoặc góp ý về trang — nhắn trực tiếp cho shop qua một trong hai kênh dưới đây, bấm là mở khung chat ngay:</p>
+    <div style="display:flex; gap:10px; flex-wrap:wrap;">
+      <a href="https://m.me/Levietlong95" target="_blank" rel="noopener" style="flex:1; min-width:150px; display:flex; align-items:center; justify-content:center; gap:9px; background:#166fe5; color:#fff; border-radius:12px; padding:13px 10px; text-decoration:none; font-weight:800; font-size:15.5px;">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="#fff" aria-hidden="true"><path d="M13.5 21.9v-7.9h2.65l.4-3.1H13.5V8.9c0-.9.25-1.5 1.55-1.5h1.65V4.6c-.3-.04-1.3-.13-2.45-.13-2.4 0-4.05 1.47-4.05 4.17v2.33H7.5V14h2.7v7.9a10 10 0 0 0 3.3 0z"/></svg>
+        Nhắn qua Facebook
+      </a>
+      <a href="https://zalo.me/0395250965" target="_blank" rel="noopener" style="flex:1; min-width:150px; display:flex; align-items:center; justify-content:center; gap:9px; background:#0068FF; color:#fff; border-radius:12px; padding:13px 10px; text-decoration:none; font-weight:800; font-size:15.5px;">
+        <svg width="30" height="22" viewBox="0 0 40 24" aria-hidden="true"><rect x="0.75" y="1.75" width="38.5" height="18.5" rx="9.25" fill="#fff"/><text x="20" y="15.5" text-anchor="middle" font-family="Arial, sans-serif" font-size="10.5" font-weight="bold" fill="#0068FF">Zalo</text></svg>
+        Nhắn qua Zalo
+      </a>
+    </div>
+  </div>
+
+  <div class="card" id="secAbout">
+    <h2>ℹ️ Về Trang Này</h2>
+    <p class="sub" style="text-align:left;"><b>Shop là ai:</b> trang của Long — chủ kênh hài Trâu Đen trên Facebook (<a href="https://www.facebook.com/Levietlong95" target="_blank" rel="noopener">Lê Việt Long</a>). Trang giúp bạn mở đúng sản phẩm Shopee qua link của shop và tra cứu chất lượng sản phẩm trước khi mua.</p>
+    <p class="sub" style="text-align:left;"><b>Riêng tư:</b> link bạn gửi qua nút Tra cứu chỉ dùng để shop đọc sản phẩm và tổng hợp review từ các nguồn công khai. Kết quả đăng trên trang gồm tên sản phẩm và nhận xét tổng hợp — không đăng thông tin cá nhân của bạn; mục tên trong biểu mẫu là tùy chọn, để trống cũng được.</p>
+    <p class="sub" style="text-align:left;"><b>Minh bạch:</b> giá trên trang là giá tham khảo lúc cập nhật, giá cuối cùng theo Shopee lúc thanh toán. Khi bạn mua qua link của shop, Shopee có thể trả cho shop một khoản hoa hồng nhỏ từ phía người bán — bạn không phải trả thêm đồng nào.</p>
+  </div>
+
+  <div class="note">💡 <b>Lưu ý:</b> Sản phẩm trên trang do shop tuyển chọn; giá ghi “Từ ~” là giá tham khảo lúc cập nhật — giá cuối cùng theo Shopee lúc bạn thanh toán. Kết quả tra cứu được tổng hợp từ các nguồn công khai (Google, YouTube, các trang review) và chỉ hiển thị 3 kết quả gần nhất.</div>
+
+  <section class="card" id="secAccount" style="max-width:860px; margin:18px auto 0;">
+    <h2>💰 Tài Khoản &amp; Mã Hoàn Hoa Hồng</h2>
+    <p class="sub" style="text-align:left;">Mỗi khách một mã riêng — đơn mua qua trang này ghi theo đúng mã của bạn, shop đối soát hoa hồng Shopee và trả lại bạn <b>80% hoa hồng của đơn đó</b>. Đăng nhập để xem mã của bạn, số dư và lịch sử shop trả tiền trong bảng điều khiển.</p>
+    <div id="accCtaOut" style="display:flex; gap:10px; flex-wrap:wrap;">
+      <button id="ctaLogin" type="button" style="flex:1; min-width:140px; background:#d63c1e; color:#fff; border:none; border-radius:12px; padding:13px; font-size:16px; font-weight:800; cursor:pointer;">Đăng nhập</button>
+      <button id="ctaRegister" type="button" style="flex:1; min-width:140px; background:#fff; color:#d63c1e; border:2px solid #d63c1e; border-radius:12px; padding:13px; font-size:16px; font-weight:800; cursor:pointer;">Đăng ký</button>
+    </div>
+    <div id="accCtaIn" style="display:none;">
+      <p style="margin:0 0 10px;">Xin chào <b id="ctaName"></b> — mã hoàn hoa hồng của bạn: <b id="ctaCode" style="color:#d63c1e; letter-spacing:1px;"></b></p>
+      <button id="ctaDash" type="button" style="width:100%; background:#0b57d0; color:#fff; border:none; border-radius:12px; padding:13px; font-size:15.5px; font-weight:800; cursor:pointer;">👤 Mở bảng điều khiển của tôi</button>
+    </div>
+  </section>
+</div>
+
+<footer>
+  <div class="wrap">
+    <div class="fname" id="footName">Săn Sale Cùng Long</div>
+    <div id="footContact" style="margin-top:4px;">Liên hệ hợp tác: <a href="https://m.me/Levietlong95" target="_blank" rel="noopener">Facebook</a> · <a href="https://zalo.me/0395250965" target="_blank" rel="noopener">Zalo</a></div>
+    <div style="margin-top:6px;"><a href="#" data-legal="terms">📜 Điều khoản sử dụng</a> · <a href="#" data-legal="privacy">🔒 Chính sách bảo mật</a></div>
+    <div style="margin-top:8px;">Trang hỗ trợ săn sale Shopee của Long — không phải trang của Shopee. Mua qua link của shop, bạn không trả thêm đồng nào.</div>
+  </div>
+</footer>
+
+<div class="toast" id="toast"></div>
+
+<div id="authModal" style="display:none; position:fixed; inset:0; z-index:999; background:rgba(24,10,4,.55); overflow-y:auto; padding:20px 10px 30px;">
     <div id="authModalBox" style="position:relative; max-width:880px; margin:0 auto; animation:authPop .18s ease-out;">
       <button id="authModalClose" type="button" aria-label="Dong" style="position:absolute; top:10px; right:10px; z-index:3; width:36px; height:36px; border-radius:50%; border:none; background:#fff; color:#c23215; font-size:17px; font-weight:900; cursor:pointer; box-shadow:0 2px 8px rgba(0,0,0,.28);">&#10005;</button>
       <div class="card" id="accModalCard" style="margin-top:0;">
@@ -453,106 +721,71 @@ body{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;text-r
     </div>
   </div>
 
-  <section id="myResearch" style="display:none; max-width:860px; margin:18px auto 0; padding:0 14px;">
-    <div style="background:#fff; border-radius:14px; padding:14px 16px; box-shadow:0 1px 4px rgba(0,0,0,.06);">
-      <div style="font-weight:800; font-size:17px;">🔎 Kết quả tra cứu của bạn</div>
-      <div style="font-size:13px; color:#666; margin-top:3px;">Chỉ máy của bạn mới thấy mục này — shop gửi kết quả riêng về đúng máy đã gửi link tra cứu.</div>
-      <div id="myResearchList" style="margin-top:10px;"></div>
+<div id="legalModal" style="display:none; position:fixed; inset:0; z-index:1001; background:rgba(24,10,4,.6); overflow-y:auto; padding:20px 10px 30px;">
+  <div style="position:relative; max-width:760px; margin:0 auto; background:#fff; border-radius:16px; padding:20px 18px 24px; box-shadow:0 8px 30px rgba(0,0,0,.3);">
+    <button id="legalClose" type="button" aria-label="Dong" style="position:absolute; top:10px; right:10px; width:36px; height:36px; border-radius:50%; border:none; background:#f4f4f4; color:#c23215; font-size:17px; font-weight:900; cursor:pointer;">&#10005;</button>
+    <h2 style="font-size:19px; margin:0 30px 4px 0; color:#16110d;">📜 Điều khoản &amp; Bảo mật</h2>
+    <p style="font-size:12.5px; color:#6e6e6e; margin:0 0 12px;">Săn Sale Cùng Long — Phiên bản 1.0, hiệu lực từ 29/10/2026</p>
+    <div style="display:flex; gap:8px; margin-bottom:12px;">
+      <button type="button" id="legalTabT" style="flex:1; padding:9px; border-radius:10px; border:1.5px solid #16110d; background:#16110d; color:#fff; font-size:14px; font-weight:800; cursor:pointer;">Điều khoản sử dụng</button>
+      <button type="button" id="legalTabP" style="flex:1; padding:9px; border-radius:10px; border:1.5px solid #ddd; background:#fff; color:#333; font-size:14px; font-weight:800; cursor:pointer;">Chính sách bảo mật</button>
     </div>
-  </section>
-
-  <div class="card">
-    <h2>🎬 Video Mới</h2>
-    <p class="sub">Video mới nhất trên Facebook của shop — xem vui rồi quay lại săn sale tiếp nhé.</p>
-    <div style="display:flex; gap:10px; flex-wrap:wrap;">
-      <a href="https://www.facebook.com/Levietlong95/reels" target="_blank" rel="noopener" style="flex:1; min-width:140px; text-align:center; background:#fff4ec; border:1.5px solid #ffd9c7; border-radius:12px; padding:16px 10px; text-decoration:none; color:#333; font-weight:700;">🐃 Trâu Đen<br><span style="font-size:12.5px; color:#6e6e6e; font-weight:400;">Video hài mới nhất</span></a>
-      <a href="https://www.facebook.com/Levietlong95/videos" target="_blank" rel="noopener" style="flex:1; min-width:140px; text-align:center; background:#fff4ec; border:1.5px solid #ffd9c7; border-radius:12px; padding:16px 10px; text-decoration:none; color:#333; font-weight:700;">🎥 Kho Video<br><span style="font-size:12.5px; color:#6e6e6e; font-weight:400;">Xem tất cả trên Facebook</span></a>
+    <div id="legalTerms" style="font-size:13.5px; line-height:1.55; color:#211d19; text-align:left;">
+      <h3 style="font-size:15px; margin:12px 0 4px;">Điều 1. Giới thiệu dịch vụ</h3>
+      <p>1.1. Săn Sale Cùng Long ("Trang", "Shop") là trang hỗ trợ mua sắm do cá nhân vận hành, cung cấp: (a) chuyển đổi liên kết sản phẩm Shopee thành liên kết tiếp thị liên kết của Shop; (b) gợi ý mã giảm giá công khai; (c) tra cứu thông tin sản phẩm mang tính tham khảo; (d) chương trình hoàn một phần hoa hồng tiếp thị liên kết cho người dùng có tài khoản.</p>
+      <p>1.2. Trang không phải là Shopee, không bán hàng trực tiếp và không phải đại diện của Shopee. Mọi giao dịch mua bán diễn ra giữa người dùng và người bán trên nền tảng Shopee.</p>
+      <h3 style="font-size:15px; margin:12px 0 4px;">Điều 2. Tài khoản và điều kiện sử dụng</h3>
+      <p>2.1. Khi đăng ký, người dùng xác nhận thông tin cung cấp là đúng sự thật và chịu trách nhiệm với thông tin đó.</p>
+      <p>2.2. Mỗi người dùng chỉ được hưởng hoa hồng trên một tài khoản chính. Nghiêm cấm: (a) tạo nhiều tài khoản để gian lận hoa hồng; (b) tự mua hàng qua liên kết/mã của chính mình hoặc của người trong cùng hộ/thiết bị nhằm trục lợi hoa hồng; (c) dùng công cụ tự động gây quá tải, phá hoại Trang; (d) mạo danh Shop hoặc người dùng khác.</p>
+      <h3 style="font-size:15px; margin:12px 0 4px;">Điều 3. Cơ chế hoa hồng và hoàn tiền</h3>
+      <p>3.1. Hoa hồng của một đơn hàng chỉ phát sinh khi đơn hàng được hệ thống của Shopee (hoặc đối tác ghi nhận hoa hồng của Shop) ghi nhận hợp lệ gắn với mã cá nhân của người dùng, và Shop đã thực nhận khoản hoa hồng đó.</p>
+      <p>3.2. Phần người dùng được hoàn = 80% của hoa hồng thực nhận sau khi trừ thuế thu nhập cá nhân 10% do Shopee khấu trừ (tương đương 72% số hoa hồng thể hiện trên báo cáo). Đây là khoản Shop tự nguyện chia sẻ từ hoa hồng của Shop, không phải hoa hồng Shopee trả cho người dùng.</p>
+      <p>3.3. Căn cứ đối soát duy nhất là báo cáo chính thức của Shopee/đối tác ghi nhận. Số liệu hiển thị "tạm tính" trên Trang chỉ là ước tính, không phải là cam kết chi trả; số "khả dụng" sau đối soát mới là căn cứ rút tiền.</p>
+      <p>3.4. Đơn hàng bị hủy, bị trả hàng/hoàn tiền, bị Shopee xác định gian lận hoặc không hợp lệ thì không phát sinh khoản hoàn. Nếu khoản hoàn đã chi mà sau đó Shopee truy thu/hủy hoa hồng tương ứng, Shop được quyền trừ vào số dư khả dụng tiếp theo của người dùng.</p>
+      <p>3.5. Shop có quyền điều chỉnh tỷ lệ hoàn cho các đơn hàng phát sinh SAU thời điểm thông báo trên Trang. Đơn hàng đã được ghi nhận giữ nguyên tỷ lệ tại thời điểm ghi nhận.</p>
+      <h3 style="font-size:15px; margin:12px 0 4px;">Điều 4. Rút tiền</h3>
+      <p>4.1. Ngưỡng rút tối thiểu: 10.000đ mỗi yêu cầu, rút toàn bộ số dư khả dụng tại thời điểm yêu cầu.</p>
+      <p>4.2. Điều kiện rút: đã điền đầy đủ và đúng thông tin khách hàng (họ tên theo giấy tờ tùy thân) và thông tin nhận tiền; họ tên chủ tài khoản ngân hàng phải trùng khớp họ tên khách hàng đã đăng ký; nhập đúng mã PIN rút tiền.</p>
+      <p>4.3. Thông tin khách hàng và thông tin nhận tiền sau khi lưu sẽ bị khóa để bảo vệ người dùng; việc thay đổi chỉ thực hiện qua Shop sau khi xác minh. Người dùng chịu trách nhiệm nếu cung cấp sai thông tin dẫn đến chuyển tiền thất bại hoặc chậm trễ.</p>
+      <p>4.4. Shop xử lý yêu cầu rút trong vòng 07 ngày làm việc kể từ khi yêu cầu hợp lệ. Khi phát hiện dấu hiệu bất thường hoặc nghi ngờ gian lận, Shop có quyền tạm giữ khoản chi để kiểm tra và sẽ thông báo lý do cho người dùng; phần hoa hồng phát sinh từ hành vi gian lận sẽ bị hủy và không được chi trả.</p>
+      <h3 style="font-size:15px; margin:12px 0 4px;">Điều 5. Mã giảm giá và tra cứu sản phẩm</h3>
+      <p>5.1. Mã giảm giá và kết quả tra cứu trên Trang chỉ mang tính tham khảo, được tổng hợp từ nguồn công khai và có thể thay đổi/hết hiệu lực bất cứ lúc nào theo chính sách của Shopee và người bán.</p>
+      <p>5.2. Shop không cam kết mã giảm giá áp dụng thành công cho mọi tài khoản/đơn hàng. Người dùng tự kiểm tra điều kiện áp dụng tại trang thanh toán của Shopee trước khi mua.</p>
+      <h3 style="font-size:15px; margin:12px 0 4px;">Điều 6. Giới hạn trách nhiệm</h3>
+      <p>6.1. Dịch vụ được cung cấp "theo hiện trạng". Shop không chịu trách nhiệm về: chất lượng, giá cả, giao hàng, bảo hành của sản phẩm (thuộc trách nhiệm của người bán và Shopee); quyết định mua hàng của người dùng; thiệt hại gián tiếp phát sinh từ việc sử dụng hoặc không sử dụng được Trang.</p>
+      <p>6.2. Trong mọi trường hợp, trách nhiệm tối đa của Shop với một người dùng không vượt quá tổng số tiền Shop đã thực trả cho người dùng đó trong 03 tháng gần nhất.</p>
+      <h3 style="font-size:15px; margin:12px 0 4px;">Điều 7. Tạm khóa và chấm dứt tài khoản</h3>
+      <p>7.1. Shop có quyền tạm khóa hoặc chấm dứt tài khoản vi phạm Điều khoản này. Với hành vi gian lận rõ ràng, Shop có thể khóa ngay để ngăn thiệt hại, sau đó thông báo cho người dùng.</p>
+      <p>7.2. Người dùng có thể yêu cầu đóng tài khoản bất cứ lúc nào qua kênh liên hệ của Shop; số dư khả dụng hợp lệ sẽ được quyết toán trước khi đóng, trừ phần liên quan đến gian lận theo Điều 4.4.</p>
+      <h3 style="font-size:15px; margin:12px 0 4px;">Điều 8. Thay đổi Điều khoản</h3>
+      <p>Shop có thể sửa đổi Điều khoản và sẽ thông báo phiên bản mới trên Trang trước khi áp dụng. Việc người dùng tiếp tục sử dụng Trang sau thời điểm hiệu lực của phiên bản mới được coi là chấp nhận phiên bản đó.</p>
+      <h3 style="font-size:15px; margin:12px 0 4px;">Điều 9. Luật áp dụng và giải quyết tranh chấp</h3>
+      <p>Điều khoản này được điều chỉnh bởi pháp luật Việt Nam. Tranh chấp (nếu có) ưu tiên giải quyết bằng thương lượng; trường hợp không thương lượng được, tranh chấp sẽ được giải quyết tại Tòa án có thẩm quyền theo quy định pháp luật.</p>
     </div>
-  </div>
-
-  <div class="card" id="secRank">
-    <span id="secHot"></span>
-    <h2>🏆 Bảng Xếp Hạng &amp; Sản Phẩm Hot</h2>
-    <p class="sub">Gộp hai mục làm một cho gọn như bản thử: <b>TOP 10</b> xếp theo độ <b>BÁN CHẠY</b> trên Shopee — huy hiệu 🏆 Hạng 1–10 ngay trên từng thẻ, kèm nhận xét ngắn của shop để bạn chốt nhanh. Đủ <b>15 món theo 5 ngành</b>, mỗi ngành 3 tiêu chí: 🔥 <b>bán chạy nhất</b>, ⭐ <b>đánh giá cao nhất</b>, 💸 <b>rẻ nhất</b>. Bấm chip để lọc nhanh theo ngành; bấm "Xem deal" là mở Shopee đã sắp xếp/lọc đúng tiêu chí của món đó. Giá "từ" là giá tham khảo. <span id="rankStamp"></span><span id="updStamp" hidden></span></p>
-    <div id="rankChips"></div>
-    <div class="grid" id="products"></div>
-  </div>
-
-  <div class="card">
-    <h2>🧺 Đồ gia dụng rẻ hữu ích</h2>
-    <p class="sub">Món nào cũng rẻ mà nhà nào cũng cần — cùng chuẩn tuyển chọn giá rẻ nhất + shop 4.5★+ như trên.</p>
-    <div class="grid" id="household"></div>
-  </div>
-
-  <div class="card">
-    <h2>🗂️ Danh Mục Hot</h2>
-    <p class="sub">Bấm vào danh mục để xem deal trên Shopee:</p>
-    <div class="cats" id="cats"></div>
-  </div>
-
-  <div class="card">
-    <h2>💬 Tư Vấn Sản Phẩm</h2>
-    <p class="sub">Khách hỏi — shop đáp:</p>
-    <div id="qas"></div>
-  </div>
-
-  <div class="card">
-    <h2>❓ Dùng thế nào?</h2>
-    <div class="steps">
-      <div class="step"><span class="n">1</span><br>Dán link sản phẩm Shopee vào ô Săn Sale</div>
-      <div class="step"><span class="n">2</span><br>Bấm mở sản phẩm — hoặc gửi link để shop tra cứu chất lượng trước</div>
-      <div class="step"><span class="n">3</span><br>Mua trên Shopee như bình thường, giá không đổi</div>
-    </div>
-  </div>
-
-  <div class="card" id="secContact">
-    <h2>🤝 Liên Hệ Hợp Tác</h2>
-    <p class="sub">Cần shop săn mã riêng cho một món, hợp tác quảng bá hoặc góp ý về trang — nhắn trực tiếp cho shop qua một trong hai kênh dưới đây, bấm là mở khung chat ngay:</p>
-    <div style="display:flex; gap:10px; flex-wrap:wrap;">
-      <a href="https://m.me/Levietlong95" target="_blank" rel="noopener" style="flex:1; min-width:150px; display:flex; align-items:center; justify-content:center; gap:9px; background:#166fe5; color:#fff; border-radius:12px; padding:13px 10px; text-decoration:none; font-weight:800; font-size:15.5px;">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="#fff" aria-hidden="true"><path d="M13.5 21.9v-7.9h2.65l.4-3.1H13.5V8.9c0-.9.25-1.5 1.55-1.5h1.65V4.6c-.3-.04-1.3-.13-2.45-.13-2.4 0-4.05 1.47-4.05 4.17v2.33H7.5V14h2.7v7.9a10 10 0 0 0 3.3 0z"/></svg>
-        Nhắn qua Facebook
-      </a>
-      <a href="https://zalo.me/0395250965" target="_blank" rel="noopener" style="flex:1; min-width:150px; display:flex; align-items:center; justify-content:center; gap:9px; background:#0068FF; color:#fff; border-radius:12px; padding:13px 10px; text-decoration:none; font-weight:800; font-size:15.5px;">
-        <svg width="30" height="22" viewBox="0 0 40 24" aria-hidden="true"><rect x="0.75" y="1.75" width="38.5" height="18.5" rx="9.25" fill="#fff"/><text x="20" y="15.5" text-anchor="middle" font-family="Arial, sans-serif" font-size="10.5" font-weight="bold" fill="#0068FF">Zalo</text></svg>
-        Nhắn qua Zalo
-      </a>
+    <div id="legalPrivacy" style="display:none; font-size:13.5px; line-height:1.55; color:#211d19; text-align:left;">
+      <h3 style="font-size:15px; margin:12px 0 4px;">1. Dữ liệu thu thập và mục đích</h3>
+      <p>Shop chỉ thu thập những thông tin tối thiểu cần thiết để vận hành tài khoản và <b>chi trả hoa hồng cho bạn</b>. Mật khẩu đăng nhập và mã PIN rút tiền chỉ được lưu dưới dạng mã băm — Shop không lưu và không đọc được giá trị gốc. Việc thu thập, xử lý dữ liệu tuân thủ <b>Nghị định 13/2023/NĐ-CP</b> về bảo vệ dữ liệu cá nhân.</p>
+      <h3 style="font-size:15px; margin:12px 0 4px;">2. Chia sẻ dữ liệu</h3>
+      <p>Shop <b>không bán hay trao đổi</b> dữ liệu cá nhân của bạn cho bên thứ ba. Dữ liệu chỉ được chia sẻ cho ngân hàng khi thực hiện chuyển tiền cho bạn, và cung cấp cho cơ quan nhà nước khi có yêu cầu hợp pháp.</p>
+      <h3 style="font-size:15px; margin:12px 0 4px;">3. Bảo mật và lưu trữ</h3>
+      <p>Dữ liệu được phân quyền theo từng tài khoản — bạn chỉ truy cập được dữ liệu của chính mình; tài khoản quản trị của Shop bật xác thực hai lớp. Dữ liệu được lưu trong thời gian tài khoản còn hoạt động, cộng thêm thời gian cần thiết cho đối soát và nghĩa vụ pháp lý. Trang cũng lưu một ít dữ liệu trên chính trình duyệt của bạn (mã máy tra cứu, lịch sử săn sale) để tính năng hoạt động; bạn có thể xóa bất cứ lúc nào trong cài đặt trình duyệt.</p>
+      <h3 style="font-size:15px; margin:12px 0 4px;">4. Quyền của bạn</h3>
+      <p>Theo Nghị định 13/2023/NĐ-CP, bạn có quyền được biết, truy cập, yêu cầu chỉnh sửa hoặc xóa dữ liệu của mình và rút lại sự đồng ý. Chỉ cần liên hệ Shop qua mục "Liên Hệ Hợp Tác" trên Trang — Shop phản hồi trong vòng 07 ngày làm việc.</p>
+      <h3 style="font-size:15px; margin:12px 0 4px;">5. Thay đổi Chính sách</h3>
+      <p>Khi Chính sách có thay đổi, phiên bản mới sẽ được thông báo trên Trang trước khi áp dụng; việc tiếp tục sử dụng Trang đồng nghĩa bạn chấp nhận phiên bản mới.</p>
+      <p style="margin-top:14px; font-weight:700;">Bằng việc tích chọn đồng ý và đăng ký tài khoản, bạn xác nhận đã đọc, hiểu và đồng ý với toàn bộ Điều khoản sử dụng và Chính sách bảo mật này.</p>
     </div>
   </div>
-
-  <div class="card" id="secAbout">
-    <h2>ℹ️ Về Trang Này</h2>
-    <p class="sub" style="text-align:left;"><b>Shop là ai:</b> trang của Long — chủ kênh hài Trâu Đen trên Facebook (<a href="https://www.facebook.com/Levietlong95" target="_blank" rel="noopener">Lê Việt Long</a>). Trang giúp bạn mở đúng sản phẩm Shopee qua link của shop và tra cứu chất lượng sản phẩm trước khi mua.</p>
-    <p class="sub" style="text-align:left;"><b>Riêng tư:</b> link bạn gửi qua nút Tra cứu chỉ dùng để shop đọc sản phẩm và tổng hợp review từ các nguồn công khai. Kết quả đăng trên trang gồm tên sản phẩm và nhận xét tổng hợp — không đăng thông tin cá nhân của bạn; mục tên trong biểu mẫu là tùy chọn, để trống cũng được.</p>
-    <p class="sub" style="text-align:left;"><b>Minh bạch:</b> giá trên trang là giá tham khảo lúc cập nhật, giá cuối cùng theo Shopee lúc thanh toán. Khi bạn mua qua link của shop, Shopee có thể trả cho shop một khoản hoa hồng nhỏ từ phía người bán — bạn không phải trả thêm đồng nào.</p>
-  </div>
-
-  <div class="note">💡 <b>Lưu ý:</b> Sản phẩm trên trang do shop tuyển chọn; giá ghi “Từ ~” là giá tham khảo lúc cập nhật — giá cuối cùng theo Shopee lúc bạn thanh toán. Kết quả tra cứu được tổng hợp từ các nguồn công khai (Google, YouTube, các trang review) và chỉ hiển thị 3 kết quả gần nhất.</div>
-
-  <section class="card" id="secAccount" style="max-width:860px; margin:18px auto 0;">
-    <h2>💰 Tài Khoản &amp; Mã Hoàn Hoa Hồng</h2>
-    <p class="sub" style="text-align:left;">Mỗi khách một mã riêng — đơn mua qua trang này ghi theo đúng mã của bạn, shop đối soát hoa hồng Shopee và trả lại bạn <b>80% hoa hồng của đơn đó</b>. Đăng nhập để xem mã của bạn, số dư và lịch sử shop trả tiền trong bảng điều khiển.</p>
-    <div id="accCtaOut" style="display:flex; gap:10px; flex-wrap:wrap;">
-      <button id="ctaLogin" type="button" style="flex:1; min-width:140px; background:#d63c1e; color:#fff; border:none; border-radius:12px; padding:13px; font-size:16px; font-weight:800; cursor:pointer;">Đăng nhập</button>
-      <button id="ctaRegister" type="button" style="flex:1; min-width:140px; background:#fff; color:#d63c1e; border:2px solid #d63c1e; border-radius:12px; padding:13px; font-size:16px; font-weight:800; cursor:pointer;">Đăng ký</button>
-    </div>
-    <div id="accCtaIn" style="display:none;">
-      <p style="margin:0 0 10px;">Xin chào <b id="ctaName"></b> — mã hoàn hoa hồng của bạn: <b id="ctaCode" style="color:#d63c1e; letter-spacing:1px;"></b></p>
-      <button id="ctaDash" type="button" style="width:100%; background:#0b57d0; color:#fff; border:none; border-radius:12px; padding:13px; font-size:15.5px; font-weight:800; cursor:pointer;">👤 Mở bảng điều khiển của tôi</button>
-    </div>
-  </section>
-
-  <footer>
-    <div class="fname" id="footName">Săn Sale Cùng Long</div>
-    <div id="footContact">Liên hệ hợp tác: <a href="https://m.me/Levietlong95" target="_blank" rel="noopener">Facebook</a> · <a href="https://zalo.me/0395250965" target="_blank" rel="noopener">Zalo</a></div>
-    <div style="margin-top:6px;"><a href="#" data-legal="terms" style="color:#ffd9cc;">📜 Điều khoản sử dụng</a> · <a href="#" data-legal="privacy" style="color:#ffd9cc;">🔒 Chính sách bảo mật</a></div>
-    <div style="margin-top:6px;"></div>
-  </footer>
 </div>
-<div class="toast" id="toast"></div>
+<script>(function(){var m=document.getElementById("legalModal");if(!m)return;var tT=document.getElementById("legalTerms"),tP=document.getElementById("legalPrivacy"),bT=document.getElementById("legalTabT"),bP=document.getElementById("legalTabP");function tab(which){var terms=which!=="privacy";tT.style.display=terms?"":"none";tP.style.display=terms?"none":"";bT.style.background=terms?"#16110d":"#fff";bT.style.color=terms?"#fff":"#333";bT.style.borderColor=terms?"#16110d":"#ddd";bP.style.background=terms?"#fff":"#16110d";bP.style.color=terms?"#333":"#fff";bP.style.borderColor=terms?"#ddd":"#16110d";}function open(which){tab(which);m.style.display="block";m.scrollTop=0;}function close(){m.style.display="none";}document.addEventListener("click",function(e){var a=e.target&&e.target.closest?e.target.closest("[data-legal]"):null;if(a){e.preventDefault();open(a.getAttribute("data-legal"));}});bT.addEventListener("click",function(){tab("terms");});bP.addEventListener("click",function(){tab("privacy");});document.getElementById("legalClose").addEventListener("click",close);m.addEventListener("click",function(e){if(e.target===m)close();});})();</script>
+
+<script>(function(){var ua=navigator.userAgent||"";var wv=/(Zalo|FBAN|FBAV|FB_IAB|Instagram|Messenger)/i.test(ua);if(wv){var w=document.getElementById("accWebviewWarn");if(w)w.style.display="block";}try{var q=(location.search||"")+"#"+(location.hash||"");if(q.indexOf("error")!==-1){var sp=new URLSearchParams(location.search);var hp=new URLSearchParams((location.hash||"").replace(/^#/,""));var desc=sp.get("error_description")||hp.get("error_description")||sp.get("error")||hp.get("error");if(desc){setTimeout(function(){if(window.openAuthModal)openAuthModal("login");if(window.accMsg)accMsg("\u26a0\ufe0f Google b\u00e1o l\u1ed7i: "+decodeURIComponent(String(desc).replace(/\+/g," "))+" \u2014 b\u1ea1n ch\u1ee5p m\u00e0n h\u00ecnh d\u00f2ng n\u00e0y g\u1eedi shop \u0111\u1ec3 \u0111\u01b0\u1ee3c h\u1ed7 tr\u1ee3 nh\u00e9.");try{history.replaceState(null,"",location.pathname);}catch(e){}},400);}}}catch(e){}})();</script>
+<div id="scrollBtns" style="position:fixed;right:10px;bottom:10px;display:none;flex-direction:column;gap:6px;z-index:900"><button type="button" title="Lên đầu trang" onclick="window.scrollTo({top:0,behavior:'smooth'})" style="width:40px;height:40px;border:none;border-radius:50%;font-size:17px;font-weight:700;background:#c21807;color:#fff;box-shadow:0 2px 8px rgba(0,0,0,.25);cursor:pointer;opacity:.92;padding:0">⬆</button><button type="button" title="Xuống cuối trang" onclick="window.scrollTo({top:document.body.scrollHeight,behavior:'smooth'})" style="width:40px;height:40px;border:none;border-radius:50%;font-size:17px;font-weight:700;background:#c21807;color:#fff;box-shadow:0 2px 8px rgba(0,0,0,.25);cursor:pointer;opacity:.92;padding:0">⬇</button></div><script>(function(){var box=document.getElementById("scrollBtns");var modal=document.getElementById("authModal");function modalOpen(){return modal&&getComputedStyle(modal).display!=="none";}function upd(){var max=document.documentElement.scrollHeight-window.innerHeight;var past=max>0&&window.scrollY>max/3;box.style.display=(past&&!modalOpen())?"flex":"none";}window.addEventListener("scroll",upd,{passive:true});window.addEventListener("resize",upd);if(modal&&window.MutationObserver)new MutationObserver(upd).observe(modal,{attributes:true,attributeFilter:["style","class"]});upd();})();</script><script>(function(){function show(id){["accTabHome","accTabOrders","accTabInfo"].forEach(function(p){var el=document.getElementById(p);if(el)el.style.display=(p===id)?"":"none";});document.querySelectorAll(".atab").forEach(function(b){var on=b.getAttribute("data-atab")===id;b.style.background=on?"#16110d":"#fff";b.style.color=on?"#fff":"#333";b.style.borderColor=on?"#16110d":"#ddd";});}document.addEventListener("click",function(e){var b=e.target&&e.target.closest?e.target.closest(".atab"):null;if(b)show(b.getAttribute("data-atab"));});show("accTabHome");})();</script>
+
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <script>
+
 /* ============================================================
    CẤU HÌNH TRANG — chủ shop điền thông tin của mình ở đây
    ============================================================ */
@@ -1307,8 +1540,8 @@ function renderProducts(boxId, list) {
 })();
 
 /* Render Sản Phẩm Hot theo NGÀNH HÀNG Shopee — mỗi ngành đúng 3 món theo 3 tiêu chí:
-   bán chạy nhất (best), đánh giá cao nhất (rated), rẻ nhất (cheap). Nút "Xem deal" mở
-   Shopee đã sắp xếp/lọc đúng tiêu chí của món đó. */
+   bán chạy nhất (best), đánh giá cao nhất (rated), rẻ nhất (cheap). Nút "Hoàn tiền" mở
+   Shopee đã sắp xếp/lọc đúng tiêu chí của món đó qua link của shop. */
 const HOT_CATS = [
   { key: "home", label: "🏠 Nhà cửa & Đời sống" },
   { key: "beauty", label: "💄 Sắc đẹp" },
@@ -1321,60 +1554,61 @@ const PICK_META = {
   rated: { badge: "⭐ Đánh giá cao nhất ngành", mode: "rated", bg: "#fb8c00" },
   cheap: { badge: "💸 Rẻ nhất ngành", mode: "price", bg: "#43a047" }
 };
-/* Render GỘP Bảng Xếp Hạng + Sản Phẩm Hot (Long gộp 30/10/2026, kiểu bản thử
-   ban-gop-ecc: MỘT mục duy nhất, chip lọc theo ngành, lưới thẻ). TOP 10 = 10 món
-   đầu của PRODUCTS (5 best + 5 rated; thứ tự mảng = thứ hạng bán chạy, kèm
+/* Render sản phẩm kiểu BẢN GỘP ECC (trang chính dựng lại 30/10/2026 theo khung
+   ban-gop-ecc): MỘT lưới thẻ .pcard + chip lọc theo ngành; TOP 10 = 10 món đầu
+   của PRODUCTS (5 best + 5 rated; thứ tự mảng = thứ hạng bán chạy, kèm
    RANK_NOTES ngay trên thẻ), 5 món cheap ở vị trí 11–15 không mang số hạng.
-   Nút "Xem deal" vẫn tự sắp xếp/lọc theo pick của món như trước. */
-(function renderMerged() {
-  const box = document.getElementById("products");
-  const chipsBox = document.getElementById("rankChips");
+   Nút "🔎 Check" = hỏi shop về món đó (askHref); nút "💰 Hoàn tiền" = mở deal
+   qua link của shop (searchAff theo pick). */
+(function renderEccProducts() {
+  const grid = document.getElementById("grid");
+  const catsBox = document.getElementById("cats");
+  if (!grid || !catsBox) return;
   function cardFor(p, rank) {
     const meta = PICK_META[p.pick] || PICK_META.best;
     const d = document.createElement("div");
-    d.className = "prod";
-    d.style.position = "relative";
-    d.innerHTML = '<div class="thumb"></div><div class="body"><div class="pname"></div>' +
-      '<div class="price"></div><div class="stars">⭐ Ưu tiên shop 4.5★+ khi mở deal</div>' +
+    d.className = "pcard";
+    d.innerHTML = '<div class="pimg"></div><div class="pbody"><div class="pname"></div>' +
+      '<div class="price num"></div>' +
       (rank && RANK_NOTES[rank - 1] ? '<div class="rankcmt"></div>' : '') +
-      '<div class="pnote">Giá tham khảo trên Shopee \u2022 Cập nhật ngày ' + PAGE_UPDATED + '</div>' +
-      '<a class="dealbtn" target="_blank" rel="noopener">Xem deal →</a></div>';
+      '<div class="age">Giá tham khảo \u2022 Cập nhật ngày ' + PAGE_UPDATED + '</div>' +
+      '<div class="pfoot"><a class="mini check" target="_blank" rel="noopener">🔎 Check</a>' +
+      '<a class="mini buy" target="_blank" rel="noopener">💰 Hoàn tiền</a></div></div>';
     if (rank) {
       const rb = document.createElement("div");
+      rb.className = "rankbadge";
       rb.textContent = "🏆 Hạng " + rank;
-      rb.style.cssText = "position:absolute; top:8px; left:8px; background:" +
-        (rank === 1 ? "#b45309" : rank === 2 ? "#6b7280" : rank === 3 ? "#c47b4a" : "#1a1a1a") +
-        "; color:#fff; font-size:12.5px; font-weight:800; padding:3px 9px; border-radius:999px; z-index:2;";
+      rb.style.background = rank === 1 ? "#b45309" : rank === 2 ? "#6b7280" : rank === 3 ? "#c47b4a" : "#1a1a1a";
       d.appendChild(rb);
     }
     const pb = document.createElement("div");
+    pb.className = "pickbadge";
     pb.textContent = meta.badge;
-    pb.style.cssText = "position:absolute; top:" + (rank ? "36px" : "8px") +
-      "; left:8px; background:" + meta.bg +
-      "; color:#fff; font-size:11.5px; font-weight:800; padding:3px 9px; border-radius:999px; z-index:2;";
+    pb.style.background = meta.bg;
+    pb.style.top = rank ? "36px" : "8px";
     d.appendChild(pb);
-    const thumb = d.querySelector(".thumb");
+    const pimg = d.querySelector(".pimg");
     if (p.img) {
       const im = document.createElement("img");
       im.src = p.img; im.alt = p.name; im.loading = "lazy";
-      im.onerror = () => { thumb.textContent = p.icon; };
-      thumb.appendChild(im);
+      im.onerror = () => { pimg.textContent = p.icon; };
+      pimg.appendChild(im);
     } else {
-      thumb.textContent = p.icon;
+      pimg.textContent = p.icon;
     }
     d.querySelector(".pname").textContent = p.name;
     d.querySelector(".price").textContent = p.price;
     const cmt = d.querySelector(".rankcmt");
     if (cmt) cmt.textContent = RANK_NOTES[rank - 1];
-    d.querySelector("a.dealbtn").href = searchAff(p.keyword, meta.mode);
-    extraBtns(d, p);
+    d.querySelector("a.mini.check").href = askHref(p);
+    d.querySelector("a.mini.buy").href = searchAff(p.keyword, meta.mode);
     return d;
   }
   function draw(filter) {
-    box.innerHTML = "";
+    grid.innerHTML = "";
     PRODUCTS.forEach((p, i) => {
       if (filter !== "all" && p.cat !== filter) return;
-      box.appendChild(cardFor(p, i < 10 ? i + 1 : 0));
+      grid.appendChild(cardFor(p, i < 10 ? i + 1 : 0));
     });
   }
   const chipDefs = [{ key: "all", label: "🏆 Tất cả" }].concat(HOT_CATS);
@@ -1382,13 +1616,14 @@ const PICK_META = {
     const b = document.createElement("button");
     b.type = "button";
     b.textContent = c.label;
-    b.className = "rankchip" + (idx === 0 ? " on" : "");
+    b.className = "cat" + (idx === 0 ? " on" : "");
+    b.setAttribute("data-f", c.key);
     b.addEventListener("click", () => {
-      chipsBox.querySelectorAll(".rankchip").forEach(x => x.classList.remove("on"));
+      catsBox.querySelectorAll(".cat").forEach(x => x.classList.remove("on"));
       b.classList.add("on");
       draw(c.key);
     });
-    chipsBox.appendChild(b);
+    catsBox.appendChild(b);
   });
   draw("all");
   document.getElementById("rankStamp").textContent = "Cập nhật: " + PAGE_UPDATED + ".";
@@ -1396,10 +1631,10 @@ const PICK_META = {
 renderProducts("household", HOUSEHOLD);
 
 /* Render danh mục */
-const cBox = document.getElementById("cats");
+const cBox = document.getElementById("catsMain");
 CATEGORIES.forEach(cat => {
   const d = document.createElement("a");
-  d.className = "cat";
+  d.className = "catcard";
   d.href = searchAff(cat.keyword); d.target = "_blank"; d.rel = "noopener";
   d.innerHTML = '<div class="ic"></div><div class="ct"></div>';
   d.querySelector(".ic").textContent = cat.icon;
@@ -1409,12 +1644,13 @@ CATEGORIES.forEach(cat => {
 
 /* Render tư vấn */
 const qBox = document.getElementById("qas");
-QAS.forEach(item => {
+QAS.forEach((item, qi) => {
   const d = document.createElement("div");
-  d.className = "qa";
-  d.innerHTML = '<div class="q"></div><div class="a"></div>';
-  d.querySelector(".q").textContent = "❓ " + item.q;
+  d.className = "qacard";
+  d.innerHTML = '<div class="q"></div><div class="a" style="margin-top:6px; color:#44403c;"></div><div class="meta"></div>';
+  d.querySelector(".q").textContent = "Hỏi: " + item.q;
   d.querySelector(".a").textContent = item.a;
+  d.querySelector(".meta").innerHTML = "#" + String(qi + 1).padStart(3, "0") + ' · Shop trả lời <span class="tag done">Đã trả lời ✔</span>';
   qBox.appendChild(d);
 });
 
@@ -2275,152 +2511,8 @@ document.getElementById("pageName").textContent = CONFIG.pageName;
 document.getElementById("pageTagline").textContent = CONFIG.tagline;
 document.getElementById("footName").textContent = CONFIG.pageName;
 document.getElementById("updStamp").textContent = "Cập nhật: " + PAGE_UPDATED + ".";
+
 </script>
-
-<div id="legalModal" style="display:none; position:fixed; inset:0; z-index:1001; background:rgba(24,10,4,.6); overflow-y:auto; padding:20px 10px 30px;">
-  <div style="position:relative; max-width:760px; margin:0 auto; background:#fff; border-radius:16px; padding:20px 18px 24px; box-shadow:0 8px 30px rgba(0,0,0,.3);">
-    <button id="legalClose" type="button" aria-label="Dong" style="position:absolute; top:10px; right:10px; width:36px; height:36px; border-radius:50%; border:none; background:#f4f4f4; color:#c23215; font-size:17px; font-weight:900; cursor:pointer;">&#10005;</button>
-    <h2 style="font-size:19px; margin:0 30px 4px 0; color:#16110d;">📜 Điều khoản &amp; Bảo mật</h2>
-    <p style="font-size:12.5px; color:#6e6e6e; margin:0 0 12px;">Săn Sale Cùng Long — Phiên bản 1.0, hiệu lực từ 29/10/2026</p>
-    <div style="display:flex; gap:8px; margin-bottom:12px;">
-      <button type="button" id="legalTabT" style="flex:1; padding:9px; border-radius:10px; border:1.5px solid #16110d; background:#16110d; color:#fff; font-size:14px; font-weight:800; cursor:pointer;">Điều khoản sử dụng</button>
-      <button type="button" id="legalTabP" style="flex:1; padding:9px; border-radius:10px; border:1.5px solid #ddd; background:#fff; color:#333; font-size:14px; font-weight:800; cursor:pointer;">Chính sách bảo mật</button>
-    </div>
-    <div id="legalTerms" style="font-size:13.5px; line-height:1.55; color:#211d19; text-align:left;">
-      <h3 style="font-size:15px; margin:12px 0 4px;">Điều 1. Giới thiệu dịch vụ</h3>
-      <p>1.1. Săn Sale Cùng Long ("Trang", "Shop") là trang hỗ trợ mua sắm do cá nhân vận hành, cung cấp: (a) chuyển đổi liên kết sản phẩm Shopee thành liên kết tiếp thị liên kết của Shop; (b) gợi ý mã giảm giá công khai; (c) tra cứu thông tin sản phẩm mang tính tham khảo; (d) chương trình hoàn một phần hoa hồng tiếp thị liên kết cho người dùng có tài khoản.</p>
-      <p>1.2. Trang không phải là Shopee, không bán hàng trực tiếp và không phải đại diện của Shopee. Mọi giao dịch mua bán diễn ra giữa người dùng và người bán trên nền tảng Shopee.</p>
-      <h3 style="font-size:15px; margin:12px 0 4px;">Điều 2. Tài khoản và điều kiện sử dụng</h3>
-      <p>2.1. Khi đăng ký, người dùng xác nhận thông tin cung cấp là đúng sự thật và chịu trách nhiệm với thông tin đó.</p>
-      <p>2.2. Mỗi người dùng chỉ được hưởng hoa hồng trên một tài khoản chính. Nghiêm cấm: (a) tạo nhiều tài khoản để gian lận hoa hồng; (b) tự mua hàng qua liên kết/mã của chính mình hoặc của người trong cùng hộ/thiết bị nhằm trục lợi hoa hồng; (c) dùng công cụ tự động gây quá tải, phá hoại Trang; (d) mạo danh Shop hoặc người dùng khác.</p>
-      <h3 style="font-size:15px; margin:12px 0 4px;">Điều 3. Cơ chế hoa hồng và hoàn tiền</h3>
-      <p>3.1. Hoa hồng của một đơn hàng chỉ phát sinh khi đơn hàng được hệ thống của Shopee (hoặc đối tác ghi nhận hoa hồng của Shop) ghi nhận hợp lệ gắn với mã cá nhân của người dùng, và Shop đã thực nhận khoản hoa hồng đó.</p>
-      <p>3.2. Phần người dùng được hoàn = 80% của hoa hồng thực nhận sau khi trừ thuế thu nhập cá nhân 10% do Shopee khấu trừ (tương đương 72% số hoa hồng thể hiện trên báo cáo). Đây là khoản Shop tự nguyện chia sẻ từ hoa hồng của Shop, không phải hoa hồng Shopee trả cho người dùng.</p>
-      <p>3.3. Căn cứ đối soát duy nhất là báo cáo chính thức của Shopee/đối tác ghi nhận. Số liệu hiển thị "tạm tính" trên Trang chỉ là ước tính, không phải là cam kết chi trả; số "khả dụng" sau đối soát mới là căn cứ rút tiền.</p>
-      <p>3.4. Đơn hàng bị hủy, bị trả hàng/hoàn tiền, bị Shopee xác định gian lận hoặc không hợp lệ thì không phát sinh khoản hoàn. Nếu khoản hoàn đã chi mà sau đó Shopee truy thu/hủy hoa hồng tương ứng, Shop được quyền trừ vào số dư khả dụng tiếp theo của người dùng.</p>
-      <p>3.5. Shop có quyền điều chỉnh tỷ lệ hoàn cho các đơn hàng phát sinh SAU thời điểm thông báo trên Trang. Đơn hàng đã được ghi nhận giữ nguyên tỷ lệ tại thời điểm ghi nhận.</p>
-      <h3 style="font-size:15px; margin:12px 0 4px;">Điều 4. Rút tiền</h3>
-      <p>4.1. Ngưỡng rút tối thiểu: 10.000đ mỗi yêu cầu, rút toàn bộ số dư khả dụng tại thời điểm yêu cầu.</p>
-      <p>4.2. Điều kiện rút: đã điền đầy đủ và đúng thông tin khách hàng (họ tên theo giấy tờ tùy thân) và thông tin nhận tiền; họ tên chủ tài khoản ngân hàng phải trùng khớp họ tên khách hàng đã đăng ký; nhập đúng mã PIN rút tiền.</p>
-      <p>4.3. Thông tin khách hàng và thông tin nhận tiền sau khi lưu sẽ bị khóa để bảo vệ người dùng; việc thay đổi chỉ thực hiện qua Shop sau khi xác minh. Người dùng chịu trách nhiệm nếu cung cấp sai thông tin dẫn đến chuyển tiền thất bại hoặc chậm trễ.</p>
-      <p>4.4. Shop xử lý yêu cầu rút trong vòng 07 ngày làm việc kể từ khi yêu cầu hợp lệ. Khi phát hiện dấu hiệu bất thường hoặc nghi ngờ gian lận, Shop có quyền tạm giữ khoản chi để kiểm tra và sẽ thông báo lý do cho người dùng; phần hoa hồng phát sinh từ hành vi gian lận sẽ bị hủy và không được chi trả.</p>
-      <h3 style="font-size:15px; margin:12px 0 4px;">Điều 5. Mã giảm giá và tra cứu sản phẩm</h3>
-      <p>5.1. Mã giảm giá và kết quả tra cứu trên Trang chỉ mang tính tham khảo, được tổng hợp từ nguồn công khai và có thể thay đổi/hết hiệu lực bất cứ lúc nào theo chính sách của Shopee và người bán.</p>
-      <p>5.2. Shop không cam kết mã giảm giá áp dụng thành công cho mọi tài khoản/đơn hàng. Người dùng tự kiểm tra điều kiện áp dụng tại trang thanh toán của Shopee trước khi mua.</p>
-      <h3 style="font-size:15px; margin:12px 0 4px;">Điều 6. Giới hạn trách nhiệm</h3>
-      <p>6.1. Dịch vụ được cung cấp "theo hiện trạng". Shop không chịu trách nhiệm về: chất lượng, giá cả, giao hàng, bảo hành của sản phẩm (thuộc trách nhiệm của người bán và Shopee); quyết định mua hàng của người dùng; thiệt hại gián tiếp phát sinh từ việc sử dụng hoặc không sử dụng được Trang.</p>
-      <p>6.2. Trong mọi trường hợp, trách nhiệm tối đa của Shop với một người dùng không vượt quá tổng số tiền Shop đã thực trả cho người dùng đó trong 03 tháng gần nhất.</p>
-      <h3 style="font-size:15px; margin:12px 0 4px;">Điều 7. Tạm khóa và chấm dứt tài khoản</h3>
-      <p>7.1. Shop có quyền tạm khóa hoặc chấm dứt tài khoản vi phạm Điều khoản này. Với hành vi gian lận rõ ràng, Shop có thể khóa ngay để ngăn thiệt hại, sau đó thông báo cho người dùng.</p>
-      <p>7.2. Người dùng có thể yêu cầu đóng tài khoản bất cứ lúc nào qua kênh liên hệ của Shop; số dư khả dụng hợp lệ sẽ được quyết toán trước khi đóng, trừ phần liên quan đến gian lận theo Điều 4.4.</p>
-      <h3 style="font-size:15px; margin:12px 0 4px;">Điều 8. Thay đổi Điều khoản</h3>
-      <p>Shop có thể sửa đổi Điều khoản và sẽ thông báo phiên bản mới trên Trang trước khi áp dụng. Việc người dùng tiếp tục sử dụng Trang sau thời điểm hiệu lực của phiên bản mới được coi là chấp nhận phiên bản đó.</p>
-      <h3 style="font-size:15px; margin:12px 0 4px;">Điều 9. Luật áp dụng và giải quyết tranh chấp</h3>
-      <p>Điều khoản này được điều chỉnh bởi pháp luật Việt Nam. Tranh chấp (nếu có) ưu tiên giải quyết bằng thương lượng; trường hợp không thương lượng được, tranh chấp sẽ được giải quyết tại Tòa án có thẩm quyền theo quy định pháp luật.</p>
-    </div>
-    <div id="legalPrivacy" style="display:none; font-size:13.5px; line-height:1.55; color:#211d19; text-align:left;">
-      <h3 style="font-size:15px; margin:12px 0 4px;">1. Dữ liệu thu thập và mục đích</h3>
-      <p>Shop chỉ thu thập những thông tin tối thiểu cần thiết để vận hành tài khoản và <b>chi trả hoa hồng cho bạn</b>. Mật khẩu đăng nhập và mã PIN rút tiền chỉ được lưu dưới dạng mã băm — Shop không lưu và không đọc được giá trị gốc. Việc thu thập, xử lý dữ liệu tuân thủ <b>Nghị định 13/2023/NĐ-CP</b> về bảo vệ dữ liệu cá nhân.</p>
-      <h3 style="font-size:15px; margin:12px 0 4px;">2. Chia sẻ dữ liệu</h3>
-      <p>Shop <b>không bán hay trao đổi</b> dữ liệu cá nhân của bạn cho bên thứ ba. Dữ liệu chỉ được chia sẻ cho ngân hàng khi thực hiện chuyển tiền cho bạn, và cung cấp cho cơ quan nhà nước khi có yêu cầu hợp pháp.</p>
-      <h3 style="font-size:15px; margin:12px 0 4px;">3. Bảo mật và lưu trữ</h3>
-      <p>Dữ liệu được phân quyền theo từng tài khoản — bạn chỉ truy cập được dữ liệu của chính mình; tài khoản quản trị của Shop bật xác thực hai lớp. Dữ liệu được lưu trong thời gian tài khoản còn hoạt động, cộng thêm thời gian cần thiết cho đối soát và nghĩa vụ pháp lý. Trang cũng lưu một ít dữ liệu trên chính trình duyệt của bạn (mã máy tra cứu, lịch sử săn sale) để tính năng hoạt động; bạn có thể xóa bất cứ lúc nào trong cài đặt trình duyệt.</p>
-      <h3 style="font-size:15px; margin:12px 0 4px;">4. Quyền của bạn</h3>
-      <p>Theo Nghị định 13/2023/NĐ-CP, bạn có quyền được biết, truy cập, yêu cầu chỉnh sửa hoặc xóa dữ liệu của mình và rút lại sự đồng ý. Chỉ cần liên hệ Shop qua mục "Liên Hệ Hợp Tác" trên Trang — Shop phản hồi trong vòng 07 ngày làm việc.</p>
-      <h3 style="font-size:15px; margin:12px 0 4px;">5. Thay đổi Chính sách</h3>
-      <p>Khi Chính sách có thay đổi, phiên bản mới sẽ được thông báo trên Trang trước khi áp dụng; việc tiếp tục sử dụng Trang đồng nghĩa bạn chấp nhận phiên bản mới.</p>
-      <p style="margin-top:14px; font-weight:700;">Bằng việc tích chọn đồng ý và đăng ký tài khoản, bạn xác nhận đã đọc, hiểu và đồng ý với toàn bộ Điều khoản sử dụng và Chính sách bảo mật này.</p>
-    </div>
-  </div>
-</div>
-<script>(function(){var m=document.getElementById("legalModal");if(!m)return;var tT=document.getElementById("legalTerms"),tP=document.getElementById("legalPrivacy"),bT=document.getElementById("legalTabT"),bP=document.getElementById("legalTabP");function tab(which){var terms=which!=="privacy";tT.style.display=terms?"":"none";tP.style.display=terms?"none":"";bT.style.background=terms?"#16110d":"#fff";bT.style.color=terms?"#fff":"#333";bT.style.borderColor=terms?"#16110d":"#ddd";bP.style.background=terms?"#fff":"#16110d";bP.style.color=terms?"#333":"#fff";bP.style.borderColor=terms?"#ddd":"#16110d";}function open(which){tab(which);m.style.display="block";m.scrollTop=0;}function close(){m.style.display="none";}document.addEventListener("click",function(e){var a=e.target&&e.target.closest?e.target.closest("[data-legal]"):null;if(a){e.preventDefault();open(a.getAttribute("data-legal"));}});bT.addEventListener("click",function(){tab("terms");});bP.addEventListener("click",function(){tab("privacy");});document.getElementById("legalClose").addEventListener("click",close);m.addEventListener("click",function(e){if(e.target===m)close();});})();</script>
-
-<script>(function(){var ua=navigator.userAgent||"";var wv=/(Zalo|FBAN|FBAV|FB_IAB|Instagram|Messenger)/i.test(ua);if(wv){var w=document.getElementById("accWebviewWarn");if(w)w.style.display="block";}try{var q=(location.search||"")+"#"+(location.hash||"");if(q.indexOf("error")!==-1){var sp=new URLSearchParams(location.search);var hp=new URLSearchParams((location.hash||"").replace(/^#/,""));var desc=sp.get("error_description")||hp.get("error_description")||sp.get("error")||hp.get("error");if(desc){setTimeout(function(){if(window.openAuthModal)openAuthModal("login");if(window.accMsg)accMsg("\u26a0\ufe0f Google b\u00e1o l\u1ed7i: "+decodeURIComponent(String(desc).replace(/\+/g," "))+" \u2014 b\u1ea1n ch\u1ee5p m\u00e0n h\u00ecnh d\u00f2ng n\u00e0y g\u1eedi shop \u0111\u1ec3 \u0111\u01b0\u1ee3c h\u1ed7 tr\u1ee3 nh\u00e9.");try{history.replaceState(null,"",location.pathname);}catch(e){}},400);}}}catch(e){}})();</script>
-<div id="scrollBtns" style="position:fixed;right:10px;bottom:10px;display:none;flex-direction:column;gap:6px;z-index:900"><button type="button" title="Lên đầu trang" onclick="window.scrollTo({top:0,behavior:'smooth'})" style="width:40px;height:40px;border:none;border-radius:50%;font-size:17px;font-weight:700;background:#c21807;color:#fff;box-shadow:0 2px 8px rgba(0,0,0,.25);cursor:pointer;opacity:.92;padding:0">⬆</button><button type="button" title="Xuống cuối trang" onclick="window.scrollTo({top:document.body.scrollHeight,behavior:'smooth'})" style="width:40px;height:40px;border:none;border-radius:50%;font-size:17px;font-weight:700;background:#c21807;color:#fff;box-shadow:0 2px 8px rgba(0,0,0,.25);cursor:pointer;opacity:.92;padding:0">⬇</button></div><script>(function(){var box=document.getElementById("scrollBtns");var modal=document.getElementById("authModal");function modalOpen(){return modal&&getComputedStyle(modal).display!=="none";}function upd(){var max=document.documentElement.scrollHeight-window.innerHeight;var past=max>0&&window.scrollY>max/3;box.style.display=(past&&!modalOpen())?"flex":"none";}window.addEventListener("scroll",upd,{passive:true});window.addEventListener("resize",upd);if(modal&&window.MutationObserver)new MutationObserver(upd).observe(modal,{attributes:true,attributeFilter:["style","class"]});upd();})();</script><script>(function(){function show(id){["accTabHome","accTabOrders","accTabInfo"].forEach(function(p){var el=document.getElementById(p);if(el)el.style.display=(p===id)?"":"none";});document.querySelectorAll(".atab").forEach(function(b){var on=b.getAttribute("data-atab")===id;b.style.background=on?"#16110d":"#fff";b.style.color=on?"#fff":"#333";b.style.borderColor=on?"#16110d":"#ddd";});}document.addEventListener("click",function(e){var b=e.target&&e.target.closest?e.target.closest(".atab"):null;if(b)show(b.getAttribute("data-atab"));});show("accTabHome");})();</script>
-
-<style id="eccThemeGop">
-/* ===== GIAO DIEN BAN GOP "CHECK TRUOC · HOAN SAU" (ECC) — ap 30/10/2026 theo duyet cua chu trang.
-   He thong: den #1a1a1a + do #dc2626 + vang #FFBA00 (kieu check var), vi navy #1e2942/#0f172a.
-   Chi la lop CSS override + hero 2 nut noi vao co che san co; logic trang giu nguyen 100%.
-   Ban v2 "Vi hoan tien" la diem hoi phuc o index.html.bak-20261030-gop. ===== */
-:root{
-  --bg:#f3f4f6; --card:#ffffff; --border:#e3e0d8; --ink:#1a1a1a; --text:#26221c;
-  --muted:#6b7280; --green:#1e2942; --green-dark:#0f172a; --green-soft:#e8ecf4; --gold:#FFBA00;
-  --primary:#dc2626; --primary-dark:#b91c1c; --vivid:#FF7A00;
-}
-body{font-family:"Be Vietnam Pro",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;}
-h1,h2{text-wrap:balance;}
-header.topbar{background:#1a1a1a; color:#fff; border-bottom:4px solid var(--primary);
-  box-shadow:0 10px 26px rgba(26,26,26,.18);}
-header.topbar .name{color:#fff;}
-header.topbar .tag{color:var(--gold);}
-#topLogin{background:transparent; color:#fff; border:1.5px solid rgba(255,255,255,.85); box-shadow:none;}
-#topRegister{background:var(--primary); color:#fff; border:1.5px solid var(--primary); box-shadow:none;}
-#topDash{background:#fff; color:var(--ink); box-shadow:none;}
-#topLogout{background:transparent; color:#fff; border:1.5px solid rgba(255,255,255,.55); box-shadow:none;}
-.hero{background:#FFF7E8; color:var(--ink); border:2px solid var(--ink); border-radius:20px; margin-top:14px;
-  box-shadow:0 16px 38px rgba(26,26,26,.16);}
-.gopkick{font-size:11.5px; font-weight:800; letter-spacing:.13em; color:var(--primary); text-transform:uppercase; margin-bottom:6px;}
-.hero h1{font-weight:900; letter-spacing:-.4px; color:var(--ink); line-height:1.14;}
-.hero h1 .gopred{color:var(--primary);}
-.hero p{color:#4b4237;}
-.hero .searchrow{background:#fff; padding:10px; border-radius:14px; border:2px solid var(--ink);}
-.hero .searchrow input{border:2px solid var(--ink); background:#fff; color:var(--ink);}
-.searchrow button{background:var(--ink); color:#fff;}
-#btnPaste{background:var(--gold); color:var(--ink);}
-.gopbtns{display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:10px;}
-.gopbtns button{border:none; border-radius:12px; padding:13px 8px; font-size:15.5px; font-weight:800; cursor:pointer; font-family:inherit; line-height:1.15;}
-#btnCheck{background:var(--ink); color:#fff;}
-#btnConvert{background:var(--primary); color:#fff;}
-.v2checks{list-style:none; margin:0 0 14px; padding:0; display:grid; gap:6px;}
-.v2checks li{font-size:13.5px; color:#3f3a30; font-weight:600;}
-.v2checks li::before{content:"✓"; display:inline-flex; align-items:center; justify-content:center;
-  width:19px; height:19px; border-radius:50%; background:var(--primary); color:#fff; font-weight:900;
-  font-size:12px; margin-right:8px; vertical-align:-4px;}
-.gopstats{display:grid; grid-template-columns:1fr 1fr; background:var(--primary); border-radius:16px; margin-top:16px; overflow:hidden;}
-.gopstats .gs{padding:13px 15px; color:#fff;}
-.gopstats .gs b{display:block; font-size:21px; font-weight:900; font-variant-numeric:tabular-nums;}
-.gopstats .gs span{font-size:12px; color:#ffffff;}
-@media(min-width:641px){.gopstats{grid-template-columns:repeat(4,1fr);}}
-.v2tiles{display:grid; grid-template-columns:1fr 1fr; gap:11px; margin-top:16px;}
-.v2tile{text-decoration:none; border-radius:20px; padding:16px 14px; display:block; border:1px solid var(--border);}
-.v2tile .ic{font-size:26px;}
-.v2tile b{display:block; font-size:16px; margin-top:5px; color:var(--ink);}
-.v2tile span{font-size:12.5px; color:var(--muted);}
-.v2tile.rank{background:#1a1a1a; border-color:#1a1a1a;}
-.v2tile.rank b{color:#fff;}
-.v2tile.rank span{color:#d1d5db;}
-.v2tile.gift{background:var(--primary); border-color:var(--primary);}
-.v2tile.gift b{color:#fff;}
-.v2tile.gift span{color:#ffffff;}
-.banner{border:1px solid var(--border); color:var(--ink);}
-.banner.b1{background:var(--green-soft);}
-.banner.b2{background:#FFF3E2;}
-.banner .s{color:#4b5563;}
-.card{border-radius:20px; box-shadow:0 1px 2px rgba(26,26,26,.05),0 12px 32px rgba(26,26,26,.07);}
-.card h2{border-left:none; padding-left:0;}
-.prod{border-radius:16px;}
-.prod .thumb{background:#f1eee6;}
-.price{font-variant-numeric:tabular-nums;}
-.voucher .code{font-variant-numeric:tabular-nums;}
-#openProdBtn{background:var(--vivid); color:#1a1a1a;}
-#askResearchBtn{background:var(--green);}
-.chip{background:#fff; border:1.5px solid var(--ink); color:var(--ink);}
-footer{background:#111111;}
-#accHave > div:first-child{background:linear-gradient(135deg,#1e2942,#0f172a) !important;}
-#accWalAvail{font-variant-numeric:tabular-nums;}
-#ctaLogin{background:var(--green) !important;}
-#ctaRegister{color:var(--green) !important; border-color:var(--green) !important;}
-#ctaCode{color:var(--green) !important;}
-#ctaDash{background:var(--green) !important;}
-#accCreateF{background:var(--green) !important;}
-#accLogin{background:var(--green) !important;}
-
-#rankChips{display:flex; flex-wrap:wrap; gap:6px; margin:2px 0 12px;}
-.rankchip{border:1.5px solid #1a1a1a; background:#fff; color:#1a1a1a; border-radius:999px; padding:7px 13px; font-family:inherit; font-size:13px; font-weight:700; cursor:pointer;}
-.rankchip.on{background:#1a1a1a; color:#fff;}
-#secRank .prod .rankcmt{font-size:12.5px; color:#57534e; line-height:1.4;}
-</style>
 <script>
 /* HERO 2 NUT (ban gop, 30/10/2026): nut Check = chuyen doi link roi kich hoat
    ngay nut Tra cuu san co (#askResearchBtn) khi khoi Buoc 3 hien ra;
@@ -2440,6 +2532,32 @@ footer{background:#111111;}
       if(tries > 24) clearInterval(iv);
     }, 500);
   });
+})();
+</script>
+<script>
+/* VI HERO (ban gop ECC): phan anh so du that tu bang dieu khien khi da dang nhap */
+(function(){
+  function txt(id){ var e=document.getElementById(id); return e ? e.textContent.trim() : ""; }
+  function sync(){
+    var dash = document.getElementById("topDash");
+    var logged = dash && dash.style.display !== "none" && dash.textContent.trim();
+    var avail = txt("accWalAvail");
+    var big = document.getElementById("heroWalBig"), sub = document.getElementById("heroWalBigSub"), btn = document.getElementById("heroWalletBtn");
+    if(!big || !btn) return;
+    if(logged && avail){
+      big.textContent = avail; sub.textContent = "số dư khả dụng trong ví của bạn";
+      document.getElementById("heroWalAvail").textContent = avail;
+      document.getElementById("heroWalEst").textContent = txt("accWalEst") || "—";
+      document.getElementById("heroWalPaid").textContent = txt("accWalPaid") || "—";
+      btn.textContent = "👤 Mở ví & bảng điều khiển →";
+    } else {
+      big.textContent = "80%"; sub.textContent = "hoa hồng được trả lại";
+      btn.textContent = "Đăng nhập để xem ví →";
+    }
+  }
+  var btn = document.getElementById("heroWalletBtn");
+  if(btn) btn.addEventListener("click", function(){ if(window.openAuthModal) openAuthModal("login"); });
+  setInterval(sync, 1500); sync();
 })();
 </script>
 </body>
