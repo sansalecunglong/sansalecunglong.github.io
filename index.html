@@ -1836,10 +1836,28 @@ async function sbForgotPin() {
   if (!sb || !sbUser) { toast("Bạn đăng nhập trước nhé"); return; }
   const email = (sbUser.email || "").trim();
   if (!email) { toast("Tài khoản chưa có email để gửi xác nhận"); return; }
+  const btn = document.getElementById("accForgotPin");
+  let last = 0, blockUntil = 0;
+  try { last = parseInt(localStorage.getItem("sscl_pin_otp_ts") || "0", 10) || 0; blockUntil = parseInt(localStorage.getItem("sscl_pin_otp_block") || "0", 10) || 0; } catch (e) {}
+  const now = Date.now();
+  if (blockUntil > now) { accMsg("⏳ Hệ thống gửi email đang chạm giới hạn — bạn đợi thêm khoảng " + Math.ceil((blockUntil - now) / 60000) + " phút rồi bấm lại MỘT lần nhé. Cần gấp thì nhắn shop đặt lại giúp."); return; }
+  if (last && now - last < 10 * 60000) { accMsg("📧 Email đặt lại đã được gửi tới " + email + " cách đây ít phút — bạn kiểm tra hộp thư (cả mục Spam/Quảng cáo) và bấm link trong email trên cùng trình duyệt này nhé. Link còn hiệu lực trong 1 giờ, đừng bấm gửi lại liên tục."); return; }
+  if (btn) { btn.disabled = true; btn.textContent = "⏳ Đang gửi email…"; }
   try { sessionStorage.setItem("sscl_pin_reset", "1"); } catch (e) {}
   const r = await sb.auth.signInWithOtp({ email: email, options: { shouldCreateUser: false, emailRedirectTo: "https://sansalecunglong.github.io/" } });
-  if (r.error) { try { sessionStorage.removeItem("sscl_pin_reset"); } catch (e) {} accMsg("⚠️ " + sbErrText(r.error)); return; }
-  accMsg("📧 Đã gửi email xác nhận tới " + email + ". Bạn mở hộp thư trên cùng trình duyệt này, bấm vào link trong email để quay lại đặt mật khẩu rút tiền mới.");
+  if (r.error) {
+    try { sessionStorage.removeItem("sscl_pin_reset"); } catch (e) {}
+    const em = ((r.error.message || "") + " " + (r.error.code || ""));
+    if (/over_email_send|rate limit|too many/i.test(em)) {
+      try { localStorage.setItem("sscl_pin_otp_block", String(Date.now() + 30 * 60000)); } catch (e) {}
+      accMsg("⚠️ Máy chủ gửi email đang chạm GIỚI HẠN GỬI của gói miễn phí nên email CHƯA gửi được — không phải lỗi do bạn. Bạn đợi khoảng 30 phút rồi bấm lại MỘT lần (bấm liên tục sẽ càng lâu). Cần đặt lại gấp thì nhắn shop hỗ trợ.");
+    } else { accMsg("⚠️ " + sbErrText(r.error)); }
+    if (btn) { btn.disabled = false; btn.textContent = "Quên mật khẩu rút tiền? Bấm để nhận email đặt lại"; }
+    return;
+  }
+  try { localStorage.setItem("sscl_pin_otp_ts", String(Date.now())); } catch (e) {}
+  if (btn) { btn.textContent = "📧 Đã gửi email — kiểm tra hộp thư nhé"; }
+  accMsg("📧 Đã gửi email xác nhận tới " + email + ". Bạn mở hộp thư trên cùng trình duyệt này, bấm vào link trong email để quay lại đặt mật khẩu rút tiền mới. Chưa thấy thì kiểm tra mục Spam/Quảng cáo — đừng bấm gửi lại liên tục nhé.");
 }
 let pinResetAsked = false;
 async function checkPinReset() {
