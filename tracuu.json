@@ -113,6 +113,15 @@
  ],
  "mb2ac6f560bc2b7ea62d32ffe": [
   {
+   "rid": "ACYDBNh6NJc0JOsrjICeDxhtpy3RK2DfME_kgW3Szy1gKsxaY__FyAR_WgBJQ7mc29q7Avw",
+   "name": "quạt 3 pha",
+   "link": "",
+   "verdict": "",
+   "points": [],
+   "time": "13:44 30/10",
+   "status": "pending"
+  },
+  {
    "rid": "ACYDBNijnVmYuSnYH0tep1PZRYf7s5E6SIwS349b5BvIlQc7eMj-l65raGuit_O5WK-ym_0",
    "name": "quạt 3 pha",
    "link": "",
@@ -215,21 +224,6 @@
     "Khuyết điểm: giá 375.000₫ không rẻ so với áo thun nữ phổ thông — nên đối chiếu bảng size và chất liệu trong listing trước khi mua"
    ],
    "time": "21:44 29/10",
-   "status": "done"
-  },
-  {
-   "rid": "ACYDBNhItBYT8DyLDuC_uDCfcw83s05meZ9GmLi0zF91lZg07LFH0YJmuv1tC-ld1njDF-c",
-   "name": "Quạt Phun Sương GOOJODOQ Động Cơ 9526 RPM, Gió Mạnh 8.6m/s, 100 Tốc Độ, Phun Sương Dưỡng Ẩm, Pin 3600mAh Dùng 11.5 Giờ",
-   "link": "https://shopee.vn/opaanlp/958778013/56208488536",
-   "verdict": "✅ ĐÁNG MUA — gió mạnh 100 tốc độ kèm phun sương, Shopee 4,8/5, giá 239.000₫ đang giảm 44%",
-   "points": [
-    "Ưu điểm: Shopee (qua Apify) niêm yết 239.000₫, đang giảm 44%, điểm 4,8/5",
-    "Ưu điểm: FPT Shop đánh giá quạt Goojodoq làm mát ổn định, chạy êm ở mức gió thấp và trung bình, nhỏ gọn dễ mang theo",
-    "Ưu điểm: 100 tốc độ gió, phun sương dưỡng ẩm, pin 3600mAh dùng tới 11,5 giờ theo listing",
-    "Khuyết điểm: FPT Shop lưu ý chỉ làm mát cá nhân, không thay được quạt công suất lớn trong phòng rộng",
-    "Khuyết điểm: dùng mức gió cao trong thời gian dài sẽ hao pin nhanh hơn (FPT Shop)"
-   ],
-   "time": "21:21 29/10",
    "status": "done"
   }
  ],
