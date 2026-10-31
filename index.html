@@ -849,7 +849,7 @@ const CONFIG = {
 };
 
 /* === AUTO-DATA-START: khu vực Muse tự cập nhật định kỳ — chỉ sửa trong 2 mốc này === */
-const PAGE_UPDATED = "31/10/2026";   // ← ngày cập nhật dữ liệu gần nhất
+const PAGE_UPDATED = "01/11/2026";   // ← ngày cập nhật dữ liệu gần nhất
 /* API dữ liệu sản phẩm Shopee qua RapidAPI (Long duyệt tối 26/10/2026):
    khóa do Long đăng ký gói miễn phí rồi gắn vào đây; để trống = tính năng tự tra tắt. */
 const RAPIDAPI_KEY = ""; /* TAM TAT 26/10/2026: goi free API v2 chi 5 luot/thang da het; cho Long quyet dinh nang goi hay doi nguon khac */
@@ -861,7 +861,7 @@ const RAPIDAPI_HOST = "shopee-product-scraper2.p.rapidapi.com";
 const UPCOMING = [
   { icon: "👑", when: "Mỗi ngày", title: "Shopee VIP & Voucher Xtra back lượt", desc: "Nhả lại theo các khung 0H • 9H • 12H • 15H • 18H • 20H — canh đúng khung giờ, vào app Shopee bấm Lưu ở banner tương ứng." },
   { icon: "🛍️", when: "11/11", title: "Siêu sale 11/11 — đợt sale lớn nhất năm của Shopee", desc: "Loạt mã toàn sàn và mã kênh mới dự kiến mở từ 0H 11/11 — canh 0H vào app Shopee lưu mã sớm vì mã ngon hết lượt rất nhanh." },
-  { icon: "🛒", when: "15/11", title: "Sale giữa tháng 15/11", desc: "Đợt sale giữa tháng theo lịch Shopee: mã toàn sàn và deal ngành hàng mở trong ngày 15/11 — canh vào app Shopee lưu mã từ đầu ngày." },
+  { icon: "🎉", when: "1/11", title: "Sale 1/11 đầu tháng — mở màn mùa sale 11.11", desc: "Đang diễn ra hôm nay: deal đồng giá 29K • 99K • 199K • 399K theo khung 0H • 12H • 15H • 19H, mã VIP/Xtra lên mới từ 0H — canh khung giờ vào app Shopee lưu mã." },
   { icon: "💸", when: "25/11", title: "Lương Về Sale To — sale ngày lương cuối tháng", desc: "Đợt sale ngày lương như hôm 25/10: có mã riêng theo ngày, chỉ dùng trong ngày sale — canh vào app Shopee lưu mã trong ngày." },
 ];
 
@@ -872,17 +872,20 @@ const UPCOMING = [
    mỗi mã phải có mặt trên nguồn tổng hợp (ANM tra mã / noti.sale) trong cửa sổ
    còn hiệu lực; TUYỆT ĐỐI không bịa mã, không bịa số lượt còn. Job nền mỗi giờ
    rà lại: mã nào nguồn không còn liệt kê hoặc đã hết hạn thì gỡ. */
-const VOUCHER_UPDATED = "23:13 30/10/2026";
+const VOUCHER_UPDATED = "00:15 01/11/2026";
 const VOUCHERS = [
-  { code: "VNM250KOCT", off: "Giảm 12% tối đa 250K", cond: "Đơn từ 200K", fam: "Toàn sàn Shopee", exp: "Hết hạn 31/10/2026", chk: "ANM, 23:13 30/10" },
-  { code: "WASTON150K", off: "Giảm 14% tối đa 150K", cond: "Đơn từ 150K", fam: "Toàn sàn Shopee", exp: "Hết hạn 31/10/2026", chk: "ANM, 23:13 30/10" },
-  { code: "30301026GIAM100K17", off: "Giảm 17% tối đa 100K", cond: "Đơn từ 200K", fam: "Toàn sàn Shopee", exp: "Hết hạn 31/10/2026", chk: "ANM, 23:13 30/10" },
-  { code: "30301026GIAM250K18", off: "Giảm 18% tối đa 250K", cond: "Đơn từ 750K", fam: "Toàn sàn Shopee", exp: "Hết hạn 31/10/2026", chk: "ANM, 23:13 30/10" },
-  { code: "30301026GIAM600K19", off: "Giảm 19% tối đa 600K", cond: "Đơn từ 1000K", fam: "Toàn sàn Shopee", exp: "Hết hạn 31/10/2026", chk: "ANM, 23:13 30/10" },
-  { code: "30301026GIAM2000K19", off: "Giảm 19% tối đa 2000K", cond: "Đơn từ 3000K", fam: "Toàn sàn Shopee", exp: "Hết hạn 31/10/2026", chk: "ANM, 23:13 30/10" },
-  { code: "VIDEO-1530863982120960", off: "Giảm 18% tối đa 99K", cond: "Đơn từ 99K", fam: "Shopee Video — Siêu Sale Quốc Tế", exp: "Hết hạn 31/10/2026", chk: "ANM, 23:13 30/10" },
-  { code: "VIDEO-1530863982383108", off: "Giảm 16% tối đa 150K", cond: "Đơn từ 99K", fam: "Shopee Video — Siêu Sale Quốc Tế", exp: "Hết hạn 31/10/2026", chk: "ANM, 23:13 30/10" },
-  { code: "VIDEO-1530863990116360", off: "Giảm 16% tối đa 150K", cond: "Đơn từ 150K", fam: "Shopee Video — Siêu Sale Quốc Tế", exp: "Hết hạn 31/10/2026", chk: "ANM, 23:13 30/10" },
+  { code: "111GIAM150K4", off: "Giảm 30% tối đa 150K", cond: "Đơn từ 300K", fam: "Toàn sàn Shopee", exp: "Hết hạn 01/11/2026", chk: "ANM, 00:15 01/11" },
+  { code: "111GIAM500K2", off: "Giảm 23% tối đa 500K", cond: "Đơn từ 150K", fam: "Toàn sàn Shopee", exp: "Hết hạn 01/11/2026", chk: "ANM, 00:15 01/11" },
+  { code: "111GIAM350K3", off: "Giảm 23% tối đa 350K", cond: "Đơn từ 200K", fam: "Toàn sàn Shopee", exp: "Hết hạn 01/11/2026", chk: "ANM, 00:15 01/11" },
+  { code: "111GIAM450K", off: "Giảm 22% tối đa 450K", cond: "Đơn từ 1000K", fam: "Toàn sàn Shopee", exp: "Hết hạn 01/11/2026", chk: "ANM, 00:15 01/11" },
+  { code: "111GIAM250K1", off: "Giảm 21% tối đa 250K", cond: "Đơn từ 350K", fam: "Toàn sàn Shopee", exp: "Hết hạn 01/11/2026", chk: "ANM, 00:15 01/11" },
+  { code: "111GIAM1000K2", off: "Giảm 20% tối đa 1000K", cond: "Đơn từ 3000K", fam: "Toàn sàn Shopee", exp: "Hết hạn 01/11/2026", chk: "ANM, 00:15 01/11" },
+  { code: "111GIAM10K", off: "Giảm 20% tối đa 10K", cond: "Đơn từ 0K", fam: "Toàn sàn Shopee", exp: "Hết hạn 01/11/2026", chk: "ANM, 00:15 01/11" },
+  { code: "VIDEO-1541126519689216", off: "Giảm 22% tối đa 200K", cond: "Đơn từ 99K", fam: "Shopee Video — Thời Trang & Khỏe Đẹp", exp: "Hết hạn 01/11/2026", chk: "ANM, 00:15 01/11" },
+  { code: "VIDEO-1541126494392324", off: "Giảm 22% tối đa 80K", cond: "Đơn từ 50K", fam: "Shopee Video", exp: "Hết hạn 01/11/2026", chk: "ANM, 00:15 01/11" },
+  { code: "VIDEO-1541126502912000", off: "Giảm 21% tối đa 150K", cond: "Đơn từ 150K", fam: "Shopee Video", exp: "Hết hạn 01/11/2026", chk: "ANM, 00:15 01/11" },
+  { code: "VIDEO-1541126536859648", off: "Giảm 21% tối đa 80K", cond: "Đơn từ 50K", fam: "Shopee Video", exp: "Hết hạn 01/11/2026", chk: "ANM, 00:15 01/11" },
+  { code: "VIDEO-1541813816692740", off: "Giảm 20% tối đa 200K", cond: "Đơn từ 150K", fam: "Shopee Video", exp: "Hết hạn 30/11/2026", chk: "ANM, 00:15 01/11" },
 ];
 
 const PRODUCTS = [
