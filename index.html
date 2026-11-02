@@ -849,7 +849,7 @@ const CONFIG = {
 };
 
 /* === AUTO-DATA-START: khu vực Muse tự cập nhật định kỳ — chỉ sửa trong 2 mốc này === */
-const PAGE_UPDATED = "02/11/2026";   // ← ngày cập nhật dữ liệu gần nhất
+const PAGE_UPDATED = "03/11/2026";   // ← ngày cập nhật dữ liệu gần nhất
 /* API dữ liệu sản phẩm Shopee qua RapidAPI (Long duyệt tối 26/10/2026):
    khóa do Long đăng ký gói miễn phí rồi gắn vào đây; để trống = tính năng tự tra tắt. */
 const RAPIDAPI_KEY = ""; /* TAM TAT 26/10/2026: goi free API v2 chi 5 luot/thang da het; cho Long quyet dinh nang goi hay doi nguon khac */
@@ -872,18 +872,20 @@ const UPCOMING = [
    mỗi mã phải có mặt trên nguồn tổng hợp (ANM tra mã / noti.sale) trong cửa sổ
    còn hiệu lực; TUYỆT ĐỐI không bịa mã, không bịa số lượt còn. Job nền mỗi giờ
    rà lại: mã nào nguồn không còn liệt kê hoặc đã hết hạn thì gỡ. */
-const VOUCHER_UPDATED = "00:16 02/11/2026";
+const VOUCHER_UPDATED = "00:16 03/11/2026";
 const VOUCHERS = [
-  { code: "211SWALL2500K", off: "Giảm 25% tối đa 2500K", cond: "Đơn từ 3000K", fam: "Toàn sàn Shopee", exp: "Hết hạn 02/11/2026", chk: "ANM, 00:13 02/11" },
-  { code: "2511HB500K", off: "Giảm 22% tối đa 500K", cond: "Đơn từ 1000K", fam: "Toàn sàn Shopee", exp: "Hết hạn 05/11/2026", chk: "ANM, 00:13 02/11" },
-  { code: "211SWALL1000K", off: "Giảm 21% tối đa 1000K", cond: "Đơn từ 3000K", fam: "Toàn sàn Shopee", exp: "Hết hạn 02/11/2026", chk: "ANM, 00:13 02/11" },
-  { code: "211SWALL400K", off: "Giảm 20% tối đa 400K", cond: "Đơn từ 1000K", fam: "Toàn sàn Shopee", exp: "Hết hạn 02/11/2026", chk: "ANM, 00:13 02/11" },
-  { code: "211SWALL250K", off: "Giảm 20% tối đa 250K", cond: "Đơn từ 750K", fam: "Toàn sàn Shopee", exp: "Hết hạn 02/11/2026", chk: "ANM, 00:13 02/11" },
-  { code: "0211HOMEBK2000", off: "Giảm 19% tối đa 2000K", cond: "Đơn từ 3000K", fam: "Toàn sàn Shopee", exp: "Hết hạn 10/11/2026", chk: "ANM, 00:13 02/11" },
-  { code: "0211HOMEBK700", off: "Giảm 19% tối đa 700K", cond: "Đơn từ 1000K", fam: "Toàn sàn Shopee", exp: "Hết hạn 10/11/2026", chk: "ANM, 00:13 02/11" },
-  { code: "VIDEO-1541813832814592", off: "Giảm 20% tối đa 1200K", cond: "Đơn từ 1200K", fam: "Shopee Video — Hàng Quốc Tế", exp: "Hết hạn 30/11/2026", chk: "ANM, 00:13 02/11" },
-  { code: "VIDEO-1541813816561664", off: "Giảm 20% tối đa 700K", cond: "Đơn từ 850K", fam: "Shopee Video — Hàng Quốc Tế", exp: "Hết hạn 30/11/2026", chk: "ANM, 00:13 02/11" },
-  { code: "VIDEO-1541813816692740", off: "Giảm 20% tối đa 200K", cond: "Đơn từ 150K", fam: "Shopee Video — Hàng Quốc Tế", exp: "Hết hạn 30/11/2026", chk: "ANM, 00:13 02/11" }
+  { code: "2511HB500K", off: "Giảm 22% tối đa 500K", cond: "Đơn từ 1000K", fam: "Toàn sàn Shopee", exp: "Hết hạn 05/11/2026", chk: "ANM, 00:14 03/11" },
+  { code: "2511SWALL3000K", off: "Giảm 19% tối đa 3000K", cond: "Đơn từ 5000K", fam: "Toàn sàn Shopee", exp: "Hết hạn 05/11/2026", chk: "ANM, 00:14 03/11" },
+  { code: "0211HOMEBK2000", off: "Giảm 19% tối đa 2000K", cond: "Đơn từ 3000K", fam: "Toàn sàn Shopee", exp: "Hết hạn 10/11/2026", chk: "ANM, 00:14 03/11" },
+  { code: "2511SWALL1000K2", off: "Giảm 19% tối đa 1000K", cond: "Đơn từ 3000K", fam: "Toàn sàn Shopee", exp: "Hết hạn 05/11/2026", chk: "ANM, 00:14 03/11" },
+  { code: "0211HOMEBK700", off: "Giảm 19% tối đa 700K", cond: "Đơn từ 1000K", fam: "Toàn sàn Shopee", exp: "Hết hạn 10/11/2026", chk: "ANM, 00:14 03/11" },
+  { code: "2511SWALL600K2", off: "Giảm 19% tối đa 600K", cond: "Đơn từ 1000K", fam: "Toàn sàn Shopee", exp: "Hết hạn 05/11/2026", chk: "ANM, 00:14 03/11" },
+  { code: "0211HOMEBK250", off: "Giảm 19% tối đa 250K", cond: "Đơn từ 500K", fam: "Toàn sàn Shopee", exp: "Hết hạn 10/11/2026", chk: "ANM, 00:14 03/11" },
+  { code: "2511SWALL200K2", off: "Giảm 18% tối đa 200K", cond: "Đơn từ 600K", fam: "Toàn sàn Shopee", exp: "Hết hạn 05/11/2026", chk: "ANM, 00:14 03/11" },
+  { code: "2511SWALL100K2", off: "Giảm 18% tối đa 100K", cond: "Đơn từ 250K", fam: "Toàn sàn Shopee", exp: "Hết hạn 05/11/2026", chk: "ANM, 00:14 03/11" },
+  { code: "VIDEO-1541813832814592", off: "Giảm 20% tối đa 1200K", cond: "Đơn từ 1200K", fam: "Shopee Video — Hàng Quốc Tế", exp: "Hết hạn 30/11/2026", chk: "ANM, 00:14 03/11" },
+  { code: "VIDEO-1541813816561664", off: "Giảm 20% tối đa 700K", cond: "Đơn từ 850K", fam: "Shopee Video — Hàng Quốc Tế", exp: "Hết hạn 30/11/2026", chk: "ANM, 00:14 03/11" },
+  { code: "VIDEO-1541813816692740", off: "Giảm 20% tối đa 200K", cond: "Đơn từ 150K", fam: "Shopee Video — Hàng Quốc Tế", exp: "Hết hạn 30/11/2026", chk: "ANM, 00:14 03/11" }
 ];
 
 const PRODUCTS = [
