@@ -41,6 +41,7 @@
   --fs-base:19px;
   --tap:56px;
 }
+html[data-font="small"]{ --fs-base:16.5px; }
 html[data-font="large"]{ --fs-base:21.5px; }
 html[data-font="xlarge"]{ --fs-base:24px; }
 @media (prefers-color-scheme: dark){
@@ -585,6 +586,350 @@ html.hc .pick-chip[aria-pressed="true"]{color:#fff}
   *,*::before,*::after{animation-duration:.001s !important; transition-duration:.001s !important; scroll-behavior:auto !important}
   .fc-inner{transition:none}
 }
+
+/* ============================================================
+   V4 — MOBILE TYPOGRAPHY, LAYOUT & CONTRAST (tối ưu điện thoại)
+   Sàn chữ 16px cho mọi nội dung · tiêu đề clamp() · lưới tự
+   xuống 1 cột ở mức chữ Rất lớn · sửa contrast nút cam/xanh.
+   ============================================================ */
+html{-webkit-text-size-adjust:100%; text-size-adjust:100%}
+body{line-height:1.65}
+h1,h2,h3,p,button,a,span,div{overflow-wrap:break-word}
+button{line-height:1.4}
+header.site{padding-top:env(safe-area-inset-top,0px)}
+footer.site{padding-bottom:calc(46px + env(safe-area-inset-bottom,0px))}
+
+/* --- Tiêu đề co giãn theo bề ngang màn hình --- */
+.hero h1{font-size:clamp(30px,8.5vw,44px); line-height:1.28}
+.lesson-head h1{font-size:clamp(28px,8vw,40px); line-height:1.3}
+.sec-head h2{font-size:clamp(24px,6.8vw,34px); line-height:1.32}
+.total-banner h2{font-size:clamp(24px,6.8vw,32px); line-height:1.32}
+.sub-h{font-size:clamp(22px,6vw,28px); line-height:1.35}
+.panel h3,.step-card h3,.tip h3{line-height:1.4}
+
+/* --- SÀN CỠ CHỮ 16px: không chữ nội dung nào nhỏ hơn --- */
+.brand span{font-size:max(16px,.9em)}
+.brand b{font-size:max(18px,1.12em); line-height:1.35}
+.a11y-label{font-size:max(16px,.82em)}
+.seg button{font-size:max(16px,.85em)}
+.btn-hc{font-size:max(16px,.85em)}
+.btn-sm{font-size:max(16px,.88em)}
+.icon-btn{font-size:max(16px,.85em)}
+.hero-eyebrow{font-size:max(16px,.85em); line-height:1.45}
+.hero-note{font-size:max(16px,.9em); line-height:1.6}
+.hero-card .hc-tag{font-size:max(16px,.8em); line-height:1.45}
+.hero-card .hc-ex{font-size:max(16px,.95em); line-height:1.6}
+.hero-mini span{font-size:max(16px,.78em); line-height:1.45}
+.stat span{font-size:max(16px,.85em); line-height:1.5}
+.bar-label{font-size:max(16px,.92em); line-height:1.55}
+.badge-chip{font-size:max(16px,.85em); line-height:1.45}
+.step-card p{font-size:max(16px,.95em); line-height:1.65}
+.panel .panel-sub{font-size:max(16px,.92em); line-height:1.6}
+.wotd-from{font-size:max(16px,.85em); line-height:1.55}
+.review-item .rv{font-size:max(16px,.9em)}
+.review-item .rw{font-size:max(17px,1.02em)}
+.lc-done{font-size:max(16px,.78em); padding:8px 14px; line-height:1.4}
+.lesson-card .lc-goal{font-size:max(16px,.93em); line-height:1.65}
+.lc-meta span{font-size:max(16px,.8em); padding:7px 14px; line-height:1.45}
+.rm-dot{padding:10px 8px; gap:2px}
+.rm-dot small{font-size:max(16px,.52em); line-height:1.2; letter-spacing:.02em}
+.rm-dot big{font-size:max(22px,1.3em); line-height:1.1}
+.rm-level{font-size:max(16px,.92em); line-height:1.55}
+.rm-flag{font-size:max(16px,.85em); line-height:1.45}
+.rm-topics span{font-size:max(16px,.86em); line-height:1.5; padding:8px 14px}
+.rm-desc{font-size:max(16px,1em); line-height:1.65}
+.rm-goal{font-size:max(16px,1em); line-height:1.65}
+.rm-note{font-size:max(16px,.95em); line-height:1.6}
+.tip p{font-size:max(16px,.93em); line-height:1.65}
+footer.site p{font-size:max(16px,.9em); line-height:1.65}
+.tab-btn{font-size:max(16px,.95em)}
+.vocab-row .v-ipa{font-size:max(17px,.95em); line-height:1.55}
+.vocab-row .v-vi{font-size:max(17px,1.02em); line-height:1.6}
+.vocab-row .v-ex{font-size:max(16px,.9em); line-height:1.6}
+.learned-toggle{font-size:max(16px,.85em)}
+.rb-step b{font-size:max(16px,.82em); line-height:1.45}
+.rb-step span{font-size:max(16px,.95em); line-height:1.6}
+.rb-status{font-size:max(17px,1.02em); line-height:1.55}
+.rb-score{font-size:max(17px,1em)}
+.rb-line{font-size:max(17px,1em); line-height:1.6}
+.rb-note{font-size:max(16px,1em); line-height:1.6}
+.wcheck{font-size:max(17px,.98em); line-height:1.45}
+.num-chip span{font-size:max(16px,.85em)}
+.num-chip small{font-size:max(16px,.75em); line-height:1.45}
+.fc-face .fc-hint{font-size:max(16px,.8em); line-height:1.45}
+.fc-ex{font-size:max(16px,.95em); line-height:1.6}
+.bubble .who{font-size:max(16px,.8em); line-height:1.45}
+.bubble .vi{font-size:max(16px,.93em); line-height:1.6}
+.bubble .en{font-size:max(18px,1.18em); line-height:1.55}
+.pick-chip{font-size:max(16px,.88em)}
+.quiz-q .q-tag{font-size:max(16px,.78em); line-height:1.45}
+.quiz-q .q-text{font-size:max(18px,1.15em); line-height:1.6}
+.q-explain{font-size:max(16px,1em); line-height:1.65}
+.order-zone .oz-empty{font-size:max(16px,.92em)}
+.speak-vi,.speak-status,.speak-heard{font-size:max(16px,1em); line-height:1.6}
+.feedback{font-size:max(16px,1em); line-height:1.65}
+.lesson-goal{font-size:max(17px,1em); line-height:1.65}
+.sub-p,.sec-head p{font-size:max(16px,1em); line-height:1.65}
+.hero-sub{line-height:1.65}
+.toast{font-size:max(17px,1em); line-height:1.5}
+.no-support,.empty-note{font-size:max(16px,1em); line-height:1.65}
+.fc-progress{font-size:max(16px,1em)}
+
+/* --- SỬA CONTRAST (số đo detector: cam 1.9:1 / hover 1.4:1) ---
+   Chế độ tối: nền cam/xanh lá sáng → chữ nâu/đen đậm trên đó,
+   đạt ≥7:1, vẫn giữ tông ấm. Chế độ sáng giữ nguyên vì nền đã đậm. */
+@media (prefers-color-scheme: dark){
+  .btn-accent{color:#2A1402}
+  .btn-accent:hover{color:#2A1402}
+  .rm-flag.here{color:#2A1402}
+  .mic-btn{color:#2A1402}
+  .avatar.av-b{background:var(--accent)}
+  .icon-btn.mic.listening{color:#2A1402}
+  .btn-soft{color:#CDEED6}
+  .word-chip{color:#CDEED6}
+  .stat b,.hero-mini b,.num-chip span{color:#93D6A6}
+}
+/* Tương phản cao luôn thắng: nền đã đậm → chữ trắng */
+html.hc .btn-accent, html.hc .btn-accent:hover,
+html.hc .rm-flag.here, html.hc .mic-btn,
+html.hc .icon-btn.mic.listening{color:#FFF6EC}
+html.hc .btn-soft, html.hc .word-chip{color:#003D1E}
+html.hc .stat b, html.hc .hero-mini b, html.hc .num-chip span{color:#003D1E}
+
+/* ============ BỐ CỤC ĐIỆN THOẠI ≤700px ============ */
+@media (max-width:700px){
+  .wrap{padding-left:max(16px,env(safe-area-inset-left,0px)); padding-right:max(16px,env(safe-area-inset-right,0px))}
+  /* Header xếp chồng gọn, nút chỉnh chữ chạm ≥56px */
+  .header-in{flex-direction:column; align-items:stretch; gap:10px; padding:10px 0 12px}
+  .brand{margin-right:0}
+  .brand .brand-mark{display:flex}
+  .brand>span:last-child{display:block}
+  .a11y-bar{width:100%; gap:10px}
+  .a11y-label{width:100%}
+  .seg{width:100%}
+  .seg button{flex:1 1 0; min-height:56px; padding:10px 4px; white-space:normal}
+  .btn-hc{width:100%; min-height:56px}
+  /* Hero gọn lại */
+  .hero{padding:24px 0 16px}
+  .hero-grid{gap:20px}
+  .hero-card{padding:20px}
+  .hero-card .hc-word{font-size:clamp(30px,9vw,40px)}
+  .hero-cta .btn{flex:1 1 100%; min-height:56px}
+  .hero-mini{flex-wrap:wrap}
+  .hero-mini div{flex:1 1 30%; min-width:88px}
+  section.block{padding:24px 0}
+  .progress-card,.panel{padding:20px}
+  /* Thống kê tiến độ 2×2 */
+  .progress-top{display:grid; grid-template-columns:1fr 1fr; gap:16px 14px}
+  .lesson-grid,.steps,.tips,.two-col{grid-template-columns:1fr}
+  /* Từ vựng: xếp dọc, nút lưới 2/hàng, mỗi nút ≥56px */
+  .vocab-row{flex-direction:column; align-items:stretch; gap:12px; padding:16px}
+  .vocab-row .v-main{flex:none; min-width:0; width:100%}
+  .vocab-row .v-en{font-size:clamp(24px,7.2vw,28px) !important; line-height:1.3}
+  .v-btns{display:grid; grid-template-columns:1fr 1fr; gap:10px; width:100%}
+  .v-btns .icon-btn,.v-btns .learned-toggle{width:100%; min-height:56px; height:auto; justify-content:center; text-align:center; padding:10px 8px; white-space:normal}
+  .v-btns .learned-toggle{grid-column:1/-1}
+  .rb-panel{padding:16px}
+  .rb-actions{display:grid; grid-template-columns:1fr 1fr; gap:10px}
+  .rb-actions .icon-btn{min-height:56px; justify-content:center; white-space:normal; text-align:center}
+  .rb-steps{grid-template-columns:1fr}
+  /* Flashcard: đủ cao, chữ mặt thẻ ≥26px */
+  .fc-card{height:340px}
+  .fc-face{padding:20px 16px}
+  .fc-word{font-size:clamp(26px,8.5vw,40px)}
+  .fc-vi{font-size:clamp(26px,7vw,30px)}
+  .fc-controls{display:grid; grid-template-columns:1fr 1fr; gap:10px}
+  .fc-controls .btn{min-height:56px; white-space:normal; text-align:center}
+  /* Hội thoại full-width */
+  .dlg-line{max-width:100%}
+  .dlg-line .bubble{min-width:0}
+  .bubble{padding:14px 16px}
+  .avatar{width:48px; height:48px}
+  /* Quiz: đáp án full-width ≥56px */
+  .q-opts{grid-template-columns:1fr}
+  .q-opt{min-height:56px; height:auto; font-size:max(17px,1em); padding:14px 16px}
+  .quiz-q{padding:18px 16px}
+  .word-chip{min-height:56px}
+  /* Tabs: 2 nút/hàng, chạm dễ */
+  .tabs{gap:8px}
+  .tab-btn{flex:1 1 calc(50% - 8px); min-height:56px; padding:10px 8px; text-align:center; white-space:normal}
+  /* Lộ trình: mốc to hơn, có padding, hết cramped-padding */
+  .roadmap::before{left:35px}
+  .rm-stage{gap:12px; padding:12px 0}
+  .rm-dot{width:76px; height:76px; flex:none}
+  .rm-card{padding:18px 16px}
+  .rm-top{flex-direction:column; gap:8px}
+  .rm-flag{align-self:flex-start}
+  /* Ôn lại + số đếm */
+  .review-item{flex-direction:column; align-items:stretch}
+  .review-item .sp{margin-left:0; display:grid; grid-template-columns:1fr 1fr; gap:8px}
+  .review-item .sp .icon-btn{min-height:56px; justify-content:center}
+  .numbers-strip{gap:8px}
+  .num-chip{flex:1 1 96px; min-width:96px; min-height:84px; padding:12px 8px}
+  .total-banner{padding:22px 18px; gap:14px}
+  .total-banner .btn{margin-left:0; width:100%; min-height:56px}
+  .speak-box{padding:20px 16px}
+  .speak-target{font-size:clamp(26px,7.5vw,32px)}
+  .sentence-pick .pick-chip{flex:1 1 28%}
+  .lesson-head{padding:20px 0 4px}
+  .step-card,.tip{padding:20px}
+}
+
+/* ============ MÀN HÌNH RẤT NHỎ ≤400px ============ */
+@media (max-width:400px){
+  .wrap{padding-left:max(12px,env(safe-area-inset-left,0px)); padding-right:max(12px,env(safe-area-inset-right,0px))}
+  .brand>span:last-child>span{display:none}
+  .seg button{padding:10px 2px}
+  .v-btns .icon-btn{padding:10px 4px; gap:6px}
+  .v-btns .icon-btn svg{width:18px; height:18px}
+  .rm-dot{width:72px; height:72px}
+  .roadmap::before{left:33px}
+  .progress-top{gap:12px 10px}
+  .fc-controls{grid-template-columns:1fr}
+  .dlg-line{gap:8px}
+  .avatar{width:44px; height:44px}
+}
+
+/* Mức chữ Rất lớn: mọi lưới xuống 1 cột, không tràn ngang kể cả 320px */
+@media (max-width:900px){
+  html[data-font="xlarge"] .lesson-grid,
+  html[data-font="xlarge"] .steps,
+  html[data-font="xlarge"] .tips,
+  html[data-font="xlarge"] .two-col,
+  html[data-font="xlarge"] .q-opts{grid-template-columns:1fr}
+  html[data-font="xlarge"] .hero-grid{grid-template-columns:1fr}
+  html[data-font="xlarge"] .tab-btn{flex:1 1 100%}
+  html[data-font="xlarge"] .fc-controls{grid-template-columns:1fr}
+}
+html[data-font="xlarge"] .vocab-row .v-main{min-width:0}
+
+
+/* --- V4.1: nút <button> phải thừa hưởng cỡ chữ trang (trước đây
+   thẻ bài học/số đếm/thẻ ghi nhớ bị UA thu xuống 13.3px) + khóa
+   min-width cho các ô lưới để chữ Rất lớn không đẩy tràn trang --- */
+button{font-size:inherit}
+.lc-open{font-size:max(17px,1em)}
+.fc-card{font-size:inherit}
+@media (max-width:700px){
+  .two-col,.steps,.tips,.lesson-grid{grid-template-columns:minmax(0,1fr)}
+  .two-col>*,.steps>*,.tips>*,.lesson-grid>*,.progress-top>*,.hero-grid>*{min-width:0}
+  .hero-mini{display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:10px}
+  .hero-mini div{min-width:0; flex:none}
+}
+
+/* ============================================================
+   V5 — BỘ NGHE XỊN (WHISPER CHẠY NGAY TRÊN MÁY) + PHÂN TÍCH ÂM
+   ============================================================ */
+.engine-card{
+  background:var(--surface); border:2px solid var(--primary); border-radius:var(--r-md);
+  padding:20px; margin-bottom:20px; box-shadow:var(--shadow-sm);
+}
+.engine-title{font-family:var(--font-display); font-weight:700; font-size:max(19px,1.18em); line-height:1.35}
+.engine-desc{margin-top:6px; font-weight:600}
+.engine-status{margin-top:12px; font-weight:800; color:var(--primary-strong)}
+.engine-note{margin-top:10px; color:var(--muted); font-weight:600}
+.engine-desc,.engine-status,.engine-note,.rb-phon{font-size:max(16px,1em); line-height:1.6}
+.wx-bar{height:16px; margin-top:12px; background:var(--surface-2); border:2px solid var(--border-strong); border-radius:999px; overflow:hidden}
+.wx-fill{height:100%; width:0%; background:var(--primary); border-radius:999px; transition:width .35s ease}
+.engine-card .rb-actions{margin-top:14px}
+.engine-card .btn{min-height:56px}
+.rb-phon{margin-top:12px; background:var(--primary-soft); border:1.5px solid var(--primary); border-radius:var(--r-sm); padding:12px 14px; font-weight:600}
+.rb-phon b{display:block; margin-bottom:4px; color:var(--primary-strong)}
+.rb-phon p{margin-top:4px}
+.rec-time{font-variant-numeric:tabular-nums}
+@media (max-width:700px){
+  .engine-card{padding:16px}
+  .engine-card .btn{width:100%}
+}
+
+/* ============================================================
+   V5.1 — MỨC CỠ CHỮ “NHỎ” (người mắt tốt, xem được nhiều hơn)
+   Mức này do người dùng CHỦ ĐỘNG chọn nên sàn chữ riêng là 14px
+   (thay vì 16px của các mức còn lại) — không chữ nội dung nào
+   dưới 14px; nút bấm vẫn giữ nguyên chiều cao ≥56px (--tap
+   không đổi theo mức chữ); tiêu đề co nhẹ để vừa màn hình hơn.
+   ============================================================ */
+html[data-font="small"] .brand span{font-size:max(14px,.9em)}
+html[data-font="small"] .brand b{font-size:max(16px,1.12em)}
+html[data-font="small"] .a11y-label{font-size:max(14px,.82em)}
+html[data-font="small"] .seg button{font-size:max(14px,.85em)}
+html[data-font="small"] .btn-hc{font-size:max(14px,.85em)}
+html[data-font="small"] .btn-sm{font-size:max(14px,.88em)}
+html[data-font="small"] .icon-btn{font-size:max(14px,.85em)}
+html[data-font="small"] .hero-eyebrow{font-size:max(14px,.85em)}
+html[data-font="small"] .hero-note{font-size:max(14px,.9em)}
+html[data-font="small"] .hero-card .hc-tag{font-size:max(14px,.8em)}
+html[data-font="small"] .hero-card .hc-ex{font-size:max(14px,.95em)}
+html[data-font="small"] .hero-mini span{font-size:max(14px,.78em)}
+html[data-font="small"] .stat span{font-size:max(14px,.85em)}
+html[data-font="small"] .bar-label{font-size:max(14px,.92em)}
+html[data-font="small"] .badge-chip{font-size:max(14px,.85em)}
+html[data-font="small"] .step-card p{font-size:max(14px,.95em)}
+html[data-font="small"] .panel .panel-sub{font-size:max(14px,.92em)}
+html[data-font="small"] .wotd-from{font-size:max(14px,.85em)}
+html[data-font="small"] .review-item .rv{font-size:max(14px,.9em)}
+html[data-font="small"] .review-item .rw{font-size:max(15px,1.02em)}
+html[data-font="small"] .lc-done{font-size:max(14px,.78em)}
+html[data-font="small"] .lesson-card .lc-goal{font-size:max(14px,.93em)}
+html[data-font="small"] .lc-meta span{font-size:max(14px,.8em)}
+html[data-font="small"] .rm-dot small{font-size:max(14px,.52em)}
+html[data-font="small"] .rm-dot big{font-size:max(20px,1.3em)}
+html[data-font="small"] .rm-level{font-size:max(14px,.92em)}
+html[data-font="small"] .rm-flag{font-size:max(14px,.85em)}
+html[data-font="small"] .rm-topics span{font-size:max(14px,.86em)}
+html[data-font="small"] .rm-desc{font-size:max(14px,1em)}
+html[data-font="small"] .rm-goal{font-size:max(14px,1em)}
+html[data-font="small"] .rm-note{font-size:max(14px,.95em)}
+html[data-font="small"] .tip p{font-size:max(14px,.93em)}
+html[data-font="small"] footer.site p{font-size:max(14px,.9em)}
+html[data-font="small"] .tab-btn{font-size:max(14px,.95em)}
+html[data-font="small"] .vocab-row .v-ipa{font-size:max(15px,.95em)}
+html[data-font="small"] .vocab-row .v-vi{font-size:max(15px,1.02em)}
+html[data-font="small"] .vocab-row .v-ex{font-size:max(14px,.9em)}
+html[data-font="small"] .learned-toggle{font-size:max(14px,.85em)}
+html[data-font="small"] .rb-step b{font-size:max(14px,.82em)}
+html[data-font="small"] .rb-step span{font-size:max(14px,.95em)}
+html[data-font="small"] .rb-status{font-size:max(15px,1.02em)}
+html[data-font="small"] .rb-score{font-size:max(15px,1em)}
+html[data-font="small"] .rb-line{font-size:max(15px,1em)}
+html[data-font="small"] .rb-note{font-size:max(14px,1em)}
+html[data-font="small"] .wcheck{font-size:max(15px,.98em)}
+html[data-font="small"] .num-chip span{font-size:max(14px,.85em)}
+html[data-font="small"] .num-chip small{font-size:max(14px,.75em)}
+html[data-font="small"] .fc-face .fc-hint{font-size:max(14px,.8em)}
+html[data-font="small"] .fc-ex{font-size:max(14px,.95em)}
+html[data-font="small"] .bubble .who{font-size:max(14px,.8em)}
+html[data-font="small"] .bubble .vi{font-size:max(14px,.93em)}
+html[data-font="small"] .bubble .en{font-size:max(16px,1.18em)}
+html[data-font="small"] .pick-chip{font-size:max(14px,.88em)}
+html[data-font="small"] .quiz-q .q-tag{font-size:max(14px,.78em)}
+html[data-font="small"] .quiz-q .q-text{font-size:max(16px,1.15em)}
+html[data-font="small"] .q-explain{font-size:max(14px,1em)}
+html[data-font="small"] .order-zone .oz-empty{font-size:max(14px,.92em)}
+html[data-font="small"] .speak-vi, html[data-font="small"] .speak-status, html[data-font="small"] .speak-heard{font-size:max(14px,1em)}
+html[data-font="small"] .feedback{font-size:max(14px,1em)}
+html[data-font="small"] .lesson-goal{font-size:max(15px,1em)}
+html[data-font="small"] .sub-p, html[data-font="small"] .sec-head p{font-size:max(14px,1em)}
+html[data-font="small"] .toast{font-size:max(15px,1em)}
+html[data-font="small"] .no-support, html[data-font="small"] .empty-note{font-size:max(14px,1em)}
+html[data-font="small"] .fc-progress{font-size:max(14px,1em)}
+html[data-font="small"] .lc-open{font-size:max(15px,1em)}
+html[data-font="small"] .engine-desc, html[data-font="small"] .engine-status,
+html[data-font="small"] .engine-note, html[data-font="small"] .rb-phon{font-size:max(14px,1em)}
+html[data-font="small"] .engine-title{font-size:max(17px,1.18em)}
+html[data-font="small"] .q-opt{font-size:max(15px,1em)}
+/* Tiêu đề co nhẹ ở mức Nhỏ để xem được nhiều nội dung hơn */
+html[data-font="small"] .hero h1{font-size:clamp(26px,8vw,38px)}
+html[data-font="small"] .lesson-head h1{font-size:clamp(25px,7.5vw,36px)}
+html[data-font="small"] .sec-head h2{font-size:clamp(22px,6.5vw,30px)}
+html[data-font="small"] .total-banner h2{font-size:clamp(22px,6.5vw,29px)}
+html[data-font="small"] .sub-h{font-size:clamp(20px,5.8vw,25px)}
+/* Nhóm 4 nút cỡ chữ: màn hẹp thì tự xếp 2 nút một hàng, vẫn cao 56px */
+@media (max-width:560px){
+  .seg{flex-wrap:wrap}
+  .seg button{flex:1 1 42%; min-height:56px}
+}
+
 </style>
 </head>
 <body>
@@ -598,6 +943,7 @@ html.hc .pick-chip[aria-pressed="true"]{color:#fff}
     <div class="a11y-bar" role="group" aria-label="Tùy chỉnh hiển thị">
       <span class="a11y-label" id="fsLabel">Cỡ chữ:</span>
       <div class="seg" role="group" aria-labelledby="fsLabel">
+        <button type="button" data-fs="small" aria-pressed="false">Nhỏ</button>
         <button type="button" data-fs="normal" aria-pressed="true">Thường</button>
         <button type="button" data-fs="large" aria-pressed="false">Lớn</button>
         <button type="button" data-fs="xlarge" aria-pressed="false">Rất lớn</button>
@@ -884,14 +1230,22 @@ html.hc .pick-chip[aria-pressed="true"]{color:#fff}
 
     <section class="tab-panel active" id="panel-vocab" role="tabpanel" aria-label="Từ vựng">
       <h2 class="sub-h">Từ vựng của bài</h2>
-      <p class="sub-p">Mỗi từ có 3 nút nghe: <b>Nghe thường</b>, <b>Nghe chậm</b> và <b>Nghe rất chậm</b>. Nghe xong, bấm <b>Đọc lại</b> và đọc to vào mic — trang web sẽ nghe lại, chỉ ngay từ nào đúng, từ nào sai để bác sửa luôn tại chỗ. Học thuộc từ nào, bấm “Đã thuộc” ở từ đó.</p>
+      <p class="sub-p">Mỗi từ có 3 nút nghe: <b>Nghe thường</b>, <b>Nghe chậm</b> và <b>Nghe rất chậm</b>. Nghe xong, bấm <b>Đọc lại</b> và đọc to vào mic — trang web sẽ nghe lại, chỉ ngay từ nào đúng, từ nào sai để bác sửa luôn tại chỗ. Nếu đã bật <b>Bộ nghe xịn</b> ở thẻ dưới đây, trang ghi âm và nghe ngay trên máy: bác nghe lại được giọng mình và biết rõ âm nào chưa đúng. Học thuộc từ nào, bấm “Đã thuộc” ở từ đó.</p>
       <div class="rb-steps" aria-label="Cách luyện nghe và đọc lại">
         <div class="rb-step"><b>Bước 1 · Nghe</b><span>Bấm Nghe thường, Nghe chậm hoặc Nghe rất chậm để nghe mẫu thật kỹ.</span></div>
         <div class="rb-step"><b>Bước 2 · Đọc lại</b><span>Bấm nút “Đọc lại” màu cam rồi đọc to vào mic, giống như mẫu vừa nghe.</span></div>
         <div class="rb-step"><b>Bước 3 · Sửa ngay</b><span>Từ đọc đúng sẽ tô xanh kèm dấu ✓, từ sai hoặc thiếu sẽ tô đỏ kèm dấu ✗ — nghe chậm lại và đọc lại ngay tại chỗ.</span></div>
       </div>
+      <div class="engine-card" data-engine-card>
+        <p class="engine-title">Bộ nghe xịn — nghe ngay trên máy của bác</p>
+        <p class="engine-desc">Bật bộ nghe này, trang web sẽ <b>ghi âm rồi tự nghe ngay trên máy</b> của bác: lúc nói <b>không cần mạng</b>, không còn lỗi “mất mạng” giữa chừng, chấm xong còn chỉ rõ <b>âm nào chưa đúng</b>, và bác <b>nghe lại được giọng của chính mình</b> để tự sửa.</p>
+        <p class="engine-status" data-wx-status aria-live="polite">Chưa bật.</p>
+        <div class="wx-bar" data-wx-bar style="display:none" role="progressbar" aria-label="Tiến độ tải bộ nghe"><div class="wx-fill" data-wx-fill></div></div>
+        <div class="rb-actions"><button type="button" class="btn btn-primary" data-wx-btn>Bật bộ nghe xịn</button></div>
+        <p class="engine-note" data-wx-note>Lần đầu bật cần tải bộ nghe khoảng <b>40MB</b> — bác nên bật khi đang có Wi-Fi. Chỉ tải <b>1 lần duy nhất</b>, máy tự lưu cho những lần sau. Khi chưa bật, nút “Đọc lại” vẫn nghe theo cách cũ qua mạng.</p>
+      </div>
       <div id="rbNoSupport" class="no-support" style="display:none; margin-bottom:20px">
-        <p><b>Lưu ý:</b> trình duyệt này chưa nghe được giọng nói nên chưa chấm đọc được. Bác hãy mở trang bằng <b>Google Chrome</b> (trên điện thoại Android hoặc máy tính) để dùng nút “Đọc lại”. Trong lúc đó, bác cứ bấm <b>Nghe chậm / Nghe rất chậm</b> rồi đọc to theo 3 lần — cách này vẫn rất hiệu quả.</p>
+        <p><b>Lưu ý:</b> trình duyệt này chưa nghe được giọng nói qua mạng nên chưa chấm đọc theo cách cũ được. Bác hãy mở trang bằng <b>Google Chrome</b> (trên điện thoại Android hoặc máy tính), hoặc bấm nút <b>“Bật bộ nghe xịn”</b> ở thẻ ngay phía trên để trang ghi âm và nghe ngay trên máy. Trong lúc đó, bác cứ bấm <b>Nghe chậm / Nghe rất chậm</b> rồi đọc to theo 3 lần — cách này vẫn rất hiệu quả.</p>
       </div>
       <div class="vocab-list" id="vocabList"></div>
       <div id="numbersWrap"></div>
@@ -943,7 +1297,15 @@ html.hc .pick-chip[aria-pressed="true"]{color:#fff}
 
     <section class="tab-panel" id="panel-speak" role="tabpanel" aria-label="Luyện nói">
       <h2 class="sub-h">Luyện nói theo câu mẫu</h2>
-      <p class="sub-p">Chọn một câu, bấm nút loa để nghe trước, rồi bấm nút mic tròn và đọc to câu đó. Trang web sẽ nghe và cho bác biết đã đúng chưa.</p>
+      <p class="sub-p">Chọn một câu, bấm nút loa để nghe trước, rồi bấm nút mic tròn và đọc to câu đó. Trang web sẽ nghe và cho bác biết đã đúng chưa. Nếu đã bật <b>Bộ nghe xịn</b>, máy sẽ ghi âm rồi tự nghe ngay trên máy — không cần mạng lúc nói, và bác nghe lại được giọng của mình.</p>
+      <div class="engine-card" data-engine-card>
+        <p class="engine-title">Bộ nghe xịn — nghe ngay trên máy của bác</p>
+        <p class="engine-desc">Bật bộ nghe này, trang web sẽ <b>ghi âm rồi tự nghe ngay trên máy</b> của bác: lúc nói <b>không cần mạng</b>, không còn lỗi “mất mạng” giữa chừng, và bác <b>nghe lại được giọng của chính mình</b> để tự sửa.</p>
+        <p class="engine-status" data-wx-status aria-live="polite">Chưa bật.</p>
+        <div class="wx-bar" data-wx-bar style="display:none" role="progressbar" aria-label="Tiến độ tải bộ nghe"><div class="wx-fill" data-wx-fill></div></div>
+        <div class="rb-actions"><button type="button" class="btn btn-primary" data-wx-btn>Bật bộ nghe xịn</button></div>
+        <p class="engine-note" data-wx-note>Lần đầu bật cần tải bộ nghe khoảng <b>40MB</b> — bác nên bật khi đang có Wi-Fi. Chỉ tải <b>1 lần duy nhất</b>, máy tự lưu cho những lần sau. Khi chưa bật, nút mic vẫn nghe theo cách cũ qua mạng.</p>
+      </div>
       <div id="speakSupported">
         <div class="speak-box">
           <div class="sentence-pick" id="speakPick"></div>
@@ -958,6 +1320,7 @@ html.hc .pick-chip[aria-pressed="true"]{color:#fff}
           </button>
           <p class="speak-status" id="speakStatus">Bấm nút mic rồi đọc to câu ở trên nhé</p>
           <p class="speak-heard" id="speakHeard" aria-live="polite"></p>
+          <div style="text-align:center"><button type="button" class="icon-btn slow" id="speakPlayBtn" style="display:none">Nghe lại giọng của bác</button></div>
           <div class="feedback" id="speakFeedback" role="status"></div>
         </div>
       </div>
@@ -1207,7 +1570,7 @@ var TOTAL_QUIZ = [
 
 /* ================= STATE (localStorage) ================= */
 var STORE_KEY = "tieng-anh-nguoi-moi-v1";
-var state = { learned:{}, completed:{}, quizBest:{}, streak:0, lastDay:"", totalBest:0, practice:{} };
+var state = { learned:{}, completed:{}, quizBest:{}, streak:0, lastDay:"", totalBest:0, practice:{}, whisper:0 };
 function loadState(){
   try{
     var raw = localStorage.getItem(STORE_KEY);
@@ -1419,6 +1782,7 @@ function renderLessonGridCounts(){
 
 /* ================= VIEW SWITCHING ================= */
 function showView(id){
+  MicSessions.cancelCurrent();
   ["viewHome","viewLesson","viewTotal"].forEach(function(v){
     document.getElementById(v).classList.toggle("active", v===id);
   });
@@ -1439,6 +1803,7 @@ function openLesson(id){
   showView("viewLesson");
 }
 function switchTab(name){
+  MicSessions.cancelCurrent();
   document.querySelectorAll(".tab-btn").forEach(function(b){
     b.setAttribute("aria-selected", b.getAttribute("data-tab")===name ? "true" : "false");
   });
@@ -1620,8 +1985,9 @@ function renderSpeakPick(){
     pick.appendChild(c);
   });
   var SR = window.SpeechRecognition || window.webkitSpeechRecognition;
-  document.getElementById("speakSupported").style.display = SR ? "block" : "none";
-  document.getElementById("speakUnsupported").style.display = SR ? "none" : "block";
+  var canSpeak = !!SR || wxSupported();
+  document.getElementById("speakSupported").style.display = canSpeak ? "block" : "none";
+  document.getElementById("speakUnsupported").style.display = canSpeak ? "none" : "block";
   syncSpeakTarget();
 }
 function syncSpeakTarget(){
@@ -1631,6 +1997,7 @@ function syncSpeakTarget(){
   document.getElementById("speakStatus").textContent = "Bấm nút mic rồi đọc to câu ở trên nhé";
   document.getElementById("speakHeard").textContent = "";
   var f = document.getElementById("speakFeedback"); f.className = "feedback"; f.textContent = "";
+  var pb = document.getElementById("speakPlayBtn"); if(pb) pb.style.display = "none";
 }
 document.getElementById("speakListenN").addEventListener("click", function(){ if(speakItems.length) speak(speakItems[speakIndex].en, 1); });
 document.getElementById("speakListenS").addEventListener("click", function(){ if(speakItems.length) speak(speakItems[speakIndex].en, 0.5); });
@@ -1641,48 +2008,237 @@ function similarity(a, b){
   var hit = 0; wb.forEach(function(w){ if(wa.indexOf(w) >= 0) hit++; });
   return hit / wb.length;
 }
-document.getElementById("micBtn").addEventListener("click", function(){
-  var SR = window.SpeechRecognition || window.webkitSpeechRecognition;
-  if(!SR){ toast("Trình duyệt này chưa hỗ trợ luyện nói. Bác hãy dùng Chrome nhé."); return; }
-  if(listening && recog){ try{ recog.stop(); }catch(e){} return; }
-  try{
-    recog = new SR(); recog.lang = "en-US"; recog.interimResults = false; recog.maxAlternatives = 1;
-  }catch(e){ toast("Chưa bật được mic lúc này, bác thử lại nhé."); return; }
-  var btn = document.getElementById("micBtn"), status = document.getElementById("speakStatus"), heard = document.getElementById("speakHeard"), fb = document.getElementById("speakFeedback");
-  recog.onstart = function(){ listening = true; btn.classList.add("listening"); status.textContent = "Đang nghe… bác đọc to câu mẫu nhé!"; fb.className="feedback"; fb.textContent=""; };
-  recog.onend = function(){ listening = false; btn.classList.remove("listening"); };
-  recog.onerror = function(ev){
-    listening = false; btn.classList.remove("listening");
-    if(ev.error === "not-allowed"){ status.textContent = "Trang web chưa được phép dùng mic. Bác bấm cho phép (Allow) khi trình duyệt hỏi nhé."; }
-    else if(ev.error === "no-speech"){ status.textContent = "Chưa nghe thấy tiếng. Bác bấm mic và đọc to hơn một chút nhé."; }
-    else { status.textContent = "Có trục trặc nhỏ với mic. Bác thử lại sau một chút nhé."; }
-  };
-  recog.onresult = function(ev){
-    var said = ev.results[0][0].transcript || "";
-    heard.textContent = "Trang web nghe được: “" + said + "”";
-    var target = speakItems[speakIndex].en;
-    var score = similarity(said, target);
-    fb.classList.add("show");
-    if(normalize(said) === normalize(target) || score >= 0.9){
-      fb.className = "feedback show good";
-      fb.textContent = "Xuất sắc! Bác nói rất đúng và rõ. Cứ phát huy như vậy nhé!";
-      status.textContent = "Đúng rồi! Bác thử câu tiếp theo hoặc nghe lại để so sánh.";
-    } else if(score >= 0.55){
-      fb.className = "feedback show good";
-      fb.textContent = "Gần đúng rồi! Bác nghe lại câu mẫu bằng nút “Nghe chậm”, chú ý các từ còn thiếu rồi đọc lại một lần nữa nhé. Câu mẫu: “" + target + "”";
-      status.textContent = "Gần đúng rồi — thử lại một lần nữa nhé!";
-    } else {
-      fb.className = "feedback show try";
-      fb.textContent = "Chưa sao đâu bác. Hãy bấm “Nghe chậm”, nghe kỹ từng từ, rồi đọc theo từng cụm nhỏ. Câu mẫu: “" + target + "” (" + speakItems[speakIndex].vi + ")";
-      status.textContent = "Mình thử lại chậm rãi nhé!";
+function gradeSpeak(said){
+  var heard = document.getElementById("speakHeard"), fb = document.getElementById("speakFeedback"), status = document.getElementById("speakStatus");
+  heard.textContent = "Trang web nghe được: “" + said + "”";
+  var target = speakItems[speakIndex].en;
+  var score = similarity(said, target);
+  fb.classList.add("show");
+  if(normalize(said) === normalize(target) || score >= 0.9){
+    fb.className = "feedback show good";
+    fb.textContent = "Xuất sắc! Bác nói rất đúng và rõ. Cứ phát huy như vậy nhé!";
+    status.textContent = "Đúng rồi! Bác thử câu tiếp theo hoặc nghe lại để so sánh.";
+  } else if(score >= 0.55){
+    fb.className = "feedback show good";
+    fb.textContent = "Gần đúng rồi! Bác nghe lại câu mẫu bằng nút “Nghe chậm”, chú ý các từ còn thiếu rồi đọc lại một lần nữa nhé. Câu mẫu: “" + target + "”";
+    status.textContent = "Gần đúng rồi — thử lại một lần nữa nhé!";
+  } else {
+    fb.className = "feedback show try";
+    fb.textContent = "Chưa sao đâu bác. Hãy bấm “Nghe chậm”, nghe kỹ từng từ, rồi đọc theo từng cụm nhỏ. Câu mẫu: “" + target + "” (" + speakItems[speakIndex].vi + ")";
+    status.textContent = "Mình thử lại chậm rãi nhé!";
+  }
+}
+var spAudioUrl = null;
+function setSpAudio(blob){
+  if(spAudioUrl){ try{ URL.revokeObjectURL(spAudioUrl); }catch(e){} spAudioUrl = null; }
+  spAudioUrl = URL.createObjectURL(blob);
+  var pb = document.getElementById("speakPlayBtn"); if(pb) pb.style.display = "inline-flex";
+}
+function spStatus(t){ document.getElementById("speakStatus").textContent = t; }
+function closeSpeakUI(){
+  var b = document.getElementById("micBtn"); if(b) b.classList.remove("listening");
+}
+function spAdapter(session){
+  return {
+    phase: function(p){
+      var btn = document.getElementById("micBtn");
+      if(p === "starting"){ btn.classList.add("listening"); spStatus("Đang mở mic… bác bấm “Cho phép” nếu máy hỏi nhé."); }
+      else if(p === "listening"){ btn.classList.add("listening"); spStatus("Đang nghe… bác cứ nói câu mẫu ở trên."); }
+      else if(p === "recording"){ btn.classList.add("listening"); spStatus("Đang ghi… bác đang nói — nói xong cứ im lặng, máy tự dừng và chấm."); }
+      else if(p === "grading"){ btn.classList.remove("listening"); spStatus("Đang nghe lại… máy đang nghe giọng của bác ngay trên máy, bác chờ vài giây nhé."); }
+    },
+    error: function(kind){
+      document.getElementById("micBtn").classList.remove("listening");
+      if(kind === "not-allowed") spStatus("Trang web chưa được phép dùng mic. Bác bấm cho phép (Allow) khi trình duyệt hỏi nhé.");
+      else if(kind === "audio-capture") spStatus("Không tìm thấy mic hoặc mic đang bận. Bác kiểm tra lại mic rồi thử lại nhé.");
+      else if(kind === "no-speech") spStatus("Chưa nghe rõ tiếng. Bác để máy gần miệng hơn, nói to hơn rồi bấm mic thử lại nhé.");
+      else spStatus("Máy chưa nghe được lần này. Bác bấm mic và đọc lại nhé.");
+    },
+    audioF32: function(f32){
+      setSpAudio(f32ToWavBlob(f32, 16000));
+      wx.transcriber(f32, {}).then(function(out){
+        if(!MicSessions.isCurrent(session.id)) return;
+        MicSessions.finish(session);
+        var text = (out && out.text) ? String(out.text).trim() : "";
+        if(!text){ spStatus("Chưa nghe rõ tiếng. Bác để máy gần miệng hơn, nói to hơn rồi bấm mic thử lại nhé."); return; }
+        gradeSpeak(text);
+        spStatus("Đã chấm xong — bác bấm “Nghe lại giọng của bác” để tự nghe lại mình nói nhé.");
+      }).catch(function(){
+        if(!MicSessions.isCurrent(session.id)) return;
+        MicSessions.finish(session);
+        spStatus("Máy chưa nghe được lần này. Bác bấm mic và đọc lại nhé.");
+      });
+    },
+    audioBlob: function(blob){
+      setSpAudio(blob);
+      wxTranscribe(blob).then(function(text){
+        if(!MicSessions.isCurrent(session.id)) return;
+        MicSessions.finish(session);
+        if(!text){ spStatus("Chưa nghe rõ tiếng. Bác để máy gần miệng hơn, nói to hơn rồi bấm mic thử lại nhé."); return; }
+        gradeSpeak(text);
+        spStatus("Đã chấm xong — bác bấm “Nghe lại giọng của bác” để tự nghe lại mình nói nhé.");
+      }).catch(function(){
+        if(!MicSessions.isCurrent(session.id)) return;
+        MicSessions.finish(session);
+        spStatus("Máy chưa nghe được lần này. Bác bấm mic và đọc lại nhé.");
+      });
     }
   };
-  try{ recog.start(); }catch(e){ toast("Chưa bật được mic lúc này, bác thử lại nhé."); }
+}
+function spSRAdapter(session){
+  return {
+    maxAlternatives: 1,
+    phase: function(p){
+      var btn = document.getElementById("micBtn"), fb = document.getElementById("speakFeedback");
+      if(p === "listening"){ btn.classList.add("listening"); spStatus("Đang nghe… bác đọc to câu mẫu nhé! (Cách nghe qua mạng — nếu hay lỗi, bác bật “Bộ nghe xịn” ở phía trên.)"); fb.className = "feedback"; fb.textContent = ""; }
+    },
+    result: function(res){ gradeSpeak(res[0].transcript || ""); },
+    error: function(kind){
+      document.getElementById("micBtn").classList.remove("listening");
+      if(kind === "not-allowed") spStatus("Trang web chưa được phép dùng mic. Bác bấm cho phép (Allow) khi trình duyệt hỏi nhé.");
+      else if(kind === "no-speech") spStatus("Chưa nghe thấy tiếng. Bác bấm mic và đọc to hơn một chút nhé.");
+      else if(kind === "network") spStatus("Mạng đang yếu nên nghe qua mạng bị lỗi — đây là lỗi quen thuộc của cách nghe này. Bác bật “Bộ nghe xịn” ở thẻ phía trên để máy nghe ngay trên máy, không cần mạng lúc nói.");
+      else spStatus("Có trục trặc nhỏ với mic. Bác thử lại sau một chút nhé.");
+    },
+    ended: function(gotResult){
+      document.getElementById("micBtn").classList.remove("listening");
+      if(!gotResult) spStatus("Chưa nghe thấy tiếng. Bác bấm mic và đọc to hơn một chút nhé.");
+    }
+  };
+}
+document.getElementById("micBtn").addEventListener("click", function(){
+  var cur = MicSessions.get();
+  if(cur && cur.key === "speak"){
+    if(cur.phase === "starting" || cur.phase === "grading") return;
+    if(cur.phase === "listening" || cur.phase === "recording"){
+      if(cur.kind === "sr"){ var r = cur.resources.recog; if(r){ try{ r.stop(); }catch(e){} } }
+      else if(cur.stopCapture) cur.stopCapture();
+      return;
+    }
+  }
+  if(window.speechSynthesis){ try{ window.speechSynthesis.cancel(); }catch(e){} }
+  var session = MicSessions.begin({
+    key: "speak", kind: (wx.state === "ready") ? "capture" : "sr", capMs: 20000,
+    closeUI: function(){ closeSpeakUI(); }
+  });
+  if(wx.state === "ready"){ startCaptureSession(session, spAdapter(session)); return; }
+  if(rbSupported()){ startSRSession(session, spSRAdapter(session)); return; }
+  MicSessions.finish(session);
+  if(wx.state === "loading"){ spStatus("Bộ nghe xịn đang tải… bác chờ tải xong (xem % ở thẻ phía trên) rồi bấm mic lại nhé."); return; }
+  if(wxSupported()){ spStatus("Trình duyệt này không nghe được qua mạng. Bác bấm nút “Bật bộ nghe xịn” ở thẻ phía trên — tải xong là bấm mic để máy ghi âm và nghe ngay trên máy."); return; }
+  toast("Trình duyệt này chưa hỗ trợ luyện nói. Bác hãy dùng Chrome nhé.");
 });
 
 /* ================= READBACK: NGHE → ĐỌC LẠI → SỬA NGAY ================= */
 function rbSupported(){ return !!(window.SpeechRecognition || window.webkitSpeechRecognition); }
-var rbRecog = null;
+
+/* ================= QUẢN LÝ PHIÊN MIC DUY NHẤT (MicSessionManager) =================
+   Toàn trang tại mỗi thời điểm CHỈ MỘT phiên mic được hoạt động. Mở phiên
+   mới là phiên cũ bị hủy sạch (dừng ghi / hủy VAD / abort recognition /
+   tắt track mic / đóng panel cũ). Mọi callback bất đồng bộ đều phải qua
+   isCurrent(id) mới được chạm vào giao diện — kết quả đến muộn của phiên
+   cũ bị bỏ qua hoàn toàn. */
+var MicSessions = (function(){
+  var seq = 0, current = null;
+  function dispose(s){
+    if(!s || !s.resources) return;
+    var r = s.resources;
+    r.discard = true;
+    if(s.capTimer){ clearTimeout(s.capTimer); s.capTimer = null; }
+    (r.timers || []).forEach(function(t){ clearInterval(t); clearTimeout(t); });
+    if(r.recorder && r.recorder.state === "recording"){ try{ r.recorder.stop(); }catch(e){} }
+    if(r.vad){ try{ r.vad.destroy(); }catch(e){} r.vad = null; }
+    if(r.recog){ try{ r.recog.abort(); }catch(e){} r.recog = null; }
+    if(r.monitorCtx){ try{ r.monitorCtx.close(); }catch(e){} r.monitorCtx = null; }
+    (r.streams || []).forEach(function(st){ st.getTracks().forEach(function(t){ try{ t.stop(); }catch(e){} }); });
+    r.streams = [];
+  }
+  function begin(meta){
+    var prev = current;
+    var prevWasRecording = !!(prev && (prev.phase === "listening" || prev.phase === "recording"));
+    cancelCurrent();
+    seq += 1;
+    var s = {
+      id: seq, key: meta.key || "", kind: meta.kind || "", ownerCtx: meta.ownerCtx || null,
+      phase: "starting", active: true, startedAt: Date.now(),
+      capMs: meta.capMs || 20000, capTimer: null, stopCapture: null,
+      closeUI: meta.closeUI || null, prevWasRecording: prevWasRecording,
+      resources: { streams: [], timers: [], discard: false, gradeFromBlob: false, recorder: null, vad: null, recog: null, monitorCtx: null }
+    };
+    current = s;
+    return s;
+  }
+  function cancelCurrent(){
+    if(!current) return null;
+    var s = current; current = null; s.active = false; s.phase = "cancelled";
+    dispose(s);
+    if(s.closeUI){ try{ s.closeUI(s); }catch(e){} }
+    return s;
+  }
+  function isCurrent(id){ return !!(current && current.active && current.id === id); }
+  function get(){ return current; }
+  function setPhase(s, p){ if(isCurrent(s.id)) s.phase = p; }
+  function finish(s){
+    if(current && s && current.id === s.id){
+      current = null; s.active = false; s.phase = "done";
+      if(s.capTimer){ clearTimeout(s.capTimer); s.capTimer = null; }
+    }
+  }
+  return { begin: begin, cancelCurrent: cancelCurrent, isCurrent: isCurrent, get: get, setPhase: setPhase, finish: finish, dispose: dispose };
+})();
+/* Quyết định khi bấm lại nút Đọc lại / mic (hàm thuần, có kiểm thử) */
+function sessionClickAction(cur, sameOwner){
+  if(!cur) return "start";
+  if(!sameOwner) return "start";
+  if(cur.phase === "starting" || cur.phase === "grading") return "ignore";
+  return "stop";
+}
+/* Trần cứng một buổi ghi: từ ngắn ~8 giây, câu ~20 giây (hàm thuần, có kiểm thử) */
+function capMsForTarget(ctx){
+  var n = normalize(ctx.target || "").split(" ").filter(Boolean).length;
+  return n <= 2 ? 8000 : 20000;
+}
+/* Bộ phát hiện im lặng (hàm thuần, có kiểm thử): đã nghe thấy tiếng nói,
+   im lặng liên tục đủ lâu thì trả "stop" để buổi ghi tự kết thúc. */
+function makeEndpointDetector(opts){
+  var silenceMs = (opts && opts.silenceMs) || 1200;
+  var speechRms = (opts && opts.speechRms) || 0.02;
+  var heardSpeech = false, silenceStart = null;
+  return {
+    feed: function(rms, t){
+      if(rms >= speechRms){ heardSpeech = true; silenceStart = null; return "speech"; }
+      if(!heardSpeech) return "waiting";
+      if(silenceStart === null) silenceStart = t;
+      return (t - silenceStart >= silenceMs) ? "stop" : "silence";
+    },
+    heard: function(){ return heardSpeech; }
+  };
+}
+/* Điểm gọi getUserMedia DUY NHẤT trong mã của trang — stream luôn được
+   gắn vào phiên để khi phiên bị hủy, track mic tắt ngay (đèn mic tắt). */
+function micAcquire(session){
+  return navigator.mediaDevices.getUserMedia({ audio: true }).then(function(stream){
+    if(session){
+      session.resources.streams.push(stream);
+      if(!MicSessions.isCurrent(session.id)){
+        stream.getTracks().forEach(function(t){ try{ t.stop(); }catch(e){} });
+      }
+    }
+    return stream;
+  });
+}
+function endCaptureResources(session){ MicSessions.dispose(session); }
+function closeReadbackPanel(ctx){
+  if(!ctx || !ctx.panel) return;
+  ctx.panel.classList.remove("show");
+  ctx.panel.innerHTML = "";
+  if(ctx.btn) ctx.btn.classList.remove("listening");
+  if(ctx.audioUrl){ try{ URL.revokeObjectURL(ctx.audioUrl); }catch(e){} ctx.audioUrl = null; }
+}
+function srKind(kind){
+  var known = { "not-allowed": 1, "no-speech": 1, "network": 1, "audio-capture": 1 };
+  return known[kind] ? kind : "error";
+}
 function alignWords(tWords, hWords){
   var n = tWords.length, m = hWords.length, i, j;
   var dp = [];
@@ -1702,6 +2258,122 @@ function alignWords(tWords, hWords){
   var count = 0; for(var k in matched){ if(matched.hasOwnProperty(k)) count++; }
   return { matched: matched, extras: extras, count: count };
 }
+/* ================= PHÂN TÍCH ÂM (bảng âm vị IPA cho các từ trong 6 bài) =================
+   Mỗi từ -> dãy âm vị IPA (Anh-Mỹ, khớp phiên âm trang đã có). Từ không có
+   trong bảng (tên riêng…) thì bỏ qua phân tích âm, chỉ chấm từ như cũ. */
+var PHON = {
+"a":"ə","ahead":"ə h ɛ d","am":"æ m","and":"ə n d","are":"ɑ r","at":"æ t",
+"bag":"b æ ɡ","bit":"b ɪ t","breakfast":"b r ɛ k f ə s t","bus":"b ʌ s","buy":"b aɪ","by":"b aɪ",
+"cheap":"tʃ i p","children":"tʃ ɪ l d r ə n",
+"daughter":"d ɔ t ə r","david":"d eɪ v ɪ d","delicious":"d ɪ l ɪ ʃ ə s","discount":"d ɪ s k aʊ n t","do":"d u","doctor":"d ɑ k t ə r","dollars":"d ɑ l ə r z",
+"eight":"eɪ t","excuse":"ɪ k s k j u z","expensive":"ɪ k s p ɛ n s ɪ v",
+"family":"f æ m ə l i","far":"f ɑ r","father":"f ɑ ð ə r","feel":"f i l","fever":"f i v ə r","fine":"f aɪ n","five":"f aɪ v","food":"f u d","for":"f ɔ r","four":"f ɔ r","from":"f r ə m","fruit":"f r u t",
+"go":"ɡ oʊ","good":"ɡ ʊ d","goodbye":"ɡ ʊ d b aɪ","grandchildren":"ɡ r æ n tʃ ɪ l d r ə n",
+"have":"h æ v","headache":"h ɛ d eɪ k","healthy":"h ɛ l θ i","hello":"h ə l oʊ","here":"h ɪ r","hi":"h aɪ","home":"h oʊ m","hospital":"h ɑ s p ɪ t ə l","how":"h aʊ","husband":"h ʌ z b ə n d",
+"i":"aɪ","i'm":"aɪ m","in":"ɪ n","is":"ɪ z","it":"ɪ t",
+"left":"l ɛ f t","like":"l aɪ k",
+"many":"m ɛ n i","market":"m ɑ r k ɪ t","me":"m i","medicine":"m ɛ d ɪ s ɪ n","meet":"m i t","minutes":"m ɪ n ɪ t s","money":"m ʌ n i","morning":"m ɔ r n ɪ ŋ","mother":"m ʌ ð ə r","much":"m ʌ tʃ","my":"m aɪ",
+"name":"n eɪ m","near":"n ɪ r","need":"n i d","nice":"n aɪ s","nine":"n aɪ n","no":"n oʊ",
+"one":"w ʌ n",
+"photo":"f oʊ t oʊ","please":"p l i z","price":"p r aɪ s",
+"rest":"r ɛ s t","rice":"r aɪ s","right":"r aɪ t",
+"see":"s i","seven":"s ɛ v ə n","shop":"ʃ ɑ p","six":"s ɪ k s","some":"s ʌ m","son":"s ʌ n","straight":"s t r eɪ t",
+"take":"t eɪ k","tea":"t i","ten":"t ɛ n","thank":"θ æ ŋ k","thanks":"θ æ ŋ k s","the":"ð ə","then":"ð ɛ n","there":"ð ɛ r","this":"ð ɪ s","three":"θ r i","tired":"t aɪ ə r d","to":"t u","today":"t ə d eɪ","tomorrow":"t ə m ɑ r oʊ","too":"t u","turn":"t ɜ r n","two":"t u",
+"vegetables":"v ɛ dʒ t ə b ə l z","very":"v ɛ r i","vietnam":"v i ɛ t n ɑ m",
+"water":"w ɔ t ə r","well":"w ɛ l","what":"w ʌ t","where":"w ɛ r","wife":"w aɪ f","will":"w ɪ l","would":"w ʊ d",
+"yes":"j ɛ s","you":"j u","your":"j ɔ r",
+/* Tên riêng trong câu mẫu (đọc kiểu Anh) + các từ máy hay nghe nhầm sang —
+   chỉ dùng ở phía “từ máy nghe được” để vẫn chỉ được âm lệch, không bịa âm. */
+"lan":"l ɑ n","mai":"m aɪ",
+"tree":"t r i","free":"f r i","tank":"t æ ŋ k","sank":"s æ ŋ k","rise":"r aɪ z","light":"l aɪ t",
+"let":"l ɛ t","but":"b ʌ t","she":"ʃ i","chip":"tʃ ɪ p","ship":"ʃ ɪ p","foot":"f ʊ t","life":"l aɪ f","these":"ð i z"
+};
+var PHON_TIPS = {
+"θ":"Âm /θ/: đặt đầu lưỡi chạm nhẹ răng cửa trên rồi thổi hơi ra (như trong “three”, “thank”) — đừng đọc thành /t/ hay /s/.",
+"ð":"Âm /ð/: đầu lưỡi chạm răng cửa giống /θ/ nhưng rung cổ họng cho có tiếng (như trong “the”, “this”, “mother”).",
+"ʃ":"Âm /ʃ/: chu môi tròn, thổi hơi mềm như “sh” (như trong “shop”, “delicious”) — đừng đọc thành /s/.",
+"ʒ":"Âm /ʒ/: giống /ʃ/ nhưng rung cổ họng (âm ở giữa từ “vegetables”).",
+"tʃ":"Âm /tʃ/: bật mạnh một tiếng, cong lưỡi như “ch” (như trong “cheap”, “children”, “much”).",
+"dʒ":"Âm /dʒ/: giống /tʃ/ nhưng rung cổ họng (như trong “vegetables”).",
+"æ":"Âm /æ/: mở miệng rộng, âm nằm giữa “a” và “e” (như trong “family”, “thank”, “have”) — đừng đọc hẳn thành “e”.",
+"ə":"Âm /ə/: âm nhẹ, rất ngắn, thả lỏng miệng (như âm giữa trong “family”, “doctor”).",
+"r":"Âm /r/: cong đầu lưỡi lên, không chạm vào đâu cả (như trong “rice”, “right”) — khác hẳn âm “r” của tiếng Việt.",
+"ŋ":"Âm /ŋ/: âm mũi ở cuối, gần như “ng” trong tiếng Việt (như trong “morning”, “thank”).",
+"l":"Âm /l/: đầu lưỡi chạm lợi trên; ở cuối từ (như “feel”, “well”) giữ chạm một nhịp, đừng bỏ qua.",
+"v":"Âm /v/: răng cửa trên chạm nhẹ môi dưới rồi rung (như trong “very”, “five”, “have”) — đừng đọc thành /b/ hay /w/.",
+"z":"Âm /z/: giống /s/ nhưng rung cổ họng (như trong “is”, “please”).",
+"w":"Âm /w/: chu môi tròn rồi mở ra nhanh (như trong “where”, “water”, “one”)."
+};
+var FINAL_PHON = {"p":1,"t":1,"k":1,"s":1,"z":1,"f":1,"v":1,"b":1,"d":1,"g":1,"m":1,"n":1,"ŋ":1,"l":1};
+function phonOf(word){ var p = PHON[word]; return p ? p.split(" ") : null; }
+function phonemeDiff(correct, heard){
+  var n = correct.length, m = heard.length, i, j;
+  var dp = [];
+  for(i = 0; i <= n; i++){ dp.push([]); for(j = 0; j <= m; j++){ dp[i][j] = 0; } }
+  for(i = 0; i <= n; i++) dp[i][0] = i;
+  for(j = 0; j <= m; j++) dp[0][j] = j;
+  for(i = 1; i <= n; i++){
+    for(j = 1; j <= m; j++){
+      dp[i][j] = Math.min(
+        dp[i-1][j-1] + (correct[i-1] === heard[j-1] ? 0 : 1),
+        dp[i-1][j] + 1,
+        dp[i][j-1] + 1
+      );
+    }
+  }
+  var ops = []; i = n; j = m;
+  while(i > 0 || j > 0){
+    if(i > 0 && j > 0 && dp[i][j] === dp[i-1][j-1] + (correct[i-1] === heard[j-1] ? 0 : 1)){
+      if(correct[i-1] !== heard[j-1]) ops.unshift({ type:"sub", c:correct[i-1], h:heard[j-1], pos:i-1 });
+      i--; j--;
+    } else if(i > 0 && dp[i][j] === dp[i-1][j] + 1){
+      ops.unshift({ type:"del", c:correct[i-1], pos:i-1 }); i--;
+    } else {
+      ops.unshift({ type:"ins", h:heard[j-1], pos:i }); j--;
+    }
+  }
+  return ops;
+}
+function phonemeAdvice(correctWord, heardWord){
+  var cp = phonOf(correctWord), hp = phonOf(heardWord);
+  if(!cp || !hp) return null;
+  var ops = phonemeDiff(cp, hp), tips = [], seen = {};
+  function push(t){ if(t && !seen[t]){ seen[t] = 1; tips.push(t); } }
+  for(var k = 0; k < ops.length; k++){
+    var op = ops[k];
+    if(op.type === "sub"){
+      if((op.c === "i" && op.h === "ɪ") || (op.c === "ɪ" && op.h === "i")){
+        push("Âm /iː/ và /ɪ/ khác nhau ở độ dài: /iː/ (như trong “meet”, “tea”) phải kéo dài và căng miệng hơn; /ɪ/ (như trong “it”, “this”) thì ngắn và thả lỏng.");
+      } else if((op.c === "u" && op.h === "ʊ") || (op.c === "ʊ" && op.h === "u")){
+        push("Âm /uː/ (như trong “food”, “fruit”) cần chu môi và kéo dài; /ʊ/ (như trong “good”, “would”) thì ngắn và thả lỏng hơn.");
+      } else if(PHON_TIPS[op.c]){ push(PHON_TIPS[op.c]); }
+      else { push("Âm /" + op.c + "/ trong từ này nghe thành /" + op.h + "/ — bác nghe chậm từ mẫu, để ý đúng âm đó rồi đọc lại."); }
+    } else if(op.type === "del"){
+      if(op.pos === cp.length - 1 && FINAL_PHON[op.c]){
+        push("Thiếu âm cuối /" + op.c + "/ — tiếng Anh rất cần âm cuối: hãy bật rõ âm /" + op.c + "/ ở cuối từ, đừng nuốt mất.");
+      } else if(PHON_TIPS[op.c]){ push("Chưa nghe rõ âm /" + op.c + "/ trong từ: " + PHON_TIPS[op.c]); }
+      else { push("Thiếu âm /" + op.c + "/ — bác đọc chậm từng âm của từ rồi ghép lại."); }
+    } else if(op.type === "ins"){
+      push("Nghe có thêm âm /" + op.h + "/ mà từ mẫu không có — bác đọc gọn lại, đừng thêm tiếng.");
+    }
+    if(tips.length >= 2) break;
+  }
+  return tips.length ? tips : null;
+}
+/* Nhận xét nhịp & độ to từ bản ghi (hàm thuần: thời lượng, số từ, RMS) */
+function paceRemarks(durSec, wordCount, rms){
+  var out = [];
+  if(!(durSec > 0)) return out;
+  if(typeof rms === "number" && rms > 0 && rms < 0.015){
+    out.push("Giọng hơi nhỏ — bác để máy gần miệng hơn và nói to hơn một chút nhé.");
+  }
+  if(wordCount > 0){
+    var wps = wordCount / durSec;
+    if(durSec > 1.2 && wps > 3.4) out.push("Bác đọc hơi nhanh — đọc chậm lại, rõ từng từ sẽ dễ nghe và dễ đúng hơn.");
+    else if(durSec > 2.5 && wps < 0.8) out.push("Bác đọc hơi chậm và ngắt lâu — không sao cả, quen dần rồi mình đọc liền mạch hơn một chút.");
+  }
+  return out;
+}
 function rbActionBtn(label, fn, cls){
   var b = document.createElement("button");
   b.type = "button"; b.className = "icon-btn" + (cls ? " " + cls : "");
@@ -1718,7 +2390,7 @@ function rbShowMessage(ctx, kind){
   actions.appendChild(rbActionBtn("Nghe chậm lại", function(){ speak(ctx.target, 0.5); }, "slow"));
   if(kind === "unsupported"){
     title.textContent = "Trình duyệt này chưa nghe được giọng nói";
-    text.textContent = "Tính năng chấm đọc cần trình duyệt Google Chrome (trên điện thoại Android hoặc máy tính) và cần bác cho phép dùng mic khi được hỏi. Trong lúc chưa dùng được, bác vẫn luyện rất tốt bằng cách: bấm “Nghe chậm” hoặc “Nghe rất chậm”, nghe kỹ rồi đọc to theo 3 lần.";
+    text.textContent = "Tính năng chấm đọc qua mạng cần trình duyệt Google Chrome (trên điện thoại Android hoặc máy tính) và cần bác cho phép dùng mic khi được hỏi. Bác cũng có thể bấm “Bật bộ nghe xịn” ở thẻ phía trên để trang ghi âm và nghe ngay trên máy. Trong lúc chưa dùng được, bác vẫn luyện rất tốt bằng cách: bấm “Nghe chậm” hoặc “Nghe rất chậm”, nghe kỹ rồi đọc to theo 3 lần.";
   } else {
     actions.appendChild(rbActionBtn("Đọc lại lần nữa", function(){ startReadback(ctx); }, "mic"));
     if(kind === "not-allowed"){
@@ -1733,6 +2405,9 @@ function rbShowMessage(ctx, kind){
     } else if(kind === "audio-capture"){
       title.textContent = "Không tìm thấy mic";
       text.textContent = "Máy chưa nhận được mic. Bác kiểm tra lại mic (hoặc tai nghe có mic) rồi bấm “Đọc lại lần nữa” nhé.";
+    } else if(kind === "wx-loading"){
+      title.textContent = "Bộ nghe xịn đang tải";
+      text.textContent = "Bác chờ bộ nghe tải xong (xem % ở thẻ “Bộ nghe xịn” phía trên) rồi bấm “Đọc lại lần nữa” nhé. Tải xong một lần là những lần sau máy nghe ngay trên máy, lúc nói không cần mạng nữa.";
     } else {
       title.textContent = "Chưa nghe được lúc này";
       text.textContent = "Có trục trặc nhỏ khi bật mic. Bác chờ một chút rồi bấm “Đọc lại lần nữa” nhé.";
@@ -1791,60 +2466,648 @@ function rbShowResult(ctx, best){
       toast("Đọc đúng hết rồi! Đã đánh dấu “Đã thuộc”: " + ctx.target);
     }
   }
+  /* Phân tích âm: ghép từng từ sai với từ máy nghe được (theo thứ tự), so dãy âm vị */
+  var wrongIdx = [];
+  tWords.forEach(function(w, i){ if(!best.al.matched[i]) wrongIdx.push(i); });
+  var phonLines = [], seenLine = {};
+  for(var pi = 0; pi < wrongIdx.length; pi++){
+    var hw = best.al.extras[pi];
+    if(!hw) continue;
+    var adv = phonemeAdvice(tWords[wrongIdx[pi]], hw);
+    if(!adv) continue;
+    for(var ai = 0; ai < adv.length; ai++){
+      var line = "Từ “" + disp[wrongIdx[pi]] + "” nghe thành “" + hw + "” — " + adv[ai];
+      if(!seenLine[line] && phonLines.length < 4){ seenLine[line] = 1; phonLines.push(line); }
+    }
+    if(phonLines.length >= 4) break;
+  }
+  if(phonLines.length){
+    var phon = document.createElement("div"); phon.className = "rb-phon";
+    var phT = document.createElement("b"); phT.textContent = "Phân tích âm — chỗ nên sửa:";
+    phon.appendChild(phT);
+    phonLines.forEach(function(line){
+      var pln = document.createElement("p"); pln.textContent = "• " + line; phon.appendChild(pln);
+    });
+    panel.appendChild(phon);
+  }
+  if(ctx.fromRecording && typeof ctx.recDur === "number" && ctx.recDur > 0){
+    var rl = document.createElement("p"); rl.className = "rb-line";
+    var rm2 = ctx.paceRemarks || [];
+    rl.textContent = "Nhịp & độ to: bác đọc trong khoảng " + String(ctx.recDur.toFixed(1)).replace(".", ",") + " giây. " + (rm2.length ? rm2.join(" ") : "Độ to và tốc độ như vậy là vừa phải — tốt lắm bác.");
+    panel.appendChild(rl);
+  }
   var actions = document.createElement("div"); actions.className = "rb-actions";
   actions.appendChild(rbActionBtn("Nghe chậm lại", function(){ speak(ctx.target, 0.5); }, "slow"));
+  if(ctx.fromRecording && ctx.lastBlob){
+    actions.appendChild(rbPlayBtn(ctx));
+    actions.appendChild(rbActionBtn("Chấm lại", function(){ gradeAgain(ctx); }, "vslow"));
+  }
   actions.appendChild(rbActionBtn("Đọc lại lần nữa", function(){ startReadback(ctx); }, "mic"));
   panel.appendChild(actions);
 }
+var rbOpenCtx = null;
 function startReadback(ctx){
-  var panel = ctx.panel;
-  if(!rbSupported()){ rbShowMessage(ctx, "unsupported"); return; }
-  if(rbRecog){ try{ rbRecog.abort(); }catch(e){} rbRecog = null; }
-  document.querySelectorAll(".icon-btn.mic.listening").forEach(function(b){ b.classList.remove("listening"); });
   if(window.speechSynthesis){ try{ window.speechSynthesis.cancel(); }catch(e){} }
+  /* Accordion: toàn trang chỉ mở 1 panel chấm tại một thời điểm — kể cả
+     panel của phiên trước đã kết thúc (kết quả/lỗi) cũng phải đóng lại. */
+  if(rbOpenCtx && rbOpenCtx !== ctx) closeReadbackPanel(rbOpenCtx);
+  rbOpenCtx = ctx;
+  var cur = MicSessions.get();
+  var action = sessionClickAction(cur, !!(cur && cur.ownerCtx === ctx));
+  if(action === "ignore") return;
+  if(action === "stop"){
+    MicSessions.cancelCurrent();
+    rbShowIdle(ctx, "Đã dừng ghi âm", "Bác bấm “Đọc lại” khi sẵn sàng nói lại nhé.");
+    return;
+  }
+  var session = MicSessions.begin({
+    key: "readback", ownerCtx: ctx,
+    kind: (wx.state === "ready") ? "capture" : "sr",
+    capMs: capMsForTarget(ctx),
+    closeUI: function(s){ closeReadbackPanel(s.ownerCtx); }
+  });
+  if(wx.state === "ready"){ startCaptureSession(session, rbAdapter(ctx, session)); return; }
+  if(rbSupported()){ startSRReadback(ctx, session); return; }
+  MicSessions.finish(session);
+  if(wx.state === "loading"){ rbShowMessage(ctx, "wx-loading"); return; }
+  rbShowMessage(ctx, "unsupported");
+}
+function rbShowIdle(ctx, title, text){
+  var panel = ctx.panel;
   panel.innerHTML = ""; panel.className = "rb-panel show";
+  var t = document.createElement("p"); t.className = "rb-status"; t.textContent = title; panel.appendChild(t);
+  var p = document.createElement("p"); p.className = "rb-line"; p.textContent = text; panel.appendChild(p);
+  var actions = document.createElement("div"); actions.className = "rb-actions";
+  actions.appendChild(rbActionBtn("Nghe chậm lại", function(){ speak(ctx.target, 0.5); }, "slow"));
+  actions.appendChild(rbActionBtn("Đọc lại", function(){ startReadback(ctx); }, "mic"));
+  panel.appendChild(actions);
+  if(ctx.btn) ctx.btn.classList.remove("listening");
+}
+function rbGradingUI(ctx){
+  var panel = ctx.panel;
+  panel.innerHTML = ""; panel.className = "rb-panel show";
+  var st = document.createElement("p"); st.className = "rb-status";
+  st.textContent = "Đang chấm… máy đang nghe lại giọng của bác ngay trên máy, bác chờ vài giây nhé.";
+  panel.appendChild(st);
+  var actions = document.createElement("div"); actions.className = "rb-actions";
+  actions.appendChild(rbPlayBtn(ctx));
+  panel.appendChild(actions);
+  if(ctx.btn) ctx.btn.classList.remove("listening");
+}
+function rbPhaseUI(ctx, session, phase){
+  if(phase === "grading"){ rbGradingUI(ctx); return; }
+  var panel = ctx.panel;
+  panel.innerHTML = ""; panel.className = "rb-panel show";
+  if(ctx.btn) ctx.btn.classList.add("listening");
   var status = document.createElement("p"); status.className = "rb-status";
-  status.textContent = "Đang nghe… bác đọc to: “" + ctx.target + "”";
   panel.appendChild(status);
+  if(phase === "starting"){
+    status.textContent = "Đang mở mic… nếu máy hỏi, bác bấm “Cho phép / Allow” nhé.";
+    if(session.prevWasRecording){
+      var note = document.createElement("p"); note.className = "rb-line";
+      note.textContent = "Đã dừng phần đọc ở từ trước để bắt đầu ở đây.";
+      panel.appendChild(note);
+    }
+    return;
+  }
   var hint = document.createElement("p"); hint.className = "rb-line";
-  hint.textContent = "Đọc xong bác cứ dừng lại, trang web sẽ tự chấm ngay.";
   panel.appendChild(hint);
+  var actions = document.createElement("div"); actions.className = "rb-actions";
+  actions.appendChild(rbActionBtn("Dừng lại", function(){ if(session.stopCapture) session.stopCapture(); }, "mic"));
+  panel.appendChild(actions);
+  if(phase === "listening"){
+    status.textContent = "Đang nghe… bác cứ nói: “" + ctx.target + "”";
+    hint.textContent = "Nói xong bác cứ im lặng — máy nghe thấy im lặng là tự dừng và chấm ngay, bác không cần bấm gì thêm. (Muốn dừng sớm thì bấm “Dừng lại”.)";
+  } else if(phase === "recording"){
+    status.appendChild(document.createTextNode("Đang ghi… "));
+    var tm = document.createElement("span"); tm.className = "rec-time"; tm.textContent = "0:00";
+    status.appendChild(tm);
+    status.appendChild(document.createTextNode(" — bác đang nói"));
+    hint.textContent = "Nói xong cứ im lặng khoảng 1 giây, máy sẽ tự dừng và chấm.";
+  }
+}
+function rbAdapter(ctx, session){
+  var iv = setInterval(function(){
+    if(!MicSessions.isCurrent(session.id)){ clearInterval(iv); return; }
+    var el = ctx.panel.querySelector(".rec-time");
+    if(el){ var s = Math.floor((Date.now() - session.startedAt) / 1000); el.textContent = "0:" + (s < 10 ? "0" : "") + s; }
+  }, 500);
+  session.resources.timers.push(iv);
+  return {
+    phase: function(p){ rbPhaseUI(ctx, session, p); },
+    error: function(kind){ rbShowMessage(ctx, srKind(kind)); },
+    audioF32: function(f32, dur, rms){ gradeF32(ctx, session, f32, dur, rms); },
+    audioBlob: function(blob){ gradeBlob(ctx, session, blob); }
+  };
+}
+/* ===== Đường Web Speech (dự phòng khi chưa bật bộ nghe xịn) — qua MicSessionManager ===== */
+function startSRMonitor(session){
+  if(!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) return;
+  micAcquire(session).then(function(stream){
+    if(!MicSessions.isCurrent(session.id)) return;
+    try{
+      var AC = window.AudioContext || window.webkitAudioContext; if(!AC) return;
+      var ac = new AC(); session.resources.monitorCtx = ac;
+      if(ac.state === "suspended"){ try{ ac.resume(); }catch(e){} }
+      var srcN = ac.createMediaStreamSource(stream);
+      var an = ac.createAnalyser(); an.fftSize = 512; srcN.connect(an);
+      var det = makeEndpointDetector({ silenceMs: 1200, speechRms: 0.02 });
+      var buf = new Uint8Array(an.fftSize);
+      var iv = setInterval(function(){
+        if(!MicSessions.isCurrent(session.id)){ clearInterval(iv); return; }
+        an.getByteTimeDomainData(buf);
+        var sum = 0, i, v;
+        for(i = 0; i < buf.length; i++){ v = (buf[i] - 128) / 128; sum += v * v; }
+        if(det.feed(Math.sqrt(sum / buf.length), Date.now()) === "stop"){
+          clearInterval(iv);
+          var r = session.resources.recog;
+          if(r){ try{ r.stop(); }catch(e){} }
+        }
+      }, 120);
+      session.resources.timers.push(iv);
+    }catch(e){}
+  }).catch(function(){});
+}
+function startSRSession(session, adapter){
   var SR = window.SpeechRecognition || window.webkitSpeechRecognition;
   var rec;
-  try{ rec = new SR(); }catch(e){ rbShowMessage(ctx, "error"); return; }
-  rbRecog = rec;
-  ctx.session = (ctx.session || 0) + 1;
-  var mySession = ctx.session;
-  rec.lang = "en-US"; rec.interimResults = false; rec.maxAlternatives = 3;
-  var got = false;
-  ctx.btn.classList.add("listening");
+  try{ rec = new SR(); }catch(e){ MicSessions.finish(session); adapter.error("error"); return; }
+  session.resources.recog = rec;
+  rec.lang = "en-US"; rec.interimResults = false; rec.maxAlternatives = adapter.maxAlternatives || 1;
+  var got = false, errorShown = false;
+  rec.onstart = function(){
+    if(!MicSessions.isCurrent(session.id)) return;
+    MicSessions.setPhase(session, "listening");
+    adapter.phase("listening");
+    startSRMonitor(session);
+  };
   rec.onresult = function(ev){
+    if(!MicSessions.isCurrent(session.id)) return;
     got = true;
-    var res = ev.results[0];
-    var tWords = normalize(ctx.target).split(" ").filter(Boolean);
-    var best = null;
-    for(var k = 0; k < res.length; k++){
-      var said = res[k].transcript || "";
-      var hWords = normalize(said).split(" ").filter(Boolean);
-      var al = alignWords(tWords, hWords);
-      var sc = al.count - al.extras.length * 0.25;
-      if(!best || sc > best.score){ best = { said: said, al: al, score: sc }; }
-    }
-    if(ctx.session === mySession && best) rbShowResult(ctx, best);
+    adapter.result(ev.results[0]);
   };
   rec.onerror = function(ev){
-    if(ctx.session !== mySession) return;
-    ctx.btn.classList.remove("listening");
-    if(got) return;
-    if(ev.error === "aborted") return;
-    rbShowMessage(ctx, ev.error || "error");
+    if(!MicSessions.isCurrent(session.id)) return;
+    if(got || ev.error === "aborted") return;
+    errorShown = true;
+    MicSessions.dispose(session); MicSessions.finish(session);
+    adapter.error(ev.error || "error");
   };
   rec.onend = function(){
-    if(rbRecog === rec) rbRecog = null;
-    if(ctx.session === mySession) ctx.btn.classList.remove("listening");
+    if(!MicSessions.isCurrent(session.id)) return;
+    MicSessions.dispose(session); MicSessions.finish(session);
+    if(!errorShown) adapter.ended(got);
   };
+  session.capTimer = setTimeout(function(){
+    if(MicSessions.isCurrent(session.id)){ try{ rec.stop(); }catch(e){} }
+  }, session.capMs);
+  adapter.phase("starting");
   try{ rec.start(); }
-  catch(e){ ctx.btn.classList.remove("listening"); rbShowMessage(ctx, "error"); }
+  catch(e){ MicSessions.finish(session); adapter.error("error"); }
+}
+function startSRReadback(ctx, session){
+  ctx.fromRecording = false; ctx.lastBlob = null; ctx.lastF32 = null;
+  if(ctx.audioUrl){ try{ URL.revokeObjectURL(ctx.audioUrl); }catch(e){} ctx.audioUrl = null; }
+  var tWords = normalize(ctx.target).split(" ").filter(Boolean);
+  startSRSession(session, {
+    maxAlternatives: 3,
+    phase: function(p){
+      if(p !== "starting" && p !== "listening") return;
+      var panel = ctx.panel;
+      panel.innerHTML = ""; panel.className = "rb-panel show";
+      var status = document.createElement("p"); status.className = "rb-status";
+      status.textContent = "Đang nghe… bác đọc to: “" + ctx.target + "”";
+      panel.appendChild(status);
+      var hint = document.createElement("p"); hint.className = "rb-line";
+      hint.textContent = "Đọc xong bác cứ dừng lại, trang web sẽ tự chấm ngay. Cách nghe này đi qua mạng — nếu hay gặp lỗi, bác bật “Bộ nghe xịn” ở phía trên để máy nghe ngay trên máy. Muốn dừng sớm, bác bấm nút “Đọc lại” lần nữa.";
+      panel.appendChild(hint);
+      if(session.prevWasRecording){
+        var note = document.createElement("p"); note.className = "rb-line";
+        note.textContent = "Đã dừng phần đọc ở từ trước để bắt đầu ở đây.";
+        panel.appendChild(note);
+      }
+      if(ctx.btn) ctx.btn.classList.add("listening");
+    },
+    result: function(res){
+      var best = null;
+      for(var k = 0; k < res.length; k++){
+        var said = res[k].transcript || "";
+        var hWords = normalize(said).split(" ").filter(Boolean);
+        var al = alignWords(tWords, hWords);
+        var sc = al.count - al.extras.length * 0.25;
+        if(!best || sc > best.score) best = { said: said, al: al, score: sc };
+      }
+      if(ctx.btn) ctx.btn.classList.remove("listening");
+      if(best) rbShowResult(ctx, best);
+    },
+    error: function(kind){
+      if(ctx.btn) ctx.btn.classList.remove("listening");
+      rbShowMessage(ctx, srKind(kind));
+    },
+    ended: function(gotResult){
+      if(ctx.btn) ctx.btn.classList.remove("listening");
+      if(!gotResult) rbShowMessage(ctx, "no-speech");
+    }
+  });
+}
+
+/* ================= BỘ NGHE XỊN: WHISPER CHẠY NGAY TRÊN MÁY (Transformers.js) =================
+   Thư viện + mô hình CHỈ tải khi bác bấm “Bật bộ nghe xịn” — trang mở ra
+   không tự tải gì cả. Mô hình Xenova/whisper-tiny.en (bản gọn ~40MB) được
+   trình duyệt tự lưu (cache) sau lần tải đầu. Nghe trên main thread kèm
+   trạng thái chờ rõ ràng; ghi âm bằng MediaRecorder ngay trong trang. */
+var WX_CDN = "https://cdn.jsdelivr.net/npm/@xenova/transformers@2.17.2/dist/transformers.min.js";
+var WX_MODEL = "Xenova/whisper-tiny.en";
+var wx = { state:"off", pct:0, msg:"", transcriber:null, vadReady:false };
+var wxAC = null, wxLastInfo = null, wxFileBytes = {};
+var VAD_CDN = "https://cdn.jsdelivr.net/npm/@ricky0123/vad-web@0.0.19/dist/bundle.min.js";
+var VAD_BASE = "https://cdn.jsdelivr.net/npm/@ricky0123/vad-web@0.0.19/dist/";
+var VAD_ORT_CDN = "https://cdn.jsdelivr.net/npm/onnxruntime-web@1.14.0/dist/ort.min.js";
+var VAD_WASM = "https://cdn.jsdelivr.net/npm/onnxruntime-web@1.14.0/dist/";
+function wxSupported(){
+  return ("WebAssembly" in window) && typeof MediaRecorder !== "undefined" && !!(navigator.mediaDevices && navigator.mediaDevices.getUserMedia);
+}
+function wxSetState(st, msg){ wx.state = st; if(msg !== undefined) wx.msg = msg; renderEngineCards(); }
+function renderEngineCards(){
+  document.querySelectorAll("[data-engine-card]").forEach(function(card){
+    var st = card.querySelector("[data-wx-status]");
+    var bar = card.querySelector("[data-wx-bar]");
+    var fill = card.querySelector("[data-wx-fill]");
+    var btn = card.querySelector("[data-wx-btn]");
+    var note = card.querySelector("[data-wx-note]");
+    if(!wxSupported()){
+      if(st) st.textContent = "Máy hoặc trình duyệt này chưa hỗ trợ bộ nghe trên máy — bác cứ dùng nút Đọc lại theo cách nghe qua mạng (bằng Chrome), hoặc nghe mẫu rồi đọc to theo 3 lần.";
+      if(btn) btn.style.display = "none";
+      if(bar) bar.style.display = "none";
+      return;
+    }
+    if(wx.state === "ready"){
+      if(st) st.textContent = "Đã sẵn sàng — nghe offline: máy nghe ngay trên máy, lúc nói không cần mạng, và TỰ DỪNG ngay khi bác nói xong (bác không cần bấm dừng). Các nút “Đọc lại” giờ sẽ ghi âm, cho bác nghe lại giọng mình, chấm ngay trên máy và chỉ rõ âm nào chưa đúng." + (wx.vadReady ? "" : " (Bộ tự dừng theo tiếng nói chưa tải được nên máy dùng bộ phát hiện im lặng dự phòng — vẫn tự dừng khi bác nói xong.)");
+      if(bar) bar.style.display = "none";
+      if(btn) btn.style.display = "none";
+      if(note) note.textContent = "Bộ nghe đã được lưu trên máy này. Những lần mở trang sau, bác chỉ cần bấm “Bật bộ nghe xịn” là dùng ngay — máy nạp lại từ bộ nhớ, không tải lại 40MB.";
+    } else if(wx.state === "loading"){
+      if(st) st.textContent = wx.msg || "Đang tải bộ nghe…";
+      if(bar){ bar.style.display = "block"; if(fill) fill.style.width = (wx.pct || 0) + "%"; }
+      if(btn){ btn.disabled = true; btn.textContent = "Đang tải… " + (wx.pct || 0) + "%"; }
+    } else if(wx.state === "error"){
+      if(st) st.textContent = wx.msg || "Tải bộ nghe chưa thành công.";
+      if(bar) bar.style.display = "none";
+      if(btn){ btn.disabled = false; btn.style.display = ""; btn.textContent = "Thử tải lại bộ nghe xịn"; }
+    } else {
+      if(st) st.textContent = state.whisper ? "Bộ nghe đã từng tải xong trên máy này — bấm nút dưới đây để bật lại, sẽ rất nhanh." : "Chưa bật. Khi chưa bật, nút “Đọc lại” vẫn nghe theo cách cũ qua mạng (cần có mạng, đôi khi chưa ổn định).";
+      if(bar) bar.style.display = "none";
+      if(btn){ btn.disabled = false; btn.style.display = ""; btn.textContent = "Bật bộ nghe xịn"; }
+    }
+  });
+  var rbns = document.getElementById("rbNoSupport");
+  if(rbns) rbns.style.display = (!rbSupported() && wx.state !== "ready") ? "block" : "none";
+}
+function loadScriptOnce(src){
+  return new Promise(function(resolve, reject){
+    var s = document.createElement("script");
+    s.src = src; s.async = true;
+    s.onload = function(){ resolve(); };
+    s.onerror = function(){ reject(new Error("cdn")); };
+    document.head.appendChild(s);
+  });
+}
+function wxLoadScript(){
+  if(window.Transformers) return Promise.resolve();
+  return loadScriptOnce(WX_CDN).then(function(){
+    if(!window.Transformers) throw new Error("no-global");
+  });
+}
+/* Bộ tự dừng theo tiếng nói (Silero VAD qua @ricky0123/vad-web) — chỉ tải
+   cùng lúc bật bộ nghe xịn, tuyệt đối không tải khi trang vừa mở. Tải
+   không được thì máy vẫn nghe bằng bộ phát hiện im lặng dự phòng. */
+function wxLoadVadLibs(){
+  var chain = Promise.resolve();
+  if(!window.ort) chain = chain.then(function(){ return loadScriptOnce(VAD_ORT_CDN); });
+  return chain.then(function(){
+    if(!window.vad) return loadScriptOnce(VAD_CDN);
+  }).then(function(){
+    return !!(window.vad && window.vad.MicVAD);
+  }).catch(function(){ return false; });
+}
+function wxProgress(d){
+  if(!d) return;
+  if(d.status === "progress" && d.file){
+    var prev = wxFileBytes[d.file] || { loaded:0, total:0 };
+    if(typeof d.loaded === "number") prev.loaded = d.loaded;
+    if(typeof d.total === "number" && d.total > 0) prev.total = d.total;
+    wxFileBytes[d.file] = prev;
+    var L = 0, T = 0, k;
+    for(k in wxFileBytes){ if(wxFileBytes.hasOwnProperty(k)){ L += wxFileBytes[k].loaded || 0; T += wxFileBytes[k].total || 0; } }
+    if(T > 0) wx.pct = Math.min(99, Math.round(L / T * 100));
+    else if(typeof d.progress === "number") wx.pct = Math.max(wx.pct || 0, Math.min(99, Math.round(d.progress)));
+    wx.msg = "Đang tải bộ nghe về máy… " + wx.pct + "% — chỉ tải lần đầu thôi, bác đừng tắt trang nhé.";
+    renderEngineCards();
+  } else if(d.status === "initiate" || d.status === "download"){
+    wx.msg = "Đang chuẩn bị tải bộ nghe…"; renderEngineCards();
+  } else if(d.status === "done" || d.status === "ready"){
+    wx.msg = "Đang nạp bộ nghe vào máy…"; renderEngineCards();
+  }
+}
+function wxEnable(){
+  if(wx.state === "loading" || wx.state === "ready") return;
+  if(!wxSupported()){ toast("Máy này chưa hỗ trợ bộ nghe trên máy, bác nhé."); return; }
+  wxFileBytes = {}; wx.pct = 0;
+  wxSetState("loading", "Đang tải thư viện nghe… (bước này cần có mạng)");
+  wxLoadScript().then(function(){
+    var T = window.Transformers;
+    try{
+      T.env.allowLocalModels = false;
+      T.env.useBrowserCache = true;
+      if(T.env.backends && T.env.backends.onnx && T.env.backends.onnx.wasm){
+        T.env.backends.onnx.wasm.wasmPaths = "https://cdn.jsdelivr.net/npm/@xenova/transformers@2.17.2/dist/";
+        T.env.backends.onnx.wasm.numThreads = 1;
+      }
+    }catch(e){}
+    wx.msg = "Đang tải bộ nghe về máy… 0%"; renderEngineCards();
+    return T.pipeline("automatic-speech-recognition", WX_MODEL, { progress_callback: wxProgress });
+  }).then(function(transcriber){
+    wx.transcriber = transcriber; wx.pct = 100;
+    wx.msg = "Đang tải bộ tự dừng theo tiếng nói…"; renderEngineCards();
+    return wxLoadVadLibs();
+  }).then(function(vadOk){
+    wx.vadReady = !!vadOk;
+    state.whisper = 1; saveState();
+    wxSetState("ready");
+    toast("Bộ nghe xịn đã sẵn sàng! Giờ bác bấm “Đọc lại” là máy ghi âm, tự dừng khi bác nói xong và nghe ngay trên máy.");
+  }).catch(function(err){
+    wxSetState("error", "Chưa tải được bộ nghe (có thể do mạng yếu). Bác kiểm tra lại Wi-Fi rồi bấm “Thử tải lại” nhé. Trong lúc chờ, nút Đọc lại vẫn nghe qua mạng như cũ.");
+  });
+}
+function wxDecode(buf){
+  return new Promise(function(resolve, reject){
+    try{
+      var p = wxAC.decodeAudioData(buf, resolve, reject);
+      if(p && typeof p.catch === "function") p.catch(reject);
+    }catch(e){ reject(e); }
+  });
+}
+function wxAudioFromBlob(blob){
+  if(!wxAC){ var AC = window.AudioContext || window.webkitAudioContext; wxAC = new AC(); }
+  if(wxAC.state === "suspended"){ try{ wxAC.resume(); }catch(e){} }
+  return blob.arrayBuffer().then(function(buf){
+    return wxDecode(buf.slice(0));
+  }).then(function(decoded){
+    var ch = decoded.getChannelData(0), sum = 0, i;
+    for(i = 0; i < ch.length; i++){ sum += ch[i] * ch[i]; }
+    var rms = ch.length ? Math.sqrt(sum / ch.length) : 0;
+    var dur = decoded.duration;
+    var len = Math.max(1, Math.round(dur * 16000));
+    var off = new OfflineAudioContext(1, len, 16000);
+    var src = off.createBufferSource(); src.buffer = decoded;
+    src.connect(off.destination); src.start();
+    return off.startRendering().then(function(rendered){
+      return { audio: rendered.getChannelData(0), dur: dur, rms: rms };
+    });
+  });
+}
+function wxTranscribe(blob){
+  return wxAudioFromBlob(blob).then(function(info){
+    wxLastInfo = info;
+    return wx.transcriber(info.audio, {});
+  }).then(function(out){
+    return (out && out.text) ? String(out.text).trim() : "";
+  });
+}
+function rbStopTracks(session){
+  if(session && session.stream){ session.stream.getTracks().forEach(function(t){ try{ t.stop(); }catch(e){} }); }
+}
+function rbPickMime(){
+  var cands = ["audio/webm;codecs=opus", "audio/webm", "audio/mp4", "audio/ogg;codecs=opus", "audio/ogg"];
+  if(typeof MediaRecorder === "undefined") return "";
+  for(var i = 0; i < cands.length; i++){ try{ if(MediaRecorder.isTypeSupported(cands[i])) return cands[i]; }catch(e){} }
+  return "";
+}
+function rbPlayBtn(ctx){
+  return rbActionBtn("Nghe lại giọng của bác", function(){
+    if(!ctx.audioUrl) return;
+    if(!ctx.audioEl) ctx.audioEl = new Audio();
+    try{
+      ctx.audioEl.pause(); ctx.audioEl.src = ctx.audioUrl;
+      var pr = ctx.audioEl.play(); if(pr && pr.catch) pr.catch(function(){});
+    }catch(e){}
+  }, "play");
+}
+function f32ToWavBlob(samples, sampleRate){
+  var buffer = new ArrayBuffer(44 + samples.length * 2);
+  var view = new DataView(buffer);
+  function ws(off, str){ for(var i = 0; i < str.length; i++) view.setUint8(off + i, str.charCodeAt(i)); }
+  ws(0, "RIFF"); view.setUint32(4, 36 + samples.length * 2, true); ws(8, "WAVEfmt ");
+  view.setUint32(16, 16, true); view.setUint16(20, 1, true); view.setUint16(22, 1, true);
+  view.setUint32(24, sampleRate, true); view.setUint32(28, sampleRate * 2, true);
+  view.setUint16(32, 2, true); view.setUint16(34, 16, true); ws(36, "data");
+  view.setUint32(40, samples.length * 2, true);
+  var off = 44, i, s;
+  for(i = 0; i < samples.length; i++, off += 2){
+    s = Math.max(-1, Math.min(1, samples[i]));
+    view.setInt16(off, s < 0 ? s * 0x8000 : s * 0x7FFF, true);
+  }
+  return new Blob([view], { type: "audio/wav" });
+}
+/* ===== GHI ÂM MỘT PHIÊN: VAD (Silero, chạy trên máy) hoặc dự phòng
+   MediaRecorder + phát hiện im lặng RMS. Cả hai đường dùng CHUNG một
+   stream mic do micAcquire cấp cho phiên — không mở mic lần thứ hai. ===== */
+function startCaptureSession(session, adapter){
+  MicSessions.setPhase(session, "starting");
+  adapter.phase("starting");
+  if(window.speechSynthesis){ try{ window.speechSynthesis.cancel(); }catch(e){} }
+  micAcquire(session).then(function(stream){
+    if(!MicSessions.isCurrent(session.id)) return;
+    if(wx.vadReady && window.vad && window.vad.MicVAD){ startVadCapture(session, adapter, stream); }
+    else { startRecorderCapture(session, adapter, stream); }
+  }).catch(function(err){
+    if(!MicSessions.isCurrent(session.id)) return;
+    MicSessions.finish(session);
+    if(err && (err.name === "NotAllowedError" || err.name === "SecurityError")) adapter.error("not-allowed");
+    else if(err && err.name === "NotFoundError") adapter.error("audio-capture");
+    else adapter.error("error");
+  });
+}
+function startRecorderCapture(session, adapter, stream){
+  var chunks = [];
+  var mime = rbPickMime();
+  var rec;
+  try{ rec = mime ? new MediaRecorder(stream, { mimeType: mime }) : new MediaRecorder(stream); }
+  catch(e){ MicSessions.finish(session); adapter.error("audio-capture"); return; }
+  session.resources.recorder = rec;
+  var det = makeEndpointDetector({ silenceMs: 1200, speechRms: 0.02 });
+  try{
+    var AC = window.AudioContext || window.webkitAudioContext;
+    if(AC){
+      var ac = new AC(); session.resources.monitorCtx = ac;
+      if(ac.state === "suspended"){ try{ ac.resume(); }catch(e){} }
+      var srcN = ac.createMediaStreamSource(stream);
+      var an = ac.createAnalyser(); an.fftSize = 512; srcN.connect(an);
+      var buf = new Uint8Array(an.fftSize);
+      var iv = setInterval(function(){
+        if(!MicSessions.isCurrent(session.id)){ clearInterval(iv); return; }
+        an.getByteTimeDomainData(buf);
+        var sum = 0, i, v;
+        for(i = 0; i < buf.length; i++){ v = (buf[i] - 128) / 128; sum += v * v; }
+        var d = det.feed(Math.sqrt(sum / buf.length), Date.now());
+        if(d === "speech" && session.phase === "listening"){ MicSessions.setPhase(session, "recording"); adapter.phase("recording"); }
+        else if(d === "stop"){ stopCaptureAndGrade(session); }
+      }, 120);
+      session.resources.timers.push(iv);
+    }
+  }catch(e){}
+  rec.ondataavailable = function(ev){ if(ev.data && ev.data.size) chunks.push(ev.data); };
+  rec.onstop = function(){
+    if(session.resources.discard) return;
+    if(!MicSessions.isCurrent(session.id)) return;
+    var blob = new Blob(chunks, { type: rec.mimeType || mime || "audio/webm" });
+    endCaptureResources(session);
+    MicSessions.setPhase(session, "grading"); adapter.phase("grading");
+    adapter.audioBlob(blob);
+  };
+  session.stopCapture = function(){ stopCaptureAndGrade(session); };
+  session.capTimer = setTimeout(function(){ stopCaptureAndGrade(session); }, session.capMs);
+  MicSessions.setPhase(session, "listening");
+  adapter.phase("listening");
+  try{ rec.start(250); }
+  catch(e){ MicSessions.finish(session); adapter.error("audio-capture"); }
+}
+function stopCaptureAndGrade(session){
+  if(!MicSessions.isCurrent(session.id)) return;
+  if(session.capTimer){ clearTimeout(session.capTimer); session.capTimer = null; }
+  var rec = session.resources.recorder;
+  if(rec && rec.state === "recording"){ try{ rec.stop(); }catch(e){} }
+}
+function startVadCapture(session, adapter, stream){
+  var vadOpts = {
+    baseAssetPath: VAD_BASE, onnxWASMBasePath: VAD_WASM, stream: stream,
+    positiveSpeechThreshold: 0.5, negativeSpeechThreshold: 0.35,
+    redemptionMs: 1100, redemptionFrames: 12,
+    minSpeechMs: 300, minSpeechFrames: 3,
+    preSpeechPadMs: 90, preSpeechPadFrames: 1,
+    onSpeechStart: function(){
+      if(!MicSessions.isCurrent(session.id)) return;
+      MicSessions.setPhase(session, "recording"); adapter.phase("recording");
+    },
+    onSpeechEnd: function(audio){
+      if(!MicSessions.isCurrent(session.id)) return;
+      if(session.capTimer){ clearTimeout(session.capTimer); session.capTimer = null; }
+      endCaptureResources(session);
+      MicSessions.setPhase(session, "grading"); adapter.phase("grading");
+      var sum = 0, i;
+      for(i = 0; i < audio.length; i++) sum += audio[i] * audio[i];
+      var rms = audio.length ? Math.sqrt(sum / audio.length) : 0;
+      adapter.audioF32(audio, audio.length / 16000, rms);
+    },
+    onVADMisfire: function(){
+      if(!MicSessions.isCurrent(session.id)) return;
+      if(session.phase === "recording"){ MicSessions.setPhase(session, "listening"); adapter.phase("listening"); }
+    }
+  };
+  window.vad.MicVAD.new(vadOpts).then(function(vadInst){
+    if(!MicSessions.isCurrent(session.id)){ try{ vadInst.destroy(); }catch(e){} return; }
+    session.resources.vad = vadInst;
+    try{ vadInst.start(); }
+    catch(e){ startRecorderCapture(session, adapter, stream); return; }
+    /* Nguồn dự phòng cho nút Dừng thủ công giữa câu: một MediaRecorder trên CÙNG stream. */
+    var chunks = [];
+    var mime = rbPickMime();
+    var rec = null;
+    try{ rec = mime ? new MediaRecorder(stream, { mimeType: mime }) : new MediaRecorder(stream); }catch(e){ rec = null; }
+    if(rec){
+      session.resources.recorder = rec;
+      rec.ondataavailable = function(ev){ if(ev.data && ev.data.size) chunks.push(ev.data); };
+      rec.onstop = function(){
+        if(session.resources.discard) return;
+        if(!MicSessions.isCurrent(session.id)) return;
+        if(!session.resources.gradeFromBlob) return;
+        session.resources.gradeFromBlob = false;
+        var blob = new Blob(chunks, { type: rec.mimeType || mime || "audio/webm" });
+        endCaptureResources(session);
+        MicSessions.setPhase(session, "grading"); adapter.phase("grading");
+        adapter.audioBlob(blob);
+      };
+      try{ rec.start(250); }catch(e){ session.resources.recorder = null; }
+    }
+    session.stopCapture = function(){
+      if(!MicSessions.isCurrent(session.id)) return;
+      if(session.capTimer){ clearTimeout(session.capTimer); session.capTimer = null; }
+      if(session.resources.vad){ try{ session.resources.vad.destroy(); }catch(e){} session.resources.vad = null; }
+      session.resources.gradeFromBlob = true;
+      var r2 = session.resources.recorder;
+      if(r2 && r2.state === "recording"){ try{ r2.stop(); }catch(e){} }
+      else { endCaptureResources(session); MicSessions.finish(session); adapter.error("no-speech"); }
+    };
+    session.capTimer = setTimeout(function(){ if(session.stopCapture) session.stopCapture(); }, session.capMs);
+    MicSessions.setPhase(session, "listening");
+    adapter.phase("listening");
+  }).catch(function(){
+    if(!MicSessions.isCurrent(session.id)) return;
+    /* VAD không chạy được trên máy này -> ghi bằng MediaRecorder + phát hiện im lặng, trên cùng stream */
+    startRecorderCapture(session, adapter, stream);
+  });
+}
+/* ===== CHẤM BẢN GHI BẰNG WHISPER NGAY TRÊN MÁY ===== */
+function finishGrade(ctx, session, text, dur, rms){
+  ctx.recDur = dur;
+  var hWords = normalize(text).split(" ").filter(Boolean);
+  ctx.paceRemarks = paceRemarks(dur, hWords.length, (typeof rms === "number") ? rms : null);
+  if(session) MicSessions.finish(session);
+  if(!text || !hWords.length){
+    rbShowRecordRetry(ctx, "Chưa nghe rõ tiếng", "Máy chưa nghe rõ bác nói gì. Bác bấm “Nghe lại giọng của bác” để tự nghe lại, để máy gần miệng hơn, nói to và chậm lại — rồi bấm “Chấm lại” hoặc “Đọc lại lần nữa” nhé.");
+    return;
+  }
+  var tWords = normalize(ctx.target).split(" ").filter(Boolean);
+  rbShowResult(ctx, { said: text, al: alignWords(tWords, hWords) });
+}
+function gradeF32(ctx, session, f32, dur, rms){
+  ctx.lastF32 = f32; ctx.lastDur = dur; ctx.lastRms = rms;
+  ctx.lastBlob = f32ToWavBlob(f32, 16000);
+  if(ctx.audioUrl){ try{ URL.revokeObjectURL(ctx.audioUrl); }catch(e){} }
+  ctx.audioUrl = URL.createObjectURL(ctx.lastBlob);
+  ctx.fromRecording = true;
+  wx.transcriber(f32, {}).then(function(out){
+    if(session && !MicSessions.isCurrent(session.id)) return;
+    var text = (out && out.text) ? String(out.text).trim() : "";
+    finishGrade(ctx, session, text, dur, rms);
+  }).catch(function(){
+    if(session && !MicSessions.isCurrent(session.id)) return;
+    if(session) MicSessions.finish(session);
+    rbShowRecordRetry(ctx, "Máy chưa nghe được lần này", "Có trục trặc nhỏ khi máy nghe lại bản ghi. Bản ghi vẫn còn nguyên — bác bấm “Chấm lại” để máy nghe lại, không cần nói lại đâu.");
+  });
+}
+function gradeBlob(ctx, session, blob){
+  if(ctx.audioUrl){ try{ URL.revokeObjectURL(ctx.audioUrl); }catch(e){} ctx.audioUrl = null; }
+  ctx.lastBlob = blob; ctx.lastF32 = null;
+  ctx.audioUrl = URL.createObjectURL(blob);
+  ctx.fromRecording = true;
+  wxTranscribe(blob).then(function(text){
+    if(session && !MicSessions.isCurrent(session.id)) return;
+    var info = wxLastInfo || {};
+    finishGrade(ctx, session, text, (typeof info.dur === "number") ? info.dur : 0, (typeof info.rms === "number") ? info.rms : null);
+  }).catch(function(){
+    if(session && !MicSessions.isCurrent(session.id)) return;
+    if(session) MicSessions.finish(session);
+    rbShowRecordRetry(ctx, "Máy chưa nghe được lần này", "Có trục trặc nhỏ khi máy nghe lại bản ghi. Bản ghi vẫn còn nguyên — bác bấm “Chấm lại” để máy nghe lại, không cần nói lại đâu.");
+  });
+}
+function gradeAgain(ctx){
+  rbGradingUI(ctx);
+  if(ctx.lastF32){ gradeF32(ctx, null, ctx.lastF32, ctx.lastDur, ctx.lastRms); }
+  else if(ctx.lastBlob){ gradeBlob(ctx, null, ctx.lastBlob); }
+}
+function rbShowRecordRetry(ctx, title, text){
+  var panel = ctx.panel;
+  panel.innerHTML = ""; panel.className = "rb-panel show";
+  var t = document.createElement("p"); t.className = "rb-status"; t.textContent = title; panel.appendChild(t);
+  var p = document.createElement("p"); p.className = "rb-line"; p.textContent = text; panel.appendChild(p);
+  var actions = document.createElement("div"); actions.className = "rb-actions";
+  actions.appendChild(rbActionBtn("Nghe chậm lại", function(){ speak(ctx.target, 0.5); }, "slow"));
+  actions.appendChild(rbPlayBtn(ctx));
+  actions.appendChild(rbActionBtn("Chấm lại", function(){ gradeAgain(ctx); }, "vslow"));
+  actions.appendChild(rbActionBtn("Đọc lại lần nữa", function(){ startReadback(ctx); }, "mic"));
+  panel.appendChild(actions);
+  if(ctx.btn) ctx.btn.classList.remove("listening");
 }
 
 /* ================= QUIZ ENGINE ================= */
@@ -2052,7 +3315,17 @@ updateStreak();
 renderLessonGrid();
 pickWotd();
 refreshProgress();
-if(!rbSupported()){ var rbns = document.getElementById("rbNoSupport"); if(rbns) rbns.style.display = "block"; }
+document.querySelectorAll("[data-wx-btn]").forEach(function(b){ b.addEventListener("click", wxEnable); });
+var spb = document.getElementById("speakPlayBtn");
+if(spb){ spb.addEventListener("click", function(){
+  if(!spAudioUrl) return;
+  var a = new Audio(spAudioUrl);
+  var pr = a.play(); if(pr && pr.catch) pr.catch(function(){});
+}); }
+renderEngineCards();
+document.addEventListener("visibilitychange", function(){
+  if(document.hidden) MicSessions.cancelCurrent();
+});
 if(!ttsOK){ setTimeout(function(){ toast("Trình duyệt này chưa hỗ trợ giọng đọc tiếng Anh. Bác mở trang bằng Chrome hoặc Safari để nghe phát âm nhé."); }, 800); }
 </script>
 </body>
