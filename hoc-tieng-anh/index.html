@@ -394,6 +394,28 @@ html.hc .tab-btn[aria-selected="true"]{color:#fff}
 .learned-toggle:active{transform:scale(.96)}
 .learned-toggle.on{background:var(--success-soft); border-color:var(--success); color:var(--success)}
 
+/* Readback: Nghe → Đọc lại → Sửa ngay */
+.vocab-item{display:flex; flex-direction:column; min-width:0}
+.rb-steps{display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin-bottom:20px}
+.rb-step{background:var(--surface-2); border:2px solid var(--border); border-radius:var(--r-md); padding:14px 16px}
+.rb-step b{display:block; color:var(--accent-strong); font-size:.82em; letter-spacing:.05em; text-transform:uppercase; margin-bottom:4px}
+.rb-step span{font-weight:600; font-size:.95em; color:var(--ink-2)}
+@media (max-width:700px){ .rb-steps{grid-template-columns:1fr} }
+.icon-btn.mic{border-color:var(--accent); color:var(--accent-strong); background:var(--accent-soft)}
+.icon-btn.mic.listening{background:var(--danger); border-color:var(--danger); color:#fff; animation:pulse 1.2s ease infinite}
+.icon-btn.vslow{border-color:var(--primary); color:var(--primary-strong); background:var(--primary-soft)}
+.rb-panel{display:none; margin-top:10px; background:var(--surface-2); border:2px solid var(--border-strong); border-radius:var(--r-md); padding:18px 20px}
+.rb-panel.show{display:block}
+.rb-status{font-weight:800; font-size:1.02em}
+.rb-score{font-weight:800}
+.rb-words{display:flex; flex-wrap:wrap; gap:8px; margin:12px 0 4px}
+.wcheck{padding:7px 14px; border-radius:var(--r-pill); font-weight:800; border:2.5px solid; font-size:.98em}
+.wcheck.ok{background:var(--success-soft); border-color:var(--success); color:var(--ink)}
+.wcheck.bad{background:var(--danger-soft); border-color:var(--danger); color:var(--ink); text-decoration:underline; text-underline-offset:3px}
+.rb-line{font-weight:600; margin-top:8px}
+.rb-note{font-weight:700; margin-top:10px; background:var(--surface); border:1.5px solid var(--border-strong); border-radius:var(--r-sm); padding:12px 14px}
+.rb-actions{display:flex; gap:8px; flex-wrap:wrap; margin-top:14px}
+
 /* Numbers strip */
 .numbers-strip{display:flex; flex-wrap:wrap; gap:10px; margin-top:20px}
 .num-chip{
@@ -655,7 +677,7 @@ html.hc .pick-chip[aria-pressed="true"]{color:#fff}
         <div class="step-card">
           <div class="step-num" aria-hidden="true">2</div>
           <h3>Bấm nút loa để nghe</h3>
-          <p>Mỗi từ và mỗi câu đều có nút <b>Nghe</b> và nút <b>Nghe chậm</b>. Nghe xong, bác đọc theo thành tiếng 2–3 lần. Nghe chậm sẽ đọc thật chậm, rõ từng âm.</p>
+          <p>Mỗi từ và mỗi câu đều có nút <b>Nghe</b> với 3 tốc độ: thường, chậm và rất chậm. Nghe xong, bác bấm nút <b>Đọc lại</b> và đọc to vào mic — trang web nghe lại, chỉ ra từ nào đọc chưa đúng để bác sửa ngay tại chỗ.</p>
         </div>
         <div class="step-card">
           <div class="step-num" aria-hidden="true">3</div>
@@ -682,7 +704,7 @@ html.hc .pick-chip[aria-pressed="true"]{color:#fff}
           <p class="wotd-from" id="wotdFrom">…</p>
           <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:18px">
             <button type="button" class="icon-btn" data-speak="" data-rate="1" id="wotdBtnN">Nghe thường</button>
-            <button type="button" class="icon-btn slow" data-speak="" data-rate="0.65" id="wotdBtnS">Nghe chậm</button>
+            <button type="button" class="icon-btn slow" data-speak="" data-rate="0.5" id="wotdBtnS">Nghe chậm</button>
             <button type="button" class="learned-toggle" id="wotdLearnBtn">Đánh dấu đã thuộc</button>
           </div>
         </div>
@@ -862,11 +884,19 @@ html.hc .pick-chip[aria-pressed="true"]{color:#fff}
 
     <section class="tab-panel active" id="panel-vocab" role="tabpanel" aria-label="Từ vựng">
       <h2 class="sub-h">Từ vựng của bài</h2>
-      <p class="sub-p">Bấm <b>Nghe</b> để nghe đọc bình thường, <b>Nghe chậm</b> để nghe đọc thật chậm. Học thuộc từ nào, bấm “Đã thuộc” ở từ đó.</p>
+      <p class="sub-p">Mỗi từ có 3 nút nghe: <b>Nghe thường</b>, <b>Nghe chậm</b> và <b>Nghe rất chậm</b>. Nghe xong, bấm <b>Đọc lại</b> và đọc to vào mic — trang web sẽ nghe lại, chỉ ngay từ nào đúng, từ nào sai để bác sửa luôn tại chỗ. Học thuộc từ nào, bấm “Đã thuộc” ở từ đó.</p>
+      <div class="rb-steps" aria-label="Cách luyện nghe và đọc lại">
+        <div class="rb-step"><b>Bước 1 · Nghe</b><span>Bấm Nghe thường, Nghe chậm hoặc Nghe rất chậm để nghe mẫu thật kỹ.</span></div>
+        <div class="rb-step"><b>Bước 2 · Đọc lại</b><span>Bấm nút “Đọc lại” màu cam rồi đọc to vào mic, giống như mẫu vừa nghe.</span></div>
+        <div class="rb-step"><b>Bước 3 · Sửa ngay</b><span>Từ đọc đúng sẽ tô xanh kèm dấu ✓, từ sai hoặc thiếu sẽ tô đỏ kèm dấu ✗ — nghe chậm lại và đọc lại ngay tại chỗ.</span></div>
+      </div>
+      <div id="rbNoSupport" class="no-support" style="display:none; margin-bottom:20px">
+        <p><b>Lưu ý:</b> trình duyệt này chưa nghe được giọng nói nên chưa chấm đọc được. Bác hãy mở trang bằng <b>Google Chrome</b> (trên điện thoại Android hoặc máy tính) để dùng nút “Đọc lại”. Trong lúc đó, bác cứ bấm <b>Nghe chậm / Nghe rất chậm</b> rồi đọc to theo 3 lần — cách này vẫn rất hiệu quả.</p>
+      </div>
       <div class="vocab-list" id="vocabList"></div>
       <div id="numbersWrap"></div>
       <h3 class="sub-h" style="margin-top:30px">Câu mẫu dùng ngay</h3>
-      <p class="sub-p">Đây là những câu hoàn chỉnh bác có thể dùng luôn trong đời sống.</p>
+      <p class="sub-p">Đây là những câu hoàn chỉnh bác có thể dùng luôn trong đời sống. Cũng nghe 3 mức như trên, rồi bấm <b>Đọc lại</b> để tập nói cả câu — trang web chấm từng từ cho bác.</p>
       <div class="vocab-list" id="phraseList"></div>
     </section>
 
@@ -982,6 +1012,7 @@ html.hc .pick-chip[aria-pressed="true"]{color:#fff}
 <script>
 /* ================= DATA ================= */
 var SPEAKER_SVG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 5 6 9H2v6h4l5 4V5Z"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg>';
+var MIC_SVG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" x2="12" y1="19" y2="22"/></svg>';
 
 var LESSONS = [
 { id:1, title:"Chào hỏi & giới thiệu", sub:"Bài 1 · Làm quen và tự giới thiệu bản thân",
@@ -1176,7 +1207,7 @@ var TOTAL_QUIZ = [
 
 /* ================= STATE (localStorage) ================= */
 var STORE_KEY = "tieng-anh-nguoi-moi-v1";
-var state = { learned:{}, completed:{}, quizBest:{}, streak:0, lastDay:"", totalBest:0 };
+var state = { learned:{}, completed:{}, quizBest:{}, streak:0, lastDay:"", totalBest:0, practice:{} };
 function loadState(){
   try{
     var raw = localStorage.getItem(STORE_KEY);
@@ -1226,9 +1257,9 @@ document.addEventListener("click", function(e){
   var b = e.target.closest("[data-speak]");
   if(b){ speak(b.getAttribute("data-speak"), parseFloat(b.getAttribute("data-rate")||"1")); }
 });
-function speakBtn(text, rate, label, slow){
+function speakBtn(text, rate, label, slow, extraCls){
   var b = document.createElement("button");
-  b.type="button"; b.className = "icon-btn" + (slow ? " slow" : "");
+  b.type="button"; b.className = "icon-btn" + (slow ? " slow" : "") + (extraCls ? " " + extraCls : "");
   b.setAttribute("data-speak", text); b.setAttribute("data-rate", String(rate));
   b.innerHTML = SPEAKER_SVG + "<span>"+label+"</span>";
   return b;
@@ -1341,7 +1372,7 @@ function renderReview(){
     t.appendChild(rw); t.appendChild(rv); row.appendChild(t);
     var sp = document.createElement("div"); sp.className = "sp";
     sp.appendChild(speakBtn(v.en, 1, "Nghe", false));
-    sp.appendChild(speakBtn(v.en, 0.65, "Chậm", true));
+    sp.appendChild(speakBtn(v.en, 0.5, "Nghe chậm", true));
     row.appendChild(sp);
     list.appendChild(row);
   });
@@ -1420,6 +1451,16 @@ document.querySelectorAll(".tab-btn").forEach(function(b){
 });
 
 /* ================= VOCAB RENDER ================= */
+function readbackBtn(target, ipa, vi, isWord, panel){
+  var b = document.createElement("button");
+  b.type = "button"; b.className = "icon-btn mic";
+  b.innerHTML = MIC_SVG + "<span>Đọc lại</span>";
+  b.setAttribute("aria-label", "Đọc lại “" + target + "” để trang web nghe và chấm");
+  b.addEventListener("click", function(){
+    startReadback({ target: target, ipa: ipa || "", vi: vi || "", isWord: !!isWord, panel: panel, btn: b, session: 0 });
+  });
+  return b;
+}
 function learnToggle(en){
   var b = document.createElement("button");
   b.type="button"; b.className="learned-toggle"; b.setAttribute("data-learn-toggle", en);
@@ -1448,11 +1489,16 @@ function renderVocab(){
     var vi = document.createElement("div"); vi.className="v-vi"; vi.textContent = v.vi;
     var ex = document.createElement("div"); ex.className="v-ex"; ex.textContent = "Ví dụ: " + v.ex;
     main.appendChild(en); main.appendChild(ipa); main.appendChild(vi); main.appendChild(ex); row.appendChild(main);
+    var panel = document.createElement("div"); panel.className="rb-panel"; panel.setAttribute("aria-live","polite");
     var btns = document.createElement("div"); btns.className="v-btns";
-    btns.appendChild(speakBtn(v.en, 1, "Nghe", false));
-    btns.appendChild(speakBtn(v.en, 0.65, "Nghe chậm", true));
+    btns.appendChild(speakBtn(v.en, 1, "Nghe thường", false));
+    btns.appendChild(speakBtn(v.en, 0.5, "Nghe chậm", true));
+    btns.appendChild(speakBtn(v.en, 0.38, "Nghe rất chậm", false, "vslow"));
+    btns.appendChild(readbackBtn(v.en, v.ipa, v.vi, true, panel));
     btns.appendChild(learnToggle(v.en));
-    row.appendChild(btns); list.appendChild(row);
+    row.appendChild(btns);
+    var item = document.createElement("div"); item.className="vocab-item";
+    item.appendChild(row); item.appendChild(panel); list.appendChild(item);
   });
   var pl = document.getElementById("phraseList"); pl.innerHTML = "";
   currentLesson.phrases.forEach(function(p){
@@ -1461,10 +1507,15 @@ function renderVocab(){
     var en = document.createElement("div"); en.className="v-en"; en.style.fontSize="1.2em"; en.textContent = p.en;
     var vi = document.createElement("div"); vi.className="v-vi"; vi.textContent = p.vi;
     main.appendChild(en); main.appendChild(vi); row.appendChild(main);
+    var panel = document.createElement("div"); panel.className="rb-panel"; panel.setAttribute("aria-live","polite");
     var btns = document.createElement("div"); btns.className="v-btns";
-    btns.appendChild(speakBtn(p.en, 1, "Nghe", false));
-    btns.appendChild(speakBtn(p.en, 0.65, "Nghe chậm", true));
-    row.appendChild(btns); pl.appendChild(row);
+    btns.appendChild(speakBtn(p.en, 1, "Nghe thường", false));
+    btns.appendChild(speakBtn(p.en, 0.5, "Nghe chậm", true));
+    btns.appendChild(speakBtn(p.en, 0.38, "Nghe rất chậm", false, "vslow"));
+    btns.appendChild(readbackBtn(p.en, "", p.vi, false, panel));
+    row.appendChild(btns);
+    var item = document.createElement("div"); item.className="vocab-item";
+    item.appendChild(row); item.appendChild(panel); pl.appendChild(item);
   });
   var nw = document.getElementById("numbersWrap"); nw.innerHTML = "";
   if(currentLesson.numbers){
@@ -1531,7 +1582,7 @@ function renderDialogue(){
     var hide = (roleMode==="hideA" && line.who==="A") || (roleMode==="hideB" && line.who==="B");
     if(hide){ en.classList.add("hidden-text"); vi.classList.add("hidden-text"); en.textContent = "… (đến lượt bác nói) …"; }
     var btns = document.createElement("div"); btns.className="b-btns";
-    btns.appendChild(speakBtn(line.en, 0.65, "Nghe chậm câu này", true));
+    btns.appendChild(speakBtn(line.en, 0.5, "Nghe chậm câu này", true));
     if(hide){
       var showBtn = document.createElement("button"); showBtn.type="button"; showBtn.className="icon-btn";
       showBtn.textContent = "Xem đáp án";
@@ -1582,7 +1633,7 @@ function syncSpeakTarget(){
   var f = document.getElementById("speakFeedback"); f.className = "feedback"; f.textContent = "";
 }
 document.getElementById("speakListenN").addEventListener("click", function(){ if(speakItems.length) speak(speakItems[speakIndex].en, 1); });
-document.getElementById("speakListenS").addEventListener("click", function(){ if(speakItems.length) speak(speakItems[speakIndex].en, 0.65); });
+document.getElementById("speakListenS").addEventListener("click", function(){ if(speakItems.length) speak(speakItems[speakIndex].en, 0.5); });
 function normalize(s){ return (s||"").toLowerCase().replace(/[^a-z0-9' ]/g," ").replace(/\s+/g," ").trim(); }
 function similarity(a, b){
   var wa = normalize(a).split(" ").filter(Boolean), wb = normalize(b).split(" ").filter(Boolean);
@@ -1628,6 +1679,173 @@ document.getElementById("micBtn").addEventListener("click", function(){
   };
   try{ recog.start(); }catch(e){ toast("Chưa bật được mic lúc này, bác thử lại nhé."); }
 });
+
+/* ================= READBACK: NGHE → ĐỌC LẠI → SỬA NGAY ================= */
+function rbSupported(){ return !!(window.SpeechRecognition || window.webkitSpeechRecognition); }
+var rbRecog = null;
+function alignWords(tWords, hWords){
+  var n = tWords.length, m = hWords.length, i, j;
+  var dp = [];
+  for(i = 0; i <= n; i++){ dp.push([]); for(j = 0; j <= m; j++){ dp[i][j] = 0; } }
+  for(i = n - 1; i >= 0; i--){
+    for(j = m - 1; j >= 0; j--){
+      dp[i][j] = (tWords[i] === hWords[j]) ? dp[i+1][j+1] + 1 : Math.max(dp[i+1][j], dp[i][j+1]);
+    }
+  }
+  var matched = {}, extras = [], ti = 0, hj = 0;
+  while(ti < n && hj < m){
+    if(tWords[ti] === hWords[hj]){ matched[ti] = true; ti++; hj++; }
+    else if(dp[ti+1][hj] >= dp[ti][hj+1]){ ti++; }
+    else { extras.push(hWords[hj]); hj++; }
+  }
+  while(hj < m){ extras.push(hWords[hj]); hj++; }
+  var count = 0; for(var k in matched){ if(matched.hasOwnProperty(k)) count++; }
+  return { matched: matched, extras: extras, count: count };
+}
+function rbActionBtn(label, fn, cls){
+  var b = document.createElement("button");
+  b.type = "button"; b.className = "icon-btn" + (cls ? " " + cls : "");
+  b.textContent = label;
+  b.addEventListener("click", fn);
+  return b;
+}
+function rbShowMessage(ctx, kind){
+  var panel = ctx.panel;
+  panel.innerHTML = ""; panel.className = "rb-panel show";
+  var title = document.createElement("p"); title.className = "rb-status";
+  var text = document.createElement("p"); text.className = "rb-line";
+  var actions = document.createElement("div"); actions.className = "rb-actions";
+  actions.appendChild(rbActionBtn("Nghe chậm lại", function(){ speak(ctx.target, 0.5); }, "slow"));
+  if(kind === "unsupported"){
+    title.textContent = "Trình duyệt này chưa nghe được giọng nói";
+    text.textContent = "Tính năng chấm đọc cần trình duyệt Google Chrome (trên điện thoại Android hoặc máy tính) và cần bác cho phép dùng mic khi được hỏi. Trong lúc chưa dùng được, bác vẫn luyện rất tốt bằng cách: bấm “Nghe chậm” hoặc “Nghe rất chậm”, nghe kỹ rồi đọc to theo 3 lần.";
+  } else {
+    actions.appendChild(rbActionBtn("Đọc lại lần nữa", function(){ startReadback(ctx); }, "mic"));
+    if(kind === "not-allowed"){
+      title.textContent = "Chưa được phép dùng mic";
+      text.textContent = "Bác bấm “Cho phép / Allow” khi trình duyệt hỏi xin dùng mic nhé. Nếu lỡ bấm nhầm “Chặn”, bác bấm vào biểu tượng ổ khóa (hoặc mic) trên thanh địa chỉ, bật lại mic cho trang này, rồi bấm “Đọc lại lần nữa”.";
+    } else if(kind === "no-speech"){
+      title.textContent = "Chưa nghe thấy tiếng";
+      text.textContent = "Trang web chưa nghe thấy bác nói. Bác để điện thoại gần miệng hơn, đọc to và rõ từng từ, rồi bấm “Đọc lại lần nữa” nhé.";
+    } else if(kind === "network"){
+      title.textContent = "Chưa có kết nối mạng";
+      text.textContent = "Nghe giọng nói cần có mạng. Bác kiểm tra lại Wi-Fi hoặc 4G rồi bấm “Đọc lại lần nữa” nhé.";
+    } else if(kind === "audio-capture"){
+      title.textContent = "Không tìm thấy mic";
+      text.textContent = "Máy chưa nhận được mic. Bác kiểm tra lại mic (hoặc tai nghe có mic) rồi bấm “Đọc lại lần nữa” nhé.";
+    } else {
+      title.textContent = "Chưa nghe được lúc này";
+      text.textContent = "Có trục trặc nhỏ khi bật mic. Bác chờ một chút rồi bấm “Đọc lại lần nữa” nhé.";
+    }
+  }
+  panel.appendChild(title); panel.appendChild(text); panel.appendChild(actions);
+}
+function rbShowResult(ctx, best){
+  var panel = ctx.panel;
+  panel.innerHTML = ""; panel.className = "rb-panel show";
+  var tWords = normalize(ctx.target).split(" ").filter(Boolean);
+  var rawTokens = ctx.target.split(/\s+/).map(function(w){ return w.replace(/^[^A-Za-z0-9']+|[^A-Za-z0-9']+$/g, ""); }).filter(Boolean);
+  var disp = (rawTokens.length === tWords.length) ? rawTokens : tWords;
+  var total = tWords.length, good = best.al.count;
+  var score = document.createElement("p"); score.className = "rb-score";
+  score.textContent = "Kết quả đọc lại: đúng " + good + " / " + total + " từ";
+  panel.appendChild(score);
+  var words = document.createElement("div"); words.className = "rb-words";
+  disp.forEach(function(w, i){
+    var s = document.createElement("span");
+    var ok = !!best.al.matched[i];
+    s.className = "wcheck " + (ok ? "ok" : "bad");
+    s.textContent = (ok ? "✓ " : "✗ ") + w;
+    words.appendChild(s);
+  });
+  panel.appendChild(words);
+  var said = document.createElement("p"); said.className = "rb-line";
+  said.textContent = "Bạn nói: “" + (best.said || "…") + "”";
+  panel.appendChild(said);
+  var right = document.createElement("p"); right.className = "rb-line";
+  right.textContent = "Đúng là: “" + ctx.target + "”" + (ctx.ipa ? "  " + ctx.ipa : "") + (ctx.vi ? " — " + ctx.vi : "");
+  panel.appendChild(right);
+  var missing = [];
+  tWords.forEach(function(w, i){ if(!best.al.matched[i]) missing.push(disp[i]); });
+  var note = document.createElement("p"); note.className = "rb-note";
+  var perfect = (good === total);
+  if(perfect && best.al.extras.length === 0){
+    note.textContent = "Đúng rồi, rất tốt! Bác đọc đúng hết " + total + "/" + total + " từ.";
+  } else if(perfect){
+    note.textContent = "Đúng rồi! Bác đã đọc đủ và đúng tất cả các từ chính. (Web có nghe thêm từ “" + best.al.extras[0] + "” — không sao đâu bác.)";
+  } else if(best.al.extras.length === 0){
+    note.textContent = "Còn thiếu từ “" + missing[0] + "”" + (missing.length > 1 ? " và " + (missing.length - 1) + " từ nữa" : "") + ". Bác bấm “Nghe chậm lại”, nghe kỹ từ đó rồi đọc lại nhé.";
+  } else {
+    note.textContent = "Từ “" + (missing[0] || "") + "” nghe chưa rõ — web nghe thành “" + best.al.extras[0] + "”. Bác đọc chậm từng tiếng, rõ âm cuối, rồi đọc lại nhé.";
+  }
+  panel.appendChild(note);
+  if(perfect){
+    if(!state.practice) state.practice = {};
+    state.practice[ctx.target] = (state.practice[ctx.target] || 0) + 1;
+    saveState();
+    var prog = document.createElement("p"); prog.className = "rb-line";
+    prog.textContent = "Đã ghi nhận tiến bộ: bác đã đọc đúng " + (ctx.isWord ? "từ" : "câu") + " này " + state.practice[ctx.target] + " lần.";
+    panel.appendChild(prog);
+    if(ctx.isWord && !isLearned(ctx.target)){
+      setLearned(ctx.target, true);
+      toast("Đọc đúng hết rồi! Đã đánh dấu “Đã thuộc”: " + ctx.target);
+    }
+  }
+  var actions = document.createElement("div"); actions.className = "rb-actions";
+  actions.appendChild(rbActionBtn("Nghe chậm lại", function(){ speak(ctx.target, 0.5); }, "slow"));
+  actions.appendChild(rbActionBtn("Đọc lại lần nữa", function(){ startReadback(ctx); }, "mic"));
+  panel.appendChild(actions);
+}
+function startReadback(ctx){
+  var panel = ctx.panel;
+  if(!rbSupported()){ rbShowMessage(ctx, "unsupported"); return; }
+  if(rbRecog){ try{ rbRecog.abort(); }catch(e){} rbRecog = null; }
+  document.querySelectorAll(".icon-btn.mic.listening").forEach(function(b){ b.classList.remove("listening"); });
+  if(window.speechSynthesis){ try{ window.speechSynthesis.cancel(); }catch(e){} }
+  panel.innerHTML = ""; panel.className = "rb-panel show";
+  var status = document.createElement("p"); status.className = "rb-status";
+  status.textContent = "Đang nghe… bác đọc to: “" + ctx.target + "”";
+  panel.appendChild(status);
+  var hint = document.createElement("p"); hint.className = "rb-line";
+  hint.textContent = "Đọc xong bác cứ dừng lại, trang web sẽ tự chấm ngay.";
+  panel.appendChild(hint);
+  var SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  var rec;
+  try{ rec = new SR(); }catch(e){ rbShowMessage(ctx, "error"); return; }
+  rbRecog = rec;
+  ctx.session = (ctx.session || 0) + 1;
+  var mySession = ctx.session;
+  rec.lang = "en-US"; rec.interimResults = false; rec.maxAlternatives = 3;
+  var got = false;
+  ctx.btn.classList.add("listening");
+  rec.onresult = function(ev){
+    got = true;
+    var res = ev.results[0];
+    var tWords = normalize(ctx.target).split(" ").filter(Boolean);
+    var best = null;
+    for(var k = 0; k < res.length; k++){
+      var said = res[k].transcript || "";
+      var hWords = normalize(said).split(" ").filter(Boolean);
+      var al = alignWords(tWords, hWords);
+      var sc = al.count - al.extras.length * 0.25;
+      if(!best || sc > best.score){ best = { said: said, al: al, score: sc }; }
+    }
+    if(ctx.session === mySession && best) rbShowResult(ctx, best);
+  };
+  rec.onerror = function(ev){
+    if(ctx.session !== mySession) return;
+    ctx.btn.classList.remove("listening");
+    if(got) return;
+    if(ev.error === "aborted") return;
+    rbShowMessage(ctx, ev.error || "error");
+  };
+  rec.onend = function(){
+    if(rbRecog === rec) rbRecog = null;
+    if(ctx.session === mySession) ctx.btn.classList.remove("listening");
+  };
+  try{ rec.start(); }
+  catch(e){ ctx.btn.classList.remove("listening"); rbShowMessage(ctx, "error"); }
+}
 
 /* ================= QUIZ ENGINE ================= */
 function shuffle(arr){ var a = arr.slice(); for(var i=a.length-1;i>0;i--){ var j = Math.floor(Math.random()*(i+1)); var t=a[i]; a[i]=a[j]; a[j]=t; } return a; }
@@ -1796,7 +2014,7 @@ document.getElementById("ctaGuide").addEventListener("click", function(){
   document.getElementById("guideSection").scrollIntoView({behavior:"smooth"});
 });
 document.getElementById("wotdListen").addEventListener("click", function(){ if(wotd) speak(wotd.en, 1); });
-document.getElementById("wotdListenSlow").addEventListener("click", function(){ if(wotd) speak(wotd.en, 0.65); });
+document.getElementById("wotdListenSlow").addEventListener("click", function(){ if(wotd) speak(wotd.en, 0.5); });
 document.getElementById("wotdLearnBtn").addEventListener("click", function(){
   if(!wotd) return;
   setLearned(wotd.en, !isLearned(wotd.en)); syncWotdBtn();
@@ -1834,6 +2052,7 @@ updateStreak();
 renderLessonGrid();
 pickWotd();
 refreshProgress();
+if(!rbSupported()){ var rbns = document.getElementById("rbNoSupport"); if(rbns) rbns.style.display = "block"; }
 if(!ttsOK){ setTimeout(function(){ toast("Trình duyệt này chưa hỗ trợ giọng đọc tiếng Anh. Bác mở trang bằng Chrome hoặc Safari để nghe phát âm nhé."); }, 800); }
 </script>
 </body>
