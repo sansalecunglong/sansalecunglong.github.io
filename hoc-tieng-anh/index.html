@@ -931,34 +931,48 @@ html[data-font="small"] .sub-h{font-size:clamp(20px,5.8vw,25px)}
 }
 
 /* ============================================================
-   V6 — BỘ CHỌN CỠ CHỮ THU GỌN: header chỉ còn 1 nút nhỏ
-   “Cỡ chữ: Thường ▾”; bấm mới mở bảng chọn ngay dưới nút,
-   chọn xong bảng TỰ ĐÓNG để header luôn gọn, nhường diện
-   tích cho nội dung học. Nút Tương phản cao giữ nguyên.
+   V7 — ẨN HẲN CÀI ĐẶT HIỂN THỊ VÀO NÚT MENU 3 GẠCH (☰)
+   Header chỉ còn: tên trang + MỘT nút Menu ở góc phải.
+   Cỡ chữ (4 mức) và Tương phản cao nằm hết trong bảng menu
+   thả xuống dưới header; chọn xong menu TỰ ĐÓNG.
    ============================================================ */
-.fs-picker{position:relative}
-.fs-toggle{
-  display:inline-flex; align-items:center; gap:9px;
-  min-height:56px; padding:8px 18px; border-radius:var(--r-pill);
-  border:2px solid var(--border-strong); background:var(--surface); color:var(--ink);
-  font-size:max(16px,.85em); font-weight:700; white-space:nowrap;
+.header-in{flex-wrap:nowrap; padding:10px 0; gap:12px}
+.brand{min-width:0}
+.menu-wrap{position:relative; margin-left:auto; flex:none}
+.menu-toggle{
+  display:inline-flex; align-items:center; justify-content:center; gap:10px;
+  min-width:56px; min-height:56px; padding:8px 16px;
+  border-radius:14px; border:2px solid var(--border-strong);
+  background:var(--surface); color:var(--ink);
+  font-size:max(16px,.9em); font-weight:800; line-height:1.2;
   transition:border-color .18s ease, background-color .18s ease, transform .15s ease;
   touch-action:manipulation;
 }
-.fs-toggle:hover{border-color:var(--primary); color:var(--primary)}
-.fs-toggle:active{transform:scale(.97)}
-.fs-toggle .fs-aa{font-family:var(--font-display); font-weight:700; font-size:1.15em; color:var(--primary)}
-.fs-toggle b{color:var(--primary-strong)}
-.fs-toggle .fs-caret{font-size:.85em; color:var(--muted); transition:transform .18s ease}
-.fs-toggle[aria-expanded="true"] .fs-caret{transform:rotate(180deg)}
-.fs-panel{
-  position:absolute; top:calc(100% + 8px); right:0; z-index:70;
-  width:min(340px,calc(100vw - 24px));
+.menu-toggle:hover{border-color:var(--primary); color:var(--primary)}
+.menu-toggle:active{transform:scale(.97)}
+.menu-toggle[aria-expanded="true"]{background:var(--primary); border-color:var(--primary); color:#FFF8EA}
+@media (prefers-color-scheme: dark){ .menu-toggle[aria-expanded="true"]{color:#12241A} }
+html.hc .menu-toggle[aria-expanded="true"]{color:#fff}
+.menu-symbol{font-size:24px; line-height:1; font-weight:400; width:26px; text-align:center; flex:none}
+.menu-label{white-space:nowrap}
+.display-menu{
+  position:absolute; top:calc(100% + 10px); right:0; z-index:80;
+  width:min(368px,calc(100vw - 24px));
+  max-height:calc(100dvh - 96px); overflow-y:auto;
   background:var(--surface); border:2px solid var(--border-strong); border-radius:var(--r-md);
-  box-shadow:var(--shadow); padding:16px;
+  box-shadow:var(--shadow); padding:18px;
 }
-.fs-panel[hidden]{display:none}
-.fs-panel-title{font-weight:800; font-size:max(16px,1em); margin-bottom:12px}
+.display-menu[hidden]{display:none}
+.dm-title{
+  font-family:var(--font-display); font-weight:700;
+  font-size:max(19px,1.2em); line-height:1.35; margin-bottom:4px;
+}
+.dm-section{margin-top:16px; padding-top:16px; border-top:1.5px solid var(--border)}
+.dm-section:first-of-type{margin-top:10px}
+.dm-label{font-weight:800; font-size:max(16px,1em); line-height:1.5; margin-bottom:10px}
+.dm-current{font-weight:600; color:var(--muted)}
+.dm-current b{color:var(--primary-strong)}
+.dm-note{margin-top:8px; color:var(--muted); font-weight:600; font-size:max(16px,.92em); line-height:1.55}
 .fs-grid{display:grid; grid-template-columns:1fr 1fr; gap:10px}
 .fs-opt{
   display:flex; align-items:center; justify-content:space-between; gap:8px;
@@ -974,25 +988,60 @@ html[data-font="small"] .sub-h{font-size:clamp(20px,5.8vw,25px)}
 .fs-opt .fs-check{visibility:hidden; font-weight:800; color:var(--primary)}
 .fs-opt[aria-pressed="true"] .fs-check{visibility:visible}
 .fs-sample{
-  margin-top:14px; padding:10px 12px; border:1.5px dashed var(--border-strong);
+  margin-top:12px; padding:10px 12px; border:1.5px dashed var(--border-strong);
   border-radius:var(--r-sm); font-size:1em; line-height:1.5; color:var(--ink-2);
 }
-/* Mức Nhỏ: chữ trong bảng chọn vẫn ≥14px như sàn của mức này */
-html[data-font="small"] .fs-toggle{font-size:max(14px,.85em)}
-html[data-font="small"] .fs-panel-title{font-size:max(14px,1em)}
-html[data-font="small"] .fs-opt{font-size:max(14px,1em)}
+.hc-menu-btn{
+  display:flex; align-items:center; justify-content:space-between; gap:12px;
+  width:100%; min-height:56px; padding:10px 16px; border-radius:var(--r-sm);
+  border:2px solid var(--border-strong); background:var(--surface-2); color:var(--ink);
+  font-size:max(16px,1em); font-weight:700; text-align:left;
+  transition:border-color .18s ease, background-color .18s ease, transform .15s ease;
+  touch-action:manipulation;
+}
+.hc-menu-btn:active{transform:scale(.98)}
+.hc-menu-btn:hover{border-color:var(--primary)}
+.hc-state{
+  flex:none; padding:6px 14px; border-radius:var(--r-pill);
+  background:var(--bg-soft); border:1.5px solid var(--border-strong);
+  font-size:max(16px,.88em); font-weight:800; color:var(--muted);
+}
+.hc-menu-btn[aria-pressed="true"]{background:var(--primary-soft); border-color:var(--primary); color:var(--primary-strong)}
+.hc-menu-btn[aria-pressed="true"] .hc-state{background:var(--primary); border-color:var(--primary); color:#FFF8EA}
+@media (prefers-color-scheme: dark){ .hc-menu-btn[aria-pressed="true"] .hc-state{color:#12241A} }
+html.hc .hc-menu-btn[aria-pressed="true"] .hc-state{color:#fff}
+.dm-nav-btn{
+  display:flex; align-items:center; justify-content:space-between; gap:10px;
+  width:100%; min-height:56px; padding:10px 16px; margin-top:10px; border-radius:var(--r-sm);
+  border:2px solid var(--border-strong); background:var(--surface-2); color:var(--ink);
+  font-size:max(16px,1em); font-weight:700; text-align:left;
+  transition:border-color .18s ease, transform .15s ease;
+  touch-action:manipulation;
+}
+.dm-nav-btn:first-of-type{margin-top:0}
+.dm-nav-btn:hover{border-color:var(--primary); color:var(--primary)}
+.dm-nav-btn:active{transform:scale(.98)}
+.dm-nav-btn .dm-arrow{color:var(--muted); font-weight:800}
+/* Mức Nhỏ: chữ trong menu vẫn ≥14px như sàn của mức này */
+html[data-font="small"] .menu-toggle{font-size:max(14px,.9em)}
+html[data-font="small"] .dm-title{font-size:max(17px,1.2em)}
+html[data-font="small"] .dm-label, html[data-font="small"] .fs-opt,
+html[data-font="small"] .hc-menu-btn, html[data-font="small"] .dm-nav-btn{font-size:max(14px,1em)}
+html[data-font="small"] .dm-note{font-size:max(14px,.92em)}
+html[data-font="small"] .hc-state{font-size:max(14px,.88em)}
 @media (max-width:700px){
-  /* Header: nút Cỡ chữ + nút Tương phản cao xếp cạnh nhau, mỗi nút nửa hàng */
-  .a11y-bar{flex-wrap:nowrap}
-  .fs-picker{flex:1 1 0; min-width:0}
-  .fs-toggle{width:100%; justify-content:center; padding:8px 6px; gap:6px}
-  .btn-hc{flex:1 1 0; width:auto; padding:8px 6px}
-  /* Bảng chọn bám theo cột trái của header, không tràn màn hình */
-  .fs-panel{left:0; right:auto}
+  /* Header MỘT HÀNG duy nhất ở mobile: logo trái, nút Menu phải — thấp và gọn */
+  .header-in{flex-direction:row !important; align-items:center; flex-wrap:nowrap; padding:8px 0; gap:10px}
+  .brand{margin-right:0; flex:1 1 auto; min-width:0}
+  .brand-mark{width:48px; height:48px; border-radius:14px}
+  .menu-wrap{margin-left:auto}
+  .menu-toggle{min-width:56px; min-height:56px; padding:8px 14px}
+  .display-menu{position:absolute; right:0; left:auto}
 }
 @media (max-width:400px){
-  .fs-toggle .fs-aa{display:none}
   .fs-grid{grid-template-columns:1fr}
+  .menu-toggle{padding:8px 12px; gap:7px}
+  .brand-mark{width:44px; height:44px}
 }
 
 </style>
@@ -1005,15 +1054,15 @@ html[data-font="small"] .fs-opt{font-size:max(14px,1em)}
       <span class="brand-mark" aria-hidden="true">Aa</span>
       <span><b>Tiếng Anh Cho Người Mới</b><span>Học chậm mà chắc — mỗi ngày 10 phút</span></span>
     </a>
-    <div class="a11y-bar" role="group" aria-label="Tùy chỉnh hiển thị">
-      <div class="fs-picker">
-        <button type="button" class="fs-toggle" id="fsToggle" aria-haspopup="true" aria-expanded="false" aria-controls="fsPanel">
-          <span class="fs-aa" aria-hidden="true">Aa</span>
-          <span class="fs-toggle-label">Cỡ chữ: <b id="fsCurrentName">Thường</b></span>
-          <span class="fs-caret" aria-hidden="true">▾</span>
-        </button>
-        <div class="fs-panel" id="fsPanel" hidden role="group" aria-label="Chọn cỡ chữ">
-          <div class="fs-panel-title" id="fsLabel">Chọn cỡ chữ</div>
+    <div class="menu-wrap">
+      <button type="button" class="menu-toggle" id="menuToggle" aria-haspopup="true" aria-expanded="false" aria-controls="displayMenu" aria-label="Mở menu cài đặt hiển thị">
+        <span class="menu-symbol" id="menuSymbol" aria-hidden="true">☰</span>
+        <span class="menu-label">Menu</span>
+      </button>
+      <div class="display-menu" id="displayMenu" hidden role="group" aria-label="Cài đặt hiển thị">
+        <div class="dm-title">Cài đặt hiển thị</div>
+        <div class="dm-section">
+          <div class="dm-label" id="fsLabel">Cỡ chữ <span class="dm-current">— đang dùng: <b id="fsCurrentName">Thường</b></span></div>
           <div class="fs-grid" role="group" aria-labelledby="fsLabel">
             <button type="button" class="fs-opt" data-fs="small" aria-pressed="false"><span class="fs-opt-name">Nhỏ</span><span class="fs-check" aria-hidden="true">✓</span></button>
             <button type="button" class="fs-opt" data-fs="normal" aria-pressed="true"><span class="fs-opt-name">Thường</span><span class="fs-check" aria-hidden="true">✓</span></button>
@@ -1022,8 +1071,21 @@ html[data-font="small"] .fs-opt{font-size:max(14px,1em)}
           </div>
           <p class="fs-sample" id="fsSample" aria-hidden="true">Chữ mẫu Aa — Học tiếng Anh mỗi ngày</p>
         </div>
+        <div class="dm-section">
+          <div class="dm-label" id="hcLabel">Tương phản cao</div>
+          <button type="button" class="hc-menu-btn" id="hcToggle" aria-pressed="false" aria-labelledby="hcLabel hcState">
+            <span>Tương phản cao</span>
+            <span class="hc-state" id="hcState">Đang tắt</span>
+          </button>
+          <p class="dm-note">Bật lên thì chữ đậm và rõ hơn, dễ đọc hơn khi mắt mỏi.</p>
+        </div>
+        <div class="dm-section">
+          <div class="dm-label">Đi nhanh tới</div>
+          <button type="button" class="dm-nav-btn" data-menu-goto="lessonsSection"><span>Lộ trình 6 bài học</span><span class="dm-arrow" aria-hidden="true">→</span></button>
+          <button type="button" class="dm-nav-btn" data-menu-goto="roadmapSection"><span>Bản đồ lộ trình</span><span class="dm-arrow" aria-hidden="true">→</span></button>
+          <button type="button" class="dm-nav-btn" data-menu-goto="guideSection"><span>Cách học 3 bước</span><span class="dm-arrow" aria-hidden="true">→</span></button>
+        </div>
       </div>
-      <button type="button" class="btn-hc" id="hcToggle" aria-pressed="false">Tương phản cao</button>
     </div>
   </div>
 </header>
@@ -1087,7 +1149,7 @@ html[data-font="small"] .fs-opt{font-size:max(14px,1em)}
     <div class="wrap">
       <div class="sec-head">
         <h2 id="guideTitle">Bắt đầu chỉ với 3 bước rất đơn giản</h2>
-        <p>Trang này được thiết kế riêng cho người lớn tuổi: chữ to, ít nút, không có gì rối rắm. Cứ làm theo 3 bước dưới đây.</p>
+        <p>Trang này được thiết kế riêng cho người lớn tuổi: chữ to, ít nút, không có gì rối rắm. Cứ làm theo 3 bước dưới đây. Muốn chữ to hơn nữa, bấm nút 3 gạch (Menu) ở góc trên bên phải rồi chọn Cỡ chữ.</p>
       </div>
       <div class="steps">
         <div class="step-card">
@@ -1441,7 +1503,7 @@ html[data-font="small"] .fs-opt{font-size:max(14px,1em)}
 <footer class="site">
   <div class="wrap">
     <p><b>Tiếng Anh Cho Người Mới</b> — Học chậm mà chắc. Mỗi ngày 10 phút, sau 6 bài bác đã có thể giao tiếp những việc thường ngày.</p>
-    <p style="margin-top:6px">Mẹo: bấm nút “Cỡ chữ” ở trên cùng rồi chọn mức to hơn nếu chữ còn nhỏ, hoặc bật “Tương phản cao” nếu bác thấy chữ chưa đủ rõ.</p>
+    <p style="margin-top:6px">Mẹo: Muốn chữ to hơn, bấm nút 3 gạch (Menu) ở góc trên bên phải rồi chọn Cỡ chữ. Cũng trong menu đó, bác bật “Tương phản cao” nếu thấy chữ chưa đủ rõ.</p>
   </div>
 </footer>
 
@@ -3360,23 +3422,33 @@ document.getElementById("wotdLearnBtn").addEventListener("click", function(){
 });
 
 /* Font size + contrast (persisted as display preference) */
-/* V6: bộ chọn thu gọn — bấm nút “Cỡ chữ: …” mới mở bảng chọn,
-   chọn xong bảng tự đóng, nhãn nút cập nhật đúng mức mới. */
+/* V7: ẩn hẳn vào nút Menu 3 gạch — header chỉ còn nút ☰/✕.
+   Chọn cỡ chữ hoặc bật/tắt tương phản xong menu TỰ ĐÓNG,
+   mở lại vẫn thấy đúng mức đang dùng (✓ + nhãn “đang dùng”). */
 var FS_NAMES = { small:"Nhỏ", normal:"Thường", large:"Lớn", xlarge:"Rất lớn" };
-var fsToggle = document.getElementById("fsToggle");
-var fsPanel = document.getElementById("fsPanel");
-function fsPanelOpen(){ return fsPanel && !fsPanel.hidden; }
-function openFsPanel(){
-  if(!fsPanel) return;
-  fsPanel.hidden = false;
-  fsToggle.setAttribute("aria-expanded", "true");
+var menuToggle = document.getElementById("menuToggle");
+var displayMenu = document.getElementById("displayMenu");
+var menuSymbol = document.getElementById("menuSymbol");
+function menuOpen(){ return displayMenu && !displayMenu.hidden; }
+function openDisplayMenu(){
+  if(!displayMenu) return;
+  displayMenu.hidden = false;
+  menuToggle.setAttribute("aria-expanded", "true");
+  menuToggle.setAttribute("aria-label", "Đóng menu cài đặt hiển thị");
+  if(menuSymbol) menuSymbol.textContent = "✕";
+  var first = displayMenu.querySelector("[data-fs]");
+  if(first) first.focus();
 }
-function closeFsPanel(refocus){
-  if(!fsPanel || fsPanel.hidden) return;
-  fsPanel.hidden = true;
-  fsToggle.setAttribute("aria-expanded", "false");
-  if(refocus) fsToggle.focus();
+function closeDisplayMenu(refocus){
+  if(!displayMenu || displayMenu.hidden) return;
+  displayMenu.hidden = true;
+  menuToggle.setAttribute("aria-expanded", "false");
+  menuToggle.setAttribute("aria-label", "Mở menu cài đặt hiển thị");
+  if(menuSymbol) menuSymbol.textContent = "☰";
+  if(refocus) menuToggle.focus();
 }
+/* Tên cũ giữ lại làm alias: showView() và các chỗ khác vẫn gọi closeFsPanel */
+function closeFsPanel(refocus){ closeDisplayMenu(refocus); }
 function applyFontSize(level){
   document.documentElement.setAttribute("data-font", level);
   document.querySelectorAll("[data-fs]").forEach(function(b){ b.setAttribute("aria-pressed", b.getAttribute("data-fs")===level ? "true":"false"); });
@@ -3384,51 +3456,61 @@ function applyFontSize(level){
   if(nm) nm.textContent = FS_NAMES[level] || level;
   try{ localStorage.setItem("tieng-anh-font", level); }catch(e){}
 }
-if(fsToggle){
-  fsToggle.addEventListener("click", function(){
-    if(fsPanelOpen()) closeFsPanel(false); else openFsPanel();
+if(menuToggle){
+  menuToggle.addEventListener("click", function(){
+    if(menuOpen()) closeDisplayMenu(false); else openDisplayMenu();
   });
 }
 document.querySelectorAll("[data-fs]").forEach(function(b){
   b.addEventListener("click", function(){
     applyFontSize(b.getAttribute("data-fs"));
-    closeFsPanel(true); /* chọn xong là ẩn bảng ngay, focus về nút thu gọn */
+    closeDisplayMenu(true); /* chọn xong là menu tự đóng, focus về nút 3 gạch */
   });
 });
-/* Đóng bảng chọn khi bấm ra ngoài */
+/* Lối tắt trong menu: đóng menu, về trang chính (nếu đang ở bài học) rồi cuộn tới mục */
+document.querySelectorAll("[data-menu-goto]").forEach(function(b){
+  b.addEventListener("click", function(){
+    var targetId = b.getAttribute("data-menu-goto");
+    closeDisplayMenu(false);
+    var el = document.getElementById(targetId);
+    if(!el) return;
+    var home = document.getElementById("viewHome");
+    if(home && !home.classList.contains("active")) showView("viewHome");
+    setTimeout(function(){ el.scrollIntoView({behavior:"smooth", block:"start"}); }, 60);
+    if(menuToggle) menuToggle.focus();
+  });
+});
+/* Đóng menu khi bấm ra ngoài */
 document.addEventListener("pointerdown", function(e){
-  if(!fsPanelOpen()) return;
-  var pk = fsToggle.closest(".fs-picker");
-  if(pk && !pk.contains(e.target)) closeFsPanel(false);
+  if(!menuOpen()) return;
+  var wrap = menuToggle.closest(".menu-wrap");
+  if(wrap && !wrap.contains(e.target)) closeDisplayMenu(false);
 });
-/* Đóng bảng chọn khi bấm Esc */
+/* Đóng menu khi bấm Esc */
 document.addEventListener("keydown", function(e){
-  if((e.key === "Escape" || e.key === "Esc") && fsPanelOpen()) closeFsPanel(true);
+  if((e.key === "Escape" || e.key === "Esc") && menuOpen()) closeDisplayMenu(true);
 });
-/* Đóng bảng chọn khi cuộn trang đi xa so với lúc mở */
-var fsOpenY = null;
-document.addEventListener("scroll", function(){
-  if(!fsPanelOpen()){ fsOpenY = null; return; }
-  if(fsOpenY === null){ fsOpenY = window.scrollY; return; }
-  if(Math.abs(window.scrollY - fsOpenY) > 120){ closeFsPanel(false); fsOpenY = null; }
-}, {passive:true});
-/* Đổi bài / đổi tab / đổi view thì bảng chọn cũng tự đóng */
+/* Đổi bài / đổi tab / đổi view thì menu cũng tự đóng */
 document.addEventListener("click", function(e){
-  if(!fsPanelOpen()) return;
+  if(!menuOpen()) return;
   var t = e.target;
   if(t.closest && (t.closest(".tab-btn") || t.closest(".lesson-card") || t.closest("[data-backhome]") ||
       t.closest("#backHome") || t.closest("#brandHome") || t.closest("#ctaStart") || t.closest("#totalDone") ||
-      t.closest("[data-open-lesson]") || t.closest("[data-goto]"))) closeFsPanel(false);
+      t.closest("[data-open-lesson]"))) closeDisplayMenu(false);
 });
 function applyContrast(on){
   document.documentElement.classList.toggle("hc", on);
-  document.getElementById("hcToggle").setAttribute("aria-pressed", on ? "true" : "false");
+  var btn = document.getElementById("hcToggle");
+  if(btn) btn.setAttribute("aria-pressed", on ? "true" : "false");
+  var st = document.getElementById("hcState");
+  if(st) st.textContent = on ? "Đang bật" : "Đang tắt";
   try{ localStorage.setItem("tieng-anh-hc", on ? "1" : "0"); }catch(e){}
 }
 document.getElementById("hcToggle").addEventListener("click", function(){
   var on = !document.documentElement.classList.contains("hc");
   applyContrast(on);
   toast(on ? "Đã bật tương phản cao — chữ sẽ rõ và đậm hơn." : "Đã tắt tương phản cao.");
+  closeDisplayMenu(true); /* bấm xong menu cũng tự đóng, focus về nút 3 gạch */
 });
 (function restorePrefs(){
   try{
