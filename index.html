@@ -393,6 +393,19 @@ footer a{color:#fca5a5;}
 #wvBar #wvOpenBtn{background:#FFBA00;color:#1a1a1a;border:none;border-radius:8px;padding:7px 12px;font-weight:800;cursor:pointer;font-size:13.5px;white-space:nowrap}
 #wvBar #wvClose{background:none;border:none;color:#bbb;font-size:15px;cursor:pointer;padding:2px 4px;margin-left:auto}
 #wvBar .wvSteps{flex-basis:100%;background:#262626;border-radius:8px;padding:8px 10px;font-size:13px}
+/* VA TRAN NGANG (Hallmark audit 04/11): hang 2 nut .duo ep trang rong ~400px tren dien thoai, header sat bien 375px */
+.duo{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
+.duo .btn{min-width:0;white-space:normal}
+.hero-grid>*{min-width:0}
+.logo{min-width:0}
+.logo>span:not(.mark){min-width:0}
+@media(max-width:520px){
+  .top{gap:8px}
+  .logo{font-size:15px;gap:7px}
+  .logo .mark{padding:4px 7px;font-size:13.5px}
+  .logo small{display:none}
+  .topauth button{padding:7px 9px;font-size:12.5px}
+}
 </style>
 </head>
 <body>
