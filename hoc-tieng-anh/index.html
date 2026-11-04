@@ -930,6 +930,71 @@ html[data-font="small"] .sub-h{font-size:clamp(20px,5.8vw,25px)}
   .seg button{flex:1 1 42%; min-height:56px}
 }
 
+/* ============================================================
+   V6 — BỘ CHỌN CỠ CHỮ THU GỌN: header chỉ còn 1 nút nhỏ
+   “Cỡ chữ: Thường ▾”; bấm mới mở bảng chọn ngay dưới nút,
+   chọn xong bảng TỰ ĐÓNG để header luôn gọn, nhường diện
+   tích cho nội dung học. Nút Tương phản cao giữ nguyên.
+   ============================================================ */
+.fs-picker{position:relative}
+.fs-toggle{
+  display:inline-flex; align-items:center; gap:9px;
+  min-height:56px; padding:8px 18px; border-radius:var(--r-pill);
+  border:2px solid var(--border-strong); background:var(--surface); color:var(--ink);
+  font-size:max(16px,.85em); font-weight:700; white-space:nowrap;
+  transition:border-color .18s ease, background-color .18s ease, transform .15s ease;
+  touch-action:manipulation;
+}
+.fs-toggle:hover{border-color:var(--primary); color:var(--primary)}
+.fs-toggle:active{transform:scale(.97)}
+.fs-toggle .fs-aa{font-family:var(--font-display); font-weight:700; font-size:1.15em; color:var(--primary)}
+.fs-toggle b{color:var(--primary-strong)}
+.fs-toggle .fs-caret{font-size:.85em; color:var(--muted); transition:transform .18s ease}
+.fs-toggle[aria-expanded="true"] .fs-caret{transform:rotate(180deg)}
+.fs-panel{
+  position:absolute; top:calc(100% + 8px); right:0; z-index:70;
+  width:min(340px,calc(100vw - 24px));
+  background:var(--surface); border:2px solid var(--border-strong); border-radius:var(--r-md);
+  box-shadow:var(--shadow); padding:16px;
+}
+.fs-panel[hidden]{display:none}
+.fs-panel-title{font-weight:800; font-size:max(16px,1em); margin-bottom:12px}
+.fs-grid{display:grid; grid-template-columns:1fr 1fr; gap:10px}
+.fs-opt{
+  display:flex; align-items:center; justify-content:space-between; gap:8px;
+  min-height:56px; padding:10px 16px; border-radius:var(--r-sm);
+  border:2px solid var(--border-strong); background:var(--surface-2); color:var(--ink);
+  font-size:max(16px,1em); font-weight:700; text-align:left;
+  transition:border-color .18s ease, background-color .18s ease, transform .15s ease;
+  touch-action:manipulation;
+}
+.fs-opt:active{transform:scale(.97)}
+.fs-opt:hover{border-color:var(--primary)}
+.fs-opt[aria-pressed="true"]{background:var(--primary-soft); border-color:var(--primary); color:var(--primary-strong)}
+.fs-opt .fs-check{visibility:hidden; font-weight:800; color:var(--primary)}
+.fs-opt[aria-pressed="true"] .fs-check{visibility:visible}
+.fs-sample{
+  margin-top:14px; padding:10px 12px; border:1.5px dashed var(--border-strong);
+  border-radius:var(--r-sm); font-size:1em; line-height:1.5; color:var(--ink-2);
+}
+/* Mức Nhỏ: chữ trong bảng chọn vẫn ≥14px như sàn của mức này */
+html[data-font="small"] .fs-toggle{font-size:max(14px,.85em)}
+html[data-font="small"] .fs-panel-title{font-size:max(14px,1em)}
+html[data-font="small"] .fs-opt{font-size:max(14px,1em)}
+@media (max-width:700px){
+  /* Header: nút Cỡ chữ + nút Tương phản cao xếp cạnh nhau, mỗi nút nửa hàng */
+  .a11y-bar{flex-wrap:nowrap}
+  .fs-picker{flex:1 1 0; min-width:0}
+  .fs-toggle{width:100%; justify-content:center; padding:8px 6px; gap:6px}
+  .btn-hc{flex:1 1 0; width:auto; padding:8px 6px}
+  /* Bảng chọn bám theo cột trái của header, không tràn màn hình */
+  .fs-panel{left:0; right:auto}
+}
+@media (max-width:400px){
+  .fs-toggle .fs-aa{display:none}
+  .fs-grid{grid-template-columns:1fr}
+}
+
 </style>
 </head>
 <body>
@@ -941,12 +1006,22 @@ html[data-font="small"] .sub-h{font-size:clamp(20px,5.8vw,25px)}
       <span><b>Tiếng Anh Cho Người Mới</b><span>Học chậm mà chắc — mỗi ngày 10 phút</span></span>
     </a>
     <div class="a11y-bar" role="group" aria-label="Tùy chỉnh hiển thị">
-      <span class="a11y-label" id="fsLabel">Cỡ chữ:</span>
-      <div class="seg" role="group" aria-labelledby="fsLabel">
-        <button type="button" data-fs="small" aria-pressed="false">Nhỏ</button>
-        <button type="button" data-fs="normal" aria-pressed="true">Thường</button>
-        <button type="button" data-fs="large" aria-pressed="false">Lớn</button>
-        <button type="button" data-fs="xlarge" aria-pressed="false">Rất lớn</button>
+      <div class="fs-picker">
+        <button type="button" class="fs-toggle" id="fsToggle" aria-haspopup="true" aria-expanded="false" aria-controls="fsPanel">
+          <span class="fs-aa" aria-hidden="true">Aa</span>
+          <span class="fs-toggle-label">Cỡ chữ: <b id="fsCurrentName">Thường</b></span>
+          <span class="fs-caret" aria-hidden="true">▾</span>
+        </button>
+        <div class="fs-panel" id="fsPanel" hidden role="group" aria-label="Chọn cỡ chữ">
+          <div class="fs-panel-title" id="fsLabel">Chọn cỡ chữ</div>
+          <div class="fs-grid" role="group" aria-labelledby="fsLabel">
+            <button type="button" class="fs-opt" data-fs="small" aria-pressed="false"><span class="fs-opt-name">Nhỏ</span><span class="fs-check" aria-hidden="true">✓</span></button>
+            <button type="button" class="fs-opt" data-fs="normal" aria-pressed="true"><span class="fs-opt-name">Thường</span><span class="fs-check" aria-hidden="true">✓</span></button>
+            <button type="button" class="fs-opt" data-fs="large" aria-pressed="false"><span class="fs-opt-name">Lớn</span><span class="fs-check" aria-hidden="true">✓</span></button>
+            <button type="button" class="fs-opt" data-fs="xlarge" aria-pressed="false"><span class="fs-opt-name">Rất lớn</span><span class="fs-check" aria-hidden="true">✓</span></button>
+          </div>
+          <p class="fs-sample" id="fsSample" aria-hidden="true">Chữ mẫu Aa — Học tiếng Anh mỗi ngày</p>
+        </div>
       </div>
       <button type="button" class="btn-hc" id="hcToggle" aria-pressed="false">Tương phản cao</button>
     </div>
@@ -1366,7 +1441,7 @@ html[data-font="small"] .sub-h{font-size:clamp(20px,5.8vw,25px)}
 <footer class="site">
   <div class="wrap">
     <p><b>Tiếng Anh Cho Người Mới</b> — Học chậm mà chắc. Mỗi ngày 10 phút, sau 6 bài bác đã có thể giao tiếp những việc thường ngày.</p>
-    <p style="margin-top:6px">Mẹo: bấm nút “Rất lớn” ở đầu trang nếu chữ còn nhỏ, hoặc bật “Tương phản cao” nếu bác thấy chữ chưa đủ rõ.</p>
+    <p style="margin-top:6px">Mẹo: bấm nút “Cỡ chữ” ở trên cùng rồi chọn mức to hơn nếu chữ còn nhỏ, hoặc bật “Tương phản cao” nếu bác thấy chữ chưa đủ rõ.</p>
   </div>
 </footer>
 
@@ -1783,6 +1858,7 @@ function renderLessonGridCounts(){
 /* ================= VIEW SWITCHING ================= */
 function showView(id){
   MicSessions.cancelCurrent();
+  if(typeof closeFsPanel === "function") closeFsPanel(false);
   ["viewHome","viewLesson","viewTotal"].forEach(function(v){
     document.getElementById(v).classList.toggle("active", v===id);
   });
@@ -3284,13 +3360,65 @@ document.getElementById("wotdLearnBtn").addEventListener("click", function(){
 });
 
 /* Font size + contrast (persisted as display preference) */
+/* V6: bộ chọn thu gọn — bấm nút “Cỡ chữ: …” mới mở bảng chọn,
+   chọn xong bảng tự đóng, nhãn nút cập nhật đúng mức mới. */
+var FS_NAMES = { small:"Nhỏ", normal:"Thường", large:"Lớn", xlarge:"Rất lớn" };
+var fsToggle = document.getElementById("fsToggle");
+var fsPanel = document.getElementById("fsPanel");
+function fsPanelOpen(){ return fsPanel && !fsPanel.hidden; }
+function openFsPanel(){
+  if(!fsPanel) return;
+  fsPanel.hidden = false;
+  fsToggle.setAttribute("aria-expanded", "true");
+}
+function closeFsPanel(refocus){
+  if(!fsPanel || fsPanel.hidden) return;
+  fsPanel.hidden = true;
+  fsToggle.setAttribute("aria-expanded", "false");
+  if(refocus) fsToggle.focus();
+}
 function applyFontSize(level){
   document.documentElement.setAttribute("data-font", level);
   document.querySelectorAll("[data-fs]").forEach(function(b){ b.setAttribute("aria-pressed", b.getAttribute("data-fs")===level ? "true":"false"); });
+  var nm = document.getElementById("fsCurrentName");
+  if(nm) nm.textContent = FS_NAMES[level] || level;
   try{ localStorage.setItem("tieng-anh-font", level); }catch(e){}
 }
+if(fsToggle){
+  fsToggle.addEventListener("click", function(){
+    if(fsPanelOpen()) closeFsPanel(false); else openFsPanel();
+  });
+}
 document.querySelectorAll("[data-fs]").forEach(function(b){
-  b.addEventListener("click", function(){ applyFontSize(b.getAttribute("data-fs")); });
+  b.addEventListener("click", function(){
+    applyFontSize(b.getAttribute("data-fs"));
+    closeFsPanel(true); /* chọn xong là ẩn bảng ngay, focus về nút thu gọn */
+  });
+});
+/* Đóng bảng chọn khi bấm ra ngoài */
+document.addEventListener("pointerdown", function(e){
+  if(!fsPanelOpen()) return;
+  var pk = fsToggle.closest(".fs-picker");
+  if(pk && !pk.contains(e.target)) closeFsPanel(false);
+});
+/* Đóng bảng chọn khi bấm Esc */
+document.addEventListener("keydown", function(e){
+  if((e.key === "Escape" || e.key === "Esc") && fsPanelOpen()) closeFsPanel(true);
+});
+/* Đóng bảng chọn khi cuộn trang đi xa so với lúc mở */
+var fsOpenY = null;
+document.addEventListener("scroll", function(){
+  if(!fsPanelOpen()){ fsOpenY = null; return; }
+  if(fsOpenY === null){ fsOpenY = window.scrollY; return; }
+  if(Math.abs(window.scrollY - fsOpenY) > 120){ closeFsPanel(false); fsOpenY = null; }
+}, {passive:true});
+/* Đổi bài / đổi tab / đổi view thì bảng chọn cũng tự đóng */
+document.addEventListener("click", function(e){
+  if(!fsPanelOpen()) return;
+  var t = e.target;
+  if(t.closest && (t.closest(".tab-btn") || t.closest(".lesson-card") || t.closest("[data-backhome]") ||
+      t.closest("#backHome") || t.closest("#brandHome") || t.closest("#ctaStart") || t.closest("#totalDone") ||
+      t.closest("[data-open-lesson]") || t.closest("[data-goto]"))) closeFsPanel(false);
 });
 function applyContrast(on){
   document.documentElement.classList.toggle("hc", on);
