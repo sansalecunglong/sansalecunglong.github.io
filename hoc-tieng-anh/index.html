@@ -1044,6 +1044,73 @@ html[data-font="small"] .hc-state{font-size:max(14px,.88em)}
   .brand-mark{width:44px; height:44px}
 }
 
+
+/* ============================================================
+   V8 — 6 chương × 10 bài, trò chơi cuối bài, cổng kiểm tra
+   ============================================================ */
+.chapter-list{display:flex; flex-direction:column; gap:18px}
+.chapter-card{background:var(--surface); border:2px solid var(--border); border-radius:var(--r-lg); box-shadow:var(--shadow-sm); overflow:hidden}
+.ch-head{display:flex; align-items:flex-start; justify-content:space-between; gap:14px; width:100%; min-height:56px; padding:20px 20px 10px; background:transparent; border:0; color:var(--ink); text-align:left}
+.ch-head-txt{display:flex; flex-direction:column; gap:4px; min-width:0}
+.ch-title{font-family:var(--font-display); font-weight:700; font-size:max(19px,1.22em); line-height:1.3}
+.ch-desc{color:var(--muted); font-size:max(16px,.93em); line-height:1.55; font-weight:500}
+.ch-meta{display:flex; flex-direction:column; align-items:flex-end; gap:6px; flex:none}
+.ch-prog{font-weight:800; color:var(--primary); font-size:max(16px,.95em); font-variant-numeric:tabular-nums}
+.ch-chev{font-weight:800; color:var(--accent-strong); font-size:max(16px,.88em)}
+.ch-bar{margin:4px 20px 16px}
+.ch-body{display:flex; flex-direction:column; gap:8px; padding:0 16px 18px}
+.lesson-row{display:flex; justify-content:space-between; align-items:center; gap:12px; width:100%; min-height:56px; padding:12px 16px; border:2px solid var(--border); border-radius:var(--r-sm); background:var(--surface-2); color:var(--ink); font-size:max(16px,1em); font-weight:700; text-align:left; touch-action:manipulation; transition:border-color .18s ease, transform .15s ease}
+.lesson-row:hover{border-color:var(--primary)}
+.lesson-row:active{transform:scale(.99)}
+.lesson-row.is-done{border-color:var(--success); background:var(--success-soft)}
+.lesson-row.is-locked{opacity:.78}
+.lr-name{min-width:0}
+.lr-status{flex:none; font-size:max(16px,.88em); font-weight:800; color:var(--muted)}
+.lesson-row.is-done .lr-status{color:var(--success)}
+.game-head{display:flex; flex-wrap:wrap; gap:10px; align-items:center; justify-content:space-between; background:var(--surface); border:2px solid var(--border); border-radius:var(--r-md); padding:16px 18px; margin-bottom:18px; box-shadow:var(--shadow-sm)}
+.game-name{font-family:var(--font-display); font-weight:700; font-size:max(19px,1.25em)}
+.game-state{font-weight:700; color:var(--muted); font-size:max(16px,.92em)}
+.game-box{background:var(--surface); border:2px solid var(--border); border-radius:var(--r-lg); padding:22px; box-shadow:var(--shadow-sm)}
+.game-status{font-weight:800; font-size:max(17px,1.05em); margin-bottom:14px; font-variant-numeric:tabular-nums}
+.game-q{font-size:max(17px,1.08em); font-weight:700; margin-bottom:14px}
+.game-note{margin-top:14px; background:var(--bg-soft); border:1.5px solid var(--border-strong); border-radius:var(--r-sm); padding:12px 16px; font-weight:700; font-size:max(16px,1em)}
+.game-acts{display:flex; gap:12px; flex-wrap:wrap; justify-content:center; margin-top:16px}
+.q-opts.one-col{grid-template-columns:1fr}
+.mem-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:10px}
+.mem-tile{min-height:76px; padding:10px 8px; border-radius:var(--r-md); border:2.5px solid var(--border-strong); background:var(--primary); color:#FFF8EA; font-size:max(16px,1em); font-weight:800; transition:transform .15s ease, background-color .18s ease; touch-action:manipulation}
+@media (prefers-color-scheme: dark){ .mem-tile{color:#12241A} }
+html.hc .mem-tile{color:#fff}
+.mem-tile.open{background:var(--surface); color:var(--ink); border-color:var(--accent)}
+.mem-tile.done{background:var(--success-soft); color:var(--ink); border-color:var(--success); cursor:default}
+@media (max-width:560px){ .mem-grid{grid-template-columns:repeat(2,1fr)} }
+.match-cols{display:grid; grid-template-columns:1fr 1fr; gap:14px}
+.match-col{display:flex; flex-direction:column; gap:10px}
+.match-btn{min-height:56px; padding:12px 14px; border-radius:var(--r-md); border:2px solid var(--border-strong); background:var(--surface-2); color:var(--ink); font-size:max(16px,1em); font-weight:700; text-align:left; touch-action:manipulation}
+.match-btn.sel{border-color:var(--accent); background:var(--accent-soft)}
+.match-btn.done{border-color:var(--success); background:var(--success-soft); opacity:.75; cursor:default}
+.fill-word{display:flex; gap:6px; justify-content:center; flex-wrap:wrap; font-family:var(--font-display); font-size:2.1em; font-weight:700; margin:16px 0 20px}
+.fill-ch{min-width:30px; text-align:center}
+.fill-slot{min-width:34px; text-align:center; color:var(--accent-strong); border-bottom:4px solid var(--accent)}
+.letter-bank{display:flex; gap:10px; flex-wrap:wrap; justify-content:center}
+.letter-btn{min-width:56px; min-height:56px; padding:8px 14px; border-radius:var(--r-sm); border:2px solid var(--primary); background:var(--primary-soft); color:var(--primary-strong); font-size:1.3em; font-weight:800; touch-action:manipulation}
+.letter-btn:active{transform:scale(.95)}
+.speed-prompt{font-family:var(--font-display); font-size:clamp(24px,6vw,34px); font-weight:700; text-align:center; margin:8px 0 16px}
+.tf-card{background:var(--surface-2); border:2px solid var(--border-strong); border-radius:var(--r-md); padding:20px; text-align:center; margin-bottom:16px}
+.tf-en{font-family:var(--font-display); font-size:1.7em; font-weight:700}
+.tf-vi{font-size:max(17px,1.05em); font-weight:700; color:var(--accent-strong); margin-top:4px}
+.tf-row{display:flex; gap:12px; justify-content:center; flex-wrap:wrap}
+.tf-row .btn{flex:1; max-width:230px}
+.dlg-pick{display:flex; flex-direction:column; gap:10px; margin-top:14px}
+.dlg-pick-btn{min-height:56px; padding:12px 16px; border-radius:var(--r-md); border:2px solid var(--border-strong); background:var(--surface); color:var(--ink); text-align:left; touch-action:manipulation}
+.dlg-pick-btn .dp-who{display:block; font-size:max(16px,.82em); font-weight:800; color:var(--muted)}
+.dlg-pick-btn .dp-en{display:block; font-size:max(17px,1.05em); font-weight:700; margin-top:2px}
+.dlg-pick-btn.done{opacity:.45; cursor:default}
+.dlg-placed{flex-direction:column; align-items:stretch}
+.placed-line{font-weight:700; font-size:max(16px,1em); background:var(--surface); border:1.5px solid var(--success); border-radius:var(--r-sm); padding:10px 14px; width:100%}
+.badflash{animation:badflashA .55s ease}
+@keyframes badflashA{0%,100%{} 50%{background:var(--danger-soft); border-color:var(--danger)}}
+@media (prefers-reduced-motion: reduce){ .badflash{animation:none} }
+
 </style>
 </head>
 <body>
@@ -1081,7 +1148,7 @@ html[data-font="small"] .hc-state{font-size:max(14px,.88em)}
         </div>
         <div class="dm-section">
           <div class="dm-label">Đi nhanh tới</div>
-          <button type="button" class="dm-nav-btn" data-menu-goto="lessonsSection"><span>Lộ trình 6 bài học</span><span class="dm-arrow" aria-hidden="true">→</span></button>
+          <button type="button" class="dm-nav-btn" data-menu-goto="lessonsSection"><span>Lộ trình 6 chương · 60 bài</span><span class="dm-arrow" aria-hidden="true">→</span></button>
           <button type="button" class="dm-nav-btn" data-menu-goto="roadmapSection"><span>Bản đồ lộ trình</span><span class="dm-arrow" aria-hidden="true">→</span></button>
           <button type="button" class="dm-nav-btn" data-menu-goto="guideSection"><span>Cách học 3 bước</span><span class="dm-arrow" aria-hidden="true">→</span></button>
         </div>
@@ -1134,12 +1201,12 @@ html[data-font="small"] .hc-state{font-size:max(14px,.88em)}
         </div>
         <div class="progress-top">
           <div class="stat"><b id="statPct">0%</b><span>Đã hoàn thành lộ trình</span></div>
-          <div class="stat"><b id="statWords">0 / 48</b><span>Từ vựng đã thuộc</span></div>
+          <div class="stat"><b id="statWords">0 / 300</b><span>Từ vựng đã thuộc</span></div>
           <div class="stat"><b id="statStreak">0 ngày</b><span>Chuỗi ngày học liên tục</span></div>
-          <div class="stat"><b id="statLessons">0 / 6</b><span>Bài đã hoàn thành</span></div>
+          <div class="stat"><b id="statLessons">0 / 60</b><span>Bài đã hoàn thành</span></div>
         </div>
         <div class="bar" role="progressbar" aria-label="Phần trăm hoàn thành lộ trình" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="mainBar"><div class="bar-fill" id="mainBarFill"></div></div>
-        <p class="bar-label" id="barLabel">Hãy bắt đầu bài 1 — Chào hỏi &amp; giới thiệu nhé!</p>
+        <p class="bar-label" id="barLabel">Hãy bắt đầu với Chương 1 · Bài 1 — Chào hỏi trong ngày nhé!</p>
         <div class="badges-row" id="badgesRow" aria-label="Huy hiệu đã đạt"></div>
       </div>
     </div>
@@ -1155,7 +1222,7 @@ html[data-font="small"] .hc-state{font-size:max(14px,.88em)}
         <div class="step-card">
           <div class="step-num" aria-hidden="true">1</div>
           <h3>Chọn một bài học</h3>
-          <p>Kéo xuống phần “Lộ trình 6 bài học” và bấm vào bài đầu tiên: <b>Chào hỏi &amp; giới thiệu</b>. Mỗi bài chỉ xoay quanh một việc quen thuộc trong đời sống hằng ngày.</p>
+          <p>Kéo xuống phần “Lộ trình 6 chương · 60 bài học”, mở Chương 1 và bấm Bài 1: <b>Chào hỏi trong ngày</b>. Mỗi bài nhỏ chỉ có 5 từ — học nhẹ mà chắc.</p>
         </div>
         <div class="step-card">
           <div class="step-num" aria-hidden="true">2</div>
@@ -1164,8 +1231,8 @@ html[data-font="small"] .hc-state{font-size:max(14px,.88em)}
         </div>
         <div class="step-card">
           <div class="step-num" aria-hidden="true">3</div>
-          <h3>Làm bài kiểm tra ngắn</h3>
-          <p>Cuối mỗi bài có vài câu hỏi vui, chấm điểm ngay và giải thích bằng tiếng Việt. Sai cũng không sao — bấm “Làm lại” là ôn lại được ngay.</p>
+          <h3>Chơi trò chơi cuối bài</h3>
+          <p>Cuối mỗi bài là một trò chơi tiếng Anh ngắn với cách chơi riêng. Chơi đạt từ 80% là hoàn thành bài và mở bài tiếp theo. Đầu bài mới có bài kiểm tra nhanh bài cũ — chưa thuộc thì trang web nhắc bác học lại bài cũ trước.</p>
         </div>
       </div>
     </div>
@@ -1180,7 +1247,7 @@ html[data-font="small"] .hc-state{font-size:max(14px,.88em)}
       <div class="two-col">
         <div class="panel">
           <h3>Từ của ngày</h3>
-          <p class="panel-sub">Mỗi ngày thuộc thêm 1 từ — chỉ hơn một tháng là bác thuộc hết 48 từ trong lộ trình!</p>
+          <p class="panel-sub">Mỗi ngày thuộc thêm 1 từ — học đều đặn là bác thuộc dần hết 300 từ trong lộ trình!</p>
           <div class="wotd-word" id="wotdWord">…</div>
           <div class="wotd-ipa" id="wotdIpa">…</div>
           <p class="wotd-vi" id="wotdVi">…</p>
@@ -1203,10 +1270,10 @@ html[data-font="small"] .hc-state{font-size:max(14px,.88em)}
   <section class="block" id="lessonsSection" aria-labelledby="lessonsTitle" style="padding-top:6px">
     <div class="wrap">
       <div class="sec-head">
-        <h2 id="lessonsTitle">Lộ trình 6 bài học đời thường</h2>
-        <p>Học theo thứ tự từ bài 1 đến bài 6, hoặc chọn bất kỳ bài nào bác thấy cần trước. Mỗi bài gồm: từ vựng có giọng đọc, thẻ ghi nhớ, hội thoại mẫu, luyện nói và bài kiểm tra.</p>
+        <h2 id="lessonsTitle">Lộ trình 6 chương · 60 bài học đời thường</h2>
+        <p>Mỗi chương có 10 bài nhỏ, học lần lượt từng bài: chơi đạt trò chơi cuối bài mới mở bài tiếp theo, và đầu mỗi bài mới có bài kiểm tra nhanh bài cũ. Mỗi bài nhỏ gồm 5 từ vựng có giọng đọc, thẻ ghi nhớ, hội thoại mẫu, luyện nói và một trò chơi riêng.</p>
       </div>
-      <div class="lesson-grid" id="lessonGrid"></div>
+      <div id="chapterList" class="chapter-list"></div>
     </div>
   </section>
 
@@ -1228,19 +1295,19 @@ html[data-font="small"] .hc-state{font-size:max(14px,.88em)}
               </div>
               <span class="rm-flag here" id="rmFlag1">📍 Bạn đang ở đây</span>
             </div>
-            <p class="rm-desc">Đây chính là 6 bài bác đang học ở ngay phía trên: những việc gần gũi nhất trong đời sống hằng ngày.</p>
+            <p class="rm-desc">Đây chính là khóa học bác đang học ở ngay phía trên: 6 chương theo 6 chủ đề đời thường, mỗi chương 10 bài nhỏ — tổng cộng 60 bài.</p>
             <div class="rm-topics" aria-label="Các bài trong chặng 1">
-              <span>Bài 1 · Chào hỏi &amp; giới thiệu</span>
-              <span>Bài 2 · Gia đình &amp; số đếm</span>
-              <span>Bài 3 · Ăn uống &amp; đi chợ</span>
-              <span>Bài 4 · Hỏi đường &amp; đi lại</span>
-              <span>Bài 5 · Sức khỏe &amp; đi khám</span>
-              <span>Bài 6 · Mua sắm &amp; giá cả</span>
+              <span>Chương 1 · Chào hỏi &amp; giới thiệu</span>
+              <span>Chương 2 · Gia đình &amp; số đếm</span>
+              <span>Chương 3 · Ăn uống &amp; đi chợ</span>
+              <span>Chương 4 · Hỏi đường &amp; đi lại</span>
+              <span>Chương 5 · Sức khỏe &amp; đi khám</span>
+              <span>Chương 6 · Mua sắm &amp; giá cả</span>
             </div>
-            <div class="rm-goal"><b>Học xong chặng này, bác sẽ:</b> tự giới thiệu được tên tuổi, quê quán · hỏi giá và mua đồ được ở chợ, cửa hàng · hỏi đường cơ bản · nói được những câu đơn giản khi mệt, đau và đi khám. Tổng cộng <b>48 từ cốt lõi</b> dùng hằng ngày nhất.</div>
-            <div class="rm-bar" role="progressbar" aria-label="Tiến độ chặng 1" aria-valuemin="0" aria-valuemax="6" aria-valuenow="0" id="rmBar1"><div class="rm-bar-fill" id="rmBarFill1"></div></div>
-            <p class="rm-note" id="rmNote1">Bác đã hoàn thành 0 / 6 bài của chặng 1.</p>
-            <p class="rm-desc" style="margin-top:4px">Nhịp học gợi ý: mỗi ngày 10–15 phút, khoảng 2–3 tuần là đi hết chặng này.</p>
+            <div class="rm-goal"><b>Học xong chặng này, bác sẽ:</b> tự giới thiệu được tên tuổi, quê quán · hỏi giá và mua đồ được ở chợ, cửa hàng · hỏi đường cơ bản · nói được những câu đơn giản khi mệt, đau và đi khám. Tổng cộng <b>60 bài nhỏ — khoảng 300 từ/cụm cốt lõi</b> dùng hằng ngày nhất.</div>
+            <div class="rm-bar" role="progressbar" aria-label="Tiến độ chặng 1" aria-valuemin="0" aria-valuemax="60" aria-valuenow="0" id="rmBar1"><div class="rm-bar-fill" id="rmBarFill1"></div></div>
+            <p class="rm-note" id="rmNote1">Bác đã hoàn thành 0 / 60 bài của chặng 1.</p>
+            <p class="rm-desc" style="margin-top:4px">Nhịp học gợi ý: mỗi ngày 10–15 phút, học đều từng bài nhỏ là đi hết chặng này.</p>
           </div>
         </div>
 
@@ -1317,7 +1384,7 @@ html[data-font="small"] .hc-state{font-size:max(14px,.88em)}
       <div class="total-banner">
         <div>
           <h2 id="totalTitle">Bài kiểm tra tổng hợp</h2>
-          <p>Học xong vài bài rồi? Thử sức với 6 câu hỏi trộn từ tất cả các bài để xem bác nhớ được bao nhiêu.</p>
+          <p>Học xong vài bài rồi? Thử sức với 6 câu hỏi trộn từ tất cả các chương để xem bác nhớ được bao nhiêu.</p>
         </div>
         <button type="button" class="btn" id="openTotalQuiz">Làm bài tổng hợp</button>
       </div>
@@ -1355,6 +1422,10 @@ html[data-font="small"] .hc-state{font-size:max(14px,.88em)}
       <h1 id="lessonTitle">Bài học</h1>
       <p id="lessonSub" style="color:var(--muted); font-weight:600"></p>
       <div class="lesson-goal" id="lessonGoal"></div>
+      <div id="gateBanner" class="lesson-goal" style="display:none; margin-top:10px">
+        <span id="gateBannerText"></span>
+        <button type="button" class="btn btn-accent btn-sm" id="gateBannerBtn" style="margin-left:10px">Kiểm tra lại để mở bài mới</button>
+      </div>
     </div>
 
     <div class="tabs" role="tablist" aria-label="Các phần của bài học">
@@ -1362,7 +1433,7 @@ html[data-font="small"] .hc-state{font-size:max(14px,.88em)}
       <button type="button" class="tab-btn" role="tab" data-tab="cards" aria-selected="false">2 · Thẻ ghi nhớ</button>
       <button type="button" class="tab-btn" role="tab" data-tab="dialogue" aria-selected="false">3 · Hội thoại</button>
       <button type="button" class="tab-btn" role="tab" data-tab="speak" aria-selected="false">4 · Luyện nói</button>
-      <button type="button" class="tab-btn" role="tab" data-tab="quiz" aria-selected="false">5 · Kiểm tra</button>
+      <button type="button" class="tab-btn" role="tab" data-tab="quiz" aria-selected="false">5 · Trò chơi</button>
     </div>
 
     <section class="tab-panel active" id="panel-vocab" role="tabpanel" aria-label="Từ vựng">
@@ -1467,17 +1538,35 @@ html[data-font="small"] .hc-state{font-size:max(14px,.88em)}
       </div>
     </section>
 
-    <section class="tab-panel" id="panel-quiz" role="tabpanel" aria-label="Bài kiểm tra">
-      <h2 class="sub-h">Kiểm tra cuối bài</h2>
-      <p class="sub-p">Trả lời đủ các câu rồi bấm “Chấm điểm”. Đạt từ 2/3 câu đúng trở lên là bác đã nắm được bài này.</p>
-      <div id="quizWrap"></div>
-      <div style="display:flex; gap:12px; flex-wrap:wrap; margin-top:6px">
-        <button type="button" class="btn btn-primary" id="quizSubmit">Chấm điểm</button>
-        <button type="button" class="btn btn-ghost" id="quizRetry" style="display:none">Làm lại bài kiểm tra</button>
-        <button type="button" class="btn btn-soft" id="quizDone" style="display:none">Hoàn thành bài — về trang chính</button>
-      </div>
-      <div class="quiz-result" id="quizResult" role="status"></div>
+    <section class="tab-panel" id="panel-quiz" role="tabpanel" aria-label="Trò chơi cuối bài">
+      <h2 class="sub-h">Trò chơi cuối bài — chơi để hoàn thành bài</h2>
+      <p class="sub-p" id="gameIntro">Mỗi bài có một trò chơi riêng. Chơi đạt yêu cầu là bài được đánh dấu hoàn thành và bài tiếp theo được mở.</p>
+      <div id="gameWrap"></div>
+      <div class="quiz-result" id="gameResult" role="status"></div>
     </section>
+  </div>
+</div>
+
+
+<!-- ================= GATE VIEW (kiểm tra bài cũ / bài khóa) ================= -->
+<div class="view" id="viewGate">
+  <div class="wrap">
+    <div class="lesson-head">
+      <button type="button" class="btn btn-ghost btn-sm" id="gateBack">← Quay lại trang chính</button>
+      <h1 id="gateTitle">Kiểm tra nhanh bài cũ</h1>
+      <p id="gateIntro" style="color:var(--muted); font-weight:600"></p>
+    </div>
+    <div id="gateLockBox" class="no-support" style="display:none; margin-top:16px"></div>
+    <div id="gateWrap" style="margin-top:16px"></div>
+    <div style="display:flex; gap:12px; flex-wrap:wrap">
+      <button type="button" class="btn btn-primary" id="gateSubmit">Chấm bài kiểm tra</button>
+      <button type="button" class="btn btn-ghost" id="gateRetry" style="display:none">Làm lại bài kiểm tra</button>
+    </div>
+    <div class="quiz-result" id="gateResult" role="status"></div>
+    <div id="gateFailBtns" style="display:none; gap:12px; flex-wrap:wrap; margin-top:16px">
+      <button type="button" class="btn btn-accent" id="gateStudyPrev">Học lại bài cũ</button>
+      <button type="button" class="btn btn-soft" id="gateReviewCards">Ôn nhanh bằng thẻ chữ rồi kiểm tra lại</button>
+    </div>
   </div>
 </div>
 
@@ -1487,7 +1576,7 @@ html[data-font="small"] .hc-state{font-size:max(14px,.88em)}
     <div class="lesson-head">
       <button type="button" class="btn btn-ghost btn-sm" data-backhome>← Quay lại trang chính</button>
       <h1>Bài kiểm tra tổng hợp</h1>
-      <p style="color:var(--muted); font-weight:600">6 câu hỏi trộn từ cả 6 bài — chào hỏi, gia đình, ăn uống, đi đường, sức khỏe và mua sắm.</p>
+      <p style="color:var(--muted); font-weight:600">6 câu hỏi trộn từ cả 6 chương — chào hỏi, gia đình, ăn uống, đi đường, sức khỏe và mua sắm.</p>
     </div>
     <div id="totalQuizWrap" style="margin-top:20px"></div>
     <div style="display:flex; gap:12px; flex-wrap:wrap">
@@ -1502,7 +1591,7 @@ html[data-font="small"] .hc-state{font-size:max(14px,.88em)}
 
 <footer class="site">
   <div class="wrap">
-    <p><b>Tiếng Anh Cho Người Mới</b> — Học chậm mà chắc. Mỗi ngày 10 phút, sau 6 bài bác đã có thể giao tiếp những việc thường ngày.</p>
+    <p><b>Tiếng Anh Cho Người Mới</b> — Học chậm mà chắc. Mỗi ngày 10 phút, sau 60 bài nhỏ bác đã có thể giao tiếp những việc thường ngày.</p>
     <p style="margin-top:6px">Mẹo: Muốn chữ to hơn, bấm nút 3 gạch (Menu) ở góc trên bên phải rồi chọn Cỡ chữ. Cũng trong menu đó, bác bật “Tương phản cao” nếu thấy chữ chưa đủ rõ.</p>
   </div>
 </footer>
@@ -1514,204 +1603,100 @@ html[data-font="small"] .hc-state{font-size:max(14px,.88em)}
 var SPEAKER_SVG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 5 6 9H2v6h4l5 4V5Z"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg>';
 var MIC_SVG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" x2="12" y1="19" y2="22"/></svg>';
 
+var CHAPTERS = [{"id": 1, "title": "Chào hỏi & giới thiệu", "desc": "Chào hỏi, giới thiệu tên tuổi, quê quán, nghề nghiệp và những lời lịch sự đầu tiên."}, {"id": 2, "title": "Gia đình & số đếm", "desc": "Nói về bố mẹ, anh chị em, con cháu và đếm số, nói tuổi."}, {"id": 3, "title": "Ăn uống & đi chợ", "desc": "Cơm, rau củ, trái cây, đồ uống, gọi món và đi chợ mua đồ."}, {"id": 4, "title": "Hỏi đường & đi lại", "desc": "Trái phải, gần xa, hỏi đường, đi xe buýt, taxi và chỉ đường cho người khác."}, {"id": 5, "title": "Sức khỏe & đi khám", "desc": "Cơ thể, đau sốt, đi khám bác sĩ, uống thuốc và giữ gìn sức khỏe."}, {"id": 6, "title": "Mua sắm & giá cả", "desc": "Quần áo, màu sắc, cỡ, hỏi giá, mặc cả, trả tiền và đổi trả hàng."}];
+
 var LESSONS = [
-{ id:1, title:"Chào hỏi & giới thiệu", sub:"Bài 1 · Làm quen và tự giới thiệu bản thân",
-  goal:"Mục tiêu: Sau bài này, bác chào hỏi được, tự nói tên mình và hỏi thăm sức khỏe người khác một cách lịch sự.",
-  vocab:[
-    {en:"Hello", ipa:"/həˈloʊ/", vi:"Xin chào", ex:"Hello! — Xin chào!"},
-    {en:"Good morning", ipa:"/ɡʊd ˈmɔːrnɪŋ/", vi:"Chào buổi sáng", ex:"Good morning, Mrs. Lan."},
-    {en:"My name is…", ipa:"/maɪ neɪm ɪz/", vi:"Tên tôi là…", ex:"My name is Hung."},
-    {en:"Nice to meet you", ipa:"/naɪs tuː miːt juː/", vi:"Rất vui được gặp bạn", ex:"Nice to meet you, too."},
-    {en:"How are you?", ipa:"/haʊ ɑːr juː/", vi:"Bạn có khỏe không?", ex:"How are you today?"},
-    {en:"I'm fine, thank you", ipa:"/aɪm faɪn θæŋk juː/", vi:"Tôi khỏe, cảm ơn bạn", ex:"I'm fine, thank you. And you?"},
-    {en:"Please", ipa:"/pliːz/", vi:"Xin vui lòng / làm ơn", ex:"Sit down, please."},
-    {en:"Goodbye", ipa:"/ɡʊdˈbaɪ/", vi:"Tạm biệt", ex:"Goodbye, see you tomorrow!"}
-  ],
-  phrases:[
-    {en:"Hello, my name is Lan.", vi:"Xin chào, tên tôi là Lan."},
-    {en:"I am from Vietnam.", vi:"Tôi đến từ Việt Nam."},
-    {en:"Nice to meet you.", vi:"Rất vui được gặp bạn."},
-    {en:"See you tomorrow!", vi:"Hẹn gặp bạn ngày mai!"}
-  ],
-  dialogue:[
-    {who:"A", name:"David", en:"Hello! My name is David.", vi:"Xin chào! Tên tôi là David."},
-    {who:"B", name:"Mai", en:"Hi, David. I'm Mai. Nice to meet you.", vi:"Chào David. Tôi là Mai. Rất vui được gặp bạn."},
-    {who:"A", name:"David", en:"Nice to meet you, too. How are you?", vi:"Tôi cũng rất vui. Bạn có khỏe không?"},
-    {who:"B", name:"Mai", en:"I'm fine, thank you. And you?", vi:"Tôi khỏe, cảm ơn bạn. Còn bạn thì sao?"},
-    {who:"A", name:"David", en:"I'm very well, thanks.", vi:"Tôi rất khỏe, cảm ơn bạn."}
-  ],
-  quiz:[
-    {type:"mcq", tag:"Chọn nghĩa đúng", q:"“Nice to meet you” nghĩa là gì?", opts:["Rất vui được gặp bạn","Hẹn gặp lại ngày mai","Bạn có khỏe không?","Cảm ơn bạn nhiều"], answer:0, explain:"“Nice to meet you” = Rất vui được gặp bạn — câu nói khi mới làm quen."},
-    {type:"listen", tag:"Nghe rồi chọn", q:"Bấm nút nghe, rồi chọn từ bác vừa nghe được:", listen:"Good morning", opts:["Good morning","Good night","Goodbye","Good afternoon"], answer:0, explain:"Từ vừa đọc là “Good morning” — Chào buổi sáng."},
-    {type:"order", tag:"Sắp xếp thành câu", q:"Bấm các từ theo đúng thứ tự để tạo thành câu “Tên tôi là Lan”:", words:["My","name","is","Lan"], sentence:"My name is Lan", explain:"Câu đúng: “My name is Lan.” — Tên tôi là Lan."}
-  ]
-},
-{ id:2, title:"Gia đình & số đếm", sub:"Bài 2 · Nói về người thân và đếm số từ 1 đến 10",
-  goal:"Mục tiêu: Sau bài này, bác giới thiệu được các thành viên trong gia đình và đếm được từ 1 đến 10.",
-  vocab:[
-    {en:"Family", ipa:"/ˈfæməli/", vi:"Gia đình", ex:"This is my family."},
-    {en:"Mother", ipa:"/ˈmʌðər/", vi:"Mẹ", ex:"My mother is kind."},
-    {en:"Father", ipa:"/ˈfɑːðər/", vi:"Bố", ex:"My father is strong."},
-    {en:"Husband", ipa:"/ˈhʌzbənd/", vi:"Chồng", ex:"This is my husband."},
-    {en:"Wife", ipa:"/waɪf/", vi:"Vợ", ex:"This is my wife."},
-    {en:"Son", ipa:"/sʌn/", vi:"Con trai", ex:"I have one son."},
-    {en:"Daughter", ipa:"/ˈdɔːtər/", vi:"Con gái", ex:"I have two daughters."},
-    {en:"Grandchildren", ipa:"/ˈɡræntʃɪldrən/", vi:"Các cháu (cháu nội/ngoại)", ex:"I love my grandchildren."}
-  ],
-  numbers:[["1","One","một"],["2","Two","hai"],["3","Three","ba"],["4","Four","bốn"],["5","Five","năm"],["6","Six","sáu"],["7","Seven","bảy"],["8","Eight","tám"],["9","Nine","chín"],["10","Ten","mười"]],
-  phrases:[
-    {en:"I have two children.", vi:"Tôi có hai người con."},
-    {en:"This is my family.", vi:"Đây là gia đình tôi."},
-    {en:"I have three grandchildren.", vi:"Tôi có ba người cháu."}
-  ],
-  dialogue:[
-    {who:"A", name:"Tom", en:"Is this your family photo?", vi:"Đây có phải ảnh gia đình bạn không?"},
-    {who:"B", name:"Hoa", en:"Yes. This is my mother and my father.", vi:"Đúng vậy. Đây là mẹ tôi và bố tôi."},
-    {who:"A", name:"Tom", en:"How many children do you have?", vi:"Bạn có mấy người con?"},
-    {who:"B", name:"Hoa", en:"I have one son and one daughter.", vi:"Tôi có một con trai và một con gái."}
-  ],
-  quiz:[
-    {type:"mcq", tag:"Chọn nghĩa đúng", q:"“Grandchildren” nghĩa là gì?", opts:["Ông bà","Các cháu","Anh chị em","Hàng xóm"], answer:1, explain:"“Grandchildren” = các cháu (cháu nội, cháu ngoại)."},
-    {type:"listen", tag:"Nghe rồi chọn", q:"Bấm nút nghe, rồi chọn số bác vừa nghe được:", listen:"Seven", opts:["Six","Seven","Ten","Three"], answer:1, explain:"Từ vừa đọc là “Seven” — số 7."},
-    {type:"order", tag:"Sắp xếp thành câu", q:"Sắp xếp thành câu “Tôi có hai người con”:", words:["I","have","two","children"], sentence:"I have two children", explain:"Câu đúng: “I have two children.” — Tôi có hai người con."}
-  ]
-},
-{ id:3, title:"Ăn uống & đi chợ", sub:"Bài 3 · Ăn sáng, đi chợ và gọi món đơn giản",
-  goal:"Mục tiêu: Sau bài này, bác nói được tên các món ăn, đồ uống quen thuộc và khen món ăn ngon.",
-  vocab:[
-    {en:"Rice", ipa:"/raɪs/", vi:"Cơm / gạo", ex:"I eat rice every day."},
-    {en:"Water", ipa:"/ˈwɔːtər/", vi:"Nước", ex:"I drink water."},
-    {en:"Tea", ipa:"/tiː/", vi:"Trà", ex:"Would you like some tea?"},
-    {en:"Breakfast", ipa:"/ˈbrekfəst/", vi:"Bữa sáng", ex:"Breakfast is at seven."},
-    {en:"Vegetables", ipa:"/ˈvedʒtəbəlz/", vi:"Rau củ", ex:"Vegetables are good for you."},
-    {en:"Fruit", ipa:"/fruːt/", vi:"Trái cây", ex:"I like fresh fruit."},
-    {en:"Market", ipa:"/ˈmɑːrkɪt/", vi:"Chợ", ex:"I go to the market."},
-    {en:"Delicious", ipa:"/dɪˈlɪʃəs/", vi:"Ngon", ex:"This soup is delicious!"}
-  ],
-  phrases:[
-    {en:"I would like some tea, please.", vi:"Cho tôi một ít trà."},
-    {en:"This food is delicious.", vi:"Món ăn này ngon quá."},
-    {en:"I go to the market in the morning.", vi:"Tôi đi chợ vào buổi sáng."}
-  ],
-  dialogue:[
-    {who:"A", name:"Lan", en:"Good morning! What would you like?", vi:"Chào buổi sáng! Bác muốn dùng gì ạ?"},
-    {who:"B", name:"Ông Ba", en:"I would like rice and vegetables, please.", vi:"Cho tôi cơm và rau."},
-    {who:"A", name:"Lan", en:"Would you like some tea?", vi:"Bác có muốn uống trà không?"},
-    {who:"B", name:"Ông Ba", en:"Yes, please. This food is delicious!", vi:"Có, cảm ơn cháu. Món ăn ngon quá!"}
-  ],
-  quiz:[
-    {type:"mcq", tag:"Chọn nghĩa đúng", q:"“Delicious” nghĩa là gì?", opts:["Đắt","Ngon","Nóng","Nhiều"], answer:1, explain:"“Delicious” = ngon — dùng để khen đồ ăn."},
-    {type:"listen", tag:"Nghe rồi chọn", q:"Bấm nút nghe, rồi chọn từ bác vừa nghe được:", listen:"Water", opts:["Tea","Rice","Water","Fruit"], answer:2, explain:"Từ vừa đọc là “Water” — nước."},
-    {type:"order", tag:"Sắp xếp thành câu", q:"Sắp xếp thành câu “Món ăn này ngon”:", words:["This","food","is","delicious"], sentence:"This food is delicious", explain:"Câu đúng: “This food is delicious.” — Món ăn này ngon."}
-  ]
-},
-{ id:4, title:"Hỏi đường & đi lại", sub:"Bài 4 · Hỏi đường, rẽ trái phải và đi xe buýt",
-  goal:"Mục tiêu: Sau bài này, bác hỏi được đường đi, hiểu chỉ dẫn rẽ trái, rẽ phải, đi thẳng và hỏi về xe buýt.",
-  vocab:[
-    {en:"Where", ipa:"/weər/", vi:"Ở đâu", ex:"Where is the market?"},
-    {en:"Left", ipa:"/left/", vi:"Bên trái", ex:"Turn left, please."},
-    {en:"Right", ipa:"/raɪt/", vi:"Bên phải", ex:"Turn right here."},
-    {en:"Straight", ipa:"/streɪt/", vi:"(Đi) thẳng", ex:"Go straight ahead."},
-    {en:"Turn", ipa:"/tɜːrn/", vi:"Rẽ / quay", ex:"Turn left at the bank."},
-    {en:"Near", ipa:"/nɪər/", vi:"Gần", ex:"The shop is near here."},
-    {en:"Far", ipa:"/fɑːr/", vi:"Xa", ex:"It is not far."},
-    {en:"Bus", ipa:"/bʌs/", vi:"Xe buýt", ex:"I go by bus."}
-  ],
-  phrases:[
-    {en:"Where is the hospital?", vi:"Bệnh viện ở đâu?"},
-    {en:"Turn left, please.", vi:"Xin rẽ trái."},
-    {en:"Go straight ahead.", vi:"Đi thẳng về phía trước."},
-    {en:"Is it far from here?", vi:"Từ đây đến đó có xa không?"}
-  ],
-  dialogue:[
-    {who:"A", name:"Bà Tư", en:"Excuse me, where is the market?", vi:"Xin lỗi, cho tôi hỏi chợ ở đâu?"},
-    {who:"B", name:"Nam", en:"Go straight, then turn left.", vi:"Bác đi thẳng, sau đó rẽ trái."},
-    {who:"A", name:"Bà Tư", en:"Is it far from here?", vi:"Từ đây có xa không cháu?"},
-    {who:"B", name:"Nam", en:"No, it is near. Five minutes by bus.", vi:"Không xa đâu ạ. Đi xe buýt 5 phút là tới."}
-  ],
-  quiz:[
-    {type:"mcq", tag:"Chọn nghĩa đúng", q:"Muốn nói “rẽ phải”, bác nói thế nào?", opts:["Turn left","Go straight","Turn right","Go by bus"], answer:2, explain:"“Turn right” = rẽ phải. “Turn left” là rẽ trái."},
-    {type:"listen", tag:"Nghe rồi chọn", q:"Bấm nút nghe, rồi chọn từ bác vừa nghe được:", listen:"Near", opts:["Far","Near","Left","Bus"], answer:1, explain:"Từ vừa đọc là “Near” — gần. Trái nghĩa là “Far” — xa."},
-    {type:"order", tag:"Sắp xếp thành câu", q:"Sắp xếp thành câu hỏi “Bệnh viện ở đâu?”:", words:["Where","is","the","hospital"], sentence:"Where is the hospital", explain:"Câu đúng: “Where is the hospital?” — Bệnh viện ở đâu?"}
-  ]
-},
-{ id:5, title:"Sức khỏe & đi khám", sub:"Bài 5 · Nói về sức khỏe và đi khám bác sĩ",
-  goal:"Mục tiêu: Sau bài này, bác nói được khi mình mệt, đau đầu, sốt và hiểu những câu đơn giản khi đi khám.",
-  vocab:[
-    {en:"Doctor", ipa:"/ˈdɑːktər/", vi:"Bác sĩ", ex:"I see a doctor today."},
-    {en:"Hospital", ipa:"/ˈhɑːspɪtl/", vi:"Bệnh viện", ex:"The hospital is near here."},
-    {en:"Headache", ipa:"/ˈhedeɪk/", vi:"Đau đầu", ex:"I have a headache."},
-    {en:"Fever", ipa:"/ˈfiːvər/", vi:"Sốt", ex:"He has a fever."},
-    {en:"Medicine", ipa:"/ˈmedɪsɪn/", vi:"Thuốc", ex:"Take this medicine."},
-    {en:"Tired", ipa:"/ˈtaɪərd/", vi:"Mệt", ex:"I am very tired today."},
-    {en:"Rest", ipa:"/rest/", vi:"Nghỉ ngơi", ex:"You need to rest."},
-    {en:"Healthy", ipa:"/ˈhelθi/", vi:"Khỏe mạnh", ex:"I want to be healthy."}
-  ],
-  phrases:[
-    {en:"I have a headache.", vi:"Tôi bị đau đầu."},
-    {en:"I need to see a doctor.", vi:"Tôi cần đi gặp bác sĩ."},
-    {en:"Take this medicine and rest.", vi:"Uống thuốc này và nghỉ ngơi nhé."}
-  ],
-  dialogue:[
-    {who:"A", name:"Bác sĩ", en:"Hello. How do you feel today?", vi:"Xin chào. Hôm nay bác thấy thế nào?"},
-    {who:"B", name:"Ông Sáu", en:"I have a headache and a fever.", vi:"Tôi bị đau đầu và sốt."},
-    {who:"A", name:"Bác sĩ", en:"Take this medicine and rest at home.", vi:"Bác uống thuốc này và nghỉ ngơi ở nhà nhé."},
-    {who:"B", name:"Ông Sáu", en:"Thank you, doctor.", vi:"Cảm ơn bác sĩ."}
-  ],
-  quiz:[
-    {type:"mcq", tag:"Chọn nghĩa đúng", q:"“I have a fever” nghĩa là gì?", opts:["Tôi bị đau đầu","Tôi bị sốt","Tôi rất mệt","Tôi cần uống nước"], answer:1, explain:"“Fever” = sốt. “I have a fever” = Tôi bị sốt."},
-    {type:"listen", tag:"Nghe rồi chọn", q:"Bấm nút nghe, rồi chọn từ bác vừa nghe được:", listen:"Medicine", opts:["Doctor","Hospital","Medicine","Healthy"], answer:2, explain:"Từ vừa đọc là “Medicine” — thuốc."},
-    {type:"order", tag:"Sắp xếp thành câu", q:"Sắp xếp thành câu “Tôi bị đau đầu”:", words:["I","have","a","headache"], sentence:"I have a headache", explain:"Câu đúng: “I have a headache.” — Tôi bị đau đầu."}
-  ]
-},
-{ id:6, title:"Mua sắm & giá cả", sub:"Bài 6 · Hỏi giá, mặc cả nhẹ nhàng và mua đồ",
-  goal:"Mục tiêu: Sau bài này, bác hỏi được giá tiền, nói đắt hay rẻ và mua đồ đơn giản bằng tiếng Anh.",
-  vocab:[
-    {en:"How much?", ipa:"/haʊ mʌtʃ/", vi:"Bao nhiêu tiền?", ex:"How much is this?"},
-    {en:"Price", ipa:"/praɪs/", vi:"Giá", ex:"The price is good."},
-    {en:"Money", ipa:"/ˈmʌni/", vi:"Tiền", ex:"How much money?"},
-    {en:"Cheap", ipa:"/tʃiːp/", vi:"Rẻ", ex:"This bag is cheap."},
-    {en:"Expensive", ipa:"/ɪkˈspensɪv/", vi:"Đắt", ex:"That watch is expensive."},
-    {en:"Shop", ipa:"/ʃɑːp/", vi:"Cửa hàng", ex:"The shop is near my house."},
-    {en:"Discount", ipa:"/ˈdɪskaʊnt/", vi:"Giảm giá", ex:"Is there a discount?"},
-    {en:"Buy", ipa:"/baɪ/", vi:"Mua", ex:"I buy two kilos of rice."}
-  ],
-  phrases:[
-    {en:"How much is this?", vi:"Cái này bao nhiêu tiền?"},
-    {en:"It is too expensive.", vi:"Nó đắt quá."},
-    {en:"I will take it.", vi:"Tôi lấy cái này."}
-  ],
-  dialogue:[
-    {who:"A", name:"Bà Năm", en:"Excuse me, how much is this bag?", vi:"Cho tôi hỏi, cái túi này bao nhiêu tiền?"},
-    {who:"B", name:"Người bán", en:"It is ten dollars.", vi:"Mười đô la ạ."},
-    {who:"A", name:"Bà Năm", en:"It is a bit expensive. Is there a discount?", vi:"Hơi đắt. Có giảm giá không?"},
-    {who:"B", name:"Người bán", en:"Yes, eight dollars for you.", vi:"Có ạ, tám đô cho bác."},
-    {who:"A", name:"Bà Năm", en:"Good, I will take it.", vi:"Được, tôi lấy cái này."}
-  ],
-  quiz:[
-    {type:"mcq", tag:"Chọn nghĩa đúng", q:"Muốn hỏi giá, bác nói câu nào?", opts:["How are you?","How much is this?","Where is this?","What is your name?"], answer:1, explain:"“How much is this?” = Cái này bao nhiêu tiền?"},
-    {type:"listen", tag:"Nghe rồi chọn", q:"Bấm nút nghe, rồi chọn từ bác vừa nghe được:", listen:"Cheap", opts:["Shop","Cheap","Price","Buy"], answer:1, explain:"Từ vừa đọc là “Cheap” — rẻ. Trái nghĩa: “Expensive” — đắt."},
-    {type:"order", tag:"Sắp xếp thành câu", q:"Sắp xếp thành câu “Cái này bao nhiêu tiền?”:", words:["How","much","is","this"], sentence:"How much is this", explain:"Câu đúng: “How much is this?” — Cái này bao nhiêu tiền?"}
-  ]
-}
+{"id": 1, "ch": 1, "n": 1, "title": "Chào hỏi trong ngày", "sub": "Chương 1 · Bài 1 — Chào hỏi trong ngày", "goal": "Mục tiêu: Bác chào hỏi được vào từng buổi trong ngày.", "vocab": [{"en": "Hello", "ipa": "/həˈloʊ/", "vi": "Xin chào", "ex": "Hello! Nice to meet you. — Xin chào! Rất vui được gặp bạn."}, {"en": "Good morning", "ipa": "/ɡʊd ˈmɔːrnɪŋ/", "vi": "Chào buổi sáng", "ex": "Good morning Mrs. Lan. — Chào buổi sáng cô Lan."}, {"en": "Good afternoon", "ipa": "/ɡʊd ˌæftərˈnuːn/", "vi": "Chào buổi chiều", "ex": "Good afternoon Mr. Nam. — Chào buổi chiều anh Nam."}, {"en": "Good evening", "ipa": "/ɡʊd ˈiːvnɪŋ/", "vi": "Chào buổi tối", "ex": "Good evening everyone. — Chào buổi tối mọi người."}, {"en": "Hi", "ipa": "/haɪ/", "vi": "Chào bạn (thân mật)", "ex": "Hi Mai! — Chào Mai!"}], "phrases": [{"en": "Hello. My name is Lan.", "vi": "Xin chào. Tôi là Lan."}, {"en": "Good morning. How are you?", "vi": "Chào buổi sáng. Bạn có khỏe không?"}, {"en": "Good evening. Nice to meet you.", "vi": "Chào buổi tối. Rất vui được gặp bạn."}], "dialogue": [{"who": "A", "name": "David", "en": "Hello! Good morning.", "vi": "Xin chào! Chào buổi sáng."}, {"who": "B", "name": "Mai", "en": "Hi David. Good morning.", "vi": "Chào David. Chào buổi sáng."}, {"who": "A", "name": "David", "en": "Nice to meet you Mai.", "vi": "Rất vui được gặp bạn Mai."}]},
+{"id": 2, "ch": 1, "n": 2, "title": "Tạm biệt và lời chúc", "sub": "Chương 1 · Bài 2 — Tạm biệt và lời chúc", "goal": "Mục tiêu: Bác chào tạm biệt và chúc một ngày tốt lành được.", "vocab": [{"en": "Goodbye", "ipa": "/ɡʊdˈbaɪ/", "vi": "Tạm biệt", "ex": "Goodbye. See you tomorrow. — Tạm biệt. Hẹn gặp ngày mai."}, {"en": "See you tomorrow", "ipa": "/siː juː təˈmɑːroʊ/", "vi": "Hẹn gặp bạn ngày mai", "ex": "See you tomorrow at school. — Hẹn gặp bạn ngày mai ở trường."}, {"en": "See you later", "ipa": "/siː juː ˈleɪtər/", "vi": "Hẹn gặp lại sau", "ex": "See you later at home. — Lát nữa gặp ở nhà nhé."}, {"en": "Have a nice day", "ipa": "/hæv ə naɪs deɪ/", "vi": "Chúc một ngày tốt lành", "ex": "Have a nice day Mrs. Hoa. — Chúc cô Hoa một ngày tốt lành."}, {"en": "Good night", "ipa": "/ɡʊd naɪt/", "vi": "Chúc ngủ ngon", "ex": "Good night. Sleep well. — Chúc ngủ ngon. Ngủ ngon nhé."}], "phrases": [{"en": "Goodbye. See you tomorrow.", "vi": "Tạm biệt. Hẹn gặp bạn ngày mai."}, {"en": "Have a nice day!", "vi": "Chúc bạn một ngày tốt lành!"}, {"en": "Good night. See you tomorrow.", "vi": "Chúc ngủ ngon. Mai gặp lại nhé."}], "dialogue": [{"who": "A", "name": "Lan", "en": "Goodbye Mr. Long.", "vi": "Tạm biệt anh Long."}, {"who": "B", "name": "Long", "en": "Goodbye Lan. See you tomorrow.", "vi": "Tạm biệt Lan. Mai gặp lại nhé."}, {"who": "A", "name": "Lan", "en": "Have a nice day!", "vi": "Chúc anh một ngày tốt lành!"}]},
+{"id": 3, "ch": 1, "n": 3, "title": "Giới thiệu tên mình", "sub": "Chương 1 · Bài 3 — Giới thiệu tên mình", "goal": "Mục tiêu: Bác tự nói được tên mình và hỏi tên người khác.", "vocab": [{"en": "Name", "ipa": "/neɪm/", "vi": "Tên", "ex": "My name is Hung. — Tên tôi là Hùng."}, {"en": "What is your name?", "ipa": "/wʌt ɪz jɔːr neɪm/", "vi": "Bạn tên là gì?", "ex": "What is your name please? — Xin hỏi bạn tên là gì?"}, {"en": "My name is", "ipa": "/maɪ neɪm ɪz/", "vi": "Tên tôi là", "ex": "My name is Lan. — Tên tôi là Lan."}, {"en": "I am", "ipa": "/aɪ æm/", "vi": "Tôi là", "ex": "I am Mai. — Tôi là Mai."}, {"en": "Me too", "ipa": "/miː tuː/", "vi": "Tôi cũng vậy", "ex": "I am happy. Me too. — Tôi đang vui. Tôi cũng vậy."}], "phrases": [{"en": "My name is Lan.", "vi": "Tên tôi là Lan."}, {"en": "What is your name?", "vi": "Bạn tên là gì?"}, {"en": "I am from Vietnam.", "vi": "Tôi đến từ Việt Nam."}], "dialogue": [{"who": "A", "name": "Tom", "en": "Hello. What is your name?", "vi": "Xin chào. Bạn tên là gì?"}, {"who": "B", "name": "Hoa", "en": "My name is Hoa.", "vi": "Tên tôi là Hoa."}, {"who": "A", "name": "Tom", "en": "Nice to meet you Hoa.", "vi": "Rất vui được gặp bạn Hoa."}]},
+{"id": 4, "ch": 1, "n": 4, "title": "Hỏi quê quán", "sub": "Chương 1 · Bài 4 — Hỏi quê quán", "goal": "Mục tiêu: Bác hỏi và nói được mình đến từ đâu.", "vocab": [{"en": "Where are you from?", "ipa": "/weər ɑːr juː frʌm/", "vi": "Bạn đến từ đâu?", "ex": "Where are you from Mr. David? — Anh David đến từ đâu?"}, {"en": "I am from Vietnam", "ipa": "/aɪ æm frʌm ˌviːetˈnɑːm/", "vi": "Tôi đến từ Việt Nam", "ex": "I am from Vietnam. — Tôi đến từ Việt Nam."}, {"en": "Hometown", "ipa": "/ˈhoʊmtaʊn/", "vi": "Quê hương", "ex": "Haiphong is my hometown. — Hải Phòng là quê hương của tôi."}, {"en": "City", "ipa": "/ˈsɪti/", "vi": "Thành phố", "ex": "Hanoi is a big city. — Hà Nội là một thành phố lớn."}, {"en": "Village", "ipa": "/ˈvɪlɪdʒ/", "vi": "Làng quê", "ex": "My village is small and quiet. — Làng của tôi nhỏ và yên tĩnh."}], "phrases": [{"en": "Where are you from?", "vi": "Bạn đến từ đâu?"}, {"en": "I am from Haiphong.", "vi": "Tôi đến từ Hải Phòng."}, {"en": "My hometown is Thai Nguyen.", "vi": "Quê tôi ở Thái Nguyên."}], "dialogue": [{"who": "A", "name": "Mai", "en": "Where are you from?", "vi": "Bạn đến từ đâu?"}, {"who": "B", "name": "John", "en": "I am from America.", "vi": "Tôi đến từ nước Mỹ."}, {"who": "A", "name": "Mai", "en": "I am from Vietnam.", "vi": "Tôi đến từ Việt Nam."}]},
+{"id": 5, "ch": 1, "n": 5, "title": "Nghề nghiệp", "sub": "Chương 1 · Bài 5 — Nghề nghiệp", "goal": "Mục tiêu: Bác nói được nghề nghiệp của mình và người khác.", "vocab": [{"en": "Job", "ipa": "/dʒɑːb/", "vi": "Công việc", "ex": "What is your job? — Bạn làm nghề gì?"}, {"en": "Teacher", "ipa": "/ˈtiːtʃər/", "vi": "Giáo viên", "ex": "My sister is a teacher. — Chị tôi là giáo viên."}, {"en": "Farmer", "ipa": "/ˈfɑːrmər/", "vi": "Nông dân", "ex": "My father is a farmer. — Bố tôi là nông dân."}, {"en": "Worker", "ipa": "/ˈwɜːrkər/", "vi": "Công nhân", "ex": "He is a worker. — Anh ấy là công nhân."}, {"en": "Retired", "ipa": "/rɪˈtaɪərd/", "vi": "Đã nghỉ hưu", "ex": "My mother is retired. — Mẹ tôi đã nghỉ hưu."}], "phrases": [{"en": "What is your job?", "vi": "Bạn làm nghề gì?"}, {"en": "I am a teacher.", "vi": "Tôi là giáo viên."}, {"en": "My father is a farmer.", "vi": "Bố tôi là nông dân."}], "dialogue": [{"who": "A", "name": "Nam", "en": "What is your job?", "vi": "Bạn làm nghề gì?"}, {"who": "B", "name": "Linh", "en": "I am a teacher.", "vi": "Tôi là giáo viên."}, {"who": "A", "name": "Nam", "en": "My mother is retired now.", "vi": "Mẹ tôi giờ đã nghỉ hưu rồi."}]},
+{"id": 6, "ch": 1, "n": 6, "title": "Lời lịch sự", "sub": "Chương 1 · Bài 6 — Lời lịch sự", "goal": "Mục tiêu: Bác dùng được các lời lịch sự như làm ơn và cảm ơn.", "vocab": [{"en": "Please", "ipa": "/pliːz/", "vi": "Làm ơn / xin vui lòng", "ex": "Sit down please. — Mời bạn ngồi."}, {"en": "Thank you", "ipa": "/θæŋk juː/", "vi": "Cảm ơn bạn", "ex": "Thank you very much. — Cảm ơn bạn rất nhiều."}, {"en": "You are welcome", "ipa": "/jʊər ˈwelkəm/", "vi": "Không có gì", "ex": "Thank you. You are welcome. — Cảm ơn bạn. Không có gì."}, {"en": "Sorry", "ipa": "/ˈsɑːri/", "vi": "Xin lỗi", "ex": "I am sorry. I am late. — Tôi xin lỗi. Tôi đến muộn."}, {"en": "Excuse me", "ipa": "/ɪkˈskjuːz miː/", "vi": "Xin lỗi (muốn hỏi đường)", "ex": "Excuse me. Where is the market? — Xin lỗi. Chợ ở đâu ạ?"}], "phrases": [{"en": "Thank you very much.", "vi": "Cảm ơn bạn rất nhiều."}, {"en": "You are welcome.", "vi": "Không có gì."}, {"en": "Excuse me please.", "vi": "Xin lỗi cho tôi hỏi."}], "dialogue": [{"who": "A", "name": "Hoa", "en": "Excuse me. Sit down please.", "vi": "Mời bạn ngồi."}, {"who": "B", "name": "Tom", "en": "Thank you very much.", "vi": "Cảm ơn bạn rất nhiều."}, {"who": "A", "name": "Hoa", "en": "You are welcome.", "vi": "Không có gì."}]},
+{"id": 7, "ch": 1, "n": 7, "title": "Hỏi thăm sức khỏe", "sub": "Chương 1 · Bài 7 — Hỏi thăm sức khỏe", "goal": "Mục tiêu: Bác hỏi thăm và trả lời về sức khỏe được.", "vocab": [{"en": "How are you?", "ipa": "/haʊ ɑːr juː/", "vi": "Bạn có khỏe không?", "ex": "How are you today? — Hôm nay bạn có khỏe không?"}, {"en": "I am fine", "ipa": "/aɪ æm faɪn/", "vi": "Tôi khỏe", "ex": "I am fine thank you. — Tôi khỏe cảm ơn bạn."}, {"en": "I am very well", "ipa": "/aɪ æm ˈveri wel/", "vi": "Tôi rất khỏe", "ex": "I am very well thanks. — Tôi rất khỏe cảm ơn bạn."}, {"en": "Not bad", "ipa": "/nɑːt bæd/", "vi": "Cũng tạm ổn", "ex": "How are you? Not bad. — Bạn khỏe không? Cũng tạm ổn."}, {"en": "And you?", "ipa": "/ənd juː/", "vi": "Còn bạn thì sao?", "ex": "I am fine. And you? — Tôi khỏe. Còn bạn thì sao?"}], "phrases": [{"en": "How are you today?", "vi": "Hôm nay bạn có khỏe không?"}, {"en": "I am fine thank you. And you?", "vi": "Tôi khỏe cảm ơn bạn. Còn bạn thì sao?"}, {"en": "I am very well.", "vi": "Tôi rất khỏe."}], "dialogue": [{"who": "A", "name": "David", "en": "Hello Mai. How are you?", "vi": "Chào Mai. Bạn có khỏe không?"}, {"who": "B", "name": "Mai", "en": "I am fine thank you. And you?", "vi": "Tôi khỏe cảm ơn bạn. Còn bạn thì sao?"}, {"who": "A", "name": "David", "en": "I am very well thanks.", "vi": "Tôi rất khỏe cảm ơn bạn."}]},
+{"id": 8, "ch": 1, "n": 8, "title": "Giới thiệu người khác", "sub": "Chương 1 · Bài 8 — Giới thiệu người khác", "goal": "Mục tiêu: Bác giới thiệu được bạn bè và người thân với người khác.", "vocab": [{"en": "Friend", "ipa": "/frend/", "vi": "Bạn bè", "ex": "Lan is my friend. — Lan là bạn của tôi."}, {"en": "This is my friend", "ipa": "/ðɪs ɪz maɪ frend/", "vi": "Đây là bạn của tôi", "ex": "This is my friend Nam. — Đây là bạn của tôi tên Nam."}, {"en": "He is", "ipa": "/hiː ɪz/", "vi": "Anh ấy / ông ấy là", "ex": "He is my brother. — Anh ấy là anh trai tôi."}, {"en": "She is", "ipa": "/ʃiː ɪz/", "vi": "Chị ấy / cô ấy là", "ex": "She is my sister. — Cô ấy là em gái tôi."}, {"en": "Meet", "ipa": "/miːt/", "vi": "Gặp gỡ", "ex": "Nice to meet you. — Rất vui được gặp bạn."}], "phrases": [{"en": "This is my friend Nam.", "vi": "Đây là bạn của tôi tên Nam."}, {"en": "She is my sister.", "vi": "Cô ấy là em gái tôi."}, {"en": "He is my brother.", "vi": "Anh ấy là anh trai tôi."}], "dialogue": [{"who": "A", "name": "Lan", "en": "David. This is my friend Mai.", "vi": "David. Đây là bạn của tôi tên Mai."}, {"who": "B", "name": "David", "en": "Nice to meet you Mai.", "vi": "Rất vui được gặp bạn Mai."}, {"who": "A", "name": "Mai", "en": "Nice to meet you too.", "vi": "Tôi cũng rất vui được gặp bạn."}]},
+{"id": 9, "ch": 1, "n": 9, "title": "Nói về hôm nay", "sub": "Chương 1 · Bài 9 — Nói về hôm nay", "goal": "Mục tiêu: Bác nói được cảm giác của mình trong ngày hôm nay.", "vocab": [{"en": "Today", "ipa": "/təˈdeɪ/", "vi": "Hôm nay", "ex": "Today is a good day. — Hôm nay là một ngày đẹp."}, {"en": "Happy", "ipa": "/ˈhæpi/", "vi": "Vui vẻ", "ex": "I am happy today. — Hôm nay tôi rất vui."}, {"en": "Busy", "ipa": "/ˈbɪzi/", "vi": "Bận rộn", "ex": "She is busy today. — Hôm nay cô ấy bận."}, {"en": "Sunny", "ipa": "/ˈsʌni/", "vi": "Nắng đẹp", "ex": "It is sunny today. — Hôm nay trời nắng đẹp."}, {"en": "A good day", "ipa": "/ə ɡʊd deɪ/", "vi": "Một ngày tốt lành", "ex": "Today is a good day. — Hôm nay là một ngày tốt lành."}], "phrases": [{"en": "I am happy today.", "vi": "Hôm nay tôi rất vui."}, {"en": "It is sunny today.", "vi": "Hôm nay trời nắng đẹp."}, {"en": "Today is a good day.", "vi": "Hôm nay là một ngày tốt lành."}], "dialogue": [{"who": "A", "name": "Mai", "en": "How are you today?", "vi": "Hôm nay bạn thế nào?"}, {"who": "B", "name": "Nam", "en": "I am happy today. It is sunny.", "vi": "Hôm nay tôi vui. Trời nắng đẹp."}, {"who": "A", "name": "Mai", "en": "Today is a good day.", "vi": "Hôm nay là một ngày đẹp."}]},
+{"id": 10, "ch": 1, "n": 10, "title": "Ôn tập chương 1", "sub": "Chương 1 · Bài 10 — Ôn tập chương 1", "goal": "Mục tiêu: Bác ôn lại các từ quan trọng nhất của chương 1.", "vocab": [{"en": "Hello", "ipa": "/həˈloʊ/", "vi": "Xin chào", "ex": "Hello! How are you? — Xin chào! Bạn có khỏe không?"}, {"en": "My name is", "ipa": "/maɪ neɪm ɪz/", "vi": "Tên tôi là", "ex": "My name is Hung. — Tên tôi là Hùng."}, {"en": "Please", "ipa": "/pliːz/", "vi": "Làm ơn / xin vui lòng", "ex": "Come in please. — Mời bạn vào."}, {"en": "How are you?", "ipa": "/haʊ ɑːr juː/", "vi": "Bạn có khỏe không?", "ex": "How are you today? — Hôm nay bạn có khỏe không?"}, {"en": "Goodbye", "ipa": "/ɡʊdˈbaɪ/", "vi": "Tạm biệt", "ex": "Goodbye. Have a nice day. — Tạm biệt. Chúc một ngày tốt lành."}], "phrases": [{"en": "Hello. My name is Lan.", "vi": "Xin chào. Tên tôi là Lan."}, {"en": "How are you today?", "vi": "Hôm nay bạn có khỏe không?"}, {"en": "Goodbye. See you tomorrow.", "vi": "Tạm biệt. Hẹn gặp ngày mai."}], "dialogue": [{"who": "A", "name": "Lan", "en": "Hello. My name is Lan.", "vi": "Xin chào. Tên tôi là Lan."}, {"who": "B", "name": "David", "en": "Nice to meet you Lan. How are you?", "vi": "Rất vui được gặp Lan. Bạn có khỏe không?"}, {"who": "A", "name": "Lan", "en": "I am fine thank you.", "vi": "Tôi khỏe cảm ơn bạn."}]},
+{"id": 11, "ch": 2, "n": 1, "title": "Bố mẹ", "sub": "Chương 2 · Bài 1 — Bố mẹ", "goal": "Mục tiêu: Bác nói được về bố mẹ của mình.", "vocab": [{"en": "Mother", "ipa": "/ˈmʌðər/", "vi": "Mẹ", "ex": "My mother is kind. — Mẹ tôi rất hiền."}, {"en": "Father", "ipa": "/ˈfɑːðər/", "vi": "Bố", "ex": "My father is strong. — Bố tôi khỏe mạnh."}, {"en": "Parents", "ipa": "/ˈpeərənts/", "vi": "Bố mẹ", "ex": "My parents live in Haiphong. — Bố mẹ tôi sống ở Hải Phòng."}, {"en": "Mom", "ipa": "/mɑːm/", "vi": "Mẹ (gọi thân mật)", "ex": "I love my mom. — Tôi yêu mẹ tôi."}, {"en": "Dad", "ipa": "/dæd/", "vi": "Bố (gọi thân mật)", "ex": "My dad is a farmer. — Bố tôi là nông dân."}], "phrases": [{"en": "This is my mother.", "vi": "Đây là mẹ tôi."}, {"en": "This is my father.", "vi": "Đây là bố tôi."}, {"en": "I love my parents.", "vi": "Tôi yêu bố mẹ tôi."}], "dialogue": [{"who": "A", "name": "Tom", "en": "Is this your mother?", "vi": "Đây là mẹ của bạn phải không?"}, {"who": "B", "name": "Hoa", "en": "Yes. This is my mother and my father.", "vi": "Đúng vậy. Đây là mẹ tôi và bố tôi."}, {"who": "A", "name": "Tom", "en": "Your parents are very kind.", "vi": "Bố mẹ bạn rất hiền."}]},
+{"id": 12, "ch": 2, "n": 2, "title": "Anh chị em", "sub": "Chương 2 · Bài 2 — Anh chị em", "goal": "Mục tiêu: Bác nói được về anh chị em trong nhà.", "vocab": [{"en": "Brother", "ipa": "/ˈbrʌðər/", "vi": "Anh trai / em trai", "ex": "My brother is a worker. — Anh trai tôi là công nhân."}, {"en": "Sister", "ipa": "/ˈsɪstər/", "vi": "Chị gái / em gái", "ex": "My sister is a teacher. — Em gái tôi là giáo viên."}, {"en": "Older sister", "ipa": "/ˈoʊldər ˈsɪstər/", "vi": "Chị gái", "ex": "My older sister lives in Hanoi. — Chị gái tôi sống ở Hà Nội."}, {"en": "Only child", "ipa": "/ˈoʊnli tʃaɪld/", "vi": "Con một", "ex": "I am an only child. — Tôi là con một."}, {"en": "Together", "ipa": "/təˈɡeðər/", "vi": "Cùng nhau", "ex": "We eat together every day. — Chúng tôi ăn cơm cùng nhau mỗi ngày."}], "phrases": [{"en": "I have one brother.", "vi": "Tôi có một người anh trai."}, {"en": "I have two sisters.", "vi": "Tôi có hai người em gái."}, {"en": "We live together.", "vi": "Chúng tôi sống cùng nhau."}], "dialogue": [{"who": "A", "name": "Mai", "en": "Do you have a brother?", "vi": "Bạn có anh trai không?"}, {"who": "B", "name": "Nam", "en": "Yes. I have one brother and one sister.", "vi": "Có. Tôi có một anh trai và một em gái."}, {"who": "A", "name": "Mai", "en": "My sister and I live together.", "vi": "Em gái tôi và tôi sống cùng nhau."}]},
+{"id": 13, "ch": 2, "n": 3, "title": "Con cái", "sub": "Chương 2 · Bài 3 — Con cái", "goal": "Mục tiêu: Bác nói được về con trai và con gái của mình.", "vocab": [{"en": "Son", "ipa": "/sʌn/", "vi": "Con trai", "ex": "I have one son. — Tôi có một người con trai."}, {"en": "Daughter", "ipa": "/ˈdɔːtər/", "vi": "Con gái", "ex": "I have two daughters. — Tôi có hai người con gái."}, {"en": "Children", "ipa": "/ˈtʃɪldrən/", "vi": "Các con / trẻ em", "ex": "I have two children. — Tôi có hai người con."}, {"en": "Baby", "ipa": "/ˈbeɪbi/", "vi": "Em bé", "ex": "The baby is happy. — Em bé đang vui."}, {"en": "Kid", "ipa": "/kɪd/", "vi": "Đứa trẻ", "ex": "This kid is my son. — Đứa trẻ này là con trai tôi."}], "phrases": [{"en": "I have two children.", "vi": "Tôi có hai người con."}, {"en": "I have one son and one daughter.", "vi": "Tôi có một con trai và một con gái."}, {"en": "My daughter is a teacher.", "vi": "Con gái tôi là giáo viên."}], "dialogue": [{"who": "A", "name": "Tom", "en": "How many children do you have?", "vi": "Bạn có mấy người con?"}, {"who": "B", "name": "Hoa", "en": "I have one son and one daughter.", "vi": "Tôi có một con trai và một con gái."}, {"who": "A", "name": "Tom", "en": "Your children are lovely.", "vi": "Các con của bạn rất dễ thương."}]},
+{"id": 14, "ch": 2, "n": 4, "title": "Ông bà và họ hàng", "sub": "Chương 2 · Bài 4 — Ông bà và họ hàng", "goal": "Mục tiêu: Bác nói được về ông bà và họ hàng.", "vocab": [{"en": "Grandmother", "ipa": "/ˈɡrænˌmʌðər/", "vi": "Bà", "ex": "My grandmother is ninety years old. — Bà tôi chín mươi tuổi."}, {"en": "Grandfather", "ipa": "/ˈɡrænˌfɑːðər/", "vi": "Ông", "ex": "My grandfather is very well. — Ông tôi rất khỏe."}, {"en": "Grandchildren", "ipa": "/ˈɡræntʃɪldrən/", "vi": "Các cháu", "ex": "I have three grandchildren. — Tôi có ba người cháu."}, {"en": "Uncle", "ipa": "/ˈʌŋkəl/", "vi": "Chú / bác / cậu", "ex": "My uncle lives in the city. — Chú tôi sống ở thành phố."}, {"en": "Aunt", "ipa": "/ænt/", "vi": "Cô / dì", "ex": "My aunt is a doctor. — Cô tôi là bác sĩ."}], "phrases": [{"en": "I have three grandchildren.", "vi": "Tôi có ba người cháu."}, {"en": "My grandmother is very well.", "vi": "Bà tôi rất khỏe."}, {"en": "This is my uncle.", "vi": "Đây là chú tôi."}], "dialogue": [{"who": "A", "name": "Lan", "en": "How many grandchildren do you have?", "vi": "Bác có mấy người cháu?"}, {"who": "B", "name": "Ông Ba", "en": "I have three grandchildren.", "vi": "Tôi có ba người cháu."}, {"who": "A", "name": "Lan", "en": "Your grandmother is very well.", "vi": "Bà của bác rất khỏe."}]},
+{"id": 15, "ch": 2, "n": 5, "title": "Số đếm 1–10", "sub": "Chương 2 · Bài 5 — Số đếm 1–10", "goal": "Mục tiêu: Bác đếm được từ 1 đến 10.", "vocab": [{"en": "One", "ipa": "/wʌn/", "vi": "Số 1", "ex": "I have one son. — Tôi có một người con trai."}, {"en": "Two", "ipa": "/tuː/", "vi": "Số 2", "ex": "I have two daughters. — Tôi có hai người con gái."}, {"en": "Three", "ipa": "/θriː/", "vi": "Số 3", "ex": "I have three grandchildren. — Tôi có ba người cháu."}, {"en": "Four", "ipa": "/fɔːr/", "vi": "Số 4", "ex": "We have four people at home. — Nhà tôi có bốn người."}, {"en": "Five", "ipa": "/faɪv/", "vi": "Số 5", "ex": "Five people live in my house. — Năm người sống trong nhà tôi."}], "phrases": [{"en": "I have two children.", "vi": "Tôi có hai người con."}, {"en": "One two three four five.", "vi": "Một hai ba bốn năm."}, {"en": "I have three grandchildren.", "vi": "Tôi có ba người cháu."}], "dialogue": [{"who": "A", "name": "Mai", "en": "How many people are in your family?", "vi": "Gia đình bạn có mấy người?"}, {"who": "B", "name": "Nam", "en": "Five people. My parents and three children.", "vi": "Năm người. Bố mẹ tôi và ba người con."}, {"who": "A", "name": "Mai", "en": "One two three four five people.", "vi": "Một hai ba bốn năm người."}], "numbers": [["1", "One", "một"], ["2", "Two", "hai"], ["3", "Three", "ba"], ["4", "Four", "bốn"], ["5", "Five", "năm"], ["6", "Six", "sáu"], ["7", "Seven", "bảy"], ["8", "Eight", "tám"], ["9", "Nine", "chín"], ["10", "Ten", "mười"]]},
+{"id": 16, "ch": 2, "n": 6, "title": "Số đếm 11 đến 20", "sub": "Chương 2 · Bài 6 — Số đếm 11 đến 20", "goal": "Mục tiêu: Bác đếm được từ 11 đến 20.", "vocab": [{"en": "Eleven", "ipa": "/ɪˈlevən/", "vi": "Số 11", "ex": "There are eleven people here. — Ở đây có mười một người."}, {"en": "Twelve", "ipa": "/twelv/", "vi": "Số 12", "ex": "Twelve months in a year. — Một năm có mười hai tháng."}, {"en": "Thirteen", "ipa": "/ˌθɜːrˈtiːn/", "vi": "Số 13", "ex": "She is thirteen years old. — Cô ấy mười ba tuổi."}, {"en": "Fourteen", "ipa": "/ˌfɔːrˈtiːn/", "vi": "Số 14", "ex": "He is fourteen years old. — Anh ấy mười bốn tuổi."}, {"en": "Fifteen", "ipa": "/ˌfɪfˈtiːn/", "vi": "Số 15", "ex": "I have fifteen students. — Tôi có mười lăm học sinh."}], "phrases": [{"en": "She is thirteen years old.", "vi": "Cô ấy mười ba tuổi."}, {"en": "There are twelve months in a year.", "vi": "Một năm có mười hai tháng."}, {"en": "He is fifteen years old.", "vi": "Anh ấy mười lăm tuổi."}], "dialogue": [{"who": "A", "name": "Lan", "en": "How old is your son?", "vi": "Con trai bạn bao nhiêu tuổi?"}, {"who": "B", "name": "Hoa", "en": "He is fifteen years old.", "vi": "Cháu mười lăm tuổi."}, {"who": "A", "name": "Lan", "en": "And your daughter is thirteen.", "vi": "Và con gái bạn mười ba tuổi."}], "numbers": [["11", "Eleven", "mười một"], ["12", "Twelve", "mười hai"], ["13", "Thirteen", "mười ba"], ["14", "Fourteen", "mười bốn"], ["15", "Fifteen", "mười lăm"], ["16", "Sixteen", "mười sáu"], ["17", "Seventeen", "mười bảy"], ["18", "Eighteen", "mười tám"], ["19", "Nineteen", "mười chín"], ["20", "Twenty", "hai mươi"]]},
+{"id": 17, "ch": 2, "n": 7, "title": "Số chục và số trăm", "sub": "Chương 2 · Bài 7 — Số chục và số trăm", "goal": "Mục tiêu: Bác đọc được các số chục và số trăm.", "vocab": [{"en": "Twenty", "ipa": "/ˈtwenti/", "vi": "Số 20", "ex": "She is twenty years old. — Cô ấy hai mươi tuổi."}, {"en": "Thirty", "ipa": "/ˈθɜːrti/", "vi": "Số 30", "ex": "He is thirty years old. — Anh ấy ba mươi tuổi."}, {"en": "Forty", "ipa": "/ˈfɔːrti/", "vi": "Số 40", "ex": "My sister is forty years old. — Chị tôi bốn mươi tuổi."}, {"en": "Fifty", "ipa": "/ˈfɪfti/", "vi": "Số 50", "ex": "My father is fifty years old. — Bố tôi năm mươi tuổi."}, {"en": "One hundred", "ipa": "/wʌn ˈhʌndrəd/", "vi": "Số 100", "ex": "One hundred people live in my village. — Một trăm người sống trong làng tôi."}], "phrases": [{"en": "My mother is fifty years old.", "vi": "Mẹ tôi năm mươi tuổi."}, {"en": "He is thirty years old.", "vi": "Anh ấy ba mươi tuổi."}, {"en": "One hundred people are here.", "vi": "Một trăm người đang ở đây."}], "dialogue": [{"who": "A", "name": "Tom", "en": "How old is your father?", "vi": "Bố bạn bao nhiêu tuổi?"}, {"who": "B", "name": "Nam", "en": "He is fifty years old.", "vi": "Ông năm mươi tuổi."}, {"who": "A", "name": "Tom", "en": "And your mother is forty.", "vi": "Và mẹ bạn bốn mươi tuổi."}], "numbers": [["10", "Ten", "mười"], ["20", "Twenty", "hai mươi"], ["30", "Thirty", "ba mươi"], ["40", "Forty", "bốn mươi"], ["50", "Fifty", "năm mươi"], ["60", "Sixty", "sáu mươi"], ["70", "Seventy", "bảy mươi"], ["80", "Eighty", "tám mươi"], ["90", "Ninety", "chín mươi"], ["100", "One hundred", "một trăm"]]},
+{"id": 18, "ch": 2, "n": 8, "title": "Tuổi tác", "sub": "Chương 2 · Bài 8 — Tuổi tác", "goal": "Mục tiêu: Bác hỏi và nói được tuổi của mình và người khác.", "vocab": [{"en": "Age", "ipa": "/eɪdʒ/", "vi": "Tuổi", "ex": "What is your age? — Bạn bao nhiêu tuổi?"}, {"en": "How old are you?", "ipa": "/haʊ oʊld ɑːr juː/", "vi": "Bạn bao nhiêu tuổi?", "ex": "How old are you please? — Cho tôi hỏi bạn bao nhiêu tuổi?"}, {"en": "Years old", "ipa": "/jɪərz oʊld/", "vi": "Tuổi (đứng sau số)", "ex": "I am sixty years old. — Tôi sáu mươi tuổi."}, {"en": "Young", "ipa": "/jʌŋ/", "vi": "Trẻ", "ex": "She is young and happy. — Cô ấy trẻ và vui vẻ."}, {"en": "Old", "ipa": "/oʊld/", "vi": "Già / cao tuổi", "ex": "My grandfather is old and well. — Ông tôi cao tuổi và khỏe mạnh."}], "phrases": [{"en": "How old are you?", "vi": "Bạn bao nhiêu tuổi?"}, {"en": "I am sixty years old.", "vi": "Tôi sáu mươi tuổi."}, {"en": "My grandmother is ninety years old.", "vi": "Bà tôi chín mươi tuổi."}], "dialogue": [{"who": "A", "name": "David", "en": "How old are you Mrs. Hoa?", "vi": "Bác Hoa năm nay bao nhiêu tuổi ạ?"}, {"who": "B", "name": "Bà Hoa", "en": "I am sixty years old.", "vi": "Tôi sáu mươi tuổi."}, {"who": "A", "name": "David", "en": "You are very well.", "vi": "Bác rất khỏe ạ."}]},
+{"id": 19, "ch": 2, "n": 9, "title": "Nhà mình có mấy người", "sub": "Chương 2 · Bài 9 — Nhà mình có mấy người", "goal": "Mục tiêu: Bác nói được nhà mình có bao nhiêu người.", "vocab": [{"en": "Family", "ipa": "/ˈfæməli/", "vi": "Gia đình", "ex": "This is my family. — Đây là gia đình tôi."}, {"en": "People", "ipa": "/ˈpiːpəl/", "vi": "Người (số nhiều)", "ex": "Five people live in my house. — Năm người sống trong nhà tôi."}, {"en": "How many?", "ipa": "/haʊ ˈmeni/", "vi": "Bao nhiêu (người)?", "ex": "How many people are at home? — Ở nhà có bao nhiêu người?"}, {"en": "Live with", "ipa": "/lɪv wɪð/", "vi": "Sống cùng với", "ex": "I live with my son. — Tôi sống cùng con trai tôi."}, {"en": "House", "ipa": "/haʊs/", "vi": "Nhà", "ex": "My house is near the market. — Nhà tôi ở gần chợ."}], "phrases": [{"en": "How many people are in your family?", "vi": "Gia đình bạn có mấy người?"}, {"en": "I live with my children.", "vi": "Tôi sống cùng các con tôi."}, {"en": "My house is near the market.", "vi": "Nhà tôi ở gần chợ."}], "dialogue": [{"who": "A", "name": "Mai", "en": "How many people are in your family?", "vi": "Gia đình bạn có mấy người?"}, {"who": "B", "name": "Ông Tư", "en": "Five people. I live with my children.", "vi": "Năm người. Tôi sống cùng các con tôi."}, {"who": "A", "name": "Mai", "en": "Your house is big and happy.", "vi": "Nhà bác to và vui vẻ."}]},
+{"id": 20, "ch": 2, "n": 10, "title": "Ôn tập chương 2", "sub": "Chương 2 · Bài 10 — Ôn tập chương 2", "goal": "Mục tiêu: Bác ôn lại các từ quan trọng nhất của chương 2.", "vocab": [{"en": "Mother", "ipa": "/ˈmʌðər/", "vi": "Mẹ", "ex": "My mother is kind. — Mẹ tôi rất hiền."}, {"en": "Son", "ipa": "/sʌn/", "vi": "Con trai", "ex": "I have one son. — Tôi có một người con trai."}, {"en": "Grandchildren", "ipa": "/ˈɡræntʃɪldrən/", "vi": "Các cháu", "ex": "I have three grandchildren. — Tôi có ba người cháu."}, {"en": "Five", "ipa": "/faɪv/", "vi": "Số 5", "ex": "There are five people in my family. — Gia đình tôi có năm người."}, {"en": "How many?", "ipa": "/haʊ ˈmeni/", "vi": "Bao nhiêu (người)?", "ex": "How many children do you have? — Bạn có mấy người con?"}], "phrases": [{"en": "I have two children.", "vi": "Tôi có hai người con."}, {"en": "How many people are in your family?", "vi": "Gia đình bạn có mấy người?"}, {"en": "My mother is very well.", "vi": "Mẹ tôi rất khỏe."}], "dialogue": [{"who": "A", "name": "Tom", "en": "How many children do you have?", "vi": "Bạn có mấy người con?"}, {"who": "B", "name": "Hoa", "en": "I have one son and one daughter.", "vi": "Tôi có một con trai và một con gái."}, {"who": "A", "name": "Tom", "en": "And three grandchildren. Lovely!", "vi": "Và ba người cháu. Thật dễ thương!"}]},
+{"id": 21, "ch": 3, "n": 1, "title": "Cơm và món chính", "sub": "Chương 3 · Bài 1 — Cơm và món chính", "goal": "Mục tiêu: Bác gọi tên được cơm và các món chính quen thuộc.", "vocab": [{"en": "Rice", "ipa": "/raɪs/", "vi": "Cơm / gạo", "ex": "I eat rice every day. — Tôi ăn cơm mỗi ngày."}, {"en": "Noodles", "ipa": "/ˈnuːdəlz/", "vi": "Mì / phở", "ex": "I like hot noodles. — Tôi thích phở nóng."}, {"en": "Bread", "ipa": "/bred/", "vi": "Bánh mì", "ex": "I eat bread in the morning. — Tôi ăn bánh mì vào buổi sáng."}, {"en": "Soup", "ipa": "/suːp/", "vi": "Canh / súp", "ex": "This soup is delicious. — Món canh này ngon."}, {"en": "Fish", "ipa": "/fɪʃ/", "vi": "Cá", "ex": "We eat fish today. — Hôm nay chúng tôi ăn cá."}], "phrases": [{"en": "I eat rice every day.", "vi": "Tôi ăn cơm mỗi ngày."}, {"en": "I like hot noodles.", "vi": "Tôi thích phở nóng."}, {"en": "This soup is delicious.", "vi": "Món canh này ngon."}], "dialogue": [{"who": "A", "name": "Lan", "en": "What do you eat today?", "vi": "Hôm nay bác ăn gì ạ?"}, {"who": "B", "name": "Ông Ba", "en": "I eat rice and fish.", "vi": "Tôi ăn cơm và cá."}, {"who": "A", "name": "Lan", "en": "The soup is delicious too.", "vi": "Món canh cũng ngon ạ."}]},
+{"id": 22, "ch": 3, "n": 2, "title": "Rau củ", "sub": "Chương 3 · Bài 2 — Rau củ", "goal": "Mục tiêu: Bác gọi tên được các loại rau củ thường ngày.", "vocab": [{"en": "Vegetables", "ipa": "/ˈvedʒtəbəlz/", "vi": "Rau củ", "ex": "Vegetables are good for you. — Rau củ tốt cho sức khỏe."}, {"en": "Tomato", "ipa": "/təˈmeɪtoʊ/", "vi": "Cà chua", "ex": "I buy two kilos of tomatoes. — Tôi mua hai ký cà chua."}, {"en": "Potato", "ipa": "/pəˈteɪtoʊ/", "vi": "Khoai tây", "ex": "We cook potatoes today. — Hôm nay chúng tôi nấu khoai tây."}, {"en": "Carrot", "ipa": "/ˈkærət/", "vi": "Cà rốt", "ex": "Carrots are good for your eyes. — Cà rốt tốt cho mắt."}, {"en": "Onion", "ipa": "/ˈʌnjən/", "vi": "Hành", "ex": "I need one onion. — Tôi cần một củ hành."}], "phrases": [{"en": "Vegetables are good for you.", "vi": "Rau củ tốt cho bạn."}, {"en": "I buy tomatoes and carrots.", "vi": "Tôi mua cà chua và cà rốt."}, {"en": "We eat vegetables every day.", "vi": "Chúng tôi ăn rau mỗi ngày."}], "dialogue": [{"who": "A", "name": "Mai", "en": "What vegetables do you buy?", "vi": "Bạn mua rau gì?"}, {"who": "B", "name": "Hoa", "en": "I buy tomatoes carrots and onions.", "vi": "Tôi mua cà chua cà rốt và hành."}, {"who": "A", "name": "Mai", "en": "Vegetables are good for you.", "vi": "Rau củ tốt cho sức khỏe."}]},
+{"id": 23, "ch": 3, "n": 3, "title": "Trái cây", "sub": "Chương 3 · Bài 3 — Trái cây", "goal": "Mục tiêu: Bác gọi tên được các loại trái cây quen thuộc.", "vocab": [{"en": "Fruit", "ipa": "/fruːt/", "vi": "Trái cây", "ex": "I like fresh fruit. — Tôi thích trái cây tươi."}, {"en": "Banana", "ipa": "/bəˈnænə/", "vi": "Chuối", "ex": "I eat a banana every morning. — Tôi ăn một quả chuối mỗi sáng."}, {"en": "Orange", "ipa": "/ˈɔːrɪndʒ/", "vi": "Cam", "ex": "This orange is sweet. — Quả cam này ngọt."}, {"en": "Apple", "ipa": "/ˈæpəl/", "vi": "Táo", "ex": "An apple a day is good. — Mỗi ngày một quả táo thì tốt."}, {"en": "Mango", "ipa": "/ˈmæŋɡoʊ/", "vi": "Xoài", "ex": "Mangoes are delicious in summer. — Xoài ngon vào mùa hè."}], "phrases": [{"en": "I like fresh fruit.", "vi": "Tôi thích trái cây tươi."}, {"en": "This orange is sweet.", "vi": "Quả cam này ngọt."}, {"en": "I eat a banana every morning.", "vi": "Tôi ăn một quả chuối mỗi buổi sáng."}], "dialogue": [{"who": "A", "name": "Nam", "en": "Do you like fruit?", "vi": "Bạn có thích trái cây không?"}, {"who": "B", "name": "Lan", "en": "Yes. I like bananas and mangoes.", "vi": "Có. Tôi thích chuối và xoài."}, {"who": "A", "name": "Nam", "en": "This orange is sweet too.", "vi": "Quả cam này cũng ngọt."}]},
+{"id": 24, "ch": 3, "n": 4, "title": "Đồ uống", "sub": "Chương 3 · Bài 4 — Đồ uống", "goal": "Mục tiêu: Bác gọi được nước trà cà phê và các đồ uống.", "vocab": [{"en": "Water", "ipa": "/ˈwɔːtər/", "vi": "Nước", "ex": "I drink water every day. — Tôi uống nước mỗi ngày."}, {"en": "Tea", "ipa": "/tiː/", "vi": "Trà", "ex": "Would you like some tea? — Bạn có muốn uống trà không?"}, {"en": "Coffee", "ipa": "/ˈkɔːfi/", "vi": "Cà phê", "ex": "I drink coffee in the morning. — Tôi uống cà phê vào buổi sáng."}, {"en": "Milk", "ipa": "/mɪlk/", "vi": "Sữa", "ex": "Children drink milk. — Trẻ em uống sữa."}, {"en": "Juice", "ipa": "/dʒuːs/", "vi": "Nước ép", "ex": "This juice is fresh and sweet. — Nước ép này tươi và ngọt."}], "phrases": [{"en": "I would like some tea please.", "vi": "Cho tôi một ít trà."}, {"en": "I drink water every day.", "vi": "Tôi uống nước mỗi ngày."}, {"en": "Would you like some coffee?", "vi": "Bạn có muốn uống cà phê không?"}], "dialogue": [{"who": "A", "name": "Hoa", "en": "Would you like some tea?", "vi": "Bạn có muốn uống trà không?"}, {"who": "B", "name": "Tom", "en": "Yes please. I like tea.", "vi": "Có cảm ơn bạn. Tôi thích trà."}, {"who": "A", "name": "Hoa", "en": "And some water too.", "vi": "Và thêm một ít nước nữa."}]},
+{"id": 25, "ch": 3, "n": 5, "title": "Ngon và đói khát", "sub": "Chương 3 · Bài 5 — Ngon và đói khát", "goal": "Mục tiêu: Bác nói được món ăn ngon và cảm giác đói khát.", "vocab": [{"en": "Delicious", "ipa": "/dɪˈlɪʃəs/", "vi": "Ngon", "ex": "This food is delicious. — Món ăn này ngon."}, {"en": "Hungry", "ipa": "/ˈhʌŋɡri/", "vi": "Đói", "ex": "I am hungry now. — Bây giờ tôi đói."}, {"en": "Thirsty", "ipa": "/ˈθɜːrsti/", "vi": "Khát", "ex": "I am thirsty. I need water. — Tôi khát. Tôi cần nước."}, {"en": "Full", "ipa": "/fʊl/", "vi": "No", "ex": "Thank you. I am full. — Cảm ơn bạn. Tôi no rồi."}, {"en": "Sweet", "ipa": "/swiːt/", "vi": "Ngọt", "ex": "This mango is sweet. — Quả xoài này ngọt."}], "phrases": [{"en": "This food is delicious.", "vi": "Món ăn này ngon."}, {"en": "I am hungry.", "vi": "Tôi đói."}, {"en": "I am thirsty. I need water.", "vi": "Tôi khát. Tôi cần nước."}], "dialogue": [{"who": "A", "name": "Ông Sáu", "en": "I am hungry.", "vi": "Tôi đói."}, {"who": "B", "name": "Lan", "en": "Here is some rice. It is delicious.", "vi": "Đây là cơm ạ. Cơm ngon lắm."}, {"who": "A", "name": "Ông Sáu", "en": "Thank you. Now I am full.", "vi": "Cảm ơn cháu. Giờ tôi no rồi."}]},
+{"id": 26, "ch": 3, "n": 6, "title": "Bữa sáng trưa tối", "sub": "Chương 3 · Bài 6 — Bữa sáng trưa tối", "goal": "Mục tiêu: Bác nói được về ba bữa ăn trong ngày.", "vocab": [{"en": "Breakfast", "ipa": "/ˈbrekfəst/", "vi": "Bữa sáng", "ex": "Breakfast is at seven. — Bữa sáng lúc bảy giờ."}, {"en": "Lunch", "ipa": "/lʌntʃ/", "vi": "Bữa trưa", "ex": "Lunch is at twelve. — Bữa trưa lúc mười hai giờ."}, {"en": "Dinner", "ipa": "/ˈdɪnər/", "vi": "Bữa tối", "ex": "We eat dinner together. — Chúng tôi ăn tối cùng nhau."}, {"en": "Eat", "ipa": "/iːt/", "vi": "Ăn", "ex": "I eat breakfast at home. — Tôi ăn sáng ở nhà."}, {"en": "Drink", "ipa": "/drɪŋk/", "vi": "Uống", "ex": "I drink tea at breakfast. — Tôi uống trà vào bữa sáng."}], "phrases": [{"en": "Breakfast is at seven.", "vi": "Bữa sáng lúc bảy giờ."}, {"en": "We eat lunch together.", "vi": "Chúng tôi ăn trưa cùng nhau."}, {"en": "We eat dinner at home.", "vi": "Chúng tôi ăn tối ở nhà."}], "dialogue": [{"who": "A", "name": "Mai", "en": "When is breakfast?", "vi": "Bữa sáng lúc mấy giờ?"}, {"who": "B", "name": "Nam", "en": "Breakfast is at seven. Lunch is at twelve.", "vi": "Bữa sáng lúc bảy giờ. Bữa trưa lúc mười hai giờ."}, {"who": "A", "name": "Mai", "en": "And we eat dinner together.", "vi": "Và chúng tôi ăn tối cùng nhau."}]},
+{"id": 27, "ch": 3, "n": 7, "title": "Ở quán ăn", "sub": "Chương 3 · Bài 7 — Ở quán ăn", "goal": "Mục tiêu: Bác gọi món và ngồi ăn ở quán được.", "vocab": [{"en": "Menu", "ipa": "/ˈmenjuː/", "vi": "Thực đơn", "ex": "Please show me the menu. — Cho tôi xem thực đơn."}, {"en": "Order", "ipa": "/ˈɔːrdər/", "vi": "Gọi món", "ex": "I would like to order. — Tôi muốn gọi món."}, {"en": "Waiter", "ipa": "/ˈweɪtər/", "vi": "Nhân viên phục vụ", "ex": "The waiter is kind. — Nhân viên phục vụ rất tử tế."}, {"en": "Table", "ipa": "/ˈteɪbəl/", "vi": "Bàn ăn", "ex": "This table is near the window. — Bàn này ở gần cửa sổ."}, {"en": "Bill", "ipa": "/bɪl/", "vi": "Hóa đơn", "ex": "The bill please. — Cho tôi hóa đơn."}], "phrases": [{"en": "The bill please.", "vi": "Cho tôi hóa đơn."}, {"en": "I would like to order.", "vi": "Tôi muốn gọi món."}, {"en": "This table is good.", "vi": "Bàn này tốt."}], "dialogue": [{"who": "A", "name": "Waiter", "en": "Good morning. Here is the menu.", "vi": "Chào buổi sáng. Đây là thực đơn ạ."}, {"who": "B", "name": "Bà Năm", "en": "I would like rice and fish please.", "vi": "Cho tôi cơm và cá."}, {"who": "A", "name": "Waiter", "en": "Yes. And tea for your table.", "vi": "Vâng ạ. Và trà cho bàn của bác."}]},
+{"id": 28, "ch": 3, "n": 8, "title": "Nấu ăn", "sub": "Chương 3 · Bài 8 — Nấu ăn", "goal": "Mục tiêu: Bác nói được các việc nấu nướng đơn giản.", "vocab": [{"en": "Cook", "ipa": "/kʊk/", "vi": "Nấu ăn", "ex": "My wife cooks very well. — Vợ tôi nấu ăn rất ngon."}, {"en": "Boil", "ipa": "/bɔɪl/", "vi": "Luộc", "ex": "Boil the vegetables please. — Luộc rau nhé."}, {"en": "Fry", "ipa": "/fraɪ/", "vi": "Chiên / rán", "ex": "We fry the fish. — Chúng tôi rán cá."}, {"en": "Salt", "ipa": "/sɔːlt/", "vi": "Muối", "ex": "A little salt please. — Cho một ít muối nhé."}, {"en": "Sugar", "ipa": "/ˈʃʊɡər/", "vi": "Đường", "ex": "No sugar in my tea please. — Trà của tôi không đường nhé."}], "phrases": [{"en": "My mother cooks very well.", "vi": "Mẹ tôi nấu ăn rất ngon."}, {"en": "Boil the vegetables please.", "vi": "Luộc rau nhé."}, {"en": "No sugar please.", "vi": "Không đường nhé."}], "dialogue": [{"who": "A", "name": "Hoa", "en": "Do you cook today?", "vi": "Hôm nay bạn có nấu ăn không?"}, {"who": "B", "name": "Nam", "en": "Yes. I fry the fish and boil the vegetables.", "vi": "Có. Tôi rán cá và luộc rau."}, {"who": "A", "name": "Hoa", "en": "Your food is delicious.", "vi": "Món ăn của bạn ngon lắm."}]},
+{"id": 29, "ch": 3, "n": 9, "title": "Đi chợ mua đồ", "sub": "Chương 3 · Bài 9 — Đi chợ mua đồ", "goal": "Mục tiêu: Bác đi chợ và mua đồ ăn được.", "vocab": [{"en": "Market", "ipa": "/ˈmɑːrkɪt/", "vi": "Chợ", "ex": "I go to the market in the morning. — Tôi đi chợ vào buổi sáng."}, {"en": "Kilo", "ipa": "/ˈkiːloʊ/", "vi": "Ký (ki-lô)", "ex": "Two kilos of rice please. — Cho tôi hai ký gạo."}, {"en": "Fresh", "ipa": "/freʃ/", "vi": "Tươi", "ex": "This fish is fresh. — Con cá này tươi."}, {"en": "Basket", "ipa": "/ˈbæskɪt/", "vi": "Giỏ", "ex": "My basket is full. — Giỏ của tôi đầy rồi."}, {"en": "Seller", "ipa": "/ˈselər/", "vi": "Người bán hàng", "ex": "The seller is very kind. — Người bán hàng rất tử tế."}], "phrases": [{"en": "I go to the market in the morning.", "vi": "Tôi đi chợ vào buổi sáng."}, {"en": "Two kilos of rice please.", "vi": "Cho tôi hai ký gạo."}, {"en": "This fish is fresh.", "vi": "Con cá này tươi."}], "dialogue": [{"who": "A", "name": "Bà Tư", "en": "Good morning. Two kilos of rice please.", "vi": "Chào buổi sáng. Cho tôi hai ký gạo."}, {"who": "B", "name": "Seller", "en": "Yes. The rice is good and fresh.", "vi": "Vâng ạ. Gạo ngon và mới."}, {"who": "A", "name": "Bà Tư", "en": "Thank you very much.", "vi": "Cảm ơn bạn rất nhiều."}]},
+{"id": 30, "ch": 3, "n": 10, "title": "Ôn tập chương 3", "sub": "Chương 3 · Bài 10 — Ôn tập chương 3", "goal": "Mục tiêu: Bác ôn lại các từ quan trọng nhất của chương 3.", "vocab": [{"en": "Rice", "ipa": "/raɪs/", "vi": "Cơm / gạo", "ex": "I eat rice every day. — Tôi ăn cơm mỗi ngày."}, {"en": "Delicious", "ipa": "/dɪˈlɪʃəs/", "vi": "Ngon", "ex": "This food is delicious. — Món ăn này ngon."}, {"en": "Breakfast", "ipa": "/ˈbrekfəst/", "vi": "Bữa sáng", "ex": "Breakfast is at seven. — Bữa sáng lúc bảy giờ."}, {"en": "Coffee", "ipa": "/ˈkɔːfi/", "vi": "Cà phê", "ex": "I drink coffee in the morning. — Tôi uống cà phê vào buổi sáng."}, {"en": "Market", "ipa": "/ˈmɑːrkɪt/", "vi": "Chợ", "ex": "I go to the market in the morning. — Tôi đi chợ vào buổi sáng."}], "phrases": [{"en": "This food is delicious.", "vi": "Món ăn này ngon."}, {"en": "I go to the market in the morning.", "vi": "Tôi đi chợ vào buổi sáng."}, {"en": "Breakfast is at seven.", "vi": "Bữa sáng lúc bảy giờ."}], "dialogue": [{"who": "A", "name": "Lan", "en": "What do you eat for breakfast?", "vi": "Bác ăn gì vào bữa sáng ạ?"}, {"who": "B", "name": "Ông Ba", "en": "I eat rice and drink coffee.", "vi": "Tôi ăn cơm và uống cà phê."}, {"who": "A", "name": "Lan", "en": "The food at the market is delicious.", "vi": "Đồ ăn ở chợ ngon lắm ạ."}]},
+{"id": 31, "ch": 4, "n": 1, "title": "Trái phải thẳng", "sub": "Chương 4 · Bài 1 — Trái phải thẳng", "goal": "Mục tiêu: Bác hiểu và nói được các hướng cơ bản.", "vocab": [{"en": "Left", "ipa": "/left/", "vi": "Bên trái", "ex": "Turn left please. — Xin rẽ trái."}, {"en": "Right", "ipa": "/raɪt/", "vi": "Bên phải", "ex": "Turn right here. — Rẽ phải ở đây."}, {"en": "Straight", "ipa": "/streɪt/", "vi": "Thẳng", "ex": "Go straight ahead. — Đi thẳng về phía trước."}, {"en": "Turn", "ipa": "/tɜːrn/", "vi": "Rẽ / quay", "ex": "Turn left at the bank. — Rẽ trái ở chỗ ngân hàng."}, {"en": "Go", "ipa": "/ɡoʊ/", "vi": "Đi", "ex": "We go to the market. — Chúng tôi đi chợ."}], "phrases": [{"en": "Turn left please.", "vi": "Xin rẽ trái."}, {"en": "Go straight ahead.", "vi": "Đi thẳng về phía trước."}, {"en": "Turn right here.", "vi": "Rẽ phải ở đây."}], "dialogue": [{"who": "A", "name": "Bà Tư", "en": "Excuse me. Left or right?", "vi": "Xin lỗi. Rẽ trái hay rẽ phải ạ?"}, {"who": "B", "name": "Nam", "en": "Go straight then turn left.", "vi": "Bác đi thẳng rồi rẽ trái."}, {"who": "A", "name": "Bà Tư", "en": "Thank you very much.", "vi": "Cảm ơn cháu rất nhiều."}]},
+{"id": 32, "ch": 4, "n": 2, "title": "Gần xa ở đây ở đó", "sub": "Chương 4 · Bài 2 — Gần xa ở đây ở đó", "goal": "Mục tiêu: Bác nói được gần xa và vị trí ở đây ở đó.", "vocab": [{"en": "Near", "ipa": "/nɪər/", "vi": "Gần", "ex": "The shop is near here. — Cửa hàng ở gần đây."}, {"en": "Far", "ipa": "/fɑːr/", "vi": "Xa", "ex": "It is not far. — Chỗ đó không xa."}, {"en": "Here", "ipa": "/hɪər/", "vi": "Ở đây", "ex": "The bus stop is here. — Trạm xe buýt ở đây."}, {"en": "There", "ipa": "/ðeər/", "vi": "Ở đó", "ex": "My house is there. — Nhà tôi ở đằng đó."}, {"en": "Where", "ipa": "/weər/", "vi": "Ở đâu", "ex": "Where is the market? — Chợ ở đâu?"}], "phrases": [{"en": "Where is the hospital?", "vi": "Bệnh viện ở đâu?"}, {"en": "It is near here.", "vi": "Chỗ đó ở gần đây."}, {"en": "It is not far.", "vi": "Chỗ đó không xa."}], "dialogue": [{"who": "A", "name": "Mai", "en": "Where is the park?", "vi": "Công viên ở đâu?"}, {"who": "B", "name": "Nam", "en": "It is near here. There.", "vi": "Ở gần đây. Đằng kia kìa."}, {"who": "A", "name": "Mai", "en": "Good. It is not far.", "vi": "Tốt. Không xa lắm."}]},
+{"id": 33, "ch": 4, "n": 3, "title": "Hỏi đường cơ bản", "sub": "Chương 4 · Bài 3 — Hỏi đường cơ bản", "goal": "Mục tiêu: Bác hỏi đường cơ bản được khi đi ở nơi lạ.", "vocab": [{"en": "Street", "ipa": "/striːt/", "vi": "Đường phố", "ex": "This street is long. — Con đường này dài."}, {"en": "Where is", "ipa": "/weər ɪz/", "vi": "... ở đâu?", "ex": "Where is the bank? — Ngân hàng ở đâu?"}, {"en": "On the left", "ipa": "/ɑːn ðə left/", "vi": "Ở bên trái", "ex": "The shop is on the left. — Cửa hàng ở bên trái."}, {"en": "On the right", "ipa": "/ɑːn ðə raɪt/", "vi": "Ở bên phải", "ex": "The park is on the right. — Công viên ở bên phải."}, {"en": "Is it far?", "ipa": "/ɪz ɪt fɑːr/", "vi": "Có xa không?", "ex": "Is it far from here? — Từ đây đến đó có xa không?"}], "phrases": [{"en": "Where is the bank?", "vi": "Ngân hàng ở đâu?"}, {"en": "The shop is on the left.", "vi": "Cửa hàng ở bên trái."}, {"en": "Is it far from here?", "vi": "Từ đây đến đó có xa không?"}], "dialogue": [{"who": "A", "name": "Ông Sáu", "en": "Excuse me. Where is the post office?", "vi": "Xin lỗi. Bưu điện ở đâu ạ?"}, {"who": "B", "name": "Lan", "en": "It is on the right. It is not far.", "vi": "Ở bên phải ạ. Không xa đâu."}, {"who": "A", "name": "Ông Sáu", "en": "Thank you very much.", "vi": "Cảm ơn cháu rất nhiều."}]},
+{"id": 34, "ch": 4, "n": 4, "title": "Phương tiện đi lại", "sub": "Chương 4 · Bài 4 — Phương tiện đi lại", "goal": "Mục tiêu: Bác gọi tên được các phương tiện quen thuộc.", "vocab": [{"en": "Bus", "ipa": "/bʌs/", "vi": "Xe buýt", "ex": "I go by bus. — Tôi đi bằng xe buýt."}, {"en": "Car", "ipa": "/kɑːr/", "vi": "Ô tô", "ex": "My son has a car. — Con trai tôi có ô tô."}, {"en": "Motorbike", "ipa": "/ˈmoʊtərbaɪk/", "vi": "Xe máy", "ex": "He goes by motorbike. — Anh ấy đi bằng xe máy."}, {"en": "Bicycle", "ipa": "/ˈbaɪsɪkəl/", "vi": "Xe đạp", "ex": "I ride a bicycle every morning. — Tôi đạp xe mỗi sáng."}, {"en": "Train", "ipa": "/treɪn/", "vi": "Tàu hỏa", "ex": "We go to Hanoi by train. — Chúng tôi đi Hà Nội bằng tàu hỏa."}], "phrases": [{"en": "I go by bus.", "vi": "Tôi đi bằng xe buýt."}, {"en": "We go by train.", "vi": "Chúng tôi đi bằng tàu hỏa."}, {"en": "I ride a bicycle.", "vi": "Tôi đi xe đạp."}], "dialogue": [{"who": "A", "name": "Mai", "en": "Do you go by bus?", "vi": "Bạn đi bằng xe buýt phải không?"}, {"who": "B", "name": "Nam", "en": "Yes. I go to work by bus.", "vi": "Đúng vậy. Tôi đi làm bằng xe buýt."}, {"who": "A", "name": "Mai", "en": "My father goes by motorbike.", "vi": "Bố tôi đi bằng xe máy."}]},
+{"id": 35, "ch": 4, "n": 5, "title": "Đi bộ và qua đường", "sub": "Chương 4 · Bài 5 — Đi bộ và qua đường", "goal": "Mục tiêu: Bác nói được về đi bộ và qua đường an toàn.", "vocab": [{"en": "Walk", "ipa": "/wɔːk/", "vi": "Đi bộ", "ex": "I walk to the market. — Tôi đi bộ ra chợ."}, {"en": "Cross", "ipa": "/krɔːs/", "vi": "Băng qua", "ex": "Cross the street here please. — Qua đường ở đây nhé."}, {"en": "Careful", "ipa": "/ˈkeərfəl/", "vi": "Cẩn thận", "ex": "Be careful please. — Xin hãy cẩn thận."}, {"en": "Traffic light", "ipa": "/ˈtræfɪk laɪt/", "vi": "Đèn giao thông", "ex": "Wait for the traffic light. — Chờ đèn giao thông nhé."}, {"en": "Sidewalk", "ipa": "/ˈsaɪdwɔːk/", "vi": "Vỉa hè", "ex": "Walk on the sidewalk. — Đi bộ trên vỉa hè."}], "phrases": [{"en": "Walk on the sidewalk.", "vi": "Đi bộ trên vỉa hè."}, {"en": "Be careful please.", "vi": "Xin hãy cẩn thận."}, {"en": "I walk to the park.", "vi": "Tôi đi bộ ra công viên."}], "dialogue": [{"who": "A", "name": "Lan", "en": "Let us walk to the market.", "vi": "Chúng ta đi bộ ra chợ nhé."}, {"who": "B", "name": "Ông Tư", "en": "Be careful. Wait for the traffic light.", "vi": "Cẩn thận nhé. Chờ đèn giao thông đã."}, {"who": "A", "name": "Lan", "en": "Now we cross the street.", "vi": "Giờ chúng ta qua đường."}]},
+{"id": 36, "ch": 4, "n": 6, "title": "Đi taxi", "sub": "Chương 4 · Bài 6 — Đi taxi", "goal": "Mục tiêu: Bác gọi taxi và nói địa chỉ được.", "vocab": [{"en": "Taxi", "ipa": "/ˈtæksi/", "vi": "Taxi", "ex": "I need a taxi. — Tôi cần một chiếc taxi."}, {"en": "Driver", "ipa": "/ˈdraɪvər/", "vi": "Tài xế", "ex": "The driver is kind. — Tài xế rất tử tế."}, {"en": "Stop here please", "ipa": "/stɑːp hɪər pliːz/", "vi": "Dừng ở đây ạ", "ex": "Stop here please. This is my house. — Dừng ở đây ạ. Đây là nhà tôi."}, {"en": "Address", "ipa": "/əˈdres/", "vi": "Địa chỉ", "ex": "What is your address? — Địa chỉ của bạn là gì?"}, {"en": "Slow down", "ipa": "/sloʊ daʊn/", "vi": "Đi chậm lại", "ex": "Slow down please. — Xin đi chậm lại."}], "phrases": [{"en": "Stop here please.", "vi": "Dừng ở đây ạ."}, {"en": "I need a taxi.", "vi": "Tôi cần một chiếc taxi."}, {"en": "Slow down please.", "vi": "Xin đi chậm lại."}], "dialogue": [{"who": "A", "name": "Bà Năm", "en": "I need a taxi please.", "vi": "Cho tôi một chiếc taxi."}, {"who": "B", "name": "Driver", "en": "Yes. Where do you go?", "vi": "Vâng ạ. Bác đi đâu ạ?"}, {"who": "A", "name": "Bà Năm", "en": "To the hospital. Slow down please.", "vi": "Đến bệnh viện. Xin đi chậm lại."}]},
+{"id": 37, "ch": 4, "n": 7, "title": "Mất bao lâu", "sub": "Chương 4 · Bài 7 — Mất bao lâu", "goal": "Mục tiêu: Bác hỏi và nói được thời gian đi mất bao lâu.", "vocab": [{"en": "Minute", "ipa": "/ˈmɪnɪt/", "vi": "Phút", "ex": "Five minutes by bus. — Đi xe buýt năm phút."}, {"en": "Hour", "ipa": "/ˈaʊər/", "vi": "Giờ (tiếng)", "ex": "One hour by car. — Đi ô tô một tiếng."}, {"en": "How long?", "ipa": "/haʊ lɔːŋ/", "vi": "Bao lâu?", "ex": "How long from here? — Từ đây mất bao lâu?"}, {"en": "Fast", "ipa": "/fæst/", "vi": "Nhanh", "ex": "The train is fast. — Tàu hỏa nhanh."}, {"en": "Slow", "ipa": "/sloʊ/", "vi": "Chậm", "ex": "The bus is slow today. — Hôm nay xe buýt chậm."}], "phrases": [{"en": "How long from here?", "vi": "Từ đây mất bao lâu?"}, {"en": "Five minutes by bus.", "vi": "Đi xe buýt năm phút."}, {"en": "One hour by train.", "vi": "Đi tàu một tiếng."}], "dialogue": [{"who": "A", "name": "Mai", "en": "How long to the airport?", "vi": "Đến sân bay mất bao lâu?"}, {"who": "B", "name": "Nam", "en": "One hour by car. The car is fast.", "vi": "Đi ô tô một tiếng. Ô tô nhanh."}, {"who": "A", "name": "Mai", "en": "And five minutes to the park.", "vi": "Và năm phút đến công viên."}]},
+{"id": 38, "ch": 4, "n": 8, "title": "Địa điểm quanh ta", "sub": "Chương 4 · Bài 8 — Địa điểm quanh ta", "goal": "Mục tiêu: Bác gọi tên được các địa điểm quanh mình.", "vocab": [{"en": "Bus stop", "ipa": "/bʌs stɑːp/", "vi": "Trạm xe buýt", "ex": "The bus stop is near here. — Trạm xe buýt ở gần đây."}, {"en": "Airport", "ipa": "/ˈeərpɔːrt/", "vi": "Sân bay", "ex": "The airport is far from here. — Sân bay ở xa đây."}, {"en": "Park", "ipa": "/pɑːrk/", "vi": "Công viên", "ex": "We walk in the park. — Chúng tôi đi bộ trong công viên."}, {"en": "Bank", "ipa": "/bæŋk/", "vi": "Ngân hàng", "ex": "The bank is on the left. — Ngân hàng ở bên trái."}, {"en": "Post office", "ipa": "/poʊst ˈɔːfɪs/", "vi": "Bưu điện", "ex": "The post office is on the right. — Bưu điện ở bên phải."}], "phrases": [{"en": "The bus stop is near here.", "vi": "Trạm xe buýt ở gần đây."}, {"en": "The bank is on the left.", "vi": "Ngân hàng ở bên trái."}, {"en": "We walk in the park.", "vi": "Chúng tôi đi bộ trong công viên."}], "dialogue": [{"who": "A", "name": "Hoa", "en": "Where is the bus stop?", "vi": "Trạm xe buýt ở đâu?"}, {"who": "B", "name": "Tom", "en": "It is near the park. On the left.", "vi": "Ở gần công viên. Bên trái ấy."}, {"who": "A", "name": "Hoa", "en": "Thank you. And the bank is there.", "vi": "Cảm ơn bạn. Và ngân hàng ở đằng kia."}]},
+{"id": 39, "ch": 4, "n": 9, "title": "Chỉ đường cho người khác", "sub": "Chương 4 · Bài 9 — Chỉ đường cho người khác", "goal": "Mục tiêu: Bác chỉ đường đơn giản cho người khác được.", "vocab": [{"en": "Go straight", "ipa": "/ɡoʊ streɪt/", "vi": "Đi thẳng", "ex": "Go straight to the park. — Đi thẳng đến công viên."}, {"en": "Turn left", "ipa": "/tɜːrn left/", "vi": "Rẽ trái", "ex": "Turn left at the bank. — Rẽ trái ở chỗ ngân hàng."}, {"en": "Turn right", "ipa": "/tɜːrn raɪt/", "vi": "Rẽ phải", "ex": "Turn right at the shop. — Rẽ phải ở chỗ cửa hàng."}, {"en": "At the corner", "ipa": "/æt ðə ˈkɔːrnər/", "vi": "Ở góc đường", "ex": "The shop is at the corner. — Cửa hàng ở góc đường."}, {"en": "You will see", "ipa": "/juː wɪl siː/", "vi": "Bạn sẽ thấy", "ex": "You will see the market. — Bạn sẽ thấy chợ."}], "phrases": [{"en": "Go straight then turn left.", "vi": "Đi thẳng rồi rẽ trái."}, {"en": "You will see the park.", "vi": "Bạn sẽ thấy công viên."}, {"en": "The shop is at the corner.", "vi": "Cửa hàng ở góc đường."}], "dialogue": [{"who": "A", "name": "David", "en": "Excuse me. Where is the market?", "vi": "Xin lỗi. Chợ ở đâu?"}, {"who": "B", "name": "Mai", "en": "Go straight then turn right.", "vi": "Bạn đi thẳng rồi rẽ phải."}, {"who": "A", "name": "David", "en": "Thank you very much.", "vi": "Cảm ơn bạn rất nhiều."}, {"who": "B", "name": "Mai", "en": "You will see the market at the corner.", "vi": "Bạn sẽ thấy chợ ở góc đường."}]},
+{"id": 40, "ch": 4, "n": 10, "title": "Ôn tập chương 4", "sub": "Chương 4 · Bài 10 — Ôn tập chương 4", "goal": "Mục tiêu: Bác ôn lại các từ quan trọng nhất của chương 4.", "vocab": [{"en": "Left", "ipa": "/left/", "vi": "Bên trái", "ex": "Turn left please. — Xin rẽ trái."}, {"en": "Near", "ipa": "/nɪər/", "vi": "Gần", "ex": "The shop is near here. — Cửa hàng ở gần đây."}, {"en": "Bus", "ipa": "/bʌs/", "vi": "Xe buýt", "ex": "I go by bus. — Tôi đi bằng xe buýt."}, {"en": "Walk", "ipa": "/wɔːk/", "vi": "Đi bộ", "ex": "I walk to the market. — Tôi đi bộ ra chợ."}, {"en": "Minute", "ipa": "/ˈmɪnɪt/", "vi": "Phút", "ex": "Five minutes by bus. — Đi xe buýt năm phút."}], "phrases": [{"en": "Turn left please.", "vi": "Xin rẽ trái."}, {"en": "I go by bus.", "vi": "Tôi đi bằng xe buýt."}, {"en": "Five minutes by bus.", "vi": "Đi xe buýt năm phút."}], "dialogue": [{"who": "A", "name": "Bà Tư", "en": "Excuse me. Where is the market?", "vi": "Xin lỗi. Chợ ở đâu?"}, {"who": "B", "name": "Nam", "en": "Go straight then turn left. Five minutes by bus.", "vi": "Đi thẳng rồi rẽ trái. Đi xe buýt năm phút."}, {"who": "A", "name": "Bà Tư", "en": "Thank you very much.", "vi": "Cảm ơn cháu rất nhiều."}]},
+{"id": 41, "ch": 5, "n": 1, "title": "Đầu mặt tai mắt", "sub": "Chương 5 · Bài 1 — Đầu mặt tai mắt", "goal": "Mục tiêu: Bác gọi tên được các bộ phận trên đầu và mặt.", "vocab": [{"en": "Head", "ipa": "/hed/", "vi": "Đầu", "ex": "My head hurts. — Đầu tôi đau."}, {"en": "Eye", "ipa": "/aɪ/", "vi": "Mắt", "ex": "My eyes are tired. — Mắt tôi mỏi."}, {"en": "Ear", "ipa": "/ɪər/", "vi": "Tai", "ex": "His ear hurts. — Tai của anh ấy đau."}, {"en": "Nose", "ipa": "/noʊz/", "vi": "Mũi", "ex": "Her nose is small. — Mũi của cô ấy nhỏ."}, {"en": "Mouth", "ipa": "/maʊθ/", "vi": "Miệng", "ex": "Open your mouth please. — Xin há miệng ra."}], "phrases": [{"en": "My eyes are tired.", "vi": "Mắt tôi mỏi."}, {"en": "Open your mouth please.", "vi": "Xin há miệng ra."}, {"en": "My head hurts.", "vi": "Đầu tôi đau."}], "dialogue": [{"who": "A", "name": "Doctor", "en": "What hurts today?", "vi": "Hôm nay bác đau ở đâu ạ?"}, {"who": "B", "name": "Ông Sáu", "en": "My head hurts. My eyes are tired.", "vi": "Đầu tôi đau. Mắt tôi mỏi."}, {"who": "A", "name": "Doctor", "en": "Open your mouth please.", "vi": "Xin bác há miệng ra."}]},
+{"id": 42, "ch": 5, "n": 2, "title": "Tay chân và cơ thể", "sub": "Chương 5 · Bài 2 — Tay chân và cơ thể", "goal": "Mục tiêu: Bác gọi tên được tay chân và cơ thể.", "vocab": [{"en": "Hand", "ipa": "/hænd/", "vi": "Bàn tay", "ex": "Wash your hands please. — Xin rửa tay nhé."}, {"en": "Leg", "ipa": "/leɡ/", "vi": "Chân", "ex": "My leg hurts. — Chân tôi đau."}, {"en": "Back", "ipa": "/bæk/", "vi": "Lưng", "ex": "His back hurts. — Lưng của anh ấy đau."}, {"en": "Stomach", "ipa": "/ˈstʌmək/", "vi": "Bụng / dạ dày", "ex": "My stomach hurts. — Bụng tôi đau."}, {"en": "Body", "ipa": "/ˈbɑːdi/", "vi": "Cơ thể", "ex": "Your body needs rest. — Cơ thể của bạn cần nghỉ ngơi."}], "phrases": [{"en": "My leg hurts.", "vi": "Chân tôi đau."}, {"en": "My stomach hurts.", "vi": "Bụng tôi đau."}, {"en": "My body needs rest.", "vi": "Cơ thể tôi cần nghỉ ngơi."}], "dialogue": [{"who": "A", "name": "Nurse", "en": "What hurts today?", "vi": "Hôm nay bác đau ở đâu ạ?"}, {"who": "B", "name": "Bà Năm", "en": "My back and my stomach hurt.", "vi": "Lưng và bụng tôi đau."}, {"who": "A", "name": "Nurse", "en": "Your body needs rest.", "vi": "Cơ thể của bác cần nghỉ ngơi ạ."}]},
+{"id": 43, "ch": 5, "n": 3, "title": "Đau sốt ho", "sub": "Chương 5 · Bài 3 — Đau sốt ho", "goal": "Mục tiêu: Bác nói được khi mình đau sốt và ho.", "vocab": [{"en": "Headache", "ipa": "/ˈhedeɪk/", "vi": "Đau đầu", "ex": "I have a headache. — Tôi bị đau đầu."}, {"en": "Fever", "ipa": "/ˈfiːvər/", "vi": "Sốt", "ex": "He has a fever. — Anh ấy bị sốt."}, {"en": "Cough", "ipa": "/kɔːf/", "vi": "Ho", "ex": "She has a cough. — Cô ấy bị ho."}, {"en": "Pain", "ipa": "/peɪn/", "vi": "Cơn đau", "ex": "The pain is here. — Cơn đau ở đây."}, {"en": "Sick", "ipa": "/sɪk/", "vi": "Ốm / bệnh", "ex": "I feel sick today. — Hôm nay tôi thấy ốm."}], "phrases": [{"en": "I have a headache.", "vi": "Tôi bị đau đầu."}, {"en": "I have a fever.", "vi": "Tôi bị sốt."}, {"en": "I feel sick today.", "vi": "Hôm nay tôi thấy ốm."}], "dialogue": [{"who": "A", "name": "Doctor", "en": "How do you feel today?", "vi": "Hôm nay bác thấy thế nào ạ?"}, {"who": "B", "name": "Ông Ba", "en": "I have a headache and a fever.", "vi": "Tôi bị đau đầu và sốt."}, {"who": "A", "name": "Doctor", "en": "And a cough too?", "vi": "Và cả ho nữa phải không ạ?"}, {"who": "B", "name": "Ông Ba", "en": "Yes. I feel sick.", "vi": "Đúng vậy. Tôi thấy ốm."}]},
+{"id": 44, "ch": 5, "n": 4, "title": "Mệt và chóng mặt", "sub": "Chương 5 · Bài 4 — Mệt và chóng mặt", "goal": "Mục tiêu: Bác nói được khi mình mệt và chóng mặt.", "vocab": [{"en": "Tired", "ipa": "/ˈtaɪərd/", "vi": "Mệt", "ex": "I am very tired today. — Hôm nay tôi rất mệt."}, {"en": "Dizzy", "ipa": "/ˈdɪzi/", "vi": "Chóng mặt", "ex": "I feel dizzy. — Tôi thấy chóng mặt."}, {"en": "Weak", "ipa": "/wiːk/", "vi": "Yếu", "ex": "He feels weak today. — Hôm nay anh ấy thấy yếu."}, {"en": "Sleep", "ipa": "/sliːp/", "vi": "Ngủ", "ex": "I need to sleep. — Tôi cần ngủ."}, {"en": "Rest", "ipa": "/rest/", "vi": "Nghỉ ngơi", "ex": "You need to rest. — Bạn cần nghỉ ngơi."}], "phrases": [{"en": "I am very tired today.", "vi": "Hôm nay tôi rất mệt."}, {"en": "I feel dizzy.", "vi": "Tôi thấy chóng mặt."}, {"en": "You need to rest.", "vi": "Bạn cần nghỉ ngơi."}], "dialogue": [{"who": "A", "name": "Mai", "en": "How do you feel today Mom?", "vi": "Hôm nay mẹ thấy thế nào?"}, {"who": "B", "name": "Bà Hoa", "en": "I am tired and dizzy.", "vi": "Mẹ mệt và chóng mặt."}, {"who": "A", "name": "Mai", "en": "You need to rest and sleep.", "vi": "Mẹ cần nghỉ ngơi và ngủ ạ."}]},
+{"id": 45, "ch": 5, "n": 5, "title": "Đi khám bác sĩ", "sub": "Chương 5 · Bài 5 — Đi khám bác sĩ", "goal": "Mục tiêu: Bác nói được những câu cơ bản khi đi khám.", "vocab": [{"en": "Doctor", "ipa": "/ˈdɑːktər/", "vi": "Bác sĩ", "ex": "I see a doctor today. — Hôm nay tôi đi gặp bác sĩ."}, {"en": "Hospital", "ipa": "/ˈhɑːspɪtl/", "vi": "Bệnh viện", "ex": "The hospital is near here. — Bệnh viện ở gần đây."}, {"en": "Nurse", "ipa": "/nɜːrs/", "vi": "Y tá", "ex": "The nurse is kind. — Cô y tá rất tử tế."}, {"en": "Appointment", "ipa": "/əˈpɔɪntmənt/", "vi": "Lịch hẹn khám", "ex": "I have an appointment at nine. — Tôi có lịch hẹn lúc chín giờ."}, {"en": "Check", "ipa": "/tʃek/", "vi": "Khám / kiểm tra", "ex": "The doctor checks my eyes. — Bác sĩ khám mắt cho tôi."}], "phrases": [{"en": "I need to see a doctor.", "vi": "Tôi cần đi gặp bác sĩ."}, {"en": "I have an appointment at nine.", "vi": "Tôi có lịch hẹn lúc chín giờ."}, {"en": "The hospital is near here.", "vi": "Bệnh viện ở gần đây."}], "dialogue": [{"who": "A", "name": "Nurse", "en": "Good morning. Do you have an appointment?", "vi": "Chào buổi sáng. Bác có lịch hẹn không ạ?"}, {"who": "B", "name": "Ông Tư", "en": "Yes. At nine. I see the doctor today.", "vi": "Có. Lúc chín giờ. Hôm nay tôi gặp bác sĩ."}, {"who": "A", "name": "Nurse", "en": "Please sit down and wait.", "vi": "Mời bác ngồi và chờ ạ."}]},
+{"id": 46, "ch": 5, "n": 6, "title": "Uống thuốc", "sub": "Chương 5 · Bài 6 — Uống thuốc", "goal": "Mục tiêu: Bác hiểu được cách uống thuốc đơn giản.", "vocab": [{"en": "Medicine", "ipa": "/ˈmedɪsɪn/", "vi": "Thuốc", "ex": "Take this medicine. — Uống thuốc này nhé."}, {"en": "Pill", "ipa": "/pɪl/", "vi": "Viên thuốc", "ex": "One pill in the morning. — Một viên vào buổi sáng."}, {"en": "Twice a day", "ipa": "/twaɪs ə deɪ/", "vi": "Ngày hai lần", "ex": "Take this medicine twice a day. — Uống thuốc này ngày hai lần."}, {"en": "Before meals", "ipa": "/bɪˈfɔːr miːlz/", "vi": "Trước bữa ăn", "ex": "Take the pill before meals. — Uống viên thuốc trước bữa ăn."}, {"en": "After meals", "ipa": "/ˈæftər miːlz/", "vi": "Sau bữa ăn", "ex": "Take the medicine after meals. — Uống thuốc sau bữa ăn."}], "phrases": [{"en": "Take this medicine twice a day.", "vi": "Uống thuốc này ngày hai lần."}, {"en": "One pill in the morning.", "vi": "Một viên vào buổi sáng."}, {"en": "Take the pill before meals.", "vi": "Uống viên thuốc trước bữa ăn."}], "dialogue": [{"who": "A", "name": "Doctor", "en": "Take this medicine twice a day.", "vi": "Bác uống thuốc này ngày hai lần ạ."}, {"who": "B", "name": "Bà Tư", "en": "Before meals or after meals?", "vi": "Trước bữa ăn hay sau bữa ăn ạ?"}, {"who": "A", "name": "Doctor", "en": "After meals please. One pill.", "vi": "Sau bữa ăn ạ. Một viên nhé."}]},
+{"id": 47, "ch": 5, "n": 7, "title": "Lời khuyên giữ sức khỏe", "sub": "Chương 5 · Bài 7 — Lời khuyên giữ sức khỏe", "goal": "Mục tiêu: Bác nghe và nói được lời khuyên giữ sức khỏe.", "vocab": [{"en": "Healthy", "ipa": "/ˈhelθi/", "vi": "Khỏe mạnh", "ex": "I want to be healthy. — Tôi muốn khỏe mạnh."}, {"en": "Exercise", "ipa": "/ˈeksərsaɪz/", "vi": "Tập thể dục", "ex": "Exercise is good for you. — Tập thể dục tốt cho bạn."}, {"en": "Every day", "ipa": "/ˈevri deɪ/", "vi": "Mỗi ngày", "ex": "Walk every day please. — Đi bộ mỗi ngày nhé."}, {"en": "Early", "ipa": "/ˈɜːrli/", "vi": "Sớm", "ex": "Sleep early and be healthy. — Ngủ sớm và giữ sức khỏe."}, {"en": "Good for you", "ipa": "/ɡʊd fɔːr juː/", "vi": "Tốt cho bạn", "ex": "Vegetables are good for you. — Rau củ tốt cho bạn."}], "phrases": [{"en": "Exercise is good for you.", "vi": "Tập thể dục tốt cho bạn."}, {"en": "Walk every day.", "vi": "Đi bộ mỗi ngày."}, {"en": "I want to be healthy.", "vi": "Tôi muốn khỏe mạnh."}], "dialogue": [{"who": "A", "name": "Doctor", "en": "Walk every day. Exercise is good for you.", "vi": "Bác đi bộ mỗi ngày nhé. Tập thể dục tốt cho bác."}, {"who": "B", "name": "Ông Sáu", "en": "And sleep early too.", "vi": "Và ngủ sớm nữa."}, {"who": "A", "name": "Doctor", "en": "Yes. You will be healthy.", "vi": "Đúng vậy ạ. Bác sẽ khỏe mạnh."}]},
+{"id": 48, "ch": 5, "n": 8, "title": "Trường hợp khẩn cấp", "sub": "Chương 5 · Bài 8 — Trường hợp khẩn cấp", "goal": "Mục tiêu: Bác gọi giúp đỡ được trong trường hợp khẩn cấp.", "vocab": [{"en": "Help!", "ipa": "/help/", "vi": "Cứu tôi với!", "ex": "Help! I need a doctor. — Cứu tôi với! Tôi cần bác sĩ."}, {"en": "Call", "ipa": "/kɔːl/", "vi": "Gọi điện", "ex": "Call the doctor please. — Xin gọi bác sĩ."}, {"en": "Ambulance", "ipa": "/ˈæmbjələns/", "vi": "Xe cấp cứu", "ex": "Call an ambulance now. — Gọi xe cấp cứu ngay."}, {"en": "Emergency", "ipa": "/ɪˈmɜːrdʒənsi/", "vi": "Khẩn cấp", "ex": "This is an emergency. — Đây là trường hợp khẩn cấp."}, {"en": "Hurry", "ipa": "/ˈhɜːri/", "vi": "Nhanh lên", "ex": "Hurry please. He is sick. — Nhanh lên. Anh ấy đang ốm."}], "phrases": [{"en": "Call an ambulance now.", "vi": "Gọi xe cấp cứu ngay."}, {"en": "This is an emergency.", "vi": "Đây là trường hợp khẩn cấp."}, {"en": "Help! I need a doctor.", "vi": "Cứu tôi với! Tôi cần bác sĩ."}], "dialogue": [{"who": "A", "name": "Mai", "en": "Help! This is an emergency.", "vi": "Cứu với! Đây là trường hợp khẩn cấp."}, {"who": "B", "name": "Nam", "en": "I call an ambulance now.", "vi": "Tôi gọi xe cấp cứu ngay đây."}, {"who": "A", "name": "Mai", "en": "Hurry please.", "vi": "Nhanh lên nhé."}]},
+{"id": 49, "ch": 5, "n": 9, "title": "Vệ sinh hằng ngày", "sub": "Chương 5 · Bài 9 — Vệ sinh hằng ngày", "goal": "Mục tiêu: Bác nói được các việc vệ sinh hằng ngày.", "vocab": [{"en": "Wash", "ipa": "/wɑːʃ/", "vi": "Rửa", "ex": "Wash your hands please. — Xin rửa tay nhé."}, {"en": "Soap", "ipa": "/soʊp/", "vi": "Xà phòng", "ex": "Wash with soap and water. — Rửa bằng xà phòng và nước."}, {"en": "Teeth", "ipa": "/tiːθ/", "vi": "Răng", "ex": "Brush your teeth every day. — Chải răng mỗi ngày nhé."}, {"en": "Brush", "ipa": "/brʌʃ/", "vi": "Chải", "ex": "I brush my teeth in the morning. — Tôi chải răng vào buổi sáng."}, {"en": "Clean", "ipa": "/kliːn/", "vi": "Sạch", "ex": "Your hands are clean now. — Tay của bạn giờ sạch rồi."}], "phrases": [{"en": "Wash your hands with soap.", "vi": "Rửa tay bằng xà phòng."}, {"en": "Brush your teeth every day.", "vi": "Chải răng mỗi ngày."}, {"en": "Your hands are clean.", "vi": "Tay của bạn sạch."}], "dialogue": [{"who": "A", "name": "Lan", "en": "Wash your hands with soap please.", "vi": "Rửa tay bằng xà phòng nhé."}, {"who": "B", "name": "Bé Bo", "en": "Yes Mom. And brush my teeth.", "vi": "Vâng mẹ. Và chải răng nữa."}, {"who": "A", "name": "Lan", "en": "Good. Your hands are clean now.", "vi": "Giỏi. Tay con giờ sạch rồi."}]},
+{"id": 50, "ch": 5, "n": 10, "title": "Ôn tập chương 5", "sub": "Chương 5 · Bài 10 — Ôn tập chương 5", "goal": "Mục tiêu: Bác ôn lại các từ quan trọng nhất của chương 5.", "vocab": [{"en": "Doctor", "ipa": "/ˈdɑːktər/", "vi": "Bác sĩ", "ex": "I see a doctor today. — Hôm nay tôi đi gặp bác sĩ."}, {"en": "Headache", "ipa": "/ˈhedeɪk/", "vi": "Đau đầu", "ex": "I have a headache. — Tôi bị đau đầu."}, {"en": "Medicine", "ipa": "/ˈmedɪsɪn/", "vi": "Thuốc", "ex": "Take this medicine. — Uống thuốc này nhé."}, {"en": "Rest", "ipa": "/rest/", "vi": "Nghỉ ngơi", "ex": "You need to rest. — Bạn cần nghỉ ngơi."}, {"en": "Help!", "ipa": "/help/", "vi": "Cứu tôi với!", "ex": "Help! Call a doctor. — Cứu tôi với! Gọi bác sĩ."}], "phrases": [{"en": "I need to see a doctor.", "vi": "Tôi cần đi gặp bác sĩ."}, {"en": "Take this medicine and rest.", "vi": "Uống thuốc này và nghỉ ngơi nhé."}, {"en": "I have a headache.", "vi": "Tôi bị đau đầu."}], "dialogue": [{"who": "A", "name": "Doctor", "en": "How do you feel today?", "vi": "Hôm nay bác thấy thế nào ạ?"}, {"who": "B", "name": "Ông Ba", "en": "I have a headache. I need medicine.", "vi": "Tôi bị đau đầu. Tôi cần thuốc."}, {"who": "A", "name": "Doctor", "en": "Take this medicine and rest at home.", "vi": "Bác uống thuốc này và nghỉ ngơi ở nhà nhé."}]},
+{"id": 51, "ch": 6, "n": 1, "title": "Quần áo", "sub": "Chương 6 · Bài 1 — Quần áo", "goal": "Mục tiêu: Bác gọi tên được các món quần áo quen thuộc.", "vocab": [{"en": "Shirt", "ipa": "/ʃɜːrt/", "vi": "Áo sơ mi", "ex": "This shirt is new. — Chiếc áo sơ mi này mới."}, {"en": "Dress", "ipa": "/dres/", "vi": "Váy", "ex": "Her dress is beautiful. — Chiếc váy của cô ấy đẹp."}, {"en": "Pants", "ipa": "/pænts/", "vi": "Quần dài", "ex": "These pants are too big. — Chiếc quần này to quá."}, {"en": "Hat", "ipa": "/hæt/", "vi": "Mũ", "ex": "I like this hat. — Tôi thích chiếc mũ này."}, {"en": "Shoes", "ipa": "/ʃuːz/", "vi": "Giày", "ex": "My shoes are new. — Đôi giày của tôi mới."}], "phrases": [{"en": "This shirt is new.", "vi": "Chiếc áo sơ mi này mới."}, {"en": "I like this hat.", "vi": "Tôi thích chiếc mũ này."}, {"en": "Her dress is beautiful.", "vi": "Chiếc váy của cô ấy đẹp."}], "dialogue": [{"who": "A", "name": "Lan", "en": "I like this dress. It is beautiful.", "vi": "Tôi thích chiếc váy này. Nó đẹp."}, {"who": "B", "name": "Seller", "en": "And this hat is new.", "vi": "Và chiếc mũ này thì mới ạ."}, {"who": "A", "name": "Lan", "en": "Good. I look at the shoes too.", "vi": "Tốt. Tôi xem giày nữa."}]},
+{"id": 52, "ch": 6, "n": 2, "title": "Màu sắc", "sub": "Chương 6 · Bài 2 — Màu sắc", "goal": "Mục tiêu: Bác gọi tên được các màu sắc cơ bản.", "vocab": [{"en": "Red", "ipa": "/red/", "vi": "Màu đỏ", "ex": "The dress is red. — Chiếc váy màu đỏ."}, {"en": "Blue", "ipa": "/bluː/", "vi": "Màu xanh dương", "ex": "His shirt is blue. — Áo sơ mi của anh ấy màu xanh dương."}, {"en": "Green", "ipa": "/ɡriːn/", "vi": "Màu xanh lá", "ex": "The hat is green. — Chiếc mũ màu xanh lá."}, {"en": "White", "ipa": "/waɪt/", "vi": "Màu trắng", "ex": "I like the white shirt. — Tôi thích chiếc áo sơ mi trắng."}, {"en": "Black", "ipa": "/blæk/", "vi": "Màu đen", "ex": "These shoes are black. — Đôi giày này màu đen."}], "phrases": [{"en": "The dress is red.", "vi": "Chiếc váy màu đỏ."}, {"en": "I like the white shirt.", "vi": "Tôi thích chiếc áo sơ mi trắng."}, {"en": "His shirt is blue.", "vi": "Áo của anh ấy màu xanh dương."}], "dialogue": [{"who": "A", "name": "Mai", "en": "Do you like the red dress?", "vi": "Bạn có thích chiếc váy đỏ không?"}, {"who": "B", "name": "Lan", "en": "Yes. And the white shirt too.", "vi": "Có. Và cả chiếc áo sơ mi trắng nữa."}, {"who": "A", "name": "Mai", "en": "The blue one is nice too.", "vi": "Chiếc màu xanh dương cũng đẹp."}]},
+{"id": 53, "ch": 6, "n": 3, "title": "Cỡ to nhỏ vừa", "sub": "Chương 6 · Bài 3 — Cỡ to nhỏ vừa", "goal": "Mục tiêu: Bác nói được cỡ to nhỏ và vừa hay không.", "vocab": [{"en": "Big", "ipa": "/bɪɡ/", "vi": "To", "ex": "This bag is big. — Chiếc túi này to."}, {"en": "Small", "ipa": "/smɔːl/", "vi": "Nhỏ", "ex": "That hat is small. — Chiếc mũ đó nhỏ."}, {"en": "Size", "ipa": "/saɪz/", "vi": "Cỡ / kích thước", "ex": "What size do you need? — Bạn cần cỡ nào?"}, {"en": "Fit", "ipa": "/fɪt/", "vi": "Vừa (cỡ)", "ex": "These shoes fit me. — Đôi giày này vừa với tôi."}, {"en": "Too big", "ipa": "/tuː bɪɡ/", "vi": "To quá", "ex": "This shirt is too big. — Chiếc áo này to quá."}], "phrases": [{"en": "What size do you need?", "vi": "Bạn cần cỡ nào?"}, {"en": "This shirt is too big.", "vi": "Chiếc áo này to quá."}, {"en": "These shoes fit me.", "vi": "Đôi giày này vừa với tôi."}], "dialogue": [{"who": "A", "name": "Seller", "en": "What size do you need?", "vi": "Bác cần cỡ nào ạ?"}, {"who": "B", "name": "Bà Năm", "en": "This shirt is too big. A small one please.", "vi": "Chiếc áo này to quá. Cho tôi chiếc nhỏ ạ."}, {"who": "A", "name": "Seller", "en": "This one fits you.", "vi": "Chiếc này vừa với bác ạ."}]},
+{"id": 54, "ch": 6, "n": 4, "title": "Hỏi giá và mặc cả", "sub": "Chương 6 · Bài 4 — Hỏi giá và mặc cả", "goal": "Mục tiêu: Bác hỏi giá và mặc cả nhẹ nhàng được.", "vocab": [{"en": "How much?", "ipa": "/haʊ mʌtʃ/", "vi": "Bao nhiêu tiền?", "ex": "How much is this? — Cái này bao nhiêu tiền?"}, {"en": "Price", "ipa": "/praɪs/", "vi": "Giá", "ex": "The price is good. — Giá này tốt."}, {"en": "Cheap", "ipa": "/tʃiːp/", "vi": "Rẻ", "ex": "This bag is cheap. — Chiếc túi này rẻ."}, {"en": "Expensive", "ipa": "/ɪkˈspensɪv/", "vi": "Đắt", "ex": "That watch is expensive. — Chiếc đồng hồ đó đắt."}, {"en": "Discount", "ipa": "/ˈdɪskaʊnt/", "vi": "Giảm giá", "ex": "Is there a discount? — Có giảm giá không?"}], "phrases": [{"en": "How much is this?", "vi": "Cái này bao nhiêu tiền?"}, {"en": "It is too expensive.", "vi": "Nó đắt quá."}, {"en": "Is there a discount?", "vi": "Có giảm giá không?"}], "dialogue": [{"who": "A", "name": "Bà Năm", "en": "Excuse me. How much is this bag?", "vi": "Cho tôi hỏi. Cái túi này bao nhiêu tiền?"}, {"who": "B", "name": "Seller", "en": "It is ten dollars.", "vi": "Mười đô la ạ."}, {"who": "A", "name": "Bà Năm", "en": "It is a bit expensive. Is there a discount?", "vi": "Hơi đắt. Có giảm giá không ạ?"}, {"who": "B", "name": "Seller", "en": "Yes. Eight dollars for you.", "vi": "Có ạ. Tám đô cho bác."}]},
+{"id": 55, "ch": 6, "n": 5, "title": "Đẹp tốt mới cũ", "sub": "Chương 6 · Bài 5 — Đẹp tốt mới cũ", "goal": "Mục tiêu: Bác nhận xét được đồ đẹp tốt mới hay xấu.", "vocab": [{"en": "Beautiful", "ipa": "/ˈbjuːtɪfəl/", "vi": "Đẹp", "ex": "This dress is beautiful. — Chiếc váy này đẹp."}, {"en": "Nice", "ipa": "/naɪs/", "vi": "Đẹp / tốt", "ex": "Your hat is nice. — Chiếc mũ của bạn đẹp."}, {"en": "New", "ipa": "/nuː/", "vi": "Mới", "ex": "My shoes are new. — Đôi giày của tôi mới."}, {"en": "Good", "ipa": "/ɡʊd/", "vi": "Tốt", "ex": "The price is good. — Giá này tốt."}, {"en": "Bad", "ipa": "/bæd/", "vi": "Xấu / kém", "ex": "This bag is bad. I need a new one. — Chiếc túi này kém. Tôi cần một chiếc mới."}], "phrases": [{"en": "This dress is beautiful.", "vi": "Chiếc váy này đẹp."}, {"en": "Your hat is nice.", "vi": "Chiếc mũ của bạn đẹp."}, {"en": "The price is good.", "vi": "Giá này tốt."}], "dialogue": [{"who": "A", "name": "Lan", "en": "This dress is beautiful.", "vi": "Chiếc váy này đẹp."}, {"who": "B", "name": "Mai", "en": "Yes. And it is new and nice.", "vi": "Đúng vậy. Nó mới và đẹp."}, {"who": "A", "name": "Lan", "en": "The price is good too.", "vi": "Giá cũng tốt nữa."}]},
+{"id": 56, "ch": 6, "n": 6, "title": "Trả tiền", "sub": "Chương 6 · Bài 6 — Trả tiền", "goal": "Mục tiêu: Bác nói được về tiền và cách trả tiền.", "vocab": [{"en": "Money", "ipa": "/ˈmʌni/", "vi": "Tiền", "ex": "How much money? — Bao nhiêu tiền?"}, {"en": "Pay", "ipa": "/peɪ/", "vi": "Trả tiền", "ex": "I pay by card. — Tôi trả bằng thẻ."}, {"en": "Cash", "ipa": "/kæʃ/", "vi": "Tiền mặt", "ex": "I pay in cash. — Tôi trả tiền mặt."}, {"en": "Card", "ipa": "/kɑːrd/", "vi": "Thẻ", "ex": "Do you take a card? — Bạn có nhận thẻ không?"}, {"en": "Change", "ipa": "/tʃeɪndʒ/", "vi": "Tiền thừa (thối lại)", "ex": "Here is your change. — Đây là tiền thừa của bạn."}], "phrases": [{"en": "I pay by card.", "vi": "Tôi trả bằng thẻ."}, {"en": "I pay in cash.", "vi": "Tôi trả tiền mặt."}, {"en": "Here is your change.", "vi": "Đây là tiền thừa của bạn."}], "dialogue": [{"who": "A", "name": "Bà Năm", "en": "I pay in cash.", "vi": "Tôi trả tiền mặt."}, {"who": "B", "name": "Seller", "en": "Thank you. Here is your change.", "vi": "Cảm ơn bác. Đây là tiền thừa của bác."}, {"who": "A", "name": "Bà Năm", "en": "Thank you very much.", "vi": "Cảm ơn bạn rất nhiều."}]},
+{"id": 57, "ch": 6, "n": 7, "title": "Mua quà và đồ dùng", "sub": "Chương 6 · Bài 7 — Mua quà và đồ dùng", "goal": "Mục tiêu: Bác mua được quà và đồ dùng cho người thân.", "vocab": [{"en": "Gift", "ipa": "/ɡɪft/", "vi": "Quà", "ex": "This gift is for my wife. — Món quà này cho vợ tôi."}, {"en": "Bag", "ipa": "/bæɡ/", "vi": "Túi", "ex": "I buy a new bag. — Tôi mua một chiếc túi mới."}, {"en": "Watch", "ipa": "/wɑːtʃ/", "vi": "Đồng hồ đeo tay", "ex": "This watch is for my son. — Chiếc đồng hồ này cho con trai tôi."}, {"en": "Phone", "ipa": "/foʊn/", "vi": "Điện thoại", "ex": "My phone is old. — Điện thoại của tôi cũ rồi."}, {"en": "Toy", "ipa": "/tɔɪ/", "vi": "Đồ chơi", "ex": "This toy is for my grandchild. — Đồ chơi này cho cháu tôi."}], "phrases": [{"en": "This gift is for my wife.", "vi": "Món quà này cho vợ tôi."}, {"en": "I buy a new bag.", "vi": "Tôi mua một chiếc túi mới."}, {"en": "This toy is for my grandchild.", "vi": "Đồ chơi này cho cháu tôi."}], "dialogue": [{"who": "A", "name": "Ông Tư", "en": "I need a gift for my wife.", "vi": "Tôi cần một món quà cho vợ tôi."}, {"who": "B", "name": "Seller", "en": "This bag is beautiful.", "vi": "Chiếc túi này đẹp ạ."}, {"who": "A", "name": "Ông Tư", "en": "And this watch is for my son.", "vi": "Và chiếc đồng hồ này cho con trai tôi."}]},
+{"id": 58, "ch": 6, "n": 8, "title": "Muốn cần chọn", "sub": "Chương 6 · Bài 8 — Muốn cần chọn", "goal": "Mục tiêu: Bác nói được mình muốn gì cần gì và chọn đồ.", "vocab": [{"en": "Want", "ipa": "/wɑːnt/", "vi": "Muốn", "ex": "I want this shirt. — Tôi muốn chiếc áo này."}, {"en": "Need", "ipa": "/niːd/", "vi": "Cần", "ex": "I need new shoes. — Tôi cần giày mới."}, {"en": "Choose", "ipa": "/tʃuːz/", "vi": "Chọn", "ex": "Please choose one. — Xin chọn một chiếc."}, {"en": "Like", "ipa": "/laɪk/", "vi": "Thích", "ex": "I like the red one. — Tôi thích chiếc màu đỏ."}, {"en": "This one", "ipa": "/ðɪs wʌn/", "vi": "Cái này", "ex": "I take this one. — Tôi lấy cái này."}], "phrases": [{"en": "I want this shirt.", "vi": "Tôi muốn chiếc áo này."}, {"en": "I need new shoes.", "vi": "Tôi cần giày mới."}, {"en": "I take this one.", "vi": "Tôi lấy cái này."}], "dialogue": [{"who": "A", "name": "Mai", "en": "Do you want the red shirt?", "vi": "Bạn muốn chiếc áo đỏ phải không?"}, {"who": "B", "name": "Lan", "en": "Yes. I like this one.", "vi": "Đúng vậy. Tôi thích cái này."}, {"who": "A", "name": "Mai", "en": "Good. I choose the blue one.", "vi": "Tốt. Tôi chọn cái màu xanh."}]},
+{"id": 59, "ch": 6, "n": 9, "title": "Đổi trả hàng", "sub": "Chương 6 · Bài 9 — Đổi trả hàng", "goal": "Mục tiêu: Bác đổi hoặc trả lại hàng được khi đồ bị hỏng.", "vocab": [{"en": "Exchange", "ipa": "/ɪksˈtʃeɪndʒ/", "vi": "Đổi hàng", "ex": "I want to exchange this shirt. — Tôi muốn đổi chiếc áo này."}, {"en": "Return", "ipa": "/rɪˈtɜːrn/", "vi": "Trả lại hàng", "ex": "I want to return this bag. — Tôi muốn trả lại chiếc túi này."}, {"en": "Broken", "ipa": "/ˈbroʊkən/", "vi": "Bị hỏng", "ex": "This watch is broken. — Chiếc đồng hồ này bị hỏng."}, {"en": "Receipt", "ipa": "/rɪˈsiːt/", "vi": "Hóa đơn / biên lai", "ex": "Here is my receipt. — Đây là hóa đơn của tôi."}, {"en": "Another one", "ipa": "/əˈnʌðər wʌn/", "vi": "Một cái khác", "ex": "Another one please. — Cho tôi một cái khác."}], "phrases": [{"en": "This watch is broken.", "vi": "Chiếc đồng hồ này bị hỏng."}, {"en": "I want to exchange this shirt.", "vi": "Tôi muốn đổi chiếc áo này."}, {"en": "Here is my receipt.", "vi": "Đây là hóa đơn của tôi."}], "dialogue": [{"who": "A", "name": "Bà Năm", "en": "This watch is broken. Here is my receipt.", "vi": "Chiếc đồng hồ này bị hỏng. Đây là hóa đơn của tôi."}, {"who": "B", "name": "Seller", "en": "I am sorry. Another one for you.", "vi": "Tôi xin lỗi ạ. Một chiếc khác cho bác."}, {"who": "A", "name": "Bà Năm", "en": "Thank you very much.", "vi": "Cảm ơn bạn rất nhiều."}]},
+{"id": 60, "ch": 6, "n": 10, "title": "Ôn tập chương 6", "sub": "Chương 6 · Bài 10 — Ôn tập chương 6", "goal": "Mục tiêu: Bác ôn lại các từ quan trọng nhất của chương 6.", "vocab": [{"en": "How much?", "ipa": "/haʊ mʌtʃ/", "vi": "Bao nhiêu tiền?", "ex": "How much is this? — Cái này bao nhiêu tiền?"}, {"en": "Cheap", "ipa": "/tʃiːp/", "vi": "Rẻ", "ex": "This bag is cheap. — Chiếc túi này rẻ."}, {"en": "Beautiful", "ipa": "/ˈbjuːtɪfəl/", "vi": "Đẹp", "ex": "This dress is beautiful. — Chiếc váy này đẹp."}, {"en": "Money", "ipa": "/ˈmʌni/", "vi": "Tiền", "ex": "How much money? — Bao nhiêu tiền?"}, {"en": "Gift", "ipa": "/ɡɪft/", "vi": "Quà", "ex": "This gift is for my wife. — Món quà này cho vợ tôi."}], "phrases": [{"en": "How much is this?", "vi": "Cái này bao nhiêu tiền?"}, {"en": "I will take it.", "vi": "Tôi lấy cái này."}, {"en": "This gift is for my wife.", "vi": "Món quà này cho vợ tôi."}], "dialogue": [{"who": "A", "name": "Bà Năm", "en": "How much is this bag?", "vi": "Cái túi này bao nhiêu tiền?"}, {"who": "B", "name": "Seller", "en": "It is cheap and beautiful.", "vi": "Nó rẻ và đẹp ạ."}, {"who": "A", "name": "Bà Năm", "en": "Good. I will take it.", "vi": "Tốt. Tôi lấy cái này."}]}
 ];
 
 var TOTAL_QUIZ = [
-  {type:"mcq", tag:"Bài 1 · Chào hỏi", q:"Khi mới gặp một người bạn mới, bác nói câu nào?", opts:["Goodbye","Nice to meet you","Thank you, doctor","How much is this?"], answer:1, explain:"“Nice to meet you” — Rất vui được gặp bạn, dùng khi mới làm quen."},
-  {type:"listen", tag:"Bài 3 · Ăn uống", q:"Bấm nút nghe, rồi chọn từ bác vừa nghe được:", listen:"Delicious", opts:["Delicious","Expensive","Hospital","Family"], answer:0, explain:"Từ vừa đọc là “Delicious” — ngon."},
-  {type:"mcq", tag:"Bài 2 · Gia đình", q:"“Daughter” nghĩa là gì?", opts:["Con trai","Mẹ","Con gái","Cháu gái"], answer:2, explain:"“Daughter” = con gái. “Son” mới là con trai."},
-  {type:"order", tag:"Bài 4 · Hỏi đường", q:"Sắp xếp thành câu “Đi thẳng về phía trước”:", words:["Go","straight","ahead"], sentence:"Go straight ahead", explain:"Câu đúng: “Go straight ahead.” — Đi thẳng về phía trước."},
-  {type:"mcq", tag:"Bài 5 · Sức khỏe", q:"“You need to rest” nghĩa là gì?", opts:["Bạn cần uống thuốc","Bạn cần đi khám","Bạn cần nghỉ ngơi","Bạn cần ăn sáng"], answer:2, explain:"“Rest” = nghỉ ngơi. Câu này nghĩa là: Bạn cần nghỉ ngơi."},
-  {type:"mcq", tag:"Bài 6 · Mua sắm", q:"“It is too expensive” nghĩa là gì?", opts:["Nó rẻ quá","Nó đắt quá","Nó đẹp quá","Nó to quá"], answer:1, explain:"“Expensive” = đắt. “Too expensive” = đắt quá."}
+  {type:"mcq", tag:"Chương 1 · Chào hỏi", q:"Khi mới gặp một người bạn mới, bác nói câu nào?", opts:["Goodbye","Nice to meet you","Thank you, doctor","How much is this?"], answer:1, explain:"“Nice to meet you” — Rất vui được gặp bạn, dùng khi mới làm quen."},
+  {type:"listen", tag:"Chương 3 · Ăn uống", q:"Bấm nút nghe, rồi chọn từ bác vừa nghe được:", listen:"Delicious", opts:["Delicious","Expensive","Hospital","Family"], answer:0, explain:"Từ vừa đọc là “Delicious” — ngon."},
+  {type:"mcq", tag:"Chương 2 · Gia đình", q:"“Daughter” nghĩa là gì?", opts:["Con trai","Mẹ","Con gái","Cháu gái"], answer:2, explain:"“Daughter” = con gái. “Son” mới là con trai."},
+  {type:"order", tag:"Chương 4 · Hỏi đường", q:"Sắp xếp thành câu “Đi thẳng về phía trước”:", words:["Go","straight","ahead"], sentence:"Go straight ahead", explain:"Câu đúng: “Go straight ahead.” — Đi thẳng về phía trước."},
+  {type:"mcq", tag:"Chương 5 · Sức khỏe", q:"“You need to rest” nghĩa là gì?", opts:["Bạn cần uống thuốc","Bạn cần đi khám","Bạn cần nghỉ ngơi","Bạn cần ăn sáng"], answer:2, explain:"“Rest” = nghỉ ngơi. Câu này nghĩa là: Bạn cần nghỉ ngơi."},
+  {type:"mcq", tag:"Chương 6 · Mua sắm", q:"“It is too expensive” nghĩa là gì?", opts:["Nó rẻ quá","Nó đắt quá","Nó đẹp quá","Nó to quá"], answer:1, explain:"“Expensive” = đắt. “Too expensive” = đắt quá."}
 ];
 
 /* ================= STATE (localStorage) ================= */
 var STORE_KEY = "tieng-anh-nguoi-moi-v1";
-var state = { learned:{}, completed:{}, quizBest:{}, streak:0, lastDay:"", totalBest:0, practice:{}, whisper:0 };
+var state = { learned:{}, completed:{}, quizBest:{}, streak:0, lastDay:"", totalBest:0, practice:{}, whisper:0, gatePassed:{}, gameBest:{}, gameWrong:{}, __v:2 };
 function loadState(){
   try{
     var raw = localStorage.getItem(STORE_KEY);
-    if(raw){ var p = JSON.parse(raw); if(p && typeof p==="object"){ state = Object.assign(state, p); } }
+    if(raw){ var p = JSON.parse(raw); if(p && typeof p==="object"){
+      state = Object.assign(state, p);
+      if(p.__v !== 2){
+        /* Dữ liệu của bản 6 bài cũ: giữ nguyên từ đã thuộc và chuỗi ngày học,
+           đặt lại tiến độ bài cho khớp cấu trúc 6 chương × 10 bài mới. */
+        state.completed = {}; state.quizBest = {}; state.totalBest = 0;
+        state.gatePassed = {}; state.gameBest = {}; state.gameWrong = {};
+        state.__v = 2;
+      }
+      if(!state.gatePassed) state.gatePassed = {};
+      if(!state.gameBest) state.gameBest = {};
+      if(!state.gameWrong) state.gameWrong = {};
+      if(!state.completed) state.completed = {};
+    }}
   }catch(e){}
 }
 function saveState(){ try{ localStorage.setItem(STORE_KEY, JSON.stringify(state)); }catch(e){} }
@@ -1782,15 +1767,17 @@ function refreshProgress(){
   document.getElementById("mainBarFill").style.width = pct + "%";
   bar.setAttribute("aria-valuenow", String(pct));
   var label = document.getElementById("barLabel");
-  if(done===0) label.textContent = "Hãy bắt đầu bài 1 — Chào hỏi & giới thiệu nhé!";
-  else if(done<6) label.textContent = "Tốt lắm! Bác đã xong " + done + " bài. Cứ thong thả học tiếp bài " + (done+1) + " nhé.";
-  else label.textContent = "Tuyệt vời! Bác đã hoàn thành cả 6 bài. Hãy ôn lại thường xuyên để nhớ lâu nhé!";
+  if(done===0) label.textContent = "Hãy bắt đầu với " + nextLessonLabel() + " nhé!";
+  else if(done<LESSONS.length) label.textContent = "Tốt lắm! Bác đã xong " + done + " / " + LESSONS.length + " bài. Cứ thong thả học tiếp " + nextLessonLabel() + " nhé.";
+  else label.textContent = "Tuyệt vời! Bác đã hoàn thành cả 60 bài nhỏ. Hãy ôn lại thường xuyên để nhớ lâu nhé!";
   var br = document.getElementById("badgesRow"); br.innerHTML = "";
-  LESSONS.forEach(function(L){
+  CHAPTERS.forEach(function(C){
+    var inCh = LESSONS.filter(function(L){ return L.ch===C.id; });
+    var dn = inCh.filter(function(L){ return state.completed[L.id]; }).length;
     var s = document.createElement("span");
-    var earned = !!state.completed[L.id];
+    var earned = dn === inCh.length;
     s.className = "badge-chip" + (earned ? " earned" : "");
-    s.textContent = (earned ? "🏅 " : "☆ ") + "Bài " + L.id + ": " + L.title;
+    s.textContent = (earned ? "🏅 " : "☆ ") + "Chương " + C.id + ": " + C.title + " (" + dn + "/10)";
     br.appendChild(s);
   });
   if(state.totalBest >= 5){
@@ -1822,8 +1809,8 @@ function renderRoadmap(){
   } else {
     stage.classList.add("now"); stage.classList.remove("done");
     flag.className = "rm-flag here"; flag.textContent = "📍 Bạn đang ở đây";
-    if(done === 0) note.textContent = "Bác đã hoàn thành 0 / " + total + " bài của chặng 1. Hãy bắt đầu với Bài 1 ở ngay phía trên nhé!";
-    else note.textContent = "Bác đã hoàn thành " + done + " / " + total + " bài của chặng 1. Cứ thong thả học tiếp Bài " + (done + 1) + " nhé!";
+    if(done === 0) note.textContent = "Bác đã hoàn thành 0 / " + total + " bài của chặng 1. Hãy bắt đầu với " + nextLessonLabel() + " ở ngay phía trên nhé!";
+    else note.textContent = "Bác đã hoàn thành " + done + " / " + total + " bài của chặng 1. Cứ thong thả học tiếp " + nextLessonLabel() + " nhé!";
   }
 }
 
@@ -1842,7 +1829,7 @@ function pickWotd(){
     if(v) v.textContent = wotd.vi;
   });
   document.getElementById("wotdExHero").textContent = "Ví dụ: " + wotd.ex;
-  document.getElementById("wotdFrom").textContent = "Từ này thuộc Bài " + wotd.lesson + " — " + wotd.lessonTitle;
+  document.getElementById("wotdFrom").textContent = "Từ này thuộc " + lessonById(wotd.lesson).sub;
   var bN = document.getElementById("wotdBtnN"), bS = document.getElementById("wotdBtnS");
   bN.setAttribute("data-speak", wotd.en); bS.setAttribute("data-speak", wotd.en);
   syncWotdBtn();
@@ -1857,7 +1844,10 @@ function syncWotdBtn(){
 function renderReview(){
   var list = document.getElementById("reviewList"); if(!list) return;
   list.innerHTML = "";
-  var pending = allVocab().filter(function(v){ return !isLearned(v.en); }).slice(0,6);
+  var gw = state.gameWrong || {};
+  var pending = allVocab().filter(function(v){ return !isLearned(v.en); });
+  pending.sort(function(a,b){ var d = (gw[b.en]||0) - (gw[a.en]||0); if(d) return d; return a.lesson - b.lesson; });
+  pending = pending.slice(0,6);
   if(pending.length===0){
     var d = document.createElement("div"); d.className="empty-note";
     d.textContent = "Bác đã thuộc hết các từ rồi. Quá giỏi! Hãy học bài tiếp theo hoặc làm bài kiểm tra tổng hợp nhé.";
@@ -1879,69 +1869,98 @@ function renderReview(){
 }
 
 /* ================= LESSON GRID ================= */
+var openChapters = {};
 function renderLessonGrid(){
-  var grid = document.getElementById("lessonGrid"); grid.innerHTML = "";
-  LESSONS.forEach(function(L){
-    var card = document.createElement("button");
-    card.type = "button"; card.className = "lesson-card"; card.setAttribute("data-lesson-card", L.id);
-    var top = document.createElement("div"); top.className="lc-top";
-    var num = document.createElement("span"); num.className="lc-num"; num.textContent = L.id;
-    var done = document.createElement("span"); done.className="lc-done"; done.textContent = "✓ Đã xong";
-    top.appendChild(num); top.appendChild(done); card.appendChild(top);
-    var h = document.createElement("h3"); h.textContent = "Bài " + L.id + ": " + L.title; card.appendChild(h);
-    var g = document.createElement("p"); g.className="lc-goal"; g.textContent = L.goal.replace("Mục tiêu: ",""); card.appendChild(g);
-    var meta = document.createElement("div"); meta.className="lc-meta";
-    var m1 = document.createElement("span"); m1.textContent = L.vocab.length + " từ vựng";
-    var m2 = document.createElement("span"); m2.textContent = L.dialogue.length + " câu hội thoại";
-    var m3 = document.createElement("span"); m3.className="lc-learned-count"; m3.textContent = "Đã thuộc: 0/" + L.vocab.length;
-    meta.appendChild(m1); meta.appendChild(m2); meta.appendChild(m3); card.appendChild(meta);
-    var bar = document.createElement("div"); bar.className="lc-mini-bar";
-    var fill = document.createElement("div"); fill.className="lc-mini-fill"; fill.setAttribute("data-fill", L.id);
-    bar.appendChild(fill); card.appendChild(bar);
-    var open = document.createElement("span"); open.className="lc-open"; open.textContent = "Vào học bài này →";
-    card.appendChild(open);
-    card.addEventListener("click", function(){ openLesson(L.id); });
-    grid.appendChild(card);
+  var wrapEl = document.getElementById("chapterList"); if(!wrapEl) return;
+  if(!Object.keys(openChapters).length){
+    var nx = LESSONS.filter(function(L){ return !state.completed[L.id]; })[0] || LESSONS[0];
+    openChapters[nx.ch] = true;
+  }
+  wrapEl.innerHTML = "";
+  CHAPTERS.forEach(function(C){
+    var inCh = LESSONS.filter(function(L){ return L.ch===C.id; });
+    var dn = inCh.filter(function(L){ return state.completed[L.id]; }).length;
+    var card = document.createElement("div"); card.className = "chapter-card";
+    var head = document.createElement("button"); head.type = "button"; head.className = "ch-head";
+    head.setAttribute("aria-expanded", openChapters[C.id] ? "true" : "false");
+    var htxt = document.createElement("span"); htxt.className = "ch-head-txt";
+    var h3 = document.createElement("span"); h3.className = "ch-title"; h3.textContent = "Chương " + C.id + ": " + C.title;
+    var hd = document.createElement("span"); hd.className = "ch-desc"; hd.textContent = C.desc;
+    htxt.appendChild(h3); htxt.appendChild(hd); head.appendChild(htxt);
+    var hmeta = document.createElement("span"); hmeta.className = "ch-meta";
+    var hp = document.createElement("span"); hp.className = "ch-prog"; hp.textContent = dn + " / 10 bài";
+    var chev = document.createElement("span"); chev.className = "ch-chev"; chev.setAttribute("aria-hidden","true");
+    chev.textContent = openChapters[C.id] ? "▾ Thu gọn" : "▸ Xem 10 bài";
+    hmeta.appendChild(hp); hmeta.appendChild(chev); head.appendChild(hmeta);
+    var bar = document.createElement("div"); bar.className = "lc-mini-bar ch-bar";
+    var fill = document.createElement("div"); fill.className = "lc-mini-fill"; fill.style.width = (dn*10) + "%";
+    bar.appendChild(fill); card.appendChild(head); card.appendChild(bar);
+    var body = document.createElement("div"); body.className = "ch-body";
+    body.style.display = openChapters[C.id] ? "flex" : "none";
+    inCh.forEach(function(L){
+      var row = document.createElement("button"); row.type = "button";
+      var locked = !isUnlocked(L);
+      row.className = "lesson-row" + (state.completed[L.id] ? " is-done" : "") + (locked ? " is-locked" : "");
+      var nm = document.createElement("span"); nm.className = "lr-name";
+      nm.textContent = "Bài " + L.n + ": " + L.title;
+      var st = document.createElement("span"); st.className = "lr-status";
+      st.textContent = state.completed[L.id] ? "✓ Đã hoàn thành" : (locked ? "🔒 Đang khóa" : (state.gatePassed[L.id] || L.id===1 ? "▶ Vào học" : "▶ Kiểm tra bài cũ rồi học"));
+      row.appendChild(nm); row.appendChild(st);
+      row.addEventListener("click", function(){ openLesson(L.id); });
+      body.appendChild(row);
+    });
+    card.appendChild(body);
+    head.addEventListener("click", function(){
+      openChapters[C.id] = !openChapters[C.id];
+      body.style.display = openChapters[C.id] ? "flex" : "none";
+      head.setAttribute("aria-expanded", openChapters[C.id] ? "true" : "false");
+      chev.textContent = openChapters[C.id] ? "▾ Thu gọn" : "▸ Xem 10 bài";
+    });
+    wrapEl.appendChild(card);
   });
 }
-function renderLessonGridCounts(){
-  LESSONS.forEach(function(L){
-    var n = L.vocab.filter(function(v){ return isLearned(v.en); }).length;
-    var card = document.querySelector('[data-lesson-card="'+L.id+'"]');
-    if(!card) return;
-    card.classList.toggle("is-done", !!state.completed[L.id]);
-    var c = card.querySelector(".lc-learned-count");
-    if(c) c.textContent = "Đã thuộc: " + n + "/" + L.vocab.length;
-    var f = card.querySelector('[data-fill="'+L.id+'"]');
-    if(f) f.style.width = Math.round(n / L.vocab.length * 100) + "%";
-  });
-}
+function renderLessonGridCounts(){ renderLessonGrid(); }
 
 /* ================= VIEW SWITCHING ================= */
 function showView(id){
-  MicSessions.cancelCurrent();
+  MicSessions.cancelCurrent(); stopGameTimer();
   if(typeof closeFsPanel === "function") closeFsPanel(false);
-  ["viewHome","viewLesson","viewTotal"].forEach(function(v){
+  ["viewHome","viewLesson","viewTotal","viewGate"].forEach(function(v){
     document.getElementById(v).classList.toggle("active", v===id);
   });
   window.scrollTo({top:0, behavior:"smooth"});
 }
 var currentLesson = null, fcIndex = 0, fcFlipped = false;
 
-function openLesson(id){
-  currentLesson = LESSONS.filter(function(L){ return L.id===id; })[0];
-  if(!currentLesson) return;
+function openLesson(id, opts){
+  opts = opts || {};
+  var L = lessonById(id); if(!L) return;
+  stopGameTimer();
+  if(!isUnlocked(L)){ showLock(L); return; }
+  if(!state.completed[L.id] && !state.gatePassed[L.id] && L.id > 1){ startGateCheck(L); return; }
+  enterLesson(L, opts.tab);
+}
+function enterLesson(L, tab){
+  currentLesson = L;
   fcIndex = 0; fcFlipped = false;
-  document.getElementById("lessonTitle").textContent = "Bài " + currentLesson.id + ": " + currentLesson.title;
-  document.getElementById("lessonSub").textContent = currentLesson.sub;
-  document.getElementById("lessonGoal").textContent = currentLesson.goal;
-  switchTab("vocab");
-  renderVocab(); renderFlashcard(); renderDialogue(); renderSpeakPick(); buildQuiz(currentLesson.quiz, document.getElementById("quizWrap"));
-  resetQuizUI("lesson");
+  document.getElementById("lessonTitle").textContent = "Chương " + L.ch + " · Bài " + L.n + ": " + L.title;
+  document.getElementById("lessonSub").textContent = L.sub;
+  document.getElementById("lessonGoal").textContent = L.goal;
+  switchTab(tab || "vocab");
+  renderVocab(); renderFlashcard(); renderDialogue(); renderSpeakPick(); renderGame();
+  updateGateBanner();
   showView("viewLesson");
 }
+function updateGateBanner(){
+  var b = document.getElementById("gateBanner"); if(!b) return;
+  if(pendingGateTarget && currentLesson && currentLesson.id === pendingGateTarget - 1){
+    var T = lessonById(pendingGateTarget);
+    document.getElementById("gateBannerText").textContent = "Bác đang ôn lại bài này để mở " + (T ? ("Bài " + T.n + " — " + T.title + " (Chương " + T.ch + ")") : "bài mới") + ". Ôn xong, bấm nút kiểm tra lại nhé.";
+    b.style.display = "block";
+  } else b.style.display = "none";
+}
 function switchTab(name){
-  MicSessions.cancelCurrent();
+  MicSessions.cancelCurrent(); stopGameTimer();
   document.querySelectorAll(".tab-btn").forEach(function(b){
     b.setAttribute("aria-selected", b.getAttribute("data-tab")===name ? "true" : "false");
   });
@@ -2022,7 +2041,7 @@ function renderVocab(){
   });
   var nw = document.getElementById("numbersWrap"); nw.innerHTML = "";
   if(currentLesson.numbers){
-    var h = document.createElement("h3"); h.className="sub-h"; h.style.marginTop="30px"; h.textContent = "Đếm số từ 1 đến 10 — bấm vào số để nghe";
+    var h = document.createElement("h3"); h.className="sub-h"; h.style.marginTop="30px"; h.textContent = "Bảng số trong bài này — bấm vào số để nghe";
     nw.appendChild(h);
     var strip = document.createElement("div"); strip.className="numbers-strip";
     currentLesson.numbers.forEach(function(n){
@@ -3338,11 +3357,7 @@ function gradeQuiz(questions, wrap){
 }
 function resetQuizUI(kind){
   if(kind === "lesson"){
-    document.getElementById("quizResult").className = "quiz-result";
-    document.getElementById("quizResult").innerHTML = "";
-    document.getElementById("quizSubmit").style.display = "inline-flex";
-    document.getElementById("quizRetry").style.display = "none";
-    document.getElementById("quizDone").style.display = "none";
+    return; /* panel kiểm tra cũ đã thay bằng trò chơi cuối bài */
   } else {
     document.getElementById("totalResult").className = "quiz-result";
     document.getElementById("totalResult").innerHTML = "";
@@ -3351,32 +3366,645 @@ function resetQuizUI(kind){
     document.getElementById("totalDone").style.display = "none";
   }
 }
-document.getElementById("quizSubmit").addEventListener("click", function(){
-  if(!currentLesson) return;
-  var r = gradeQuiz(currentLesson.quiz, document.getElementById("quizWrap"));
-  if(!r.answeredAll){ toast("Bác trả lời hết các câu đã nhé — còn câu chưa làm."); return; }
-  var total = currentLesson.quiz.length;
-  var res = document.getElementById("quizResult"); res.classList.add("show");
-  var passed = r.score >= 2;
-  var best = state.quizBest[currentLesson.id] || 0;
-  if(r.score > best){ state.quizBest[currentLesson.id] = r.score; }
-  if(passed){ state.completed[currentLesson.id] = true; }
-  saveState(); refreshProgress();
-  res.innerHTML = "";
-  var sc = document.createElement("div"); sc.className="score"; sc.textContent = r.score + " / " + total + " câu đúng";
-  var msg = document.createElement("p"); msg.style.fontWeight="700"; msg.style.marginTop="6px";
-  msg.textContent = passed ? "Chúc mừng bác! Bác đã nắm được bài " + currentLesson.id + " — " + currentLesson.title + ". Bài học đã được đánh dấu hoàn thành." : "Bác đúng " + r.score + "/" + total + " câu. Hãy đọc phần giải thích ở từng câu, ôn lại một chút rồi làm lại nhé — đạt 2/3 câu là qua bài.";
-  res.appendChild(sc); res.appendChild(msg);
-  document.getElementById("quizSubmit").style.display = "none";
-  document.getElementById("quizRetry").style.display = "inline-flex";
-  if(passed) document.getElementById("quizDone").style.display = "inline-flex";
+/* (Bài kiểm tra cuối bài cũ đã được thay bằng trò chơi cuối bài — xem mục GAME bên dưới.) */
+
+
+/* ================= KIỂM TRA BÀI CŨ + KHÓA BÀI + TRÒ CHƠI CUỐI BÀI ================= */
+var gameTimer = null, gameSession = 0, pendingGateTarget = 0, gateTarget = 0, gateQuestions = [];
+function stopGameTimer(){ if(gameTimer){ clearInterval(gameTimer); gameTimer = null; } gameSession++; }
+function lessonById(id){ return LESSONS.filter(function(L){ return L.id===id; })[0] || null; }
+function isUnlocked(L){ return !!L && (L.id === 1 || !!state.completed[L.id - 1]); }
+function nextLessonLabel(){ var nx = LESSONS.filter(function(L){ return !state.completed[L.id]; })[0]; return nx ? ("Chương " + nx.ch + " · Bài " + nx.n + " — " + nx.title) : "bài ôn tập cuối khóa"; }
+function recordWrong(en){ state.gameWrong = state.gameWrong || {}; state.gameWrong[en] = (state.gameWrong[en]||0) + 1; saveState(); }
+function exEn(v){ return (v.ex || "").split(" — ")[0]; }
+function lessonSentences(L){ var out = []; L.phrases.forEach(function(p){ out.push(p.en); }); L.dialogue.forEach(function(d){ out.push(d.en); }); L.vocab.forEach(function(v){ out.push(exEn(v)); }); return out.filter(function(s, i, a){ return s && a.indexOf(s) === i; }); }
+function chapterLessons(ch){ return LESSONS.filter(function(L){ return L.ch === ch; }); }
+function chapterVocab(ch){ var out = []; chapterLessons(ch).forEach(function(L){ L.vocab.forEach(function(v){ out.push(v); }); }); return out; }
+function gEl(tag, cls, text){ var e = document.createElement(tag); if(cls) e.className = cls; if(text !== undefined && text !== null) e.textContent = text; return e; }
+function bigBtn(label, cls){ var b = gEl("button", "btn " + (cls || "btn-primary"), label); b.type = "button"; return b; }
+function optGrid(items, onPick){
+  var grid = gEl("div", "q-opts");
+  items.forEach(function(it){
+    var b = gEl("button", "q-opt", it.label); b.type = "button";
+    b.addEventListener("click", function(){ onPick(it, b, grid); });
+    grid.appendChild(b);
+  });
+  return grid;
+}
+function markPick(grid, btn, correct){
+  grid.querySelectorAll(".q-opt").forEach(function(x){ x.disabled = true; });
+  btn.classList.add(correct ? "correct" : "wrong");
+}
+
+/* ---------- Cổng kiểm tra bài cũ ---------- */
+function gatePoolFor(L){
+  if(L.n === 10) return chapterLessons(L.ch).filter(function(x){ return x.n < 10; });
+  var p = lessonById(L.id - 1); return p ? [p] : [];
+}
+function prevLabel(L){ var p = lessonById(L.id - 1); return p ? ("Chương " + p.ch + " · Bài " + p.n + " — " + p.title) : ""; }
+function buildGateQuestions(L){
+  var pool = gatePoolFor(L);
+  var vp = []; pool.forEach(function(x){ x.vocab.forEach(function(v){ vp.push(v); }); });
+  var vs = shuffle(vp);
+  var qs = [];
+  for(var i = 0; i < 2 && i < vs.length; i++){
+    var v = vs[i];
+    var others = shuffle(vp.filter(function(x){ return x.en !== v.en; })).slice(0,3).map(function(o){ return o.vi; });
+    var opts = shuffle([v.vi].concat(others));
+    qs.push({type:"mcq", tag:"Kiểm tra bài cũ · Chọn nghĩa đúng", q:"“" + v.en + "” nghĩa là gì?", opts:opts, answer:opts.indexOf(v.vi), explain:"“" + v.en + "” = " + v.vi + "."});
+  }
+  var lv = vs[2] || vs[0];
+  if(lv){
+    var o2 = shuffle(vp.filter(function(x){ return x.en !== lv.en; })).slice(0,3).map(function(o){ return o.en; });
+    var opts2 = shuffle([lv.en].concat(o2));
+    qs.push({type:"listen", tag:"Kiểm tra bài cũ · Nghe rồi chọn", q:"Bấm nút nghe, rồi chọn từ bác vừa nghe được:", listen:lv.en, opts:opts2, answer:opts2.indexOf(lv.en), explain:"Từ vừa đọc là “" + lv.en + "” — " + lv.vi + "."});
+  }
+  var pp = []; pool.forEach(function(x){ x.phrases.forEach(function(p){ pp.push(p); }); });
+  var ph = pp[Math.floor(Math.random() * pp.length)];
+  if(ph){
+    var words = ph.en.replace(/[.!?]/g, "").split(/\s+/).filter(Boolean);
+    qs.push({type:"order", tag:"Kiểm tra bài cũ · Sắp xếp thành câu", q:"Sắp xếp thành câu “" + ph.vi + "”:", words:words, sentence:words.join(" "), explain:"Câu đúng: “" + ph.en + "” — " + ph.vi + "."});
+  }
+  return qs;
+}
+function startGateCheck(L){
+  gateTarget = L.id; pendingGateTarget = L.id;
+  gateQuestions = buildGateQuestions(L);
+  document.getElementById("gateTitle").textContent = "Kiểm tra nhanh bài cũ";
+  document.getElementById("gateIntro").textContent = "Trước khi học Bài " + L.n + " — " + L.title + " (Chương " + L.ch + "), bác trả lời 4 câu về " + (L.n === 10 ? "các bài trước trong chính chương này" : prevLabel(L)) + ". Đúng từ 3/4 câu là vào học bài mới ngay.";
+  var lb = document.getElementById("gateLockBox"); lb.style.display = "none"; lb.innerHTML = "";
+  document.getElementById("gateFailBtns").style.display = "none";
+  var res = document.getElementById("gateResult"); res.className = "quiz-result"; res.innerHTML = "";
+  document.getElementById("gateSubmit").style.display = "inline-flex";
+  document.getElementById("gateRetry").style.display = "none";
+  buildQuiz(gateQuestions, document.getElementById("gateWrap"));
+  showView("viewGate");
+}
+function showLock(L){
+  gateTarget = 0;
+  document.getElementById("gateTitle").textContent = "Bài này đang khóa 🔒";
+  document.getElementById("gateIntro").textContent = "";
+  document.getElementById("gateWrap").innerHTML = "";
+  document.getElementById("gateSubmit").style.display = "none";
+  document.getElementById("gateRetry").style.display = "none";
+  document.getElementById("gateFailBtns").style.display = "none";
+  var res = document.getElementById("gateResult"); res.className = "quiz-result"; res.innerHTML = "";
+  var lb = document.getElementById("gateLockBox"); lb.style.display = "block"; lb.innerHTML = "";
+  var p = gEl("p", "", "Bài " + L.n + " — " + L.title + " (Chương " + L.ch + ") học sau " + prevLabel(L) + ". Bác hoàn thành bài trước — chơi trò chơi cuối bài đạt yêu cầu — là bài này tự mở ra. Học lần lượt từng bài nhỏ như vậy sẽ nhớ rất chắc.");
+  lb.appendChild(p);
+  var b = bigBtn("Đi học bài trước ngay", "btn-accent"); b.style.marginTop = "14px";
+  b.addEventListener("click", function(){ openLesson(L.id - 1); });
+  lb.appendChild(b);
+  showView("viewGate");
+}
+document.getElementById("gateBack").addEventListener("click", function(){ showView("viewHome"); refreshProgress(); });
+document.getElementById("gateSubmit").addEventListener("click", function(){
+  var L = lessonById(gateTarget); if(!L) return;
+  var r = gradeQuiz(gateQuestions, document.getElementById("gateWrap"));
+  if(!r.answeredAll){ toast("Bác trả lời hết 4 câu đã nhé — còn câu chưa làm."); return; }
+  var res = document.getElementById("gateResult"); res.classList.add("show"); res.innerHTML = "";
+  document.getElementById("gateSubmit").style.display = "none";
+  document.getElementById("gateRetry").style.display = "inline-flex";
+  res.appendChild(gEl("div", "score", r.score + " / 4 câu đúng"));
+  if(r.score >= 3){
+    state.gatePassed[L.id] = true; pendingGateTarget = 0; saveState();
+    var m = gEl("p", "", "Giỏi lắm! Bác thuộc bài cũ rồi — vào học bài mới thôi."); m.style.fontWeight = "700"; m.style.marginTop = "6px";
+    res.appendChild(m);
+    var eb = bigBtn("Vào học Bài " + L.n + " — " + L.title, "btn-primary"); eb.style.marginTop = "12px";
+    eb.addEventListener("click", function(){ enterLesson(L); });
+    res.appendChild(eb);
+    document.getElementById("gateFailBtns").style.display = "none";
+  } else {
+    var m2 = gEl("p", "", "Bạn chưa thuộc bài cũ — mình học lại bài cũ một chút rồi quay lại nhé. Không sao cả, ôn lại một vòng là nhớ ngay."); m2.style.fontWeight = "700"; m2.style.marginTop = "6px";
+    res.appendChild(m2);
+    document.getElementById("gateFailBtns").style.display = "flex";
+    document.getElementById("gateStudyPrev").textContent = "Học lại " + prevLabel(L);
+  }
   res.scrollIntoView({behavior:"smooth", block:"center"});
 });
-document.getElementById("quizRetry").addEventListener("click", function(){
-  buildQuiz(currentLesson.quiz, document.getElementById("quizWrap")); resetQuizUI("lesson");
-  document.getElementById("quizWrap").scrollIntoView({behavior:"smooth"});
+document.getElementById("gateRetry").addEventListener("click", function(){ var L = lessonById(gateTarget); if(L) startGateCheck(L); });
+document.getElementById("gateStudyPrev").addEventListener("click", function(){
+  var L = lessonById(gateTarget); if(!L) return;
+  var p = lessonById(L.id - 1); if(p) enterLesson(p);
 });
-document.getElementById("quizDone").addEventListener("click", function(){ showView("viewHome"); refreshProgress(); toast("Đã lưu tiến độ. Hẹn bác ở bài tiếp theo!"); });
+document.getElementById("gateReviewCards").addEventListener("click", function(){
+  var L = lessonById(gateTarget); if(!L) return;
+  var p = lessonById(L.id - 1); if(p) enterLesson(p, "cards");
+});
+var gateBannerBtn = document.getElementById("gateBannerBtn");
+if(gateBannerBtn) gateBannerBtn.addEventListener("click", function(){ var T = lessonById(pendingGateTarget); if(T) startGateCheck(T); });
+
+/* ---------- Khung trò chơi ---------- */
+var GAME_INFO = {
+  1:{name:"Lật thẻ trí nhớ", intro:"Lật hai thẻ bất kỳ — một thẻ tiếng Anh và một thẻ nghĩa tiếng Việt giống nhau là ghép được một cặp.", rule:"Ghép hết 5 cặp là xong. Lật sai mỗi lần trừ 5 điểm — đạt từ 80 điểm là hoàn thành bài."},
+  2:{name:"Nghe và chọn đúng", intro:"Nghe máy đọc một từ, rồi chọn nghĩa tiếng Việt đúng của từ đó.", rule:"Có 5 câu — đúng từ 4 câu (80%) là hoàn thành bài."},
+  3:{name:"Sắp xếp từ thành câu", intro:"Bấm các từ theo đúng thứ tự để tạo thành câu hoàn chỉnh.", rule:"Có 5 câu — xếp đúng từ 4 câu (80%) là hoàn thành bài."},
+  4:{name:"Điền chữ còn thiếu", intro:"Mỗi từ bị thiếu một hoặc hai chữ cái — bấm chữ đúng để điền vào chỗ trống.", rule:"Có 5 từ — điền đúng từ 4 từ (80%) là hoàn thành bài."},
+  5:{name:"Nối cặp từ", intro:"Chạm một từ tiếng Anh ở cột trái, rồi chạm nghĩa tiếng Việt đúng của nó ở cột phải.", rule:"Nối chuẩn ngay lần đầu từ 4 cặp (80%) là hoàn thành bài."},
+  6:{name:"Săn điểm tốc độ", intro:"Nhìn nghĩa tiếng Việt, bấm ngay từ tiếng Anh đúng. Đúng được 10 điểm, đúng 3 lần liền được cộng thêm 5 điểm, sai bị trừ 3 giây.", rule:"Trong 60 giây, đạt từ 50 điểm là hoàn thành bài."},
+  7:{name:"Nghe và chọn câu đúng", intro:"Nghe máy đọc một câu hoàn chỉnh, rồi chọn đúng câu bác vừa nghe.", rule:"Có 5 câu — đúng từ 4 câu (80%) là hoàn thành bài."},
+  8:{name:"Đúng hay Sai", intro:"Trang web hiện một từ cùng một nghĩa — bác xem nghĩa đó đúng hay sai rồi bấm nút.", rule:"Có 5 câu — đúng từ 4 câu (80%) là hoàn thành bài."},
+  9:{name:"Ghép hội thoại", intro:"Bấm các câu hội thoại theo đúng thứ tự nói chuyện, từ câu đầu tiên đến câu cuối cùng.", rule:"Bấm nhầm không quá 1 lần (đạt từ 80%) là hoàn thành bài."},
+  10:{name:"Thử thách tổng ôn chương", intro:"10 câu hỏi trộn từ vựng, nghe và xếp câu của cả chương. Bác có 3 mạng — mỗi câu sai mất 1 mạng.", rule:"Đúng từ 8/10 câu là hoàn thành bài và cả chương."}
+};
+function renderGame(){
+  stopGameTimer();
+  var wrap = document.getElementById("gameWrap"); if(!wrap || !currentLesson) return;
+  var res = document.getElementById("gameResult");
+  res.className = "quiz-result"; res.innerHTML = ""; res.style.background = ""; res.style.borderColor = "";
+  wrap.innerHTML = "";
+  var info = GAME_INFO[currentLesson.n]; if(!info) return;
+  document.getElementById("gameIntro").textContent = info.intro + " " + info.rule;
+  var head = gEl("div", "game-head");
+  head.appendChild(gEl("span", "game-name", "🎮 " + info.name));
+  head.appendChild(gEl("span", "game-state", state.completed[currentLesson.id] ? "✓ Bác đã hoàn thành bài này — chơi lại để ôn thêm" : "Chơi đạt yêu cầu là bài được tính hoàn thành"));
+  wrap.appendChild(head);
+  var box = gEl("div", "game-box"); wrap.appendChild(box);
+  var builders = {1:gameMemory, 2:gameListenPick, 3:gameOrder, 4:gameFill, 5:gameMatch, 6:gameSpeed, 7:gameListenSentence, 8:gameTrueFalse, 9:gameDialogueOrder, 10:gameChallenge};
+  builders[currentLesson.n](box, currentLesson);
+}
+function finishGame(pass, pct, headline, detail){
+  stopGameTimer();
+  var L = currentLesson; if(!L) return;
+  if(pass){
+    state.completed[L.id] = true;
+    if(pct > (state.gameBest[L.id] || 0)) state.gameBest[L.id] = pct;
+  }
+  saveState(); refreshProgress();
+  var res = document.getElementById("gameResult"); if(!res) return;
+  res.className = "quiz-result show"; res.innerHTML = "";
+  res.style.background = pass ? "" : "var(--accent-soft)";
+  res.style.borderColor = pass ? "" : "var(--accent)";
+  res.appendChild(gEl("div", "score", headline));
+  var msg = gEl("p", "", detail); msg.style.fontWeight = "700"; msg.style.marginTop = "6px";
+  res.appendChild(msg);
+  var acts = gEl("div", "game-acts");
+  var again = bigBtn("Chơi lại trò này", "btn-ghost");
+  again.addEventListener("click", function(){ renderGame(); });
+  acts.appendChild(again);
+  if(pass){
+    var nx = lessonById(L.id + 1);
+    if(nx){
+      var nb = bigBtn("Sang bài tiếp theo →", "btn-primary");
+      nb.addEventListener("click", function(){ openLesson(nx.id); });
+      acts.appendChild(nb);
+    }
+    var hb = bigBtn("Về trang chính", "btn-soft");
+    hb.addEventListener("click", function(){ showView("viewHome"); refreshProgress(); });
+    acts.appendChild(hb);
+  } else {
+    var rb = bigBtn("Ôn lại từ của bài này", "btn-accent");
+    rb.addEventListener("click", function(){ switchTab("vocab"); window.scrollTo({top:0, behavior:"smooth"}); });
+    acts.appendChild(rb);
+    var hb2 = bigBtn("Về trang chính", "btn-soft");
+    hb2.addEventListener("click", function(){ showView("viewHome"); refreshProgress(); });
+    acts.appendChild(hb2);
+  }
+  res.appendChild(acts);
+  res.scrollIntoView({behavior:"smooth", block:"center"});
+}
+
+/* ---------- Game 1: Lật thẻ trí nhớ ---------- */
+function gameMemory(wrap, L){
+  var tiles = [];
+  L.vocab.forEach(function(v, i){ tiles.push({pair:i, kind:"en", text:v.en}); tiles.push({pair:i, kind:"vi", text:v.vi}); });
+  tiles = shuffle(tiles);
+  var status = gEl("p", "game-status", "Đã ghép đúng 0 / 5 cặp · Lật sai: 0 lần");
+  var grid = gEl("div", "mem-grid");
+  var first = null, lock = false, matched = 0, mistakes = 0;
+  tiles.forEach(function(t){
+    var b = gEl("button", "mem-tile", "?"); b.type = "button";
+    b.setAttribute("aria-label", "Thẻ chưa lật — bấm để lật");
+    b.addEventListener("click", function(){
+      if(lock || b.classList.contains("open") || b.classList.contains("done")) return;
+      b.classList.add("open"); b.textContent = t.text;
+      if(!first){ first = {t:t, b:b}; return; }
+      if(first.t.pair === t.pair && first.t.kind !== t.kind){
+        b.classList.add("done"); first.b.classList.add("done"); matched++;
+        status.textContent = "Đã ghép đúng " + matched + " / 5 cặp · Lật sai: " + mistakes + " lần";
+        first = null;
+        if(matched === 5){
+          var pct = Math.max(0, 100 - mistakes * 5);
+          setTimeout(function(){ finishGame(pct >= 80, pct, "Ghép đúng cả 5 cặp!", "Điểm ghi nhớ: " + pct + "/100 (lật sai " + mistakes + " lần). " + (pct >= 80 ? "Bác nhớ từ rất tốt — bài đã hoàn thành!" : "Sai hơi nhiều lần — bác ôn lại từ rồi chơi lại nhé.")); }, 500);
+        }
+      } else {
+        mistakes++; lock = true;
+        status.textContent = "Đã ghép đúng " + matched + " / 5 cặp · Lật sai: " + mistakes + " lần";
+        var f = first; first = null;
+        setTimeout(function(){ b.classList.remove("open"); b.textContent = "?"; f.b.classList.remove("open"); f.b.textContent = "?"; lock = false; }, 800);
+      }
+    });
+    grid.appendChild(b);
+  });
+  wrap.appendChild(status); wrap.appendChild(grid);
+}
+
+/* ---------- Game 2: Nghe và chọn đúng ---------- */
+function gameListenPick(wrap, L){
+  var rounds = shuffle(L.vocab.slice());
+  var idx = 0, score = 0;
+  var status = gEl("p", "game-status"); wrap.appendChild(status);
+  var box = gEl("div", ""); wrap.appendChild(box);
+  function next(){
+    box.innerHTML = "";
+    if(idx >= rounds.length){
+      var pct = Math.round(score / rounds.length * 100);
+      finishGame(pct >= 80, pct, "Đúng " + score + " / " + rounds.length + " câu", pct >= 80 ? "Tai bác nghe rất chuẩn — bài đã hoàn thành!" : "Chưa đạt 80% — bác nghe lại các từ trong bài rồi chơi lại nhé.");
+      return;
+    }
+    var v = rounds[idx];
+    status.textContent = "Câu " + (idx + 1) + " / " + rounds.length + " · Đúng: " + score;
+    var lb = speakBtn(v.en, 0.85, "Nghe từ này", false); lb.style.marginBottom = "14px";
+    box.appendChild(lb);
+    box.appendChild(gEl("p", "game-q", "Từ bác vừa nghe có nghĩa là gì?"));
+    var others = shuffle(L.vocab.filter(function(x){ return x.en !== v.en; })).slice(0, 2);
+    var items = shuffle([{label:v.vi, ok:true}].concat(others.map(function(o){ return {label:o.vi, ok:false}; })));
+    var grid = optGrid(items, function(it, btn, g){
+      markPick(g, btn, it.ok);
+      if(it.ok) score++; else recordWrong(v.en);
+      idx++;
+      setTimeout(next, 1000);
+    });
+    box.appendChild(grid);
+    setTimeout(function(){ speak(v.en, 0.85); }, 350);
+  }
+  next();
+}
+
+/* ---------- Game 3: Sắp xếp từ thành câu ---------- */
+function gameOrder(wrap, L){
+  var sents = [];
+  L.phrases.forEach(function(p){ sents.push({en:p.en, vi:p.vi}); });
+  L.vocab.slice(0, 2).forEach(function(v){ sents.push({en:exEn(v), vi:""}); });
+  sents = sents.slice(0, 5);
+  var idx = 0, score = 0;
+  var status = gEl("p", "game-status"); wrap.appendChild(status);
+  var box = gEl("div", ""); wrap.appendChild(box);
+  function next(){
+    box.innerHTML = "";
+    if(idx >= sents.length){
+      var pct = Math.round(score / sents.length * 100);
+      finishGame(pct >= 80, pct, "Xếp đúng " + score + " / " + sents.length + " câu", pct >= 80 ? "Bác xếp câu rất chuẩn — bài đã hoàn thành!" : "Chưa đạt 80% — bác xem lại các câu mẫu trong bài rồi chơi lại nhé.");
+      return;
+    }
+    var s = sents[idx];
+    status.textContent = "Câu " + (idx + 1) + " / " + sents.length + " · Đúng: " + score;
+    box.appendChild(gEl("p", "game-q", s.vi ? ("Xếp các từ thành câu: “" + s.vi + "”") : "Xếp các từ thành câu đúng:"));
+    var clean = s.en.replace(/[.!?]/g, "");
+    var words = clean.split(/\s+/).filter(Boolean);
+    var zone = gEl("div", "order-zone");
+    var empty = gEl("span", "oz-empty", "Câu của bác sẽ hiện ở đây… (bấm vào từ đã chọn để bỏ ra)");
+    zone.appendChild(empty); box.appendChild(zone);
+    var bank = gEl("div", "word-bank"); box.appendChild(bank);
+    shuffle(words.slice()).forEach(function(w){
+      var chip = gEl("button", "word-chip", w); chip.type = "button";
+      chip.addEventListener("click", function(){
+        if(chip.classList.contains("used")) return;
+        chip.classList.add("used");
+        var e = zone.querySelector(".oz-empty"); if(e) e.remove();
+        var placed = gEl("button", "word-chip in-zone", w); placed.type = "button";
+        placed.addEventListener("click", function(){
+          placed.remove(); chip.classList.remove("used");
+          if(!zone.querySelector(".in-zone")) zone.appendChild(empty);
+        });
+        zone.appendChild(placed);
+      });
+      bank.appendChild(chip);
+    });
+    var chk = bigBtn("Kiểm tra câu này", "btn-primary"); chk.style.marginTop = "14px";
+    chk.addEventListener("click", function(){
+      var built = Array.prototype.map.call(zone.querySelectorAll(".in-zone"), function(p){ return p.textContent; }).join(" ");
+      if(!built){ toast("Bác hãy bấm các từ để xếp thành câu đã nhé."); return; }
+      var ok = normalize(built) === normalize(clean);
+      if(ok) score++;
+      chk.disabled = true;
+      box.appendChild(gEl("p", "game-note", ok ? ("✓ Đúng rồi! Câu đúng: “" + s.en + "”") : ("Chưa đúng. Câu đúng là: “" + s.en + "”")));
+      var nx = bigBtn("Câu tiếp theo →", "btn-accent"); nx.style.marginTop = "10px";
+      nx.addEventListener("click", function(){ idx++; next(); });
+      box.appendChild(nx);
+    });
+    box.appendChild(chk);
+  }
+  next();
+}
+
+/* ---------- Game 4: Điền chữ còn thiếu ---------- */
+function gameFill(wrap, L){
+  var rounds = shuffle(L.vocab.slice());
+  var idx = 0, score = 0;
+  var status = gEl("p", "game-status"); wrap.appendChild(status);
+  var box = gEl("div", ""); wrap.appendChild(box);
+  var LETTERS = "aeioutrnslmh";
+  function targetWord(v){
+    var ws = v.en.replace(/[^A-Za-z ]/g, "").split(/\s+/).filter(function(w){ return w.length >= 3; });
+    if(!ws.length) return v.en.replace(/[^A-Za-z]/g, "").toLowerCase();
+    ws.sort(function(a, b){ return b.length - a.length; });
+    return ws[0].toLowerCase();
+  }
+  function next(){
+    box.innerHTML = "";
+    if(idx >= rounds.length){
+      var pct = Math.round(score / rounds.length * 100);
+      finishGame(pct >= 80, pct, "Điền đúng " + score + " / " + rounds.length + " từ", pct >= 80 ? "Bác nhớ mặt chữ rất tốt — bài đã hoàn thành!" : "Chưa đạt 80% — bác ôn lại mặt chữ các từ rồi chơi lại nhé.");
+      return;
+    }
+    var v = rounds[idx];
+    var word = targetWord(v);
+    status.textContent = "Từ " + (idx + 1) + " / " + rounds.length + " · Đúng: " + score;
+    box.appendChild(gEl("p", "game-q", "Từ này nghĩa là: “" + v.vi + "”. Chọn chữ còn thiếu để hoàn thiện từ:"));
+    var nBlank = word.length >= 7 ? 2 : 1;
+    var positions = [];
+    while(positions.length < nBlank){
+      var p = Math.floor(Math.random() * word.length);
+      if(positions.indexOf(p) < 0) positions.push(p);
+    }
+    positions.sort(function(a, b){ return a - b; });
+    var blanks = positions.map(function(){ return ""; });
+    var disp = gEl("div", "fill-word");
+    function renderDisp(){
+      disp.innerHTML = "";
+      word.split("").forEach(function(ch, i){
+        var pi = positions.indexOf(i);
+        disp.appendChild(gEl("span", pi >= 0 ? "fill-slot" : "fill-ch", pi >= 0 ? (blanks[pi] || "_") : ch));
+      });
+    }
+    renderDisp(); box.appendChild(disp);
+    var bank = gEl("div", "letter-bank"); box.appendChild(bank);
+    function showCheck(){
+      bank.innerHTML = "";
+      var chk = bigBtn("Kiểm tra từ này", "btn-primary");
+      chk.addEventListener("click", function(){
+        var ok = positions.every(function(p, i){ return blanks[i] === word[p]; });
+        if(ok) score++; else recordWrong(v.en);
+        box.appendChild(gEl("p", "game-note", ok ? ("✓ Đúng rồi! Từ đúng: " + word) : ("Chưa đúng. Từ đúng là: " + word)));
+        var nx = bigBtn("Từ tiếp theo →", "btn-accent"); nx.style.marginTop = "10px";
+        nx.addEventListener("click", function(){ idx++; next(); });
+        box.appendChild(nx);
+        chk.disabled = true;
+      });
+      bank.appendChild(chk);
+    }
+    function renderBank(bi){
+      bank.innerHTML = "";
+      var correct = word[positions[bi]];
+      var opts = [correct];
+      while(opts.length < 4){
+        var c = LETTERS[Math.floor(Math.random() * LETTERS.length)];
+        if(opts.indexOf(c) < 0) opts.push(c);
+      }
+      shuffle(opts).forEach(function(c){
+        var b = gEl("button", "letter-btn", c); b.type = "button";
+        b.addEventListener("click", function(){
+          blanks[bi] = c;
+          renderDisp();
+          var nb = blanks.indexOf("");
+          if(nb >= 0) renderBank(nb); else showCheck();
+        });
+        bank.appendChild(b);
+      });
+    }
+    renderBank(0);
+  }
+  next();
+}
+
+/* ---------- Game 5: Nối cặp ---------- */
+function gameMatch(wrap, L){
+  var status = gEl("p", "game-status"); wrap.appendChild(status);
+  var cols = gEl("div", "match-cols"); wrap.appendChild(cols);
+  var colEn = gEl("div", "match-col"); var colVi = gEl("div", "match-col");
+  cols.appendChild(colEn); cols.appendChild(colVi);
+  var sel = null, matched = 0, firstTry = 0, errored = {};
+  function upd(){ status.textContent = "Đã nối đúng " + matched + " / 5 cặp · Nối chuẩn ngay lần đầu: " + firstTry + " cặp"; }
+  upd();
+  shuffle(L.vocab.slice()).forEach(function(v){
+    var b = gEl("button", "match-btn", v.en); b.type = "button";
+    b.addEventListener("click", function(){
+      if(b.classList.contains("done")) return;
+      colEn.querySelectorAll(".match-btn").forEach(function(x){ x.classList.remove("sel"); });
+      b.classList.add("sel"); sel = {v:v, b:b};
+    });
+    colEn.appendChild(b);
+  });
+  shuffle(L.vocab.slice()).forEach(function(v){
+    var b = gEl("button", "match-btn", v.vi); b.type = "button";
+    b.addEventListener("click", function(){
+      if(b.classList.contains("done")) return;
+      if(!sel){ toast("Bác chọn một từ tiếng Anh ở cột trái trước nhé."); return; }
+      if(sel.v.en === v.en){
+        b.classList.add("done"); sel.b.classList.add("done"); sel.b.classList.remove("sel");
+        if(!errored[v.en]) firstTry++;
+        matched++; sel = null; upd();
+        if(matched === 5){
+          var pct = Math.round(firstTry / 5 * 100);
+          setTimeout(function(){ finishGame(pct >= 80, pct, "Nối xong cả 5 cặp!", "Bác nối chuẩn ngay lần đầu " + firstTry + " / 5 cặp (" + pct + "%). " + (pct >= 80 ? "Rất tốt — bài đã hoàn thành!" : "Chưa đạt 80% — bác ôn lại nghĩa các từ rồi chơi lại nhé.")); }, 400);
+        }
+      } else {
+        errored[sel.v.en] = true; recordWrong(sel.v.en);
+        b.classList.add("badflash");
+        setTimeout(function(){ b.classList.remove("badflash"); }, 600);
+        toast("Chưa đúng cặp — bác thử nghĩa khác nhé.");
+      }
+    });
+    colVi.appendChild(b);
+  });
+}
+
+/* ---------- Game 6: Săn điểm tốc độ ---------- */
+function gameSpeed(wrap, L){
+  var session = ++gameSession;
+  var pts = 0, streak = 0, timeLeft = 60, over = false;
+  var status = gEl("p", "game-status"); wrap.appendChild(status);
+  var prompt = gEl("p", "speed-prompt"); wrap.appendChild(prompt);
+  var box = gEl("div", ""); wrap.appendChild(box);
+  function upd(){ status.textContent = "⏱ Còn " + timeLeft + " giây · Điểm: " + pts + " · Đúng liền mạch: " + streak; }
+  function round(){
+    if(over || session !== gameSession) return;
+    box.innerHTML = "";
+    var v = L.vocab[Math.floor(Math.random() * L.vocab.length)];
+    prompt.textContent = "“" + v.vi + "” tiếng Anh là…?";
+    var others = shuffle(L.vocab.filter(function(x){ return x.en !== v.en; })).slice(0, 2);
+    var items = shuffle([{label:v.en, ok:true}].concat(others.map(function(o){ return {label:o.en, ok:false}; })));
+    var grid = optGrid(items, function(it, btn, g){
+      if(over) return;
+      markPick(g, btn, it.ok);
+      if(it.ok){ pts += 10; streak++; if(streak % 3 === 0) pts += 5; }
+      else { streak = 0; timeLeft = Math.max(0, timeLeft - 3); recordWrong(v.en); }
+      upd();
+      setTimeout(round, 450);
+    });
+    box.appendChild(grid);
+  }
+  upd(); round();
+  gameTimer = setInterval(function(){
+    if(session !== gameSession){ stopGameTimer(); return; }
+    timeLeft--;
+    upd();
+    if(timeLeft <= 0){
+      over = true; stopGameTimer();
+      finishGame(pts >= 50, Math.min(100, pts), "Được " + pts + " điểm trong 60 giây", pts >= 50 ? "Tốc độ của bác rất nhanh — bài đã hoàn thành!" : "Cần từ 50 điểm mới đạt — bác chơi lại, chọn nhanh và chắc tay hơn nhé.");
+    }
+  }, 1000);
+}
+
+/* ---------- Game 7: Nghe và chọn câu đúng ---------- */
+function gameListenSentence(wrap, L){
+  var pool = lessonSentences(L);
+  var chPool = [];
+  chapterLessons(L.ch).forEach(function(x){ chPool = chPool.concat(lessonSentences(x)); });
+  chPool = chPool.filter(function(s, i, a){ return a.indexOf(s) === i; });
+  var rounds = shuffle(pool.slice()).slice(0, 5);
+  var idx = 0, score = 0;
+  var status = gEl("p", "game-status"); wrap.appendChild(status);
+  var box = gEl("div", ""); wrap.appendChild(box);
+  function next(){
+    box.innerHTML = "";
+    if(idx >= rounds.length){
+      var pct = Math.round(score / rounds.length * 100);
+      finishGame(pct >= 80, pct, "Nghe đúng " + score + " / " + rounds.length + " câu", pct >= 80 ? "Bác nghe câu hoàn chỉnh rất tốt — bài đã hoàn thành!" : "Chưa đạt 80% — bác nghe lại các câu mẫu trong bài rồi chơi lại nhé.");
+      return;
+    }
+    var s = rounds[idx];
+    status.textContent = "Câu " + (idx + 1) + " / " + rounds.length + " · Đúng: " + score;
+    var lb = speakBtn(s, 0.8, "Nghe câu này", false); lb.style.marginBottom = "14px";
+    box.appendChild(lb);
+    box.appendChild(gEl("p", "game-q", "Câu bác vừa nghe là câu nào?"));
+    var distract = shuffle(chPool.filter(function(x){ return x !== s; })).slice(0, 2);
+    var items = shuffle([{label:s, ok:true}].concat(distract.map(function(d){ return {label:d, ok:false}; })));
+    var grid = optGrid(items, function(it, btn, g){
+      markPick(g, btn, it.ok);
+      if(it.ok) score++;
+      idx++;
+      setTimeout(next, 1100);
+    });
+    grid.classList.add("one-col");
+    box.appendChild(grid);
+    setTimeout(function(){ speak(s, 0.8); }, 350);
+  }
+  next();
+}
+
+/* ---------- Game 8: Đúng hay Sai ---------- */
+function gameTrueFalse(wrap, L){
+  var rounds = shuffle(L.vocab.slice());
+  var idx = 0, score = 0;
+  var status = gEl("p", "game-status"); wrap.appendChild(status);
+  var box = gEl("div", ""); wrap.appendChild(box);
+  function next(){
+    box.innerHTML = "";
+    if(idx >= rounds.length){
+      var pct = Math.round(score / rounds.length * 100);
+      finishGame(pct >= 80, pct, "Đúng " + score + " / " + rounds.length + " câu", pct >= 80 ? "Bác phân biệt nghĩa rất nhanh — bài đã hoàn thành!" : "Chưa đạt 80% — bác ôn lại nghĩa các từ rồi chơi lại nhé.");
+      return;
+    }
+    var v = rounds[idx];
+    var isTrue = Math.random() < 0.5;
+    var shownVi = v.vi;
+    if(!isTrue){
+      var others = L.vocab.filter(function(x){ return x.en !== v.en; });
+      shownVi = others[Math.floor(Math.random() * others.length)].vi;
+    }
+    status.textContent = "Câu " + (idx + 1) + " / " + rounds.length + " · Đúng: " + score;
+    var card = gEl("div", "tf-card");
+    card.appendChild(gEl("div", "tf-en", v.en));
+    card.appendChild(gEl("div", "tf-vi", "nghĩa là: " + shownVi));
+    box.appendChild(card);
+    box.appendChild(gEl("p", "game-q", "Nghĩa này đúng hay sai?"));
+    var row = gEl("div", "tf-row");
+    [["Đúng ✓", true], ["Sai ✗", false]].forEach(function(pair){
+      var b = bigBtn(pair[0], pair[1] ? "btn-primary" : "btn-accent");
+      b.addEventListener("click", function(){
+        var ok = pair[1] === isTrue;
+        if(ok) score++; else recordWrong(v.en);
+        row.querySelectorAll("button").forEach(function(x){ x.disabled = true; });
+        box.appendChild(gEl("p", "game-note", ok ? ("✓ Đúng rồi! “" + v.en + "” = " + v.vi) : ("Chưa đúng. “" + v.en + "” = " + v.vi)));
+        var nx = bigBtn("Câu tiếp theo →", "btn-primary"); nx.style.marginTop = "10px";
+        nx.addEventListener("click", function(){ idx++; next(); });
+        box.appendChild(nx);
+      });
+      row.appendChild(b);
+    });
+    box.appendChild(row);
+  }
+  next();
+}
+
+/* ---------- Game 9: Ghép hội thoại ---------- */
+function gameDialogueOrder(wrap, L){
+  var lines = L.dialogue.slice();
+  var status = gEl("p", "game-status"); wrap.appendChild(status);
+  var placed = gEl("div", "order-zone dlg-placed"); wrap.appendChild(placed);
+  placed.appendChild(gEl("span", "oz-empty", "Các câu bác chọn đúng thứ tự sẽ hiện ở đây…"));
+  var list = gEl("div", "dlg-pick"); wrap.appendChild(list);
+  var expect = 0, errors = 0;
+  function upd(){ status.textContent = "Đã xếp đúng " + expect + " / " + lines.length + " câu · Bấm nhầm: " + errors + " lần"; }
+  upd();
+  shuffle(lines.map(function(d, i){ return {d:d, i:i}; })).forEach(function(it){
+    var b = gEl("button", "dlg-pick-btn", ""); b.type = "button";
+    b.appendChild(gEl("span", "dp-who", "Người " + it.d.who + " · " + it.d.name));
+    b.appendChild(gEl("span", "dp-en", it.d.en));
+    b.addEventListener("click", function(){
+      if(b.classList.contains("done")) return;
+      if(it.i === expect){
+        b.classList.add("done");
+        var e = placed.querySelector(".oz-empty"); if(e) e.remove();
+        placed.appendChild(gEl("div", "placed-line", (expect + 1) + ". " + it.d.en));
+        expect++; upd();
+        if(expect === lines.length){
+          var pct = Math.round(lines.length / (lines.length + errors) * 100);
+          setTimeout(function(){ finishGame(pct >= 80, pct, "Xếp xong cả đoạn hội thoại!", "Bác bấm nhầm " + errors + " lần (điểm " + pct + "%). " + (pct >= 80 ? "Bác nhớ hội thoại rất tốt — bài đã hoàn thành!" : "Chưa đạt 80% — bác đọc lại hội thoại ở mục 3 · Hội thoại rồi chơi lại nhé.")); }, 400);
+        }
+      } else {
+        errors++; upd();
+        b.classList.add("badflash");
+        setTimeout(function(){ b.classList.remove("badflash"); }, 600);
+        toast("Chưa phải câu tiếp theo — bác nghĩ lại thứ tự nhé.");
+      }
+    });
+    list.appendChild(b);
+  });
+}
+
+/* ---------- Game 10: Thử thách tổng ôn chương ---------- */
+function gameChallenge(wrap, L){
+  var vp = chapterVocab(L.ch);
+  var vs = shuffle(vp.slice());
+  var qs = [];
+  for(var i = 0; i < 5; i++){
+    var v = vs[i];
+    var others = shuffle(vp.filter(function(x){ return x.en !== v.en; })).slice(0, 3).map(function(o){ return o.vi; });
+    var opts = shuffle([v.vi].concat(others));
+    qs.push({type:"mcq", tag:"Tổng ôn · Chọn nghĩa đúng", q:"“" + v.en + "” nghĩa là gì?", opts:opts, answer:opts.indexOf(v.vi), explain:"“" + v.en + "” = " + v.vi + "."});
+  }
+  for(var j = 0; j < 3; j++){
+    var lv = vs[5 + j];
+    var o2 = shuffle(vp.filter(function(x){ return x.en !== lv.en; })).slice(0, 3).map(function(o){ return o.en; });
+    var opts2 = shuffle([lv.en].concat(o2));
+    qs.push({type:"listen", tag:"Tổng ôn · Nghe rồi chọn", q:"Bấm nút nghe, rồi chọn từ bác vừa nghe được:", listen:lv.en, opts:opts2, answer:opts2.indexOf(lv.en), explain:"Từ vừa đọc là “" + lv.en + "” — " + lv.vi + "."});
+  }
+  var phrasesPool = [];
+  chapterLessons(L.ch).forEach(function(x){ x.phrases.forEach(function(p){ phrasesPool.push(p); }); });
+  shuffle(phrasesPool.slice()).slice(0, 2).forEach(function(ph){
+    var words = ph.en.replace(/[.!?]/g, "").split(/\s+/).filter(Boolean);
+    qs.push({type:"order", tag:"Tổng ôn · Sắp xếp thành câu", q:"Sắp xếp thành câu “" + ph.vi + "”:", words:words, sentence:words.join(" "), explain:"Câu đúng: “" + ph.en + "” — " + ph.vi + "."});
+  });
+  qs = shuffle(qs);
+  wrap.appendChild(gEl("p", "game-q", "10 câu hỏi trộn của cả chương. Bác có 3 mạng ❤❤❤ — mỗi câu sai mất 1 mạng. Đúng từ 8/10 câu là hoàn thành bài và cả chương!"));
+  var qw = gEl("div", ""); wrap.appendChild(qw);
+  buildQuiz(qs, qw);
+  var sub = bigBtn("Chấm bài thử thách", "btn-primary"); sub.style.marginTop = "6px";
+  sub.addEventListener("click", function(){
+    var r = gradeQuiz(qs, qw);
+    if(!r.answeredAll){ toast("Bác trả lời hết 10 câu đã nhé — còn câu chưa làm."); return; }
+    sub.disabled = true;
+    var wrong = qs.length - r.score;
+    var lives = 3 - wrong;
+    var hearts = lives > 0 ? new Array(lives + 1).join("❤") : "hết mạng";
+    finishGame(r.score >= 8, r.score * 10, "Đúng " + r.score + " / 10 câu · Mạng còn: " + hearts, r.score >= 8 ? "Bác đã vượt qua thử thách tổng ôn — hoàn thành cả chương này!" : "Cần đúng ít nhất 8/10 câu. Bác xem lại giải thích ở từng câu, ôn thêm rồi thử lại nhé.");
+  });
+  wrap.appendChild(sub);
+}
+
 
 /* Total quiz */
 document.getElementById("openTotalQuiz").addEventListener("click", function(){
@@ -3494,7 +4122,7 @@ document.addEventListener("keydown", function(e){
 document.addEventListener("click", function(e){
   if(!menuOpen()) return;
   var t = e.target;
-  if(t.closest && (t.closest(".tab-btn") || t.closest(".lesson-card") || t.closest("[data-backhome]") ||
+  if(t.closest && (t.closest(".tab-btn") || t.closest(".lesson-row") || t.closest("[data-backhome]") ||
       t.closest("#backHome") || t.closest("#brandHome") || t.closest("#ctaStart") || t.closest("#totalDone") ||
       t.closest("[data-open-lesson]"))) closeDisplayMenu(false);
 });
