@@ -4,6 +4,7 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
 <meta name="color-scheme" content="light dark" />
+<meta name="description" content="Trang học tiếng Anh cho người mới bắt đầu: 6 chương, 60 bài nhỏ, từ vựng có phiên âm, hội thoại mỗi người 5 câu, trò chơi cuối mỗi bài và luyện nói bằng mic." />
 <link rel="icon" href="data:," />
 <title>Học Tiếng Anh Cho Người Mới Bắt Đầu</title>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -22,6 +23,7 @@
   --primary:#175C33;
   --primary-strong:#0E4525;
   --primary-soft:#E3F0E4;
+  --on-primary:#FFF7E6;
   --accent:#C2410C;
   --accent-strong:#9A3412;
   --accent-soft:#FFEEDD;
@@ -49,6 +51,7 @@ html[data-font="xlarge"]{ --fs-base:24px; }
     --bg:#131A15; --bg-soft:#182119; --surface:#1C261E; --surface-2:#212D23;
     --ink:#F2EFE4; --ink-2:#D8DECF; --muted:#B9C4B0;
     --primary:#7FBF92; --primary-strong:#A5D8B4; --primary-soft:#243A28;
+    --on-primary:#12241A; --banner-ink:#0E4525;
     --accent:#F2A56B; --accent-strong:#FFC79B; --accent-soft:#3A2A1C;
     --border:#35443A; --border-strong:#50624f;
     --success:#8FD3A4; --success-soft:#22392A;
@@ -62,6 +65,7 @@ html.hc{
   --bg:#FFFFFF; --bg-soft:#FFFFFF; --surface:#FFFFFF; --surface-2:#FFFDE7;
   --ink:#000000; --ink-2:#111111; --muted:#222222;
   --primary:#003D1E; --primary-strong:#002B14; --primary-soft:#DFF5E3;
+  --on-primary:#FFFFFF;
   --accent:#8F2D00; --accent-strong:#6E2200; --accent-soft:#FFE4C2;
   --border:#000000; --border-strong:#000000;
   --success:#00572A; --danger:#8F0F08; --focus:#0000CC;
@@ -92,13 +96,13 @@ header.site{
 .brand{display:flex; align-items:center; gap:12px; margin-right:auto; text-decoration:none; color:var(--ink)}
 .brand-mark{
   width:52px; height:52px; border-radius:16px; flex:none;
-  background:var(--primary); color:#FFF7E6;
+  background:var(--primary); color:var(--on-primary);
   display:flex; align-items:center; justify-content:center;
   font-family:var(--font-display); font-weight:700; font-size:1.35rem;
 }
-html.hc .brand-mark{color:#fff}
-@media (prefers-color-scheme: dark){ .brand-mark{color:#12241A} }
-html.hc .brand-mark{color:#fff}
+html.hc .brand-mark{color:var(--on-primary)}
+@media (prefers-color-scheme: dark){ .brand-mark{color:var(--on-primary)} }
+html.hc .brand-mark{color:var(--on-primary)}
 .brand b{font-size:1.02em; line-height:1.3; display:block}
 .brand span{font-size:.78em; color:var(--muted); display:block; font-weight:500}
 .a11y-bar{display:flex; align-items:center; gap:8px; flex-wrap:wrap}
@@ -164,7 +168,7 @@ html.hc .btn-primary{color:#fff}
   border:1.5px solid var(--accent);
 }
 .hero h1{font-size:2.35em; font-weight:700; letter-spacing:-.01em; margin:18px 0 14px}
-.hero h1 em{font-style:italic; color:var(--primary)}
+.hero h1 em{font-style:normal; color:var(--primary)}
 .hero-sub{font-size:1.08em; color:var(--ink-2); max-width:34em; margin-bottom:26px}
 .hero-cta{display:flex; gap:12px; flex-wrap:wrap; align-items:center}
 .hero-note{margin-top:16px; font-size:.9em; color:var(--muted); font-weight:500}
@@ -195,11 +199,11 @@ section.block{padding:38px 0}
   padding:26px; box-shadow:var(--shadow-sm);
 }
 .progress-top{display:flex; flex-wrap:wrap; gap:22px; align-items:flex-end; justify-content:space-between}
-.stat b{font-size:1.7em; font-variant-numeric:tabular-nums; color:var(--primary); display:block; line-height:1.15}
+.stat b{font-size:1.7em; font-variant-numeric:tabular-nums; color:var(--primary); display:block; line-height:1.3}
 .stat span{font-size:.85em; color:var(--muted); font-weight:600}
 .bar{height:22px; background:var(--bg-soft); border:2px solid var(--border); border-radius:var(--r-pill); overflow:hidden; margin-top:18px}
 html.hc .bar{background:#fff}
-.bar-fill{height:100%; width:0%; background:var(--primary); border-radius:var(--r-pill); transition:width .6s cubic-bezier(.22,1,.36,1)}
+.bar-fill{height:100%; width:100%; background:var(--primary); border-radius:var(--r-pill); transform:scaleX(0); transform-origin:left center; transition:transform .6s cubic-bezier(.22,1,.36,1)}
 .bar-label{margin-top:8px; font-weight:700; font-size:.92em}
 .badges-row{display:flex; gap:8px; flex-wrap:wrap; margin-top:14px}
 .badge-chip{
@@ -267,7 +271,7 @@ html.hc .step-num{color:#fff}
 .lc-meta{display:flex; gap:8px; flex-wrap:wrap}
 .lc-meta span{background:var(--bg-soft); border:1.5px solid var(--border); padding:5px 12px; border-radius:var(--r-pill); font-size:.8em; font-weight:700; color:var(--muted)}
 .lc-mini-bar{height:10px; background:var(--bg-soft); border:1.5px solid var(--border); border-radius:var(--r-pill); overflow:hidden}
-.lc-mini-fill{height:100%; background:var(--accent); width:0%; transition:width .5s ease}
+.lc-mini-fill{height:100%; background:var(--accent); width:100%; transform:scaleX(0); transform-origin:left center; transition:transform .5s ease}
 .lc-open{font-weight:800; color:var(--primary); display:inline-flex; align-items:center; gap:8px}
 
 /* ============ ROADMAP (bản đồ lộ trình) ============ */
@@ -319,7 +323,7 @@ html.hc .rm-stage.now .rm-dot{color:#fff}
 .rm-goal b{color:var(--ink)}
 .rm-bar{height:16px; background:var(--bg-soft); border:2px solid var(--border); border-radius:var(--r-pill); overflow:hidden; margin-top:16px}
 html.hc .rm-bar{background:#fff}
-.rm-bar-fill{height:100%; width:0%; background:var(--accent); border-radius:var(--r-pill); transition:width .6s cubic-bezier(.22,1,.36,1)}
+.rm-bar-fill{height:100%; width:100%; background:var(--accent); border-radius:var(--r-pill); transform:scaleX(0); transform-origin:left center; transition:transform .6s cubic-bezier(.22,1,.36,1)}
 .rm-note{margin-top:10px; font-weight:700; font-size:.95em}
 @media (max-width:560px){
   .roadmap::before{left:25px}
@@ -447,8 +451,8 @@ html.hc .tab-btn[aria-selected="true"]{color:#fff}
 .fc-back{background:var(--primary); color:#FFF8EA; transform:rotateY(180deg); box-shadow:var(--shadow)}
 @media (prefers-color-scheme: dark){ .fc-back{color:#12241A} }
 html.hc .fc-back{color:#fff}
-.fc-face .fc-hint{font-size:.8em; font-weight:800; letter-spacing:.05em; text-transform:uppercase; opacity:.75}
-.fc-word{font-family:var(--font-display); font-size:2.5em; font-weight:700; line-height:1.2}
+.fc-face .fc-hint{font-size:.8em; font-weight:800; letter-spacing:.05em; text-transform:uppercase; opacity:.88}
+.fc-word{font-family:var(--font-display); font-size:2.5em; font-weight:700; line-height:1.3}
 .fc-ipa{font-size:1.15em; font-weight:700; color:var(--accent-strong)}
 .fc-back .fc-ipa{color:inherit; opacity:.9}
 .fc-vi{font-size:1.4em; font-weight:800}
@@ -617,7 +621,7 @@ header.site{padding-top:env(safe-area-inset-top,0px)}
 footer.site{padding-bottom:calc(46px + env(safe-area-inset-bottom,0px))}
 
 /* --- Tiêu đề co giãn theo bề ngang màn hình --- */
-.hero h1{font-size:clamp(30px,8.5vw,44px); line-height:1.28}
+.hero h1{font-size:clamp(30px,8.5vw,44px); line-height:1.32}
 .lesson-head h1{font-size:clamp(28px,8vw,40px); line-height:1.3}
 .sec-head h2{font-size:clamp(24px,6.8vw,34px); line-height:1.32}
 .total-banner h2{font-size:clamp(24px,6.8vw,32px); line-height:1.32}
@@ -942,7 +946,7 @@ html[data-font="small"] .sub-h{font-size:clamp(20px,5.8vw,25px)}
   min-width:56px; min-height:56px; padding:8px 16px;
   border-radius:14px; border:2px solid var(--border-strong);
   background:var(--surface); color:var(--ink);
-  font-size:max(16px,.9em); font-weight:800; line-height:1.2;
+  font-size:max(16px,.9em); font-weight:800; line-height:1.3;
   transition:border-color .18s ease, background-color .18s ease, transform .15s ease;
   touch-action:manipulation;
 }
@@ -955,7 +959,7 @@ html.hc .menu-toggle[aria-expanded="true"]{color:#fff}
 .menu-label{white-space:nowrap}
 .display-menu{
   position:absolute; top:calc(100% + 10px); right:0; z-index:80;
-  width:min(368px,calc(100vw - 24px));
+  width:100%; max-width:368px;
   max-height:calc(100dvh - 96px); overflow-y:auto;
   background:var(--surface); border:2px solid var(--border-strong); border-radius:var(--r-md);
   box-shadow:var(--shadow); padding:18px;
@@ -1176,6 +1180,57 @@ footer.site{padding-bottom:calc(120px + env(safe-area-inset-bottom,0px))}
   .menu-toggle{padding:8px 12px; gap:7px}
 }
 
+/* ============================================================
+   V14 — MIC TRONG WEBVIEW + TỐI ƯU ĐIỆN THOẠI TOÀN DIỆN
+   (rà bằng Impeccable detector, Hallmark sloplint và checklist ECC)
+   · .wv-note: dòng lưu ý gọn cố định trong panel khi trang bị mở
+     trong ứng dụng khác (kèm nút Sao chép địa chỉ).
+   · Menu hiển thị bỏ 100vw, neo theo khung header — hết nguy cơ
+     tràn ngang vì thanh cuộn; cuộn trong menu không lan ra trang.
+   · text-wrap: balance cho tiêu đề, pretty cho đoạn văn (ECC);
+     tabular-nums cho mọi số đếm/điểm còn thiếu; :active cho các
+     nút còn thiếu trạng thái nhấn; tap-highlight trong suốt;
+     toast tôn trọng safe-area đáy; ô nhập (nếu có) sàn 16px để
+     iOS không tự phóng to khi chạm.
+   ============================================================ */
+.wv-note{margin-top:10px; background:var(--accent-soft); border:1.5px solid var(--accent); border-radius:var(--r-sm); padding:10px 12px}
+.wv-note p{font-weight:600; font-size:max(16px,.92em); line-height:1.5}
+.wv-note .rb-actions{margin-top:8px}
+#speakInAppGuide{margin-top:12px}
+#speakInAppGuide .wv-note{margin-top:0}
+.header-in{position:relative}
+.menu-wrap{position:static}
+.display-menu{overscroll-behavior:contain}
+h1,h2,h3{text-wrap:balance}
+p{text-wrap:pretty}
+.stat span,.num-chip span,.num-chip small,.hc-state,.lr-status,.game-state{font-variant-numeric:tabular-nums}
+button,a{touch-action:manipulation}
+*{-webkit-tap-highlight-color:transparent}
+.match-btn,.dlg-pick-btn{transition:transform .15s ease, background-color .18s ease, border-color .18s ease}
+.match-btn:active,.dlg-pick-btn:active,.mem-tile:active{transform:scale(.97)}
+.ch-head:active{transform:scale(.99)}
+.seg button:active{background:var(--primary-soft)}
+html,body{overscroll-behavior-x:none}
+.toast{bottom:calc(26px + env(safe-area-inset-bottom,0px))}
+input,select,textarea{font-size:max(16px,1em)}
+img{max-width:100%; height:auto}
+@media (prefers-color-scheme: dark){
+  /* Nút trong banner xanh có nền kem cố định: ở chế độ tối phải giữ
+     chữ xanh đậm như bản sáng, tránh chữ xanh nhạt trên nền kem
+     (detector đo chỉ 1.5:1). */
+  .total-banner .btn{color:var(--banner-ink)}
+}
+@media (max-width:700px){
+  /* Nút hành động trong panel Đọc lại là nút chính của panel: ≥56px */
+  .rb-actions .icon-btn{min-height:56px}
+}
+h1,h2,h3{line-height:1.32}
+/* Hộp “Aa”: quy tắc .brand span (màu muted cho dòng phụ đề) thắng
+   .brand-mark về độ ưu tiên nên chữ Aa bị nhuộm màu xám trên nền
+   xanh (detector đo 1.2–1.5:1). Ghim lại màu chữ đúng ý đồ bằng
+   selector mạnh hơn cho cả 3 chế độ màu. */
+.brand .brand-mark{color:var(--on-primary)}
+
 </style>
 </head>
 <body>
@@ -1358,7 +1413,7 @@ footer.site{padding-bottom:calc(120px + env(safe-area-inset-bottom,0px))}
                 <h3>Làm quen</h3>
                 <p class="rm-level">Cấp độ: Pre-A1 đến đầu A1 — mức làm quen đầu tiên</p>
               </div>
-              <span class="rm-flag here" id="rmFlag1">📍 Bạn đang ở đây</span>
+              <span class="rm-flag here" id="rmFlag1">Bạn đang ở đây</span>
             </div>
             <p class="rm-desc">Đây chính là khóa học bác đang học ở ngay phía trên: 6 chương theo 6 chủ đề đời thường, mỗi chương 10 bài nhỏ — tổng cộng 60 bài.</p>
             <div class="rm-topics" aria-label="Các bài trong chặng 1">
@@ -1870,7 +1925,7 @@ function refreshProgress(){
   document.getElementById("statStreakHero").textContent = state.streak||0;
   document.getElementById("statPctHero").textContent = pct + "%";
   var bar = document.getElementById("mainBar");
-  document.getElementById("mainBarFill").style.width = pct + "%";
+  document.getElementById("mainBarFill").style.transform = "scaleX(" + (pct / 100) + ")";
   bar.setAttribute("aria-valuenow", String(pct));
   var label = document.getElementById("barLabel");
   if(done===0) label.textContent = "Hãy bắt đầu với " + nextLessonLabel() + " nhé!";
@@ -1904,7 +1959,7 @@ function renderRoadmap(){
   var total = LESSONS.length;
   var pct = Math.round((done / total) * 100);
   var bar = document.getElementById("rmBar1");
-  document.getElementById("rmBarFill1").style.width = pct + "%";
+  document.getElementById("rmBarFill1").style.transform = "scaleX(" + (pct / 100) + ")";
   bar.setAttribute("aria-valuenow", String(done));
   var flag = document.getElementById("rmFlag1");
   var note = document.getElementById("rmNote1");
@@ -1914,7 +1969,7 @@ function renderRoadmap(){
     note.textContent = "Chúc mừng bác — bác đã đi hết Chặng 1! Trong lúc chờ Chặng 2 đang được chuẩn bị, bác hãy ôn lại từ vựng ở mục “Ôn lại hôm nay” và thỉnh thoảng làm lại bài kiểm tra tổng hợp để nhớ thật lâu nhé.";
   } else {
     stage.classList.add("now"); stage.classList.remove("done");
-    flag.className = "rm-flag here"; flag.textContent = "📍 Bạn đang ở đây";
+    flag.className = "rm-flag here"; flag.textContent = "Bạn đang ở đây";
     if(done === 0) note.textContent = "Bác đã hoàn thành 0 / " + total + " bài của chặng 1. Hãy bắt đầu với " + nextLessonLabel() + " ở ngay phía trên nhé!";
     else note.textContent = "Bác đã hoàn thành " + done + " / " + total + " bài của chặng 1. Cứ thong thả học tiếp " + nextLessonLabel() + " nhé!";
   }
@@ -1999,7 +2054,7 @@ function renderLessonGrid(){
     chev.textContent = openChapters[C.id] ? "▾ Thu gọn" : "▸ Xem 10 bài";
     hmeta.appendChild(hp); hmeta.appendChild(chev); head.appendChild(hmeta);
     var bar = document.createElement("div"); bar.className = "lc-mini-bar ch-bar";
-    var fill = document.createElement("div"); fill.className = "lc-mini-fill"; fill.style.width = (dn*10) + "%";
+    var fill = document.createElement("div"); fill.className = "lc-mini-fill"; fill.style.transform = "scaleX(" + (dn / 10) + ")";
     bar.appendChild(fill); card.appendChild(head); card.appendChild(bar);
     var body = document.createElement("div"); body.className = "ch-body";
     body.style.display = openChapters[C.id] ? "flex" : "none";
@@ -2479,7 +2534,7 @@ function spSRAdapter(session){
       else if(kind === "no-speech") spStatus("Chưa nghe thấy tiếng. Bác bấm mic và đọc to hơn một chút nhé.");
       else if(kind === "network") spStatus("Mạng đang yếu nên chưa nghe được. Bác kiểm tra Wi-Fi/4G rồi bấm mic thử lại nhé.");
       else spStatus("Có trục trặc nhỏ với mic. Bác thử lại sau một chút nhé.");
-      if(inAppBrowserInfo() && !inAppGuideShown){ inAppGuideShown = true; showSpeakInAppGuide(); }
+      if(inAppBrowserInfo()) showSpeakWebviewNote();
     },
     ended: function(gotResult, meta){
       document.getElementById("micBtn").classList.remove("listening");
@@ -2501,21 +2556,17 @@ document.getElementById("micBtn").addEventListener("click", function(){
   }
   if(window.speechSynthesis){ try{ window.speechSynthesis.cancel(); }catch(e){} }
   hideSpeakSelfCheck();
-  /* Mở trong trình duyệt nhúng của app khác: hiện hướng dẫn mở bằng
-     Chrome/Safari một lần trước khi bật mic (không chặn cứng). */
-  if(inAppBrowserInfo() && !inAppGuideShown){
-    inAppGuideShown = true;
-    showSpeakInAppGuide();
-    spStatus("Bác xem lưu ý trong khung màu cam ở dưới trước khi bật mic nhé.");
-    return;
-  }
-  if(rbSupported()){
+  /* Trình duyệt nhúng của app khác: BỎ HẲN SpeechRecognition (không có
+     kênh thu âm đáng tin trong WKWebView — lần đầu vớt được, lần hai
+     chết), chạy thẳng ghi âm tự kiểm tra ngay từ lần bấm đầu tiên. */
+  if(rbSupported() && !inAppBrowserInfo()){
     var session = MicSessions.begin({
       key: "speak", kind: "sr", capMs: 20000,
       closeUI: function(){ closeSpeakUI(); }
     });
     startSRSession(session, spSRAdapter(session)); return;
   }
+  if(inAppBrowserInfo()) showSpeakWebviewNote();
   var s2 = MicSessions.begin({
     key: "speak", kind: "record", capMs: 20000,
     closeUI: function(){ closeSpeakUI(); }
@@ -2631,6 +2682,45 @@ function showSpeakInAppGuide(){
     box.style.display = "none";
     document.getElementById("micBtn").click();
   }));
+  box.style.display = "block";
+}
+/* ===== DÒNG LƯU Ý GỌN CHO TRÌNH DUYỆT NHÚNG (WEBVIEW) =====
+   Trong webview của app khác, Đọc lại/Luyện nói chạy ghi âm tự kiểm
+   tra; panel luôn kèm MỘT dòng gọn cố định này + nút sao chép địa chỉ
+   live — không modal chặn, không cần bấm “Vẫn dùng mic ở đây”, chế độ
+   ghi âm chạy ngay từ lần bấm đầu tiên. */
+function webviewNoteEl(){
+  var info = inAppBrowserInfo();
+  if(!info) return null;
+  var box = document.createElement("div"); box.className = "wv-note";
+  var p = document.createElement("p");
+  p.textContent = "Đang mở trong ứng dụng " + info.name + " — bộ nghe tự động không chạy được ở đây. Mở bằng Safari/Chrome để máy chấm tự động.";
+  box.appendChild(p);
+  var actions = document.createElement("div"); actions.className = "rb-actions";
+  var copyBtn = document.createElement("button");
+  copyBtn.type = "button"; copyBtn.className = "icon-btn";
+  copyBtn.textContent = "Sao chép địa chỉ";
+  copyBtn.addEventListener("click", function(){ copyPageAddress(copyBtn); });
+  actions.appendChild(copyBtn);
+  box.appendChild(actions);
+  return box;
+}
+function appendWebviewNote(panel){
+  var n = webviewNoteEl();
+  if(n && panel) panel.appendChild(n);
+}
+function showSpeakWebviewNote(){
+  var box = document.getElementById("speakInAppGuide");
+  if(!box){
+    box = document.createElement("div"); box.id = "speakInAppGuide";
+    var fb = document.getElementById("speakFeedback");
+    if(fb && fb.parentNode) fb.parentNode.insertBefore(box, fb);
+  }
+  if(box.getAttribute("data-wv") === "1"){ box.style.display = "block"; return; }
+  box.innerHTML = "";
+  var note = webviewNoteEl();
+  if(note) box.appendChild(note);
+  box.setAttribute("data-wv", "1");
   box.style.display = "block";
 }
 
@@ -2985,9 +3075,7 @@ function rbShowMessage(ctx, kind){
     }
   }
   panel.appendChild(title); panel.appendChild(text); panel.appendChild(actions);
-  if(kind !== "unsupported" && inAppBrowserInfo()){
-    panel.appendChild(buildInAppGuide(null));
-  }
+  appendWebviewNote(panel);
 }
 function rbShowResult(ctx, best){
   ctx._errStreak = 0;
@@ -3094,14 +3182,13 @@ function startReadback(ctx){
     rbShowIdle(ctx, "Đã dừng ghi âm", "Bác bấm “Đọc lại” khi sẵn sàng nói lại nhé.");
     return;
   }
-  /* Mở trong trình duyệt nhúng của app khác: hiện hướng dẫn mở bằng
-     Chrome/Safari một lần trước khi bật mic (không chặn cứng). */
-  if(inAppBrowserInfo() && !inAppGuideShown){
-    inAppGuideShown = true;
-    rbShowInAppGuide(ctx);
-    return;
-  }
-  var useSR = rbSupported() && !ctx._forceRecord;
+  /* Trình duyệt nhúng của app khác (Gemini/Google, Zalo, Facebook…):
+     SpeechRecognition trong WKWebView không có kênh thu âm đáng tin —
+     lần đầu có thể vớt được, từ lần hai trả no-speech/chết lặng. Vì vậy
+     ở webview BỎ HẲN bộ nhận giọng, chạy thẳng ghi âm tự kiểm tra qua
+     getUserMedia ngay từ lần bấm đầu tiên; panel luôn kèm dòng lưu ý
+     gọn + nút sao chép địa chỉ để mở bằng Safari/Chrome. */
+  var useSR = rbSupported() && !ctx._forceRecord && !inAppBrowserInfo();
   var session = MicSessions.begin({
     key: "readback", ownerCtx: ctx,
     kind: useSR ? "sr" : "record",
@@ -3120,6 +3207,7 @@ function rbShowIdle(ctx, title, text){
   actions.appendChild(rbActionBtn("Nghe chậm lại", function(){ speak(ctx.target, 0.5); }, "slow"));
   actions.appendChild(rbActionBtn("Đọc lại", function(){ startReadback(ctx); }, "mic"));
   panel.appendChild(actions);
+  appendWebviewNote(panel);
   if(ctx.btn) ctx.btn.classList.remove("listening");
 }
 function rbGradingUI(ctx){
@@ -3131,6 +3219,7 @@ function rbGradingUI(ctx){
   var actions = document.createElement("div"); actions.className = "rb-actions";
   actions.appendChild(rbPlayBtn(ctx));
   panel.appendChild(actions);
+  appendWebviewNote(panel);
   if(ctx.btn) ctx.btn.classList.remove("listening");
 }
 function rbPhaseUI(ctx, session, phase){
@@ -3147,6 +3236,7 @@ function rbPhaseUI(ctx, session, phase){
       note.textContent = "Đã dừng phần đọc ở từ trước để bắt đầu ở đây.";
       panel.appendChild(note);
     }
+    appendWebviewNote(panel);
     return;
   }
   var hint = document.createElement("p"); hint.className = "rb-line";
@@ -3164,6 +3254,7 @@ function rbPhaseUI(ctx, session, phase){
     status.appendChild(document.createTextNode(" — bác đang nói"));
     hint.textContent = "Nói xong cứ im lặng khoảng 1 giây, máy tự dừng.";
   }
+  appendWebviewNote(panel);
 }
 function rbSelfAdapter(ctx, session){
   var iv = setInterval(function(){
@@ -3212,6 +3303,7 @@ function rbShowSelfCheck(ctx, session, info){
   }, "vslow"));
   actions.appendChild(rbActionBtn("Chưa đúng, đọc lại", function(){ startReadback(ctx); }, "mic"));
   panel.appendChild(actions);
+  appendWebviewNote(panel);
 }
 /* ===== Đường Web Speech (bộ nghe có sẵn trong Chrome) — qua MicSessionManager =====
    QUAN TRỌNG: phiên nhận giọng CHỈ chạy SpeechRecognition — tuyệt đối
