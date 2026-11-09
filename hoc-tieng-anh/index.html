@@ -1872,6 +1872,13 @@ function pickEnVoice(){
     var s = 0;
     if(lang === "en-us") s += 40; else if(lang.indexOf("en-us") === 0) s += 35; else if(lang === "en-gb") s += 18;
     if(name.indexOf("google us english") >= 0) s += 60;
+    /* Android: giọng Google US English là giọng en-US hay nhất trên
+       Chrome Android; máy Samsung thường chỉ có giọng hệ thống kiểu
+       “English (United States)” — cộng điểm để các biến thể này thắng
+       các giọng rô-bốt mặc định, phần Nghe đều giọng giữa các máy. */
+    if(name.indexOf("us english") >= 0) s += 45;
+    if(name.indexOf("english") >= 0 && lang === "en-us") s += 15;
+    if(name.indexOf("united states") >= 0) s += 15;
     if(name.indexOf("samantha") >= 0) s += 55;
     if(name.indexOf("aria") >= 0 || name.indexOf("jenny") >= 0) s += 45;
     if(name.indexOf("natural") >= 0) s += 30;
@@ -2515,6 +2522,7 @@ function spSelfAdapter(session){
       fb.textContent = "Chế độ tự kiểm tra: bác tự nghe và đánh giá nhé. Câu mẫu: “" + (speakItems[speakIndex] ? speakItems[speakIndex].en : "") + "”. Bản ghi lẫn tiếng ồn (TV, quạt) thì tắt bớt rồi ghi lại sẽ rõ hơn.";
       var w = document.getElementById("speakSelfCheck"); if(w) w.style.display = "flex";
       var n = document.getElementById("speakSelfNote"); if(n) n.style.display = "block";
+      showSpeakVoiceRetry();
     }
   };
 }
@@ -2525,20 +2533,30 @@ function spSRAdapter(session){
       var btn = document.getElementById("micBtn"), fb = document.getElementById("speakFeedback");
       if(p === "listening"){ btn.classList.add("listening"); spStatus("Đang nghe… bác đọc to câu mẫu nhé! Đọc xong cứ dừng lại, trang tự chấm ngay."); fb.className = "feedback"; fb.textContent = ""; }
     },
-    result: function(res){ gradeSpeak(res[0].transcript || ""); },
-    error: function(kind){
+    result: function(res){ noteSrResult(); gradeSpeak(res[0].transcript || ""); },
+    error: function(kind, meta){
       document.getElementById("micBtn").classList.remove("listening");
+      if(kind === "no-speech" && meta && !meta.started){
+        /* Báo “không nghe thấy tiếng” mà bộ nghe CHƯA HỀ bắt đầu nghe
+           (không có onstart): phiên chết lặng của nền tảng chứ không
+           phải bác im lặng — tự cứu sang ghi âm tự kiểm tra + ghi nhớ. */
+        speakSrDeadRescue(); return;
+      }
       if(kind === "not-allowed") spStatus("Trang web chưa được phép dùng mic. Bác bấm cho phép (Allow) khi trình duyệt hỏi nhé.");
       else if(kind === "service-not-allowed") spStatus("Bộ nghe đang bị trình duyệt chặn. Bác mở trang bằng Chrome hoặc Safari bản chính, cho phép mic một lần rồi bấm mic thử lại nhé.");
       else if(kind === "audio-capture") spStatus("Mic chưa lên được — có thể mic đang bị ứng dụng khác dùng. Bác đóng hẳn các ứng dụng đó rồi bấm mic thử lại nhé.");
       else if(kind === "no-speech") spStatus("Chưa nghe thấy tiếng. Bác bấm mic và đọc to hơn một chút nhé.");
-      else if(kind === "network") spStatus("Mạng đang yếu nên chưa nghe được. Bác kiểm tra Wi-Fi/4G rồi bấm mic thử lại nhé.");
+      else if(kind === "network"){
+        spStatus("Mạng đang yếu nên chưa nghe được. Bác kiểm tra Wi-Fi/4G rồi bấm mic thử lại nhé.");
+        if(noteSrNetworkError() >= 2) showSpeakNetSuggest();
+      }
       else spStatus("Có trục trặc nhỏ với mic. Bác thử lại sau một chút nhé.");
       if(inAppBrowserInfo()) showSpeakWebviewNote();
     },
     ended: function(gotResult, meta){
       document.getElementById("micBtn").classList.remove("listening");
-      if(gotResult) return;
+      if(gotResult){ noteSrResult(); return; }
+      if(meta && meta.dead){ speakSrDeadRescue(); return; }
       if(session._userStop){ spStatus("Đã dừng. Bác bấm mic khi muốn đọc lại nhé."); return; }
       spStatus("Chưa nghe thấy tiếng. Bác bấm mic và đọc to hơn một chút nhé.");
     }
@@ -2556,10 +2574,11 @@ document.getElementById("micBtn").addEventListener("click", function(){
   }
   if(window.speechSynthesis){ try{ window.speechSynthesis.cancel(); }catch(e){} }
   hideSpeakSelfCheck();
-  /* Trình duyệt nhúng của app khác: BỎ HẲN SpeechRecognition (không có
-     kênh thu âm đáng tin trong WKWebView — lần đầu vớt được, lần hai
-     chết), chạy thẳng ghi âm tự kiểm tra ngay từ lần bấm đầu tiên. */
-  if(rbSupported() && !inAppBrowserInfo()){
+  hideSpeakVoiceRetry();
+  /* Bo mạch thích ứng quyết định cơ chế: webview app khác / máy đã
+     nhớ chế độ ghi âm / người học đã chọn ghi âm sau lỗi mạng → ghi âm
+     tự kiểm tra; còn lại bộ chấm tự động. */
+  if(pickVoiceEngine(speakForceRecord) === "sr"){
     var session = MicSessions.begin({
       key: "speak", kind: "sr", capMs: 20000,
       closeUI: function(){ closeSpeakUI(); }
@@ -2586,6 +2605,46 @@ document.getElementById("speakSelfRetry").addEventListener("click", function(){
 
 /* ================= READBACK: NGHE → ĐỌC LẠI → SỬA NGAY ================= */
 function rbSupported(){ return !!(window.SpeechRecognition || window.webkitSpeechRecognition); }
+
+/* ================= BO MẠCH THÍCH ỨNG GIỌNG NÓI THEO MÔI TRƯỜNG =================
+   Cơ chế nghe được quyết định TRƯỚC mỗi lần bấm, theo đúng môi trường
+   đang mở trang, để máy nào cũng dùng được mượt như trên laptop:
+   - Trình duyệt nhúng của app khác (Gemini/Google, Zalo, Facebook,
+     Messenger, TikTok, Line — cả iOS lẫn Android): SpeechRecognition ở
+     đó không có kênh thu âm đáng tin → ghi âm tự kiểm tra ngay (V13).
+   - Safari/Chrome iOS thật, Chrome/Edge/Samsung Internet Android,
+     Chrome/Edge desktop: bộ chấm tự động (SpeechRecognition).
+   - Nếu một phiên chấm tự động “chết lặng” KHÔNG phát bất kỳ sự kiện
+     nào (bộ nghe không hề bắt đầu nghe — khác hẳn người học im lặng
+     thật: trường hợp đó bộ nghe đã bắt đầu và sẽ báo no-speech), trang
+     tự chuyển sang ghi âm tự kiểm tra cho các lần sau trong buổi và
+     GHI NHỚ lựa chọn vào localStorage (khóa riêng dưới đây, không
+     đụng khóa dữ liệu học cũ) để lần mở sau vào thẳng chế độ chạy
+     được. Panel có nút nhỏ “Thử lại bộ chấm tự động” để quay lại khi
+     đổi máy/đổi trình duyệt.
+   - Lỗi mạng (network) của bộ chấm lặp lại 2 lần trong buổi: chỉ GỢI Ý
+     chuyển ghi âm tự kiểm tra, không tự ép người học. */
+var VOICE_MODE_KEY = "tieng-anh-voice-mode";
+function voiceModeStored(){
+  try{ return localStorage.getItem(VOICE_MODE_KEY); }catch(e){ return null; }
+}
+function voiceModeRememberRecord(){
+  try{ localStorage.setItem(VOICE_MODE_KEY, "record"); }catch(e){}
+}
+function voiceModeForget(){
+  try{ localStorage.removeItem(VOICE_MODE_KEY); }catch(e){}
+}
+/* Trả "sr" (bộ chấm tự động) hoặc "record" (ghi âm tự kiểm tra) */
+function pickVoiceEngine(forceRecord){
+  if(inAppBrowserInfo()) return "record";
+  if(!rbSupported()) return "record";
+  if(forceRecord) return "record";
+  if(voiceModeStored() === "record") return "record";
+  return "sr";
+}
+var srNetStreak = 0;
+function noteSrResult(){ srNetStreak = 0; }
+function noteSrNetworkError(){ srNetStreak += 1; return srNetStreak; }
 
 /* ================= PHÁT HIỆN TRÌNH DUYỆT NHÚNG (IN-APP BROWSER) =================
    Mở trang ngay trong app Google/Gemini, Facebook, Zalo, TikTok… thì
@@ -2722,6 +2781,73 @@ function showSpeakWebviewNote(){
   if(note) box.appendChild(note);
   box.setAttribute("data-wv", "1");
   box.style.display = "block";
+}
+
+/* ===== TỰ CỨU CHO PHẦN LUYỆN NÓI (cùng bo mạch với phần Đọc lại) =====
+   Bộ nghe chết lặng trên máy này → ghi nhớ chuyển ghi âm tự kiểm tra,
+   báo rõ cho người học và chừa nút “Thử lại bộ chấm tự động”. */
+var speakForceRecord = false;
+function speakSrDeadRescue(){
+  voiceModeRememberRecord();
+  spStatus("Bộ nghe tự động chưa ổn trên máy này — trang đã chuyển sang ghi âm tự kiểm tra và sẽ nhớ lựa chọn này cho lần sau. Bác bấm mic để ghi âm, nghe lại giọng mình rồi tự đánh dấu nhé.");
+  showSpeakVoiceRetry();
+}
+function speakVoiceRetryBox(){
+  var box = document.getElementById("speakVoiceRetry");
+  if(!box){
+    box = document.createElement("div"); box.id = "speakVoiceRetry"; box.className = "rb-actions";
+    box.style.cssText = "justify-content:center; margin-top:10px";
+    var fb = document.getElementById("speakFeedback");
+    if(fb && fb.parentNode) fb.parentNode.insertBefore(box, fb.nextSibling);
+  }
+  return box;
+}
+function showSpeakVoiceRetry(){
+  /* Chỉ hiện khi đang ở chế độ ghi âm do trang ĐÃ NHỚ (máy có bộ chấm
+     nhưng từng chết lặng) — webview/không có bộ chấm thì không có gì
+     để “thử lại”. */
+  if(!rbSupported() || inAppBrowserInfo() || voiceModeStored() !== "record") return;
+  var box = speakVoiceRetryBox();
+  box.innerHTML = "";
+  var b = document.createElement("button");
+  b.type = "button"; b.className = "icon-btn";
+  b.textContent = "Thử lại bộ chấm tự động";
+  b.addEventListener("click", function(){
+    voiceModeForget();
+    speakForceRecord = false;
+    hideSpeakVoiceRetry();
+    document.getElementById("micBtn").click();
+  });
+  box.appendChild(b);
+  box.style.display = "flex";
+}
+function hideSpeakVoiceRetry(){
+  var box = document.getElementById("speakVoiceRetry");
+  if(box){ box.style.display = "none"; box.innerHTML = ""; }
+}
+/* Lỗi mạng 2 lần liên tiếp ở Luyện nói: gợi ý (không ép) chuyển ghi âm */
+function showSpeakNetSuggest(){
+  var box = document.getElementById("speakNetSuggest");
+  if(!box){
+    box = document.createElement("div"); box.id = "speakNetSuggest"; box.className = "rb-actions";
+    box.style.cssText = "justify-content:center; margin-top:10px";
+    var fb = document.getElementById("speakFeedback");
+    if(fb && fb.parentNode) fb.parentNode.insertBefore(box, fb.nextSibling);
+  }
+  if(box.getAttribute("data-on") === "1"){ box.style.display = "flex"; return; }
+  box.setAttribute("data-on", "1");
+  box.innerHTML = "";
+  var b = document.createElement("button");
+  b.type = "button"; b.className = "icon-btn";
+  b.textContent = "Chuyển sang ghi âm tự kiểm tra";
+  b.addEventListener("click", function(){
+    speakForceRecord = true;
+    box.style.display = "none";
+    document.getElementById("micBtn").click();
+  });
+  box.appendChild(b);
+  box.style.display = "flex";
+  spStatus("Mạng yếu làm bộ chấm tự động lỗi hai lần liên tiếp. Bác có thể bấm nút “Chuyển sang ghi âm tự kiểm tra” ở dưới để ghi âm và tự nghe lại — cách này không cần mạng.");
 }
 
 /* ================= QUẢN LÝ PHIÊN MIC DUY NHẤT (MicSessionManager) =================
@@ -3182,13 +3308,10 @@ function startReadback(ctx){
     rbShowIdle(ctx, "Đã dừng ghi âm", "Bác bấm “Đọc lại” khi sẵn sàng nói lại nhé.");
     return;
   }
-  /* Trình duyệt nhúng của app khác (Gemini/Google, Zalo, Facebook…):
-     SpeechRecognition trong WKWebView không có kênh thu âm đáng tin —
-     lần đầu có thể vớt được, từ lần hai trả no-speech/chết lặng. Vì vậy
-     ở webview BỎ HẲN bộ nhận giọng, chạy thẳng ghi âm tự kiểm tra qua
-     getUserMedia ngay từ lần bấm đầu tiên; panel luôn kèm dòng lưu ý
-     gọn + nút sao chép địa chỉ để mở bằng Safari/Chrome. */
-  var useSR = rbSupported() && !ctx._forceRecord && !inAppBrowserInfo();
+  /* Bo mạch thích ứng (pickVoiceEngine) quyết định cơ chế theo môi
+     trường: webview app khác / máy đã nhớ chế độ ghi âm → ghi âm tự
+     kiểm tra ngay từ lần bấm đầu tiên; còn lại bộ chấm tự động. */
+  var useSR = pickVoiceEngine(ctx._forceRecord) === "sr";
   var session = MicSessions.begin({
     key: "readback", ownerCtx: ctx,
     kind: useSR ? "sr" : "record",
@@ -3303,6 +3426,20 @@ function rbShowSelfCheck(ctx, session, info){
   }, "vslow"));
   actions.appendChild(rbActionBtn("Chưa đúng, đọc lại", function(){ startReadback(ctx); }, "mic"));
   panel.appendChild(actions);
+  /* Đang ghi âm vì trang ĐÃ NHỚ lựa chọn (máy có bộ chấm nhưng từng
+     chết lặng ở đây): chừa đường quay lại bộ chấm tự động. */
+  if(voiceModeStored() === "record" && rbSupported() && !inAppBrowserInfo()){
+    var vnote = document.createElement("p"); vnote.className = "rb-line";
+    vnote.textContent = "Máy này đang dùng ghi âm tự kiểm tra vì bộ nghe tự động từng không chạy được ở đây (trang đã nhớ lựa chọn này). Đổi máy hay đổi trình duyệt, bác có thể thử lại bộ chấm:";
+    panel.appendChild(vnote);
+    var vactions = document.createElement("div"); vactions.className = "rb-actions";
+    vactions.appendChild(rbActionBtn("Thử lại bộ chấm tự động", function(){
+      voiceModeForget();
+      ctx._forceRecord = false; ctx._srDeadStreak = 0;
+      startReadback(ctx);
+    }, "mic"));
+    panel.appendChild(vactions);
+  }
   appendWebviewNote(panel);
 }
 /* ===== Đường Web Speech (bộ nghe có sẵn trong Chrome) — qua MicSessionManager =====
@@ -3363,7 +3500,7 @@ function startSRSession(session, adapter){
        trên iOS Safari, start() lần hai trên cùng một instance thường
        chết lặng hoặc ném InvalidStateError. */
     try{ rec = new SR(); }
-    catch(e){ settle(function(){ adapter.error("error", { dur: 0 }); }); return; }
+    catch(e){ settle(function(){ adapter.error("error", { dur: 0, started: false }); }); return; }
     session.resources.recog = rec;
     rec.lang = "en-US"; rec.interimResults = false; rec.maxAlternatives = adapter.maxAlternatives || 1;
     rec.onstart = function(){
@@ -3383,14 +3520,21 @@ function startSRSession(session, adapter){
       errorShown = true;
       var kind = ev.error || "error";
       var dur = attemptAt ? Date.now() - attemptAt : 0;
-      settle(function(){ adapter.error(kind, { dur: dur }); });
+      /* meta.started cho adapter phân biệt: lỗi xảy ra khi bộ nghe ĐÃ
+         bắt đầu nghe (người học im lặng thật) khác với lỗi ập tới khi
+         bộ nghe chưa hề bắt đầu (phiên chết lặng của nền tảng). */
+      settle(function(){ adapter.error(kind, { dur: dur, started: heardStart }); });
     };
     rec.onend = function(){
       if(!MicSessions.isCurrent(session.id)) return;
       if(errorShown) return;
       var dur = attemptAt ? Date.now() - attemptAt : 0;
       settle(function(){
-        adapter.ended(got, { dur: dur, dead: !got && !session._userStop && dur < 400 });
+        /* “Chết lặng” = phiên kết thúc mà onstart KHÔNG hề tới: bộ
+           nghe chưa từng bắt đầu nghe, nên không thể là người học im
+           lặng (im lặng thật luôn có onstart trước rồi mới no-speech /
+           tự kết thúc). Adapter dùng cờ này để tự cứu ngay. */
+        adapter.ended(got, { dur: dur, dead: !got && !session._userStop && !heardStart });
       });
     };
     armWatchdog();
@@ -3403,7 +3547,7 @@ function startSRSession(session, adapter){
       if(rec){ try{ rec.abort(); }catch(e2){} }
       session.resources.recog = null; rec = null;
       if(attempts < 2){ launch(); return; }
-      settle(function(){ adapter.error("error", { dur: 0 }); });
+      settle(function(){ adapter.error("error", { dur: 0, started: false }); });
     }
   }
   session.capTimer = setTimeout(function(){
@@ -3421,12 +3565,31 @@ function startSRSession(session, adapter){
     launch();
   }
 }
-/* Tự cứu khi mic nghe trực tiếp “chết lặng” liên tiếp trên máy này:
-   chuyển RIÊNG panel này sang chế độ ghi âm tự kiểm tra (vẫn là mic,
-   vẫn nghe lại được giọng mình) kèm giải thích ngắn — người học không
-   bị kẹt với một cái mic không bao giờ lên tiếng nữa. */
+/* Gợi ý (không ép) chuyển ghi âm tự kiểm tra khi bộ chấm tự động lỗi
+   mạng 2 lần liên tiếp trong buổi — ghi âm chạy ngay trên máy, không
+   cần mạng. Chỉ thêm vào panel sau khi rbShowMessage đã vẽ xong. */
+function appendNetSwitchSuggest(ctx){
+  var panel = ctx.panel;
+  if(panel.querySelector("[data-netsuggest]")) return;
+  var p = document.createElement("p"); p.className = "rb-line"; p.setAttribute("data-netsuggest", "1");
+  p.textContent = "Mạng chập chờn khiến bộ chấm tự động lỗi hai lần liên tiếp. Bác có thể chuyển riêng phần này sang ghi âm tự kiểm tra — ghi âm và nghe lại ngay trên máy, không cần mạng:";
+  panel.appendChild(p);
+  var actions = document.createElement("div"); actions.className = "rb-actions"; actions.setAttribute("data-netsuggest", "1");
+  actions.appendChild(rbActionBtn("Chuyển sang ghi âm tự kiểm tra", function(){
+    ctx._forceRecord = true;
+    startReadback(ctx);
+  }, "mic"));
+  panel.appendChild(actions);
+}
+/* Tự cứu khi mic nghe trực tiếp “chết lặng” trên máy này (chỉ cần MỘT
+   phiên không phát bất kỳ sự kiện nào): chuyển sang ghi âm tự kiểm
+   tra (vẫn là mic, vẫn nghe lại được giọng mình) và GHI NHỚ lựa chọn
+   để lần mở sau vào thẳng — người học không bị kẹt với một cái mic
+   không bao giờ lên tiếng nữa. Nút “Thử lại bộ chấm tự động” xóa ghi
+   nhớ khi đổi máy/đổi trình duyệt. */
 function rbRescueToRecorder(ctx){
   ctx._forceRecord = true; ctx._srDeadStreak = 0;
+  voiceModeRememberRecord();
   var panel = ctx.panel;
   panel.innerHTML = ""; panel.className = "rb-panel show";
   if(ctx.btn) ctx.btn.classList.remove("listening");
@@ -3434,22 +3597,28 @@ function rbRescueToRecorder(ctx){
   t.textContent = "Mic nghe trực tiếp chưa ổn trên máy này";
   panel.appendChild(t);
   var p = document.createElement("p"); p.className = "rb-line";
-  p.textContent = "Trang chuyển riêng phần này sang ghi âm tự kiểm tra: bác ghi âm, nghe lại giọng mình rồi tự đánh dấu nhé.";
+  p.textContent = "Trang chuyển sang ghi âm tự kiểm tra: bác ghi âm, nghe lại giọng mình rồi tự đánh dấu nhé. Trang cũng sẽ NHỚ lựa chọn này — lần sau mở lên là vào thẳng ghi âm, không phải chờ bộ nghe nữa. Khi nào đổi máy hay đổi trình duyệt, bác bấm “Thử lại bộ chấm tự động” để thử lại.";
   panel.appendChild(p);
   var actions = document.createElement("div"); actions.className = "rb-actions";
   actions.appendChild(rbActionBtn("Bắt đầu ghi âm", function(){ startReadback(ctx); }, "mic"));
+  actions.appendChild(rbActionBtn("Thử lại bộ chấm tự động", function(){
+    voiceModeForget();
+    ctx._forceRecord = false; ctx._srDeadStreak = 0;
+    startReadback(ctx);
+  }, "slow"));
   panel.appendChild(actions);
 }
 function startSRReadback(ctx, session){
   ctx.fromRecording = false; ctx.lastBlob = null;
   if(ctx.audioUrl){ try{ URL.revokeObjectURL(ctx.audioUrl); }catch(e){} ctx.audioUrl = null; }
   var tWords = normalize(ctx.target).split(" ").filter(Boolean);
-  /* Phiên “chết lặng” = kết thúc <400ms, không kết quả, không do người
-     học bấm dừng. 2 phiên chết liên tiếp ở cùng một panel ⇒ tự cứu. */
+  /* Phiên “chết lặng” = bộ nghe không phát bất kỳ sự kiện nào (chưa
+     hề có onstart) — lỗi của nền tảng, không phải người học im lặng.
+     Chỉ cần 1 phiên như vậy là tự cứu ngay + ghi nhớ (rbRescueToRecorder). */
   function noteDead(){
-    ctx._srDeadStreak = (ctx._srDeadStreak || 0) + 1;
-    if(ctx._srDeadStreak >= 2){ rbRescueToRecorder(ctx); return true; }
-    return false;
+    ctx._srDeadStreak = 0;
+    rbRescueToRecorder(ctx);
+    return true;
   }
   startSRSession(session, {
     maxAlternatives: 3,
@@ -3466,7 +3635,7 @@ function startSRReadback(ctx, session){
       if(ctx.btn) ctx.btn.classList.add("listening");
     },
     result: function(res){
-      ctx._srDeadStreak = 0;
+      ctx._srDeadStreak = 0; noteSrResult();
       var best = null;
       for(var k = 0; k < res.length; k++){
         var said = res[k].transcript || "";
@@ -3481,8 +3650,11 @@ function startSRReadback(ctx, session){
     error: function(kind, meta){
       if(ctx.btn) ctx.btn.classList.remove("listening");
       kind = srKind(kind);
-      if(kind === "no-speech" && meta && meta.dur < 400){ if(noteDead()) return; }
+      /* no-speech ập tới khi bộ nghe chưa hề bắt đầu (không onstart)
+         = phiên chết lặng của nền tảng ⇒ tự cứu như watchdog. */
+      if(kind === "no-speech" && meta && !meta.started){ if(noteDead()) return; }
       rbShowMessage(ctx, kind);
+      if(kind === "network" && noteSrNetworkError() >= 2) appendNetSwitchSuggest(ctx);
     },
     ended: function(gotResult, meta){
       if(ctx.btn) ctx.btn.classList.remove("listening");
