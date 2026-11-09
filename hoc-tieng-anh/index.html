@@ -1024,6 +1024,39 @@ html.hc .hc-menu-btn[aria-pressed="true"] .hc-state{color:#fff}
 .dm-nav-btn:hover{border-color:var(--primary); color:var(--primary)}
 .dm-nav-btn:active{transform:scale(.98)}
 .dm-nav-btn .dm-arrow{color:var(--muted); font-weight:800}
+/* V15 — Panel Chẩn đoán giọng nói (công cụ kỹ thuật mở từ Menu):
+   lớp phủ toàn màn hình, chữ kỹ thuật vừa phải, cuộn trong khung riêng,
+   không đụng vào giao diện học chính. */
+.voice-diag-overlay{
+  position:fixed; inset:0; z-index:200; background:rgba(18,24,18,.55);
+  display:flex; align-items:flex-end; justify-content:center;
+}
+.voice-diag-overlay[hidden]{display:none}
+.voice-diag-card{
+  background:var(--surface); color:var(--ink); width:100%; max-width:640px;
+  max-height:88dvh; display:flex; flex-direction:column;
+  border-radius:18px 18px 0 0; border:2px solid var(--border-strong);
+  padding:16px; box-sizing:border-box;
+  padding-bottom:calc(16px + env(safe-area-inset-bottom, 0px));
+}
+@media (min-width:700px){
+  .voice-diag-overlay{align-items:center; padding:20px}
+  .voice-diag-card{border-radius:18px}
+}
+.voice-diag-head{display:flex; align-items:center; justify-content:space-between; gap:10px; margin-bottom:6px}
+.voice-diag-title{font-weight:800; font-size:17px; line-height:1.35}
+.voice-diag-intro{font-size:14px; line-height:1.55; color:var(--muted); font-weight:600; margin-bottom:10px}
+.voice-diag-body{
+  overflow-y:auto; -webkit-overflow-scrolling:touch; overscroll-behavior:contain;
+  border:1.5px solid var(--border); border-radius:12px; background:var(--surface-2);
+  padding:10px 12px; margin-bottom:12px;
+}
+.voice-diag-body pre{
+  white-space:pre-wrap; word-break:break-word; margin:0; color:var(--ink);
+  font-family:ui-monospace,Menlo,Consolas,monospace; font-size:12.5px; line-height:1.6;
+}
+.voice-diag-actions{display:flex; gap:10px; flex-wrap:wrap}
+.voice-diag-actions .btn{flex:1 1 auto; min-height:52px}
 /* Mức Nhỏ: chữ trong menu vẫn ≥14px như sàn của mức này */
 html[data-font="small"] .menu-toggle{font-size:max(14px,.9em)}
 html[data-font="small"] .dm-title{font-size:max(17px,1.2em)}
@@ -1271,6 +1304,11 @@ h1,h2,h3{line-height:1.32}
           <button type="button" class="dm-nav-btn" data-menu-goto="lessonsSection"><span>Lộ trình 6 chương · 60 bài</span><span class="dm-arrow" aria-hidden="true">→</span></button>
           <button type="button" class="dm-nav-btn" data-menu-goto="roadmapSection"><span>Bản đồ lộ trình</span><span class="dm-arrow" aria-hidden="true">→</span></button>
           <button type="button" class="dm-nav-btn" data-menu-goto="guideSection"><span>Cách học 3 bước</span><span class="dm-arrow" aria-hidden="true">→</span></button>
+        </div>
+        <div class="dm-section">
+          <div class="dm-label">Hỗ trợ kỹ thuật</div>
+          <button type="button" class="dm-nav-btn" id="voiceDiagBtn"><span>Chẩn đoán giọng nói</span><span class="dm-arrow" aria-hidden="true">→</span></button>
+          <p class="dm-note">Xem nhật ký các lần bấm mic gần nhất. Nếu mic bị lỗi, chép nhật ký ở đây gửi lại để được sửa đúng chỗ.</p>
         </div>
       </div>
     </div>
@@ -1721,6 +1759,20 @@ h1,h2,h3{line-height:1.32}
     <p style="margin-top:6px">Mẹo: Muốn chữ to hơn, bấm nút 3 gạch (Menu) ở góc trên bên phải rồi chọn Cỡ chữ. Cũng trong menu đó, bác bật “Tương phản cao” nếu thấy chữ chưa đủ rõ.</p>
   </div>
 </footer>
+
+<div class="voice-diag-overlay" id="voiceDiagOverlay" hidden role="dialog" aria-modal="true" aria-labelledby="voiceDiagTitle">
+  <div class="voice-diag-card">
+    <div class="voice-diag-head">
+      <span class="voice-diag-title" id="voiceDiagTitle">Chẩn đoán giọng nói</span>
+      <button type="button" class="icon-btn" id="voiceDiagClose">Đóng ✕</button>
+    </div>
+    <p class="voice-diag-intro">Nhật ký các lần bấm mic gần nhất, chỉ lưu trên máy này. Nếu mic bị lỗi, bấm “Sao chép nhật ký” rồi dán gửi lại cho Muse để sửa đúng chỗ.</p>
+    <div class="voice-diag-body"><pre id="voiceDiagText">…</pre></div>
+    <div class="voice-diag-actions">
+      <button type="button" class="btn btn-primary" id="voiceDiagCopy">Sao chép nhật ký</button>
+    </div>
+  </div>
+</div>
 
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 <noscript><div style="padding:20px; text-align:center; font-weight:700">Trang học cần bật JavaScript để nghe phát âm và làm bài tập. Bác hãy mở trang bằng trình duyệt Chrome hoặc Safari nhé.</div></noscript>
@@ -2533,7 +2585,7 @@ function spSRAdapter(session){
       var btn = document.getElementById("micBtn"), fb = document.getElementById("speakFeedback");
       if(p === "listening"){ btn.classList.add("listening"); spStatus("Đang nghe… bác đọc to câu mẫu nhé! Đọc xong cứ dừng lại, trang tự chấm ngay."); fb.className = "feedback"; fb.textContent = ""; }
     },
-    result: function(res){ noteSrResult(); gradeSpeak(res[0].transcript || ""); },
+    result: function(res){ noteSrResult(); noteSrSessionAudible(); gradeSpeak(res[0].transcript || ""); },
     error: function(kind, meta){
       document.getElementById("micBtn").classList.remove("listening");
       if(kind === "no-speech" && meta && !meta.started){
@@ -2542,6 +2594,12 @@ function spSRAdapter(session){
            phải bác im lặng — tự cứu sang ghi âm tự kiểm tra + ghi nhớ. */
         speakSrDeadRescue(); return;
       }
+      /* ĐÃ bắt đầu nghe mà vẫn no-speech / audio-capture, 2 phiên liên
+         tiếp trong buổi (triệu chứng máy thật V15) → chuyển ghi âm tự
+         kiểm tra ngay + ghi nhớ, như phần Đọc lại. */
+      if((kind === "no-speech" || kind === "audio-capture") && meta && meta.started){
+        if(noteSrNoSpeech() >= 2){ speakSrDeadRescue(); return; }
+      } else if(kind !== "network"){ noteSrSessionAudible(); }
       if(kind === "not-allowed") spStatus("Trang web chưa được phép dùng mic. Bác bấm cho phép (Allow) khi trình duyệt hỏi nhé.");
       else if(kind === "service-not-allowed") spStatus("Bộ nghe đang bị trình duyệt chặn. Bác mở trang bằng Chrome hoặc Safari bản chính, cho phép mic một lần rồi bấm mic thử lại nhé.");
       else if(kind === "audio-capture") spStatus("Mic chưa lên được — có thể mic đang bị ứng dụng khác dùng. Bác đóng hẳn các ứng dụng đó rồi bấm mic thử lại nhé.");
@@ -2555,9 +2613,12 @@ function spSRAdapter(session){
     },
     ended: function(gotResult, meta){
       document.getElementById("micBtn").classList.remove("listening");
-      if(gotResult){ noteSrResult(); return; }
+      if(gotResult){ noteSrResult(); noteSrSessionAudible(); return; }
       if(meta && meta.dead){ speakSrDeadRescue(); return; }
       if(session._userStop){ spStatus("Đã dừng. Bác bấm mic khi muốn đọc lại nhé."); return; }
+      /* Tự kết thúc không kết quả dù bộ nghe đã bắt đầu: tính vào
+         chuỗi 2 phiên liên tiếp như no-speech (ca máy thật V15). */
+      if(noteSrNoSpeech() >= 2){ speakSrDeadRescue(); return; }
       spStatus("Chưa nghe thấy tiếng. Bác bấm mic và đọc to hơn một chút nhé.");
     }
   };
@@ -2583,6 +2644,7 @@ document.getElementById("micBtn").addEventListener("click", function(){
       key: "speak", kind: "sr", capMs: 20000,
       closeUI: function(){ closeSpeakUI(); }
     });
+    session.voiceLog = voiceLogBegin("Luyện nói", speakItems[speakIndex] ? speakItems[speakIndex].en : "", "recognition");
     startSRSession(session, spSRAdapter(session)); return;
   }
   if(inAppBrowserInfo()) showSpeakWebviewNote();
@@ -2623,7 +2685,13 @@ function rbSupported(){ return !!(window.SpeechRecognition || window.webkitSpeec
      được. Panel có nút nhỏ “Thử lại bộ chấm tự động” để quay lại khi
      đổi máy/đổi trình duyệt.
    - Lỗi mạng (network) của bộ chấm lặp lại 2 lần trong buổi: chỉ GỢI Ý
-     chuyển ghi âm tự kiểm tra, không tự ép người học. */
+     chuyển ghi âm tự kiểm tra, không tự ép người học.
+   - V15 (theo test MÁY THẬT, thắng mọi mô phỏng trước đó): bộ nghe đã
+     bắt đầu mà vẫn không thu được tiếng (no-speech / audio-capture /
+     tự kết thúc không kết quả) 2 phiên LIÊN TIẾP trong buổi → chuyển
+     ghi âm tự kiểm tra ngay + ghi nhớ như phiên chết lặng. Mọi phiên
+     đều ghi nhật ký chẩn đoán (khóa “tieng-anh-voice-log”) để lần lỗi
+     sau có bằng chứng thật mà sửa đúng chỗ. */
 var VOICE_MODE_KEY = "tieng-anh-voice-mode";
 function voiceModeStored(){
   try{ return localStorage.getItem(VOICE_MODE_KEY); }catch(e){ return null; }
@@ -2645,6 +2713,187 @@ function pickVoiceEngine(forceRecord){
 var srNetStreak = 0;
 function noteSrResult(){ srNetStreak = 0; }
 function noteSrNetworkError(){ srNetStreak += 1; return srNetStreak; }
+
+/* Chuỗi phiên “không thu được tiếng” LIÊN TIẾP trong buổi (V15): bộ
+   nghe ĐÃ bắt đầu (đã có onstart) mà vẫn trả no-speech / audio-capture,
+   hoặc tự kết thúc mà không có kết quả. Test máy thật 3 bản liên tiếp
+   cho thấy đây đúng là triệu chứng “từ đầu nghe được, từ sau không
+   nghe thấy” — nên chỉ cần 2 phiên liên tiếp là chuyển ghi âm tự kiểm
+   tra ngay + ghi nhớ, không để người học kẹt thêm. Phiên nào có kết
+   quả, hoặc lỗi thuộc nhóm khác (mạng, quyền mic…), đều xóa chuỗi. */
+var srNoSpeechStreak = 0;
+function noteSrSessionAudible(){ srNoSpeechStreak = 0; }
+function noteSrNoSpeech(){ srNoSpeechStreak += 1; return srNoSpeechStreak; }
+
+/* Chờ giọng đọc mẫu (TTS) IM HẲN rồi mới mở phiên nghe (V15, nghi phạm
+   số 1 của lỗi máy thật): trên iOS, nếu recognition start trong lúc hệ
+   thống còn giữ kênh âm thanh của TTS (vừa bấm “Nghe mẫu”/“Nghe chậm
+   lại”), phiên nghe thu rỗng và báo no-speech — từ đầu tiên (chưa có
+   TTS chen vào) thì nghe được, từ sau thì lỗi. cancel() thôi chưa đủ:
+   phải chờ tới khi speaking/pending đều false, trần chờ 600ms. */
+function waitForTtsQuiet(){
+  return new Promise(function(resolve){
+    var ss = null;
+    try{ ss = window.speechSynthesis || null; }catch(e){}
+    if(!ss){ resolve(); return; }
+    try{ ss.cancel(); }catch(e){}
+    var t0 = Date.now();
+    (function poll(){
+      var busy = false;
+      try{ busy = !!(ss.speaking || ss.pending); }catch(e){}
+      if(!busy || Date.now() - t0 >= 600){ resolve(); return; }
+      setTimeout(poll, 50);
+    })();
+  });
+}
+
+/* ================= NHẬT KÝ CHẨN ĐOÁN GIỌNG NÓI (V15) =================
+   Test máy thật thắng mọi mô phỏng: các harness đều PASS mà máy thật
+   vẫn lỗi, nên trang tự ghi lại bằng chứng của từng phiên nghe ngay
+   trên máy người học — tối đa 20 phiên gần nhất, chỉ giữ trong
+   localStorage của máy đó (khóa riêng, không gửi đi đâu, không đụng
+   khóa dữ liệu học). Mỗi phiên ghi: tính năng, từ/câu đích, chế độ và
+   toàn bộ chuỗi sự kiện kèm mốc mili-giây. Kèm một bản ghi môi trường
+   mỗi lần mở trang. Xem tại Menu → “Chẩn đoán giọng nói”, có nút sao
+   chép để người học dán gửi lại cho Muse đọc. */
+var VOICE_LOG_KEY = "tieng-anh-voice-log";
+var VOICE_LOG_MAX = 20;
+var srInstanceTotal = 0; /* tổng số instance recognition đã tạo trong buổi */
+var voiceLogEnvDone = false;
+function voiceLogRead(){
+  try{
+    var raw = localStorage.getItem(VOICE_LOG_KEY);
+    var arr = raw ? JSON.parse(raw) : [];
+    return Object.prototype.toString.call(arr) === "[object Array]" ? arr : [];
+  }catch(e){ return []; }
+}
+function voiceLogWrite(arr){
+  try{ localStorage.setItem(VOICE_LOG_KEY, JSON.stringify(arr.slice(-VOICE_LOG_MAX))); }catch(e){}
+}
+function voiceLogEnv(){
+  if(voiceLogEnvDone) return; voiceLogEnvDone = true;
+  var info = null;
+  try{ info = inAppBrowserInfo(); }catch(e){}
+  var entry = {
+    type: "env", at: new Date().toISOString(),
+    ua: navigator.userAgent || "",
+    env: info ? ("mở trong app: " + info.name) : "trình duyệt thật (không phát hiện app nhúng)",
+    lang: navigator.language || "",
+    sr: rbSupported() ? "có" : "không",
+    storedMode: voiceModeStored() || "(chưa ghi nhớ)",
+    micPerm: "chưa đọc được"
+  };
+  var arr = voiceLogRead(); arr.push(entry); voiceLogWrite(arr);
+  try{
+    if(navigator.permissions && navigator.permissions.query){
+      var pr = navigator.permissions.query({ name: "microphone" });
+      if(pr && typeof pr.then === "function"){
+        pr.then(function(st){
+          var a2 = voiceLogRead();
+          for(var i = a2.length - 1; i >= 0; i--){
+            if(a2[i].type === "env" && a2[i].at === entry.at){ a2[i].micPerm = (st && st.state) || "không rõ"; break; }
+          }
+          voiceLogWrite(a2);
+        }, function(){});
+      }
+    }
+  }catch(e){}
+}
+/* Bắt đầu một mục nhật ký cho một phiên nghe/ghi. Trả handle {ev, finish}. */
+function voiceLogBegin(feature, target, mode){
+  voiceLogEnv();
+  var t0 = Date.now();
+  var entry = {
+    type: "session", at: new Date(t0).toISOString(),
+    feature: feature, target: String(target || "").slice(0, 80),
+    mode: mode, events: [], instancesTotal: srInstanceTotal, durMs: null
+  };
+  var arr = voiceLogRead(); arr.push(entry); voiceLogWrite(arr);
+  var done = false;
+  function persist(){
+    var a2 = voiceLogRead();
+    for(var i = a2.length - 1; i >= 0; i--){
+      if(a2[i].type === "session" && a2[i].at === entry.at && a2[i].feature === entry.feature){ a2[i] = entry; break; }
+    }
+    voiceLogWrite(a2);
+  }
+  return {
+    ev: function(name, detail){
+      entry.events.push("+" + (Date.now() - t0) + "ms " + name + (detail ? " — " + detail : ""));
+      if(entry.events.length > 80) entry.events.splice(0, entry.events.length - 80);
+      persist();
+    },
+    syncInstances: function(){ entry.instancesTotal = srInstanceTotal; persist(); },
+    finish: function(){
+      if(done) return; done = true;
+      entry.durMs = Date.now() - t0;
+      entry.instancesTotal = srInstanceTotal;
+      persist();
+    }
+  };
+}
+function voiceLogText(){
+  var arr = voiceLogRead();
+  var lines = ["NHẬT KÝ CHẨN ĐOÁN GIỌNG NÓI — Học Tiếng Anh Cho Người Mới Bắt Đầu", "Xuất lúc: " + new Date().toLocaleString("vi-VN")];
+  if(!arr.length) lines.push("", "(Chưa có phiên nghe nào được ghi trên máy này.)");
+  var n = 0;
+  arr.forEach(function(e){
+    if(e.type === "env"){
+      lines.push("", "=== MÔI TRƯỜNG (ghi khi mở trang) ===");
+      lines.push("Thời gian: " + e.at);
+      lines.push("UserAgent: " + e.ua);
+      lines.push("Trang nhận diện: " + e.env);
+      lines.push("Ngôn ngữ máy (navigator.language): " + e.lang);
+      lines.push("Có SpeechRecognition: " + e.sr);
+      lines.push("Quyền mic (navigator.permissions): " + e.micPerm);
+      lines.push("Chế độ đã ghi nhớ (tieng-anh-voice-mode): " + e.storedMode);
+    } else {
+      n += 1;
+      lines.push("", "--- Phiên " + n + " · " + e.at + " ---");
+      lines.push("Tính năng: " + e.feature + " · Đích: “" + e.target + "” · Chế độ: " + e.mode);
+      lines.push("Số instance recognition đã tạo tích lũy tới cuối phiên: " + e.instancesTotal);
+      (e.events || []).forEach(function(ev){ lines.push("  " + ev); });
+      if(typeof e.durMs === "number") lines.push("  (phiên kéo dài " + e.durMs + "ms)");
+    }
+  });
+  return lines.join("\n");
+}
+function openVoiceDiag(){
+  closeDisplayMenu(false);
+  var pre = document.getElementById("voiceDiagText");
+  if(pre) pre.textContent = voiceLogText();
+  var copyBtn = document.getElementById("voiceDiagCopy");
+  if(copyBtn) copyBtn.textContent = "Sao chép nhật ký";
+  var ov = document.getElementById("voiceDiagOverlay");
+  if(ov) ov.hidden = false;
+  var x = document.getElementById("voiceDiagClose");
+  if(x) x.focus();
+}
+function closeVoiceDiag(){
+  var ov = document.getElementById("voiceDiagOverlay");
+  if(ov) ov.hidden = true;
+}
+function copyVoiceLog(btn){
+  var text = voiceLogText();
+  function done(){
+    if(btn) btn.textContent = "Đã sao chép ✓ — dán gửi lại cho Muse nhé";
+    toast("Đã sao chép nhật ký — bác dán vào tin nhắn gửi lại nhé.");
+  }
+  function fallback(){
+    try{
+      var ta = document.createElement("textarea");
+      ta.value = text; ta.style.position = "fixed"; ta.style.opacity = "0";
+      document.body.appendChild(ta); ta.select(); ta.setSelectionRange(0, text.length);
+      var ok = false; try{ ok = document.execCommand("copy"); }catch(e){}
+      document.body.removeChild(ta);
+      if(ok) done();
+      else if(btn) btn.textContent = "Chưa sao chép được — bác chụp màn hình nhật ký này gửi lại nhé";
+    }catch(e){}
+  }
+  if(navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(text).then(done, fallback);
+  } else fallback();
+}
 
 /* ================= PHÁT HIỆN TRÌNH DUYỆT NHÚNG (IN-APP BROWSER) =================
    Mở trang ngay trong app Google/Gemini, Facebook, Zalo, TikTok… thì
@@ -2857,10 +3106,11 @@ function showSpeakNetSuggest(){
    isCurrent(id) mới được chạm vào giao diện — kết quả đến muộn của phiên
    cũ bị bỏ qua hoàn toàn. */
 /* Mốc thời gian phiên nhận giọng gần nhất vừa kết thúc/hủy. iOS Safari
-   cần một khoảng nghỉ ngắn sau khi phiên cũ nhả mic, nếu start() phiên
-   mới ngay lập tức thì phiên mới thường “chết lặng” (không onstart,
-   không onerror) và mọi lần bấm sau đều vô hiệu. startSRSession dùng
-   mốc này để chờ đủ ~350ms mới start. */
+   cần một khoảng nghỉ sau khi phiên cũ nhả mic, nếu start() phiên mới
+   ngay lập tức thì phiên mới thường “chết lặng” (không onstart, không
+   onerror) và mọi lần bấm sau đều vô hiệu. startSRSession dùng mốc này
+   để chờ đủ 600ms trên iOS (350ms ở nơi khác) mới start — V15 nâng từ
+   350ms lên sau bằng chứng máy thật. */
 var srLastEndAt = 0;
 var MicSessions = (function(){
   var seq = 0, current = null;
@@ -3451,31 +3701,55 @@ function rbShowSelfCheck(ctx, session, info){
    lần getUserMedia lại bật thêm một thông báo quyền mic. Nay việc tự
    dừng khi đọc xong do chính bộ nhận giọng đảm nhiệm (nó tự kết thúc khi
    thấy im lặng), trần cứng capMs của phiên vẫn giữ làm phanh an toàn.
-   Tính năng “Nghe lại giọng của bác” chỉ có ở chế độ tự kiểm tra. */
+   Tính năng “Nghe lại giọng của bác” chỉ có ở chế độ tự kiểm tra.
+   V15: trước mỗi phiên còn phải chờ TTS im hẳn (waitForTtsQuiet), chờ
+   mic nhả đủ 600ms trên iOS, ép lang “en-US” mọi phiên, có trần cứng
+   1,5s sau onerror phòng onend không về, và mọi sự kiện của phiên đều
+   ghi vào nhật ký chẩn đoán (Menu → Chẩn đoán giọng nói). */
 function startSRSession(session, adapter){
   var SR = window.SpeechRecognition || window.webkitSpeechRecognition;
-  /* Tắt mọi giọng đọc mẫu đang phát trước phiên nghe: trên iOS, TTS phát
-     giữa hai phiên (ví dụ vừa bấm “Nghe chậm lại”) có thể làm phiên nghe
-     kế tiếp chết lặng. */
-  if(window.speechSynthesis){ try{ window.speechSynthesis.cancel(); }catch(e){} }
   var got = false, errorShown = false, settled = false, attempts = 0;
   var heardStart = false, attemptAt = 0;
-  var rec = null, watchdog = null;
+  var rec = null, watchdog = null, errCapTimer = null;
+  var log = session.voiceLog || null;
+  function logEv(name, detail){ if(log) log.ev(name, detail); }
   session.stopCapture = function(){
     session._userStop = true;
+    logEv("user-stop", "người học bấm dừng");
     if(rec){ try{ rec.stop(); }catch(e){} }
   };
   function clearWatchdog(){ if(watchdog){ clearTimeout(watchdog); watchdog = null; } }
+  function clearErrCap(){ if(errCapTimer){ clearTimeout(errCapTimer); errCapTimer = null; } }
   /* Kết phiên TUYỆT ĐỐI một lần duy nhất: dọn tài nguyên, nhả quản lý
      phiên, ghi mốc nhả mic — sau đó mới báo về adapter. Mọi đường kết
-     thúc (onend / onerror / watchdog / start() ném lỗi) đều qua đây,
-     nên trạng thái không bao giờ kẹt lại để chặn phiên mới. */
+     thúc (onend / onerror / watchdog / trần-cứng-onerror / start() ném
+     lỗi) đều qua đây, nên trạng thái không bao giờ kẹt lại để chặn
+     phiên mới. */
   function settle(fn){
     if(settled) return; settled = true;
-    clearWatchdog();
+    clearWatchdog(); clearErrCap();
     srLastEndAt = Date.now();
     MicSessions.dispose(session); MicSessions.finish(session);
+    if(log) log.finish();
     fn();
+  }
+  /* Trần cứng sau onerror (V15): có nền tảng bắn onerror rồi KHÔNG bắn
+     onend — nếu chỉ chờ onend, cờ “đang nghe” kẹt lại và mọi lần bấm
+     sau đều bị chặn (“không nghe thấy” từ từ thứ hai trở đi). Sau
+     1,5s kể từ onerror mà phiên chưa kết thúc thì tự dọn sạch và coi
+     như phiên đã kết thúc. Chỉ dùng cho các lỗi mà handler chính đã
+     bỏ qua (đã có kết quả / lỗi aborted bị nuốt). */
+  function armErrCap(){
+    clearErrCap();
+    errCapTimer = setTimeout(function(){
+      if(settled) return;
+      if(!MicSessions.isCurrent(session.id)) return;
+      logEv("errcap-1.5s", "onerror đã về nhưng onend không về — tự dọn phiên");
+      if(rec){ try{ rec.abort(); }catch(e){} }
+      var dur = attemptAt ? Date.now() - attemptAt : 0;
+      settle(function(){ adapter.ended(got, { dur: dur, dead: !got && !session._userStop && !heardStart, forced: true }); });
+    }, 1500);
+    session.resources.timers.push(errCapTimer);
   }
   /* Watchdog chống “chết lặng”: start() không ném lỗi nhưng onstart mãi
      không tới (hay gặp trên iOS khi instance cũ chưa nhả mic hẳn) —
@@ -3488,6 +3762,7 @@ function startSRSession(session, adapter){
     watchdog = setTimeout(function(){
       if(settled || heardStart) return;
       if(!MicSessions.isCurrent(session.id)) return;
+      logEv("watchdog", "3 giây không có onstart — phiên chết lặng");
       if(rec){ try{ rec.abort(); }catch(e){} }
       settle(function(){ adapter.ended(false, { dead: true, dur: Date.now() - attemptAt }); });
     }, 3000);
@@ -3500,33 +3775,54 @@ function startSRSession(session, adapter){
        trên iOS Safari, start() lần hai trên cùng một instance thường
        chết lặng hoặc ném InvalidStateError. */
     try{ rec = new SR(); }
-    catch(e){ settle(function(){ adapter.error("error", { dur: 0, started: false }); }); return; }
+    catch(e){
+      logEv("error", "không tạo được instance: " + ((e && e.name) || e));
+      settle(function(){ adapter.error("error", { dur: 0, started: false }); });
+      return;
+    }
+    srInstanceTotal += 1;
+    if(log) log.syncInstances();
     session.resources.recog = rec;
+    /* lang ÉP TƯỜNG MINH “en-US” ở MỌI phiên, kể cả phiên thử lại
+       (V15): nếu lang rơi về ngôn ngữ hệ thống (vi-VN) thì nói tiếng
+       Anh sẽ bị báo không nghe thấy. Nhật ký ghi lại lang thực tế. */
     rec.lang = "en-US"; rec.interimResults = false; rec.maxAlternatives = adapter.maxAlternatives || 1;
+    logEv("launch#" + attempts, "lang=" + rec.lang + " · instance tích lũy=" + srInstanceTotal);
     rec.onstart = function(){
       if(!MicSessions.isCurrent(session.id)) return;
       heardStart = true;
+      logEv("onstart");
       MicSessions.setPhase(session, "listening");
       adapter.phase("listening");
     };
+    rec.onaudiostart = function(){ logEv("onaudiostart"); };
+    rec.onsoundstart = function(){ logEv("onsoundstart"); };
+    rec.onspeechstart = function(){ logEv("onspeechstart"); };
+    rec.onspeechend = function(){ logEv("onspeechend"); };
+    rec.onaudioend = function(){ logEv("onaudioend"); };
     rec.onresult = function(ev){
       if(!MicSessions.isCurrent(session.id)) return;
       got = true;
+      var tr = "";
+      try{ tr = (ev.results[0] && ev.results[0][0] && ev.results[0][0].transcript) || ""; }catch(e){}
+      logEv("onresult", "“" + String(tr).slice(0, 60) + "”");
       adapter.result(ev.results[0]);
     };
     rec.onerror = function(ev){
       if(!MicSessions.isCurrent(session.id)) return;
-      if(got || ev.error === "aborted") return;
+      var kind0 = (ev && ev.error) || "error";
+      logEv("onerror", kind0 + (heardStart ? " (đã có onstart)" : " (CHƯA có onstart)"));
+      if(got || kind0 === "aborted"){ armErrCap(); return; }
       errorShown = true;
-      var kind = ev.error || "error";
       var dur = attemptAt ? Date.now() - attemptAt : 0;
       /* meta.started cho adapter phân biệt: lỗi xảy ra khi bộ nghe ĐÃ
          bắt đầu nghe (người học im lặng thật) khác với lỗi ập tới khi
          bộ nghe chưa hề bắt đầu (phiên chết lặng của nền tảng). */
-      settle(function(){ adapter.error(kind, { dur: dur, started: heardStart }); });
+      settle(function(){ adapter.error(kind0, { dur: dur, started: heardStart }); });
     };
     rec.onend = function(){
       if(!MicSessions.isCurrent(session.id)) return;
+      logEv("onend", "got=" + got + " · heardStart=" + heardStart);
       if(errorShown) return;
       var dur = attemptAt ? Date.now() - attemptAt : 0;
       settle(function(){
@@ -3539,11 +3835,12 @@ function startSRSession(session, adapter){
     };
     armWatchdog();
     attemptAt = Date.now();
-    try{ rec.start(); }
+    try{ rec.start(); logEv("start-called"); }
     catch(e){
       /* start() ném lỗi (thường là InvalidStateError vì instance cũ
          chưa nhả hẳn): bỏ instance này, tạo instance MỚI thử lại đúng
          1 lần rồi mới báo lỗi. */
+      logEv("start-throw", (e && e.name) || String(e));
       if(rec){ try{ rec.abort(); }catch(e2){} }
       session.resources.recog = null; rec = null;
       if(attempts < 2){ launch(); return; }
@@ -3554,17 +3851,37 @@ function startSRSession(session, adapter){
     if(MicSessions.isCurrent(session.id) && rec){ try{ rec.stop(); }catch(e){} }
   }, session.capMs);
   adapter.phase("starting");
-  /* Gọi start() NGAY trong handler chạm (iOS đòi ngữ cảnh chạm) — chỉ
-     khi phiên trước vừa kết thúc <350ms mới chờ đủ 350ms cho mic nhả
-     hẳn, vì start đè lên phiên cũ đang dở là nguyên nhân chết lặng. */
-  var gap = srLastEndAt ? 350 - (Date.now() - srLastEndAt) : 0;
-  if(gap > 0){
-    var dt = setTimeout(launch, gap);
-    session.resources.timers.push(dt);
-  } else {
-    launch();
-  }
+  /* Trình tự mở phiên (V15 — theo bằng chứng máy thật, không mở start
+     ngay trong handler chạm nữa):
+     (1) chờ TTS im hẳn — cancel() rồi chờ speaking/pending đều false,
+         trần 600ms (waitForTtsQuiet): mở nghe trong lúc TTS còn giữ
+         kênh âm thanh là nghi phạm số 1 của lỗi “từ sau không nghe
+         thấy” trên iOS;
+     (2) chờ đủ khoảng nghỉ sau phiên trước: 600ms trên iOS, 350ms ở
+         nơi khác — start đè lên phiên cũ đang nhả mic dở cũng làm
+         phiên mới thu rỗng. */
+  var isIOS = /iPhone|iPad|iPod/.test(navigator.userAgent || "");
+  waitForTtsQuiet().then(function(){
+    if(settled) return;
+    if(!MicSessions.isCurrent(session.id)){
+      settled = true;
+      logEv("cancelled", "phiên bị hủy trước khi start");
+      if(log) log.finish();
+      return;
+    }
+    logEv("tts-quiet", "speechSynthesis đã im — bắt đầu mở phiên");
+    var gapMs = isIOS ? 600 : 350;
+    var gap = srLastEndAt ? gapMs - (Date.now() - srLastEndAt) : 0;
+    if(gap > 0){
+      logEv("gap-wait", "chờ " + gap + "ms cho mic nhả hẳn");
+      var dt = setTimeout(launch, gap);
+      session.resources.timers.push(dt);
+    } else {
+      launch();
+    }
+  });
 }
+
 /* Gợi ý (không ép) chuyển ghi âm tự kiểm tra khi bộ chấm tự động lỗi
    mạng 2 lần liên tiếp trong buổi — ghi âm chạy ngay trên máy, không
    cần mạng. Chỉ thêm vào panel sau khi rbShowMessage đã vẽ xong. */
@@ -3609,6 +3926,7 @@ function rbRescueToRecorder(ctx){
   panel.appendChild(actions);
 }
 function startSRReadback(ctx, session){
+  session.voiceLog = voiceLogBegin("Đọc lại", ctx.target, "recognition");
   ctx.fromRecording = false; ctx.lastBlob = null;
   if(ctx.audioUrl){ try{ URL.revokeObjectURL(ctx.audioUrl); }catch(e){} ctx.audioUrl = null; }
   var tWords = normalize(ctx.target).split(" ").filter(Boolean);
@@ -3635,7 +3953,7 @@ function startSRReadback(ctx, session){
       if(ctx.btn) ctx.btn.classList.add("listening");
     },
     result: function(res){
-      ctx._srDeadStreak = 0; noteSrResult();
+      ctx._srDeadStreak = 0; noteSrResult(); noteSrSessionAudible();
       var best = null;
       for(var k = 0; k < res.length; k++){
         var said = res[k].transcript || "";
@@ -3653,13 +3971,27 @@ function startSRReadback(ctx, session){
       /* no-speech ập tới khi bộ nghe chưa hề bắt đầu (không onstart)
          = phiên chết lặng của nền tảng ⇒ tự cứu như watchdog. */
       if(kind === "no-speech" && meta && !meta.started){ if(noteDead()) return; }
+      /* Bộ nghe ĐÃ bắt đầu mà vẫn báo không nghe thấy tiếng / không
+         bắt được mic, 2 phiên LIÊN TIẾP như vậy trong buổi (đúng triệu
+         chứng máy thật V15: từ thứ hai trở đi dính lỗi này) ⇒ máy này
+         không thu được bằng bộ chấm tự động: chuyển ghi âm tự kiểm tra
+         ngay + ghi nhớ, không để người học kẹt thêm phiên nào nữa. */
+      if((kind === "no-speech" || kind === "audio-capture") && meta && meta.started){
+        if(noteSrNoSpeech() >= 2){ noteDead(); return; }
+      } else if(kind !== "network"){ noteSrSessionAudible(); }
       rbShowMessage(ctx, kind);
       if(kind === "network" && noteSrNetworkError() >= 2) appendNetSwitchSuggest(ctx);
     },
     ended: function(gotResult, meta){
       if(ctx.btn) ctx.btn.classList.remove("listening");
-      if(gotResult){ ctx._srDeadStreak = 0; return; }
+      if(gotResult){ ctx._srDeadStreak = 0; noteSrSessionAudible(); return; }
       if(meta && meta.dead){ if(noteDead()) return; }
+      /* Phiên tự kết thúc không lỗi, không kết quả, nhưng bộ nghe ĐÃ
+         bắt đầu nghe (người học có nói mà máy thu rỗng — ca máy thật
+         V15): tính vào chuỗi 2 phiên liên tiếp như no-speech. */
+      if(meta && !session._userStop){
+        if(noteSrNoSpeech() >= 2){ noteDead(); return; }
+      }
       rbShowMessage(ctx, "no-speech");
     }
   });
@@ -3811,12 +4143,23 @@ function f32ToWavBlob(samples, sampleRate){
    Đường này CHỈ chạy khi trình duyệt không có SpeechRecognition —
    không bao giờ chạy song song với bộ nhận giọng. ===== */
 function startRecorderCapture(session, adapter){
+  if(!session.voiceLog){
+    var tgt = "";
+    if(session.ownerCtx && session.ownerCtx.target) tgt = session.ownerCtx.target;
+    else if(session.key === "speak" && typeof speakItems !== "undefined" && speakItems[speakIndex]) tgt = speakItems[speakIndex].en;
+    session.voiceLog = voiceLogBegin(session.key === "speak" ? "Luyện nói" : "Đọc lại", tgt, "ghi âm tự kiểm tra");
+  }
+  var log = session.voiceLog;
+  log.ev("recorder", "bắt đầu — xin mic qua MicStreamKeeper");
   adapter.phase("starting");
   micAcquire().then(function(stream){
     if(!MicSessions.isCurrent(session.id)) return;
+    log.ev("mic-ok", "đã có stream mic");
     beginRecorderWithStream(session, adapter, stream);
   }).catch(function(err){
     if(!MicSessions.isCurrent(session.id)) return;
+    log.ev("mic-error", gumErrorKind(err));
+    log.finish();
     MicSessions.finish(session);
     adapter.error(gumErrorKind(err));
   });
@@ -3843,7 +4186,7 @@ function beginRecorderWithStream(session, adapter, stream){
         var sum = 0, i, v;
         for(i = 0; i < buf.length; i++){ v = (buf[i] - 128) / 128; sum += v * v; }
         var d = det.feed(Math.sqrt(sum / buf.length), Date.now());
-        if(d === "speech" && session.phase === "listening"){ MicSessions.setPhase(session, "recording"); adapter.phase("recording"); }
+        if(d === "speech" && session.phase === "listening"){ MicSessions.setPhase(session, "recording"); if(session.voiceLog) session.voiceLog.ev("speech", "bộ dò nghe thấy tiếng nói"); adapter.phase("recording"); }
         else if(d === "stop"){ stopCaptureAndGrade(session); }
       }, 120);
       session.resources.timers.push(iv);
@@ -3854,10 +4197,12 @@ function beginRecorderWithStream(session, adapter, stream){
     if(session.resources.discard) return;
     if(!MicSessions.isCurrent(session.id)) return;
     var blob = new Blob(chunks, { type: rec.mimeType || mime || "audio/webm" });
+    if(session.voiceLog) session.voiceLog.ev("rec-stop", "blob " + Math.round(blob.size / 1024) + "KB · " + (rec.mimeType || mime || "?"));
     endCaptureResources(session);
     MicSessions.setPhase(session, "grading"); adapter.phase("grading");
     audioBlobInfo(blob).then(function(info){
       if(!MicSessions.isCurrent(session.id)) return;
+      if(session.voiceLog){ session.voiceLog.ev("self-audio", "sẵn sàng nghe lại"); session.voiceLog.finish(); }
       adapter.selfAudio(info);
     }).catch(function(){
       if(!MicSessions.isCurrent(session.id)) return;
@@ -3869,8 +4214,8 @@ function beginRecorderWithStream(session, adapter, stream){
   session.capTimer = setTimeout(function(){ stopCaptureAndGrade(session); }, session.capMs);
   MicSessions.setPhase(session, "listening");
   adapter.phase("listening");
-  try{ rec.start(250); }
-  catch(e){ MicSessions.finish(session); adapter.error("audio-capture"); }
+  try{ rec.start(250); if(session.voiceLog) session.voiceLog.ev("rec-start", "mime=" + (rec.mimeType || mime || "?")); }
+  catch(e){ if(session.voiceLog){ session.voiceLog.ev("rec-start-error", String(e && e.message || e)); session.voiceLog.finish(); } MicSessions.finish(session); adapter.error("audio-capture"); }
 }
 function stopCaptureAndGrade(session){
   if(!MicSessions.isCurrent(session.id)) return;
@@ -4767,6 +5112,15 @@ document.getElementById("hcToggle").addEventListener("click", function(){
 })();
 
 /* ================= INIT ================= */
+voiceLogEnv();
+var voiceDiagBtnEl = document.getElementById("voiceDiagBtn");
+if(voiceDiagBtnEl) voiceDiagBtnEl.addEventListener("click", openVoiceDiag);
+var voiceDiagCloseEl = document.getElementById("voiceDiagClose");
+if(voiceDiagCloseEl) voiceDiagCloseEl.addEventListener("click", closeVoiceDiag);
+var voiceDiagCopyEl = document.getElementById("voiceDiagCopy");
+if(voiceDiagCopyEl) voiceDiagCopyEl.addEventListener("click", function(){ copyVoiceLog(voiceDiagCopyEl); });
+var voiceDiagOverlayEl = document.getElementById("voiceDiagOverlay");
+if(voiceDiagOverlayEl) voiceDiagOverlayEl.addEventListener("click", function(e){ if(e.target === voiceDiagOverlayEl) closeVoiceDiag(); });
 loadState();
 updateStreak();
 renderLessonGrid();
