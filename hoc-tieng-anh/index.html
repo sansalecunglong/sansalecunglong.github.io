@@ -407,6 +407,8 @@ html.hc .tab-btn[aria-selected="true"]{color:#fff}
 .icon-btn.vslow{border-color:var(--primary); color:var(--primary-strong); background:var(--primary-soft)}
 .rb-panel{display:none; margin-top:10px; background:var(--surface-2); border:2px solid var(--border-strong); border-radius:var(--r-md); padding:18px 20px}
 .rb-panel.show{display:block}
+.inapp-guide{margin-top:12px; background:var(--accent-soft); border:2px solid var(--accent); border-radius:var(--r-md); padding:16px 18px; text-align:left}
+.inapp-guide .rb-status{margin-top:0}
 .rb-status{font-weight:800; font-size:1.02em}
 .rb-score{font-weight:800}
 .rb-words{display:flex; flex-wrap:wrap; gap:8px; margin:12px 0 4px}
@@ -2419,9 +2421,12 @@ function spSRAdapter(session){
     error: function(kind){
       document.getElementById("micBtn").classList.remove("listening");
       if(kind === "not-allowed") spStatus("Trang web chưa được phép dùng mic. Bác bấm cho phép (Allow) khi trình duyệt hỏi nhé.");
+      else if(kind === "service-not-allowed") spStatus("Bộ nghe đang bị trình duyệt chặn. Bác mở trang bằng Chrome hoặc Safari bản chính, cho phép mic một lần rồi bấm mic thử lại nhé.");
+      else if(kind === "audio-capture") spStatus("Mic chưa lên được — mic có thể đang bị ứng dụng khác dùng (đang có cuộc gọi, app ghi âm/quay video đang mở). Bác đóng hẳn các ứng dụng đó rồi bấm mic thử lại nhé.");
       else if(kind === "no-speech") spStatus("Chưa nghe thấy tiếng. Bác bấm mic và đọc to hơn một chút nhé.");
       else if(kind === "network") spStatus("Mạng đang yếu nên chưa nghe được. Bộ nghe này có sẵn trong Chrome và cần có mạng — bác kiểm tra Wi-Fi/4G, tắt bớt TV/quạt cho đỡ ồn rồi bấm mic thử lại nhé.");
       else spStatus("Có trục trặc nhỏ với mic. Bác thử lại sau một chút nhé.");
+      if(inAppBrowserInfo() && !inAppGuideShown){ inAppGuideShown = true; showSpeakInAppGuide(); }
     },
     ended: function(gotResult){
       document.getElementById("micBtn").classList.remove("listening");
@@ -2441,6 +2446,14 @@ document.getElementById("micBtn").addEventListener("click", function(){
   }
   if(window.speechSynthesis){ try{ window.speechSynthesis.cancel(); }catch(e){} }
   hideSpeakSelfCheck();
+  /* Mở trong trình duyệt nhúng của app khác: hiện hướng dẫn mở bằng
+     Chrome/Safari một lần trước khi bật mic (không chặn cứng). */
+  if(inAppBrowserInfo() && !inAppGuideShown){
+    inAppGuideShown = true;
+    showSpeakInAppGuide();
+    spStatus("Bác xem lưu ý trong khung màu cam ở dưới trước khi bật mic nhé.");
+    return;
+  }
   if(rbSupported()){
     var session = MicSessions.begin({
       key: "speak", kind: "sr", capMs: 20000,
@@ -2467,6 +2480,104 @@ document.getElementById("speakSelfRetry").addEventListener("click", function(){
 
 /* ================= READBACK: NGHE → ĐỌC LẠI → SỬA NGAY ================= */
 function rbSupported(){ return !!(window.SpeechRecognition || window.webkitSpeechRecognition); }
+
+/* ================= PHÁT HIỆN TRÌNH DUYỆT NHÚNG (IN-APP BROWSER) =================
+   Mở trang ngay trong app Google/Gemini, Facebook, Zalo, TikTok… thì
+   trình duyệt nhúng hay hỏi lại quyền mic mỗi lần bấm nói và nhiều máy
+   không thu được tiếng. Phát hiện qua userAgent để hiện hướng dẫn mở
+   bằng Chrome/Safari thật — không chặn cứng, ai muốn vẫn dùng tiếp. */
+function inAppBrowserInfo(){
+  var ua = navigator.userAgent || "";
+  var name = null;
+  if(/FBAN|FBAV|FB_IAB/.test(ua)) name = "Facebook";
+  else if(/Instagram/.test(ua)) name = "Instagram";
+  else if(/Zalo/.test(ua)) name = "Zalo";
+  else if(/Messenger/.test(ua)) name = "Messenger";
+  else if(/TikTok|musical_ly|BytedanceWebview/.test(ua)) name = "TikTok";
+  else if(/\bLine\//.test(ua)) name = "Line";
+  else if(/GSA\//.test(ua)) name = "Google";
+  else if(/; wv\)/.test(ua)) name = "một ứng dụng khác";
+  else if(/(iPhone|iPad|iPod)/.test(ua) && /AppleWebKit/.test(ua) && !/Safari/.test(ua)) name = "một ứng dụng khác";
+  return name ? { name: name } : null;
+}
+var inAppGuideShown = false;
+/* Địa chỉ bản live chính thức của trang (nơi bác vẫn học hằng ngày) —
+   ghi sẵn để nút sao chép luôn cho đúng địa chỉ này dù trang đang được
+   mở từ bất cứ ứng dụng nào. */
+var CANONICAL_URL = "https://sansalecunglong.github.io/hoc-tieng-anh/";
+function copyPageAddress(btn){
+  var url = CANONICAL_URL;
+  function done(){
+    if(btn) btn.textContent = "Đã sao chép ✓ — hãy dán vào Chrome/Safari";
+    toast("Đã sao chép địa chỉ trang — bác mở Chrome/Safari rồi dán vào nhé");
+  }
+  function fallback(){
+    try{
+      var ta = document.createElement("textarea");
+      ta.value = url; ta.style.position = "fixed"; ta.style.opacity = "0";
+      document.body.appendChild(ta); ta.select(); ta.setSelectionRange(0, url.length);
+      var ok = false; try{ ok = document.execCommand("copy"); }catch(e){}
+      document.body.removeChild(ta);
+      if(ok) done();
+      else if(btn) btn.textContent = "Chưa sao chép được — bác gõ lại địa chỉ trong khung dưới vào Chrome/Safari nhé";
+    }catch(e){}
+  }
+  if(navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(url).then(done, fallback);
+  } else fallback();
+}
+function buildInAppGuide(onContinue){
+  var info = inAppBrowserInfo();
+  var box = document.createElement("div"); box.className = "inapp-guide";
+  var t = document.createElement("p"); t.className = "rb-status";
+  t.textContent = "Bác đang mở trang ngay trong ứng dụng " + (info ? info.name : "") + " — mic trong này hay bị hỏi lại và nghe không rõ";
+  box.appendChild(t);
+  var p = document.createElement("p"); p.className = "rb-line";
+  p.textContent = "Khi mở trang ngay trong ứng dụng, mỗi lần bấm nói máy lại hỏi quyền mic và có khi mic không lên, không nghe được tiếng. Bác hãy mở trang bằng Chrome (điện thoại Android) hoặc Safari/Chrome (iPhone): ở đó chỉ cần cho phép mic MỘT lần, những lần sau cứ thế bật. Cách nhanh nhất: bấm nút dấu ba chấm (⋯) hoặc nút chia sẻ của ứng dụng rồi chọn “Mở trong trình duyệt”. Hoặc bấm nút “Sao chép địa chỉ trang” bên dưới, mở Chrome/Safari rồi dán địa chỉ vào.";
+  box.appendChild(p);
+  var addr = document.createElement("p"); addr.className = "rb-line";
+  addr.style.cssText = "font-weight:700; word-break:break-all; user-select:all; -webkit-user-select:all";
+  addr.textContent = CANONICAL_URL;
+  box.appendChild(addr);
+  var actions = document.createElement("div"); actions.className = "rb-actions";
+  var copyBtn = document.createElement("button");
+  copyBtn.type = "button"; copyBtn.className = "btn btn-primary";
+  copyBtn.textContent = "Sao chép địa chỉ trang";
+  copyBtn.addEventListener("click", function(){ copyPageAddress(copyBtn); });
+  actions.appendChild(copyBtn);
+  if(onContinue){
+    var cont = document.createElement("button");
+    cont.type = "button"; cont.className = "btn btn-accent";
+    cont.textContent = "Vẫn dùng mic ở đây";
+    cont.addEventListener("click", onContinue);
+    actions.appendChild(cont);
+  }
+  box.appendChild(actions);
+  return box;
+}
+function rbShowInAppGuide(ctx){
+  var panel = ctx.panel;
+  panel.innerHTML = ""; panel.className = "rb-panel show";
+  if(ctx.btn) ctx.btn.classList.remove("listening");
+  var head = document.createElement("p"); head.className = "rb-status";
+  head.textContent = "Trước khi bật mic, bác xem lưu ý này nhé";
+  panel.appendChild(head);
+  panel.appendChild(buildInAppGuide(function(){ startReadback(ctx); }));
+}
+function showSpeakInAppGuide(){
+  var box = document.getElementById("speakInAppGuide");
+  if(!box){
+    box = document.createElement("div"); box.id = "speakInAppGuide";
+    var fb = document.getElementById("speakFeedback");
+    if(fb && fb.parentNode) fb.parentNode.insertBefore(box, fb);
+  }
+  box.innerHTML = "";
+  box.appendChild(buildInAppGuide(function(){
+    box.style.display = "none";
+    document.getElementById("micBtn").click();
+  }));
+  box.style.display = "block";
+}
 
 /* ================= QUẢN LÝ PHIÊN MIC DUY NHẤT (MicSessionManager) =================
    Toàn trang tại mỗi thời điểm CHỈ MỘT phiên mic được hoạt động. Mở phiên
@@ -2560,28 +2671,65 @@ function makeEndpointDetector(opts){
     floor: function(){ return noiseFloor; }
   };
 }
-/* Điểm gọi getUserMedia DUY NHẤT trong mã của trang — stream luôn được
-   gắn vào phiên để khi phiên bị hủy, track mic tắt ngay (đèn mic tắt). */
-function micAcquire(session){
-  /* Xin mic kèm bộ lọc của trình duyệt: khử tiếng vọng, khử tạp âm nền và
-     tự chỉnh độ to. Nhiều máy Android chỉ bật các bộ lọc này khi trang xin
-     rõ; xin mặc định {audio:true} là thu cả tiếng quạt/TV vào bản ghi. */
-  var cleaned = { audio: { echoCancellation: true, noiseSuppression: true, autoGainControl: true } };
-  var req = navigator.mediaDevices.getUserMedia(cleaned).catch(function(err){
-    if(err && (err.name === "OverconstrainedError" || err.name === "NotSupportedError")){
-      return navigator.mediaDevices.getUserMedia({ audio: true });
-    }
-    throw err;
-  });
-  return req.then(function(stream){
-    if(session){
-      session.resources.streams.push(stream);
-      if(!MicSessions.isCurrent(session.id)){
-        stream.getTracks().forEach(function(t){ try{ t.stop(); }catch(e){} });
+/* ===== GIỮ MỘT STREAM MIC DUY NHẤT CHO CẢ BUỔI HỌC (MicStreamKeeper) =====
+   Xin mic đúng MỘT lần ở lần bấm ghi đầu tiên; mọi phiên ghi âm sau tái
+   dùng stream đang sống — KHÔNG stop() track sau mỗi phiên, nên trình
+   duyệt không hỏi lại quyền và không bật lại thông báo mic. Stream chỉ
+   được giải phóng khi rời trang (pagehide) hoặc trang bị ẩn quá lâu
+   (hơn 60 giây). Điểm gọi getUserMedia DUY NHẤT của trang nằm trong đây
+   và chỉ chạy khi người dùng đã bấm nút mic thật sự. */
+var MicStreamKeeper = (function(){
+  var stream = null, pending = null, hiddenTimer = null;
+  function alive(s){
+    if(!s) return false;
+    var ts = s.getAudioTracks();
+    for(var i = 0; i < ts.length; i++){ if(ts[i].readyState === "live") return true; }
+    return false;
+  }
+  function acquire(){
+    if(alive(stream)) return Promise.resolve(stream);
+    if(pending) return pending;
+    stream = null;
+    /* Xin mic kèm bộ lọc của trình duyệt: khử tiếng vọng, khử tạp âm nền
+       và tự chỉnh độ to. Nhiều máy Android chỉ bật các bộ lọc này khi
+       trang xin rõ; xin mặc định {audio:true} là thu cả tiếng quạt/TV. */
+    var cleaned = { audio: { echoCancellation: true, noiseSuppression: true, autoGainControl: true } };
+    var req = navigator.mediaDevices.getUserMedia(cleaned).catch(function(err){
+      if(err && (err.name === "OverconstrainedError" || err.name === "NotSupportedError")){
+        return navigator.mediaDevices.getUserMedia({ audio: true });
       }
+      throw err;
+    });
+    pending = req.then(function(st){
+      pending = null; stream = st; return st;
+    }, function(err){
+      pending = null; throw err;
+    });
+    return pending;
+  }
+  function release(){
+    if(hiddenTimer){ clearTimeout(hiddenTimer); hiddenTimer = null; }
+    if(stream){
+      stream.getTracks().forEach(function(t){ try{ t.stop(); }catch(e){} });
+      stream = null;
     }
-    return stream;
+  }
+  document.addEventListener("visibilitychange", function(){
+    if(document.hidden){
+      if(hiddenTimer) clearTimeout(hiddenTimer);
+      hiddenTimer = setTimeout(release, 60000);
+    } else if(hiddenTimer){ clearTimeout(hiddenTimer); hiddenTimer = null; }
   });
+  window.addEventListener("pagehide", release);
+  return { acquire: acquire, release: release, isAlive: function(){ return alive(stream); } };
+})();
+function micAcquire(){ return MicStreamKeeper.acquire(); }
+/* Đổi lỗi getUserMedia thành mã lỗi chung để panel báo đúng tiếng Việt */
+function gumErrorKind(err){
+  var n = err && err.name ? err.name : "";
+  if(n === "NotAllowedError" || n === "PermissionDeniedError" || n === "SecurityError") return "not-allowed";
+  if(n === "NotFoundError" || n === "DevicesNotFoundError" || n === "NotReadableError" || n === "TrackStartError" || n === "OverconstrainedError") return "audio-capture";
+  return "error";
 }
 function endCaptureResources(session){ MicSessions.dispose(session); }
 function closeReadbackPanel(ctx){
@@ -2592,7 +2740,7 @@ function closeReadbackPanel(ctx){
   if(ctx.audioUrl){ try{ URL.revokeObjectURL(ctx.audioUrl); }catch(e){} ctx.audioUrl = null; }
 }
 function srKind(kind){
-  var known = { "not-allowed": 1, "no-speech": 1, "network": 1, "audio-capture": 1 };
+  var known = { "not-allowed": 1, "service-not-allowed": 1, "no-speech": 1, "network": 1, "audio-capture": 1 };
   return known[kind] ? kind : "error";
 }
 function alignWords(tWords, hWords){
@@ -2740,6 +2888,7 @@ function rbActionBtn(label, fn, cls){
 function rbShowMessage(ctx, kind){
   var panel = ctx.panel;
   panel.innerHTML = ""; panel.className = "rb-panel show";
+  if(ctx.btn) ctx.btn.classList.remove("listening");
   var title = document.createElement("p"); title.className = "rb-status";
   var text = document.createElement("p"); text.className = "rb-line";
   var actions = document.createElement("div"); actions.className = "rb-actions";
@@ -2748,27 +2897,39 @@ function rbShowMessage(ctx, kind){
     title.textContent = "Trình duyệt này chưa nghe được giọng nói";
     text.textContent = "Trình duyệt này không có bộ nghe chấm tự động nên nút Đọc lại sẽ dùng chế độ ghi âm tự kiểm tra: bác ghi âm, nghe lại giọng mình rồi tự đánh giá. Muốn được chấm tự động từng từ, bác mở trang bằng Google Chrome (trên điện thoại Android hoặc máy tính) — bộ nghe có sẵn trong Chrome, dùng ngay, không phải tải thêm gì, chỉ cần có mạng và cho phép dùng mic.";
   } else {
-    actions.appendChild(rbActionBtn("Đọc lại lần nữa", function(){ startReadback(ctx); }, "mic"));
+    actions.appendChild(rbActionBtn("Thử lại", function(){ startReadback(ctx); }, "mic"));
     if(kind === "not-allowed"){
+      ctx._errStreak = 0;
       title.textContent = "Chưa được phép dùng mic";
-      text.textContent = "Bác bấm “Cho phép / Allow” khi trình duyệt hỏi xin dùng mic nhé. Nếu lỡ bấm nhầm “Chặn”, bác bấm vào biểu tượng ổ khóa (hoặc mic) trên thanh địa chỉ, bật lại mic cho trang này, rồi bấm “Đọc lại lần nữa”.";
+      text.textContent = "Bác bấm “Cho phép / Allow” khi trình duyệt hỏi xin dùng mic nhé. Nếu lỡ bấm nhầm “Chặn”, bác bấm vào biểu tượng ổ khóa (hoặc mic) trên thanh địa chỉ, bật lại mic cho trang này, rồi bấm “Thử lại”.";
+    } else if(kind === "service-not-allowed"){
+      ctx._errStreak = 0;
+      title.textContent = "Bộ nghe đang bị trình duyệt chặn";
+      text.textContent = "Trình duyệt chưa cho trang dùng bộ nghe giọng nói. Bác mở trang bằng Google Chrome hoặc Safari bản chính (không mở trong ứng dụng khác), cho phép mic một lần, rồi bấm “Thử lại” nhé.";
     } else if(kind === "no-speech"){
+      ctx._errStreak = (ctx._errStreak || 0) + 1;
       title.textContent = "Chưa nghe thấy tiếng";
-      text.textContent = "Trang web chưa nghe thấy bác nói. Bác để điện thoại gần miệng hơn, đọc to và rõ từng từ; nếu phòng đang ồn (TV, quạt, tiếng đường) thì bác tắt bớt hoặc ra chỗ yên tĩnh hơn, rồi bấm “Đọc lại lần nữa” nhé.";
+      text.textContent = "Trang web chưa nghe thấy bác nói. Bác để điện thoại gần miệng hơn, đọc to và rõ từng từ; nếu phòng đang ồn (TV, quạt, tiếng đường) thì bác tắt bớt hoặc ra chỗ yên tĩnh hơn, rồi bấm “Thử lại” nhé." + (ctx._errStreak >= 2 ? " Mic vẫn chưa lên sau vài lần thử — có thể mic đang bị một ứng dụng khác dùng (đang có cuộc gọi, hoặc app ghi âm/quay video đang mở). Bác đóng hẳn các ứng dụng đó rồi thử lại nhé." : "");
     } else if(kind === "network"){
+      ctx._errStreak = 0;
       title.textContent = "Chưa có kết nối mạng";
-      text.textContent = "Bộ nghe có sẵn trong Chrome cần có mạng mới nghe được. Bác kiểm tra lại Wi-Fi hoặc 4G, tắt bớt TV/quạt cho đỡ ồn rồi bấm “Đọc lại lần nữa” nhé.";
+      text.textContent = "Bộ nghe có sẵn trong Chrome cần có mạng mới nghe được. Bác kiểm tra lại Wi-Fi hoặc 4G, tắt bớt TV/quạt cho đỡ ồn rồi bấm “Thử lại” nhé.";
     } else if(kind === "audio-capture"){
-      title.textContent = "Không tìm thấy mic";
-      text.textContent = "Máy chưa nhận được mic. Bác kiểm tra lại mic (hoặc tai nghe có mic) rồi bấm “Đọc lại lần nữa” nhé.";
+      ctx._errStreak = (ctx._errStreak || 0) + 1;
+      title.textContent = "Mic chưa lên được";
+      text.textContent = "Máy chưa thu được tiếng từ mic. Mic có thể đang bị một ứng dụng khác dùng (đang có cuộc gọi, hoặc app ghi âm/quay video đang mở) — bác đóng hẳn các ứng dụng đó, kiểm tra lại mic (hoặc tai nghe có mic), rồi bấm “Thử lại” nhé.";
     } else {
       title.textContent = "Chưa nghe được lúc này";
-      text.textContent = "Có trục trặc nhỏ khi bật mic. Bác chờ một chút rồi bấm “Đọc lại lần nữa” nhé.";
+      text.textContent = "Có trục trặc nhỏ khi bật mic. Bác chờ một chút rồi bấm “Thử lại” nhé.";
     }
   }
   panel.appendChild(title); panel.appendChild(text); panel.appendChild(actions);
+  if(kind !== "unsupported" && inAppBrowserInfo()){
+    panel.appendChild(buildInAppGuide(null));
+  }
 }
 function rbShowResult(ctx, best){
+  ctx._errStreak = 0;
   var panel = ctx.panel;
   panel.innerHTML = ""; panel.className = "rb-panel show";
   var tWords = normalize(ctx.target).split(" ").filter(Boolean);
@@ -2872,6 +3033,13 @@ function startReadback(ctx){
     rbShowIdle(ctx, "Đã dừng ghi âm", "Bác bấm “Đọc lại” khi sẵn sàng nói lại nhé.");
     return;
   }
+  /* Mở trong trình duyệt nhúng của app khác: hiện hướng dẫn mở bằng
+     Chrome/Safari một lần trước khi bật mic (không chặn cứng). */
+  if(inAppBrowserInfo() && !inAppGuideShown){
+    inAppGuideShown = true;
+    rbShowInAppGuide(ctx);
+    return;
+  }
   var session = MicSessions.begin({
     key: "readback", ownerCtx: ctx,
     kind: rbSupported() ? "sr" : "record",
@@ -2949,6 +3117,7 @@ function rbSelfAdapter(ctx, session){
   };
 }
 function rbShowSelfCheck(ctx, session, info){
+  ctx._errStreak = 0;
   MicSessions.finish(session);
   ctx.fromRecording = true; ctx.recDur = info.dur;
   ctx.paceRemarks = paceRemarks(info.dur, normalize(ctx.target).split(" ").filter(Boolean).length, info.rms);
@@ -2982,34 +3151,16 @@ function rbShowSelfCheck(ctx, session, info){
   actions.appendChild(rbActionBtn("Chưa đúng, đọc lại", function(){ startReadback(ctx); }, "mic"));
   panel.appendChild(actions);
 }
-/* ===== Đường Web Speech (bộ nghe có sẵn trong Chrome) — qua MicSessionManager ===== */
-function startSRMonitor(session){
-  if(!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) return;
-  micAcquire(session).then(function(stream){
-    if(!MicSessions.isCurrent(session.id)) return;
-    try{
-      var AC = window.AudioContext || window.webkitAudioContext; if(!AC) return;
-      var ac = new AC(); session.resources.monitorCtx = ac;
-      if(ac.state === "suspended"){ try{ ac.resume(); }catch(e){} }
-      var srcN = ac.createMediaStreamSource(stream);
-      var an = ac.createAnalyser(); an.fftSize = 512; srcN.connect(an);
-      var det = makeEndpointDetector({ silenceMs: 1200, speechRms: 0.02 });
-      var buf = new Uint8Array(an.fftSize);
-      var iv = setInterval(function(){
-        if(!MicSessions.isCurrent(session.id)){ clearInterval(iv); return; }
-        an.getByteTimeDomainData(buf);
-        var sum = 0, i, v;
-        for(i = 0; i < buf.length; i++){ v = (buf[i] - 128) / 128; sum += v * v; }
-        if(det.feed(Math.sqrt(sum / buf.length), Date.now()) === "stop"){
-          clearInterval(iv);
-          var r = session.resources.recog;
-          if(r){ try{ r.stop(); }catch(e){} }
-        }
-      }, 120);
-      session.resources.timers.push(iv);
-    }catch(e){}
-  }).catch(function(){});
-}
+/* ===== Đường Web Speech (bộ nghe có sẵn trong Chrome) — qua MicSessionManager =====
+   QUAN TRỌNG: phiên nhận giọng CHỈ chạy SpeechRecognition — tuyệt đối
+   KHÔNG gọi getUserMedia/MediaRecorder trong phiên này. Trước đây trang
+   mở thêm một stream ghi âm song song để canh im lặng: trên iPhone/điện
+   thoại hai đường tranh nhau mic (iOS không cho ghi âm và nhận giọng
+   cùng lúc) nên máy hiện “Đang nghe…” mà không thu được tiếng, và mỗi
+   lần getUserMedia lại bật thêm một thông báo quyền mic. Nay việc tự
+   dừng khi đọc xong do chính bộ nhận giọng đảm nhiệm (nó tự kết thúc khi
+   thấy im lặng), trần cứng capMs của phiên vẫn giữ làm phanh an toàn.
+   Tính năng “Nghe lại giọng của bác” chỉ có ở chế độ tự kiểm tra. */
 function startSRSession(session, adapter){
   var SR = window.SpeechRecognition || window.webkitSpeechRecognition;
   var rec;
@@ -3021,7 +3172,6 @@ function startSRSession(session, adapter){
     if(!MicSessions.isCurrent(session.id)) return;
     MicSessions.setPhase(session, "listening");
     adapter.phase("listening");
-    startSRMonitor(session);
   };
   rec.onresult = function(ev){
     if(!MicSessions.isCurrent(session.id)) return;
@@ -3233,9 +3383,23 @@ function f32ToWavBlob(samples, sampleRate){
   return new Blob([view], { type: "audio/wav" });
 }
 /* ===== GHI ÂM MỘT PHIÊN TỰ KIỂM TRA: MediaRecorder + phát hiện im lặng
-   RMS thích ứng theo ồn nền (bộ dò dùng chung với đường Chrome). Stream
-   mic do micAcquire cấp cho phiên — không mở mic lần thứ hai. ===== */
-function startRecorderCapture(session, adapter, stream){
+   RMS thích ứng theo ồn nền (bộ dò dùng chung). Stream mic lấy từ
+   MicStreamKeeper: xin đúng một lần ở phiên ghi đầu tiên, các phiên sau
+   tái dùng stream đang sống nên trình duyệt không hỏi lại quyền mic.
+   Đường này CHỈ chạy khi trình duyệt không có SpeechRecognition —
+   không bao giờ chạy song song với bộ nhận giọng. ===== */
+function startRecorderCapture(session, adapter){
+  adapter.phase("starting");
+  micAcquire().then(function(stream){
+    if(!MicSessions.isCurrent(session.id)) return;
+    beginRecorderWithStream(session, adapter, stream);
+  }).catch(function(err){
+    if(!MicSessions.isCurrent(session.id)) return;
+    MicSessions.finish(session);
+    adapter.error(gumErrorKind(err));
+  });
+}
+function beginRecorderWithStream(session, adapter, stream){
   var chunks = [];
   var mime = rbPickMime();
   var rec;
