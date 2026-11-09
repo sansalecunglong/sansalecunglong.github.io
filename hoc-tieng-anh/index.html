@@ -88,7 +88,7 @@ header.site{
   position:sticky; top:0; z-index:60;
   background:var(--bg); border-bottom:2px solid var(--border);
 }
-.header-in{display:flex; align-items:center; gap:14px; flex-wrap:wrap; padding:12px 0}
+.header-in{display:flex; align-items:center; gap:14px; flex-wrap:wrap; padding-top:12px; padding-bottom:12px}
 .brand{display:flex; align-items:center; gap:12px; margin-right:auto; text-decoration:none; color:var(--ink)}
 .brand-mark{
   width:52px; height:52px; border-radius:16px; flex:none;
@@ -405,19 +405,20 @@ html.hc .tab-btn[aria-selected="true"]{color:#fff}
 .icon-btn.mic{border-color:var(--accent); color:var(--accent-strong); background:var(--accent-soft)}
 .icon-btn.mic.listening{background:var(--danger); border-color:var(--danger); color:#fff; animation:pulse 1.2s ease infinite}
 .icon-btn.vslow{border-color:var(--primary); color:var(--primary-strong); background:var(--primary-soft)}
-.rb-panel{display:none; margin-top:10px; background:var(--surface-2); border:2px solid var(--border-strong); border-radius:var(--r-md); padding:18px 20px}
+.rb-panel{display:none; margin-top:8px; background:var(--surface-2); border:2px solid var(--border-strong); border-radius:var(--r-md); padding:14px 16px}
+.vocab-row>.rb-panel{width:100%; margin-top:2px}
 .rb-panel.show{display:block}
 .inapp-guide{margin-top:12px; background:var(--accent-soft); border:2px solid var(--accent); border-radius:var(--r-md); padding:16px 18px; text-align:left}
 .inapp-guide .rb-status{margin-top:0}
 .rb-status{font-weight:800; font-size:1.02em}
 .rb-score{font-weight:800}
-.rb-words{display:flex; flex-wrap:wrap; gap:8px; margin:12px 0 4px}
+.rb-words{display:flex; flex-wrap:wrap; gap:8px; margin:10px 0 2px}
 .wcheck{padding:7px 14px; border-radius:var(--r-pill); font-weight:800; border:2.5px solid; font-size:.98em}
 .wcheck.ok{background:var(--success-soft); border-color:var(--success); color:var(--ink)}
 .wcheck.bad{background:var(--danger-soft); border-color:var(--danger); color:var(--ink); text-decoration:underline; text-underline-offset:3px}
-.rb-line{font-weight:600; margin-top:8px}
-.rb-note{font-weight:700; margin-top:10px; background:var(--surface); border:1.5px solid var(--border-strong); border-radius:var(--r-sm); padding:12px 14px}
-.rb-actions{display:flex; gap:8px; flex-wrap:wrap; margin-top:14px}
+.rb-line{font-weight:600; margin-top:6px}
+.rb-note{font-weight:700; margin-top:8px; background:var(--surface); border:1.5px solid var(--border-strong); border-radius:var(--r-sm); padding:10px 12px}
+.rb-actions{display:flex; gap:8px; flex-wrap:wrap; margin-top:10px}
 
 /* Numbers strip */
 .numbers-strip{display:flex; flex-wrap:wrap; gap:10px; margin-top:20px}
@@ -513,7 +514,7 @@ html.hc .avatar{color:#fff}
 @keyframes pulse{0%,100%{transform:scale(1)} 50%{transform:scale(1.07)}}
 .speak-status{text-align:center; font-weight:700; margin-top:16px; min-height:1.6em}
 .speak-heard{text-align:center; color:var(--muted); min-height:1.6em}
-.feedback{border-radius:var(--r-md); padding:16px 18px; font-weight:600; margin-top:14px; display:none}
+.feedback{border-radius:var(--r-md); padding:12px 14px; font-weight:600; margin-top:10px; display:none}
 .feedback.show{display:block}
 .feedback.good{background:var(--success-soft); border:2px solid var(--success)}
 .feedback.try{background:var(--accent-soft); border:2px solid var(--accent)}
@@ -716,7 +717,7 @@ html.hc .stat b, html.hc .hero-mini b, html.hc .num-chip span{color:#003D1E}
 @media (max-width:700px){
   .wrap{padding-left:max(16px,env(safe-area-inset-left,0px)); padding-right:max(16px,env(safe-area-inset-right,0px))}
   /* Header xếp chồng gọn, nút chỉnh chữ chạm ≥56px */
-  .header-in{flex-direction:column; align-items:stretch; gap:10px; padding:10px 0 12px}
+  .header-in{flex-direction:column; align-items:stretch; gap:10px; padding-top:10px; padding-bottom:12px}
   .brand{margin-right:0}
   .brand .brand-mark{display:flex}
   .brand>span:last-child{display:block}
@@ -745,7 +746,7 @@ html.hc .stat b, html.hc .hero-mini b, html.hc .num-chip span{color:#003D1E}
   .v-btns{display:grid; grid-template-columns:1fr 1fr; gap:10px; width:100%}
   .v-btns .icon-btn,.v-btns .learned-toggle{width:100%; min-height:56px; height:auto; justify-content:center; text-align:center; padding:10px 8px; white-space:normal}
   .v-btns .learned-toggle{grid-column:1/-1}
-  .rb-panel{padding:16px}
+  .rb-panel{padding:12px 14px}
   .rb-actions{display:grid; grid-template-columns:1fr 1fr; gap:10px}
   .rb-actions .icon-btn{min-height:56px; justify-content:center; white-space:normal; text-align:center}
   .rb-steps{grid-template-columns:1fr}
@@ -933,7 +934,7 @@ html[data-font="small"] .sub-h{font-size:clamp(20px,5.8vw,25px)}
    Cỡ chữ (4 mức) và Tương phản cao nằm hết trong bảng menu
    thả xuống dưới header; chọn xong menu TỰ ĐÓNG.
    ============================================================ */
-.header-in{flex-wrap:nowrap; padding:10px 0; gap:12px}
+.header-in{flex-wrap:nowrap; padding-top:10px; padding-bottom:10px; gap:12px}
 .brand{min-width:0}
 .menu-wrap{position:relative; margin-left:auto; flex:none}
 .menu-toggle{
@@ -1028,7 +1029,7 @@ html[data-font="small"] .dm-note{font-size:max(14px,.92em)}
 html[data-font="small"] .hc-state{font-size:max(14px,.88em)}
 @media (max-width:700px){
   /* Header MỘT HÀNG duy nhất ở mobile: logo trái, nút Menu phải — thấp và gọn */
-  .header-in{flex-direction:row !important; align-items:center; flex-wrap:nowrap; padding:8px 0; gap:10px}
+  .header-in{flex-direction:row !important; align-items:center; flex-wrap:nowrap; padding-top:8px; padding-bottom:8px; gap:10px}
   .brand{margin-right:0; flex:1 1 auto; min-width:0}
   .brand-mark{width:48px; height:48px; border-radius:14px}
   .menu-wrap{margin-left:auto}
@@ -1125,6 +1126,56 @@ html.hc .mem-tile{color:#fff}
 @keyframes badflashA{0%,100%{} 50%{background:var(--danger-soft); border-color:var(--danger)}}
 @media (prefers-reduced-motion: reduce){ .badflash{animation:none} }
 
+/* ============================================================
+   V12 — TỐI ƯU HIỂN THỊ ĐIỆN THOẠI (theo ảnh Safari iPhone)
+   · Panel tự kiểm tra nằm gọn TRONG thẻ từ, ngay dưới hàng nút,
+     chữ của từ giữ nguyên vị trí — trang không tự cuộn khi panel mở.
+   · Header không bị cắt mép: khối chữ của brand co/xuống dòng được.
+   · Đáy mọi màn hình cuộn có đệm lớn + safe-area để thanh công
+     cụ nổi của Safari không che thẻ/nút cuối cùng.
+   ============================================================ */
+html,body{overflow-x:clip}
+.brand>span.brand-txt{min-width:0}
+.brand b{overflow-wrap:break-word}
+footer.site{padding-bottom:calc(120px + env(safe-area-inset-bottom,0px))}
+.view{padding-bottom:calc(16px + env(safe-area-inset-bottom,0px))}
+.tab-panel{padding-bottom:12px}
+@media (max-width:700px){
+  .brand{gap:10px}
+  .brand-mark{flex:none}
+  .menu-wrap{flex:none}
+}
+
+/* ============================================================
+   V13 — PANEL GỌN TRONG THẺ + HEADER KHÔNG CẮT MÉP + ĐỆM ĐÁY
+   · Panel Đọc lại: padding nhỏ, trạng thái 1 dòng + giải thích
+     tối đa 2 dòng ngắn, nút bấm ngay dưới — hết panel cao ~300px
+     che mất chữ của từ đang học.
+   · Header: chuỗi co giãn min-width:0 đầy đủ từ .brand xuống
+     từng chữ; ở 320–430px logo và tiêu đề luôn gọn trong khung.
+   · Đáy trang bài học: safe-area + ~100px dự phòng để thanh
+     công cụ nổi của Safari không che thẻ/nút cuối cùng.
+   ============================================================ */
+.rb-panel{padding:10px 12px}
+.rb-status{line-height:1.45}
+.rb-line{margin-top:4px; line-height:1.5}
+.rb-note{margin-top:6px; padding:8px 10px}
+.rb-actions{margin-top:8px; gap:8px}
+.rb-words{margin-top:8px}
+.brand{flex:1 1 auto; min-width:0}
+.brand-txt{flex:1 1 auto; min-width:0}
+.view{padding-bottom:calc(100px + env(safe-area-inset-bottom,0px))}
+@media (max-width:700px){
+  .rb-panel{padding:10px 12px}
+  .rb-actions{display:flex; flex-wrap:wrap}
+  .rb-actions .icon-btn{flex:1 1 40%; min-height:52px; white-space:normal; text-align:center; justify-content:center}
+}
+@media (max-width:430px){
+  .brand b{font-size:max(17px,1.02em)}
+  .brand-mark{width:44px; height:44px; border-radius:13px}
+  .menu-toggle{padding:8px 12px; gap:7px}
+}
+
 </style>
 </head>
 <body>
@@ -1133,7 +1184,7 @@ html.hc .mem-tile{color:#fff}
   <div class="wrap header-in">
     <a class="brand" href="#" id="brandHome" aria-label="Về trang chính">
       <span class="brand-mark" aria-hidden="true">Aa</span>
-      <span><b>Tiếng Anh Cho Người Mới</b><span>Học chậm mà chắc — mỗi ngày 10 phút</span></span>
+      <span class="brand-txt"><b>Tiếng Anh Cho Người Mới Bắt Đầu</b><span>Học chậm mà chắc — mỗi ngày 10 phút</span></span>
     </a>
     <div class="menu-wrap">
       <button type="button" class="menu-toggle" id="menuToggle" aria-haspopup="true" aria-expanded="false" aria-controls="displayMenu" aria-label="Mở menu cài đặt hiển thị">
@@ -2099,8 +2150,9 @@ function renderVocab(){
     btns.appendChild(readbackBtn(v.en, v.ipa, v.vi, true, panel));
     btns.appendChild(learnToggle(v.en));
     row.appendChild(btns);
+    row.appendChild(panel);
     var item = document.createElement("div"); item.className="vocab-item";
-    item.appendChild(row); item.appendChild(panel); list.appendChild(item);
+    item.appendChild(row); list.appendChild(item);
   });
   var pl = document.getElementById("phraseList"); pl.innerHTML = "";
   currentLesson.phrases.forEach(function(p){
@@ -2116,8 +2168,9 @@ function renderVocab(){
     btns.appendChild(speakBtn(p.en, 0.38, "Nghe rất chậm", false, "vslow"));
     btns.appendChild(readbackBtn(p.en, "", p.vi, false, panel));
     row.appendChild(btns);
+    row.appendChild(panel);
     var item = document.createElement("div"); item.className="vocab-item";
-    item.appendChild(row); item.appendChild(panel); pl.appendChild(item);
+    item.appendChild(row); pl.appendChild(item);
   });
   var nw = document.getElementById("numbersWrap"); nw.innerHTML = "";
   if(currentLesson.numbers){
@@ -2402,9 +2455,9 @@ function spSelfAdapter(session){
       MicSessions.finish(session);
       setSpAudio(info.blob);
       document.getElementById("micBtn").classList.remove("listening");
-      spStatus("Đã ghi xong! Bác bấm “Nghe lại giọng của bác” để tự nghe, nghe thêm câu mẫu để so sánh, rồi chọn một nút bên dưới.");
+      spStatus("Đã ghi xong! Bác nghe lại giọng mình, nghe câu mẫu để so, rồi chọn một nút bên dưới.");
       var fb = document.getElementById("speakFeedback"); fb.className = "feedback show try";
-      fb.textContent = "Chế độ tự kiểm tra: trình duyệt này không tự chấm được nên bác tự đánh giá nhé. Câu mẫu: “" + (speakItems[speakIndex] ? speakItems[speakIndex].en : "") + "”. Nếu bản ghi lẫn nhiều tiếng ồn (TV, quạt), bác tắt bớt rồi ghi lại sẽ rõ hơn.";
+      fb.textContent = "Chế độ tự kiểm tra: bác tự nghe và đánh giá nhé. Câu mẫu: “" + (speakItems[speakIndex] ? speakItems[speakIndex].en : "") + "”. Bản ghi lẫn tiếng ồn (TV, quạt) thì tắt bớt rồi ghi lại sẽ rõ hơn.";
       var w = document.getElementById("speakSelfCheck"); if(w) w.style.display = "flex";
       var n = document.getElementById("speakSelfNote"); if(n) n.style.display = "block";
     }
@@ -2422,15 +2475,17 @@ function spSRAdapter(session){
       document.getElementById("micBtn").classList.remove("listening");
       if(kind === "not-allowed") spStatus("Trang web chưa được phép dùng mic. Bác bấm cho phép (Allow) khi trình duyệt hỏi nhé.");
       else if(kind === "service-not-allowed") spStatus("Bộ nghe đang bị trình duyệt chặn. Bác mở trang bằng Chrome hoặc Safari bản chính, cho phép mic một lần rồi bấm mic thử lại nhé.");
-      else if(kind === "audio-capture") spStatus("Mic chưa lên được — mic có thể đang bị ứng dụng khác dùng (đang có cuộc gọi, app ghi âm/quay video đang mở). Bác đóng hẳn các ứng dụng đó rồi bấm mic thử lại nhé.");
+      else if(kind === "audio-capture") spStatus("Mic chưa lên được — có thể mic đang bị ứng dụng khác dùng. Bác đóng hẳn các ứng dụng đó rồi bấm mic thử lại nhé.");
       else if(kind === "no-speech") spStatus("Chưa nghe thấy tiếng. Bác bấm mic và đọc to hơn một chút nhé.");
-      else if(kind === "network") spStatus("Mạng đang yếu nên chưa nghe được. Bộ nghe này có sẵn trong Chrome và cần có mạng — bác kiểm tra Wi-Fi/4G, tắt bớt TV/quạt cho đỡ ồn rồi bấm mic thử lại nhé.");
+      else if(kind === "network") spStatus("Mạng đang yếu nên chưa nghe được. Bác kiểm tra Wi-Fi/4G rồi bấm mic thử lại nhé.");
       else spStatus("Có trục trặc nhỏ với mic. Bác thử lại sau một chút nhé.");
       if(inAppBrowserInfo() && !inAppGuideShown){ inAppGuideShown = true; showSpeakInAppGuide(); }
     },
-    ended: function(gotResult){
+    ended: function(gotResult, meta){
       document.getElementById("micBtn").classList.remove("listening");
-      if(!gotResult) spStatus("Chưa nghe thấy tiếng. Bác bấm mic và đọc to hơn một chút nhé.");
+      if(gotResult) return;
+      if(session._userStop){ spStatus("Đã dừng. Bác bấm mic khi muốn đọc lại nhé."); return; }
+      spStatus("Chưa nghe thấy tiếng. Bác bấm mic và đọc to hơn một chút nhé.");
     }
   };
 }
@@ -2439,7 +2494,7 @@ document.getElementById("micBtn").addEventListener("click", function(){
   if(cur && cur.key === "speak"){
     if(cur.phase === "starting" || cur.phase === "grading") return;
     if(cur.phase === "listening" || cur.phase === "recording"){
-      if(cur.kind === "sr"){ var r = cur.resources.recog; if(r){ try{ r.stop(); }catch(e){} } }
+      if(cur.kind === "sr"){ if(cur.stopCapture) cur.stopCapture(); else { var r = cur.resources.recog; if(r){ try{ r.stop(); }catch(e){} } } }
       else if(cur.stopCapture) cur.stopCapture();
       return;
     }
@@ -2585,6 +2640,12 @@ function showSpeakInAppGuide(){
    tắt track mic / đóng panel cũ). Mọi callback bất đồng bộ đều phải qua
    isCurrent(id) mới được chạm vào giao diện — kết quả đến muộn của phiên
    cũ bị bỏ qua hoàn toàn. */
+/* Mốc thời gian phiên nhận giọng gần nhất vừa kết thúc/hủy. iOS Safari
+   cần một khoảng nghỉ ngắn sau khi phiên cũ nhả mic, nếu start() phiên
+   mới ngay lập tức thì phiên mới thường “chết lặng” (không onstart,
+   không onerror) và mọi lần bấm sau đều vô hiệu. startSRSession dùng
+   mốc này để chờ đủ ~350ms mới start. */
+var srLastEndAt = 0;
 var MicSessions = (function(){
   var seq = 0, current = null;
   function dispose(s){
@@ -2594,7 +2655,7 @@ var MicSessions = (function(){
     if(s.capTimer){ clearTimeout(s.capTimer); s.capTimer = null; }
     (r.timers || []).forEach(function(t){ clearInterval(t); clearTimeout(t); });
     if(r.recorder && r.recorder.state === "recording"){ try{ r.recorder.stop(); }catch(e){} }
-    if(r.recog){ try{ r.recog.abort(); }catch(e){} r.recog = null; }
+    if(r.recog){ try{ r.recog.abort(); }catch(e){} r.recog = null; srLastEndAt = Date.now(); }
     if(r.monitorCtx){ try{ r.monitorCtx.close(); }catch(e){} r.monitorCtx = null; }
     (r.streams || []).forEach(function(st){ st.getTracks().forEach(function(t){ try{ t.stop(); }catch(e){} }); });
     r.streams = [];
@@ -2894,33 +2955,33 @@ function rbShowMessage(ctx, kind){
   var actions = document.createElement("div"); actions.className = "rb-actions";
   actions.appendChild(rbActionBtn("Nghe chậm lại", function(){ speak(ctx.target, 0.5); }, "slow"));
   if(kind === "unsupported"){
-    title.textContent = "Trình duyệt này chưa nghe được giọng nói";
-    text.textContent = "Trình duyệt này không có bộ nghe chấm tự động nên nút Đọc lại sẽ dùng chế độ ghi âm tự kiểm tra: bác ghi âm, nghe lại giọng mình rồi tự đánh giá. Muốn được chấm tự động từng từ, bác mở trang bằng Google Chrome (trên điện thoại Android hoặc máy tính) — bộ nghe có sẵn trong Chrome, dùng ngay, không phải tải thêm gì, chỉ cần có mạng và cho phép dùng mic.";
+    title.textContent = "Trình duyệt này chưa tự chấm được";
+    text.textContent = "Trang sẽ ghi âm để bác tự nghe và kiểm tra. Muốn chấm tự động, bác mở trang bằng Chrome nhé.";
   } else {
     actions.appendChild(rbActionBtn("Thử lại", function(){ startReadback(ctx); }, "mic"));
     if(kind === "not-allowed"){
       ctx._errStreak = 0;
       title.textContent = "Chưa được phép dùng mic";
-      text.textContent = "Bác bấm “Cho phép / Allow” khi trình duyệt hỏi xin dùng mic nhé. Nếu lỡ bấm nhầm “Chặn”, bác bấm vào biểu tượng ổ khóa (hoặc mic) trên thanh địa chỉ, bật lại mic cho trang này, rồi bấm “Thử lại”.";
+      text.textContent = "Bác bấm “Cho phép / Allow” khi máy hỏi. Nếu lỡ bấm “Chặn”: bấm ổ khóa trên thanh địa chỉ, bật lại mic rồi bấm “Thử lại”.";
     } else if(kind === "service-not-allowed"){
       ctx._errStreak = 0;
-      title.textContent = "Bộ nghe đang bị trình duyệt chặn";
-      text.textContent = "Trình duyệt chưa cho trang dùng bộ nghe giọng nói. Bác mở trang bằng Google Chrome hoặc Safari bản chính (không mở trong ứng dụng khác), cho phép mic một lần, rồi bấm “Thử lại” nhé.";
+      title.textContent = "Bộ nghe đang bị chặn";
+      text.textContent = "Bác mở trang bằng Chrome hoặc Safari, cho phép mic một lần rồi bấm “Thử lại” nhé.";
     } else if(kind === "no-speech"){
       ctx._errStreak = (ctx._errStreak || 0) + 1;
       title.textContent = "Chưa nghe thấy tiếng";
-      text.textContent = "Trang web chưa nghe thấy bác nói. Bác để điện thoại gần miệng hơn, đọc to và rõ từng từ; nếu phòng đang ồn (TV, quạt, tiếng đường) thì bác tắt bớt hoặc ra chỗ yên tĩnh hơn, rồi bấm “Thử lại” nhé." + (ctx._errStreak >= 2 ? " Mic vẫn chưa lên sau vài lần thử — có thể mic đang bị một ứng dụng khác dùng (đang có cuộc gọi, hoặc app ghi âm/quay video đang mở). Bác đóng hẳn các ứng dụng đó rồi thử lại nhé." : "");
+      text.textContent = "Bác để máy gần miệng, đọc to rõ từng từ rồi bấm “Thử lại” nhé." + (ctx._errStreak >= 2 ? " Vẫn chưa được — bác đóng các app đang dùng mic rồi thử lại." : "");
     } else if(kind === "network"){
       ctx._errStreak = 0;
       title.textContent = "Chưa có kết nối mạng";
-      text.textContent = "Bộ nghe có sẵn trong Chrome cần có mạng mới nghe được. Bác kiểm tra lại Wi-Fi hoặc 4G, tắt bớt TV/quạt cho đỡ ồn rồi bấm “Thử lại” nhé.";
+      text.textContent = "Bộ nghe cần có mạng. Bác kiểm tra Wi-Fi hoặc 4G rồi bấm “Thử lại” nhé.";
     } else if(kind === "audio-capture"){
       ctx._errStreak = (ctx._errStreak || 0) + 1;
       title.textContent = "Mic chưa lên được";
-      text.textContent = "Máy chưa thu được tiếng từ mic. Mic có thể đang bị một ứng dụng khác dùng (đang có cuộc gọi, hoặc app ghi âm/quay video đang mở) — bác đóng hẳn các ứng dụng đó, kiểm tra lại mic (hoặc tai nghe có mic), rồi bấm “Thử lại” nhé.";
+      text.textContent = "Mic có thể đang bị app khác dùng (cuộc gọi, quay video). Bác đóng các app đó rồi bấm “Thử lại”.";
     } else {
       title.textContent = "Chưa nghe được lúc này";
-      text.textContent = "Có trục trặc nhỏ khi bật mic. Bác chờ một chút rồi bấm “Thử lại” nhé.";
+      text.textContent = "Bác chờ một chút rồi bấm “Thử lại” nhé.";
     }
   }
   panel.appendChild(title); panel.appendChild(text); panel.appendChild(actions);
@@ -3040,13 +3101,14 @@ function startReadback(ctx){
     rbShowInAppGuide(ctx);
     return;
   }
+  var useSR = rbSupported() && !ctx._forceRecord;
   var session = MicSessions.begin({
     key: "readback", ownerCtx: ctx,
-    kind: rbSupported() ? "sr" : "record",
+    kind: useSR ? "sr" : "record",
     capMs: capMsForTarget(ctx),
     closeUI: function(s){ closeReadbackPanel(s.ownerCtx); }
   });
-  if(rbSupported()){ startSRReadback(ctx, session); return; }
+  if(useSR){ startSRReadback(ctx, session); return; }
   startRecorderCapture(session, rbSelfAdapter(ctx, session));
 }
 function rbShowIdle(ctx, title, text){
@@ -3094,13 +3156,13 @@ function rbPhaseUI(ctx, session, phase){
   panel.appendChild(actions);
   if(phase === "listening"){
     status.textContent = "Đang nghe… bác cứ nói: “" + ctx.target + "”";
-    hint.textContent = "Nói xong bác cứ im lặng — máy nghe thấy im lặng là tự dừng và chấm ngay, bác không cần bấm gì thêm. (Muốn dừng sớm thì bấm “Dừng lại”.)";
+    hint.textContent = "Đọc xong cứ im lặng — máy tự dừng và chấm.";
   } else if(phase === "recording"){
     status.appendChild(document.createTextNode("Đang ghi… "));
     var tm = document.createElement("span"); tm.className = "rec-time"; tm.textContent = "0:00";
     status.appendChild(tm);
     status.appendChild(document.createTextNode(" — bác đang nói"));
-    hint.textContent = "Nói xong cứ im lặng khoảng 1 giây, máy sẽ tự dừng và chấm.";
+    hint.textContent = "Nói xong cứ im lặng khoảng 1 giây, máy tự dừng.";
   }
 }
 function rbSelfAdapter(ctx, session){
@@ -3130,12 +3192,12 @@ function rbShowSelfCheck(ctx, session, info){
   title.textContent = "Tự kiểm tra — bác nghe lại giọng mình nhé";
   panel.appendChild(title);
   var text = document.createElement("p"); text.className = "rb-line";
-  text.textContent = "Trình duyệt này không có bộ nghe chấm tự động của Chrome nên trang không tự chấm được — đây là chế độ tự kiểm tra. Bác bấm “Nghe lại giọng của bác” (bản ghi đã lọc bớt tạp âm), bấm “Nghe chậm lại” để so với câu mẫu “" + ctx.target + "”, rồi tự chọn một nút bên dưới. Nếu bản ghi lẫn nhiều tiếng ồn (TV, quạt), bác tắt bớt rồi đọc lại sẽ rõ hơn.";
+  text.textContent = "Tự kiểm tra: bác nghe lại giọng mình, nghe chậm câu mẫu để so, rồi chọn một nút bên dưới nhé.";
   panel.appendChild(text);
   if(typeof info.dur === "number" && info.dur > 0){
     var rl = document.createElement("p"); rl.className = "rb-line";
     var rm = ctx.paceRemarks || [];
-    rl.textContent = "Nhịp & độ to: bác đọc trong khoảng " + String(info.dur.toFixed(1)).replace(".", ",") + " giây. " + (rm.length ? rm.join(" ") : "Độ to và tốc độ như vậy là vừa phải.");
+    rl.textContent = "Bác đọc trong " + String(info.dur.toFixed(1)).replace(".", ",") + " giây. " + (rm.length ? rm.join(" ") : "Độ to và tốc độ vừa phải.");
     panel.appendChild(rl);
   }
   var actions = document.createElement("div"); actions.className = "rb-actions";
@@ -3163,44 +3225,140 @@ function rbShowSelfCheck(ctx, session, info){
    Tính năng “Nghe lại giọng của bác” chỉ có ở chế độ tự kiểm tra. */
 function startSRSession(session, adapter){
   var SR = window.SpeechRecognition || window.webkitSpeechRecognition;
-  var rec;
-  try{ rec = new SR(); }catch(e){ MicSessions.finish(session); adapter.error("error"); return; }
-  session.resources.recog = rec;
-  rec.lang = "en-US"; rec.interimResults = false; rec.maxAlternatives = adapter.maxAlternatives || 1;
-  var got = false, errorShown = false;
-  rec.onstart = function(){
-    if(!MicSessions.isCurrent(session.id)) return;
-    MicSessions.setPhase(session, "listening");
-    adapter.phase("listening");
+  /* Tắt mọi giọng đọc mẫu đang phát trước phiên nghe: trên iOS, TTS phát
+     giữa hai phiên (ví dụ vừa bấm “Nghe chậm lại”) có thể làm phiên nghe
+     kế tiếp chết lặng. */
+  if(window.speechSynthesis){ try{ window.speechSynthesis.cancel(); }catch(e){} }
+  var got = false, errorShown = false, settled = false, attempts = 0;
+  var heardStart = false, attemptAt = 0;
+  var rec = null, watchdog = null;
+  session.stopCapture = function(){
+    session._userStop = true;
+    if(rec){ try{ rec.stop(); }catch(e){} }
   };
-  rec.onresult = function(ev){
-    if(!MicSessions.isCurrent(session.id)) return;
-    got = true;
-    adapter.result(ev.results[0]);
-  };
-  rec.onerror = function(ev){
-    if(!MicSessions.isCurrent(session.id)) return;
-    if(got || ev.error === "aborted") return;
-    errorShown = true;
+  function clearWatchdog(){ if(watchdog){ clearTimeout(watchdog); watchdog = null; } }
+  /* Kết phiên TUYỆT ĐỐI một lần duy nhất: dọn tài nguyên, nhả quản lý
+     phiên, ghi mốc nhả mic — sau đó mới báo về adapter. Mọi đường kết
+     thúc (onend / onerror / watchdog / start() ném lỗi) đều qua đây,
+     nên trạng thái không bao giờ kẹt lại để chặn phiên mới. */
+  function settle(fn){
+    if(settled) return; settled = true;
+    clearWatchdog();
+    srLastEndAt = Date.now();
     MicSessions.dispose(session); MicSessions.finish(session);
-    adapter.error(ev.error || "error");
-  };
-  rec.onend = function(){
-    if(!MicSessions.isCurrent(session.id)) return;
-    MicSessions.dispose(session); MicSessions.finish(session);
-    if(!errorShown) adapter.ended(got);
-  };
+    fn();
+  }
+  /* Watchdog chống “chết lặng”: start() không ném lỗi nhưng onstart mãi
+     không tới (hay gặp trên iOS khi instance cũ chưa nhả mic hẳn) —
+     phiên sẽ kẹt ở pha “starting” và sessionClickAction chặn mọi lần
+     bấm sau (“ignore”) ⇒ mic chết hẳn từ lần hai. Quá 3 giây chưa có
+     onstart thì coi là phiên chết: hủy sạch và kết phiên như không
+     nghe thấy tiếng, để lần bấm sau mở được phiên mới. */
+  function armWatchdog(){
+    clearWatchdog();
+    watchdog = setTimeout(function(){
+      if(settled || heardStart) return;
+      if(!MicSessions.isCurrent(session.id)) return;
+      if(rec){ try{ rec.abort(); }catch(e){} }
+      settle(function(){ adapter.ended(false, { dead: true, dur: Date.now() - attemptAt }); });
+    }, 3000);
+    session.resources.timers.push(watchdog);
+  }
+  function launch(){
+    if(settled || !MicSessions.isCurrent(session.id)) return;
+    attempts += 1;
+    /* Instance MỚI cho mỗi phiên — không bao giờ dùng lại instance cũ:
+       trên iOS Safari, start() lần hai trên cùng một instance thường
+       chết lặng hoặc ném InvalidStateError. */
+    try{ rec = new SR(); }
+    catch(e){ settle(function(){ adapter.error("error", { dur: 0 }); }); return; }
+    session.resources.recog = rec;
+    rec.lang = "en-US"; rec.interimResults = false; rec.maxAlternatives = adapter.maxAlternatives || 1;
+    rec.onstart = function(){
+      if(!MicSessions.isCurrent(session.id)) return;
+      heardStart = true;
+      MicSessions.setPhase(session, "listening");
+      adapter.phase("listening");
+    };
+    rec.onresult = function(ev){
+      if(!MicSessions.isCurrent(session.id)) return;
+      got = true;
+      adapter.result(ev.results[0]);
+    };
+    rec.onerror = function(ev){
+      if(!MicSessions.isCurrent(session.id)) return;
+      if(got || ev.error === "aborted") return;
+      errorShown = true;
+      var kind = ev.error || "error";
+      var dur = attemptAt ? Date.now() - attemptAt : 0;
+      settle(function(){ adapter.error(kind, { dur: dur }); });
+    };
+    rec.onend = function(){
+      if(!MicSessions.isCurrent(session.id)) return;
+      if(errorShown) return;
+      var dur = attemptAt ? Date.now() - attemptAt : 0;
+      settle(function(){
+        adapter.ended(got, { dur: dur, dead: !got && !session._userStop && dur < 400 });
+      });
+    };
+    armWatchdog();
+    attemptAt = Date.now();
+    try{ rec.start(); }
+    catch(e){
+      /* start() ném lỗi (thường là InvalidStateError vì instance cũ
+         chưa nhả hẳn): bỏ instance này, tạo instance MỚI thử lại đúng
+         1 lần rồi mới báo lỗi. */
+      if(rec){ try{ rec.abort(); }catch(e2){} }
+      session.resources.recog = null; rec = null;
+      if(attempts < 2){ launch(); return; }
+      settle(function(){ adapter.error("error", { dur: 0 }); });
+    }
+  }
   session.capTimer = setTimeout(function(){
-    if(MicSessions.isCurrent(session.id)){ try{ rec.stop(); }catch(e){} }
+    if(MicSessions.isCurrent(session.id) && rec){ try{ rec.stop(); }catch(e){} }
   }, session.capMs);
   adapter.phase("starting");
-  try{ rec.start(); }
-  catch(e){ MicSessions.finish(session); adapter.error("error"); }
+  /* Gọi start() NGAY trong handler chạm (iOS đòi ngữ cảnh chạm) — chỉ
+     khi phiên trước vừa kết thúc <350ms mới chờ đủ 350ms cho mic nhả
+     hẳn, vì start đè lên phiên cũ đang dở là nguyên nhân chết lặng. */
+  var gap = srLastEndAt ? 350 - (Date.now() - srLastEndAt) : 0;
+  if(gap > 0){
+    var dt = setTimeout(launch, gap);
+    session.resources.timers.push(dt);
+  } else {
+    launch();
+  }
+}
+/* Tự cứu khi mic nghe trực tiếp “chết lặng” liên tiếp trên máy này:
+   chuyển RIÊNG panel này sang chế độ ghi âm tự kiểm tra (vẫn là mic,
+   vẫn nghe lại được giọng mình) kèm giải thích ngắn — người học không
+   bị kẹt với một cái mic không bao giờ lên tiếng nữa. */
+function rbRescueToRecorder(ctx){
+  ctx._forceRecord = true; ctx._srDeadStreak = 0;
+  var panel = ctx.panel;
+  panel.innerHTML = ""; panel.className = "rb-panel show";
+  if(ctx.btn) ctx.btn.classList.remove("listening");
+  var t = document.createElement("p"); t.className = "rb-status";
+  t.textContent = "Mic nghe trực tiếp chưa ổn trên máy này";
+  panel.appendChild(t);
+  var p = document.createElement("p"); p.className = "rb-line";
+  p.textContent = "Trang chuyển riêng phần này sang ghi âm tự kiểm tra: bác ghi âm, nghe lại giọng mình rồi tự đánh dấu nhé.";
+  panel.appendChild(p);
+  var actions = document.createElement("div"); actions.className = "rb-actions";
+  actions.appendChild(rbActionBtn("Bắt đầu ghi âm", function(){ startReadback(ctx); }, "mic"));
+  panel.appendChild(actions);
 }
 function startSRReadback(ctx, session){
   ctx.fromRecording = false; ctx.lastBlob = null;
   if(ctx.audioUrl){ try{ URL.revokeObjectURL(ctx.audioUrl); }catch(e){} ctx.audioUrl = null; }
   var tWords = normalize(ctx.target).split(" ").filter(Boolean);
+  /* Phiên “chết lặng” = kết thúc <400ms, không kết quả, không do người
+     học bấm dừng. 2 phiên chết liên tiếp ở cùng một panel ⇒ tự cứu. */
+  function noteDead(){
+    ctx._srDeadStreak = (ctx._srDeadStreak || 0) + 1;
+    if(ctx._srDeadStreak >= 2){ rbRescueToRecorder(ctx); return true; }
+    return false;
+  }
   startSRSession(session, {
     maxAlternatives: 3,
     phase: function(p){
@@ -3211,16 +3369,12 @@ function startSRReadback(ctx, session){
       status.textContent = "Đang nghe… bác đọc to: “" + ctx.target + "”";
       panel.appendChild(status);
       var hint = document.createElement("p"); hint.className = "rb-line";
-      hint.textContent = "Đọc xong bác cứ dừng lại, trang web sẽ tự chấm ngay. Bộ nghe này có sẵn trong Chrome và cần có mạng. Phòng ồn (TV, quạt) dễ làm máy nghe nhầm — bác tắt bớt cho yên tĩnh nhé. Muốn dừng sớm, bác bấm nút “Đọc lại” lần nữa.";
+      hint.textContent = "Đọc xong cứ im lặng — máy tự dừng và chấm.";
       panel.appendChild(hint);
-      if(session.prevWasRecording){
-        var note = document.createElement("p"); note.className = "rb-line";
-        note.textContent = "Đã dừng phần đọc ở từ trước để bắt đầu ở đây.";
-        panel.appendChild(note);
-      }
       if(ctx.btn) ctx.btn.classList.add("listening");
     },
     result: function(res){
+      ctx._srDeadStreak = 0;
       var best = null;
       for(var k = 0; k < res.length; k++){
         var said = res[k].transcript || "";
@@ -3232,13 +3386,17 @@ function startSRReadback(ctx, session){
       if(ctx.btn) ctx.btn.classList.remove("listening");
       if(best) rbShowResult(ctx, best);
     },
-    error: function(kind){
+    error: function(kind, meta){
       if(ctx.btn) ctx.btn.classList.remove("listening");
-      rbShowMessage(ctx, srKind(kind));
+      kind = srKind(kind);
+      if(kind === "no-speech" && meta && meta.dur < 400){ if(noteDead()) return; }
+      rbShowMessage(ctx, kind);
     },
-    ended: function(gotResult){
+    ended: function(gotResult, meta){
       if(ctx.btn) ctx.btn.classList.remove("listening");
-      if(!gotResult) rbShowMessage(ctx, "no-speech");
+      if(gotResult){ ctx._srDeadStreak = 0; return; }
+      if(meta && meta.dead){ if(noteDead()) return; }
+      rbShowMessage(ctx, "no-speech");
     }
   });
 }
