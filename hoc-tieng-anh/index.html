@@ -3037,10 +3037,15 @@ function enterLesson(L, tab){
   if(quizHead) quizHead.textContent = L.n === 10 ? ("Kiểm tra tổng hợp Chương " + L.ch + " — đạt là qua chương") : "Trò chơi cuối bài — chơi để hoàn thành bài";
   var quizTab = document.querySelector('.tab-btn[data-tab="quiz"]');
   if(quizTab) quizTab.textContent = L.n === 10 ? "5 · Kiểm tra tổng hợp" : "5 · Trò chơi";
+  /* THỨ TỰ QUAN TRỌNG: showView() và switchTab() đều gọi stopGameTimer()
+     (dọn phiên game cũ). Phải cho hai hàm đó chạy TRƯỚC renderGame() —
+     nếu renderGame() chạy trước, đồng hồ của game Săn điểm tốc độ vừa
+     khởi động đã bị showView() dọn mất ngay: đồng hồ đứng yên ở 60 giây
+     và vòng từ mới bị chặn bởi mã phiên (gameSession), bài kẹt vĩnh viễn. */
+  showView("viewLesson");
   switchTab(tab || "vocab");
   renderVocab(); renderFlashcard(); renderDialogue(); renderSpeakPick(); renderGame();
   updateGateBanner();
-  showView("viewLesson");
 }
 function updateGateBanner(){
   var b = document.getElementById("gateBanner"); if(!b) return;
@@ -3080,6 +3085,14 @@ function switchTab(name){
     p.classList.toggle("active", p.id === "panel-" + name);
   });
   updatePartProgress(name);
+  /* Game Săn điểm tốc độ (Bài 6) sống bằng đồng hồ đếm ngược thật, mà
+     stopGameTimer() ở đầu hàm này vừa dọn mọi đồng hồ đang chạy (đúng ý
+     khi rời khỏi phần Trò chơi). Nên MỖI LẦN phần Trò chơi của Bài 6
+     được mở ra, phải dựng lại game mới tinh ở đây — đồng hồ 60 giây bắt
+     đầu chạy từ lúc người học thật sự nhìn thấy game, không chạy ngầm
+     từ lúc mới vào bài và không bao giờ ở trạng thái “đứng yên”. Các
+     game khác không dùng đồng hồ nên giữ nguyên trạng thái đã dựng. */
+  if(name === "quiz" && currentLesson && currentLesson.n === 6) renderGame();
 }
 document.querySelectorAll(".tab-btn").forEach(function(b){
   b.addEventListener("click", function(){ switchTab(b.getAttribute("data-tab")); });
@@ -5935,8 +5948,12 @@ function gameSpeed(wrap, L){
     box.appendChild(grid);
   }
   upd(); round();
-  gameTimer = setInterval(function(){
-    if(session !== gameSession){ stopGameTimer(); return; }
+  /* Giữ mã đồng hồ RIÊNG của phiên này: nếu một nhịp tick trễ của phiên
+     cũ lọt qua sau khi đã có game mới, nó chỉ tự hủy chính nó — tuyệt
+     đối không gọi stopGameTimer() (hàm đó sẽ dọn nhầm đồng hồ của game
+     mới đang chạy và làm game mới đứng yên y như lỗi cũ). */
+  var myTimer = setInterval(function(){
+    if(session !== gameSession){ clearInterval(myTimer); if(gameTimer === myTimer) gameTimer = null; return; }
     timeLeft--;
     upd();
     if(timeLeft <= 0){
@@ -5944,6 +5961,7 @@ function gameSpeed(wrap, L){
       finishGame(pts >= 50, Math.min(100, pts), "Được " + pts + " điểm trong 60 giây", pts >= 50 ? "Tốc độ của bác rất nhanh — bài đã hoàn thành!" : "Cần từ 50 điểm mới đạt — bác chơi lại, chọn nhanh và chắc tay hơn nhé.");
     }
   }, 1000);
+  gameTimer = myTimer;
 }
 
 /* ---------- Game 7: Nghe và chọn câu đúng ---------- */
