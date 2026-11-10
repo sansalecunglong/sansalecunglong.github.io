@@ -344,7 +344,7 @@
           </button>
           <button class="nav-item" data-tool="tao-video">
             <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="15" height="14" rx="3"/><path d="m17 10 5-3v10l-5-3"/></svg>
-            Tạo Video <span class="tag">Tạo ngay</span>
+            Tạo Video <span class="tag">Muse</span>
           </button>
           <button class="nav-item" data-tool="giong-ai">
             <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a3 3 0 0 0-3 3v6a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path d="M19 10v1a7 7 0 0 1-14 0v-1"/><path d="M12 18v4"/></svg>
@@ -381,7 +381,7 @@
         </div>
 
         <div class="sidebar-foot">
-          Mục Tạo Video có chế độ tạo trực tiếp trong trang bằng Pollinations (key của anh). Các mục “Muse” còn lại soạn lệnh chuẩn — dán vào chat Muse là em làm thật và trả file về chat. Ba công cụ còn lại chạy ngay trong trang này.
+          Các mục “Muse” soạn lệnh chuẩn — dán vào chat Muse là em làm thật và trả file về chat. Ba công cụ còn lại chạy ngay trong trang này.
         </div>
       </aside>
       <div class="scrim" id="scrim"></div>
@@ -464,85 +464,11 @@
               <div class="tool-head">
                 <div class="tool-kicker">Sáng tạo AI</div>
                 <h1>Tạo Video</h1>
-                <p>Hai cách tạo: <strong style="color:var(--text)">⚡ Tạo trực tiếp trong trang</strong> — bấm là AI tạo video ngay tại đây bằng Pollinations (cần API key của anh, miễn phí để bắt đầu). Hoặc chế độ <strong style="color:var(--text)">Lệnh gửi Muse</strong> bên dưới — em lo kịch bản/keyframe, render qua Flow bằng tài khoản của anh.</p>
-              </div>
-
-              <div class="card" style="border-color:rgba(232,64,42,.45)">
-                <h2>⚡ Tạo trực tiếp trong trang</h2>
-                <div class="field">
-                  <label for="polKey">Pollinations API key *</label>
-                  <div style="display:flex; gap:8px;">
-                    <input type="password" id="polKey" placeholder="Dán API key của anh vào đây…" autocomplete="off" style="flex:1; min-width:0;" />
-                    <button type="button" class="btn" id="polKeyToggle" style="flex:0 0 auto; min-height:48px;">Hiện</button>
-                  </div>
-                  <div class="hint">Key chỉ lưu trên chính máy này (localStorage) — coi key như mật khẩu, đừng gửi cho ai. Trang không gửi key đi đâu ngoài Pollinations.</div>
-                </div>
-                <div class="how" style="margin-top:0; margin-bottom:16px;">
-                  <strong>Chưa có key? Lấy miễn phí trong 1 phút:</strong>
-                  <ol>
-                    <li>Vào <strong>enter.pollinations.ai</strong>, đăng nhập bằng GitHub.</li>
-                    <li>Tạo một <strong>API key</strong> mới.</li>
-                    <li>Dán key vào ô trên là tạo được.</li>
-                  </ol>
-                  <div style="margin-top:8px;">Tài khoản mới được tặng ít <strong>Pollen</strong> miễn phí qua các nhiệm vụ (Quests) — đủ tạo thử vài clip. Hết Pollen thì nạp thêm tại Pollinations, hoặc dùng chế độ Lệnh gửi Muse bên dưới.</div>
-                </div>
-                <div class="field">
-                  <label for="polPrompt">Mô tả video muốn tạo *</label>
-                  <textarea id="polPrompt" rows="4" placeholder="Ví dụ: Quán karaoke buổi tối, biển hiệu neon cam xanh phát sáng, khách vui vẻ hát trước cửa quán, quay chậm điện ảnh…"></textarea>
-                </div>
-                <div class="grid-3">
-                  <div class="field">
-                    <label for="polModel">Model</label>
-                    <select id="polModel">
-                      <option value="wan-fast" selected>wan-fast — nhanh, ít Pollen</option>
-                      <option value="wan">wan</option>
-                      <option value="wan-pro">wan-pro — nét hơn</option>
-                      <option value="veo">veo</option>
-                      <option value="seedance-pro">seedance-pro</option>
-                      <option value="ltx-2">ltx-2</option>
-                    </select>
-                  </div>
-                  <div class="field">
-                    <label for="polDuration">Thời lượng</label>
-                    <select id="polDuration">
-                      <option value="4" selected>4 giây</option>
-                      <option value="5">5 giây</option>
-                      <option value="8">8 giây</option>
-                      <option value="10">10 giây</option>
-                    </select>
-                  </div>
-                  <div class="field">
-                    <label for="polRatio">Tỷ lệ khung hình</label>
-                    <select id="polRatio">
-                      <option value="16:9">16:9 — ngang</option>
-                      <option value="9:16">9:16 — dọc (TikTok/Reels)</option>
-                      <option value="1:1">1:1 — vuông</option>
-                    </select>
-                  </div>
-                </div>
-                <div class="notice" id="polWarn"></div>
-                <div class="btn-row" style="margin-top:0;">
-                  <button class="btn btn-primary" id="polGen" style="font-size:16px; padding:14px 26px;">
-                    🎬 Tạo video ngay
-                  </button>
-                </div>
-                <div class="status-line" id="polStatus"></div>
-                <div id="polResult" style="display:none; margin-top:16px;">
-                  <div class="preview-wrap" style="padding:8px;">
-                    <video id="polVideo" controls playsinline style="max-width:100%; height:auto; border-radius:6px; display:block;"></video>
-                  </div>
-                  <div class="btn-row">
-                    <button class="btn btn-primary" id="polDownload">
-                      <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="m7 10 5 5 5-5"/><path d="M12 15V3"/></svg>
-                      Tải MP4 về máy
-                    </button>
-                    <button class="btn" id="polAgain">Tạo video khác</button>
-                  </div>
-                </div>
+                <p>Điền ý tưởng, trang soạn sẵn một lệnh chuẩn. Anh sao chép, dán vào chat Muse — em lo kịch bản và keyframe, phần render chuyển động đi qua Flow bằng tài khoản của anh.</p>
               </div>
 
               <div class="card">
-                <h2>Chế độ Lệnh gửi Muse (không cần key)</h2>
+                <h2>Ý tưởng video</h2>
                 <div class="field">
                   <label for="vidIdea">Ý tưởng / kịch bản sơ bộ *</label>
                   <textarea id="vidIdea" rows="4" placeholder="Ví dụ: Video quảng cáo quán karaoke 30 giây: mở đầu biển hiệu neon, khách hát vui, kết bằng slogan và số điện thoại đặt phòng…"></textarea>
@@ -1161,111 +1087,6 @@
           addHistory(f.type, f.title(), f.detail(), f.cmd());
           toast("Đã lưu vào lịch sử trên thiết bị này.");
         });
-      });
-
-      /* ---------- Tạo video trực tiếp (Pollinations) ---------- */
-      var POL_KEY_LS = "studio-ai-pollinations-key-v1";
-      var polBlobUrl = null, polTimer = null;
-      try { $("polKey").value = localStorage.getItem(POL_KEY_LS) || ""; } catch(e){}
-      $("polKey").addEventListener("input", function(){
-        try { localStorage.setItem(POL_KEY_LS, this.value.trim()); } catch(e){}
-        if (this.value.trim()) $("polWarn").classList.remove("show");
-      });
-      $("polKeyToggle").addEventListener("click", function(){
-        var inp = $("polKey");
-        var show = inp.type === "password";
-        inp.type = show ? "text" : "password";
-        this.textContent = show ? "Ẩn" : "Hiện";
-      });
-      function polShowWarn(msg){
-        var w = $("polWarn"); w.innerHTML = msg; w.classList.add("show");
-      }
-      function polSetStatus(msg, live){
-        $("polStatus").innerHTML = (live ? '<span class="dot"></span>' : "") + esc(msg);
-      }
-      function polErrorHint(status, bodyText){
-        var t = (bodyText || "").toLowerCase();
-        if (status === 401) return "Gợi ý: key sai hoặc chưa dán key — kiểm tra lại key ở ô phía trên.";
-        if (status === 402 || status === 403 || t.indexOf("pollen") !== -1 || t.indexOf("balance") !== -1)
-          return "Gợi ý: có vẻ đã hết Pollen miễn phí — nạp thêm tại Pollinations, hoặc dùng chế độ Lệnh gửi Muse bên dưới.";
-        if (status === 429) return "Gợi ý: đang bị giới hạn tốc độ — chờ ít phút rồi thử lại.";
-        return "Gợi ý: kiểm tra lại mô tả, model và thử lại sau ít phút.";
-      }
-      $("polGen").addEventListener("click", function(){
-        var key = $("polKey").value.trim();
-        if (!key){
-          polShowWarn("Anh chưa dán <strong>Pollinations API key</strong> — dán key vào ô phía trên rồi bấm Tạo lại. Chưa có key thì làm theo 3 bước hướng dẫn ngay dưới ô key.");
-          $("polKey").scrollIntoView({ behavior: "smooth", block: "center" });
-          $("polKey").focus({ preventScroll: true });
-          return;
-        }
-        var prompt = $("polPrompt").value.trim();
-        if (!prompt){ toast("Anh mô tả video muốn tạo trước đã."); $("polPrompt").focus(); return; }
-        var model = $("polModel").value, duration = $("polDuration").value, ratio = $("polRatio").value;
-        var suffix = ratio === "9:16" ? ", vertical 9:16 aspect ratio"
-                   : ratio === "1:1" ? ", square 1:1 aspect ratio"
-                   : ", horizontal 16:9 aspect ratio";
-        var fullPrompt = prompt + suffix;
-        var btn = this;
-        btn.disabled = true; btn.textContent = "⏳ Đang tạo video…";
-        $("polResult").style.display = "none";
-        var started = Date.now();
-        function tick(){
-          var s = Math.floor((Date.now() - started) / 1000);
-          polSetStatus("Đang gọi Pollinations tạo video… quá trình này thường mất 1–5 phút, đừng đóng trang. Đã chờ " + s + " giây.", true);
-        }
-        tick();
-        polTimer = setInterval(tick, 1000);
-        var url = "https://gen.pollinations.ai/video/" + encodeURIComponent(fullPrompt)
-          + "?model=" + encodeURIComponent(model) + "&duration=" + encodeURIComponent(duration);
-        fetch(url, { method: "GET", headers: { "Authorization": "Bearer " + key } })
-          .then(function(res){
-            if (!res.ok){
-              return res.text().then(function(bodyText){
-                throw { status: res.status, body: bodyText || ("HTTP " + res.status) };
-              });
-            }
-            return res.blob();
-          })
-          .then(function(blob){
-            clearInterval(polTimer);
-            if (polBlobUrl) URL.revokeObjectURL(polBlobUrl);
-            polBlobUrl = URL.createObjectURL(blob);
-            var v = $("polVideo");
-            v.src = polBlobUrl;
-            $("polResult").style.display = "block";
-            polSetStatus("Tạo xong sau " + Math.floor((Date.now() - started) / 1000) + " giây. Bấm phát để xem ngay, hoặc tải MP4 về máy.");
-            btn.disabled = false; btn.textContent = "🎬 Tạo video ngay";
-            addHistory("vid", "Tạo video: " + prompt.slice(0, 80),
-              "Đã tạo trực tiếp trong trang · " + model + " · " + duration + "s · " + ratio, "");
-            toast("Đã tạo video — phát ngay trong trang được rồi.");
-          })
-          .catch(function(err){
-            clearInterval(polTimer);
-            btn.disabled = false; btn.textContent = "🎬 Tạo video ngay";
-            if (err && err.status){
-              polSetStatus("");
-              polShowWarn("<strong>Tạo video thất bại (HTTP " + err.status + "):</strong><br/>" + esc(err.body)
-                + "<br/><br/>" + esc(polErrorHint(err.status, err.body)));
-            } else {
-              polSetStatus("");
-              polShowWarn("<strong>Không gọi được Pollinations.</strong> Kiểm tra kết nối mạng của máy rồi thử lại. (" + esc(err && err.message ? err.message : "Lỗi mạng") + ")");
-            }
-          });
-      });
-      $("polDownload").addEventListener("click", function(){
-        if (!polBlobUrl) return;
-        var a = document.createElement("a");
-        a.download = "video-pollinations.mp4";
-        a.href = polBlobUrl;
-        document.body.appendChild(a); a.click(); document.body.removeChild(a);
-        toast("Đã tải file MP4 về máy.");
-      });
-      $("polAgain").addEventListener("click", function(){
-        $("polResult").style.display = "none";
-        polSetStatus("");
-        $("polPrompt").scrollIntoView({ behavior: "smooth", block: "center" });
-        $("polPrompt").focus({ preventScroll: true });
       });
 
       /* ---------- Giọng đọc nhanh (speechSynthesis) ---------- */
