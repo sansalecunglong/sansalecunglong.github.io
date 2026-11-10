@@ -1325,6 +1325,50 @@ html.hc .speak-target-sticky{box-shadow:none; border-bottom:2px solid #000}
 html[data-font="small"] .rb-target-ipa{font-size:max(14px,.95em)}
 html[data-font="small"] .rb-close{font-size:max(14px,.88em)}
 
+/* ============================================================
+   V17 — CHƯƠNG MỞ ĐẦU: PHÁT ÂM 44 ÂM IPA (không bắt buộc)
+   Khối tách riêng: banner trang chủ, thẻ chương riêng, thẻ âm,
+   cặp âm dễ nhầm. Không lớp nào đụng vào khóa chính.
+   ============================================================ */
+.pron-banner{
+  background:var(--surface); border:2.5px solid var(--accent); border-radius:var(--r-lg);
+  padding:26px; box-shadow:var(--shadow-sm);
+  display:flex; gap:22px; align-items:center; flex-wrap:wrap;
+}
+.pron-banner-txt{flex:1 1 320px; min-width:0}
+.pron-banner h2{font-size:clamp(22px,6vw,30px); line-height:1.32; margin:10px 0 8px}
+.pron-banner p{color:var(--ink-2); line-height:1.65}
+.pron-banner-btns{display:flex; flex-direction:column; gap:10px; flex:none}
+.pron-banner-btns .btn{min-height:60px; white-space:normal; text-align:center}
+.opt-badge{
+  display:inline-flex; align-items:center; padding:5px 12px; border-radius:var(--r-pill);
+  background:var(--accent-soft); border:1.5px solid var(--accent); color:var(--accent-strong);
+  font-size:max(14px,.78em); font-weight:800; line-height:1.4; vertical-align:middle; white-space:nowrap;
+}
+.ipa-big{font-family:var(--font-display); font-size:2em; font-weight:700; line-height:1.2; color:var(--ink)}
+.pron-name{font-weight:800; color:var(--accent-strong); font-size:max(17px,1.02em)}
+.pron-exrow{border-top:1.5px dashed var(--border-strong); padding-top:12px; margin-top:12px}
+.pron-exrow .rb-panel{margin-top:10px}
+.sound-tip{
+  margin-top:14px; background:var(--primary-soft); border:1.5px solid var(--primary);
+  border-radius:var(--r-sm); padding:10px 12px; font-weight:600;
+  font-size:max(16px,.95em); line-height:1.6;
+}
+.sound-tip b{color:var(--primary-strong)}
+.pair-card{
+  background:var(--surface); border:2px solid var(--border); border-radius:var(--r-md);
+  padding:18px 20px; box-shadow:var(--shadow-sm); margin-bottom:14px;
+}
+.pair-head{font-family:var(--font-display); font-size:1.3em; font-weight:700; margin-bottom:4px}
+.pair-note{color:var(--muted); font-weight:600; margin-bottom:8px}
+.pair-row{border-top:1.5px dashed var(--border-strong); padding-top:12px; margin-top:12px}
+.pair-row .rb-panel{margin-top:10px}
+@media (max-width:700px){
+  .pron-banner{padding:20px}
+  .pron-banner-btns{flex:1 1 100%; width:100%}
+  .pron-banner-btns .btn{width:100%}
+}
+
 </style>
 </head>
 <body>
@@ -1362,6 +1406,7 @@ html[data-font="small"] .rb-close{font-size:max(14px,.88em)}
         </div>
         <div class="dm-section">
           <div class="dm-label">Đi nhanh tới</div>
+          <button type="button" class="dm-nav-btn" id="menuGotoPron"><span>Chương mở đầu · Phát âm (không bắt buộc)</span><span class="dm-arrow" aria-hidden="true">→</span></button>
           <button type="button" class="dm-nav-btn" data-menu-goto="lessonsSection"><span>Lộ trình 6 chương · 60 bài</span><span class="dm-arrow" aria-hidden="true">→</span></button>
           <button type="button" class="dm-nav-btn" data-menu-goto="roadmapSection"><span>Bản đồ lộ trình</span><span class="dm-arrow" aria-hidden="true">→</span></button>
           <button type="button" class="dm-nav-btn" data-menu-goto="guideSection"><span>Cách học 3 bước</span><span class="dm-arrow" aria-hidden="true">→</span></button>
@@ -1410,6 +1455,22 @@ html[data-font="small"] .rb-close{font-size:max(14px,.88em)}
       </div>
     </div>
   </div>
+
+  <section class="block" style="padding-top:6px" aria-labelledby="pronBannerTitle">
+    <div class="wrap">
+      <div class="pron-banner">
+        <div class="pron-banner-txt">
+          <span class="opt-badge">KHÔNG BẮT BUỘC — TỰ CHỌN</span>
+          <h2 id="pronBannerTitle">Chương Mở Đầu — Học Phát Âm: 44 âm IPA</h2>
+          <p>Học cách đọc đúng 44 âm tiếng Anh trước khi vào bài thì về sau gặp từ nào bác cũng đọc được. Nhưng đây là phần <b>tự chọn</b>: ai không muốn học thì cứ vào thẳng Chương 1 như bình thường — Chương 1 vẫn mở ngay, không bị khóa gì cả.</p>
+        </div>
+        <div class="pron-banner-btns">
+          <button type="button" class="btn btn-primary" id="ctaPron">Vào học phát âm</button>
+          <button type="button" class="btn btn-accent" data-skip-ch1>Bỏ qua, vào thẳng Chương 1 →</button>
+        </div>
+      </div>
+    </div>
+  </section>
 
   <section class="block" aria-labelledby="progTitle">
     <div class="wrap">
@@ -1492,6 +1553,19 @@ html[data-font="small"] .rb-close{font-size:max(14px,.88em)}
         <h2 id="lessonsTitle">Lộ trình 6 chương · 60 bài học đời thường</h2>
         <p>Mỗi chương có 10 bài nhỏ, học lần lượt từng bài: chơi đạt trò chơi cuối bài mới mở bài tiếp theo, và đầu mỗi bài mới có bài kiểm tra nhanh bài cũ. Mỗi bài nhỏ gồm 5 từ vựng có giọng đọc, thẻ ghi nhớ, hội thoại mẫu, luyện nói và một trò chơi riêng.</p>
       </div>
+      <div class="chapter-card" style="margin-bottom:18px">
+        <button type="button" class="ch-head" id="pronHomeHead" aria-label="Mở Chương Mở Đầu — Học Phát Âm, 44 âm IPA, không bắt buộc">
+          <span class="ch-head-txt">
+            <span class="ch-title">Chương Mở Đầu: Học Phát Âm — 44 âm IPA <span class="opt-badge">Không bắt buộc</span></span>
+            <span class="ch-desc">5 bài nhỏ: nguyên âm ngắn, nguyên âm dài, nguyên âm đôi và phụ âm. Học trước giúp đọc đúng mọi từ về sau — hoặc bỏ qua, vào thẳng Chương 1, không bị khóa gì cả.</span>
+          </span>
+          <span class="ch-meta"><span class="ch-prog" id="pronHomeProg">0 / 5 bài · 0 / 44 âm</span><span class="ch-chev" aria-hidden="true">▸ Vào chương</span></span>
+        </button>
+        <div class="lc-mini-bar ch-bar"><div class="lc-mini-fill" id="pronHomeFill"></div></div>
+        <div style="padding:0 20px 18px; display:flex; gap:10px; flex-wrap:wrap">
+          <button type="button" class="btn btn-ghost btn-sm" data-skip-ch1>Bỏ qua, vào thẳng Chương 1 →</button>
+        </div>
+      </div>
       <div id="chapterList" class="chapter-list"></div>
     </div>
   </section>
@@ -1516,6 +1590,7 @@ html[data-font="small"] .rb-close{font-size:max(14px,.88em)}
             </div>
             <p class="rm-desc">Đây chính là khóa học bác đang học ở ngay phía trên: 6 chương theo 6 chủ đề đời thường, mỗi chương 10 bài nhỏ — tổng cộng 60 bài.</p>
             <div class="rm-topics" aria-label="Các bài trong chặng 1">
+              <span>Chương mở đầu · Phát âm 44 âm (không bắt buộc)</span>
               <span>Chương 1 · Chào hỏi &amp; giới thiệu</span>
               <span>Chương 2 · Gia đình &amp; số đếm</span>
               <span>Chương 3 · Ăn uống &amp; đi chợ</span>
@@ -1774,6 +1849,77 @@ html[data-font="small"] .rb-close{font-size:max(14px,.88em)}
   </div>
 </div>
 
+
+<!-- ================= PRON VIEW (Chương Mở Đầu — Phát Âm, không bắt buộc) ================= -->
+<div class="view" id="viewPron">
+  <div class="wrap">
+    <div class="lesson-head">
+      <button type="button" class="btn btn-ghost btn-sm" data-pron-home>← Quay lại trang chính</button>
+      <h1>Chương Mở Đầu — Học Phát Âm</h1>
+      <p style="color:var(--muted); font-weight:600">44 âm IPA của tiếng Anh · <b>Không bắt buộc</b> — học trước thì đọc từ nào cũng chuẩn hơn; không học cũng không sao, Chương 1 vẫn mở bình thường.</p>
+      <button type="button" class="btn btn-accent btn-next-big" data-skip-ch1 style="margin-top:14px">Bỏ qua, vào thẳng Chương 1 →</button>
+    </div>
+
+    <div id="pronIndex">
+      <div class="lesson-goal">
+        <p><b>IPA là gì?</b> IPA là bảng ký hiệu ghi lại đúng âm thanh của tiếng Anh. Tiếng Việt mình đọc sao viết vậy, còn tiếng Anh thì một chữ cái có thể đọc nhiều kiểu khác nhau — nhờ ký hiệu IPA, bác nhìn là biết từ đó đọc thế nào, không phải đoán.</p>
+        <p style="margin-top:10px"><b>Vì sao nên học phát âm trước?</b> Tiếng Anh có đúng <b>44 âm</b>. Thuộc 44 âm này rồi, về sau học từ nào bác cũng tự đọc đúng được ngay từ lần đầu, nghe người ta nói cũng rõ hơn hẳn.</p>
+        <p style="margin-top:10px"><b>Cách học từng âm (3 bước nhẹ nhàng):</b> 1 · Bấm <b>Nghe</b> nghe từ ví dụ vài lần — 2 · Đọc thầm dòng <b>“Cách đọc”</b> để biết đặt lưỡi, môi ra sao — 3 · Bấm <b>Đọc lại</b> và đọc to, trang web nghe và chỉ ngay chỗ sai. Học xong âm nào, bấm “Đánh dấu đã thuộc âm” ở âm đó.</p>
+        <p style="margin-top:10px">Chương này <b>không có kiểm tra chặn cửa</b>: học bài nào cũng được vào ôn lại tự do, và bỏ qua lúc nào cũng được.</p>
+      </div>
+      <h2 class="sub-h" style="margin-top:26px">5 bài phát âm — 44 âm</h2>
+      <p class="sub-p">Học lần lượt từ Bài 1: chơi đạt trò chơi cuối bài (từ 80%) là mở bài kế tiếp trong chương này. Số âm mỗi bài khác nhau — nguyên âm ngắn 7 âm, phụ âm mỗi phần 12 âm — trang ghi rõ ngay trên từng bài.</p>
+      <div class="chapter-list" id="pronLessonList"></div>
+    </div>
+
+    <div id="pronLessonView" style="display:none">
+      <button type="button" class="part-prev" id="pronBackList">← Về danh sách 5 bài phát âm</button>
+      <h2 class="sub-h" id="pronLessonTitle">Bài phát âm</h2>
+      <p class="sub-p" id="pronLessonGoal"></p>
+
+      <h3 class="sub-h">1 · Học từng âm</h3>
+      <p class="sub-p">Mỗi âm có <b>2 từ ví dụ</b> thông dụng. Bấm <b>Nghe</b> để nghe từ, đọc dòng “Cách đọc” rồi bấm <b>Đọc lại</b> đọc to từ ví dụ — trang web chấm từng âm cho bác như ở phần Từ vựng.</p>
+      <div class="vocab-list" id="pronSounds"></div>
+
+      <h3 class="sub-h" style="margin-top:32px">2 · Thẻ ghi nhớ âm</h3>
+      <p class="sub-p">Nhìn ký hiệu âm, thử tự nhớ từ ví dụ trước, rồi bấm vào thẻ để lật xem đáp án và cách đọc.</p>
+      <div class="fc-stage">
+        <button type="button" class="fc-card" id="pfcCard" aria-label="Thẻ ghi nhớ âm, bấm để lật thẻ">
+          <span class="fc-inner" id="pfcInner">
+            <span class="fc-face fc-front">
+              <span class="fc-hint">Ký hiệu âm — bấm để lật</span>
+              <span class="fc-word" id="pfcIpa">…</span>
+              <span class="fc-ipa" id="pfcName">…</span>
+            </span>
+            <span class="fc-face fc-back">
+              <span class="fc-hint">Từ ví dụ &amp; cách đọc</span>
+              <span class="fc-vi" id="pfcEx" style="font-size:1.05em; line-height:1.5">…</span>
+              <span class="fc-ex" id="pfcTip">…</span>
+            </span>
+          </span>
+        </button>
+      </div>
+      <p class="fc-progress" id="pfcProgress">Âm 1 / 7</p>
+      <div class="fc-controls">
+        <button type="button" class="btn btn-ghost" id="pfcPrev">← Âm trước</button>
+        <button type="button" class="btn btn-soft" id="pfcListen">Nghe từ ví dụ</button>
+        <button type="button" class="btn btn-primary" id="pfcKnown">Đã thuộc âm ✓</button>
+        <button type="button" class="btn btn-ghost" id="pfcNext">Âm sau →</button>
+      </div>
+
+      <div id="pronPairsSection" style="display:none">
+        <h3 class="sub-h" style="margin-top:32px">3 · Các cặp âm dễ nhầm — nghe và so sánh</h3>
+        <p class="sub-p">Hai từ trong mỗi cặp chỉ khác nhau <b>một âm</b> mà nghĩa khác hẳn. Bấm nghe từng từ, nghe kỹ chỗ khác nhau, rồi bấm <b>Đọc lại</b> tập đọc cả hai từ.</p>
+        <div id="pronPairs"></div>
+      </div>
+
+      <h3 class="sub-h" style="margin-top:32px">4 · Trò chơi cuối bài</h3>
+      <p class="sub-p">Nghe máy đọc một từ, rồi chọn đúng ký hiệu âm có trong từ đó. Đúng từ 80% là hoàn thành bài này và mở bài phát âm tiếp theo.</p>
+      <div id="pronGameWrap"></div>
+      <div class="quiz-result" id="pronGameResult" role="status"></div>
+    </div>
+  </div>
+</div>
 
 <!-- ================= GATE VIEW (kiểm tra bài cũ / bài khóa) ================= -->
 <div class="view" id="viewGate">
@@ -2208,7 +2354,7 @@ function renderLessonGridCounts(){ renderLessonGrid(); }
 function showView(id){
   MicSessions.cancelCurrent(); stopGameTimer();
   if(typeof closeFsPanel === "function") closeFsPanel(false);
-  ["viewHome","viewLesson","viewTotal","viewGate"].forEach(function(v){
+  ["viewHome","viewLesson","viewTotal","viewGate","viewPron"].forEach(function(v){
     document.getElementById(v).classList.toggle("active", v===id);
   });
   window.scrollTo({top:0, behavior:"smooth"});
@@ -5304,6 +5450,396 @@ document.addEventListener("visibilitychange", function(){
   if(document.hidden) MicSessions.cancelCurrent();
 });
 if(!ttsOK){ setTimeout(function(){ toast("Trình duyệt này chưa hỗ trợ giọng đọc tiếng Anh. Bác mở trang bằng Chrome hoặc Safari để nghe phát âm nhé."); }, 800); }
+
+/* ============================================================
+   V17 — CHƯƠNG MỞ ĐẦU: PHÁT ÂM 44 ÂM IPA (KHÔNG BẮT BUỘC)
+   Tách riêng 100% khỏi khóa chính:
+   · Dữ liệu riêng PRON_LESSONS (5 bài, đúng 44 âm).
+   · Tiến độ riêng ở khóa localStorage riêng — state/LESSONS/
+     CHAPTERS của 6 chương chính không hề bị đụng vào, nên %
+     tiến độ, từ đã thuộc, khóa bài và cổng kiểm tra giữ nguyên.
+   · Chương 1 Bài 1 vốn mở bằng quy tắc id===1 sẵn có — chương
+     này không tham gia vào chuỗi khóa đó nên bỏ qua tự do.
+   · Đọc lại dùng NGUYÊN startReadback (cơ chế V15 + panel V16),
+     với isWord=false để kết quả luyện âm KHÔNG ghi vào “từ đã
+     thuộc” của khóa chính.
+   ============================================================ */
+var PRON_STORE_KEY = "tieng-anh-phon-v1";
+var pronState = { completed:{}, learned:{} };
+function pronLoad(){
+  try{
+    var raw = localStorage.getItem(PRON_STORE_KEY);
+    if(raw){ var p = JSON.parse(raw); if(p && typeof p === "object"){
+      if(p.completed && typeof p.completed === "object") pronState.completed = p.completed;
+      if(p.learned && typeof p.learned === "object") pronState.learned = p.learned;
+    }}
+  }catch(e){ /* dữ liệu phần mới đọc không được thì bỏ qua, trang chính không ảnh hưởng */ }
+}
+function pronSave(){ try{ localStorage.setItem(PRON_STORE_KEY, JSON.stringify(pronState)); }catch(e){} }
+
+var PRON_LESSONS = [
+{ id:"p1", n:1, title:"Nguyên âm ngắn", goal:"7 nguyên âm ngắn — đọc ngắn, gọn, dứt khoát. Đây là nhóm âm người Việt hay đọc kéo dài quá tay nhất.",
+  sounds:[
+    {ipa:"ɪ", name:"i ngắn", ex:[["sit","/sɪt/","ngồi"],["fish","/fɪʃ/","con cá"]], tip:"Cách đọc: miệng hơi mỉm cười, lưỡi ở giữa miệng, đọc thật ngắn và nhẹ như “i” lướt. Lỗi hay mắc: đọc kéo dài thành âm i dài /iː/."},
+    {ipa:"e", name:"e ngắn", ex:[["bed","/bed/","cái giường"],["pen","/pen/","cái bút"]], tip:"Cách đọc: mở miệng vừa, lưỡi ở giữa, đọc dứt khoát như “e” tiếng Việt nhưng ngắn hơn. Lỗi hay mắc: đọc bè ra thành /æ/."},
+    {ipa:"æ", name:"a-e (miệng mở rộng)", ex:[["cat","/kæt/","con mèo"],["bag","/bæɡ/","cái túi"]], tip:"Cách đọc: mở miệng rộng, hàm hạ xuống, âm nằm giữa “a” và “e” — như vừa nói a vừa cười. Lỗi hay mắc: đọc thành “a” thuần hoặc “e” thuần."},
+    {ipa:"ʌ", name:"â ngắn", ex:[["cup","/kʌp/","cái cốc"],["sun","/sʌn/","mặt trời"]], tip:"Cách đọc: miệng mở vừa, lưỡi ở giữa miệng, đọc ngắn gọn gần như “â”. Lỗi hay mắc: đọc thành “ă” hoặc kéo dài thành “a”."},
+    {ipa:"ɒ", name:"o ngắn", ex:[["hot","/hɒt/","nóng"],["dog","/dɒɡ/","con chó"]], tip:"Cách đọc: môi hơi tròn, miệng mở, đọc ngắn và gọn. Lỗi hay mắc: kéo dài thành âm o dài /ɔː/."},
+    {ipa:"ʊ", name:"u ngắn", ex:[["book","/bʊk/","quyển sách"],["good","/ɡʊd/","tốt"]], tip:"Cách đọc: môi hơi chum nhẹ, lưỡi lùi về sau, đọc ngắn. Lỗi hay mắc: kéo dài và chum môi mạnh thành /uː/."},
+    {ipa:"ə", name:"ơ nhẹ (âm schwa)", ex:[["about","/əˈbaʊt/","khoảng, về"],["teacher","/ˈtiːtʃə/","giáo viên"]], tip:"Cách đọc: thả lỏng cả miệng, đọc rất nhẹ và ngắn như “ơ” lướt qua — âm này không bao giờ được nhấn mạnh, nó luôn là âm nhẹ nhất trong từ. Lỗi hay mắc: đọc rõ và nặng như “ơ” tiếng Việt."}
+  ]},
+{ id:"p2", n:2, title:"Nguyên âm dài", goal:"5 nguyên âm dài — dấu hai chấm (ː) trong ký hiệu nghĩa là kéo dài gấp đôi âm ngắn tương ứng.",
+  sounds:[
+    {ipa:"iː", name:"i dài", ex:[["sheep","/ʃiːp/","con cừu"],["green","/ɡriːn/","màu xanh lá"]], tip:"Cách đọc: miệng mỉm cười căng sang hai bên, lưỡi căng, kéo dài như “i-i”. So với /ɪ/: âm này dài và căng hơn hẳn."},
+    {ipa:"ɑː", name:"a dài", ex:[["car","/kɑː/","ô tô"],["father","/ˈfɑːðə/","bố"]], tip:"Cách đọc: mở miệng to, lưỡi thấp và lùi về sau, kéo dài như “a-a”. Lỗi hay mắc: đọc ngắn như “a” tiếng Việt."},
+    {ipa:"ɔː", name:"o dài", ex:[["door","/dɔː/","cánh cửa"],["four","/fɔː/","số bốn"]], tip:"Cách đọc: môi tròn, lưỡi lùi về sau, kéo dài như “o-o”. So với /ɒ/: âm này dài hơn nhiều."},
+    {ipa:"uː", name:"u dài", ex:[["food","/fuːd/","đồ ăn"],["blue","/bluː/","màu xanh dương"]], tip:"Cách đọc: môi chum tròn và đưa ra phía trước, kéo dài như “u-u”. So với /ʊ/: âm này dài và môi chum mạnh hơn."},
+    {ipa:"ɜː", name:"ơ dài", ex:[["bird","/bɜːd/","con chim"],["work","/wɜːk/","làm việc"]], tip:"Cách đọc: miệng gần như khép, lưỡi ở giữa, kéo dài như “ơ-ơ” ngân. Lưu ý: chữ r ở cuối từ thường không đọc trong giọng Anh."}
+  ]},
+{ id:"p3", n:3, title:"Nguyên âm đôi", goal:"8 nguyên âm đôi — mỗi âm là hai âm trượt liền nhau trong một hơi, không ngắt quãng ở giữa.",
+  sounds:[
+    {ipa:"eɪ", name:"ây", ex:[["day","/deɪ/","ngày"],["rain","/reɪn/","mưa"]], tip:"Cách đọc: bắt đầu như “ê” rồi trượt nhanh sang “i”, liền một hơi: “ê-i”. Lỗi hay mắc: đọc thành “ây” hai tiếng ngắt rời."},
+    {ipa:"aɪ", name:"ai", ex:[["my","/maɪ/","của tôi"],["night","/naɪt/","ban đêm"]], tip:"Cách đọc: bắt đầu như “a” rồi trượt sang “i”, liền một hơi: “a-i”."},
+    {ipa:"ɔɪ", name:"oi", ex:[["boy","/bɔɪ/","cậu bé"],["coin","/kɔɪn/","đồng xu"]], tip:"Cách đọc: bắt đầu như “o” rồi trượt sang “i”, liền một hơi: “o-i”."},
+    {ipa:"aʊ", name:"ao", ex:[["now","/naʊ/","bây giờ"],["house","/haʊs/","ngôi nhà"]], tip:"Cách đọc: bắt đầu như “a” rồi trượt sang “u”, môi dần tròn lại: “a-u”."},
+    {ipa:"əʊ", name:"âu (ơ-u)", ex:[["go","/ɡəʊ/","đi"],["phone","/fəʊn/","điện thoại"]], tip:"Cách đọc: bắt đầu bằng “ơ” nhẹ rồi trượt sang “u”, môi dần tròn. Lỗi hay mắc: đọc thành “ô” thuần như tiếng Việt."},
+    {ipa:"ɪə", name:"i-ơ", ex:[["here","/hɪə/","ở đây"],["near","/nɪə/","gần"]], tip:"Cách đọc: bắt đầu bằng i ngắn /ɪ/ rồi trượt sang “ơ” nhẹ, miệng dần thả lỏng: “i-ơ”."},
+    {ipa:"eə", name:"e-ơ", ex:[["hair","/heə/","tóc"],["chair","/tʃeə/","cái ghế"]], tip:"Cách đọc: bắt đầu bằng “e” rồi trượt sang “ơ” nhẹ, miệng dần khép lại: “e-ơ”."},
+    {ipa:"ʊə", name:"u-ơ", ex:[["tour","/tʊə/","chuyến đi"],["sure","/ʃʊə/","chắc chắn"]], tip:"Cách đọc: bắt đầu bằng u ngắn /ʊ/ rồi trượt sang “ơ” nhẹ: “u-ơ”. Âm này ngày nay ít gặp — nhiều người Anh đọc nó gần như /ɔː/."}
+  ]},
+{ id:"p4", n:4, title:"Phụ âm — phần 1", goal:"12 phụ âm đầu tiên. Chú ý các cặp giống nhau về vị trí miệng, chỉ khác ở chỗ cổ họng có rung hay không.",
+  sounds:[
+    {ipa:"p", name:"pờ (bật hơi)", ex:[["pen","/pen/","cái bút"],["happy","/ˈhæpi/","vui vẻ"]], tip:"Cách đọc: hai môi bật mạnh, có hơi phụt ra — để bàn tay trước miệng sẽ thấy hơi. Lỗi hay mắc: đọc nhẹ như “b” tiếng Việt, nghe không rõ."},
+    {ipa:"b", name:"bờ", ex:[["book","/bʊk/","quyển sách"],["baby","/ˈbeɪbi/","em bé"]], tip:"Cách đọc: vị trí môi như /p/ nhưng cổ họng rung và không phụt hơi. Đặt tay lên cổ sẽ thấy rung."},
+    {ipa:"t", name:"tờ (bật hơi)", ex:[["tea","/tiː/","trà"],["cat","/kæt/","con mèo"]], tip:"Cách đọc: đầu lưỡi chạm phần lợi trên (sau răng) rồi bật ra kèm hơi. Lỗi hay mắc: chạm lưỡi vào răng như “t” tiếng Việt."},
+    {ipa:"d", name:"đờ", ex:[["dog","/dɒɡ/","con chó"],["day","/deɪ/","ngày"]], tip:"Cách đọc: vị trí lưỡi như /t/ nhưng cổ họng rung, không phụt hơi."},
+    {ipa:"k", name:"cờ (bật hơi)", ex:[["cat","/kæt/","con mèo"],["book","/bʊk/","quyển sách"]], tip:"Cách đọc: cuống lưỡi chạm vòm miệng phía sau rồi bật ra kèm hơi, như “k” nhưng mạnh hơn."},
+    {ipa:"ɡ", name:"gờ", ex:[["go","/ɡəʊ/","đi"],["dog","/dɒɡ/","con chó"]], tip:"Cách đọc: vị trí lưỡi như /k/ nhưng cổ họng rung, không phụt hơi."},
+    {ipa:"f", name:"phờ (răng-môi)", ex:[["fish","/fɪʃ/","con cá"],["coffee","/ˈkɒfi/","cà phê"]], tip:"Cách đọc: răng trên chạm nhẹ vào môi dưới rồi thổi hơi ra. Lỗi hay mắc: dùng cả hai môi như “ph” tiếng Việt."},
+    {ipa:"v", name:"vờ", ex:[["very","/ˈveri/","rất"],["five","/faɪv/","số năm"]], tip:"Cách đọc: vị trí răng-môi như /f/ nhưng cổ họng rung. Lỗi hay mắc: đọc như “v” hai môi của tiếng Việt."},
+    {ipa:"θ", name:"thờ (không rung)", ex:[["think","/θɪŋk/","nghĩ"],["three","/θriː/","số ba"]], tip:"Cách đọc: đặt đầu lưỡi ra giữa hai hàm răng rồi thổi hơi qua — đây là âm người Việt hay sai nhất. Lỗi hay mắc: đọc thành “th” hoặc “t” tiếng Việt."},
+    {ipa:"ð", name:"thờ (có rung)", ex:[["this","/ðɪs/","cái này"],["mother","/ˈmʌðə/","mẹ"]], tip:"Cách đọc: lưỡi đặt giữa hai hàm răng như /θ/ nhưng cổ họng rung. Lỗi hay mắc: đọc thành “d” hoặc “đ”."},
+    {ipa:"s", name:"xờ", ex:[["sun","/sʌn/","mặt trời"],["bus","/bʌs/","xe buýt"]], tip:"Cách đọc: lưỡi đưa gần lợi trên, thổi hơi “xì” dài và đều. Lỗi hay mắc: đọc cong lưỡi thành “s” nặng."},
+    {ipa:"z", name:"dờ (rung)", ex:[["zoo","/zuː/","sở thú"],["nose","/nəʊz/","cái mũi"]], tip:"Cách đọc: vị trí lưỡi như /s/ nhưng cổ họng rung, nghe như “zì”. Lỗi hay mắc: đọc thành “d”."}
+  ]},
+{ id:"p5", n:5, title:"Phụ âm — phần 2", goal:"12 phụ âm còn lại, gồm các âm gió, âm mũi và hai âm lướt /w/, /j/. Cuối bài có mục các cặp âm dễ nhầm để nghe so sánh.",
+  sounds:[
+    {ipa:"ʃ", name:"sờ (tròn môi)", ex:[["sheep","/ʃiːp/","con cừu"],["fish","/fɪʃ/","con cá"]], tip:"Cách đọc: môi hơi chum tròn, lưỡi lùi về sau, thổi hơi “sh” mềm. Lỗi hay mắc: đọc thành /s/ xì sắc."},
+    {ipa:"ʒ", name:"giơ (rung)", ex:[["television","/ˈtelɪvɪʒn/","ti vi"],["usual","/ˈjuːʒuəl/","thường lệ"]], tip:"Cách đọc: vị trí như /ʃ/ nhưng cổ họng rung. Âm này ít gặp, thường nằm ở giữa từ."},
+    {ipa:"tʃ", name:"chờ (bật hơi)", ex:[["chair","/tʃeə/","cái ghế"],["teacher","/ˈtiːtʃə/","giáo viên"]], tip:"Cách đọc: như “ch” tiếng Việt nhưng mạnh và bật hơi hơn, môi hơi chum."},
+    {ipa:"dʒ", name:"giơ (bật)", ex:[["job","/dʒɒb/","công việc"],["orange","/ˈɒrɪndʒ/","quả cam"]], tip:"Cách đọc: vị trí như /tʃ/ nhưng cổ họng rung. Lỗi hay mắc: đọc thành “gi” tiếng Việt."},
+    {ipa:"m", name:"mờ (âm mũi)", ex:[["mother","/ˈmʌðə/","mẹ"],["name","/neɪm/","tên"]], tip:"Cách đọc: hai môi khép lại, hơi đi ra đường mũi, ngân “m-m”."},
+    {ipa:"n", name:"nờ (âm mũi)", ex:[["name","/neɪm/","tên"],["sun","/sʌn/","mặt trời"]], tip:"Cách đọc: đầu lưỡi chạm lợi trên, hơi đi ra đường mũi, ngân “n-n”."},
+    {ipa:"ŋ", name:"ngờ (âm mũi sau)", ex:[["sing","/sɪŋ/","hát"],["morning","/ˈmɔːnɪŋ/","buổi sáng"]], tip:"Cách đọc: cuống lưỡi chạm vòm miệng sau, ngân “ng” trong mũi. Lỗi hay mắc: thêm một tiếng “gờ” ở cuối, đọc thành “sing-gờ”."},
+    {ipa:"h", name:"hờ (hà hơi)", ex:[["hello","/həˈləʊ/","xin chào"],["house","/haʊs/","ngôi nhà"]], tip:"Cách đọc: chỉ hà hơi nhẹ từ họng, như thở vào lòng bàn tay. Lỗi hay mắc: gằn mạnh như “h” tiếng Việt."},
+    {ipa:"l", name:"lờ", ex:[["light","/laɪt/","ánh sáng"],["hello","/həˈləʊ/","xin chào"]], tip:"Cách đọc: đầu lưỡi chạm lợi trên. Ở đầu từ đọc nhẹ và rõ; ở cuối từ lưỡi lùi xuống, âm nghe trầm hơn."},
+    {ipa:"r", name:"rờ (không rung lưỡi)", ex:[["red","/red/","màu đỏ"],["right","/raɪt/","bên phải"]], tip:"Cách đọc: lưỡi cong và lùi về sau, KHÔNG rung lưỡi, không chạm vào vòm miệng. Lỗi hay mắc: rung lưỡi như “r” tiếng Việt."},
+    {ipa:"w", name:"u (âm lướt)", ex:[["water","/ˈwɔːtə/","nước"],["we","/wiː/","chúng ta"]], tip:"Cách đọc: môi chum tròn như sắp huýt sáo rồi mở nhanh sang âm ngay sau nó — đọc rất nhanh, chỉ lướt qua."},
+    {ipa:"j", name:"i (âm lướt)", ex:[["yes","/jes/","vâng, đúng"],["yellow","/ˈjeləʊ/","màu vàng"]], tip:"Cách đọc: như “i” lướt rất nhanh ở đầu âm. Lỗi hay mắc: đọc thành “gi” (âm /dʒ/)."}
+  ]}
+];
+var PRON_PAIRS = [
+  {a:["ship","/ʃɪp/","con tàu"], b:["sheep","/ʃiːp/","con cừu"], note:"Khác nhau ở /ɪ/ ngắn và /iː/ dài — đọc nhầm là tàu thành cừu."},
+  {a:["bad","/bæd/","tệ, xấu"], b:["bed","/bed/","cái giường"], note:"Khác nhau ở /æ/ (miệng mở rộng) và /e/ ngắn."},
+  {a:["full","/fʊl/","đầy"], b:["fool","/fuːl/","người ngốc nghếch"], note:"Khác nhau ở /ʊ/ ngắn và /uː/ dài."},
+  {a:["think","/θɪŋk/","nghĩ"], b:["sink","/sɪŋk/","bồn rửa"], note:"Khác nhau ở /θ/ (lưỡi giữa hai răng) và /s/ xì."},
+  {a:["day","/deɪ/","ngày"], b:["they","/ðeɪ/","họ (những người kia)"], note:"Khác nhau ở /d/ và /ð/ (lưỡi giữa hai răng, cổ họng rung)."},
+  {a:["light","/laɪt/","ánh sáng"], b:["right","/raɪt/","bên phải"], note:"Khác nhau ở /l/ (lưỡi chạm lợi) và /r/ (lưỡi cong, không chạm)."},
+  {a:["cat","/kæt/","con mèo"], b:["cut","/kʌt/","cắt"], note:"Khác nhau ở /æ/ (miệng mở rộng) và /ʌ/ (â ngắn)."}
+];
+function pronLessonById(id){ return PRON_LESSONS.filter(function(L){ return L.id === id; })[0] || null; }
+function pronUnlocked(L){ return !!L && (L.n === 1 || !!pronState.completed["p" + (L.n - 1)]); }
+function pronDoneCount(){ return PRON_LESSONS.filter(function(L){ return pronState.completed[L.id]; }).length; }
+function pronLearnedCount(){ return Object.keys(pronState.learned).filter(function(k){ return pronState.learned[k]; }).length; }
+
+/* ---------- Điều hướng ---------- */
+function goChapter1(){
+  openChapters[1] = true;
+  renderLessonGrid();
+  openLesson(1);
+}
+document.querySelectorAll("[data-skip-ch1]").forEach(function(b){
+  b.addEventListener("click", function(){ goChapter1(); });
+});
+function openPron(){
+  renderPronIndex();
+  document.getElementById("pronIndex").style.display = "block";
+  document.getElementById("pronLessonView").style.display = "none";
+  showView("viewPron");
+}
+var ctaPronEl = document.getElementById("ctaPron");
+if(ctaPronEl) ctaPronEl.addEventListener("click", openPron);
+var pronHomeHeadEl = document.getElementById("pronHomeHead");
+if(pronHomeHeadEl) pronHomeHeadEl.addEventListener("click", openPron);
+var menuGotoPronEl = document.getElementById("menuGotoPron");
+if(menuGotoPronEl) menuGotoPronEl.addEventListener("click", function(){ closeDisplayMenu(false); openPron(); });
+document.querySelectorAll("[data-pron-home]").forEach(function(b){
+  b.addEventListener("click", function(){ showView("viewHome"); refreshProgress(); renderPronHome(); });
+});
+function renderPronHome(){
+  var prog = document.getElementById("pronHomeProg");
+  if(prog) prog.textContent = pronDoneCount() + " / 5 bài · " + pronLearnedCount() + " / 44 âm đã thuộc";
+  var fill = document.getElementById("pronHomeFill");
+  if(fill) fill.style.transform = "scaleX(" + (pronDoneCount() / 5) + ")";
+}
+
+/* ---------- Danh sách 5 bài ---------- */
+function renderPronIndex(){
+  var wrap = document.getElementById("pronLessonList"); if(!wrap) return;
+  wrap.innerHTML = "";
+  PRON_LESSONS.forEach(function(L){
+    var card = document.createElement("div"); card.className = "chapter-card";
+    var row = document.createElement("button"); row.type = "button"; row.className = "ch-head";
+    row.setAttribute("aria-label", "Mở Bài " + L.n + " — " + L.title + ", " + L.sounds.length + " âm");
+    var htxt = document.createElement("span"); htxt.className = "ch-head-txt";
+    var t = document.createElement("span"); t.className = "ch-title"; t.textContent = "Bài " + L.n + ": " + L.title + " (" + L.sounds.length + " âm)";
+    var d = document.createElement("span"); d.className = "ch-desc"; d.textContent = L.goal;
+    htxt.appendChild(t); htxt.appendChild(d); row.appendChild(htxt);
+    var meta = document.createElement("span"); meta.className = "ch-meta";
+    var done = !!pronState.completed[L.id];
+    var locked = !pronUnlocked(L);
+    var st = document.createElement("span"); st.className = "ch-prog";
+    st.textContent = done ? "✓ Đã hoàn thành" : (locked ? "🔒 Học bài trước đã" : "▶ Vào học");
+    var chev = document.createElement("span"); chev.className = "ch-chev"; chev.setAttribute("aria-hidden", "true"); chev.textContent = "▸ Mở bài";
+    meta.appendChild(st); meta.appendChild(chev); row.appendChild(meta);
+    row.addEventListener("click", function(){
+      if(!pronUnlocked(L)){ toast("Bác học Bài " + (L.n - 1) + " của chương phát âm trước nhé — chơi đạt trò chơi cuối bài là bài này mở ra. Hoặc bấm nút cam ở trên để vào thẳng Chương 1."); return; }
+      openPronLesson(L.id);
+    });
+    card.appendChild(row);
+    wrap.appendChild(card);
+  });
+}
+
+/* ---------- Một bài phát âm ---------- */
+var pronCurrent = null, pfcIndex = 0, pfcFlipped = false;
+function openPronLesson(id){
+  var L = pronLessonById(id); if(!L || !pronUnlocked(L)) return;
+  pronCurrent = L; pfcIndex = 0; pfcFlipped = false;
+  document.getElementById("pronIndex").style.display = "none";
+  document.getElementById("pronLessonView").style.display = "block";
+  renderPronLesson();
+  window.scrollTo({top:0, behavior:"smooth"});
+}
+document.getElementById("pronBackList").addEventListener("click", function(){
+  if(typeof MicSessions !== "undefined") MicSessions.cancelCurrent();
+  renderPronIndex();
+  document.getElementById("pronLessonView").style.display = "none";
+  document.getElementById("pronIndex").style.display = "block";
+  window.scrollTo({top:0, behavior:"smooth"});
+});
+function pronLearnToggle(s){
+  var b = document.createElement("button");
+  b.type = "button"; b.className = "learned-toggle"; b.setAttribute("data-pron-learn", s.ipa);
+  b.addEventListener("click", function(){
+    var now = !pronState.learned[s.ipa];
+    pronState.learned[s.ipa] = now; pronSave();
+    syncPronLearnButtons(); renderPronHome();
+    toast(now ? "Đã ghi nhớ: bác đã thuộc âm /" + s.ipa + "/" : "Đã bỏ đánh dấu thuộc âm /" + s.ipa + "/");
+  });
+  return b;
+}
+function syncPronLearnButtons(){
+  document.querySelectorAll("[data-pron-learn]").forEach(function(b){
+    var on = !!pronState.learned[b.getAttribute("data-pron-learn")];
+    b.classList.toggle("on", on);
+    b.textContent = on ? "Đã thuộc âm ✓" : "Đánh dấu đã thuộc âm";
+  });
+}
+function pronExRow(ex, soundIpa){
+  var wrap = document.createElement("div"); wrap.className = "pron-exrow";
+  var en = document.createElement("div"); en.className = "v-en"; en.style.fontSize = "1.18em"; en.textContent = ex[0];
+  var ip = document.createElement("div"); ip.className = "v-ipa"; ip.textContent = ex[1] + " — " + ex[2];
+  wrap.appendChild(en); wrap.appendChild(ip);
+  var panel = document.createElement("div"); panel.className = "rb-panel"; panel.setAttribute("aria-live", "polite");
+  var btns = document.createElement("div"); btns.className = "v-btns";
+  btns.appendChild(speakBtn(ex[0], 1, "Nghe thường", false));
+  btns.appendChild(speakBtn(ex[0], 0.5, "Nghe chậm", true));
+  btns.appendChild(readbackBtn(ex[0], ex[1] + " · âm /" + soundIpa + "/", ex[2], false, panel));
+  wrap.appendChild(btns);
+  wrap.appendChild(panel);
+  return wrap;
+}
+function renderPronLesson(){
+  var L = pronCurrent; if(!L) return;
+  document.getElementById("pronLessonTitle").textContent = "Bài " + L.n + ": " + L.title + " — " + L.sounds.length + " âm";
+  document.getElementById("pronLessonGoal").textContent = L.goal;
+  var list = document.getElementById("pronSounds"); list.innerHTML = "";
+  L.sounds.forEach(function(s){
+    var row = document.createElement("div"); row.className = "vocab-row";
+    var main = document.createElement("div"); main.className = "v-main";
+    var line = document.createElement("div");
+    var big = document.createElement("span"); big.className = "ipa-big"; big.textContent = "/" + s.ipa + "/";
+    var nm = document.createElement("span"); nm.className = "pron-name"; nm.textContent = "  ·  " + s.name;
+    line.appendChild(big); line.appendChild(nm); main.appendChild(line);
+    s.ex.forEach(function(ex){ main.appendChild(pronExRow(ex, s.ipa)); });
+    var tip = document.createElement("p"); tip.className = "sound-tip";
+    var tb = document.createElement("b"); tb.textContent = "Cách đọc: ";
+    tip.appendChild(tb); tip.appendChild(document.createTextNode(s.tip.replace(/^Cách đọc:\s*/, "")));
+    main.appendChild(tip);
+    row.appendChild(main);
+    row.appendChild(pronLearnToggle(s));
+    list.appendChild(row);
+  });
+  syncPronLearnButtons();
+  renderPronFlashcard();
+  var pairSec = document.getElementById("pronPairsSection");
+  if(L.n === 5){
+    pairSec.style.display = "block";
+    renderPronPairs();
+  } else {
+    pairSec.style.display = "none";
+  }
+  renderPronGame();
+}
+function renderPronPairs(){
+  var wrap = document.getElementById("pronPairs"); wrap.innerHTML = "";
+  PRON_PAIRS.forEach(function(pr){
+    var card = document.createElement("div"); card.className = "pair-card";
+    var head = document.createElement("div"); head.className = "pair-head"; head.textContent = pr.a[0] + "  —  " + pr.b[0];
+    var note = document.createElement("p"); note.className = "pair-note"; note.textContent = pr.note;
+    card.appendChild(head); card.appendChild(note);
+    [pr.a, pr.b].forEach(function(w){
+      var row = document.createElement("div"); row.className = "pair-row";
+      var en = document.createElement("div"); en.className = "v-en"; en.style.fontSize = "1.18em"; en.textContent = w[0];
+      var ip = document.createElement("div"); ip.className = "v-ipa"; ip.textContent = w[1] + " — " + w[2];
+      row.appendChild(en); row.appendChild(ip);
+      var panel = document.createElement("div"); panel.className = "rb-panel"; panel.setAttribute("aria-live", "polite");
+      var btns = document.createElement("div"); btns.className = "v-btns";
+      btns.appendChild(speakBtn(w[0], 1, "Nghe thường", false));
+      btns.appendChild(speakBtn(w[0], 0.5, "Nghe chậm", true));
+      btns.appendChild(readbackBtn(w[0], w[1], w[2], false, panel));
+      row.appendChild(btns);
+      row.appendChild(panel);
+      card.appendChild(row);
+    });
+    wrap.appendChild(card);
+  });
+}
+
+/* ---------- Thẻ ghi nhớ âm ---------- */
+function renderPronFlashcard(){
+  if(!pronCurrent) return;
+  var s = pronCurrent.sounds[pfcIndex];
+  var card = document.getElementById("pfcCard");
+  card.classList.toggle("flipped", pfcFlipped);
+  document.getElementById("pfcIpa").textContent = "/" + s.ipa + "/";
+  document.getElementById("pfcName").textContent = s.name;
+  document.getElementById("pfcEx").textContent = s.ex.map(function(ex){ return ex[0] + " " + ex[1] + " — " + ex[2]; }).join("  ·  ");
+  document.getElementById("pfcTip").textContent = s.tip;
+  document.getElementById("pfcProgress").textContent = "Âm " + (pfcIndex + 1) + " / " + pronCurrent.sounds.length + " · Đã thuộc: " + pronCurrent.sounds.filter(function(x){ return pronState.learned[x.ipa]; }).length + " âm trong bài này";
+}
+document.getElementById("pfcCard").addEventListener("click", function(){ pfcFlipped = !pfcFlipped; renderPronFlashcard(); });
+document.getElementById("pfcPrev").addEventListener("click", function(){ if(!pronCurrent) return; pfcIndex = (pfcIndex - 1 + pronCurrent.sounds.length) % pronCurrent.sounds.length; pfcFlipped = false; renderPronFlashcard(); });
+document.getElementById("pfcNext").addEventListener("click", function(){ if(!pronCurrent) return; pfcIndex = (pfcIndex + 1) % pronCurrent.sounds.length; pfcFlipped = false; renderPronFlashcard(); });
+document.getElementById("pfcListen").addEventListener("click", function(){ if(pronCurrent) speak(pronCurrent.sounds[pfcIndex].ex[0][0], 0.8); });
+document.getElementById("pfcKnown").addEventListener("click", function(){
+  if(!pronCurrent) return;
+  var s = pronCurrent.sounds[pfcIndex];
+  pronState.learned[s.ipa] = true; pronSave();
+  syncPronLearnButtons(); renderPronHome();
+  toast("Giỏi lắm! Đã thuộc âm /" + s.ipa + "/");
+  pfcIndex = (pfcIndex + 1) % pronCurrent.sounds.length; pfcFlipped = false; renderPronFlashcard();
+});
+
+/* ---------- Trò chơi phát âm: Nghe từ, chọn ký hiệu âm ---------- */
+function ipaInWord(wordIpa, sym){ return wordIpa.replace(/\//g, "").indexOf(sym) >= 0; }
+function renderPronGame(){
+  var wrap = document.getElementById("pronGameWrap"); if(!wrap || !pronCurrent) return;
+  var res = document.getElementById("pronGameResult");
+  res.className = "quiz-result"; res.innerHTML = ""; res.style.background = ""; res.style.borderColor = "";
+  wrap.innerHTML = "";
+  var L = pronCurrent;
+  var head = gEl("div", "game-head");
+  head.appendChild(gEl("span", "game-name", "🎮 Nghe và chọn ký hiệu âm"));
+  head.appendChild(gEl("span", "game-state", pronState.completed[L.id] ? "✓ Bác đã hoàn thành bài này — chơi lại để ôn thêm" : "Đúng từ 80% là hoàn thành bài này"));
+  wrap.appendChild(head);
+  var box = gEl("div", "game-box"); wrap.appendChild(box);
+  var status = gEl("p", "game-status"); box.appendChild(status);
+  var inner = gEl("div", ""); box.appendChild(inner);
+  var rounds = shuffle(L.sounds.slice());
+  var idx = 0, score = 0;
+  var allSounds = [];
+  PRON_LESSONS.forEach(function(x){ x.sounds.forEach(function(s){ allSounds.push(s); }); });
+  function next(){
+    inner.innerHTML = "";
+    if(idx >= rounds.length){
+      var pct = Math.round(score / rounds.length * 100);
+      finishPronGame(pct >= 80, pct, score, rounds.length);
+      return;
+    }
+    var s = rounds[idx];
+    var cands = s.ex.filter(function(ex){ return ipaInWord(ex[1], s.ipa); });
+    var ex = cands.length ? cands[Math.floor(Math.random() * cands.length)] : s.ex[0];
+    status.textContent = "Câu " + (idx + 1) + " / " + rounds.length + " · Đúng: " + score;
+    var lb = speakBtn(ex[0], 0.85, "Nghe lại từ này", false); lb.style.marginBottom = "12px";
+    inner.appendChild(lb);
+    inner.appendChild(gEl("p", "game-q", "Bác vừa nghe từ “" + ex[0] + "” (" + ex[2] + "). Từ này có chứa âm nào dưới đây?"));
+    var pool = L.sounds.filter(function(x){ return x.ipa !== s.ipa && !ipaInWord(ex[1], x.ipa); });
+    var distract = shuffle(pool).slice(0, 3);
+    if(distract.length < 3){
+      var extra = shuffle(allSounds.filter(function(x){ return x.ipa !== s.ipa && !ipaInWord(ex[1], x.ipa) && !distract.some(function(d){ return d.ipa === x.ipa; }); }));
+      while(distract.length < 3 && extra.length) distract.push(extra.pop());
+    }
+    var items = shuffle([{label:"/" + s.ipa + "/", ok:true}].concat(distract.map(function(d){ return {label:"/" + d.ipa + "/", ok:false}; })));
+    var grid = optGrid(items, function(it, btn, g){
+      markPick(g, btn, it.ok);
+      if(it.ok) score++;
+      idx++;
+      setTimeout(next, 1000);
+    });
+    inner.appendChild(grid);
+    setTimeout(function(){ speak(ex[0], 0.85); }, 350);
+  }
+  next();
+}
+function finishPronGame(pass, pct, score, total){
+  var L = pronCurrent; if(!L) return;
+  if(pass){
+    pronState.completed[L.id] = true; pronSave();
+    renderPronHome();
+  }
+  var res = document.getElementById("pronGameResult"); if(!res) return;
+  res.className = "quiz-result show"; res.innerHTML = "";
+  res.style.background = pass ? "" : "var(--accent-soft)";
+  res.style.borderColor = pass ? "" : "var(--accent)";
+  res.appendChild(gEl("div", "score", "Đúng " + score + " / " + total + " câu (" + pct + "%)"));
+  var msg = gEl("p", "", pass ? "Tai bác nghe âm rất chuẩn — bài phát âm này đã hoàn thành!" : "Chưa đạt 80% — bác nghe lại các âm trong bài rồi chơi lại nhé, không vội đâu.");
+  msg.style.fontWeight = "700"; msg.style.marginTop = "6px";
+  res.appendChild(msg);
+  var acts = gEl("div", "game-acts");
+  var again = bigBtn("Chơi lại trò này", "btn-ghost");
+  again.addEventListener("click", function(){ renderPronGame(); });
+  acts.appendChild(again);
+  if(pass){
+    var nx = pronLessonById("p" + (L.n + 1));
+    if(nx){
+      var nb = bigBtn("Sang Bài " + nx.n + " — " + nx.title + " →", "btn-primary btn-next-big");
+      nb.addEventListener("click", function(){ openPronLesson(nx.id); });
+      acts.appendChild(nb);
+    } else {
+      var cb = bigBtn("Vào Chương 1 học tiếp →", "btn-primary btn-next-big");
+      cb.addEventListener("click", function(){ goChapter1(); });
+      acts.appendChild(cb);
+    }
+  } else {
+    var rb = bigBtn("Nghe lại các âm của bài này", "btn-accent");
+    rb.addEventListener("click", function(){ window.scrollTo({top:0, behavior:"smooth"}); });
+    acts.appendChild(rb);
+  }
+  var hb = bigBtn("Về trang chủ", "btn-soft");
+  hb.addEventListener("click", function(){ showView("viewHome"); refreshProgress(); renderPronHome(); });
+  acts.appendChild(hb);
+  res.appendChild(acts);
+  res.scrollIntoView({behavior:"smooth", block:"center"});
+}
+
+/* ---------- Khởi tạo phần phát âm (độc lập, lỗi thì bỏ qua) ---------- */
+try{
+  pronLoad();
+  renderPronHome();
+  renderPronIndex();
+}catch(e){}
 </script>
 </body>
 </html>
