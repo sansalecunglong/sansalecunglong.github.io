@@ -5604,7 +5604,7 @@ var GAME_INFO = {
   3:{name:"Sắp xếp từ thành câu", intro:"Bấm các từ theo đúng thứ tự để tạo thành câu hoàn chỉnh.", rule:"Có 5 câu — xếp đúng từ 4 câu (80%) là hoàn thành bài."},
   4:{name:"Điền chữ còn thiếu", intro:"Mỗi từ bị thiếu một hoặc hai chữ cái — bấm chữ đúng để điền vào chỗ trống.", rule:"Có 5 từ — điền đúng từ 4 từ (80%) là hoàn thành bài."},
   5:{name:"Nối cặp từ", intro:"Chạm một từ tiếng Anh ở cột trái, rồi chạm nghĩa tiếng Việt đúng của nó ở cột phải.", rule:"Nối chuẩn ngay lần đầu từ 4 cặp (80%) là hoàn thành bài."},
-  6:{name:"Săn điểm tốc độ", intro:"Nhìn nghĩa tiếng Việt, bấm ngay từ tiếng Anh đúng. Đúng được 10 điểm, đúng 3 lần liền được cộng thêm 5 điểm, sai bị trừ 3 giây.", rule:"Trong 60 giây, đạt từ 50 điểm là hoàn thành bài."},
+  6:{name:"Săn điểm tốc độ", intro:"Nhìn nghĩa tiếng Việt, bấm ngay từ tiếng Anh đúng. Câu hỏi rút từ 30 từ của Bài 1 đến Bài 6 trong chương và không lặp lại trong một ván — bác chơi nhanh tới đâu cũng gặp từ mới. Đúng được 10 điểm, đúng 3 lần liền được cộng thêm 5 điểm, sai bị trừ 3 giây.", rule:"Trong 60 giây, đạt từ 50 điểm là hoàn thành bài."},
   7:{name:"Nghe và chọn câu đúng", intro:"Nghe máy đọc một câu hoàn chỉnh, rồi chọn đúng câu bác vừa nghe.", rule:"Có 5 câu — đúng từ 4 câu (80%) là hoàn thành bài."},
   8:{name:"Đúng hay Sai", intro:"Trang web hiện một từ cùng một nghĩa — bác xem nghĩa đó đúng hay sai rồi bấm nút.", rule:"Có 5 câu — đúng từ 4 câu (80%) là hoàn thành bài."},
   9:{name:"Ghép hội thoại", intro:"Bấm các câu hội thoại theo đúng thứ tự nói chuyện, từ câu đầu tiên đến câu cuối cùng.", rule:"Bấm nhầm không quá 1 lần (đạt từ 80%) là hoàn thành bài."},
@@ -5926,6 +5926,54 @@ function gameMatch(wrap, L){
 function gameSpeed(wrap, L){
   var session = ++gameSession;
   var pts = 0, streak = 0, timeLeft = 60, over = false;
+  /* KHO CÂU HỎI: toàn bộ từ vựng Bài 1–6 của CÙNG CHƯƠNG (6 bài × 5 từ
+     = 30 từ khác nhau, đã khử trùng theo "en") — không chỉ 5 từ của riêng
+     Bài 6 như trước (rút ngẫu nhiên từ 5 từ khiến câu hỏi lặp lại liên tục,
+     người chơi nhanh rất chán). Bài 1–5 đều đã học xong nhờ khóa tuyến
+     tính nên đây đúng tính chất ôn tập tốc độ giữa chương. */
+  var pool = [], poolSeen = {};
+  chapterLessons(L.ch).forEach(function(x){
+    if(x.n < 1 || x.n > 6) return;
+    x.vocab.forEach(function(v){
+      var key = (v.en || "").toLowerCase();
+      if(!key || poolSeen[key]) return;
+      poolSeen[key] = true; pool.push(v);
+    });
+  });
+  /* Phòng hờ dữ liệu một chương gom chưa đủ 20 từ: mở rộng dần sang
+     Bài 7–9 cùng chương; với dữ liệu hiện tại mỗi chương đủ đúng 30 từ
+     nên nhánh này không chạy. Kho rỗng/quá nhỏ thì lùi về từ của bài. */
+  if(pool.length < 20){
+    chapterLessons(L.ch).forEach(function(x){
+      if(x.n < 7 || x.n > 9) return;
+      x.vocab.forEach(function(v){
+        var key = (v.en || "").toLowerCase();
+        if(!key || poolSeen[key]) return;
+        poolSeen[key] = true; pool.push(v);
+      });
+    });
+  }
+  if(pool.length < 4) pool = L.vocab.slice();
+  wrap.setAttribute("data-speed-pool-size", String(pool.length));
+  wrap.setAttribute("data-speed-pool", pool.map(function(v){ return v.en; }).join("|"));
+  /* HÀNG ĐỢI CHỐNG LẶP: xáo trộn toàn bộ kho một lần ở đầu ván, mỗi câu
+     rút từ đầu hàng đợi — không từ nào lặp lại cho tới khi hàng đợi cạn.
+     Cạn mà chưa hết giờ (người chơi rất nhanh): xáo trộn lại thành vòng
+     mới, và đảm bảo câu đầu vòng mới khác câu cuối vòng trước. */
+  var queue = shuffle(pool.slice());
+  var lastEn = null;
+  function nextTarget(){
+    if(queue.length === 0){
+      queue = shuffle(pool.slice());
+      if(pool.length > 1 && lastEn && queue[0].en === lastEn){
+        var j = 1 + Math.floor(Math.random() * (queue.length - 1));
+        var t = queue[0]; queue[0] = queue[j]; queue[j] = t;
+      }
+    }
+    var v = queue.shift();
+    lastEn = v.en;
+    return v;
+  }
   var status = gEl("p", "game-status"); wrap.appendChild(status);
   var prompt = gEl("p", "speed-prompt"); wrap.appendChild(prompt);
   var box = gEl("div", ""); wrap.appendChild(box);
@@ -5933,9 +5981,10 @@ function gameSpeed(wrap, L){
   function round(){
     if(over || session !== gameSession) return;
     box.innerHTML = "";
-    var v = L.vocab[Math.floor(Math.random() * L.vocab.length)];
+    var v = nextTarget();
+    wrap.setAttribute("data-speed-target", v.en);
     prompt.textContent = "“" + v.vi + "” tiếng Anh là…?";
-    var others = shuffle(L.vocab.filter(function(x){ return x.en !== v.en; })).slice(0, 2);
+    var others = shuffle(pool.filter(function(x){ return x.en !== v.en; })).slice(0, 3);
     var items = shuffle([{label:v.en, ok:true}].concat(others.map(function(o){ return {label:o.en, ok:false}; })));
     var grid = optGrid(items, function(it, btn, g){
       if(over) return;
