@@ -1545,6 +1545,35 @@ html[data-font="small"] .rb-close{font-size:max(14px,.88em)}
   .lesson-head.txt-card{padding:20px 20px 16px}
 }
 
+/* ============================================================
+   V21 — ĐIỆN THOẠI: THẺ CHƯƠNG XẾP DỌC MỘT CỘT, CHỮ DÀN HẾT BỀ NGANG
+   Lỗi từ ảnh chụp máy thật: .ch-head là hàng ngang, cột phải
+   .ch-meta (tiến độ + “Vào chương”) có flex:none nên giữ cứng bề
+   ngang, ép cột chữ bên trái hẹp lại — tiêu đề/mô tả xếp chồng
+   từng cụm ngắn, nửa phải thẻ trống trắng tới đáy. Nay ở ≤767px:
+   tiêu đề + mô tả dùng TOÀN BỘ bề ngang thẻ; tiến độ và lối vào
+   thành một hàng riêng ngay dưới tiêu đề; đầu thẻ, thanh tiến độ
+   và thân thẻ căn thẳng cùng một lề trong (18px) hai bên.
+   Hàng bài học: tên bài được ưu tiên bề ngang (flex + min-width:0),
+   nhãn trạng thái dài tự xuống hàng thay vì ép tên bài.
+   Áp cho cả 3 nơi dùng .ch-head: thẻ Chương Mở Đầu ở trang chủ,
+   6 thẻ chương chính và các thẻ bài phát âm. Desktop giữ nguyên.
+   ============================================================ */
+@media (max-width:767px){
+  .ch-head{flex-direction:column; align-items:stretch; gap:10px; padding:18px 18px 8px}
+  .ch-head-txt{width:100%}
+  .ch-meta{
+    flex-direction:row; align-items:center; justify-content:space-between;
+    flex-wrap:wrap; gap:6px 14px; width:100%;
+  }
+  .ch-meta .ch-chev{margin-left:auto}
+  .ch-bar{margin:4px 18px 14px}
+  .ch-body{padding:0 18px 18px}
+  .lesson-row{flex-wrap:wrap; row-gap:4px}
+  .lr-name{flex:1 1 55%; min-width:0}
+  .lr-status{margin-left:auto; text-align:right}
+}
+
 </style>
 </head>
 <body>
