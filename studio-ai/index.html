@@ -1,0 +1,1509 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="color-scheme" content="dark" />
+    <link rel="icon" href="data:," />
+    <title>Studio AI Của Long - Bản Web Thử</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+    <style>
+      :root{
+        --bg:#0d0e12;
+        --bg-soft:#12131a;
+        --panel:#171922;
+        --panel-2:#1d1f2a;
+        --line:#262836;
+        --line-soft:#1f212e;
+        --text:#f2f2f5;
+        --text-2:#b9bbc7;
+        --text-3:#82859a;
+        --accent:#e8402a;
+        --accent-2:#ff5a3c;
+        --accent-soft:rgba(232,64,42,.14);
+        --ok:#3ecf7a;
+        --warn:#ffb02e;
+        --radius:14px;
+        --sidebar-w:264px;
+        --history-w:330px;
+      }
+      *{ box-sizing:border-box; }
+      html,body{ height:100%; }
+      body{
+        margin:0;
+        background:var(--bg);
+        color:var(--text);
+        font-family:"Be Vietnam Pro", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+        font-size:15px;
+        line-height:1.55;
+        -webkit-font-smoothing:antialiased;
+      }
+      button, input, select, textarea{ font:inherit; color:inherit; }
+      button{ cursor:pointer; }
+      :focus-visible{ outline:2px solid var(--accent-2); outline-offset:2px; }
+
+      /* ---------- Layout ---------- */
+      .app{
+        display:grid;
+        grid-template-columns:var(--sidebar-w) minmax(0,1fr);
+        min-height:100dvh;
+      }
+      @media (min-width:1280px){
+        .app{ grid-template-columns:var(--sidebar-w) minmax(0,1fr) var(--history-w); }
+      }
+
+      /* ---------- Sidebar ---------- */
+      .sidebar{
+        background:var(--bg-soft);
+        border-right:1px solid var(--line-soft);
+        padding:20px 14px 24px;
+        position:sticky; top:0; height:100dvh;
+        overflow-y:auto;
+        display:flex; flex-direction:column; gap:4px;
+        z-index:40;
+      }
+      .brand{ padding:2px 8px 16px; border-bottom:1px solid var(--line-soft); margin-bottom:14px; }
+      .brand-name{ font-size:19px; font-weight:800; letter-spacing:-.01em; line-height:1.25; }
+      .brand-name em{ font-style:normal; color:var(--accent-2); }
+      .brand-sub{ margin-top:5px; font-size:12.5px; color:var(--text-3); line-height:1.45; }
+      .nav-group{ margin:12px 0 4px; }
+      .nav-group:first-of-type{ margin-top:0; }
+      .nav-label{
+        font-size:11px; font-weight:700; letter-spacing:.12em; text-transform:uppercase;
+        color:var(--text-3); padding:0 10px; margin-bottom:6px;
+      }
+      .nav-item{
+        display:flex; align-items:center; gap:11px;
+        width:100%; min-height:46px;
+        padding:10px;
+        background:transparent; border:1px solid transparent; border-radius:11px;
+        color:var(--text-2); font-weight:500; font-size:14.5px; text-align:left;
+        transition:background .15s, color .15s;
+      }
+      .nav-item:hover{ background:var(--panel); color:var(--text); }
+      .nav-item.active{ background:var(--accent-soft); border-color:rgba(232,64,42,.35); color:#fff; }
+      .nav-item svg{ flex:0 0 auto; width:20px; height:20px; stroke:currentColor; }
+      .nav-item .tag{
+        margin-left:auto; font-size:10.5px; font-weight:700; padding:2px 7px; border-radius:99px;
+        background:var(--panel-2); color:var(--text-3); border:1px solid var(--line);
+      }
+      .nav-item.active .tag{ background:rgba(232,64,42,.25); color:#ffb4a6; border-color:rgba(232,64,42,.4); }
+      .sidebar-foot{
+        margin-top:auto; padding:14px 10px 0; border-top:1px solid var(--line-soft);
+        font-size:12.5px; color:var(--text-3); line-height:1.55;
+      }
+
+      /* ---------- Topbar (mobile) ---------- */
+      .topbar{
+        display:none;
+        position:sticky; top:0; z-index:30;
+        align-items:center; gap:12px;
+        padding:10px 14px;
+        background:rgba(13,14,18,.92); backdrop-filter:blur(8px);
+        border-bottom:1px solid var(--line-soft);
+      }
+      .topbar-title{ font-weight:700; font-size:16px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+      .icon-btn{
+        display:inline-flex; align-items:center; justify-content:center;
+        width:44px; height:44px; flex:0 0 auto;
+        background:var(--panel); border:1px solid var(--line); border-radius:11px; color:var(--text);
+      }
+      .icon-btn svg{ width:22px; height:22px; stroke:currentColor; }
+      .scrim{
+        display:none; position:fixed; inset:0; background:rgba(0,0,0,.55); z-index:35;
+      }
+
+      /* ---------- Main ---------- */
+      .main{ min-width:0; padding:26px 28px 60px; }
+      .main-inner{ max-width:860px; margin:0 auto; }
+      .tool{ display:none; }
+      .tool.active{ display:block; }
+      .tool-head{ margin-bottom:20px; }
+      .tool-kicker{
+        display:inline-flex; align-items:center; gap:7px;
+        font-size:12px; font-weight:700; letter-spacing:.06em; text-transform:uppercase;
+        color:var(--accent-2); margin-bottom:8px;
+      }
+      .tool-kicker::before{ content:""; width:22px; height:2px; background:var(--accent); border-radius:2px; }
+      .tool-head h1{ font-size:26px; font-weight:800; letter-spacing:-.015em; margin:0 0 8px; line-height:1.2; }
+      .tool-head p{ margin:0; color:var(--text-2); max-width:64ch; }
+      .how{
+        margin-top:14px; padding:12px 14px;
+        background:var(--panel); border:1px solid var(--line-soft); border-radius:var(--radius);
+        font-size:13.5px; color:var(--text-2);
+      }
+      .how strong{ color:var(--text); }
+      .how ol{ margin:6px 0 0; padding-left:20px; }
+      .how li{ margin:2px 0; }
+
+      .card{
+        background:var(--panel); border:1px solid var(--line-soft);
+        border-radius:var(--radius); padding:20px; margin-bottom:18px;
+      }
+      .card h2{ font-size:16px; font-weight:700; margin:0 0 14px; }
+      .field{ margin-bottom:16px; }
+      .field:last-child{ margin-bottom:0; }
+      .field label{ display:block; font-size:13.5px; font-weight:600; color:var(--text); margin-bottom:7px; }
+      .field .hint{ font-size:12.5px; color:var(--text-3); margin-top:6px; }
+      input[type="text"], select, textarea{
+        width:100%; background:var(--bg-soft); border:1px solid var(--line);
+        border-radius:11px; padding:12px 13px; color:var(--text);
+        min-height:48px;
+      }
+      textarea{ min-height:0; resize:vertical; line-height:1.6; }
+      input[type="text"]:focus, select:focus, textarea:focus{ border-color:var(--accent); outline:none; }
+      select{ appearance:none; background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%2382859a' stroke-width='2.4' stroke-linecap='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E"); background-repeat:no-repeat; background-position:right 14px center; padding-right:40px; }
+      .grid-2{ display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+      .grid-3{ display:grid; grid-template-columns:repeat(3,1fr); gap:16px; }
+
+      .cmd-box{
+        width:100%; background:#0a0b0f; border:1px dashed #3a3d52; border-radius:11px;
+        padding:14px; font-family:"JetBrains Mono", ui-monospace, monospace; font-size:13px;
+        line-height:1.65; color:#d7f5d0; white-space:pre-wrap; word-break:break-word;
+        min-height:120px; margin:0;
+      }
+      .btn-row{ display:flex; flex-wrap:wrap; gap:10px; margin-top:16px; }
+      .btn{
+        display:inline-flex; align-items:center; justify-content:center; gap:8px;
+        min-height:48px; padding:12px 20px;
+        border-radius:11px; border:1px solid var(--line);
+        background:var(--panel-2); color:var(--text); font-weight:600; font-size:14.5px;
+        transition:background .15s, transform .05s;
+      }
+      .btn:active{ transform:scale(.985); }
+      .btn svg{ width:18px; height:18px; stroke:currentColor; flex:0 0 auto; }
+      .btn-primary{ background:var(--accent); border-color:var(--accent); color:#fff; }
+      .btn-primary:hover{ background:var(--accent-2); }
+      .btn-ghost{ background:transparent; }
+      .btn:disabled{ opacity:.45; cursor:not-allowed; }
+
+      /* file pick */
+      .file-pick{
+        display:flex; align-items:center; gap:12px; flex-wrap:wrap;
+        background:var(--bg-soft); border:1px dashed #3a3d52; border-radius:11px; padding:14px;
+      }
+      .file-pick input[type="file"]{ position:absolute; width:1px; height:1px; opacity:0; overflow:hidden; }
+      .file-pick .pick-btn{
+        display:inline-flex; align-items:center; gap:8px; min-height:46px; padding:10px 16px;
+        background:var(--panel-2); border:1px solid var(--line); border-radius:10px;
+        font-weight:600; cursor:pointer;
+      }
+      .file-pick .pick-btn svg{ width:18px; height:18px; stroke:currentColor; }
+      .file-name{ font-size:13.5px; color:var(--text-2); word-break:break-all; }
+      .file-meta{ font-size:12.5px; color:var(--text-3); width:100%; }
+
+      /* sliders */
+      .slider-row{ display:grid; grid-template-columns:1fr auto; align-items:center; gap:6px 14px; margin-bottom:14px; }
+      .slider-row label{ font-size:13.5px; font-weight:600; }
+      .slider-row output{ font-family:"JetBrains Mono", monospace; font-size:13px; color:var(--accent-2); min-width:52px; text-align:right; }
+      .slider-row input[type="range"]{ grid-column:1 / -1; width:100%; accent-color:var(--accent); height:32px; }
+
+      /* position presets */
+      .pos-grid{ display:grid; grid-template-columns:repeat(3,52px); gap:8px; }
+      .pos-btn{
+        height:44px; border-radius:10px; border:1px solid var(--line);
+        background:var(--bg-soft); position:relative; padding:0;
+      }
+      .pos-btn::after{
+        content:""; position:absolute; width:14px; height:10px; border-radius:2px; background:var(--text-3);
+      }
+      .pos-btn[data-pos="tl"]::after{ top:6px; left:6px; } .pos-btn[data-pos="tc"]::after{ top:6px; left:50%; transform:translateX(-50%); } .pos-btn[data-pos="tr"]::after{ top:6px; right:6px; }
+      .pos-btn[data-pos="ml"]::after{ top:50%; left:6px; transform:translateY(-50%); } .pos-btn[data-pos="mc"]::after{ top:50%; left:50%; transform:translate(-50%,-50%); } .pos-btn[data-pos="mr"]::after{ top:50%; right:6px; transform:translateY(-50%); }
+      .pos-btn[data-pos="bl"]::after{ bottom:6px; left:6px; } .pos-btn[data-pos="bc"]::after{ bottom:6px; left:50%; transform:translateX(-50%); } .pos-btn[data-pos="br"]::after{ bottom:6px; right:6px; }
+      .pos-btn.active{ border-color:var(--accent); background:var(--accent-soft); }
+      .pos-btn.active::after{ background:var(--accent-2); }
+
+      .preview-wrap{
+        background:#0a0b0f; border:1px solid var(--line-soft); border-radius:11px;
+        padding:12px; display:flex; align-items:center; justify-content:center; min-height:180px;
+      }
+      .preview-wrap canvas, .preview-wrap img{ max-width:100%; height:auto; border-radius:6px; display:block; }
+      .preview-empty{ color:var(--text-3); font-size:13.5px; text-align:center; padding:26px 10px; }
+      .compare{ display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+      .compare figure{ margin:0; }
+      .compare figcaption{ font-size:12.5px; font-weight:600; color:var(--text-2); margin-bottom:7px; }
+
+      .notice{
+        display:none; padding:12px 14px; border-radius:11px; font-size:13.5px; line-height:1.55;
+        background:rgba(255,176,46,.1); border:1px solid rgba(255,176,46,.4); color:#ffd88a; margin-bottom:16px;
+      }
+      .notice.show{ display:block; }
+      .char-count{ font-size:12.5px; color:var(--text-3); text-align:right; margin-top:6px; font-variant-numeric:tabular-nums; }
+      .seg{ display:flex; gap:8px; flex-wrap:wrap; }
+      .seg button{
+        min-height:46px; padding:10px 18px; border-radius:10px;
+        border:1px solid var(--line); background:var(--bg-soft); color:var(--text-2); font-weight:600;
+      }
+      .seg button.active{ background:var(--accent-soft); border-color:rgba(232,64,42,.45); color:#fff; }
+      .status-line{ font-size:13.5px; color:var(--text-2); margin-top:12px; min-height:21px; }
+      .status-line .dot{ display:inline-block; width:8px; height:8px; border-radius:50%; background:var(--ok); margin-right:7px; vertical-align:1px; }
+
+      /* ---------- History column ---------- */
+      .history-col{
+        display:none;
+        border-left:1px solid var(--line-soft); background:var(--bg-soft);
+        position:sticky; top:0; height:100dvh; overflow-y:auto;
+        padding:20px 16px 24px;
+      }
+      @media (min-width:1280px){ .history-col{ display:block; } }
+      .history-head{ display:flex; align-items:center; justify-content:space-between; gap:10px; margin-bottom:6px; }
+      .history-head h2{ font-size:16px; font-weight:700; margin:0; }
+      .history-note{ font-size:12px; color:var(--text-3); line-height:1.5; margin:0 0 14px; }
+      .hist-search{ margin-bottom:10px; }
+      .hist-search input{ min-height:44px; }
+      .chips{ display:flex; flex-wrap:wrap; gap:6px; margin-bottom:14px; }
+      .chip{
+        min-height:36px; padding:6px 12px; border-radius:99px; font-size:12.5px; font-weight:600;
+        border:1px solid var(--line); background:var(--panel); color:var(--text-2);
+      }
+      .chip.active{ background:var(--accent-soft); border-color:rgba(232,64,42,.45); color:#fff; }
+      .hist-list{ display:flex; flex-direction:column; gap:10px; }
+      .hist-item{
+        background:var(--panel); border:1px solid var(--line-soft); border-radius:12px; padding:13px 14px;
+      }
+      .hist-top{ display:flex; align-items:flex-start; justify-content:space-between; gap:8px; }
+      .hist-type{
+        font-size:11px; font-weight:700; letter-spacing:.05em; text-transform:uppercase;
+        color:var(--accent-2);
+      }
+      .hist-time{ font-size:11.5px; color:var(--text-3); white-space:nowrap; font-variant-numeric:tabular-nums; }
+      .hist-title{ font-weight:600; font-size:14px; margin:5px 0 3px; line-height:1.45; word-break:break-word; }
+      .hist-detail{ font-size:12.5px; color:var(--text-3); line-height:1.5; word-break:break-word; white-space:pre-wrap; display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical; overflow:hidden; }
+      .hist-actions{ display:flex; gap:8px; margin-top:10px; }
+      .mini-btn{
+        min-height:38px; padding:7px 13px; border-radius:9px; font-size:12.5px; font-weight:600;
+        border:1px solid var(--line); background:var(--panel-2); color:var(--text-2);
+        display:inline-flex; align-items:center; gap:6px;
+      }
+      .mini-btn svg{ width:14px; height:14px; stroke:currentColor; }
+      .mini-btn.danger{ color:#ff9a8a; }
+      .hist-empty{
+        text-align:center; color:var(--text-3); font-size:13.5px; padding:30px 12px;
+        border:1px dashed var(--line); border-radius:12px; line-height:1.6;
+      }
+      .text-btn{
+        background:none; border:none; color:var(--text-3); font-size:12.5px; font-weight:600;
+        min-height:36px; padding:6px 8px;
+      }
+      .text-btn:hover{ color:#ff9a8a; }
+
+      /* history as main view (mobile / narrow) */
+      .tool-history .history-note{ font-size:13px; }
+
+      /* ---------- Toast ---------- */
+      .toast{
+        position:fixed; left:50%; bottom:calc(22px + env(safe-area-inset-bottom)); transform:translate(-50%, 16px);
+        background:#22242f; border:1px solid var(--line); color:var(--text);
+        padding:12px 18px; border-radius:12px; font-size:14px; font-weight:600;
+        opacity:0; pointer-events:none; transition:opacity .2s, transform .2s; z-index:80;
+        max-width:calc(100vw - 32px); text-align:center;
+        box-shadow:0 10px 32px rgba(0,0,0,.5);
+      }
+      .toast.show{ opacity:1; transform:translate(-50%, 0); }
+
+      /* ---------- Responsive ---------- */
+      @media (max-width:900px){
+        .app{ grid-template-columns:minmax(0,1fr); }
+        .topbar{ display:flex; grid-column:1; }
+        .sidebar{
+          position:fixed; top:0; left:0; width:min(300px, 86vw); height:100dvh;
+          transform:translateX(-105%); visibility:hidden;
+          transition:transform .25s ease, visibility 0s linear .25s;
+          box-shadow:20px 0 50px rgba(0,0,0,.45);
+        }
+        .sidebar.open{ transform:translateX(0); visibility:visible; transition:transform .25s ease; }
+        .scrim.show{ display:block; }
+        .main{ padding:20px 16px 56px; }
+        .tool-head h1{ font-size:23px; }
+        .card{ padding:16px; }
+        .grid-2, .grid-3{ grid-template-columns:1fr; }
+        .compare{ grid-template-columns:1fr; }
+        .btn-row .btn{ flex:1 1 auto; }
+      }
+      @media (prefers-reduced-motion: reduce){
+        *{ transition:none !important; }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="app">
+      <!-- ============ SIDEBAR ============ -->
+      <aside class="sidebar" id="sidebar" aria-label="Danh sách công cụ">
+        <div class="brand">
+          <div class="brand-name">Studio AI <em>Của Long</em></div>
+          <div class="brand-sub">Chạy bằng sức mạnh Muse — làm riêng cho anh, không bán gói, không đăng nhập.</div>
+        </div>
+
+        <div class="nav-group">
+          <div class="nav-label">Sáng tạo AI</div>
+          <button class="nav-item active" data-tool="tao-anh">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="9" cy="9" r="2"/><path d="m21 15-4.5-4.5L6 21"/></svg>
+            Tạo Ảnh <span class="tag">Muse</span>
+          </button>
+          <button class="nav-item" data-tool="tao-video">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="15" height="14" rx="3"/><path d="m17 10 5-3v10l-5-3"/></svg>
+            Tạo Video <span class="tag">Tạo ngay</span>
+          </button>
+          <button class="nav-item" data-tool="giong-ai">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a3 3 0 0 0-3 3v6a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path d="M19 10v1a7 7 0 0 1-14 0v-1"/><path d="M12 18v4"/></svg>
+            Giọng Đọc AI <span class="tag">Muse</span>
+          </button>
+          <button class="nav-item" data-tool="upscale-ai">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6"/><path d="m21 3-7 7"/><path d="M9 21H3v-6"/><path d="m3 21 7-7"/></svg>
+            Upscale AI <span class="tag">Muse</span>
+          </button>
+        </div>
+
+        <div class="nav-group">
+          <div class="nav-label">Công cụ trong trang</div>
+          <button class="nav-item" data-tool="giong-nhanh">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.5 8.5a5 5 0 0 1 0 7"/><path d="M18.5 5.5a9 9 0 0 1 0 13"/></svg>
+            Giọng Đọc Nhanh <span class="tag">Chạy ngay</span>
+          </button>
+          <button class="nav-item" data-tool="chen-logo">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
+            Chèn Logo <span class="tag">Chạy ngay</span>
+          </button>
+          <button class="nav-item" data-tool="upscale-nhanh">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/><path d="M11 8v6M8 11h6"/></svg>
+            Upscale Nhanh <span class="tag">Chạy ngay</span>
+          </button>
+        </div>
+
+        <div class="nav-group">
+          <div class="nav-label">System</div>
+          <button class="nav-item" data-tool="lich-su">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/><path d="M12 7v5l3 3"/></svg>
+            Lịch Sử Tác Vụ
+          </button>
+        </div>
+
+        <div class="sidebar-foot">
+          Mục Tạo Video có chế độ tạo trực tiếp trong trang bằng Pollinations (key của anh). Các mục “Muse” còn lại soạn lệnh chuẩn — dán vào chat Muse là em làm thật và trả file về chat. Ba công cụ còn lại chạy ngay trong trang này.
+        </div>
+      </aside>
+      <div class="scrim" id="scrim"></div>
+
+      <!-- ============ MAIN ============ -->
+      <div>
+        <div class="topbar">
+          <button class="icon-btn" id="menuBtn" aria-label="Mở menu công cụ">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+          </button>
+          <div class="topbar-title" id="topbarTitle">Tạo Ảnh</div>
+        </div>
+
+        <main class="main">
+          <div class="main-inner">
+
+            <!-- ===== TẠO ẢNH ===== -->
+            <section class="tool active" id="tool-tao-anh">
+              <div class="tool-head">
+                <div class="tool-kicker">Sáng tạo AI · qua Muse</div>
+                <h1>Tạo Ảnh</h1>
+                <p>Điền ý tưởng, trang soạn sẵn một lệnh chuẩn. Anh sao chép, dán vào chat Muse — em tạo ảnh thật bằng công cụ của em rồi gửi file về chat.</p>
+                <div class="how"><strong>Cách dùng:</strong>
+                  <ol>
+                    <li>Điền form bên dưới — lệnh tự soạn ở khung xanh.</li>
+                    <li>Bấm <strong>Sao chép lệnh</strong> (lệnh đồng thời được lưu vào lịch sử).</li>
+                    <li>Dán vào chat Muse và gửi — em trả file ảnh về chat.</li>
+                  </ol>
+                </div>
+              </div>
+              <div class="card">
+                <h2>Ý tưởng của anh</h2>
+                <div class="field">
+                  <label for="imgPrompt">Mô tả ảnh muốn tạo *</label>
+                  <textarea id="imgPrompt" rows="4" placeholder="Ví dụ: Quán karaoke buổi tối, biển hiệu neon cam xanh, khách đang vui vẻ trước cửa quán, phong cách ảnh quảng cáo…"></textarea>
+                </div>
+                <div class="grid-2">
+                  <div class="field">
+                    <label for="imgStyle">Phong cách</label>
+                    <select id="imgStyle">
+                      <option>Ảnh chụp thực tế</option>
+                      <option>Ảnh quảng cáo sản phẩm</option>
+                      <option>Minh họa 3D</option>
+                      <option>Vẽ tay / hoạt hình</option>
+                      <option>Poster / banner chữ lớn</option>
+                      <option>Tối giản, nền sạch</option>
+                    </select>
+                  </div>
+                  <div class="field">
+                    <label for="imgRatio">Tỉ lệ khung hình</label>
+                    <select id="imgRatio">
+                      <option value="16:9 ngang">16:9 — ngang (YouTube, banner)</option>
+                      <option value="9:16 dọc">9:16 — dọc (TikTok, Reels, story)</option>
+                      <option value="1:1 vuông">1:1 — vuông (bài đăng)</option>
+                      <option value="4:5 dọc nhẹ">4:5 — dọc nhẹ (feed)</option>
+                      <option value="3:2 ngang">3:2 — ngang kiểu ảnh chụp</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="field">
+                  <label for="imgNote">Ghi chú thêm (không bắt buộc)</label>
+                  <input type="text" id="imgNote" placeholder="Ví dụ: có chữ “Karaoke Vũ Gia 68”, tông màu cam chủ đạo…" />
+                </div>
+              </div>
+              <div class="card">
+                <h2>Lệnh gửi Muse</h2>
+                <pre class="cmd-box" id="imgCmd"></pre>
+                <div class="btn-row">
+                  <button class="btn btn-primary" data-copy="img">
+                    <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                    Sao chép lệnh
+                  </button>
+                  <button class="btn" data-save="img">Lưu vào lịch sử</button>
+                </div>
+              </div>
+            </section>
+
+            <!-- ===== TẠO VIDEO ===== -->
+            <section class="tool" id="tool-tao-video">
+              <div class="tool-head">
+                <div class="tool-kicker">Sáng tạo AI</div>
+                <h1>Tạo Video</h1>
+                <p>Hai cách tạo: <strong style="color:var(--text)">⚡ Tạo trực tiếp trong trang</strong> — bấm là AI tạo video ngay tại đây bằng Pollinations (cần API key của anh, miễn phí để bắt đầu). Hoặc chế độ <strong style="color:var(--text)">Lệnh gửi Muse</strong> bên dưới — em lo kịch bản/keyframe, render qua Flow bằng tài khoản của anh.</p>
+              </div>
+
+              <div class="card" style="border-color:rgba(232,64,42,.45)">
+                <h2>⚡ Tạo trực tiếp trong trang</h2>
+                <div class="field">
+                  <label for="polKey">Pollinations API key *</label>
+                  <div style="display:flex; gap:8px;">
+                    <input type="password" id="polKey" placeholder="Dán API key của anh vào đây…" autocomplete="off" style="flex:1; min-width:0;" />
+                    <button type="button" class="btn" id="polKeyToggle" style="flex:0 0 auto; min-height:48px;">Hiện</button>
+                  </div>
+                  <div class="hint">Key chỉ lưu trên chính máy này (localStorage) — coi key như mật khẩu, đừng gửi cho ai. Trang không gửi key đi đâu ngoài Pollinations.</div>
+                </div>
+                <div class="how" style="margin-top:0; margin-bottom:16px;">
+                  <strong>Chưa có key? Lấy miễn phí trong 1 phút:</strong>
+                  <ol>
+                    <li>Vào <strong>enter.pollinations.ai</strong>, đăng nhập bằng GitHub.</li>
+                    <li>Tạo một <strong>API key</strong> mới.</li>
+                    <li>Dán key vào ô trên là tạo được.</li>
+                  </ol>
+                  <div style="margin-top:8px;">Tài khoản mới được tặng ít <strong>Pollen</strong> miễn phí qua các nhiệm vụ (Quests) — đủ tạo thử vài clip. Hết Pollen thì nạp thêm tại Pollinations, hoặc dùng chế độ Lệnh gửi Muse bên dưới.</div>
+                </div>
+                <div class="field">
+                  <label for="polPrompt">Mô tả video muốn tạo *</label>
+                  <textarea id="polPrompt" rows="4" placeholder="Ví dụ: Quán karaoke buổi tối, biển hiệu neon cam xanh phát sáng, khách vui vẻ hát trước cửa quán, quay chậm điện ảnh…"></textarea>
+                </div>
+                <div class="grid-3">
+                  <div class="field">
+                    <label for="polModel">Model</label>
+                    <select id="polModel">
+                      <option value="wan-fast" selected>wan-fast — nhanh, ít Pollen</option>
+                      <option value="wan">wan</option>
+                      <option value="wan-pro">wan-pro — nét hơn</option>
+                      <option value="veo">veo</option>
+                      <option value="seedance-pro">seedance-pro</option>
+                      <option value="ltx-2">ltx-2</option>
+                    </select>
+                  </div>
+                  <div class="field">
+                    <label for="polDuration">Thời lượng</label>
+                    <select id="polDuration">
+                      <option value="4" selected>4 giây</option>
+                      <option value="5">5 giây</option>
+                      <option value="8">8 giây</option>
+                      <option value="10">10 giây</option>
+                    </select>
+                  </div>
+                  <div class="field">
+                    <label for="polRatio">Tỷ lệ khung hình</label>
+                    <select id="polRatio">
+                      <option value="16:9">16:9 — ngang</option>
+                      <option value="9:16">9:16 — dọc (TikTok/Reels)</option>
+                      <option value="1:1">1:1 — vuông</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="notice" id="polWarn"></div>
+                <div class="btn-row" style="margin-top:0;">
+                  <button class="btn btn-primary" id="polGen" style="font-size:16px; padding:14px 26px;">
+                    🎬 Tạo video ngay
+                  </button>
+                </div>
+                <div class="status-line" id="polStatus"></div>
+                <div id="polResult" style="display:none; margin-top:16px;">
+                  <div class="preview-wrap" style="padding:8px;">
+                    <video id="polVideo" controls playsinline style="max-width:100%; height:auto; border-radius:6px; display:block;"></video>
+                  </div>
+                  <div class="btn-row">
+                    <button class="btn btn-primary" id="polDownload">
+                      <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="m7 10 5 5 5-5"/><path d="M12 15V3"/></svg>
+                      Tải MP4 về máy
+                    </button>
+                    <button class="btn" id="polAgain">Tạo video khác</button>
+                  </div>
+                </div>
+              </div>
+
+              <div class="card">
+                <h2>Chế độ Lệnh gửi Muse (không cần key)</h2>
+                <div class="field">
+                  <label for="vidIdea">Ý tưởng / kịch bản sơ bộ *</label>
+                  <textarea id="vidIdea" rows="4" placeholder="Ví dụ: Video quảng cáo quán karaoke 30 giây: mở đầu biển hiệu neon, khách hát vui, kết bằng slogan và số điện thoại đặt phòng…"></textarea>
+                </div>
+                <div class="grid-3">
+                  <div class="field">
+                    <label for="vidLen">Thời lượng</label>
+                    <select id="vidLen">
+                      <option>15 giây</option>
+                      <option selected>30 giây</option>
+                      <option>45 giây</option>
+                      <option>60 giây</option>
+                      <option>90 giây</option>
+                    </select>
+                  </div>
+                  <div class="field">
+                    <label for="vidRatio">Khung hình</label>
+                    <select id="vidRatio">
+                      <option value="9:16 dọc">9:16 dọc (TikTok/Reels)</option>
+                      <option value="16:9 ngang">16:9 ngang (YouTube)</option>
+                      <option value="1:1 vuông">1:1 vuông</option>
+                    </select>
+                  </div>
+                  <div class="field">
+                    <label for="vidSub">Phụ đề</label>
+                    <select id="vidSub">
+                      <option>Có phụ đề tiếng Việt</option>
+                      <option>Có phụ đề Việt + Anh</option>
+                      <option>Không phụ đề</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="field">
+                  <label for="vidNote">Ghi chú thêm (không bắt buộc)</label>
+                  <input type="text" id="vidNote" placeholder="Ví dụ: dùng ảnh thật của quán em gửi kèm, nhạc sôi động…" />
+                </div>
+              </div>
+              <div class="card">
+                <h2>Lệnh gửi Muse</h2>
+                <pre class="cmd-box" id="vidCmd"></pre>
+                <div class="btn-row">
+                  <button class="btn btn-primary" data-copy="vid">
+                    <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                    Sao chép lệnh
+                  </button>
+                  <button class="btn" data-save="vid">Lưu vào lịch sử</button>
+                </div>
+              </div>
+            </section>
+
+            <!-- ===== GIỌNG ĐỌC AI ===== -->
+            <section class="tool" id="tool-giong-ai">
+              <div class="tool-head">
+                <div class="tool-kicker">Sáng tạo AI · qua Muse</div>
+                <h1>Giọng Đọc AI — MP3 giọng Bắc</h1>
+                <p>Dán văn bản, trang soạn lệnh. Em thu giọng đọc thật, xuất file MP3 và gửi về chat cho anh tải xuống. Cần đọc ngay không cần file thì dùng mục Giọng Đọc Nhanh.</p>
+                <div class="how"><strong>Cách dùng:</strong>
+                  <ol>
+                    <li>Dán văn bản cần đọc, chọn giọng và tốc độ.</li>
+                    <li>Bấm <strong>Sao chép lệnh</strong>, dán vào chat Muse.</li>
+                    <li>Em gửi file MP3 về chat — văn bản dài em tự chia đoạn và nối file.</li>
+                  </ol>
+                </div>
+              </div>
+              <div class="card">
+                <h2>Văn bản cần đọc</h2>
+                <div class="field">
+                  <label for="ttsText">Văn bản *</label>
+                  <textarea id="ttsText" rows="6" placeholder="Dán văn bản tiếng Việt cần đọc thành MP3…"></textarea>
+                  <div class="char-count"><span id="ttsCount">0</span> ký tự</div>
+                </div>
+                <div class="grid-2">
+                  <div class="field">
+                    <label for="ttsVoice">Giọng đọc</label>
+                    <select id="ttsVoice">
+                      <option>Nữ miền Bắc — truyền cảm</option>
+                      <option>Nam miền Bắc — trầm ấm</option>
+                      <option>Nữ miền Bắc — vui tươi, quảng cáo</option>
+                      <option>Nam miền Bắc — trang trọng, thời sự</option>
+                    </select>
+                  </div>
+                  <div class="field">
+                    <label for="ttsSpeed">Tốc độ</label>
+                    <select id="ttsSpeed">
+                      <option value="0.9">Chậm rãi (0.9x)</option>
+                      <option value="1.0" selected>Vừa (1.0x)</option>
+                      <option value="1.1">Hơi nhanh (1.1x)</option>
+                      <option value="1.25">Nhanh, quảng cáo (1.25x)</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+              <div class="card">
+                <h2>Lệnh gửi Muse</h2>
+                <pre class="cmd-box" id="ttsCmd"></pre>
+                <div class="btn-row">
+                  <button class="btn btn-primary" data-copy="tts">
+                    <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                    Sao chép lệnh
+                  </button>
+                  <button class="btn" data-save="tts">Lưu vào lịch sử</button>
+                </div>
+              </div>
+            </section>
+
+            <!-- ===== UPSCALE AI ===== -->
+            <section class="tool" id="tool-upscale-ai">
+              <div class="tool-head">
+                <div class="tool-kicker">Sáng tạo AI · qua Muse</div>
+                <h1>Upscale AI — Nét cao</h1>
+                <p>Phóng to và phục chế ảnh bằng model AI (Real-ESRGAN) ở phía em. Anh soạn lệnh ở đây, rồi gửi kèm ảnh gốc vào chat Muse — em trả file đã upscale về chat. Cần phóng nhanh 2x/4x không cần AI thì dùng Upscale Nhanh trong trang.</p>
+                <div class="how"><strong>Cách dùng:</strong>
+                  <ol>
+                    <li>Điền mức phóng và ghi chú — lệnh tự soạn ở khung xanh.</li>
+                    <li>Bấm <strong>Sao chép lệnh</strong>, dán vào chat Muse <strong>kèm ảnh gốc</strong>.</li>
+                    <li>Em upscale bằng model AI và gửi file kết quả về chat.</li>
+                  </ol>
+                </div>
+              </div>
+              <div class="card">
+                <h2>Yêu cầu upscale</h2>
+                <div class="grid-2">
+                  <div class="field">
+                    <label for="upScale">Mức phóng</label>
+                    <select id="upScale">
+                      <option value="2x">2x — gấp đôi</option>
+                      <option value="4x" selected>4x — gấp bốn</option>
+                    </select>
+                  </div>
+                  <div class="field">
+                    <label for="upKind">Loại ảnh</label>
+                    <select id="upKind">
+                      <option>Ảnh chụp thường</option>
+                      <option>Ảnh chân dung / có mặt người</option>
+                      <option>Ảnh sản phẩm</option>
+                      <option>Tranh / minh họa</option>
+                      <option>Ảnh chụp màn hình / chữ</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="field">
+                  <label for="upNote">Ghi chú thêm (không bắt buộc)</label>
+                  <input type="text" id="upNote" placeholder="Ví dụ: ảnh hơi mờ và nhiễu, ưu tiên làm nét mặt người…" />
+                </div>
+              </div>
+              <div class="card">
+                <h2>Lệnh gửi Muse</h2>
+                <pre class="cmd-box" id="upCmd"></pre>
+                <div class="btn-row">
+                  <button class="btn btn-primary" data-copy="up">
+                    <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                    Sao chép lệnh
+                  </button>
+                  <button class="btn" data-save="up">Lưu vào lịch sử</button>
+                </div>
+              </div>
+            </section>
+
+            <!-- ===== GIỌNG ĐỌC NHANH ===== -->
+            <section class="tool" id="tool-giong-nhanh">
+              <div class="tool-head">
+                <div class="tool-kicker">Công cụ trong trang · chạy ngay</div>
+                <h1>Giọng Đọc Nhanh</h1>
+                <p>Đọc văn bản thành tiếng ngay trong trang bằng giọng tiếng Việt có sẵn trong máy của anh — không cần gửi đi đâu, không cần file. Muốn file MP3 giọng Bắc chuẩn thì dùng mục Giọng Đọc AI.</p>
+              </div>
+              <div class="notice" id="noViNotice">Máy/trình duyệt này chưa có giọng tiếng Việt nên trang không đọc được tại đây. Anh mở trang bằng Chrome trên Android hoặc Safari/Chrome trên máy có cài giọng tiếng Việt, hoặc dùng mục <strong>Giọng Đọc AI</strong> để em thu file MP3 gửi về chat.</div>
+              <div class="card">
+                <h2>Văn bản</h2>
+                <div class="field">
+                  <label for="fastText">Văn bản cần đọc</label>
+                  <textarea id="fastText" rows="6" maxlength="10000" placeholder="Nhập hoặc dán văn bản tiếng Việt, tối đa 10.000 ký tự…"></textarea>
+                  <div class="char-count"><span id="fastCount">0</span> / 10.000 ký tự</div>
+                </div>
+                <div class="grid-2">
+                  <div class="field">
+                    <label for="fastVoice">Giọng đọc trong máy</label>
+                    <select id="fastVoice"></select>
+                  </div>
+                  <div class="field">
+                    <label>Tốc độ đọc</label>
+                    <div class="seg" id="fastRateSeg">
+                      <button type="button" data-rate="0.8">Chậm</button>
+                      <button type="button" data-rate="1" class="active">Thường</button>
+                      <button type="button" data-rate="1.2">Nhanh</button>
+                    </div>
+                  </div>
+                </div>
+                <div class="btn-row">
+                  <button class="btn btn-primary" id="fastPlay">
+                    <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polygon points="6 3 20 12 6 21 6 3"/></svg>
+                    Phát
+                  </button>
+                  <button class="btn" id="fastPause">Tạm dừng / Đọc tiếp</button>
+                  <button class="btn btn-ghost" id="fastStop">Dừng</button>
+                </div>
+                <div class="status-line" id="fastStatus"></div>
+              </div>
+            </section>
+
+            <!-- ===== CHÈN LOGO ===== -->
+            <section class="tool" id="tool-chen-logo">
+              <div class="tool-head">
+                <div class="tool-kicker">Công cụ trong trang · chạy ngay</div>
+                <h1>Chèn Logo Vào Ảnh</h1>
+                <p>Chọn ảnh nền và logo, chỉnh kích thước, độ mờ và vị trí — xem trước trực tiếp rồi tải ảnh PNG về máy. Mọi xử lý chạy ngay trên máy của anh, ảnh không gửi đi đâu.</p>
+              </div>
+              <div class="card">
+                <h2>1 · Chọn ảnh và logo</h2>
+                <div class="grid-2">
+                  <div class="field">
+                    <label>Ảnh nền</label>
+                    <div class="file-pick">
+                      <label class="pick-btn" for="logoBgFile">
+                        <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="m17 8-5-5-5 5"/><path d="M12 3v12"/></svg>
+                        Chọn ảnh nền
+                      </label>
+                      <input type="file" id="logoBgFile" accept="image/*" />
+                      <span class="file-name" id="logoBgName">Chưa chọn ảnh</span>
+                      <span class="file-meta" id="logoBgMeta"></span>
+                    </div>
+                  </div>
+                  <div class="field">
+                    <label>Logo (nên dùng PNG nền trong suốt)</label>
+                    <div class="file-pick">
+                      <label class="pick-btn" for="logoMarkFile">
+                        <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="m17 8-5-5-5 5"/><path d="M12 3v12"/></svg>
+                        Chọn logo
+                      </label>
+                      <input type="file" id="logoMarkFile" accept="image/*" />
+                      <span class="file-name" id="logoMarkName">Chưa chọn logo</span>
+                      <span class="file-meta" id="logoMarkMeta"></span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="card">
+                <h2>2 · Chỉnh logo</h2>
+                <div class="slider-row">
+                  <label for="logoSize">Kích thước logo (theo bề ngang ảnh)</label>
+                  <output id="logoSizeOut">20%</output>
+                  <input type="range" id="logoSize" min="5" max="80" value="20" />
+                </div>
+                <div class="slider-row">
+                  <label for="logoOpacity">Độ mờ logo</label>
+                  <output id="logoOpacityOut">100%</output>
+                  <input type="range" id="logoOpacity" min="10" max="100" value="100" />
+                </div>
+                <div class="field">
+                  <label>Vị trí nhanh (9 vị trí)</label>
+                  <div class="pos-grid" id="posGrid">
+                    <button type="button" class="pos-btn" data-pos="tl" aria-label="Trên trái"></button>
+                    <button type="button" class="pos-btn" data-pos="tc" aria-label="Trên giữa"></button>
+                    <button type="button" class="pos-btn" data-pos="tr" aria-label="Trên phải"></button>
+                    <button type="button" class="pos-btn" data-pos="ml" aria-label="Giữa trái"></button>
+                    <button type="button" class="pos-btn" data-pos="mc" aria-label="Chính giữa"></button>
+                    <button type="button" class="pos-btn" data-pos="mr" aria-label="Giữa phải"></button>
+                    <button type="button" class="pos-btn" data-pos="bl" aria-label="Dưới trái"></button>
+                    <button type="button" class="pos-btn" data-pos="bc" aria-label="Dưới giữa"></button>
+                    <button type="button" class="pos-btn active" data-pos="br" aria-label="Dưới phải"></button>
+                  </div>
+                </div>
+                <div class="slider-row">
+                  <label for="logoX">Tinh chỉnh ngang (X)</label>
+                  <output id="logoXOut">0</output>
+                  <input type="range" id="logoX" min="-200" max="200" value="0" />
+                </div>
+                <div class="slider-row" style="margin-bottom:0">
+                  <label for="logoY">Tinh chỉnh dọc (Y)</label>
+                  <output id="logoYOut">0</output>
+                  <input type="range" id="logoY" min="-200" max="200" value="0" />
+                </div>
+              </div>
+              <div class="card">
+                <h2>3 · Xem trước &amp; tải về</h2>
+                <div class="preview-wrap">
+                  <div class="preview-empty" id="logoEmpty">Chọn đủ ảnh nền và logo để xem trước tại đây.</div>
+                  <canvas id="logoCanvas" style="display:none"></canvas>
+                </div>
+                <div class="btn-row">
+                  <button class="btn btn-primary" id="logoDownload" disabled>
+                    <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="m7 10 5 5 5-5"/><path d="M12 15V3"/></svg>
+                    Tải ảnh PNG về máy
+                  </button>
+                </div>
+                <div class="status-line" id="logoStatus"></div>
+              </div>
+            </section>
+
+            <!-- ===== UPSCALE NHANH ===== -->
+            <section class="tool" id="tool-upscale-nhanh">
+              <div class="tool-head">
+                <div class="tool-kicker">Công cụ trong trang · chạy ngay</div>
+                <h1>Upscale Nhanh 2x / 4x</h1>
+                <p>Phóng to ảnh ngay trong trang bằng Canvas kèm làm nét nhẹ, tải PNG về máy. Đây là phóng nhanh trong trình duyệt — muốn phục chế nét cao bằng AI thì dùng mục Upscale AI qua Muse.</p>
+              </div>
+              <div class="card">
+                <h2>1 · Chọn ảnh</h2>
+                <div class="file-pick">
+                  <label class="pick-btn" for="upFile">
+                    <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="m17 8-5-5-5 5"/><path d="M12 3v12"/></svg>
+                    Chọn ảnh cần phóng
+                  </label>
+                  <input type="file" id="upFile" accept="image/*" />
+                  <span class="file-name" id="upFileName">Chưa chọn ảnh</span>
+                  <span class="file-meta" id="upFileMeta"></span>
+                </div>
+                <div class="field" style="margin-top:16px">
+                  <label>Mức phóng</label>
+                  <div class="seg" id="upFactorSeg">
+                    <button type="button" data-factor="2" class="active">2x</button>
+                    <button type="button" data-factor="4">4x</button>
+                  </div>
+                </div>
+                <div class="btn-row">
+                  <button class="btn btn-primary" id="upRun" disabled>Phóng ảnh</button>
+                </div>
+                <div class="status-line" id="upStatus"></div>
+              </div>
+              <div class="card" id="upResultCard" style="display:none">
+                <h2>2 · So sánh &amp; tải về</h2>
+                <div class="compare">
+                  <figure>
+                    <figcaption id="upBeforeCap">Ảnh gốc</figcaption>
+                    <div class="preview-wrap"><img id="upBefore" alt="Ảnh gốc trước khi upscale" /></div>
+                  </figure>
+                  <figure>
+                    <figcaption id="upAfterCap">Sau upscale</figcaption>
+                    <div class="preview-wrap"><canvas id="upCanvas"></canvas></div>
+                  </figure>
+                </div>
+                <div class="btn-row">
+                  <button class="btn btn-primary" id="upDownload">
+                    <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="m7 10 5 5 5-5"/><path d="M12 15V3"/></svg>
+                    Tải ảnh đã phóng (PNG)
+                  </button>
+                </div>
+              </div>
+            </section>
+
+            <!-- ===== LỊCH SỬ (view cho mobile / màn hẹp) ===== -->
+            <section class="tool tool-history" id="tool-lich-su">
+              <div class="tool-head">
+                <div class="tool-kicker">System</div>
+                <h1>Lịch Sử Tác Vụ</h1>
+                <p class="history-note">Lịch sử lưu bằng localStorage trên chính thiết bị đang mở trang — điện thoại và máy tính mỗi nơi một lịch sử riêng, tải lại trang không mất trên cùng thiết bị và trình duyệt.</p>
+              </div>
+              <div class="card">
+                <div class="hist-search field">
+                  <input type="text" id="histSearchM" placeholder="Tìm trong lịch sử…" />
+                </div>
+                <div class="chips" id="histChipsM"></div>
+                <div class="hist-list" id="histListM"></div>
+                <div class="btn-row">
+                  <button class="text-btn" id="histClearM">Xóa toàn bộ lịch sử</button>
+                </div>
+              </div>
+            </section>
+
+          </div>
+        </main>
+      </div>
+
+      <!-- ============ HISTORY COLUMN (desktop) ============ -->
+      <aside class="history-col" aria-label="Lịch sử tác vụ">
+        <div class="history-head">
+          <h2>Lịch Sử Tác Vụ</h2>
+          <button class="text-btn" id="histClearD">Xóa hết</button>
+        </div>
+        <p class="history-note">Lưu trên chính thiết bị đang mở (localStorage) — mỗi thiết bị một lịch sử riêng, tải lại trang không mất.</p>
+        <div class="hist-search field">
+          <input type="text" id="histSearchD" placeholder="Tìm trong lịch sử…" />
+        </div>
+        <div class="chips" id="histChipsD"></div>
+        <div class="hist-list" id="histListD"></div>
+      </aside>
+    </div>
+
+    <div class="toast" id="toast" role="status"></div>
+
+    <script>
+    (function(){
+      "use strict";
+      var $ = function(id){ return document.getElementById(id); };
+      var $$ = function(sel, root){ return Array.prototype.slice.call((root||document).querySelectorAll(sel)); };
+
+      /* ---------- Toast ---------- */
+      var toastTimer = null;
+      function toast(msg){
+        var t = $("toast"); t.textContent = msg; t.classList.add("show");
+        clearTimeout(toastTimer);
+        toastTimer = setTimeout(function(){ t.classList.remove("show"); }, 2600);
+      }
+
+      /* ---------- Clipboard (API + fallback chọn text) ---------- */
+      function copyText(text, done){
+        function fallback(){
+          var ta = document.createElement("textarea");
+          ta.value = text;
+          ta.setAttribute("readonly","");
+          ta.style.position = "fixed"; ta.style.top = "0"; ta.style.left = "0"; ta.style.opacity = "0";
+          document.body.appendChild(ta);
+          ta.focus(); ta.select();
+          ta.setSelectionRange(0, ta.value.length);
+          var ok = false;
+          try { ok = document.execCommand("copy"); } catch(e){ ok = false; }
+          document.body.removeChild(ta);
+          done(ok);
+        }
+        if (navigator.clipboard && window.isSecureContext !== false && navigator.clipboard.writeText){
+          navigator.clipboard.writeText(text).then(function(){ done(true); }, fallback);
+        } else { fallback(); }
+      }
+
+      /* ---------- Điều hướng / sidebar mobile ---------- */
+      var TITLES = {
+        "tao-anh":"Tạo Ảnh", "tao-video":"Tạo Video", "giong-ai":"Giọng Đọc AI",
+        "upscale-ai":"Upscale AI", "giong-nhanh":"Giọng Đọc Nhanh",
+        "chen-logo":"Chèn Logo", "upscale-nhanh":"Upscale Nhanh", "lich-su":"Lịch Sử Tác Vụ"
+      };
+      var sidebar = $("sidebar"), scrim = $("scrim");
+      function closeMenu(){ sidebar.classList.remove("open"); scrim.classList.remove("show"); }
+      $("menuBtn").addEventListener("click", function(){
+        sidebar.classList.add("open"); scrim.classList.add("show");
+      });
+      scrim.addEventListener("click", closeMenu);
+      function switchTool(key){
+        $$(".nav-item").forEach(function(b){ b.classList.toggle("active", b.getAttribute("data-tool") === key); });
+        $$(".tool").forEach(function(s){ s.classList.toggle("active", s.id === "tool-" + key); });
+        $("topbarTitle").textContent = TITLES[key] || "Studio AI Của Long";
+        closeMenu();
+        window.scrollTo({ top: 0 });
+      }
+      $$(".nav-item").forEach(function(b){
+        b.addEventListener("click", function(){ switchTool(b.getAttribute("data-tool")); });
+      });
+
+      /* ---------- Lịch sử (localStorage trên thiết bị) ---------- */
+      var LS_KEY = "studio-ai-long-web-thu-history-v1";
+      var TYPES = {
+        img:   { label:"Tạo ảnh",        filter:"Tạo ảnh" },
+        vid:   { label:"Tạo video",      filter:"Tạo video" },
+        tts:   { label:"Giọng đọc AI",   filter:"Giọng đọc AI" },
+        upai:  { label:"Upscale AI",     filter:"Upscale AI" },
+        fast:  { label:"Giọng đọc nhanh",filter:"Giọng nhanh" },
+        logo:  { label:"Chèn logo",      filter:"Chèn logo" },
+        upfast:{ label:"Upscale nhanh",  filter:"Upscale nhanh" }
+      };
+      function loadHistory(){
+        try {
+          var raw = localStorage.getItem(LS_KEY);
+          var arr = raw ? JSON.parse(raw) : [];
+          return Array.isArray(arr) ? arr : [];
+        } catch(e){ return []; }
+      }
+      function saveHistory(){
+        try { localStorage.setItem(LS_KEY, JSON.stringify(history)); } catch(e){ /* đầy bộ nhớ: bỏ qua */ }
+      }
+      var history = loadHistory();
+      var histFilter = "all", histQuery = "";
+
+      function fmtTime(ts){
+        var d = new Date(ts);
+        function p(n){ return (n<10?"0":"")+n; }
+        return p(d.getDate())+"/"+p(d.getMonth()+1)+" "+p(d.getHours())+":"+p(d.getMinutes());
+      }
+      function addHistory(type, title, detail, command){
+        history.unshift({
+          id: Date.now() + "-" + Math.random().toString(36).slice(2,7),
+          type: type, title: title, detail: detail || "", command: command || "",
+          time: Date.now()
+        });
+        if (history.length > 200) history = history.slice(0, 200);
+        saveHistory(); renderHistory();
+      }
+      function esc(s){
+        return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
+      }
+      function renderHistoryInto(listEl, emptyMsg){
+        var items = history.filter(function(h){
+          if (histFilter !== "all" && h.type !== histFilter) return false;
+          if (histQuery){
+            var q = histQuery.toLowerCase();
+            return (h.title + " " + h.detail + " " + h.command).toLowerCase().indexOf(q) !== -1;
+          }
+          return true;
+        });
+        if (!items.length){
+          listEl.innerHTML = '<div class="hist-empty">' + emptyMsg + '</div>';
+          return;
+        }
+        listEl.innerHTML = items.map(function(h){
+          var t = TYPES[h.type] || { label: h.type };
+          var copyBtn = h.command ? '<button class="mini-btn" data-hcopy="' + h.id + '"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>Sao chép lệnh</button>' : "";
+          return '<div class="hist-item">' +
+            '<div class="hist-top"><span class="hist-type">' + esc(t.label) + '</span><span class="hist-time">' + fmtTime(h.time) + '</span></div>' +
+            '<div class="hist-title">' + esc(h.title) + '</div>' +
+            (h.detail ? '<div class="hist-detail">' + esc(h.detail) + '</div>' : "") +
+            '<div class="hist-actions">' + copyBtn +
+            '<button class="mini-btn danger" data-hdel="' + h.id + '">Xóa</button></div></div>';
+        }).join("");
+        $$("[data-hcopy]", listEl).forEach(function(b){
+          b.addEventListener("click", function(){
+            var item = history.filter(function(x){ return x.id === b.getAttribute("data-hcopy"); })[0];
+            if (item) copyText(item.command, function(ok){
+              toast(ok ? "Đã sao chép lệnh — dán vào chat Muse để em làm." : "Không sao chép tự động được, anh mở mục tương ứng để copy tay.");
+            });
+          });
+        });
+        $$("[data-hdel]", listEl).forEach(function(b){
+          b.addEventListener("click", function(){
+            history = history.filter(function(x){ return x.id !== b.getAttribute("data-hdel"); });
+            saveHistory(); renderHistory(); toast("Đã xóa mục khỏi lịch sử.");
+          });
+        });
+      }
+      function renderHistory(){
+        renderHistoryInto($("histListD"), "Chưa có tác vụ nào.<br/>Soạn lệnh hoặc dùng một công cụ, mục sẽ hiện ở đây.");
+        renderHistoryInto($("histListM"), "Chưa có tác vụ nào.<br/>Soạn lệnh hoặc dùng một công cụ, mục sẽ hiện ở đây.");
+      }
+      function buildChips(el){
+        var html = '<button class="chip' + (histFilter==="all" ? " active" : "") + '" data-f="all">Tất cả</button>';
+        Object.keys(TYPES).forEach(function(k){
+          html += '<button class="chip' + (histFilter===k ? " active" : "") + '" data-f="' + k + '">' + TYPES[k].filter + '</button>';
+        });
+        el.innerHTML = html;
+        $$(".chip", el).forEach(function(c){
+          c.addEventListener("click", function(){ histFilter = c.getAttribute("data-f"); syncChips(); renderHistory(); });
+        });
+      }
+      function syncChips(){ buildChips($("histChipsD")); buildChips($("histChipsM")); }
+      function bindSearch(input){
+        input.addEventListener("input", function(){
+          histQuery = input.value.trim();
+          if (input === $("histSearchD")) $("histSearchM").value = input.value; else $("histSearchD").value = input.value;
+          renderHistory();
+        });
+      }
+      bindSearch($("histSearchD")); bindSearch($("histSearchM"));
+      function clearAll(){
+        if (!history.length){ toast("Lịch sử đang trống."); return; }
+        history = []; saveHistory(); renderHistory(); toast("Đã xóa toàn bộ lịch sử trên thiết bị này.");
+      }
+      $("histClearD").addEventListener("click", clearAll);
+      $("histClearM").addEventListener("click", clearAll);
+      syncChips(); renderHistory();
+
+      /* ---------- Soạn lệnh gửi Muse ---------- */
+      function val(id){ return $(id).value.trim(); }
+      function composeImg(){
+        var p = val("imgPrompt") || "(chưa điền ý tưởng — anh mô tả ý tưởng ảnh ngay trong chat)";
+        var s = "Em tạo giúp anh một ảnh thật bằng công cụ tạo ảnh của em, xong gửi file về chat này.\n"
+          + "Ý tưởng: " + p + "\n"
+          + "Phong cách: " + $("imgStyle").value + "\n"
+          + "Tỉ lệ khung hình: " + $("imgRatio").value;
+        if (val("imgNote")) s += "\nGhi chú: " + val("imgNote");
+        return s;
+      }
+      function composeVid(){
+        var p = val("vidIdea") || "(chưa điền ý tưởng — anh mô tả ý tưởng video ngay trong chat)";
+        var s = "Em làm giúp anh một video theo quy trình của em: viết kịch bản chi tiết, soạn prompt từng cảnh, tạo keyframe, rồi ráp và thêm phụ đề. Phần render chuyển động đi qua Flow bằng tài khoản của anh — em trình anh duyệt keyframe/kịch bản trước khi render.\n"
+          + "Ý tưởng: " + p + "\n"
+          + "Thời lượng: " + $("vidLen").value + "\n"
+          + "Khung hình: " + $("vidRatio").value + "\n"
+          + "Phụ đề: " + $("vidSub").value;
+        if (val("vidNote")) s += "\nGhi chú: " + val("vidNote");
+        return s;
+      }
+      function composeTts(){
+        var t = val("ttsText") || "(chưa dán văn bản — anh gửi văn bản ngay trong chat)";
+        return "Em thu giúp anh văn bản sau thành file MP3 giọng đọc tiếng Việt và gửi file về chat này.\n"
+          + "Giọng: " + $("ttsVoice").value + "\n"
+          + "Tốc độ: " + $("ttsSpeed").value + "x\n"
+          + "Văn bản:\n" + t;
+      }
+      function composeUp(){
+        var s = "Em upscale giúp anh ảnh anh gửi kèm tin nhắn này bằng model AI (Real-ESRGAN), xong gửi file kết quả về chat này.\n"
+          + "Mức phóng: " + $("upScale").value + "\n"
+          + "Loại ảnh: " + $("upKind").value;
+        if (val("upNote")) s += "\nGhi chú: " + val("upNote");
+        s += "\n(Nhớ gửi kèm ảnh gốc cùng lệnh này)";
+        return s;
+      }
+      var FORMS = {
+        img: { cmd: composeImg, box: "imgCmd", type: "img",
+               title: function(){ return val("imgPrompt") ? "Tạo ảnh: " + val("imgPrompt").slice(0, 80) : "Tạo ảnh (chưa điền ý tưởng)"; },
+               detail: function(){ return $("imgStyle").value + " · " + $("imgRatio").value; } },
+        vid: { cmd: composeVid, box: "vidCmd", type: "vid",
+               title: function(){ return val("vidIdea") ? "Tạo video: " + val("vidIdea").slice(0, 80) : "Tạo video (chưa điền ý tưởng)"; },
+               detail: function(){ return $("vidLen").value + " · " + $("vidRatio").value + " · " + $("vidSub").value; } },
+        tts: { cmd: composeTts, box: "ttsCmd", type: "tts",
+               title: function(){ return val("ttsText") ? "Đọc MP3: " + val("ttsText").slice(0, 80) + "…" : "Giọng đọc MP3 (chưa dán văn bản)"; },
+               detail: function(){ return $("ttsVoice").value + " · tốc độ " + $("ttsSpeed").value + "x · " + val("ttsText").length + " ký tự"; } },
+        up:  { cmd: composeUp, box: "upCmd", type: "upai",
+               title: function(){ return "Upscale AI " + $("upScale").value + " — " + $("upKind").value; },
+               detail: function(){ return val("upNote") || "Gửi kèm ảnh gốc trong chat"; } }
+      };
+      function refreshCmd(key){ $(FORMS[key].box).textContent = FORMS[key].cmd(); }
+      ["imgPrompt","imgStyle","imgRatio","imgNote"].forEach(function(id){ $(id).addEventListener("input", function(){ refreshCmd("img"); }); });
+      ["vidIdea","vidLen","vidRatio","vidSub","vidNote"].forEach(function(id){ $(id).addEventListener("input", function(){ refreshCmd("vid"); }); });
+      ["ttsText","ttsVoice","ttsSpeed"].forEach(function(id){ $(id).addEventListener("input", function(){ refreshCmd("tts"); $("ttsCount").textContent = val("ttsText").length; }); });
+      ["upScale","upKind","upNote"].forEach(function(id){ $(id).addEventListener("input", function(){ refreshCmd("up"); }); });
+      Object.keys(FORMS).forEach(refreshCmd);
+
+      $$("[data-copy]").forEach(function(b){
+        b.addEventListener("click", function(){
+          var key = b.getAttribute("data-copy"), f = FORMS[key], cmd = f.cmd();
+          copyText(cmd, function(ok){
+            addHistory(f.type, f.title(), f.detail(), cmd);
+            toast(ok ? "Đã sao chép lệnh + lưu lịch sử. Dán vào chat Muse để em làm thật." : "Đã lưu lịch sử. Sao chép tự động không được — anh chạm giữ khung lệnh để copy tay.");
+          });
+        });
+      });
+      $$("[data-save]").forEach(function(b){
+        b.addEventListener("click", function(){
+          var key = b.getAttribute("data-save"), f = FORMS[key];
+          addHistory(f.type, f.title(), f.detail(), f.cmd());
+          toast("Đã lưu vào lịch sử trên thiết bị này.");
+        });
+      });
+
+      /* ---------- Tạo video trực tiếp (Pollinations) ---------- */
+      var POL_KEY_LS = "studio-ai-pollinations-key-v1";
+      var polBlobUrl = null, polTimer = null;
+      try { $("polKey").value = localStorage.getItem(POL_KEY_LS) || ""; } catch(e){}
+      $("polKey").addEventListener("input", function(){
+        try { localStorage.setItem(POL_KEY_LS, this.value.trim()); } catch(e){}
+        if (this.value.trim()) $("polWarn").classList.remove("show");
+      });
+      $("polKeyToggle").addEventListener("click", function(){
+        var inp = $("polKey");
+        var show = inp.type === "password";
+        inp.type = show ? "text" : "password";
+        this.textContent = show ? "Ẩn" : "Hiện";
+      });
+      function polShowWarn(msg){
+        var w = $("polWarn"); w.innerHTML = msg; w.classList.add("show");
+      }
+      function polSetStatus(msg, live){
+        $("polStatus").innerHTML = (live ? '<span class="dot"></span>' : "") + esc(msg);
+      }
+      function polErrorHint(status, bodyText){
+        var t = (bodyText || "").toLowerCase();
+        if (status === 401) return "Gợi ý: key sai hoặc chưa dán key — kiểm tra lại key ở ô phía trên.";
+        if (status === 402 || status === 403 || t.indexOf("pollen") !== -1 || t.indexOf("balance") !== -1)
+          return "Gợi ý: có vẻ đã hết Pollen miễn phí — nạp thêm tại Pollinations, hoặc dùng chế độ Lệnh gửi Muse bên dưới.";
+        if (status === 429) return "Gợi ý: đang bị giới hạn tốc độ — chờ ít phút rồi thử lại.";
+        return "Gợi ý: kiểm tra lại mô tả, model và thử lại sau ít phút.";
+      }
+      $("polGen").addEventListener("click", function(){
+        var key = $("polKey").value.trim();
+        if (!key){
+          polShowWarn("Anh chưa dán <strong>Pollinations API key</strong> — dán key vào ô phía trên rồi bấm Tạo lại. Chưa có key thì làm theo 3 bước hướng dẫn ngay dưới ô key.");
+          $("polKey").scrollIntoView({ behavior: "smooth", block: "center" });
+          $("polKey").focus({ preventScroll: true });
+          return;
+        }
+        var prompt = $("polPrompt").value.trim();
+        if (!prompt){ toast("Anh mô tả video muốn tạo trước đã."); $("polPrompt").focus(); return; }
+        var model = $("polModel").value, duration = $("polDuration").value, ratio = $("polRatio").value;
+        var suffix = ratio === "9:16" ? ", vertical 9:16 aspect ratio"
+                   : ratio === "1:1" ? ", square 1:1 aspect ratio"
+                   : ", horizontal 16:9 aspect ratio";
+        var fullPrompt = prompt + suffix;
+        var btn = this;
+        btn.disabled = true; btn.textContent = "⏳ Đang tạo video…";
+        $("polResult").style.display = "none";
+        var started = Date.now();
+        function tick(){
+          var s = Math.floor((Date.now() - started) / 1000);
+          polSetStatus("Đang gọi Pollinations tạo video… quá trình này thường mất 1–5 phút, đừng đóng trang. Đã chờ " + s + " giây.", true);
+        }
+        tick();
+        polTimer = setInterval(tick, 1000);
+        var url = "https://gen.pollinations.ai/video/" + encodeURIComponent(fullPrompt)
+          + "?model=" + encodeURIComponent(model) + "&duration=" + encodeURIComponent(duration);
+        fetch(url, { method: "GET", headers: { "Authorization": "Bearer " + key } })
+          .then(function(res){
+            if (!res.ok){
+              return res.text().then(function(bodyText){
+                throw { status: res.status, body: bodyText || ("HTTP " + res.status) };
+              });
+            }
+            return res.blob();
+          })
+          .then(function(blob){
+            clearInterval(polTimer);
+            if (polBlobUrl) URL.revokeObjectURL(polBlobUrl);
+            polBlobUrl = URL.createObjectURL(blob);
+            var v = $("polVideo");
+            v.src = polBlobUrl;
+            $("polResult").style.display = "block";
+            polSetStatus("Tạo xong sau " + Math.floor((Date.now() - started) / 1000) + " giây. Bấm phát để xem ngay, hoặc tải MP4 về máy.");
+            btn.disabled = false; btn.textContent = "🎬 Tạo video ngay";
+            addHistory("vid", "Tạo video: " + prompt.slice(0, 80),
+              "Đã tạo trực tiếp trong trang · " + model + " · " + duration + "s · " + ratio, "");
+            toast("Đã tạo video — phát ngay trong trang được rồi.");
+          })
+          .catch(function(err){
+            clearInterval(polTimer);
+            btn.disabled = false; btn.textContent = "🎬 Tạo video ngay";
+            if (err && err.status){
+              polSetStatus("");
+              polShowWarn("<strong>Tạo video thất bại (HTTP " + err.status + "):</strong><br/>" + esc(err.body)
+                + "<br/><br/>" + esc(polErrorHint(err.status, err.body)));
+            } else {
+              polSetStatus("");
+              polShowWarn("<strong>Không gọi được Pollinations.</strong> Kiểm tra kết nối mạng của máy rồi thử lại. (" + esc(err && err.message ? err.message : "Lỗi mạng") + ")");
+            }
+          });
+      });
+      $("polDownload").addEventListener("click", function(){
+        if (!polBlobUrl) return;
+        var a = document.createElement("a");
+        a.download = "video-pollinations.mp4";
+        a.href = polBlobUrl;
+        document.body.appendChild(a); a.click(); document.body.removeChild(a);
+        toast("Đã tải file MP4 về máy.");
+      });
+      $("polAgain").addEventListener("click", function(){
+        $("polResult").style.display = "none";
+        polSetStatus("");
+        $("polPrompt").scrollIntoView({ behavior: "smooth", block: "center" });
+        $("polPrompt").focus({ preventScroll: true });
+      });
+
+      /* ---------- Giọng đọc nhanh (speechSynthesis) ---------- */
+      var fastRate = 1, fastLogged = false;
+      var synth = window.speechSynthesis || null;
+      function viVoices(){
+        if (!synth) return [];
+        return synth.getVoices().filter(function(v){ return /^vi([-_]|$)/i.test(v.lang || ""); });
+      }
+      function fillVoices(){
+        var sel = $("fastVoice"), list = viVoices();
+        sel.innerHTML = "";
+        if (!synth){
+          $("noViNotice").classList.add("show");
+          $("fastPlay").disabled = true;
+          sel.innerHTML = '<option>Trình duyệt không hỗ trợ đọc</option>';
+          return;
+        }
+        if (!list.length){
+          $("noViNotice").classList.add("show");
+          sel.innerHTML = '<option>Chưa có giọng tiếng Việt trong máy</option>';
+          return;
+        }
+        $("noViNotice").classList.remove("show");
+        list.forEach(function(v, i){
+          var o = document.createElement("option");
+          o.value = i; o.textContent = v.name + " (" + v.lang + ")";
+          sel.appendChild(o);
+        });
+      }
+      if (synth){
+        fillVoices();
+        synth.onvoiceschanged = fillVoices;
+        setTimeout(fillVoices, 600); setTimeout(fillVoices, 1800);
+      } else { fillVoices(); }
+
+      $("fastText").addEventListener("input", function(){ $("fastCount").textContent = $("fastText").value.length; });
+      $$("#fastRateSeg button").forEach(function(b){
+        b.addEventListener("click", function(){
+          $$("#fastRateSeg button").forEach(function(x){ x.classList.remove("active"); });
+          b.classList.add("active"); fastRate = parseFloat(b.getAttribute("data-rate"));
+        });
+      });
+      function setFastStatus(msg, live){
+        $("fastStatus").innerHTML = (live ? '<span class="dot"></span>' : "") + esc(msg);
+      }
+      $("fastPlay").addEventListener("click", function(){
+        var text = $("fastText").value.trim();
+        if (!text){ toast("Anh nhập văn bản trước đã."); return; }
+        if (!synth){ toast("Trình duyệt này không hỗ trợ giọng đọc."); return; }
+        var list = viVoices();
+        if (!list.length){ $("noViNotice").classList.add("show"); toast("Máy chưa có giọng tiếng Việt — xem ghi chú phía trên."); return; }
+        synth.cancel();
+        var u = new SpeechSynthesisUtterance(text);
+        var idx = parseInt($("fastVoice").value, 10) || 0;
+        u.voice = list[idx] || list[0];
+        u.lang = (u.voice && u.voice.lang) || "vi-VN";
+        u.rate = fastRate;
+        u.onstart = function(){ setFastStatus("Đang đọc…", true); };
+        u.onend = function(){ setFastStatus("Đã đọc xong."); };
+        u.onerror = function(e){ if (e.error !== "canceled" && e.error !== "interrupted") setFastStatus("Lỗi đọc: " + e.error); };
+        synth.speak(u);
+        setFastStatus("Đang chuẩn bị đọc…", true);
+        if (!fastLogged){
+          fastLogged = true;
+          addHistory("fast", "Giọng đọc nhanh: " + text.slice(0, 80) + "…", text.length + " ký tự · tốc độ " + fastRate + "x", "");
+        }
+      });
+      $("fastPause").addEventListener("click", function(){
+        if (!synth) return;
+        if (synth.speaking && !synth.paused){ synth.pause(); setFastStatus("Đã tạm dừng."); }
+        else if (synth.paused){ synth.resume(); setFastStatus("Đang đọc tiếp…", true); }
+      });
+      $("fastStop").addEventListener("click", function(){
+        if (!synth) return;
+        synth.cancel(); setFastStatus("Đã dừng.");
+      });
+
+      /* ---------- Nạp ảnh từ file ---------- */
+      function loadImageFile(file, cb){
+        var url = URL.createObjectURL(file);
+        var img = new Image();
+        img.onload = function(){ cb(img, url); };
+        img.onerror = function(){ URL.revokeObjectURL(url); cb(null, null); };
+        img.src = url;
+      }
+      function fmtSize(bytes){
+        if (!bytes && bytes !== 0) return "";
+        if (bytes < 1024) return bytes + " B";
+        if (bytes < 1024*1024) return (bytes/1024).toFixed(1) + " KB";
+        return (bytes/(1024*1024)).toFixed(2) + " MB";
+      }
+
+      /* ---------- Chèn logo ---------- */
+      var bgImg = null, markImg = null, logoPos = "br";
+      function drawLogo(){
+        var ready = bgImg && markImg;
+        $("logoCanvas").style.display = ready ? "block" : "none";
+        $("logoEmpty").style.display = ready ? "none" : "block";
+        $("logoDownload").disabled = !ready;
+        if (!ready) return;
+        var cv = $("logoCanvas"), ctx = cv.getContext("2d");
+        cv.width = bgImg.naturalWidth; cv.height = bgImg.naturalHeight;
+        ctx.clearRect(0, 0, cv.width, cv.height);
+        ctx.drawImage(bgImg, 0, 0);
+        var sizePct = parseInt($("logoSize").value, 10);
+        var lw = Math.round(cv.width * sizePct / 100);
+        var lh = Math.round(lw * markImg.naturalHeight / markImg.naturalWidth);
+        var margin = Math.round(cv.width * 0.03);
+        var col = logoPos.charAt(1), row = logoPos.charAt(0);
+        var x, y;
+        if (col === "l") x = margin; else if (col === "r") x = cv.width - lw - margin; else x = (cv.width - lw) / 2;
+        if (row === "t") y = margin; else if (row === "b") y = cv.height - lh - margin; else y = (cv.height - lh) / 2;
+        x += parseInt($("logoX").value, 10) / 200 * cv.width * 0.25;
+        y += parseInt($("logoY").value, 10) / 200 * cv.height * 0.25;
+        ctx.save();
+        ctx.globalAlpha = parseInt($("logoOpacity").value, 10) / 100;
+        ctx.drawImage(markImg, x, y, lw, lh);
+        ctx.restore();
+      }
+      $("logoBgFile").addEventListener("change", function(){
+        var f = this.files && this.files[0]; if (!f) return;
+        $("logoBgName").textContent = f.name;
+        loadImageFile(f, function(img){
+          if (!img){ toast("Không đọc được file ảnh nền."); return; }
+          bgImg = img;
+          $("logoBgMeta").textContent = img.naturalWidth + " × " + img.naturalHeight + " px · " + fmtSize(f.size);
+          drawLogo();
+        });
+      });
+      $("logoMarkFile").addEventListener("change", function(){
+        var f = this.files && this.files[0]; if (!f) return;
+        $("logoMarkName").textContent = f.name;
+        loadImageFile(f, function(img){
+          if (!img){ toast("Không đọc được file logo."); return; }
+          markImg = img;
+          $("logoMarkMeta").textContent = img.naturalWidth + " × " + img.naturalHeight + " px · " + fmtSize(f.size);
+          drawLogo();
+        });
+      });
+      [["logoSize","logoSizeOut","%"],["logoOpacity","logoOpacityOut","%"],["logoX","logoXOut",""],["logoY","logoYOut",""]].forEach(function(cfg){
+        $(cfg[0]).addEventListener("input", function(){
+          $(cfg[1]).textContent = this.value + cfg[2];
+          drawLogo();
+        });
+      });
+      $$("#posGrid .pos-btn").forEach(function(b){
+        b.addEventListener("click", function(){
+          $$("#posGrid .pos-btn").forEach(function(x){ x.classList.remove("active"); });
+          b.classList.add("active"); logoPos = b.getAttribute("data-pos"); drawLogo();
+        });
+      });
+      $("logoDownload").addEventListener("click", function(){
+        var cv = $("logoCanvas");
+        var a = document.createElement("a");
+        a.download = "anh-da-chen-logo.png";
+        a.href = cv.toDataURL("image/png");
+        document.body.appendChild(a); a.click(); document.body.removeChild(a);
+        $("logoStatus").textContent = "Đã tải ảnh " + cv.width + " × " + cv.height + " px về máy.";
+        addHistory("logo", "Chèn logo vào ảnh", "Ảnh " + cv.width + " × " + cv.height + " px · logo " + $("logoSize").value + "% · mờ " + $("logoOpacity").value + "%", "");
+        toast("Đã tải ảnh PNG về máy.");
+      });
+
+      /* ---------- Upscale nhanh ---------- */
+      var upImg = null, upUrl = null, upFactor = 2, upDone = false;
+      $$("#upFactorSeg button").forEach(function(b){
+        b.addEventListener("click", function(){
+          $$("#upFactorSeg button").forEach(function(x){ x.classList.remove("active"); });
+          b.classList.add("active"); upFactor = parseInt(b.getAttribute("data-factor"), 10);
+        });
+      });
+      $("upFile").addEventListener("change", function(){
+        var f = this.files && this.files[0]; if (!f) return;
+        $("upFileName").textContent = f.name;
+        loadImageFile(f, function(img, url){
+          if (!img){ toast("Không đọc được file ảnh."); return; }
+          upImg = img; upUrl = url; upDone = false;
+          $("upFileMeta").textContent = img.naturalWidth + " × " + img.naturalHeight + " px · " + fmtSize(f.size);
+          $("upRun").disabled = false;
+          $("upStatus").textContent = "Đã nạp ảnh. Bấm “Phóng ảnh” để upscale " + upFactor + "x.";
+        });
+      });
+      function sharpen(ctx, w, h){
+        if (w * h > 24000000) return false; /* ảnh quá lớn: bỏ qua làm nét để tránh treo máy */
+        var src;
+        try { src = ctx.getImageData(0, 0, w, h); } catch(e){ return false; }
+        var d = src.data, out = new Uint8ClampedArray(d);
+        var k = [0,-0.6,0, -0.6,3.4,-0.6, 0,-0.6,0];
+        for (var y = 1; y < h - 1; y++){
+          for (var x = 1; x < w - 1; x++){
+            var i = (y * w + x) * 4;
+            for (var c = 0; c < 3; c++){
+              var sum = 0, ki = 0;
+              for (var ky = -1; ky <= 1; ky++){
+                for (var kx = -1; kx <= 1; kx++){
+                  sum += d[((y + ky) * w + (x + kx)) * 4 + c] * k[ki++];
+                }
+              }
+              out[i + c] = sum;
+            }
+          }
+        }
+        var imgData = new ImageData(out, w, h);
+        ctx.putImageData(imgData, 0, 0);
+        return true;
+      }
+      $("upRun").addEventListener("click", function(){
+        if (!upImg) return;
+        var btn = this; btn.disabled = true; btn.textContent = "Đang xử lý…";
+        $("upStatus").textContent = "Đang phóng ảnh trên máy của anh…";
+        setTimeout(function(){
+          var w = upImg.naturalWidth * upFactor, h = upImg.naturalHeight * upFactor;
+          var cv = $("upCanvas"); cv.width = w; cv.height = h;
+          var ctx = cv.getContext("2d");
+          ctx.imageSmoothingEnabled = true; ctx.imageSmoothingQuality = "high";
+          ctx.drawImage(upImg, 0, 0, w, h);
+          var didSharpen = sharpen(ctx, w, h);
+          $("upBefore").src = upUrl;
+          $("upBeforeCap").textContent = "Ảnh gốc — " + upImg.naturalWidth + " × " + upImg.naturalHeight + " px";
+          $("upAfterCap").textContent = "Sau upscale " + upFactor + "x — " + w + " × " + h + " px" + (didSharpen ? " · đã làm nét" : " · ảnh lớn nên bỏ qua làm nét");
+          $("upResultCard").style.display = "block";
+          $("upStatus").textContent = "Xong. Cuộn xuống để so sánh và tải về.";
+          btn.disabled = false; btn.textContent = "Phóng ảnh";
+          upDone = true;
+          $("upResultCard").scrollIntoView({ behavior: "smooth", block: "start" });
+        }, 30);
+      });
+      $("upDownload").addEventListener("click", function(){
+        if (!upDone) return;
+        var cv = $("upCanvas");
+        var a = document.createElement("a");
+        a.download = "anh-upscale-" + upFactor + "x.png";
+        a.href = cv.toDataURL("image/png");
+        document.body.appendChild(a); a.click(); document.body.removeChild(a);
+        addHistory("upfast", "Upscale nhanh " + upFactor + "x", "Từ " + upImg.naturalWidth + " × " + upImg.naturalHeight + " lên " + cv.width + " × " + cv.height + " px", "");
+        toast("Đã tải ảnh đã phóng về máy.");
+      });
+    })();
+    </script>
+  </body>
+</html>
