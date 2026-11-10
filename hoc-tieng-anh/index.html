@@ -2482,6 +2482,85 @@ function toast(msg){
   clearTimeout(toastTimer); toastTimer = setTimeout(function(){ t.classList.remove("show"); }, 3200);
 }
 
+/* ================= BỘ CÂU KHÍCH LỆ XOAY VÒNG =================
+   Mỗi tình huống kết quả có một DANH SÁCH câu; mỗi lần hiển thị chọn
+   NGẪU NHIÊN một câu và tránh lặp đúng câu vừa dùng ở lần ngay trước
+   cho cùng tình huống (chỉ nhớ tạm trong phiên bằng biến, KHÔNG lưu
+   localStorage, không thêm khóa mới). Chỉ đổi lớp chữ hiển thị —
+   thuật toán chấm, ngưỡng đúng/sai và tự đánh dấu Đã thuộc giữ nguyên. */
+var ENC = {
+  praise: [
+    "Đúng rồi, giỏi lắm bác! 🎉",
+    "Chính xác! Bác đọc rất rõ.",
+    "Tuyệt vời!",
+    "Hoàn hảo! Cứ thế phát huy nhé.",
+    "Đúng chuẩn! Bác tiến bộ rõ rệt đấy.",
+    "Rất tốt, bác làm được rồi!"
+  ],
+  near: [
+    "Sắp đúng rồi! Chỉ còn chút nữa thôi.",
+    "Gần lắm rồi! Còn thiếu một chút xíu.",
+    "Gần đúng rồi, cố thêm tí nữa nhé!",
+    "Sắp được rồi bác! Chỉ còn một chút nữa thôi.",
+    "Gần đúng rồi đấy bác!"
+  ],
+  wrong: [
+    "Chưa đúng, nhưng không sao — thử lại nhé!",
+    "Cố lên bác! Nghe mẫu rồi đọc lại một lần nữa nhé.",
+    "Đừng nản, sai là bình thường khi học. Thử lại nào!",
+    "Bác có thể thử lại không? Nghe kỹ mẫu trước nhé.",
+    "Không sao đâu bác — học là phải thử vài lần. Mình đọc lại nhé!"
+  ],
+  nospeech: [
+    "Không sao đâu, máy chưa nghe rõ thôi.",
+    "Đừng lo, mình thử lại lần nữa nhé.",
+    "Cố lên, nói to và chậm hơn một chút nhé.",
+    "Máy chưa nghe kịp thôi bác, không phải lỗi của bác đâu."
+  ],
+  retrySelf: [
+    "Không sao, đọc lại lần nữa là quen ngay.",
+    "Cố lên, nghe mẫu rồi bắt chước theo nhé.",
+    "Đừng nản — đọc lại chậm rãi từng từ nhé.",
+    "Thử lại nào, lần này sẽ rõ hơn đấy!"
+  ],
+  gamePass: [
+    "Giỏi lắm bác! 🎉",
+    "Tuyệt vời!",
+    "Rất tốt bác ạ!",
+    "Làm tốt lắm!",
+    "Xuất sắc!"
+  ],
+  gameFail: [
+    "Đừng nản bác nhé — ôn lại một chút rồi chơi lại là đạt ngay.",
+    "Không sao đâu, sai là để nhớ lâu hơn.",
+    "Cố lên bác! Còn thiếu một chút nữa thôi.",
+    "Chưa đạt cũng không sao — mình ôn lại rồi làm lại nhé.",
+    "Sắp được rồi bác, chỉ còn thiếu một chút nữa thôi."
+  ],
+  learned: [
+    "Giỏi lắm!",
+    "Tuyệt vời!",
+    "Rất tốt!",
+    "Làm tốt lắm bác!",
+    "Xuất sắc!"
+  ],
+  qRight: [
+    "✓ Đúng rồi! ",
+    "✓ Chính xác! ",
+    "✓ Rất tốt! ",
+    "✓ Giỏi lắm! ",
+    "✓ Chuẩn rồi! "
+  ]
+};
+var encLast = {};
+function pickEnc(kind){
+  var arr = ENC[kind]; if(!arr || !arr.length) return "";
+  var i = Math.floor(Math.random() * arr.length);
+  if(arr.length > 1 && i === encLast[kind]) i = (i + 1) % arr.length;
+  encLast[kind] = i;
+  return arr[i];
+}
+
 /* ================= CHÚC MỪNG: TIẾNG CHUÔNG (WebAudio) + PHÁO GIẤY (canvas) =================
    Không tải file hay thư viện ngoài: tiếng chuông tổng hợp bằng WebAudio
    (2–4 nốt đi lên, chỉ phát sau thao tác bấm của người học), pháo giấy tự
@@ -3098,7 +3177,7 @@ document.getElementById("fcListen").addEventListener("click", function(){ speak(
 document.getElementById("fcKnown").addEventListener("click", function(){
   setLearned(currentLesson.vocab[fcIndex].en, true); renderFlashcard();
   celebrate(lessonAllLearned());
-  toast("Giỏi lắm! Đã thuộc từ “" + currentLesson.vocab[fcIndex].en + "”");
+  toast(pickEnc("learned") + " Đã thuộc từ “" + currentLesson.vocab[fcIndex].en + "”");
   fcIndex = (fcIndex + 1) % currentLesson.vocab.length; fcFlipped=false; renderFlashcard();
 });
 document.getElementById("fcUnknown").addEventListener("click", function(){
@@ -3306,16 +3385,16 @@ function gradeSpeak(said){
   fb.classList.add("show");
   if(normalize(said) === normalize(target) || score >= 0.9){
     fb.className = "feedback show good";
-    fb.textContent = "Xuất sắc! Bác nói rất đúng và rõ. Cứ phát huy như vậy nhé!";
+    fb.textContent = pickEnc("praise") + " Bác nói câu này rất đúng và rõ — cứ phát huy như vậy nhé!";
     celebrate(false);
     status.textContent = "Đúng rồi! Bác thử câu tiếp theo hoặc nghe lại để so sánh.";
   } else if(score >= 0.55){
     fb.className = "feedback show good";
-    fb.textContent = "Gần đúng rồi! Bác nghe lại câu mẫu bằng nút “Nghe chậm”, chú ý các từ còn thiếu rồi đọc lại một lần nữa nhé. Câu mẫu: “" + target + "”";
-    status.textContent = "Gần đúng rồi — thử lại một lần nữa nhé!";
+    fb.textContent = pickEnc("near") + " Bác nghe lại câu mẫu bằng nút “Nghe chậm”, chú ý các từ còn thiếu rồi đọc lại một lần nữa nhé. Câu mẫu: “" + target + "”";
+    status.textContent = "Mình thử lại một lần nữa nhé!";
   } else {
     fb.className = "feedback show try";
-    fb.textContent = "Chưa sao đâu bác. Hãy bấm “Nghe chậm”, nghe kỹ từng từ, rồi đọc theo từng cụm nhỏ. Câu mẫu: “" + target + "” (" + speakItems[speakIndex].vi + ")";
+    fb.textContent = pickEnc("wrong") + " Hãy bấm “Nghe chậm”, nghe kỹ từng từ, rồi đọc theo từng cụm nhỏ. Câu mẫu: “" + target + "” (" + speakItems[speakIndex].vi + ")";
     status.textContent = "Mình thử lại chậm rãi nhé!";
   }
 }
@@ -3388,7 +3467,7 @@ function spSRAdapter(session){
       if(kind === "not-allowed") spStatus("Trang web chưa được phép dùng mic. Bác bấm cho phép (Allow) khi trình duyệt hỏi nhé.");
       else if(kind === "service-not-allowed") spStatus("Bộ nghe đang bị trình duyệt chặn. Bác mở trang bằng Chrome hoặc Safari bản chính, cho phép mic một lần rồi bấm mic thử lại nhé.");
       else if(kind === "audio-capture") spStatus("Mic chưa lên được — có thể mic đang bị ứng dụng khác dùng. Bác đóng hẳn các ứng dụng đó rồi bấm mic thử lại nhé.");
-      else if(kind === "no-speech") spStatus("Chưa nghe thấy tiếng. Bác bấm mic và đọc to hơn một chút nhé.");
+      else if(kind === "no-speech") spStatus(pickEnc("nospeech") + " Bác bấm mic và đọc to hơn một chút nhé.");
       else if(kind === "network"){
         spStatus("Mạng đang yếu nên chưa nghe được. Bác kiểm tra Wi-Fi/4G rồi bấm mic thử lại nhé.");
         if(noteSrNetworkError() >= 2) showSpeakNetSuggest();
@@ -3404,7 +3483,7 @@ function spSRAdapter(session){
       /* Tự kết thúc không kết quả dù bộ nghe đã bắt đầu: tính vào
          chuỗi 2 phiên liên tiếp như no-speech (ca máy thật V15). */
       if(noteSrNoSpeech() >= 2){ speakSrDeadRescue(); return; }
-      spStatus("Chưa nghe thấy tiếng. Bác bấm mic và đọc to hơn một chút nhé.");
+      spStatus(pickEnc("nospeech") + " Bác bấm mic và đọc to hơn một chút nhé.");
     }
   };
 }
@@ -3442,12 +3521,13 @@ document.getElementById("micBtn").addEventListener("click", function(){
 document.getElementById("speakSelfOk").addEventListener("click", function(){
   hideSpeakSelfCheck();
   var fb = document.getElementById("speakFeedback"); fb.className = "feedback show good";
-  fb.textContent = "Tốt lắm! Bác tự nghe lại và thấy mình đọc đúng rồi. Cứ phát huy nhé — chọn câu khác để luyện tiếp nào.";
+  fb.textContent = pickEnc("praise") + " Bác tự nghe lại và thấy mình đọc đúng rồi. Cứ phát huy nhé — chọn câu khác để luyện tiếp nào.";
   celebrate(false);
   spStatus("Đã tự đánh dấu đọc đúng (tự kiểm tra). Bác chọn câu khác để luyện tiếp nhé.");
 });
 document.getElementById("speakSelfRetry").addEventListener("click", function(){
   hideSpeakSelfCheck();
+  toast(pickEnc("retrySelf"));
   document.getElementById("micBtn").click();
 });
 
@@ -4322,7 +4402,7 @@ function rbShowMessage(ctx, kind){
     } else if(kind === "no-speech"){
       ctx._errStreak = (ctx._errStreak || 0) + 1;
       title.textContent = "Chưa nghe thấy tiếng";
-      text.textContent = "Bác để máy gần miệng, đọc to rõ từng từ rồi bấm “Thử lại” nhé." + (ctx._errStreak >= 2 ? " Vẫn chưa được — bác đóng các app đang dùng mic rồi thử lại." : "");
+      text.textContent = pickEnc("nospeech") + " Bác để máy gần miệng, đọc to rõ từng từ rồi bấm “Thử lại” nhé." + (ctx._errStreak >= 2 ? " Vẫn chưa được — bác đóng các app đang dùng mic rồi thử lại." : "");
     } else if(kind === "network"){
       ctx._errStreak = 0;
       title.textContent = "Chưa có kết nối mạng";
@@ -4369,13 +4449,22 @@ function rbShowResult(ctx, best){
   var note = document.createElement("p"); note.className = "rb-note";
   var perfect = (good === total);
   if(perfect && best.al.extras.length === 0){
-    note.textContent = "Đúng rồi, rất tốt! Bác đọc đúng hết " + total + "/" + total + " từ.";
+    note.textContent = pickEnc("praise") + " Bác đọc đúng hết " + total + "/" + total + " từ.";
   } else if(perfect){
-    note.textContent = "Đúng rồi! Bác đã đọc đủ và đúng tất cả các từ chính. (Web có nghe thêm từ “" + best.al.extras[0] + "” — không sao đâu bác.)";
-  } else if(best.al.extras.length === 0){
-    note.textContent = "Còn thiếu từ “" + missing[0] + "”" + (missing.length > 1 ? " và " + (missing.length - 1) + " từ nữa" : "") + ". Bác bấm “Nghe chậm lại”, nghe kỹ từ đó rồi đọc lại nhé.";
+    note.textContent = pickEnc("praise") + " Bác đã đọc đủ và đúng tất cả các từ chính. (Web có nghe thêm từ “" + best.al.extras[0] + "” — không sao đâu bác.)";
   } else {
-    note.textContent = "Từ “" + (missing[0] || "") + "” nghe chưa rõ — web nghe thành “" + best.al.extras[0] + "”. Bác đọc chậm từng tiếng, rõ âm cuối, rồi đọc lại nhé.";
+    /* GẦN ĐÚNG: có ít nhất một phần đúng (vài từ đã khớp — còn chữ xanh)
+       hoặc từ máy nghe được gần giống từ đích (cùng âm đầu / chứa nhau).
+       SAI HẲN: không phần nào khớp. Đây chỉ là phân nhánh lớp chữ cổ
+       vũ — điểm số, ngưỡng và việc tự đánh dấu Đã thuộc không thay đổi. */
+    var heard0 = (best.al.extras[0] || "").toLowerCase(), miss0 = (missing[0] || "").toLowerCase();
+    var heardNear = !!heard0 && !!miss0 && (heard0.charAt(0) === miss0.charAt(0) || heard0.indexOf(miss0) === 0 || miss0.indexOf(heard0) === 0);
+    var opener = (good > 0 || heardNear) ? pickEnc("near") : pickEnc("wrong");
+    if(best.al.extras.length === 0){
+      note.textContent = opener + " Còn thiếu từ “" + missing[0] + "”" + (missing.length > 1 ? " và " + (missing.length - 1) + " từ nữa" : "") + ". Bác bấm “Nghe chậm lại”, nghe kỹ từ đó rồi đọc lại nhé.";
+    } else {
+      note.textContent = opener + " Từ “" + (missing[0] || "") + "” nghe chưa rõ — web nghe thành “" + best.al.extras[0] + "”. Bác đọc chậm từng tiếng, rõ âm cuối, rồi đọc lại nhé.";
+    }
   }
   panel.appendChild(note);
   if(perfect){
@@ -4387,7 +4476,7 @@ function rbShowResult(ctx, best){
     panel.appendChild(prog);
     if(ctx.isWord && !isLearned(ctx.target)){
       setLearned(ctx.target, true);
-      toast("Đọc đúng hết rồi! Đã đánh dấu “Đã thuộc”: " + ctx.target);
+      toast(pickEnc("learned") + " Đã đánh dấu “Đã thuộc”: " + ctx.target);
     }
     celebrate(ctx.isWord && lessonAllLearned());
     if(ctx.isWord) scheduleAutoNext(ctx);
@@ -4554,12 +4643,12 @@ function rbShowSelfCheck(ctx, session, info){
     if(!state.practice) state.practice = {};
     state.practice[ctx.target] = (state.practice[ctx.target] || 0) + 1;
     saveState();
-    rbShowIdle(ctx, "Tốt lắm — bác tự đánh dấu đọc đúng!", "Đã ghi nhận: bác đã tự kiểm tra và đọc đúng " + (ctx.isWord ? "từ" : "câu") + " này " + state.practice[ctx.target] + " lần.");
-    if(ctx.isWord && !isLearned(ctx.target)){ setLearned(ctx.target, true); toast("Đã đánh dấu “Đã thuộc”: " + ctx.target); }
+    rbShowIdle(ctx, pickEnc("praise"), "Đã ghi nhận: bác đã tự kiểm tra và đọc đúng " + (ctx.isWord ? "từ" : "câu") + " này " + state.practice[ctx.target] + " lần.");
+    if(ctx.isWord && !isLearned(ctx.target)){ setLearned(ctx.target, true); toast(pickEnc("learned") + " Đã đánh dấu “Đã thuộc”: " + ctx.target); }
     celebrate(ctx.isWord && lessonAllLearned());
     if(ctx.isWord) scheduleAutoNext(ctx);
   }, "vslow"));
-  actions.appendChild(rbActionBtn("Chưa đúng, đọc lại", function(){ startReadback(ctx); }, "mic"));
+  actions.appendChild(rbActionBtn("Chưa đúng, đọc lại", function(){ toast(pickEnc("retrySelf")); startReadback(ctx); }, "mic"));
   panel.appendChild(actions);
   /* Đang ghi âm vì trang ĐÃ NHỚ lựa chọn (máy có bộ chấm nhưng từng
      chết lặng ở đây): chừa đường quay lại bộ chấm tự động. */
@@ -5302,7 +5391,7 @@ function gradeQuiz(questions, wrap){
     }
     if(correct) score++;
     var ex = box.querySelector('[data-explain="'+qi+'"]');
-    if(ex){ ex.classList.add("show"); ex.textContent = (correct ? "✓ Đúng rồi! " : "Chưa đúng. ") + q.explain; }
+    if(ex){ ex.classList.add("show"); ex.textContent = (correct ? pickEnc("qRight") : "Chưa đúng. ") + q.explain; }
   });
   return {score: score, answeredAll: answeredAll};
 }
@@ -5419,14 +5508,14 @@ document.getElementById("gateSubmit").addEventListener("click", function(){
   res.appendChild(gEl("div", "score", r.score + " / 4 câu đúng"));
   if(r.score >= 3){
     state.gatePassed[L.id] = true; pendingGateTarget = 0; saveState();
-    var m = gEl("p", "", "Giỏi lắm! Bác thuộc bài cũ rồi — vào học bài mới thôi."); m.style.fontWeight = "700"; m.style.marginTop = "6px";
+    var m = gEl("p", "", pickEnc("gamePass") + " Bác thuộc bài cũ rồi — vào học bài mới thôi."); m.style.fontWeight = "700"; m.style.marginTop = "6px";
     res.appendChild(m);
     var eb = bigBtn("Vào học Bài " + L.n + " — " + L.title, "btn-primary"); eb.style.marginTop = "12px";
     eb.addEventListener("click", function(){ enterLesson(L); });
     res.appendChild(eb);
     document.getElementById("gateFailBtns").style.display = "none";
   } else {
-    var m2 = gEl("p", "", "Bạn chưa thuộc bài cũ — mình học lại bài cũ một chút rồi quay lại nhé. Không sao cả, ôn lại một vòng là nhớ ngay."); m2.style.fontWeight = "700"; m2.style.marginTop = "6px";
+    var m2 = gEl("p", "", pickEnc("gameFail") + " Mình học lại bài cũ một chút rồi quay lại nhé — ôn lại một vòng là nhớ ngay."); m2.style.fontWeight = "700"; m2.style.marginTop = "6px";
     res.appendChild(m2);
     document.getElementById("gateFailBtns").style.display = "flex";
     document.getElementById("gateStudyPrev").textContent = "Học lại " + prevLabel(L);
@@ -5489,7 +5578,7 @@ function finishGame(pass, pct, headline, detail){
   res.style.background = pass ? "" : "var(--accent-soft)";
   res.style.borderColor = pass ? "" : "var(--accent)";
   res.appendChild(gEl("div", "score", headline));
-  var msg = gEl("p", "", detail); msg.style.fontWeight = "700"; msg.style.marginTop = "6px";
+  var msg = gEl("p", "", (pass ? pickEnc("gamePass") : pickEnc("gameFail")) + " " + detail); msg.style.fontWeight = "700"; msg.style.marginTop = "6px";
   res.appendChild(msg);
   var acts = gEl("div", "game-acts");
   var again = bigBtn("Chơi lại trò này", "btn-ghost");
@@ -6127,8 +6216,8 @@ function finishChapterExam(L, total, score, wrongs){
   res.style.borderColor = pass ? "" : "var(--accent)";
   res.appendChild(gEl("div", "score", score + " / " + total + " câu đúng"));
   var msg = gEl("p", "", pass
-    ? ("Chúc mừng bác! Bác đã đạt bài Kiểm tra tổng hợp Chương " + L.ch + " — cả chương này coi như hoàn thành, Bài 1 của chương tiếp theo đã mở ra rồi.")
-    : ("Bác được " + score + "/" + total + " câu — cần đúng từ 16/20 câu là đạt. Không sao cả, rất nhiều người làm lần đầu chưa đạt ngay. Bác xem lại các câu sai ở dưới, ôn lại chương này một vòng rồi làm lại — làm lại bao nhiêu lần cũng được, không bị phạt gì đâu."));
+    ? (pickEnc("gamePass") + " Bác đã đạt bài Kiểm tra tổng hợp Chương " + L.ch + " — cả chương này coi như hoàn thành, Bài 1 của chương tiếp theo đã mở ra rồi.")
+    : (pickEnc("gameFail") + " Bác được " + score + "/" + total + " câu — cần đúng từ 16/20 câu là đạt. Rất nhiều người làm lần đầu chưa đạt ngay. Bác xem lại các câu sai ở dưới, ôn lại chương này một vòng rồi làm lại — làm lại bao nhiêu lần cũng được, không bị phạt gì đâu."));
   msg.style.fontWeight = "700"; msg.style.marginTop = "6px";
   res.appendChild(msg);
   if(wrongs.length){
@@ -6293,7 +6382,7 @@ document.getElementById("totalSubmit").addEventListener("click", function(){
   var res = document.getElementById("totalResult"); res.classList.add("show"); res.innerHTML = "";
   var sc = document.createElement("div"); sc.className="score"; sc.textContent = r.score + " / 6 câu đúng";
   var msg = document.createElement("p"); msg.style.fontWeight="700"; msg.style.marginTop="6px";
-  msg.textContent = r.score >= 5 ? "Rất xuất sắc! Bác nhớ bài rất tốt. Duy trì ôn lại mỗi ngày nhé!" : (r.score >= 3 ? "Khá tốt! Bác xem lại giải thích ở những câu sai rồi ôn thêm một vòng nữa nhé." : "Không sao cả — học lại là nhớ. Bác quay về từng bài, nghe và đọc theo thêm vài lần rồi thử lại nhé.");
+  msg.textContent = r.score >= 5 ? (pickEnc("praise") + " Bác nhớ bài rất tốt. Duy trì ôn lại mỗi ngày nhé!") : (r.score >= 3 ? (pickEnc("near") + " Bác xem lại giải thích ở những câu sai rồi ôn thêm một vòng nữa nhé.") : (pickEnc("gameFail") + " Bác quay về từng bài, nghe và đọc theo thêm vài lần rồi thử lại nhé."));
   res.appendChild(sc); res.appendChild(msg);
   document.getElementById("totalSubmit").style.display = "none";
   document.getElementById("totalRetry").style.display = "inline-flex";
@@ -6859,7 +6948,7 @@ document.getElementById("pfcKnown").addEventListener("click", function(){
   var s = pronCurrent.sounds[pfcIndex];
   pronState.learned[s.ipa] = true; pronSave();
   syncPronLearnButtons(); renderPronHome();
-  toast("Giỏi lắm! Đã thuộc âm /" + s.ipa + "/");
+  toast(pickEnc("learned") + " Đã thuộc âm /" + s.ipa + "/");
   pfcIndex = (pfcIndex + 1) % pronCurrent.sounds.length; pfcFlipped = false; renderPronFlashcard();
 });
 
@@ -6925,7 +7014,7 @@ function finishPronGame(pass, pct, score, total){
   res.style.background = pass ? "" : "var(--accent-soft)";
   res.style.borderColor = pass ? "" : "var(--accent)";
   res.appendChild(gEl("div", "score", "Đúng " + score + " / " + total + " câu (" + pct + "%)"));
-  var msg = gEl("p", "", pass ? "Tai bác nghe âm rất chuẩn — bài phát âm này đã hoàn thành!" : "Chưa đạt 80% — bác nghe lại các âm trong bài rồi chơi lại nhé, không vội đâu.");
+  var msg = gEl("p", "", pass ? (pickEnc("gamePass") + " Tai bác nghe âm rất chuẩn — bài phát âm này đã hoàn thành!") : (pickEnc("gameFail") + " Bác nghe lại các âm trong bài rồi chơi lại nhé, không vội đâu."));
   msg.style.fontWeight = "700"; msg.style.marginTop = "6px";
   res.appendChild(msg);
   var acts = gEl("div", "game-acts");
