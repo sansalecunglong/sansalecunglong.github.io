@@ -1477,6 +1477,7 @@ html[data-font="small"] .rb-close{font-size:max(14px,.88em)}
 .sg-row{margin-top:5px}
 .sg-row b{color:var(--primary-strong)}
 .sg-btns{margin-top:10px}
+.sg-vioword{font-weight:700; color:var(--ink-2); font-size:max(15px,.92em); align-self:center}
 .pair-card{
   background:var(--surface); border:2px solid var(--border); border-radius:var(--r-md);
   padding:18px 20px; box-shadow:var(--shadow-sm); margin-bottom:14px;
@@ -2488,6 +2489,9 @@ function speak(text, rate){
   if(!ttsOK){ toast("Trình duyệt này chưa hỗ trợ giọng đọc. Bác hãy mở trang bằng Chrome hoặc Safari nhé."); return; }
   try{
     window.speechSynthesis.cancel();
+    /* Chrome di động hay kẹt trạng thái paused sau lần phát trước: không
+       resume thì lần bấm này tịt hẳn dù utterance đã được tạo. */
+    if(window.speechSynthesis.paused){ try{ window.speechSynthesis.resume(); }catch(e){} }
     var u = new SpeechSynthesisUtterance(text);
     u.lang = "en-US"; u.rate = rate || 1; u.pitch = 1;
     var voice = pickEnVoice();
@@ -6317,10 +6321,32 @@ var PRON_PAIRS = [
   {a:["cat","/kæt/","con mèo"], b:["cut","/kʌt/","cắt"], note:"Khác nhau ở /æ/ (miệng mở rộng) và /ʌ/ (â ngắn)."}
 ];
 function pronLessonById(id){ return PRON_LESSONS.filter(function(L){ return L.id === id; })[0] || null; }
+/* ===== NGHE ÂM: vì sao KHÔNG đưa ký hiệu IPA trần vào TTS =====
+   Đưa thẳng ký hiệu IPA (θ, ð, ʃ, ʒ, ŋ, ə, æ, ʌ, ɒ, iː, tʃ…) cho
+   speechSynthesis đọc bằng giọng Anh: rất nhiều ký hiệu KHÔNG có
+   cách đọc trong bảng chữ của TTS nên máy trả về im lặng hoàn toàn
+   (bấm mà không nghe thấy gì) — đó là lỗi “một số âm ấn không hề
+   nói” trên máy thật. Cách sửa: mỗi âm nghe qua MỘT TỪ VÍ DỤ ĐIỂN
+   HÌNH mà âm đó nổi bật nhất, đọc bằng giọng Anh en-US như mọi từ
+   khác — người học nghe được chính âm đó vang rõ trong từ, và cả
+   44 âm đều phát được, không âm nào tịt. Bảng dưới đây chốt từ cho
+   từng âm; âm nào không có trong bảng thì lấy từ ví dụ đầu tiên
+   trong dữ liệu của âm đó. */
+var PRON_SAY = {
+  "ɪ":"it", "e":"bed", "æ":"cat", "ʌ":"cup", "ɒ":"hot", "ʊ":"book", "ə":"about",
+  "iː":"eat", "ɑː":"car", "ɔː":"door", "uː":"food", "ɜː":"bird",
+  "eɪ":"day", "aɪ":"my", "ɔɪ":"boy", "aʊ":"now", "əʊ":"go", "ɪə":"here", "eə":"hair", "ʊə":"tour",
+  "p":"pen", "b":"book", "t":"tea", "d":"dog", "k":"cat", "ɡ":"go", "f":"fish", "v":"very",
+  "θ":"think", "ð":"this", "s":"sun", "z":"zoo",
+  "ʃ":"she", "ʒ":"television", "tʃ":"chair", "dʒ":"jump", "m":"mother", "n":"name",
+  "ŋ":"sing", "h":"hello", "l":"light", "r":"red", "w":"we", "j":"yes"
+};
+function pronSayWord(s){ return PRON_SAY[s.ipa] || s.ex[0][0]; }
 /* Dòng GIẢI THÍCH cách đọc bằng tiếng Việt hiển thị dưới ký hiệu IPA (trên ô
    lưới 44 âm và trên thẻ âm): lấy câu đầu của trường how — phần chữ này chỉ
-   để ĐỌC HIỂU cách phát âm, TUYỆT ĐỐI không đưa vào TTS. Nghe âm luôn phát
-   chính ký hiệu IPA của âm bằng giọng Anh qua speak()/speakBtn(). */
+   để ĐỌC HIỂU cách phát âm, TUYỆT ĐỐI không đưa vào TTS. Nghe âm phát
+   bằng giọng Anh qua TỪ VÍ DỤ ĐIỂN HÌNH của âm (xem PRON_SAY ở trên) —
+   ký hiệu IPA trần đưa vào TTS sẽ tịt tiếng với nhiều âm. */
 function pronHowShort(s){
   var h = (s && s.how) ? String(s.how) : "";
   var dot = h.indexOf(". ");
@@ -6377,8 +6403,9 @@ function renderPronHome(){
 }
 
 /* ---------- Nghe phát âm ban đầu: lưới 44 âm, bấm là nghe CHÍNH ÂM đó ----------
-   Bấm một ô là máy đọc CHÍNH ÂM ĐÓ (ký hiệu IPA của âm) bằng GIỌNG ANH
-   (en-US) qua speak() — không đọc từ ví dụ; từ ví dụ kèm nghĩa vẫn hiển
+   Bấm một ô là nghe CHÍNH ÂM ĐÓ bằng GIỌNG ANH (en-US), phát QUA TỪ VÍ
+   DỤ ĐIỂN HÌNH của âm (pronSayWord / PRON_SAY) — đưa ký hiệu IPA trần
+   vào TTS thì nhiều âm tịt tiếng hoàn toàn. Từ ví dụ kèm nghĩa vẫn hiển
    thị trên ô để đối chiếu. Dòng chữ tiếng Việt trên ô là phần GIẢI THÍCH
    cách đọc (lấy từ trường how) để người học đọc chữ là hình dung được âm.
    Thuần nghe làm quen: không kiểm tra, không ghi tiến độ, không khóa gì.
@@ -6400,13 +6427,13 @@ function renderPronListen(){
       var L = pronLessonById(id); if(!L) return;
       L.sounds.forEach(function(s){
         var cell = document.createElement("button"); cell.type = "button"; cell.className = "pron-listen-cell";
-        cell.setAttribute("aria-label", "Nghe chính âm /" + s.ipa + "/ — từ ví dụ: " + s.ex[0][0] + ", " + s.ex[1][0]);
+        cell.setAttribute("aria-label", "Nghe chính âm /" + s.ipa + "/ qua từ " + pronSayWord(s) + " — từ ví dụ: " + s.ex[0][0] + ", " + s.ex[1][0]);
         var ip = document.createElement("span"); ip.className = "plc-ipa"; ip.textContent = "/" + s.ipa + "/";
         var vv = document.createElement("span"); vv.className = "plc-vi"; vv.textContent = pronHowShort(s);
         var w1 = document.createElement("span"); w1.className = "plc-word"; w1.textContent = s.ex[0][0] + " — " + s.ex[0][2];
         var w2 = document.createElement("span"); w2.className = "plc-word2"; w2.textContent = s.ex[1][0] + " — " + s.ex[1][2];
         cell.appendChild(ip); cell.appendChild(vv); cell.appendChild(w1); cell.appendChild(w2);
-        cell.addEventListener("click", function(){ speak(s.ipa, 1); });
+        cell.addEventListener("click", function(){ speak(pronSayWord(s), 1); });
         grid.appendChild(cell);
       });
     });
@@ -6502,12 +6529,17 @@ function pronGuideBlock(s){
     box.appendChild(p);
   });
   var gb = document.createElement("div"); gb.className = "v-btns sg-btns";
-  /* Nút nghe của THẺ ÂM: đọc CHÍNH ÂM ĐÓ (ký hiệu IPA) bằng GIỌNG ANH,
-     thường + chậm (rate 0.5) — không đọc từ ví dụ; nghe từ ví dụ thì
-     dùng nút Nghe ở từng từ bên dưới. Cách đọc kiểu Việt đã có sẵn ở
-     3 dòng chữ giải thích ngay phía trên để đọc theo. */
-  gb.appendChild(speakBtn(s.ipa, 1, "Nghe âm /" + s.ipa + "/", false));
-  gb.appendChild(speakBtn(s.ipa, 0.5, "Nghe chậm", true));
+  /* Nút nghe của THẺ ÂM: nghe CHÍNH ÂM ĐÓ bằng GIỌNG ANH, phát QUA TỪ
+     VÍ DỤ ĐIỂN HÌNH của âm (pronSayWord) — thường + chậm (cùng từ,
+     rate 0.5). KHÔNG đưa ký hiệu IPA trần vào TTS: nhiều ký hiệu làm
+     máy tịt tiếng hoàn toàn. Cạnh nút ghi rõ “(nghe qua từ: …)” để
+     người học biết mình nghe âm qua từ nào; 3 dòng chữ giải thích
+     cách đọc ngay phía trên dẫn cách phát âm đó. */
+  var sayW = pronSayWord(s);
+  gb.appendChild(speakBtn(sayW, 1, "Nghe âm /" + s.ipa + "/", false));
+  gb.appendChild(speakBtn(sayW, 0.5, "Nghe chậm", true));
+  var vw = document.createElement("span"); vw.className = "sg-vioword"; vw.textContent = "(nghe qua từ: " + sayW + ")";
+  gb.appendChild(vw);
   box.appendChild(gb);
   return box;
 }
