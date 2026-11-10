@@ -1233,6 +1233,13 @@ html.hc .exam-bar{background:#fff}
 }
 .part-prev:hover{border-color:var(--primary); color:var(--primary)}
 .part-prev:active{transform:scale(.97)}
+/* Chỉ số phần trong bài: “Phần X/N: <tên phần>” + chấm bước thể hiện vị trí */
+.part-progress{display:flex; align-items:center; gap:14px; flex-wrap:wrap; margin-top:14px}
+.pp-text{font-weight:800; font-size:max(16px,.95em)}
+.pp-dots{display:inline-flex; gap:7px; align-items:center}
+.pp-dot{width:11px; height:11px; border-radius:50%; background:var(--muted); opacity:.35}
+.pp-dot.done{background:var(--primary); opacity:1}
+.pp-dot.now{background:var(--accent); opacity:1; box-shadow:0 0 0 3px var(--accent-soft)}
 .btn-next-big{min-height:64px; font-size:max(18px,1.05em); padding:14px 30px}
 .sub-h.part-flash{animation:partFlash 1.6s ease}
 @keyframes partFlash{0%,55%{background:var(--accent-soft); border-radius:10px}100%{background:transparent}}
@@ -2031,6 +2038,10 @@ html[data-font="small"] .rb-close{font-size:max(14px,.88em)}
         <span id="gateBannerText"></span>
         <button type="button" class="btn btn-accent btn-sm" id="gateBannerBtn" style="margin-left:10px">Kiểm tra lại để mở bài mới</button>
       </div>
+      <div class="part-progress" id="partProgress">
+        <span class="pp-text" id="partProgressText">Phần 1/5: Từ vựng</span>
+        <span class="pp-dots" id="partProgressDots" aria-hidden="true"></span>
+      </div>
     </div>
 
     <div class="tabs" role="tablist" aria-label="Các phần của bài học">
@@ -2071,17 +2082,17 @@ html[data-font="small"] .rb-close{font-size:max(14px,.88em)}
     <section class="tab-panel" id="panel-cards" role="tabpanel" aria-label="Thẻ ghi nhớ">
       <button type="button" class="part-prev" data-prevtab="vocab">← Phần trước: Từ vựng</button>
       <h2 class="sub-h">Thẻ ghi nhớ — bấm vào thẻ để lật</h2>
-      <p class="sub-p">Nhìn mặt tiếng Anh, thử tự nói nghĩa trước, rồi lật thẻ để kiểm tra. Đánh dấu “Đã thuộc” hay “Chưa thuộc” để trang web nhớ giúp bác.</p>
+      <p class="sub-p">Nhìn mặt tiếng Anh, thử tự nói nghĩa trước, rồi ấn vào thẻ để lật xem nghĩa. Đang ở mặt sau, ấn vào thẻ lần nữa sẽ sang từ tiếp theo. Đánh dấu “Đã thuộc” hay “Chưa thuộc” để trang web nhớ giúp bác.</p>
       <div class="fc-stage">
-        <button type="button" class="fc-card" id="fcCard" aria-label="Thẻ ghi nhớ, bấm để lật thẻ">
+        <button type="button" class="fc-card" id="fcCard" aria-label="Thẻ ghi nhớ — ấn để xem nghĩa, ấn lần nữa để sang từ tiếp theo">
           <span class="fc-inner" id="fcInner">
             <span class="fc-face fc-front">
-              <span class="fc-hint">Tiếng Anh — bấm để lật</span>
+              <span class="fc-hint">Ấn vào thẻ để xem nghĩa</span>
               <span class="fc-word" id="fcWord">…</span>
               <span class="fc-ipa" id="fcIpaFront">…</span>
             </span>
             <span class="fc-face fc-back">
-              <span class="fc-hint">Nghĩa tiếng Việt</span>
+              <span class="fc-hint">Ấn tiếp để sang từ tiếp theo</span>
               <span class="fc-ipa" id="fcIpaBack">…</span>
               <span class="fc-vi" id="fcVi">…</span>
               <span class="fc-ex" id="fcEx">…</span>
@@ -2200,23 +2211,30 @@ html[data-font="small"] .rb-close{font-size:max(14px,.88em)}
       <button type="button" class="part-prev" id="pronBackList">← Về danh sách 5 bài phát âm</button>
       <h2 class="sub-h" id="pronLessonTitle">Bài phát âm</h2>
       <p class="sub-p" id="pronLessonGoal"></p>
+      <div class="part-progress" id="pronPartProgress">
+        <span class="pp-text" id="pronPartText">Phần 1/3: Học từng âm</span>
+        <span class="pp-dots" id="pronPartDots" aria-hidden="true"></span>
+      </div>
 
+      <div class="pron-part" data-pname="Học từng âm" data-hsuffix="Học từng âm">
       <h3 class="sub-h">1 · Học từng âm</h3>
       <p class="sub-p">Mỗi âm có <b>2 từ ví dụ</b> thông dụng. Mỗi thẻ âm mở đầu bằng khối <b>“Cách đọc âm này”</b> — đọc khối đó trước để biết âm đọc ra sao và các lưu ý, rồi bấm <b>Nghe</b> nghe từ và bấm <b>Đọc lại</b> đọc to từ ví dụ — trang web chấm từng âm cho bác như ở phần Từ vựng.</p>
       <div class="vocab-list" id="pronSounds"></div>
+      </div>
 
-      <h3 class="sub-h" style="margin-top:32px">2 · Thẻ ghi nhớ âm</h3>
-      <p class="sub-p">Nhìn ký hiệu âm, thử tự nhớ từ ví dụ trước, rồi bấm vào thẻ để lật xem đáp án và cách đọc.</p>
+      <div class="pron-part" data-pname="Thẻ ghi nhớ âm" data-hsuffix="Thẻ ghi nhớ âm">
+      <h3 class="sub-h">2 · Thẻ ghi nhớ âm</h3>
+      <p class="sub-p">Nhìn ký hiệu âm, thử tự nhớ từ ví dụ trước, rồi ấn vào thẻ để lật xem đáp án và cách đọc. Đang ở mặt sau, ấn vào thẻ lần nữa sẽ sang âm tiếp theo.</p>
       <div class="fc-stage">
-        <button type="button" class="fc-card" id="pfcCard" aria-label="Thẻ ghi nhớ âm, bấm để lật thẻ">
+        <button type="button" class="fc-card" id="pfcCard" aria-label="Thẻ ghi nhớ âm — ấn để xem đáp án, ấn lần nữa để sang âm tiếp theo">
           <span class="fc-inner" id="pfcInner">
             <span class="fc-face fc-front">
-              <span class="fc-hint">Ký hiệu âm — bấm để lật</span>
+              <span class="fc-hint">Ấn vào thẻ để xem đáp án</span>
               <span class="fc-word" id="pfcIpa">…</span>
               <span class="fc-ipa" id="pfcName">…</span>
             </span>
             <span class="fc-face fc-back">
-              <span class="fc-hint">Từ ví dụ &amp; cách đọc</span>
+              <span class="fc-hint">Ấn tiếp để sang âm tiếp theo</span>
               <span class="fc-vi" id="pfcEx" style="font-size:1.05em; line-height:1.5">…</span>
               <span class="fc-ex" id="pfcTip">…</span>
             </span>
@@ -2231,16 +2249,20 @@ html[data-font="small"] .rb-close{font-size:max(14px,.88em)}
         <button type="button" class="btn btn-ghost" id="pfcNext">Âm sau →</button>
       </div>
 
-      <div id="pronPairsSection" style="display:none">
-        <h3 class="sub-h" style="margin-top:32px">3 · Các cặp âm dễ nhầm — nghe và so sánh</h3>
+      </div>
+
+      <div class="pron-part" id="pronPairsSection" data-pname="Các cặp âm dễ nhầm" data-hsuffix="Các cặp âm dễ nhầm — nghe và so sánh" style="display:none">
+        <h3 class="sub-h">3 · Các cặp âm dễ nhầm — nghe và so sánh</h3>
         <p class="sub-p">Hai từ trong mỗi cặp chỉ khác nhau <b>một âm</b> mà nghĩa khác hẳn. Bấm nghe từng từ, nghe kỹ chỗ khác nhau, rồi bấm <b>Đọc lại</b> tập đọc cả hai từ.</p>
         <div id="pronPairs"></div>
       </div>
 
-      <h3 class="sub-h" style="margin-top:32px">4 · Trò chơi cuối bài</h3>
+      <div class="pron-part" data-pname="Trò chơi cuối bài" data-hsuffix="Trò chơi cuối bài">
+      <h3 class="sub-h">4 · Trò chơi cuối bài</h3>
       <p class="sub-p">Nghe máy đọc một từ, rồi chọn đúng ký hiệu âm có trong từ đó. Đúng từ 80% là ghi nhận hoàn thành bài này — các bài phát âm khác vẫn mở sẵn, bác học bài nào trước cũng được.</p>
       <div id="pronGameWrap"></div>
       <div class="quiz-result" id="pronGameResult" role="status"></div>
+      </div>
     </div>
       <p class="phon-credit">Âm thanh 44 âm: bản ghi từ Wikimedia Commons (CC BY-SA / CC0 / Public domain) — danh sách nguồn từng âm trong phần Giới thiệu.</p>
   </div>
@@ -3028,6 +3050,27 @@ function updateGateBanner(){
     b.style.display = "block";
   } else b.style.display = "none";
 }
+/* Thứ tự + tên các phần của một bài thường (Bài 10 là màn hình kiểm tra
+   tổng hợp riêng, giữ nguyên như cũ nên không hiện chỉ số phần). */
+var LESSON_PARTS = [["vocab","Từ vựng"],["cards","Thẻ ghi nhớ"],["dialogue","Hội thoại"],["speak","Luyện nói"],["quiz","Trò chơi cuối bài"]];
+function updatePartProgress(name){
+  var box = document.getElementById("partProgress"); if(!box) return;
+  if(currentLesson && currentLesson.n === 10){ box.style.display = "none"; return; }
+  box.style.display = "";
+  var idx = 0;
+  LESSON_PARTS.forEach(function(p, i){ if(p[0] === name) idx = i; });
+  var t = document.getElementById("partProgressText");
+  if(t) t.textContent = "Phần " + (idx + 1) + "/" + LESSON_PARTS.length + ": " + LESSON_PARTS[idx][1];
+  var dots = document.getElementById("partProgressDots");
+  if(dots){
+    dots.innerHTML = "";
+    LESSON_PARTS.forEach(function(p, i){
+      var d = document.createElement("span");
+      d.className = "pp-dot" + (i < idx ? " done" : (i === idx ? " now" : ""));
+      dots.appendChild(d);
+    });
+  }
+}
 function switchTab(name){
   MicSessions.cancelCurrent(); stopGameTimer();
   document.querySelectorAll(".tab-btn").forEach(function(b){
@@ -3036,6 +3079,7 @@ function switchTab(name){
   document.querySelectorAll(".tab-panel").forEach(function(p){
     p.classList.toggle("active", p.id === "panel-" + name);
   });
+  updatePartProgress(name);
 }
 document.querySelectorAll(".tab-btn").forEach(function(b){
   b.addEventListener("click", function(){ switchTab(b.getAttribute("data-tab")); });
@@ -3170,7 +3214,13 @@ function renderFlashcard(){
   var n = currentLesson.vocab.filter(function(x){ return isLearned(x.en); }).length;
   document.getElementById("fcProgress").textContent = "Thẻ " + (fcIndex+1) + " / " + currentLesson.vocab.length + " · Đã thuộc: " + n + " từ trong bài này";
 }
-document.getElementById("fcCard").addEventListener("click", function(){ fcFlipped = !fcFlipped; renderFlashcard(); });
+/* Ấn trực tiếp lên thẻ: mặt trước → lật ra mặt sau; đang ở mặt sau →
+   sang TỪ TIẾP THEO (hiện mặt trước của từ kế, hết bộ thì vòng về từ đầu). */
+document.getElementById("fcCard").addEventListener("click", function(){
+  if(!currentLesson) return;
+  if(!fcFlipped){ fcFlipped = true; renderFlashcard(); }
+  else { fcIndex = (fcIndex + 1) % currentLesson.vocab.length; fcFlipped = false; renderFlashcard(); }
+});
 document.getElementById("fcPrev").addEventListener("click", function(){ fcIndex = (fcIndex - 1 + currentLesson.vocab.length) % currentLesson.vocab.length; fcFlipped=false; renderFlashcard(); });
 document.getElementById("fcNext").addEventListener("click", function(){ fcIndex = (fcIndex + 1) % currentLesson.vocab.length; fcFlipped=false; renderFlashcard(); });
 document.getElementById("fcListen").addEventListener("click", function(){ speak(currentLesson.vocab[fcIndex].en, 0.8); });
@@ -6804,7 +6854,7 @@ function renderPronIndex(){
 var pronCurrent = null, pfcIndex = 0, pfcFlipped = false;
 function openPronLesson(id){
   var L = pronLessonById(id); if(!L) return;
-  pronCurrent = L; pfcIndex = 0; pfcFlipped = false;
+  pronCurrent = L; pfcIndex = 0; pfcFlipped = false; pronPartIdx = 0;
   document.getElementById("pronIndex").style.display = "none";
   document.getElementById("pronLessonView").style.display = "block";
   renderPronLesson();
@@ -6893,14 +6943,9 @@ function renderPronLesson(){
   });
   syncPronLearnButtons();
   renderPronFlashcard();
-  var pairSec = document.getElementById("pronPairsSection");
-  if(L.n === 5){
-    pairSec.style.display = "block";
-    renderPronPairs();
-  } else {
-    pairSec.style.display = "none";
-  }
+  if(L.n === 5) renderPronPairs();
   renderPronGame();
+  pronShowPart(pronPartIdx);
 }
 function renderPronPairs(){
   var wrap = document.getElementById("pronPairs"); wrap.innerHTML = "";
@@ -6939,7 +6984,13 @@ function renderPronFlashcard(){
   document.getElementById("pfcTip").textContent = s.tip;
   document.getElementById("pfcProgress").textContent = "Âm " + (pfcIndex + 1) + " / " + pronCurrent.sounds.length + " · Đã thuộc: " + pronCurrent.sounds.filter(function(x){ return pronState.learned[x.ipa]; }).length + " âm trong bài này";
 }
-document.getElementById("pfcCard").addEventListener("click", function(){ pfcFlipped = !pfcFlipped; renderPronFlashcard(); });
+/* Ấn trực tiếp lên thẻ âm: mặt trước → lật ra mặt sau; đang ở mặt sau →
+   sang ÂM TIẾP THEO (hết bộ thì vòng về âm đầu tiên). */
+document.getElementById("pfcCard").addEventListener("click", function(){
+  if(!pronCurrent) return;
+  if(!pfcFlipped){ pfcFlipped = true; renderPronFlashcard(); }
+  else { pfcIndex = (pfcIndex + 1) % pronCurrent.sounds.length; pfcFlipped = false; renderPronFlashcard(); }
+});
 document.getElementById("pfcPrev").addEventListener("click", function(){ if(!pronCurrent) return; pfcIndex = (pfcIndex - 1 + pronCurrent.sounds.length) % pronCurrent.sounds.length; pfcFlipped = false; renderPronFlashcard(); });
 document.getElementById("pfcNext").addEventListener("click", function(){ if(!pronCurrent) return; pfcIndex = (pfcIndex + 1) % pronCurrent.sounds.length; pfcFlipped = false; renderPronFlashcard(); });
 document.getElementById("pfcListen").addEventListener("click", function(){ if(pronCurrent) speak(pronCurrent.sounds[pfcIndex].ex[0][0], 0.8); });
@@ -6951,6 +7002,76 @@ document.getElementById("pfcKnown").addEventListener("click", function(){
   toast(pickEnc("learned") + " Đã thuộc âm /" + s.ipa + "/");
   pfcIndex = (pfcIndex + 1) % pronCurrent.sounds.length; pfcFlipped = false; renderPronFlashcard();
 });
+
+/* ---------- Bài phát âm chia thành từng “trang” theo phần ----------
+   Mỗi lúc chỉ hiện ĐÚNG MỘT phần (Học từng âm → Thẻ ghi nhớ âm →
+   [Các cặp âm dễ nhầm — chỉ Bài 5] → Trò chơi cuối bài), các phần khác
+   ẩn hẳn. Nút “Tiếp theo” cuối phần / “← Quay lại” đầu phần do đoạn này
+   tự gắn vào từng phần; tiêu đề phần được đánh số lại theo số phần thật
+   của bài (bài thường 3 phần, Bài 5 có 4 phần). Không lưu thêm key nào. */
+var pronPartIdx = 0;
+function pronPartsActive(){
+  var all = Array.prototype.slice.call(document.querySelectorAll(".pron-part"));
+  return all.filter(function(p){ return p.id !== "pronPairsSection" || (pronCurrent && pronCurrent.n === 5); });
+}
+function pronShowPart(i){
+  var parts = pronPartsActive(); if(!parts.length) return;
+  if(i < 0) i = 0; if(i > parts.length - 1) i = parts.length - 1;
+  pronPartIdx = i;
+  document.querySelectorAll(".pron-part").forEach(function(p){ p.style.display = "none"; });
+  var cur = parts[i]; cur.style.display = "block";
+  parts.forEach(function(p, j){
+    var h = p.querySelector(".sub-h");
+    if(h) h.textContent = (j + 1) + " · " + p.getAttribute("data-hsuffix");
+  });
+  var pv = cur.querySelector(".pron-pnav-prev"), nx = cur.querySelector(".pron-pnav-next");
+  if(pv){ pv.style.display = i === 0 ? "none" : ""; if(i > 0) pv.textContent = "← Quay lại: " + parts[i - 1].getAttribute("data-pname"); }
+  if(nx){
+    var nav = nx.parentNode;
+    if(nav) nav.style.display = i === parts.length - 1 ? "none" : "";
+    if(i < parts.length - 1) nx.textContent = "Tiếp theo: " + parts[i + 1].getAttribute("data-pname") + " →";
+  }
+  var t = document.getElementById("pronPartText");
+  if(t) t.textContent = "Phần " + (i + 1) + "/" + parts.length + ": " + cur.getAttribute("data-pname");
+  var dots = document.getElementById("pronPartDots");
+  if(dots){
+    dots.innerHTML = "";
+    parts.forEach(function(p, j){
+      var d = document.createElement("span");
+      d.className = "pp-dot" + (j < i ? " done" : (j === i ? " now" : ""));
+      dots.appendChild(d);
+    });
+  }
+}
+function pronGoPart(delta){
+  /* Dừng gọn phiên nghe/đọc đang chạy ở phần cũ trước khi ẩn nó đi. */
+  if(typeof MicSessions !== "undefined") MicSessions.cancelCurrent();
+  try{ if(window.phonAudioEl) phonAudioEl.pause(); }catch(e){}
+  try{ if(window.speechSynthesis) speechSynthesis.cancel(); }catch(e){}
+  pronShowPart(pronPartIdx + delta);
+  var parts = pronPartsActive(); var cur = parts[pronPartIdx]; if(!cur) return;
+  var h = cur.querySelector(".sub-h"); if(!h) return;
+  setTimeout(function(){
+    h.scrollIntoView({behavior:"smooth", block:"start"});
+    h.setAttribute("tabindex", "-1");
+    try{ h.focus({preventScroll:true}); }catch(e){}
+    h.classList.add("part-flash");
+    setTimeout(function(){ h.classList.remove("part-flash"); }, 1700);
+  }, 60);
+}
+(function initPronParts(){
+  document.querySelectorAll(".pron-part").forEach(function(p){
+    var pv = document.createElement("button");
+    pv.type = "button"; pv.className = "part-prev pron-pnav-prev";
+    pv.addEventListener("click", function(){ pronGoPart(-1); });
+    p.insertBefore(pv, p.firstChild);
+    var nav = document.createElement("div"); nav.className = "part-nav";
+    var nx = document.createElement("button");
+    nx.type = "button"; nx.className = "btn btn-accent part-next pron-pnav-next";
+    nx.addEventListener("click", function(){ pronGoPart(1); });
+    nav.appendChild(nx); p.appendChild(nav);
+  });
+})();
 
 /* ---------- Trò chơi phát âm: Nghe từ, chọn ký hiệu âm ---------- */
 function ipaInWord(wordIpa, sym){ return wordIpa.replace(/\//g, "").indexOf(sym) >= 0; }
@@ -7034,7 +7155,7 @@ function finishPronGame(pass, pct, score, total){
     }
   } else {
     var rb = bigBtn("Nghe lại các âm của bài này", "btn-accent");
-    rb.addEventListener("click", function(){ window.scrollTo({top:0, behavior:"smooth"}); });
+    rb.addEventListener("click", function(){ pronGoPart(-pronPartIdx); });
     acts.appendChild(rb);
   }
   var hb = bigBtn("Về trang chủ", "btn-soft");
