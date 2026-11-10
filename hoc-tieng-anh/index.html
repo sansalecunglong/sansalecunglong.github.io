@@ -1189,6 +1189,17 @@ html[data-font="small"] .hc-state{font-size:max(14px,.88em)}
 .game-q{font-size:max(17px,1.08em); font-weight:700; margin-bottom:14px}
 .game-note{margin-top:14px; background:var(--bg-soft); border:1.5px solid var(--border-strong); border-radius:var(--r-sm); padding:12px 16px; font-weight:700; font-size:max(16px,1em)}
 .game-acts{display:flex; gap:12px; flex-wrap:wrap; justify-content:center; margin-top:16px}
+/* Kiểm tra tổng hợp cuối chương (Bài 10): tiến độ, ngữ cảnh, danh sách câu sai */
+.exam-progress{font-weight:800; font-size:max(17px,1.05em); margin-bottom:10px; font-variant-numeric:tabular-nums}
+.exam-bar{height:18px; background:var(--bg-soft); border:2px solid var(--border); border-radius:var(--r-pill); overflow:hidden; margin-bottom:18px}
+html.hc .exam-bar{background:#fff}
+.exam-bar-fill{height:100%; width:100%; background:var(--accent); border-radius:var(--r-pill); transform:scaleX(0); transform-origin:left center; transition:transform .5s ease}
+.exam-context{background:var(--surface-2); border:2px solid var(--border-strong); border-radius:var(--r-md); padding:16px 18px; font-family:var(--font-display); font-size:max(19px,1.2em); font-weight:700; margin-bottom:14px; line-height:1.5}
+.exam-hint{color:var(--muted); font-weight:600; font-size:max(16px,1em); margin-bottom:12px}
+.exam-wrong-list{text-align:left; margin-top:16px; display:flex; flex-direction:column; gap:12px}
+.exam-wrong-item{background:var(--surface); border:1.5px solid var(--border-strong); border-radius:var(--r-sm); padding:14px 16px; font-size:max(16px,1em); line-height:1.6}
+.exam-wrong-item .ew-q{font-weight:700}
+.exam-wrong-item .ew-a b{color:var(--success)}
 /* Điều hướng liền mạch giữa các phần trong bài */
 .part-nav{margin-top:30px; display:flex}
 .part-next{flex:1; min-height:64px; font-size:max(18px,1.05em); padding:14px 26px}
@@ -1442,6 +1453,21 @@ html[data-font="small"] .rb-close{font-size:max(14px,.88em)}
 .pair-note{color:var(--muted); font-weight:600; margin-bottom:8px}
 .pair-row{border-top:1.5px dashed var(--border-strong); padding-top:12px; margin-top:12px}
 .pair-row .rb-panel{margin-top:10px}
+/* Nghe phát âm ban đầu: lưới 44 ô âm, bấm là nghe từ ví dụ (thuần nghe, không tiến độ) */
+.pron-listen-sec{margin-top:4px}
+.pron-listen-group{margin-top:18px}
+.pron-listen-group h3{font-family:var(--font-display); font-size:1.15em; font-weight:700; margin-bottom:10px; color:var(--ink)}
+.pron-listen-grid{display:grid; grid-template-columns:repeat(auto-fill,minmax(128px,1fr)); gap:10px}
+.pron-listen-cell{
+  display:flex; flex-direction:column; align-items:center; justify-content:center; gap:4px;
+  min-height:100px; padding:12px 8px; text-align:center; cursor:pointer; font:inherit;
+  background:var(--surface); border:2px solid var(--border-strong); border-radius:var(--r-md);
+  color:var(--ink); box-shadow:var(--shadow-sm);
+}
+.pron-listen-cell:active{border-color:var(--accent); background:var(--accent-soft)}
+.plc-ipa{font-family:var(--font-display); font-size:1.7em; font-weight:700; line-height:1.15; color:var(--ink)}
+.plc-word{font-weight:700; font-size:max(15px,.92em); color:var(--ink-2); line-height:1.35}
+.plc-word2{font-weight:600; font-size:max(13px,.8em); color:var(--muted); line-height:1.35}
 @media (max-width:700px){
   .pron-banner{padding:20px}
   .pron-banner-btns{flex:1 1 100%; width:100%}
@@ -1564,6 +1590,7 @@ html[data-font="small"] .rb-close{font-size:max(14px,.88em)}
         </div>
         <div class="pron-banner-btns">
           <button type="button" class="btn btn-primary" id="ctaPron">Vào học phát âm</button>
+          <button type="button" class="btn btn-soft" id="ctaPronListen">Nghe thử 44 âm</button>
           <button type="button" class="btn btn-accent" data-skip-ch1>Bỏ qua, vào thẳng Chương 1 →</button>
         </div>
       </div>
@@ -2035,8 +2062,13 @@ html[data-font="small"] .rb-close{font-size:max(14px,.88em)}
         <p style="margin-top:10px"><b>Cách học từng âm (3 bước nhẹ nhàng):</b> 1 · Bấm <b>Nghe</b> nghe từ ví dụ vài lần — 2 · Đọc thầm dòng <b>“Cách đọc”</b> để biết đặt lưỡi, môi ra sao — 3 · Bấm <b>Đọc lại</b> và đọc to, trang web nghe và chỉ ngay chỗ sai. Học xong âm nào, bấm “Đánh dấu đã thuộc âm” ở âm đó.</p>
         <p style="margin-top:10px">Chương này <b>không có kiểm tra chặn cửa</b>: học bài nào cũng được vào ôn lại tự do, và bỏ qua lúc nào cũng được.</p>
       </div>
-      <h2 class="sub-h" style="margin-top:26px">5 bài phát âm — 44 âm</h2>
-      <p class="sub-p">Học lần lượt từ Bài 1: chơi đạt trò chơi cuối bài (từ 80%) là mở bài kế tiếp trong chương này. Số âm mỗi bài khác nhau — nguyên âm ngắn 7 âm, phụ âm mỗi phần 12 âm — trang ghi rõ ngay trên từng bài.</p>
+      <div class="pron-listen-sec" id="pronListenSec">
+        <h2 class="sub-h" style="margin-top:26px">Nghe phát âm ban đầu — nghe thử cả 44 âm</h2>
+        <p class="sub-p">Bấm vào từng âm để nghe thử. Nghe quen tai trước, rồi học bài nào trước cũng được — phần nghe này chỉ để làm quen, không có kiểm tra, không tính tiến độ, không bắt buộc nghe hết.</p>
+        <div id="pronListenGroups"></div>
+      </div>
+      <h2 class="sub-h" style="margin-top:30px">5 bài phát âm — 44 âm</h2>
+      <p class="sub-p">Chương này học <b>tự do</b>: cả 5 bài đều mở sẵn ngay từ đầu, bác thích học bài nào trước cũng được, không cần theo thứ tự, không có bài nào khóa bài nào. Chơi đạt trò chơi cuối bài (từ 80%) chỉ để ghi nhận bác đã hoàn thành bài đó. Số âm mỗi bài khác nhau — nguyên âm ngắn 7 âm, phụ âm mỗi phần 12 âm — trang ghi rõ ngay trên từng bài.</p>
       <div class="chapter-list" id="pronLessonList"></div>
     </div>
 
@@ -2082,7 +2114,7 @@ html[data-font="small"] .rb-close{font-size:max(14px,.88em)}
       </div>
 
       <h3 class="sub-h" style="margin-top:32px">4 · Trò chơi cuối bài</h3>
-      <p class="sub-p">Nghe máy đọc một từ, rồi chọn đúng ký hiệu âm có trong từ đó. Đúng từ 80% là hoàn thành bài này và mở bài phát âm tiếp theo.</p>
+      <p class="sub-p">Nghe máy đọc một từ, rồi chọn đúng ký hiệu âm có trong từ đó. Đúng từ 80% là ghi nhận hoàn thành bài này — các bài phát âm khác vẫn mở sẵn, bác học bài nào trước cũng được.</p>
       <div id="pronGameWrap"></div>
       <div class="quiz-result" id="pronGameResult" role="status"></div>
     </div>
@@ -2377,6 +2409,14 @@ function refreshProgress(){
     s.textContent = (earned ? "🏅 " : "☆ ") + "Chương " + C.id + ": " + C.title + " (" + dn + "/10)";
     br.appendChild(s);
   });
+  CHAPTERS.forEach(function(C){
+    if(typeof examPassed === "function" && examPassed(C.id)){
+      var es = document.createElement("span"); es.className = "badge-chip earned";
+      var bTxt = (typeof examState !== "undefined" && examState.best && examState.best[C.id]) ? (" · điểm cao nhất " + examState.best[C.id] + "/20") : "";
+      es.textContent = "🏅 Đã qua Kiểm tra tổng hợp Chương " + C.id + bTxt;
+      br.appendChild(es);
+    }
+  });
   if(state.totalBest >= 5){
     var s2 = document.createElement("span"); s2.className = "badge-chip earned";
     s2.textContent = "🏅 Kiểm tra tổng hợp: " + state.totalBest + "/6"; br.appendChild(s2);
@@ -2499,9 +2539,9 @@ function renderLessonGrid(){
       var locked = !isUnlocked(L);
       row.className = "lesson-row" + (state.completed[L.id] ? " is-done" : "") + (locked ? " is-locked" : "");
       var nm = document.createElement("span"); nm.className = "lr-name";
-      nm.textContent = "Bài " + L.n + ": " + L.title;
+      nm.textContent = L.n === 10 ? ("Bài 10: Kiểm tra tổng hợp Chương " + L.ch + " (20 câu)") : ("Bài " + L.n + ": " + L.title);
       var st = document.createElement("span"); st.className = "lr-status";
-      st.textContent = state.completed[L.id] ? "✓ Đã hoàn thành" : (locked ? "🔒 Đang khóa" : (state.gatePassed[L.id] || L.id===1 ? "▶ Vào học" : "▶ Kiểm tra bài cũ rồi học"));
+      st.textContent = state.completed[L.id] ? (L.n === 10 ? "✓ Đã đạt kiểm tra" : "✓ Đã hoàn thành") : (locked ? "🔒 Đang khóa" : (state.gatePassed[L.id] || L.id===1 ? "▶ Vào học" : "▶ Kiểm tra bài cũ rồi học"));
       row.appendChild(nm); row.appendChild(st);
       row.addEventListener("click", function(){ openLesson(L.id); });
       body.appendChild(row);
@@ -2540,9 +2580,13 @@ function openLesson(id, opts){
 function enterLesson(L, tab){
   currentLesson = L;
   fcIndex = 0; fcFlipped = false;
-  document.getElementById("lessonTitle").textContent = "Chương " + L.ch + " · Bài " + L.n + ": " + L.title;
-  document.getElementById("lessonSub").textContent = L.sub;
-  document.getElementById("lessonGoal").textContent = L.goal;
+  document.getElementById("lessonTitle").textContent = L.n === 10 ? ("Chương " + L.ch + " · Bài 10: Kiểm tra tổng hợp Chương " + L.ch) : ("Chương " + L.ch + " · Bài " + L.n + ": " + L.title);
+  document.getElementById("lessonSub").textContent = L.n === 10 ? ("Chương " + L.ch + " · Bài 10 — Kiểm tra tổng hợp cuối chương") : L.sub;
+  document.getElementById("lessonGoal").textContent = L.n === 10 ? "Đây là bài kiểm tra cuối chương: 20 câu trộn đủ 6 dạng, lấy từ tất cả 9 bài của chương này. Đúng từ 16/20 câu là đạt — chương hoàn thành và Bài 1 của chương tiếp theo sẽ mở ra. Chưa đạt thì ôn lại rồi làm lại thoải mái, không giới hạn số lần." : L.goal;
+  var quizHead = document.querySelector("#panel-quiz .sub-h");
+  if(quizHead) quizHead.textContent = L.n === 10 ? ("Kiểm tra tổng hợp Chương " + L.ch + " — đạt là qua chương") : "Trò chơi cuối bài — chơi để hoàn thành bài";
+  var quizTab = document.querySelector('.tab-btn[data-tab="quiz"]');
+  if(quizTab) quizTab.textContent = L.n === 10 ? "5 · Kiểm tra tổng hợp" : "5 · Trò chơi";
   switchTab(tab || "vocab");
   renderVocab(); renderFlashcard(); renderDialogue(); renderSpeakPick(); renderGame();
   updateGateBanner();
@@ -4942,7 +4986,7 @@ var GAME_INFO = {
   7:{name:"Nghe và chọn câu đúng", intro:"Nghe máy đọc một câu hoàn chỉnh, rồi chọn đúng câu bác vừa nghe.", rule:"Có 5 câu — đúng từ 4 câu (80%) là hoàn thành bài."},
   8:{name:"Đúng hay Sai", intro:"Trang web hiện một từ cùng một nghĩa — bác xem nghĩa đó đúng hay sai rồi bấm nút.", rule:"Có 5 câu — đúng từ 4 câu (80%) là hoàn thành bài."},
   9:{name:"Ghép hội thoại", intro:"Bấm các câu hội thoại theo đúng thứ tự nói chuyện, từ câu đầu tiên đến câu cuối cùng.", rule:"Bấm nhầm không quá 1 lần (đạt từ 80%) là hoàn thành bài."},
-  10:{name:"Thử thách tổng ôn chương", intro:"10 câu hỏi trộn từ vựng, nghe và xếp câu của cả chương. Bác có 3 mạng — mỗi câu sai mất 1 mạng.", rule:"Đúng từ 8/10 câu là hoàn thành bài và cả chương."}
+  10:{name:"Kiểm tra tổng hợp chương", intro:"Bài kiểm tra thật của cả chương: 20 câu với 6 dạng — chọn nghĩa đúng, chọn từ tiếng Anh, nghe và chọn, điền từ vào câu, sắp xếp từ thành câu, đọc hội thoại và chọn đáp án. Câu hỏi lấy từ tất cả 9 bài của chương và xáo trộn mỗi lần làm. Không giới hạn thời gian, bác cứ thong thả.", rule:"Đúng từ 16/20 câu (80%) là đạt: hoàn thành chương này và mở Bài 1 của chương tiếp theo. Chưa đạt thì ôn lại rồi làm lại thoải mái — không giới hạn số lần, không phạt."}
 };
 function renderGame(){
   stopGameTimer();
@@ -5409,44 +5453,357 @@ function gameDialogueOrder(wrap, L){
   });
 }
 
-/* ---------- Game 10: Thử thách tổng ôn chương ---------- */
-function gameChallenge(wrap, L){
-  var vp = chapterVocab(L.ch);
-  var vs = shuffle(vp.slice());
+/* ---------- Bài 10: KIỂM TRA TỔNG HỢP CUỐI CHƯƠNG ----------
+   20 câu · 6 dạng · sinh từ dữ liệu thật của Bài 1–9 trong chương
+   (45 từ/cụm + câu mẫu + 90 câu hội thoại), xáo trộn mỗi lần làm.
+   Đạt ≥16/20 → hoàn thành Bài 10 (= xong chương) → mới mở Bài 1
+   chương sau qua chuỗi khóa tuyến tính sẵn có (isUnlocked).
+   Trạng thái kiểm tra lưu ở khóa localStorage RIÊNG; người học cũ
+   đã xong Bài 10 theo game tổng ôn cũ được coi như đã đạt (migrate
+   trong examLoad, không khóa lại chương sau, không mất tiến độ). */
+var EXAM_KEY = "tieng-anh-kiem-tra-chuong-v1";
+var examState = { passed:{}, best:{}, attempts:{} };
+function examLoad(){
+  try{
+    var raw = localStorage.getItem(EXAM_KEY);
+    if(raw){ var p = JSON.parse(raw); if(p && typeof p === "object"){
+      if(p.passed && typeof p.passed === "object") examState.passed = p.passed;
+      if(p.best && typeof p.best === "object") examState.best = p.best;
+      if(p.attempts && typeof p.attempts === "object") examState.attempts = p.attempts;
+    }}
+  }catch(e){ /* dữ liệu kiểm tra hỏng/không có → bỏ qua, trang chính không vỡ */ }
+  CHAPTERS.forEach(function(C){
+    if(state.completed[C.id * 10] && !examState.passed[C.id]) examState.passed[C.id] = true;
+  });
+}
+function examSave(){ try{ localStorage.setItem(EXAM_KEY, JSON.stringify(examState)); }catch(e){} }
+function examPassed(ch){ return !!examState.passed[ch] || !!state.completed[ch * 10]; }
+
+function chapterVocabTagged(ch){
+  var out = [];
+  chapterLessons(ch).forEach(function(L){ if(L.n >= 10) return; L.vocab.forEach(function(v){ out.push({en:v.en, ipa:v.ipa, vi:v.vi, ex:v.ex, lessonN:L.n}); }); });
+  return out;
+}
+function chapterPhrasesTagged(ch){
+  var out = [];
+  chapterLessons(ch).forEach(function(L){ if(L.n >= 10) return; L.phrases.forEach(function(p){ out.push({en:p.en, vi:p.vi, lessonN:L.n}); }); });
+  return out;
+}
+function chapterDialogueTagged(ch){
+  var out = [];
+  chapterLessons(ch).forEach(function(L){ if(L.n >= 10) return; L.dialogue.forEach(function(d, i){ out.push({en:d.en, vi:d.vi, who:d.who, name:d.name, idx:i, lessonN:L.n, lessonId:L.id}); }); });
+  return out;
+}
+/* Lấy dàn đều theo bài: xáo trộn thứ tự bài, mỗi vòng mỗi bài góp 1 mục —
+   bảo đảm từ vựng/câu hỏi phủ cả 9 bài, không dồn vào 1–2 bài. */
+function spreadPick(tagged, count){
+  var byLesson = {};
+  tagged.forEach(function(t){ (byLesson[t.lessonN] = byLesson[t.lessonN] || []).push(t); });
+  var order = shuffle(Object.keys(byLesson));
+  var pools = {}; order.forEach(function(k){ pools[k] = shuffle(byLesson[k].slice()); });
+  var out = [], guard = 0;
+  while(out.length < count && guard < 600){
+    guard++;
+    var progressed = false;
+    for(var i = 0; i < order.length && out.length < count; i++){
+      var p = pools[order[i]];
+      if(p.length){ out.push(p.shift()); progressed = true; }
+    }
+    if(!progressed) break;
+  }
+  return out;
+}
+function fillCandidateFor(s, vocab){
+  var clean = s.en.replace(/[.!?]/g, "");
+  var toks = clean.split(/\s+/).filter(Boolean);
+  var lowToks = toks.map(function(t){ return t.toLowerCase().replace(/[^a-z'-]/g, ""); });
+  for(var vi2 = 0; vi2 < vocab.length; vi2++){
+    var v = vocab[vi2];
+    var core = v.en.replace(/[?!.,]/g, "").trim();
+    var ct = core.split(/\s+/).filter(Boolean).map(function(t){ return t.toLowerCase().replace(/[^a-z'-]/g, ""); });
+    if(!ct.length || ct.join("").length < 3) continue;
+    for(var i = 0; i + ct.length <= lowToks.length; i++){
+      var match = true;
+      for(var j = 0; j < ct.length; j++){ if(lowToks[i + j] !== ct[j]){ match = false; break; } }
+      if(match){
+        var disp = toks.slice();
+        for(var k2 = 0; k2 < ct.length; k2++) disp[i + k2] = "______";
+        var dispOut = [];
+        disp.forEach(function(t){ if(t === "______" && dispOut[dispOut.length - 1] === "______") return; dispOut.push(t); });
+        return { sentence:s, word:toks.slice(i, i + ct.length).join(" "), display:dispOut.join(" "), vocab:v };
+      }
+    }
+  }
+  return null;
+}
+function buildFillQuestions(vocab, phrases, dlg){
+  var sents = [];
+  phrases.forEach(function(p){ sents.push({en:p.en, vi:p.vi, lessonN:p.lessonN}); });
+  dlg.forEach(function(d){ sents.push({en:d.en, vi:d.vi, lessonN:d.lessonN}); });
+  sents = shuffle(sents);
+  var picked = [], usedWords = {}, usedLessons = {};
+  function tryPick(requireNewLesson){
+    for(var i = 0; i < sents.length && picked.length < 3; i++){
+      var s = sents[i];
+      if(requireNewLesson && usedLessons[s.lessonN]) continue;
+      var c = fillCandidateFor(s, shuffle(vocab.slice()));
+      if(!c) continue;
+      var key = c.word.toLowerCase();
+      if(usedWords[key]) continue;
+      usedWords[key] = true; usedLessons[s.lessonN] = true; picked.push(c);
+    }
+  }
+  tryPick(true); tryPick(false);
+  return picked.map(function(c){
+    var dis = shuffle(vocab.filter(function(x){ return x.en.toLowerCase() !== c.word.toLowerCase(); })).slice(0, 3).map(function(o){ return o.en; });
+    var opts = shuffle([{label:c.word, ok:true}].concat(dis.map(function(d){ return {label:d, ok:false}; })));
+    return { kind:"choice", typeLabel:"Dạng 4 · Điền từ còn thiếu vào câu", prompt:"Chọn từ đúng để điền vào chỗ trống:", context:c.display, contextVi:"Nghĩa cả câu: " + c.sentence.vi, options:opts, explain:"Câu đúng: “" + c.sentence.en + "” — " + c.sentence.vi + ".", correctLabel:c.word, listenText:c.sentence.en, vocabEn:c.vocab.en };
+  });
+}
+function pickDialogueResponse(dlg){
+  var byLesson = {};
+  dlg.forEach(function(d){ (byLesson[d.lessonId] = byLesson[d.lessonId] || []).push(d); });
+  var ids = shuffle(Object.keys(byLesson));
+  for(var i = 0; i < ids.length; i++){
+    var lines = byLesson[ids[i]];
+    var cand = [];
+    for(var j = 0; j < lines.length - 1; j++) cand.push(j);
+    cand = shuffle(cand);
+    for(var k = 0; k < cand.length; k++){
+      var a = lines[cand[k]], b = lines[cand[k] + 1];
+      if(a && b && a.en !== b.en) return { prompt:a.en, answer:b.en, answerVi:b.vi, whoName:(a.name ? a.name : ("Người " + a.who)) };
+    }
+  }
+  return null;
+}
+function buildChapterExamQuestions(L){
+  var ch = L.ch;
+  var vocab = chapterVocabTagged(ch);
+  var phrases = chapterPhrasesTagged(ch);
+  var dlg = chapterDialogueTagged(ch);
   var qs = [];
-  for(var i = 0; i < 5; i++){
-    var v = vs[i];
-    var others = shuffle(vp.filter(function(x){ return x.en !== v.en; })).slice(0, 3).map(function(o){ return o.vi; });
-    var opts = shuffle([v.vi].concat(others));
-    qs.push({type:"mcq", tag:"Tổng ôn · Chọn nghĩa đúng", q:"“" + v.en + "” nghĩa là gì?", opts:opts, answer:opts.indexOf(v.vi), explain:"“" + v.en + "” = " + v.vi + "."});
+  var usedEn = {};
+  function viDistractors(v, n){ return shuffle(vocab.filter(function(x){ return x.en !== v.en; })).slice(0, n).map(function(o){ return o.vi; }); }
+  function enDistractors(v, n){ return shuffle(vocab.filter(function(x){ return x.en !== v.en; })).slice(0, n).map(function(o){ return o.en; }); }
+  function mkChoice(typeLabel, prompt, correctLabel, distractors, explain, extra){
+    var opts = shuffle([{label:correctLabel, ok:true}].concat(distractors.map(function(d){ return {label:d, ok:false}; })));
+    var q = { kind:"choice", typeLabel:typeLabel, prompt:prompt, options:opts, explain:explain, correctLabel:correctLabel };
+    if(extra) for(var k in extra) q[k] = extra[k];
+    qs.push(q); return q;
   }
-  for(var j = 0; j < 3; j++){
-    var lv = vs[5 + j];
-    var o2 = shuffle(vp.filter(function(x){ return x.en !== lv.en; })).slice(0, 3).map(function(o){ return o.en; });
-    var opts2 = shuffle([lv.en].concat(o2));
-    qs.push({type:"listen", tag:"Tổng ôn · Nghe rồi chọn", q:"Bấm nút nghe, rồi chọn từ bác vừa nghe được:", listen:lv.en, opts:opts2, answer:opts2.indexOf(lv.en), explain:"Từ vừa đọc là “" + lv.en + "” — " + lv.vi + "."});
+  var vSpread = spreadPick(vocab, 9);
+  vSpread.forEach(function(v){ usedEn[v.en] = true; });
+  /* Dạng 1 · Chọn nghĩa đúng (Anh → Việt) × 4 */
+  vSpread.slice(0, 4).forEach(function(v){
+    mkChoice("Dạng 1 · Chọn nghĩa đúng", "“" + v.en + "” nghĩa là gì?", v.vi, viDistractors(v, 3), "“" + v.en + "” " + (v.ipa || "") + " = " + v.vi + ". (Từ của Bài " + v.lessonN + " trong chương)", { vocabEn:v.en, listenText:v.en });
+  });
+  /* Dạng 2 · Chọn từ tiếng Anh đúng (Việt → Anh) × 3 */
+  vSpread.slice(4, 7).forEach(function(v){
+    mkChoice("Dạng 2 · Chọn từ tiếng Anh đúng", "“" + v.vi + "” trong tiếng Anh là…?", v.en, enDistractors(v, 3), "“" + v.vi + "” = “" + v.en + "”. (Từ của Bài " + v.lessonN + " trong chương)", { vocabEn:v.en, listenText:v.en });
+  });
+  /* Dạng 3 · Nghe và chọn đúng × 4 (2 từ + 2 câu, TTS tốc độ Thường) */
+  vSpread.slice(7, 9).forEach(function(v){
+    mkChoice("Dạng 3 · Nghe và chọn từ đúng", "Bấm nút nghe, rồi chọn từ bác vừa nghe được:", v.en, enDistractors(v, 3), "Từ vừa đọc là “" + v.en + "” — " + v.vi + ".", { vocabEn:v.en, listen:v.en, listenText:v.en });
+  });
+  spreadPick(phrases, 2).forEach(function(p){
+    var dis = shuffle(phrases.filter(function(x){ return x.en !== p.en; })).slice(0, 2).map(function(o){ return o.en; });
+    mkChoice("Dạng 3 · Nghe và chọn câu đúng", "Bấm nút nghe, rồi chọn câu bác vừa nghe được:", p.en, dis, "Câu vừa đọc là “" + p.en + "” — " + p.vi + ".", { listen:p.en, listenText:p.en });
+  });
+  /* Dạng 4 · Điền từ còn thiếu × 3 */
+  buildFillQuestions(vocab, phrases, dlg).forEach(function(q){ qs.push(q); if(q.vocabEn) usedEn[q.vocabEn] = true; });
+  /* Dạng 5 · Sắp xếp từ thành câu × 3 */
+  var orderPool = phrases.filter(function(p){ var n = p.en.replace(/[.!?]/g, "").split(/\s+/).filter(Boolean).length; return n >= 3 && n <= 7; });
+  spreadPick(orderPool, 3).forEach(function(p){
+    var words = p.en.replace(/[.!?]/g, "").split(/\s+/).filter(Boolean);
+    qs.push({ kind:"order", typeLabel:"Dạng 5 · Sắp xếp từ thành câu", prompt:"Sắp xếp các từ thành câu: “" + p.vi + "”", words:words, sentence:words.join(" "), explain:"Câu đúng: “" + p.en + "” — " + p.vi + ".", correctLabel:p.en, listenText:p.en });
+  });
+  /* Dạng 6 · Đọc và chọn đúng × 3 (2 câu nghĩa + 1 câu trả lời hội thoại) */
+  spreadPick(phrases, 2).forEach(function(p){
+    var dis = shuffle(phrases.filter(function(x){ return x.en !== p.en; })).slice(0, 3).map(function(o){ return o.vi; });
+    mkChoice("Dạng 6 · Đọc câu và chọn nghĩa đúng", "Câu này nghĩa là gì?", p.vi, dis, "“" + p.en + "” = " + p.vi + ".", { context:p.en, listenText:p.en });
+  });
+  var resp = pickDialogueResponse(dlg);
+  if(resp){
+    var dis2 = shuffle(dlg.filter(function(x){ return x.en !== resp.answer; })).slice(0, 2).map(function(o){ return o.en; });
+    mkChoice("Dạng 6 · Đọc hội thoại và chọn câu trả lời", "Người kia trả lời thế nào cho hợp?", resp.answer, dis2, "Trong hội thoại: “" + resp.prompt + "” → “" + resp.answer + "” — " + resp.answerVi + ".", { context:resp.whoName + ": " + resp.prompt, listenText:resp.answer });
   }
-  var phrasesPool = [];
-  chapterLessons(L.ch).forEach(function(x){ x.phrases.forEach(function(p){ phrasesPool.push(p); }); });
-  shuffle(phrasesPool.slice()).slice(0, 2).forEach(function(ph){
-    var words = ph.en.replace(/[.!?]/g, "").split(/\s+/).filter(Boolean);
-    qs.push({type:"order", tag:"Tổng ôn · Sắp xếp thành câu", q:"Sắp xếp thành câu “" + ph.vi + "”:", words:words, sentence:words.join(" "), explain:"Câu đúng: “" + ph.en + "” — " + ph.vi + "."});
-  });
-  qs = shuffle(qs);
-  wrap.appendChild(gEl("p", "game-q", "10 câu hỏi trộn của cả chương. Bác có 3 mạng ❤❤❤ — mỗi câu sai mất 1 mạng. Đúng từ 8/10 câu là hoàn thành bài và cả chương!"));
-  var qw = gEl("div", ""); wrap.appendChild(qw);
-  buildQuiz(qs, qw);
-  var sub = bigBtn("Chấm bài thử thách", "btn-primary"); sub.style.marginTop = "6px";
-  sub.addEventListener("click", function(){
-    var r = gradeQuiz(qs, qw);
-    if(!r.answeredAll){ toast("Bác trả lời hết 10 câu đã nhé — còn câu chưa làm."); return; }
-    sub.disabled = true;
-    var wrong = qs.length - r.score;
-    var lives = 3 - wrong;
-    var hearts = lives > 0 ? new Array(lives + 1).join("❤") : "hết mạng";
-    finishGame(r.score >= 8, r.score * 10, "Đúng " + r.score + " / 10 câu · Mạng còn: " + hearts, r.score >= 8 ? "Bác đã vượt qua thử thách tổng ôn — hoàn thành cả chương này!" : "Cần đúng ít nhất 8/10 câu. Bác xem lại giải thích ở từng câu, ôn thêm rồi thử lại nhé.");
-  });
-  wrap.appendChild(sub);
+  /* Bù cho đủ đúng 20 câu nếu một dạng nào đó thiếu dữ liệu (phòng hờ) */
+  var extraPool = spreadPick(vocab.filter(function(v){ return !usedEn[v.en]; }), 20);
+  var ei = 0;
+  while(qs.length < 20 && ei < extraPool.length){
+    var ev = extraPool[ei++];
+    mkChoice("Dạng 1 · Chọn nghĩa đúng", "“" + ev.en + "” nghĩa là gì?", ev.vi, viDistractors(ev, 3), "“" + ev.en + "” = " + ev.vi + ". (Từ của Bài " + ev.lessonN + " trong chương)", { vocabEn:ev.en, listenText:ev.en });
+  }
+  if(qs.length > 20) qs = qs.slice(0, 20);
+  return shuffle(qs);
+}
+function finishChapterExam(L, total, score, wrongs){
+  var pass = score >= 16;
+  var pct = Math.round(score / total * 100);
+  if(pass){
+    state.completed[L.id] = true;
+    if(pct > (state.gameBest[L.id] || 0)) state.gameBest[L.id] = pct;
+    examState.passed[L.ch] = true;
+    if(score > (examState.best[L.ch] || 0)) examState.best[L.ch] = score;
+  }
+  saveState(); examSave(); refreshProgress();
+  var res = document.getElementById("gameResult"); if(!res) return;
+  res.className = "quiz-result show"; res.innerHTML = "";
+  res.style.background = pass ? "" : "var(--accent-soft)";
+  res.style.borderColor = pass ? "" : "var(--accent)";
+  res.appendChild(gEl("div", "score", score + " / " + total + " câu đúng"));
+  var msg = gEl("p", "", pass
+    ? ("Chúc mừng bác! Bác đã đạt bài Kiểm tra tổng hợp Chương " + L.ch + " — cả chương này coi như hoàn thành, Bài 1 của chương tiếp theo đã mở ra rồi.")
+    : ("Bác được " + score + "/" + total + " câu — cần đúng từ 16/20 câu là đạt. Không sao cả, rất nhiều người làm lần đầu chưa đạt ngay. Bác xem lại các câu sai ở dưới, ôn lại chương này một vòng rồi làm lại — làm lại bao nhiêu lần cũng được, không bị phạt gì đâu."));
+  msg.style.fontWeight = "700"; msg.style.marginTop = "6px";
+  res.appendChild(msg);
+  if(wrongs.length){
+    res.appendChild(gEl("h3", "sub-h", pass ? "Câu bác làm sai — xem lại cho nhớ lâu:" : "Các câu cần ôn lại (có đáp án đúng và nút nghe lại):"));
+    var list = gEl("div", "exam-wrong-list");
+    wrongs.forEach(function(w, wi){
+      var item = gEl("div", "exam-wrong-item");
+      item.appendChild(gEl("p", "ew-q", (wi + 1) + ". " + (w.context ? (w.context + " — ") : "") + w.prompt));
+      if(w.userLabel) item.appendChild(gEl("p", "", "Bác đã chọn: " + w.userLabel));
+      var a = gEl("p", "ew-a", ""); a.appendChild(document.createTextNode("Đáp án đúng: "));
+      var bEl = gEl("b", "", w.correctLabel); a.appendChild(bEl); item.appendChild(a);
+      item.appendChild(gEl("p", "", w.explain));
+      if(w.listenText){ var lb = speakBtn(w.listenText, 1, "Nghe lại", false); lb.style.marginTop = "8px"; item.appendChild(lb); }
+      list.appendChild(item);
+    });
+    res.appendChild(list);
+  }
+  var acts = gEl("div", "game-acts");
+  if(pass){
+    var nx = lessonById(L.id + 1);
+    if(nx){
+      var nb = bigBtn("Sang Chương tiếp theo →", "btn-primary btn-next-big");
+      nb.addEventListener("click", function(){ openLesson(nx.id); });
+      acts.appendChild(nb);
+    } else {
+      var hend = bigBtn("Về trang chủ xem tiến độ →", "btn-primary btn-next-big");
+      hend.addEventListener("click", function(){ showView("viewHome"); refreshProgress(); });
+      acts.appendChild(hend);
+    }
+    var againP = bigBtn("Làm lại bài kiểm tra", "btn-ghost");
+    againP.addEventListener("click", function(){ renderGame(); });
+    acts.appendChild(againP);
+  } else {
+    var study = bigBtn("Ôn lại chương này", "btn-accent btn-next-big");
+    study.addEventListener("click", function(){
+      openChapters = {}; openChapters[L.ch] = true; renderLessonGrid(); showView("viewHome");
+      setTimeout(function(){ var s = document.getElementById("lessonsSection"); if(s) s.scrollIntoView({behavior:"smooth", block:"start"}); }, 80);
+    });
+    acts.appendChild(study);
+    var againF = bigBtn("Làm lại bài kiểm tra", "btn-primary btn-next-big");
+    againF.addEventListener("click", function(){ renderGame(); });
+    acts.appendChild(againF);
+  }
+  var hb = bigBtn("Về trang chính", "btn-soft");
+  hb.addEventListener("click", function(){ showView("viewHome"); refreshProgress(); });
+  acts.appendChild(hb);
+  res.appendChild(acts);
+  res.scrollIntoView({behavior:"smooth", block:"center"});
+}
+function gameChallenge(wrap, L){
+  var questions = buildChapterExamQuestions(L);
+  examState.attempts[L.ch] = (examState.attempts[L.ch] || 0) + 1; examSave();
+  var idx = 0, score = 0, wrongs = [];
+  var head = gEl("p", "exam-progress"); wrap.appendChild(head);
+  var barWrap = gEl("div", "exam-bar");
+  var barFill = gEl("div", "exam-bar-fill"); barWrap.appendChild(barFill); wrap.appendChild(barWrap);
+  var box = gEl("div", ""); wrap.appendChild(box);
+  function updHead(){
+    head.textContent = "Câu " + Math.min(idx + 1, questions.length) + " / " + questions.length + " · Đã đúng: " + score + " · Đạt từ 16/20 câu là qua chương";
+    barFill.style.transform = "scaleX(" + (idx / questions.length) + ")";
+  }
+  function recordResult(ok, q, userLabel){
+    if(ok) score++;
+    else {
+      if(q.vocabEn) recordWrong(q.vocabEn);
+      wrongs.push({ prompt:q.prompt, context:q.context || "", userLabel:userLabel || "", correctLabel:q.correctLabel, explain:q.explain, listenText:q.listenText || q.listen || "" });
+    }
+    updHead();
+  }
+  function nextButton(){
+    var b = bigBtn(idx === questions.length - 1 ? "Xem kết quả →" : "Câu tiếp theo →", "btn-primary btn-next-big");
+    b.style.marginTop = "14px";
+    b.addEventListener("click", function(){ idx++; renderQ(); });
+    return b;
+  }
+  function renderChoiceQ(q){
+    var grid = gEl("div", "q-opts");
+    var wide = q.options.some(function(o){ return o.label.length > 24; });
+    if(wide || q.options.length <= 3) grid.classList.add("one-col");
+    var correctBtn = null;
+    q.options.forEach(function(o){
+      var b = gEl("button", "q-opt", o.label); b.type = "button";
+      if(o.ok) correctBtn = b;
+      b.addEventListener("click", function(){
+        grid.querySelectorAll(".q-opt").forEach(function(x){ x.disabled = true; });
+        if(correctBtn) correctBtn.classList.add("correct");
+        if(!o.ok) b.classList.add("wrong");
+        recordResult(o.ok, q, o.label);
+        box.appendChild(gEl("p", "game-note", (o.ok ? "✓ Đúng rồi! " : "Chưa đúng. ") + q.explain));
+        box.appendChild(nextButton());
+        var nb = box.lastChild; if(nb && nb.scrollIntoView) nb.scrollIntoView({behavior:"smooth", block:"nearest"});
+      });
+      grid.appendChild(b);
+    });
+    box.appendChild(grid);
+  }
+  function renderOrderQ(q){
+    var zone = gEl("div", "order-zone");
+    var empty = gEl("span", "oz-empty", "Câu của bác sẽ hiện ở đây… (bấm vào từ đã chọn để bỏ ra)");
+    zone.appendChild(empty); box.appendChild(zone);
+    var bank = gEl("div", "word-bank"); box.appendChild(bank);
+    shuffle(q.words.slice()).forEach(function(w){
+      var chip = gEl("button", "word-chip", w); chip.type = "button";
+      chip.addEventListener("click", function(){
+        if(chip.classList.contains("used") || chip.disabled) return;
+        chip.classList.add("used");
+        var e = zone.querySelector(".oz-empty"); if(e) e.remove();
+        var placed = gEl("button", "word-chip in-zone", w); placed.type = "button";
+        placed.addEventListener("click", function(){
+          if(placed.disabled) return;
+          placed.remove(); chip.classList.remove("used");
+          if(!zone.querySelector(".in-zone")) zone.appendChild(empty);
+        });
+        zone.appendChild(placed);
+      });
+      bank.appendChild(chip);
+    });
+    var chk = bigBtn("Kiểm tra câu này", "btn-primary"); chk.style.marginTop = "14px";
+    chk.addEventListener("click", function(){
+      var placedEls = zone.querySelectorAll(".in-zone");
+      var built = Array.prototype.map.call(placedEls, function(p){ return p.textContent; }).join(" ");
+      if(!built){ toast("Bác hãy bấm các từ để xếp thành câu đã nhé."); return; }
+      var ok = normalize(built) === normalize(q.sentence);
+      chk.disabled = true;
+      bank.querySelectorAll(".word-chip").forEach(function(c){ c.disabled = true; });
+      placedEls.forEach(function(p){ p.disabled = true; });
+      recordResult(ok, q, built);
+      box.appendChild(gEl("p", "game-note", (ok ? "✓ Đúng rồi! " : "Chưa đúng. ") + q.explain));
+      box.appendChild(nextButton());
+    });
+    box.appendChild(chk);
+  }
+  function renderQ(){
+    box.innerHTML = "";
+    if(idx >= questions.length){ finishChapterExam(L, questions.length, score, wrongs); return; }
+    updHead();
+    var q = questions[idx];
+    box.appendChild(gEl("div", "q-tag", q.typeLabel));
+    if(q.context) box.appendChild(gEl("div", "exam-context", q.context));
+    box.appendChild(gEl("p", "game-q", q.prompt));
+    if(q.contextVi) box.appendChild(gEl("p", "exam-hint", q.contextVi));
+    if(q.listen){
+      var lb = speakBtn(q.listen, 1, "Nghe", false); lb.style.marginBottom = "14px";
+      box.appendChild(lb);
+      setTimeout(function(){ speak(q.listen, 1); }, 350);
+    }
+    if(q.kind === "order") renderOrderQ(q); else renderChoiceQ(q);
+  }
+  renderQ();
 }
 
 
@@ -5602,6 +5959,7 @@ if(voiceDiagCopyEl) voiceDiagCopyEl.addEventListener("click", function(){ copyVo
 var voiceDiagOverlayEl = document.getElementById("voiceDiagOverlay");
 if(voiceDiagOverlayEl) voiceDiagOverlayEl.addEventListener("click", function(e){ if(e.target === voiceDiagOverlayEl) closeVoiceDiag(); });
 loadState();
+examLoad();
 updateStreak();
 renderLessonGrid();
 pickWotd();
@@ -5716,7 +6074,9 @@ var PRON_PAIRS = [
   {a:["cat","/kæt/","con mèo"], b:["cut","/kʌt/","cắt"], note:"Khác nhau ở /æ/ (miệng mở rộng) và /ʌ/ (â ngắn)."}
 ];
 function pronLessonById(id){ return PRON_LESSONS.filter(function(L){ return L.id === id; })[0] || null; }
-function pronUnlocked(L){ return !!L && (L.n === 1 || !!pronState.completed["p" + (L.n - 1)]); }
+/* V19: chương phát âm học TỰ DO — mọi bài luôn mở, không khóa theo bài nào cả.
+   Game cuối bài chỉ ghi nhận hoàn thành (pronState.completed), không mở/khóa gì. */
+function pronUnlocked(L){ return !!L; }
 function pronDoneCount(){ return PRON_LESSONS.filter(function(L){ return pronState.completed[L.id]; }).length; }
 function pronLearnedCount(){ return Object.keys(pronState.learned).filter(function(k){ return pronState.learned[k]; }).length; }
 
@@ -5737,6 +6097,14 @@ function openPron(){
 }
 var ctaPronEl = document.getElementById("ctaPron");
 if(ctaPronEl) ctaPronEl.addEventListener("click", openPron);
+var ctaPronListenEl = document.getElementById("ctaPronListen");
+if(ctaPronListenEl) ctaPronListenEl.addEventListener("click", function(){
+  openPron();
+  setTimeout(function(){
+    var el = document.getElementById("pronListenSec");
+    if(el) el.scrollIntoView({behavior:"smooth", block:"start"});
+  }, 80);
+});
 var pronHomeHeadEl = document.getElementById("pronHomeHead");
 if(pronHomeHeadEl) pronHomeHeadEl.addEventListener("click", openPron);
 var menuGotoPronEl = document.getElementById("menuGotoPron");
@@ -5749,6 +6117,40 @@ function renderPronHome(){
   if(prog) prog.textContent = pronDoneCount() + " / 5 bài · " + pronLearnedCount() + " / 44 âm đã thuộc";
   var fill = document.getElementById("pronHomeFill");
   if(fill) fill.style.transform = "scaleX(" + (pronDoneCount() / 5) + ")";
+}
+
+/* ---------- Nghe phát âm ban đầu: lưới 44 âm, bấm là nghe từ ví dụ ----------
+   Thuần nghe làm quen: không kiểm tra, không ghi tiến độ, không khóa gì.
+   Dữ liệu lấy nguyên từ PRON_LESSONS (mỗi âm dùng đúng 2 từ ví dụ của bài học). */
+var PRON_LISTEN_GROUPS = [
+  { title:"Nguyên âm ngắn — 7 âm", ids:["p1"] },
+  { title:"Nguyên âm dài — 5 âm", ids:["p2"] },
+  { title:"Nguyên âm đôi — 8 âm", ids:["p3"] },
+  { title:"Phụ âm — 24 âm", ids:["p4","p5"] }
+];
+function renderPronListen(){
+  var wrap = document.getElementById("pronListenGroups"); if(!wrap) return;
+  wrap.innerHTML = "";
+  PRON_LISTEN_GROUPS.forEach(function(g){
+    var sec = document.createElement("div"); sec.className = "pron-listen-group";
+    var h = document.createElement("h3"); h.textContent = g.title; sec.appendChild(h);
+    var grid = document.createElement("div"); grid.className = "pron-listen-grid";
+    g.ids.forEach(function(id){
+      var L = pronLessonById(id); if(!L) return;
+      L.sounds.forEach(function(s){
+        var cell = document.createElement("button"); cell.type = "button"; cell.className = "pron-listen-cell";
+        cell.setAttribute("aria-label", "Nghe âm /" + s.ipa + "/ — từ ví dụ: " + s.ex[0][0] + ", " + s.ex[1][0]);
+        var ip = document.createElement("span"); ip.className = "plc-ipa"; ip.textContent = "/" + s.ipa + "/";
+        var w1 = document.createElement("span"); w1.className = "plc-word"; w1.textContent = s.ex[0][0] + " — " + s.ex[0][2];
+        var w2 = document.createElement("span"); w2.className = "plc-word2"; w2.textContent = s.ex[1][0] + " — " + s.ex[1][2];
+        cell.appendChild(ip); cell.appendChild(w1); cell.appendChild(w2);
+        cell.addEventListener("click", function(){ speak(s.ex[0][0], 0.85); });
+        grid.appendChild(cell);
+      });
+    });
+    sec.appendChild(grid);
+    wrap.appendChild(sec);
+  });
 }
 
 /* ---------- Danh sách 5 bài ---------- */
@@ -5765,15 +6167,11 @@ function renderPronIndex(){
     htxt.appendChild(t); htxt.appendChild(d); row.appendChild(htxt);
     var meta = document.createElement("span"); meta.className = "ch-meta";
     var done = !!pronState.completed[L.id];
-    var locked = !pronUnlocked(L);
     var st = document.createElement("span"); st.className = "ch-prog";
-    st.textContent = done ? "✓ Đã hoàn thành" : (locked ? "🔒 Học bài trước đã" : "▶ Vào học");
+    st.textContent = done ? "✓ Đã hoàn thành" : "▶ Vào học tự do";
     var chev = document.createElement("span"); chev.className = "ch-chev"; chev.setAttribute("aria-hidden", "true"); chev.textContent = "▸ Mở bài";
     meta.appendChild(st); meta.appendChild(chev); row.appendChild(meta);
-    row.addEventListener("click", function(){
-      if(!pronUnlocked(L)){ toast("Bác học Bài " + (L.n - 1) + " của chương phát âm trước nhé — chơi đạt trò chơi cuối bài là bài này mở ra. Hoặc bấm nút cam ở trên để vào thẳng Chương 1."); return; }
-      openPronLesson(L.id);
-    });
+    row.addEventListener("click", function(){ openPronLesson(L.id); });
     card.appendChild(row);
     wrap.appendChild(card);
   });
@@ -5782,7 +6180,7 @@ function renderPronIndex(){
 /* ---------- Một bài phát âm ---------- */
 var pronCurrent = null, pfcIndex = 0, pfcFlipped = false;
 function openPronLesson(id){
-  var L = pronLessonById(id); if(!L || !pronUnlocked(L)) return;
+  var L = pronLessonById(id); if(!L) return;
   pronCurrent = L; pfcIndex = 0; pfcFlipped = false;
   document.getElementById("pronIndex").style.display = "none";
   document.getElementById("pronLessonView").style.display = "block";
@@ -6006,6 +6404,7 @@ function finishPronGame(pass, pct, score, total){
 try{
   pronLoad();
   renderPronHome();
+  renderPronListen();
   renderPronIndex();
 }catch(e){}
 </script>
