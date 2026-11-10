@@ -1525,6 +1525,75 @@ html[data-font="small"] .rb-close{font-size:max(14px,.88em)}
 .faq-item p{color:var(--ink-2); line-height:1.65}
 @media (max-width:700px){ .seo-chapters{grid-template-columns:1fr} .faq-item{padding:18px 16px} }
 
+/* ============================================================
+   V19 — TỐI ƯU BỐ CỤC “CHO HẾT TRANG” (desktop + điện thoại)
+   Nguyên tắc: lấp khoảng trắng bằng BỐ CỤC (khung rộng hơn, lưới
+   nhiều cột, lề gọn theo thang 4px) — KHÔNG đổi cỡ chữ, KHÔNG thu
+   vùng bấm (nút vẫn ≥56px, khe giữa hai nút kề nhau ≥8px).
+   ============================================================ */
+/* --- Màn hình rộng (≥1024px): khung 1200px + lưới nhiều cột --- */
+@media (min-width:1024px){
+  .wrap{max-width:1200px; padding:0 24px}
+  /* Trang chủ: thẻ chương dàn 2 cột, bài trong chương bám hết thẻ */
+  .chapter-list{display:grid; grid-template-columns:1fr 1fr; gap:18px; align-items:start}
+  /* Giới thiệu + FAQ: hết một cột hẹp */
+  .seo-intro-txt{max-width:none}
+  .seo-chapters{grid-template-columns:repeat(3,1fr)}
+  .faq-list{display:grid; grid-template-columns:1fr 1fr; gap:14px; align-items:start}
+  /* Bài học: 5 thẻ từ / thẻ âm / câu mẫu dàn 2 cột, panel Đọc lại
+     nằm trong thẻ nên cũng theo khung rộng mới */
+  .vocab-list{display:grid; grid-template-columns:1fr 1fr; gap:14px; align-items:start}
+  html[data-font="xlarge"] .vocab-list{grid-template-columns:1fr}
+  /* Hội thoại + Luyện nói dùng gần hết khung */
+  .dlg-line{max-width:84%}
+  .speak-box{max-width:1020px; margin-left:auto; margin-right:auto}
+  /* Thẻ ghi nhớ: sân khấu rộng hơn, vẫn căn giữa */
+  .fc-stage{max-width:720px}
+  /* Game: lưới thẻ nhớ thêm cột; danh sách câu sai của bài kiểm tra
+     tổng hợp dàn 2 cột */
+  .mem-grid{grid-template-columns:repeat(4,1fr)}
+  .exam-wrong-list{display:grid; grid-template-columns:1fr 1fr; gap:12px; align-items:start}
+  /* Phát âm: cặp âm dễ nhầm dàn 2 cột */
+  #pronPairs{display:grid; grid-template-columns:1fr 1fr; gap:14px; align-items:start}
+  #pronPairs .pair-card{margin-bottom:0}
+}
+@media (min-width:1280px){
+  /* Lưới “Nghe phát âm ban đầu”: ô nhỏ hơn một chút để 44 ô dàn
+     8 cột trong khung 1200px, ô vẫn cao ≥100px dễ bấm */
+  .pron-listen-grid{grid-template-columns:repeat(auto-fill,minmax(124px,1fr))}
+}
+/* --- Điện thoại (≤767px): lề gọn 14px, bớt đệm dọc chết --- */
+@media (max-width:767px){
+  .wrap{padding:0 14px}
+  .hero{padding:28px 0 20px}
+  section.block{padding:28px 0}
+  .sec-head{margin-bottom:16px}
+  .lesson-head{padding:22px 0 4px}
+  .tabs{margin:16px 0}
+  /* Bỏ lề lồng nhau thừa: thẻ con bớt đệm ngang vì khung đã có lề */
+  .panel,.progress-card{padding:20px}
+  .rm-card{padding:20px}
+  .ch-head{padding:16px 16px 8px}
+  .ch-body{padding:0 12px 14px}
+  .ch-bar{margin:4px 16px 14px}
+  .vocab-row{padding:16px}
+  .speak-box{padding:20px}
+  .game-box{padding:18px}
+  .quiz-q{padding:18px}
+  .pair-card{padding:16px}
+  .faq-item{padding:18px 16px}
+  /* Khoảng dọc giữa các thẻ/mục gọn lại theo thang 4px */
+  .chapter-list{gap:14px}
+  .steps,.tips,.lesson-grid,.two-col{gap:14px}
+  .vocab-list{gap:10px}
+  .faq-list{gap:10px}
+  .dlg{gap:10px}
+  .review-list{gap:8px}
+  /* Lưới 44 ô âm: 4 cột ở 360–390px, ô vẫn cao ≥100px dễ bấm */
+  .pron-listen-grid{grid-template-columns:repeat(4,minmax(0,1fr)); gap:8px}
+  .pron-listen-cell{min-width:0; padding:10px 4px}
+}
+
 </style>
 </head>
 <body>
@@ -3096,6 +3165,7 @@ function spSRAdapter(session){
     phase: function(p){
       var btn = document.getElementById("micBtn"), fb = document.getElementById("speakFeedback");
       if(p === "listening"){ btn.classList.add("listening"); spStatus("Đang nghe… bác đọc to câu mẫu nhé! Đọc xong cứ dừng lại, trang tự chấm ngay."); fb.className = "feedback"; fb.textContent = ""; }
+      else if(p === "retry"){ btn.classList.add("listening"); spStatus("Chưa rõ, đang nghe lại… bác đọc lại câu mẫu một lần nữa nhé!"); fb.className = "feedback"; fb.textContent = ""; }
     },
     result: function(res){ noteSrResult(); noteSrSessionAudible(); gradeSpeak(res[0].transcript || ""); },
     error: function(kind, meta){
@@ -4318,6 +4388,19 @@ function startSRSession(session, adapter){
   var got = false, errorShown = false, settled = false, attempts = 0;
   var heardStart = false, attemptAt = 0;
   var rec = null, watchdog = null, errCapTimer = null;
+  /* V17 (theo nhật ký máy thật 10/11/2026): dịch vụ nhận giọng của
+     Chrome với từ đơn ngắn hay nghe thấy tiếng nói (đã onspeechstart)
+     nhưng KHÔNG trả kết quả — phiên onend với got=false, hoặc onerror
+     no-speech dù đã heardStart; khi có kết quả thì về rất muộn (tới
+     ~2,5 giây, sát onend). Vá: (1) phiên đã heardStart không bị bất kỳ
+     bộ canh giờ nào của trang cắt sớm — kết quả được nhận cho tới khi
+     phiên thật sự kết thúc; (2) một LƯỢT bấm được nghe tối đa 2 lần:
+     lần 1 kết thúc rỗng dù đã nghe thấy tiếng thì TỰ NGHE LẠI 1 lần
+     (instance mới, chờ TTS im, ép en-US, nghỉ giữa phiên như thường),
+     panel chỉ hiện “Chưa rõ, đang nghe lại…”, không hiện “không nghe
+     thấy” giữa hai lần; (3) chỉ khi CẢ hai lần đều rỗng, lượt đó mới
+     tính MỘT strike cho cơ chế 2-lượt-rỗng → chuyển ghi âm tự kiểm tra. */
+  var retryUsed = false, attemptSeq = 0, emptyErrPending = false;
   var log = session.voiceLog || null;
   function logEv(name, detail){ if(log) log.ev(name, detail); }
   session.stopCapture = function(){
@@ -4375,9 +4458,83 @@ function startSRSession(session, adapter){
     }, 3000);
     session.resources.timers.push(watchdog);
   }
+  /* Trần cứng capMs tính cho TỪNG lần nghe: lần nghe lại được hưởng
+     trọn capMs mới, không bị trần của lần 1 cắt giữa chừng. */
+  function armCapTimer(){
+    if(session.capTimer){ clearTimeout(session.capTimer); session.capTimer = null; }
+    session.capTimer = setTimeout(function(){
+      if(MicSessions.isCurrent(session.id) && rec){ try{ rec.stop(); }catch(e){} }
+    }, session.capMs);
+  }
+  /* Tự nghe lại đúng 1 lần cho cùng đích của lượt bấm này (V17): chỉ
+     khi lần nghe vừa xong ĐÃ nghe thấy tiếng (heardStart) mà dịch vụ
+     không trả kết quả. Trả true nếu đã hẹn lần nghe lại — lượt bấm
+     chưa kết thúc, adapter chưa được báo gì cả (không strike, không
+     thông báo “không nghe thấy”). Instance cũ bị vô hiệu bằng
+     attemptSeq để mọi sự kiện đến muộn của nó bị bỏ qua. */
+  function scheduleRetry(reason){
+    if(settled || retryUsed) return false;
+    if(session._userStop || !MicSessions.isCurrent(session.id)) return false;
+    retryUsed = true;
+    attemptSeq += 1;
+    clearWatchdog(); clearErrCap();
+    srLastEndAt = Date.now();
+    session.resources.recog = null; rec = null;
+    logEv("retry-1", reason + " — tự nghe lại lần 2 cho cùng đích, chưa tính là không nghe thấy");
+    try{ adapter.phase("retry"); }catch(e){}
+    armCapTimer();
+    waitForTtsQuiet().then(function(){
+      if(settled || session._userStop) return;
+      if(!MicSessions.isCurrent(session.id)) return;
+      logEv("retry-tts-quiet", "speechSynthesis đã im — mở lần nghe lại");
+      var ios = /iPhone|iPad|iPod/.test(navigator.userAgent || "");
+      var gapMs = ios ? 600 : 350;
+      var gap = gapMs - (Date.now() - srLastEndAt);
+      if(gap > 0){
+        var dt = setTimeout(function(){ launch(); }, gap);
+        session.resources.timers.push(dt);
+      } else {
+        launch();
+      }
+    });
+    return true;
+  }
+  /* Một lần nghe kết thúc RỖNG (không kết quả, không lỗi chốt): nếu
+     lần đó đã nghe thấy tiếng và chưa dùng lần nghe lại → nghe lại;
+     ngược lại mới kết lượt và báo adapter đúng một lần (một strike
+     cho cả lượt, không phải cho từng lần nghe). */
+  function attemptEndedEmpty(){
+    if(scheduleRetry("lần nghe đã nghe thấy tiếng nhưng không có kết quả")) return;
+    var dur = attemptAt ? Date.now() - attemptAt : 0;
+    settle(function(){
+      adapter.ended(got, { dur: dur, dead: !got && !session._userStop && !heardStart });
+    });
+  }
+  /* onerror no-speech khi ĐÃ heardStart (V17): không kết án ngay —
+     đánh dấu “lần nghe rỗng”, chờ onend về để nghe lại; nếu onend
+     không về sau 1,5s (trần cứng cũ) thì tự coi lần nghe đã kết thúc
+     rỗng và đi tiếp đường nghe lại / kết lượt như onend. */
+  function armEmptyErrCap(){
+    clearErrCap();
+    errCapTimer = setTimeout(function(){
+      if(settled || !emptyErrPending) return;
+      if(!MicSessions.isCurrent(session.id)) return;
+      emptyErrPending = false;
+      logEv("errcap-1.5s", "onerror no-speech (đã heardStart) mà onend không về — coi như lần nghe kết thúc rỗng");
+      if(rec){ try{ rec.abort(); }catch(e){} }
+      attemptEndedEmpty();
+    }, 1500);
+    session.resources.timers.push(errCapTimer);
+  }
   function launch(){
     if(settled || !MicSessions.isCurrent(session.id)) return;
     attempts += 1;
+    attemptSeq += 1;
+    var mySeq = attemptSeq;
+    /* Mỗi lần nghe là một lần độc lập: reset cờ của lần trước để
+       watchdog / no-speech của lần nghe lại được xét đúng theo những
+       gì lần này thật sự nghe được. */
+    heardStart = false; errorShown = false; emptyErrPending = false;
     /* Instance MỚI cho mỗi phiên — không bao giờ dùng lại instance cũ:
        trên iOS Safari, start() lần hai trên cùng một instance thường
        chết lặng hoặc ném InvalidStateError. */
@@ -4397,6 +4554,7 @@ function startSRSession(session, adapter){
     logEv("launch#" + attempts, "lang=" + rec.lang + " · instance tích lũy=" + srInstanceTotal);
     rec.onstart = function(){
       if(!MicSessions.isCurrent(session.id)) return;
+      if(mySeq !== attemptSeq) return;
       heardStart = true;
       logEv("onstart");
       MicSessions.setPhase(session, "listening");
@@ -4409,6 +4567,7 @@ function startSRSession(session, adapter){
     rec.onaudioend = function(){ logEv("onaudioend"); };
     rec.onresult = function(ev){
       if(!MicSessions.isCurrent(session.id)) return;
+      if(mySeq !== attemptSeq) return;
       got = true;
       var tr = "";
       try{ tr = (ev.results[0] && ev.results[0][0] && ev.results[0][0].transcript) || ""; }catch(e){}
@@ -4417,9 +4576,19 @@ function startSRSession(session, adapter){
     };
     rec.onerror = function(ev){
       if(!MicSessions.isCurrent(session.id)) return;
+      if(mySeq !== attemptSeq) return;
       var kind0 = (ev && ev.error) || "error";
       logEv("onerror", kind0 + (heardStart ? " (đã có onstart)" : " (CHƯA có onstart)"));
       if(got || kind0 === "aborted"){ armErrCap(); return; }
+      /* V17: no-speech nhưng ĐÃ nghe thấy tiếng nói bắt đầu — dịch vụ
+         hay trả lỗi này thay cho kết quả với từ đơn ngắn (nhật ký máy
+         thật). Coi như lần nghe rỗng: không kết án, chờ onend để tự
+         nghe lại 1 lần; onend không về thì armEmptyErrCap xử lý. */
+      if(kind0 === "no-speech" && heardStart && !retryUsed && !session._userStop){
+        emptyErrPending = true;
+        armEmptyErrCap();
+        return;
+      }
       errorShown = true;
       var dur = attemptAt ? Date.now() - attemptAt : 0;
       /* meta.started cho adapter phân biệt: lỗi xảy ra khi bộ nghe ĐÃ
@@ -4429,8 +4598,18 @@ function startSRSession(session, adapter){
     };
     rec.onend = function(){
       if(!MicSessions.isCurrent(session.id)) return;
+      if(mySeq !== attemptSeq) return;
       logEv("onend", "got=" + got + " · heardStart=" + heardStart);
       if(errorShown) return;
+      if(emptyErrPending){ emptyErrPending = false; clearErrCap(); }
+      /* V17: lần nghe ĐÃ nghe thấy tiếng mà kết thúc không kết quả
+         (kể cả vừa bị no-speech ở trên): chưa phải “không nghe thấy” —
+         tự nghe lại 1 lần trước khi tính. Chỉ khi lần nghe lại cũng
+         rỗng, attemptEndedEmpty mới kết lượt và tính một strike. */
+      if(!got && heardStart && !session._userStop){
+        attemptEndedEmpty();
+        return;
+      }
       var dur = attemptAt ? Date.now() - attemptAt : 0;
       settle(function(){
         /* “Chết lặng” = phiên kết thúc mà onstart KHÔNG hề tới: bộ
@@ -4454,9 +4633,7 @@ function startSRSession(session, adapter){
       settle(function(){ adapter.error("error", { dur: 0, started: false }); });
     }
   }
-  session.capTimer = setTimeout(function(){
-    if(MicSessions.isCurrent(session.id) && rec){ try{ rec.stop(); }catch(e){} }
-  }, session.capMs);
+  armCapTimer();
   adapter.phase("starting");
   /* Trình tự mở phiên (V15 — theo bằng chứng máy thật, không mở start
      ngay trong handler chạm nữa):
@@ -4547,13 +4724,17 @@ function startSRReadback(ctx, session){
   startSRSession(session, {
     maxAlternatives: 3,
     phase: function(p){
-      if(p !== "starting" && p !== "listening") return;
+      if(p !== "starting" && p !== "listening" && p !== "retry") return;
       var panel = rbPreparePanel(ctx);
       var status = document.createElement("p"); status.className = "rb-status";
-      status.textContent = "Đang nghe… bác đọc to: “" + ctx.target + "”";
+      status.textContent = p === "retry"
+        ? "Chưa rõ, đang nghe lại… bác đọc lại to: “" + ctx.target + "”"
+        : "Đang nghe… bác đọc to: “" + ctx.target + "”";
       panel.appendChild(status);
       var hint = document.createElement("p"); hint.className = "rb-line";
-      hint.textContent = "Đọc xong cứ im lặng — máy tự dừng và chấm.";
+      hint.textContent = p === "retry"
+        ? "Lần nghe vừa rồi máy chưa rõ — bác đọc lại một lần nữa nhé."
+        : "Đọc xong cứ im lặng — máy tự dừng và chấm.";
       panel.appendChild(hint);
       if(ctx.btn) ctx.btn.classList.add("listening");
     },
