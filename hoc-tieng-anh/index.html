@@ -1136,6 +1136,27 @@ html.hc .hc-menu-btn[aria-pressed="true"] .hc-state{color:#fff}
 }
 .voice-diag-actions{display:flex; gap:10px; flex-wrap:wrap}
 .voice-diag-actions .btn{flex:1 1 auto; min-height:52px}
+/* Sao lưu & khôi phục tiến độ */
+.backup-overlay{position:fixed; inset:0; z-index:200; background:rgba(18,24,18,.55); display:flex; align-items:flex-end; justify-content:center}
+.backup-overlay[hidden]{display:none}
+.backup-card{background:var(--surface); color:var(--ink); width:100%; max-width:640px; max-height:92dvh; overflow-y:auto; -webkit-overflow-scrolling:touch; border-radius:18px 18px 0 0; border:2px solid var(--border-strong); padding:18px; padding-bottom:calc(18px + env(safe-area-inset-bottom,0px))}
+@media (min-width:700px){ .backup-overlay{align-items:center; padding:20px} .backup-card{border-radius:18px} }
+.backup-head{display:flex; align-items:center; justify-content:space-between; gap:10px; margin-bottom:6px}
+.backup-title{font-family:var(--font-display); font-weight:700; font-size:max(19px,1.25em); line-height:1.35}
+.backup-intro{font-size:max(16px,1em); line-height:1.6; color:var(--ink-2); font-weight:600; margin-bottom:14px}
+.backup-step{border:2px solid var(--border); border-radius:var(--r-md); padding:16px; margin-top:14px; background:var(--surface-2)}
+.backup-step h3{font-size:max(18px,1.12em); margin-bottom:6px}
+.backup-step p{font-size:max(16px,1em); line-height:1.6; color:var(--ink-2); font-weight:600}
+.backup-ta{width:100%; min-height:118px; margin-top:12px; padding:12px; border:2px solid var(--border-strong); border-radius:var(--r-sm); background:var(--surface); color:var(--ink); font-size:16px; line-height:1.5; font-family:ui-monospace,Menlo,Consolas,monospace; resize:vertical; word-break:break-all}
+.backup-actions{display:flex; gap:10px; flex-wrap:wrap; margin-top:12px}
+.backup-actions .btn{flex:1 1 200px; min-height:56px}
+.backup-status{margin-top:12px; font-size:max(16px,1em); line-height:1.6; font-weight:700; border-radius:var(--r-sm); padding:12px 14px; display:none}
+.backup-status.show{display:block}
+.backup-status.ok{background:var(--success-soft); border:2px solid var(--success); color:var(--ink)}
+.backup-status.err{background:var(--danger-soft); border:2px solid var(--danger); color:var(--ink)}
+.backup-confirm{margin-top:12px; background:var(--accent-soft); border:2px solid var(--accent); border-radius:var(--r-sm); padding:14px 16px; font-size:max(16px,1em); line-height:1.6; font-weight:600; display:none}
+.backup-confirm.show{display:block}
+html[data-font="small"] .backup-intro, html[data-font="small"] .backup-step p, html[data-font="small"] .backup-status, html[data-font="small"] .backup-confirm{font-size:max(14px,1em)}
 /* Mức Nhỏ: chữ trong menu vẫn ≥14px như sàn của mức này */
 html[data-font="small"] .menu-toggle{font-size:max(14px,.9em)}
 html[data-font="small"] .dm-title{font-size:max(17px,1.2em)}
@@ -1545,6 +1566,11 @@ html[data-font="small"] .rb-close{font-size:max(14px,.88em)}
           <button type="button" class="dm-nav-btn" data-menu-goto="lessonsSection"><span>Lộ trình 6 chương · 60 bài</span><span class="dm-arrow" aria-hidden="true">→</span></button>
           <button type="button" class="dm-nav-btn" data-menu-goto="roadmapSection"><span>Bản đồ lộ trình</span><span class="dm-arrow" aria-hidden="true">→</span></button>
           <button type="button" class="dm-nav-btn" data-menu-goto="guideSection"><span>Cách học 3 bước</span><span class="dm-arrow" aria-hidden="true">→</span></button>
+        </div>
+        <div class="dm-section">
+          <div class="dm-label">Sao lưu &amp; khôi phục tiến độ</div>
+          <p class="dm-note">Tiến độ học đang lưu trên máy này. Nếu đổi điện thoại hoặc lỡ xóa dữ liệu web, hãy sao lưu trước để lấy lại tiến độ.</p>
+          <button type="button" class="dm-nav-btn" id="backupOpenBtn"><span>Sao lưu &amp; khôi phục tiến độ</span><span class="dm-arrow" aria-hidden="true">→</span></button>
         </div>
         <div class="dm-section">
           <div class="dm-label">Hỗ trợ kỹ thuật</div>
@@ -2190,6 +2216,50 @@ html[data-font="small"] .rb-close{font-size:max(14px,.88em)}
     <div class="voice-diag-body"><pre id="voiceDiagText">…</pre></div>
     <div class="voice-diag-actions">
       <button type="button" class="btn btn-primary" id="voiceDiagCopy">Sao chép nhật ký</button>
+    </div>
+  </div>
+</div>
+
+<div class="backup-overlay" id="backupOverlay" hidden role="dialog" aria-modal="true" aria-labelledby="backupTitle">
+  <div class="backup-card">
+    <div class="backup-head">
+      <span class="backup-title" id="backupTitle">Sao lưu &amp; khôi phục tiến độ</span>
+      <button type="button" class="icon-btn" id="backupClose">Đóng ✕</button>
+    </div>
+    <p class="backup-intro">Tiến độ học đang lưu trên máy này. Nếu đổi điện thoại hoặc lỡ xóa dữ liệu web, hãy sao lưu trước để lấy lại tiến độ ở máy mới.</p>
+    <div class="backup-step">
+      <h3>Bước 1 — Sao lưu tiến độ</h3>
+      <p>Bấm nút dưới đây, trang sẽ tạo một mã sao lưu. Bác chép mã này giữ lại (gửi cho chính mình qua Zalo cũng được), hoặc tải file sao lưu về máy để giữ.</p>
+      <div class="backup-actions">
+        <button type="button" class="btn btn-primary" id="backupCreateBtn">Sao lưu tiến độ</button>
+        <button type="button" class="btn btn-ghost" id="backupDownloadBtn">Tải file sao lưu</button>
+      </div>
+      <label for="backupCodeOut" style="display:block;font-weight:800;margin-top:14px">Mã sao lưu của bác:</label>
+      <textarea class="backup-ta" id="backupCodeOut" readonly placeholder="Mã sao lưu sẽ hiện ở đây sau khi bác bấm “Sao lưu tiến độ”."></textarea>
+      <div class="backup-actions">
+        <button type="button" class="btn btn-accent" id="backupCopyBtn">Sao chép mã sao lưu</button>
+      </div>
+      <div class="backup-status" id="backupStatus" role="status" aria-live="polite"></div>
+    </div>
+    <div class="backup-step">
+      <h3>Bước 2 — Khôi phục tiến độ</h3>
+      <p>Ở máy mới, dán mã sao lưu vào ô dưới đây, hoặc bấm “Chọn file sao lưu” để chọn file đã tải về trước đó. Sau đó bấm “Kiểm tra mã &amp; khôi phục”.</p>
+      <label for="backupCodeIn" style="display:block;font-weight:800;margin-top:10px">Dán mã sao lưu vào đây:</label>
+      <textarea class="backup-ta" id="backupCodeIn" placeholder="Dán mã bắt đầu bằng TA-SL- … vào đây"></textarea>
+      <div class="backup-actions">
+        <button type="button" class="btn btn-ghost" id="backupFileBtn">Chọn file sao lưu</button>
+        <input type="file" id="backupFileInput" accept=".json,.txt,application/json,text/plain" hidden />
+        <button type="button" class="btn btn-primary" id="backupCheckBtn">Kiểm tra mã &amp; khôi phục</button>
+      </div>
+      <div class="backup-status" id="restoreStatus" role="status" aria-live="polite"></div>
+      <div class="backup-confirm" id="backupConfirm">
+        <p id="backupConfirmText"></p>
+        <p style="margin-top:8px"><b>Khôi phục sẽ THAY THẾ toàn bộ tiến độ hiện tại trên máy này.</b> Bác có chắc chắn không?</p>
+        <div class="backup-actions">
+          <button type="button" class="btn btn-accent" id="backupRestoreBtn">Khôi phục</button>
+          <button type="button" class="btn btn-ghost" id="backupCancelBtn">Hủy</button>
+        </div>
+      </div>
     </div>
   </div>
 </div>
@@ -6425,6 +6495,151 @@ function finishPronGame(pass, pct, score, total){
   res.appendChild(acts);
   res.scrollIntoView({behavior:"smooth", block:"center"});
 }
+
+/* ============================================================
+   SAO LƯU / KHÔI PHỤC TIẾN ĐỘ
+   Thu thập động mọi khóa localStorage tiền tố "tieng-anh-",
+   trừ "tieng-anh-voice-log". Gói JSON có marker, version,
+   checksum FNV-1a + độ dài để phát hiện mã bị cắt cụt.
+   ============================================================ */
+var BACKUP_EXCLUDE_KEY = "tieng-anh-voice-log";
+var backupPendingPkg = null;
+var backupLastPkg = null;
+function backupSortedDataStr(data){
+  var keys = Object.keys(data).sort(); var sorted = {};
+  keys.forEach(function(k){ sorted[k] = data[k]; });
+  return JSON.stringify(sorted);
+}
+function backupHash(str){
+  var h = 0x811c9dc5;
+  for(var i=0;i<str.length;i++){ h ^= str.charCodeAt(i); h = Math.imul(h, 0x01000193) >>> 0; }
+  return ("0000000" + h.toString(16)).slice(-8);
+}
+function backupCollect(){
+  var data = {};
+  try{
+    for(var i=0;i<localStorage.length;i++){
+      var k = localStorage.key(i);
+      if(k && k.indexOf("tieng-anh-")===0 && k!==BACKUP_EXCLUDE_KEY){ var v = localStorage.getItem(k); if(v!==null) data[k]=v; }
+    }
+  }catch(e){}
+  var ds = backupSortedDataStr(data);
+  return { app:"hoc-tieng-anh-backup", version:1, createdAt:new Date().toISOString(), length:ds.length, checksum:backupHash(ds), data:data };
+}
+function backupEncode(pkg){
+  var json = JSON.stringify(pkg);
+  var bytes = new TextEncoder().encode(json);
+  var bin = ""; var CH=0x8000;
+  for(var i=0;i<bytes.length;i+=CH){ bin += String.fromCharCode.apply(null, bytes.subarray(i, i+CH)); }
+  return "TA-SL-" + btoa(bin);
+}
+function backupDecode(text){
+  var t = (text||"").trim();
+  if(!t) throw new Error("empty");
+  if(t.charAt(0)==="{") return t;
+  if(t.indexOf("TA-SL-")===0) t = t.slice(6).trim();
+  t = t.replace(/\s+/g,"");
+  var bin = atob(t);
+  var bytes = new Uint8Array(bin.length);
+  for(var i=0;i<bin.length;i++) bytes[i]=bin.charCodeAt(i);
+  return new TextDecoder("utf-8").decode(bytes);
+}
+function backupValidate(pkg){
+  if(!pkg || typeof pkg!=="object") return "Mã sao lưu chưa đúng hoặc bị thiếu ký tự. Tiến độ hiện tại của bác KHÔNG bị thay đổi.";
+  if(pkg.app!=="hoc-tieng-anh-backup") return "Mã này không phải mã sao lưu của trang học này. Tiến độ hiện tại của bác KHÔNG bị thay đổi.";
+  if(pkg.version!==1) return "Mã sao lưu thuộc phiên bản chưa được hỗ trợ. Tiến độ hiện tại của bác KHÔNG bị thay đổi.";
+  if(!pkg.data || typeof pkg.data!=="object" || Array.isArray(pkg.data)) return "Mã sao lưu bị thiếu phần dữ liệu. Tiến độ hiện tại của bác KHÔNG bị thay đổi.";
+  var ds = backupSortedDataStr(pkg.data);
+  if(typeof pkg.length==="number" && pkg.length!==ds.length) return "Mã sao lưu chưa đúng hoặc bị thiếu ký tự. Tiến độ hiện tại của bác KHÔNG bị thay đổi.";
+  if(pkg.checksum && pkg.checksum!==backupHash(ds)) return "Mã sao lưu chưa đúng hoặc bị thiếu ký tự. Tiến độ hiện tại của bác KHÔNG bị thay đổi.";
+  if(!pkg.checksum) return "Mã sao lưu bị thiếu mã kiểm tra. Tiến độ hiện tại của bác KHÔNG bị thay đổi.";
+  return "";
+}
+function backupSummary(pkg){
+  var when = "không rõ ngày";
+  try{ var d=new Date(pkg.createdAt); if(!isNaN(d.getTime())) when = d.toLocaleString("vi-VN"); }catch(e){}
+  var done = 0;
+  try{ var raw = pkg.data["tieng-anh-nguoi-moi-v1"]; if(raw){ var s=JSON.parse(raw); if(s && s.completed) done = Object.keys(s.completed).filter(function(k){return s.completed[k];}).length; } }catch(e){}
+  return { when:when, done:done };
+}
+function backupSetStatus(id, msg, ok){
+  var el=document.getElementById(id); if(!el) return;
+  el.textContent=msg; el.className="backup-status show "+(ok?"ok":"err");
+}
+function openBackup(){
+  closeDisplayMenu(false);
+  var ov=document.getElementById("backupOverlay"); if(ov){ ov.hidden=false; var b=document.getElementById("backupCreateBtn"); if(b) b.focus(); }
+}
+function closeBackup(){ var ov=document.getElementById("backupOverlay"); if(ov) ov.hidden=true; var t=document.getElementById("backupOpenBtn"); if(t) t.focus(); }
+(function initBackup(){
+  var openBtn=document.getElementById("backupOpenBtn"); if(openBtn) openBtn.addEventListener("click", openBackup);
+  var closeBtn=document.getElementById("backupClose"); if(closeBtn) closeBtn.addEventListener("click", closeBackup);
+  var ov=document.getElementById("backupOverlay"); if(ov) ov.addEventListener("click", function(e){ if(e.target===ov) closeBackup(); });
+  document.addEventListener("keydown", function(e){ if((e.key==="Escape"||e.key==="Esc") && ov && !ov.hidden) closeBackup(); });
+  var createBtn=document.getElementById("backupCreateBtn");
+  if(createBtn) createBtn.addEventListener("click", function(){
+    backupLastPkg = backupCollect();
+    var code = backupEncode(backupLastPkg);
+    var out=document.getElementById("backupCodeOut"); if(out){ out.value=code; out.select(); }
+    backupSetStatus("backupStatus","Đã tạo mã sao lưu ✓ Bác chép mã ở ô trên để giữ lại, hoặc bấm “Tải file sao lưu”.", true);
+  });
+  var copyBtn=document.getElementById("backupCopyBtn");
+  if(copyBtn) copyBtn.addEventListener("click", function(){
+    var out=document.getElementById("backupCodeOut");
+    if(!out || !out.value){ backupSetStatus("backupStatus","Bác bấm “Sao lưu tiến độ” trước để tạo mã đã nhé.", false); return; }
+    function done(){ backupSetStatus("backupStatus","Đã sao chép ✓ Bác dán mã vào nơi cần giữ (ví dụ gửi cho chính mình qua Zalo).", true); if(copyBtn) copyBtn.textContent="Đã sao chép ✓"; setTimeout(function(){ copyBtn.textContent="Sao chép mã sao lưu"; },2500); }
+    if(navigator.clipboard && navigator.clipboard.writeText){ navigator.clipboard.writeText(out.value).then(done, function(){ out.select(); try{document.execCommand("copy");}catch(e){} done(); }); }
+    else { out.select(); try{document.execCommand("copy");}catch(e){} done(); }
+  });
+  var dlBtn=document.getElementById("backupDownloadBtn");
+  if(dlBtn) dlBtn.addEventListener("click", function(){
+    var pkg = backupLastPkg || backupCollect(); backupLastPkg=pkg;
+    var d=new Date(pkg.createdAt); var ymd=""+d.getFullYear()+String(d.getMonth()+1).padStart(2,"0")+String(d.getDate()).padStart(2,"0");
+    var blob=new Blob([JSON.stringify(pkg,null,2)],{type:"application/json"});
+    var url=URL.createObjectURL(blob); var a=document.createElement("a"); a.href=url; a.download="sao-luu-tien-do-"+ymd+".json"; document.body.appendChild(a); a.click(); setTimeout(function(){ URL.revokeObjectURL(url); a.remove(); },400);
+    backupSetStatus("backupStatus","Đã tải file sao lưu ✓ Bác giữ file này để khôi phục ở máy mới.", true);
+  });
+  var fileBtn=document.getElementById("backupFileBtn"); var fileInput=document.getElementById("backupFileInput");
+  if(fileBtn && fileInput) fileBtn.addEventListener("click", function(){ fileInput.click(); });
+  if(fileInput) fileInput.addEventListener("change", function(){
+    var f=fileInput.files && fileInput.files[0]; if(!f) return;
+    var r=new FileReader();
+    r.onload=function(){ var inp=document.getElementById("backupCodeIn"); if(inp) inp.value=String(r.result||""); backupSetStatus("restoreStatus","Đã đọc file sao lưu ✓ Bác bấm “Kiểm tra mã & khôi phục” để tiếp tục.", true); };
+    r.onerror=function(){ backupSetStatus("restoreStatus","Không đọc được file này. Bác thử chọn lại file sao lưu .json đã tải về nhé.", false); };
+    r.readAsText(f); fileInput.value="";
+  });
+  var checkBtn=document.getElementById("backupCheckBtn");
+  if(checkBtn) checkBtn.addEventListener("click", function(){
+    var inp=document.getElementById("backupCodeIn"); var conf=document.getElementById("backupConfirm");
+    backupPendingPkg=null; if(conf) conf.classList.remove("show");
+    var pkg;
+    try{ pkg=JSON.parse(backupDecode(inp ? inp.value : "")); }catch(e){ backupSetStatus("restoreStatus","Mã sao lưu chưa đúng hoặc bị thiếu ký tự. Tiến độ hiện tại của bác KHÔNG bị thay đổi.", false); return; }
+    var err=backupValidate(pkg);
+    if(err){ backupSetStatus("restoreStatus",err,false); return; }
+    backupPendingPkg=pkg;
+    var sum=backupSummary(pkg);
+    var ct=document.getElementById("backupConfirmText");
+    if(ct) ct.textContent="Gói sao lưu hợp lệ ✓ Ngày sao lưu: "+sum.when+". Tiến độ trong gói: đã hoàn thành "+sum.done+" / 60 bài.";
+    backupSetStatus("restoreStatus","Mã sao lưu hợp lệ ✓ Bác đọc kỹ phần xác nhận bên dưới rồi bấm “Khôi phục”.", true);
+    if(conf){ conf.classList.add("show"); conf.scrollIntoView({behavior:"smooth", block:"center"}); }
+  });
+  var cancelBtn=document.getElementById("backupCancelBtn");
+  if(cancelBtn) cancelBtn.addEventListener("click", function(){ backupPendingPkg=null; var conf=document.getElementById("backupConfirm"); if(conf) conf.classList.remove("show"); backupSetStatus("restoreStatus","Đã hủy khôi phục. Tiến độ hiện tại của bác không thay đổi.", true); });
+  var restoreBtn=document.getElementById("backupRestoreBtn");
+  if(restoreBtn) restoreBtn.addEventListener("click", function(){
+    if(!backupPendingPkg){ backupSetStatus("restoreStatus","Bác kiểm tra mã sao lưu trước đã nhé.", false); return; }
+    var err=backupValidate(backupPendingPkg); if(err){ backupSetStatus("restoreStatus",err,false); return; }
+    try{
+      var toRemove=[];
+      for(var i=0;i<localStorage.length;i++){ var k=localStorage.key(i); if(k && k.indexOf("tieng-anh-")===0 && k!==BACKUP_EXCLUDE_KEY) toRemove.push(k); }
+      toRemove.forEach(function(k){ localStorage.removeItem(k); });
+      Object.keys(backupPendingPkg.data).forEach(function(k){ if(k.indexOf("tieng-anh-")===0 && k!==BACKUP_EXCLUDE_KEY) localStorage.setItem(k, backupPendingPkg.data[k]); });
+      try{ sessionStorage.setItem("ta-restore-ok","1"); }catch(e){}
+    }catch(e){ backupSetStatus("restoreStatus","Khôi phục chưa được. Tiến độ có thể chưa thay đổi — bác thử lại nhé.", false); return; }
+    location.reload();
+  });
+  try{ if(sessionStorage.getItem("ta-restore-ok")==="1"){ sessionStorage.removeItem("ta-restore-ok"); setTimeout(function(){ toast("Đã khôi phục tiến độ thành công ✓"); },600); } }catch(e){}
+})();
 
 /* ---------- Khởi tạo phần phát âm (độc lập, lỗi thì bỏ qua) ---------- */
 try{
