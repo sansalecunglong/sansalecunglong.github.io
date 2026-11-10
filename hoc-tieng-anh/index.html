@@ -456,7 +456,7 @@ html.hc .tab-btn[aria-selected="true"]{color:#fff}
 .tab-panel{display:none}
 .tab-panel.active{display:block; animation:viewIn .3s ease}
 .sub-h{font-size:1.3em; margin:8px 0 6px}
-.sub-p{color:var(--muted); margin-bottom:18px; max-width:44em}
+.sub-p{color:var(--ink-2); margin-bottom:18px; max-width:44em; background:var(--surface); border:2px solid var(--border); border-radius:var(--r-md); padding:16px 20px; box-shadow:var(--shadow-sm)}
 
 /* Vocab list */
 .vocab-list{display:flex; flex-direction:column; gap:12px}
@@ -1526,72 +1526,21 @@ html[data-font="small"] .rb-close{font-size:max(14px,.88em)}
 @media (max-width:700px){ .seo-chapters{grid-template-columns:1fr} .faq-item{padding:18px 16px} }
 
 /* ============================================================
-   V19 — TỐI ƯU BỐ CỤC “CHO HẾT TRANG” (desktop + điện thoại)
-   Nguyên tắc: lấp khoảng trắng bằng BỐ CỤC (khung rộng hơn, lưới
-   nhiều cột, lề gọn theo thang 4px) — KHÔNG đổi cỡ chữ, KHÔNG thu
-   vùng bấm (nút vẫn ≥56px, khe giữa hai nút kề nhau ≥8px).
+   V20 — BỌC KHUNG CHO CÁC PHẦN CHỮ CÒN TRẦN
+   Phần chữ giới thiệu ở đầu trang chủ, đoạn giới thiệu khóa học,
+   đầu các view bài học và các đoạn hướng dẫn (.sub-p ở trên) trước
+   đây nằm trực tiếp trên nền — nay nằm trong khung thẻ cùng phong
+   cách các thẻ sẵn có của trang (nền thẻ, viền, bo góc, bóng nhẹ).
    ============================================================ */
-/* --- Màn hình rộng (≥1024px): khung 1200px + lưới nhiều cột --- */
-@media (min-width:1024px){
-  .wrap{max-width:1200px; padding:0 24px}
-  /* Trang chủ: thẻ chương dàn 2 cột, bài trong chương bám hết thẻ */
-  .chapter-list{display:grid; grid-template-columns:1fr 1fr; gap:18px; align-items:start}
-  /* Giới thiệu + FAQ: hết một cột hẹp */
-  .seo-intro-txt{max-width:none}
-  .seo-chapters{grid-template-columns:repeat(3,1fr)}
-  .faq-list{display:grid; grid-template-columns:1fr 1fr; gap:14px; align-items:start}
-  /* Bài học: 5 thẻ từ / thẻ âm / câu mẫu dàn 2 cột, panel Đọc lại
-     nằm trong thẻ nên cũng theo khung rộng mới */
-  .vocab-list{display:grid; grid-template-columns:1fr 1fr; gap:14px; align-items:start}
-  html[data-font="xlarge"] .vocab-list{grid-template-columns:1fr}
-  /* Hội thoại + Luyện nói dùng gần hết khung */
-  .dlg-line{max-width:84%}
-  .speak-box{max-width:1020px; margin-left:auto; margin-right:auto}
-  /* Thẻ ghi nhớ: sân khấu rộng hơn, vẫn căn giữa */
-  .fc-stage{max-width:720px}
-  /* Game: lưới thẻ nhớ thêm cột; danh sách câu sai của bài kiểm tra
-     tổng hợp dàn 2 cột */
-  .mem-grid{grid-template-columns:repeat(4,1fr)}
-  .exam-wrong-list{display:grid; grid-template-columns:1fr 1fr; gap:12px; align-items:start}
-  /* Phát âm: cặp âm dễ nhầm dàn 2 cột */
-  #pronPairs{display:grid; grid-template-columns:1fr 1fr; gap:14px; align-items:start}
-  #pronPairs .pair-card{margin-bottom:0}
+.txt-card{
+  background:var(--surface); border:2px solid var(--border); border-radius:var(--r-lg);
+  padding:26px; box-shadow:var(--shadow-sm);
 }
-@media (min-width:1280px){
-  /* Lưới “Nghe phát âm ban đầu”: ô nhỏ hơn một chút để 44 ô dàn
-     8 cột trong khung 1200px, ô vẫn cao ≥100px dễ bấm */
-  .pron-listen-grid{grid-template-columns:repeat(auto-fill,minmax(124px,1fr))}
-}
-/* --- Điện thoại (≤767px): lề gọn 14px, bớt đệm dọc chết --- */
-@media (max-width:767px){
-  .wrap{padding:0 14px}
-  .hero{padding:28px 0 20px}
-  section.block{padding:28px 0}
-  .sec-head{margin-bottom:16px}
-  .lesson-head{padding:22px 0 4px}
-  .tabs{margin:16px 0}
-  /* Bỏ lề lồng nhau thừa: thẻ con bớt đệm ngang vì khung đã có lề */
-  .panel,.progress-card{padding:20px}
-  .rm-card{padding:20px}
-  .ch-head{padding:16px 16px 8px}
-  .ch-body{padding:0 12px 14px}
-  .ch-bar{margin:4px 16px 14px}
-  .vocab-row{padding:16px}
-  .speak-box{padding:20px}
-  .game-box{padding:18px}
-  .quiz-q{padding:18px}
-  .pair-card{padding:16px}
-  .faq-item{padding:18px 16px}
-  /* Khoảng dọc giữa các thẻ/mục gọn lại theo thang 4px */
-  .chapter-list{gap:14px}
-  .steps,.tips,.lesson-grid,.two-col{gap:14px}
-  .vocab-list{gap:10px}
-  .faq-list{gap:10px}
-  .dlg{gap:10px}
-  .review-list{gap:8px}
-  /* Lưới 44 ô âm: 4 cột ở 360–390px, ô vẫn cao ≥100px dễ bấm */
-  .pron-listen-grid{grid-template-columns:repeat(4,minmax(0,1fr)); gap:8px}
-  .pron-listen-cell{min-width:0; padding:10px 4px}
+.txt-card .seo-intro-txt{max-width:none}
+.lesson-head.txt-card{margin-top:26px; padding:24px 26px 20px}
+@media (max-width:700px){
+  .txt-card{padding:20px}
+  .lesson-head.txt-card{padding:20px 20px 16px}
 }
 
 </style>
@@ -1657,7 +1606,7 @@ html[data-font="small"] .rb-close{font-size:max(14px,.88em)}
 
   <div class="hero">
     <div class="wrap hero-grid">
-      <div>
+      <div class="txt-card">
         <span class="hero-eyebrow">Dành cho người mới bắt đầu &amp; người lớn tuổi học lại</span>
         <h1>Học Tiếng Anh Cho Người Mới Bắt Đầu — <em>từ con số 0</em>, nhẹ nhàng mỗi ngày</h1>
         <p class="hero-sub">Chữ to, nút bấm lớn, có giọng đọc chậm rõ ràng. Chỉ cần 10 phút mỗi ngày, bác sẽ chào hỏi, đi chợ, hỏi đường và đi khám bằng tiếng Anh một cách tự tin.</p>
@@ -1943,7 +1892,9 @@ html[data-font="small"] .rb-close{font-size:max(14px,.88em)}
       <div class="sec-head">
         <h2 id="aboutTitle">Giới thiệu khóa học tiếng Anh cho người mới bắt đầu</h2>
       </div>
+      <div class="txt-card">
       <p class="seo-intro-txt">Trang Học Tiếng Anh Cho Người Mới Bắt Đầu được làm riêng cho người Việt chưa từng học, người lớn tuổi học lại và bất kỳ ai muốn bắt đầu từ con số 0. Khóa học hoàn toàn miễn phí, không cần đăng ký, học ngay trên điện thoại hoặc máy tính với chữ to, nút bấm lớn và giọng đọc chậm, rõ ràng. Lộ trình bắt đầu bằng chương mở đầu tự chọn về phát âm 44 âm IPA, giúp bạn đọc đúng mọi từ ngay từ đầu. Sau đó là 6 chương đời thường với 60 bài nhỏ, 300 từ vựng và cụm từ cốt lõi, hội thoại mẫu, thẻ ghi nhớ và trò chơi cuối mỗi bài. Mỗi từ đều có phiên âm, nghĩa tiếng Việt, câu ví dụ, nút nghe nhiều tốc độ và nút Đọc lại để luyện nói, được chấm từng từ ngay trên trang.</p>
+      </div>
       <ul class="seo-chapters">
         <li>
           <h3><a href="#lessonsSection">Chương Mở Đầu — Học Phát Âm 44 âm IPA</a></h3>
@@ -2012,7 +1963,7 @@ html[data-font="small"] .rb-close{font-size:max(14px,.88em)}
 <!-- ================= LESSON VIEW ================= -->
 <div class="view" id="viewLesson">
   <div class="wrap">
-    <div class="lesson-head">
+    <div class="lesson-head txt-card">
       <button type="button" class="btn btn-ghost btn-sm" id="backHome">← Quay lại trang chính</button>
       <h2 id="lessonTitle">Bài học</h2>
       <p id="lessonSub" style="color:var(--muted); font-weight:600"></p>
@@ -2154,7 +2105,7 @@ html[data-font="small"] .rb-close{font-size:max(14px,.88em)}
 <!-- ================= PRON VIEW (Chương Mở Đầu — Phát Âm, không bắt buộc) ================= -->
 <div class="view" id="viewPron">
   <div class="wrap">
-    <div class="lesson-head">
+    <div class="lesson-head txt-card">
       <button type="button" class="btn btn-ghost btn-sm" data-pron-home>← Quay lại trang chính</button>
       <h2>Chương Mở Đầu — Học Phát Âm</h2>
       <p style="color:var(--muted); font-weight:600">44 âm IPA của tiếng Anh · <b>Không bắt buộc</b> — học trước thì đọc từ nào cũng chuẩn hơn; không học cũng không sao, Chương 1 vẫn mở bình thường.</p>
@@ -2230,7 +2181,7 @@ html[data-font="small"] .rb-close{font-size:max(14px,.88em)}
 <!-- ================= GATE VIEW (kiểm tra bài cũ / bài khóa) ================= -->
 <div class="view" id="viewGate">
   <div class="wrap">
-    <div class="lesson-head">
+    <div class="lesson-head txt-card">
       <button type="button" class="btn btn-ghost btn-sm" id="gateBack">← Quay lại trang chính</button>
       <h2 id="gateTitle">Kiểm tra nhanh bài cũ</h2>
       <p id="gateIntro" style="color:var(--muted); font-weight:600"></p>
@@ -2252,7 +2203,7 @@ html[data-font="small"] .rb-close{font-size:max(14px,.88em)}
 <!-- ================= TOTAL QUIZ VIEW ================= -->
 <div class="view" id="viewTotal">
   <div class="wrap">
-    <div class="lesson-head">
+    <div class="lesson-head txt-card">
       <button type="button" class="btn btn-ghost btn-sm" data-backhome>← Quay lại trang chính</button>
       <h2>Bài kiểm tra tổng hợp</h2>
       <p style="color:var(--muted); font-weight:600">6 câu hỏi trộn từ cả 6 chương — chào hỏi, gia đình, ăn uống, đi đường, sức khỏe và mua sắm.</p>
@@ -6381,7 +6332,9 @@ function renderPronHome(){
   if(fill) fill.style.transform = "scaleX(" + (pronDoneCount() / 5) + ")";
 }
 
-/* ---------- Nghe phát âm ban đầu: lưới 44 âm, bấm là nghe từ ví dụ ----------
+/* ---------- Nghe phát âm ban đầu: lưới 44 âm, bấm là nghe CHÍNH ÂM đó ----------
+   Bấm một ô là TTS đọc đúng ký hiệu IPA của âm (không đọc từ ví dụ);
+   từ ví dụ kèm nghĩa vẫn hiển thị trên ô như cũ để bác đối chiếu.
    Thuần nghe làm quen: không kiểm tra, không ghi tiến độ, không khóa gì.
    Dữ liệu lấy nguyên từ PRON_LESSONS (mỗi âm dùng đúng 2 từ ví dụ của bài học). */
 var PRON_LISTEN_GROUPS = [
@@ -6401,12 +6354,12 @@ function renderPronListen(){
       var L = pronLessonById(id); if(!L) return;
       L.sounds.forEach(function(s){
         var cell = document.createElement("button"); cell.type = "button"; cell.className = "pron-listen-cell";
-        cell.setAttribute("aria-label", "Nghe âm /" + s.ipa + "/ — từ ví dụ: " + s.ex[0][0] + ", " + s.ex[1][0]);
+        cell.setAttribute("aria-label", "Nghe chính âm /" + s.ipa + "/ — từ ví dụ: " + s.ex[0][0] + ", " + s.ex[1][0]);
         var ip = document.createElement("span"); ip.className = "plc-ipa"; ip.textContent = "/" + s.ipa + "/";
         var w1 = document.createElement("span"); w1.className = "plc-word"; w1.textContent = s.ex[0][0] + " — " + s.ex[0][2];
         var w2 = document.createElement("span"); w2.className = "plc-word2"; w2.textContent = s.ex[1][0] + " — " + s.ex[1][2];
         cell.appendChild(ip); cell.appendChild(w1); cell.appendChild(w2);
-        cell.addEventListener("click", function(){ speak(s.ex[0][0], 0.85); });
+        cell.addEventListener("click", function(){ speak(s.ipa, 1); });
         grid.appendChild(cell);
       });
     });
@@ -6502,7 +6455,10 @@ function pronGuideBlock(s){
     box.appendChild(p);
   });
   var gb = document.createElement("div"); gb.className = "v-btns sg-btns";
-  gb.appendChild(speakBtn(s.ex[0][0], 1, "Nghe từ ví dụ: " + s.ex[0][0], false));
+  /* Nút nghe của THẺ ÂM: đọc chính ký hiệu IPA của âm (thường + chậm),
+     không đọc từ ví dụ — nghe từ ví dụ thì dùng nút Nghe ở từng từ bên dưới. */
+  gb.appendChild(speakBtn(s.ipa, 1, "Nghe âm /" + s.ipa + "/", false));
+  gb.appendChild(speakBtn(s.ipa, 0.5, "Nghe chậm", true));
   box.appendChild(gb);
   return box;
 }
