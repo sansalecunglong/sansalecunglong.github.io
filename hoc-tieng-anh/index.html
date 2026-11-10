@@ -2495,47 +2495,11 @@ function speak(text, rate){
     window.speechSynthesis.speak(u);
   }catch(e){ toast("Chưa đọc được lúc này, bác thử lại sau một chút nhé."); }
 }
-/* Đọc KIỂU TIẾNG VIỆT — chỉ dùng cho các nút nghe ÂM của chương phát âm:
-   chuỗi đưa vào là tiếng đọc kiểu Việt của âm (trường vi trong PRON_LESSONS,
-   ví dụ /w/ → "quờ", /ɪ/ → "i"), đọc bằng giọng tiếng Việt nếu máy có,
-   không có thì dùng giọng mặc định — tuyệt đối không đưa ký hiệu IPA trần
-   vào đây (giọng Anh sẽ đọc /w/ thành tên chữ cái "double-u"). */
-function pickViVoice(){
-  if(!ttsVoices.length) refreshTtsVoices();
-  var best = null, bestScore = -1e9;
-  for(var i = 0; i < ttsVoices.length; i++){
-    var v = ttsVoices[i];
-    var lang = (v.lang || "").toLowerCase().replace("_", "-");
-    if(lang.indexOf("vi") !== 0) continue;
-    var s = 0, name = (v.name || "").toLowerCase();
-    if(lang === "vi-vn") s += 40;
-    if(name.indexOf("vietnam") >= 0) s += 20;
-    if(name.indexOf("google") >= 0) s += 15;
-    if(name.indexOf("natural") >= 0 || name.indexOf("neural") >= 0) s += 10;
-    if(v.localService) s += 2;
-    if(s > bestScore){ bestScore = s; best = v; }
-  }
-  return best;
-}
-function speakVi(text, rate){
-  if(!text) return;
-  if(!ttsOK){ toast("Trình duyệt này chưa hỗ trợ giọng đọc. Bác hãy mở trang bằng Chrome hoặc Safari nhé."); return; }
-  try{
-    window.speechSynthesis.cancel();
-    var u = new SpeechSynthesisUtterance(text);
-    u.lang = "vi-VN"; u.rate = rate || 1; u.pitch = 1;
-    var voice = pickViVoice();
-    if(voice) u.voice = voice;
-    window.speechSynthesis.speak(u);
-  }catch(e){ toast("Chưa đọc được lúc này, bác thử lại sau một chút nhé."); }
-}
 if(ttsOK){
   refreshTtsVoices();
   if(window.speechSynthesis.onvoiceschanged !== undefined){ window.speechSynthesis.onvoiceschanged = refreshTtsVoices; }
 }
 document.addEventListener("click", function(e){
-  var bv = e.target.closest("[data-speak-vi]");
-  if(bv){ speakVi(bv.getAttribute("data-speak-vi"), parseFloat(bv.getAttribute("data-rate")||"1")); return; }
   var b = e.target.closest("[data-speak]");
   if(b){ speak(b.getAttribute("data-speak"), parseFloat(b.getAttribute("data-rate")||"1")); }
 });
@@ -2546,16 +2510,6 @@ function speakBtn(text, rate, label, slow, extraCls){
   b.innerHTML = SPEAKER_SVG + "<span>"+label+"</span>";
   return b;
 }
-/* Nút nghe ÂM kiểu tiếng Việt: text là tiếng đọc kiểu Việt của âm (trường vi),
-   phát qua speakVi — không dùng cho từ tiếng Anh. */
-function speakBtnVi(text, rate, label, slow, extraCls){
-  var b = document.createElement("button");
-  b.type="button"; b.className = "icon-btn" + (slow ? " slow" : "") + (extraCls ? " " + extraCls : "");
-  b.setAttribute("data-speak-vi", text); b.setAttribute("data-rate", String(rate));
-  b.innerHTML = SPEAKER_SVG + "<span>"+label+"</span>";
-  return b;
-}
-
 /* ================= PROGRESS UI ================= */
 function refreshProgress(){
   var total = allVocab().length;
@@ -6363,8 +6317,20 @@ var PRON_PAIRS = [
   {a:["cat","/kæt/","con mèo"], b:["cut","/kʌt/","cắt"], note:"Khác nhau ở /æ/ (miệng mở rộng) và /ʌ/ (â ngắn)."}
 ];
 function pronLessonById(id){ return PRON_LESSONS.filter(function(L){ return L.id === id; })[0] || null; }
-/* Chuỗi HIỂN THỊ “đọc là …”: ưu tiên viShow (có chú thích như “i (ngắn)”, “y (i dài)”, “êi (ây)”) khi có; chuỗi PHÁT ÂM (TTS) vẫn luôn là trường vi gọn. */
-function pronViShow(s){ return s.viShow || s.vi; }
+/* Dòng GIẢI THÍCH cách đọc bằng tiếng Việt hiển thị dưới ký hiệu IPA (trên ô
+   lưới 44 âm và trên thẻ âm): lấy câu đầu của trường how — phần chữ này chỉ
+   để ĐỌC HIỂU cách phát âm, TUYỆT ĐỐI không đưa vào TTS. Nghe âm luôn phát
+   chính ký hiệu IPA của âm bằng giọng Anh qua speak()/speakBtn(). */
+function pronHowShort(s){
+  var h = (s && s.how) ? String(s.how) : "";
+  var dot = h.indexOf(". ");
+  if(dot > 0) h = h.slice(0, dot + 1);
+  if(h.length > 130){
+    var cut = h.lastIndexOf(",", 130);
+    h = (cut > 40 ? h.slice(0, cut) : h.slice(0, 130)) + "…";
+  }
+  return h.replace(/\.$/, "");
+}
 /* V19: chương phát âm học TỰ DO — mọi bài luôn mở, không khóa theo bài nào cả.
    Game cuối bài chỉ ghi nhận hoàn thành (pronState.completed), không mở/khóa gì. */
 function pronUnlocked(L){ return !!L; }
@@ -6411,10 +6377,10 @@ function renderPronHome(){
 }
 
 /* ---------- Nghe phát âm ban đầu: lưới 44 âm, bấm là nghe CHÍNH ÂM đó ----------
-   Bấm một ô là máy PHÁT ÂM KIỂU TIẾNG VIỆT đúng tiếng của âm đó (trường vi:
-   /w/ đọc là "quờ", /ɪ/ đọc là "i"…) bằng giọng tiếng Việt — không đọc ký
-   hiệu IPA trần (giọng Anh đọc thành tên chữ cái, ví dụ "double-u"), cũng
-   không đọc từ ví dụ; từ ví dụ kèm nghĩa vẫn hiển thị trên ô để đối chiếu.
+   Bấm một ô là máy đọc CHÍNH ÂM ĐÓ (ký hiệu IPA của âm) bằng GIỌNG ANH
+   (en-US) qua speak() — không đọc từ ví dụ; từ ví dụ kèm nghĩa vẫn hiển
+   thị trên ô để đối chiếu. Dòng chữ tiếng Việt trên ô là phần GIẢI THÍCH
+   cách đọc (lấy từ trường how) để người học đọc chữ là hình dung được âm.
    Thuần nghe làm quen: không kiểm tra, không ghi tiến độ, không khóa gì.
    Dữ liệu lấy nguyên từ PRON_LESSONS (mỗi âm dùng đúng 2 từ ví dụ của bài học). */
 var PRON_LISTEN_GROUPS = [
@@ -6434,13 +6400,13 @@ function renderPronListen(){
       var L = pronLessonById(id); if(!L) return;
       L.sounds.forEach(function(s){
         var cell = document.createElement("button"); cell.type = "button"; cell.className = "pron-listen-cell";
-        cell.setAttribute("aria-label", "Nghe chính âm /" + s.ipa + "/ — đọc là " + pronViShow(s) + " — từ ví dụ: " + s.ex[0][0] + ", " + s.ex[1][0]);
+        cell.setAttribute("aria-label", "Nghe chính âm /" + s.ipa + "/ — từ ví dụ: " + s.ex[0][0] + ", " + s.ex[1][0]);
         var ip = document.createElement("span"); ip.className = "plc-ipa"; ip.textContent = "/" + s.ipa + "/";
-        var vv = document.createElement("span"); vv.className = "plc-vi"; vv.textContent = "đọc là \u201C" + pronViShow(s) + "\u201D";
+        var vv = document.createElement("span"); vv.className = "plc-vi"; vv.textContent = pronHowShort(s);
         var w1 = document.createElement("span"); w1.className = "plc-word"; w1.textContent = s.ex[0][0] + " — " + s.ex[0][2];
         var w2 = document.createElement("span"); w2.className = "plc-word2"; w2.textContent = s.ex[1][0] + " — " + s.ex[1][2];
         cell.appendChild(ip); cell.appendChild(vv); cell.appendChild(w1); cell.appendChild(w2);
-        cell.addEventListener("click", function(){ speakVi(s.vi, 1); });
+        cell.addEventListener("click", function(){ speak(s.ipa, 1); });
         grid.appendChild(cell);
       });
     });
@@ -6536,12 +6502,12 @@ function pronGuideBlock(s){
     box.appendChild(p);
   });
   var gb = document.createElement("div"); gb.className = "v-btns sg-btns";
-  /* Nút nghe của THẺ ÂM: phát âm KIỂU TIẾNG VIỆT đúng tiếng của âm (trường
-     vi — /w/ là "quờ", /ɪ/ là "i") bằng giọng tiếng Việt, thường + chậm;
-     không đọc ký hiệu IPA trần, không đọc từ ví dụ — nghe từ ví dụ thì
-     dùng nút Nghe ở từng từ bên dưới. */
-  gb.appendChild(speakBtnVi(s.vi, 1, "Nghe âm /" + s.ipa + "/ — đọc là \u201C" + pronViShow(s) + "\u201D", false));
-  gb.appendChild(speakBtnVi(s.vi, 0.5, "Nghe chậm", true));
+  /* Nút nghe của THẺ ÂM: đọc CHÍNH ÂM ĐÓ (ký hiệu IPA) bằng GIỌNG ANH,
+     thường + chậm (rate 0.5) — không đọc từ ví dụ; nghe từ ví dụ thì
+     dùng nút Nghe ở từng từ bên dưới. Cách đọc kiểu Việt đã có sẵn ở
+     3 dòng chữ giải thích ngay phía trên để đọc theo. */
+  gb.appendChild(speakBtn(s.ipa, 1, "Nghe âm /" + s.ipa + "/", false));
+  gb.appendChild(speakBtn(s.ipa, 0.5, "Nghe chậm", true));
   box.appendChild(gb);
   return box;
 }
@@ -6556,7 +6522,7 @@ function renderPronLesson(){
     var line = document.createElement("div");
     var big = document.createElement("span"); big.className = "ipa-big"; big.textContent = "/" + s.ipa + "/";
     var nm = document.createElement("span"); nm.className = "pron-name"; nm.textContent = "  ·  " + s.name;
-    var vr = document.createElement("span"); vr.className = "pron-vi"; vr.textContent = "  ·  đọc là \u201C" + pronViShow(s) + "\u201D";
+    var vr = document.createElement("span"); vr.className = "pron-vi"; vr.textContent = "  ·  " + pronHowShort(s);
     line.appendChild(big); line.appendChild(nm); line.appendChild(vr); main.appendChild(line);
     main.appendChild(pronGuideBlock(s));
     s.ex.forEach(function(ex){ main.appendChild(pronExRow(ex, s.ipa)); });
