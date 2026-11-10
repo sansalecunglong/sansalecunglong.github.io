@@ -538,6 +538,7 @@ html.hc .fc-back{color:#fff}
 .fc-ex{font-size:.95em; opacity:.85}
 .fc-controls{display:flex; gap:10px; justify-content:center; flex-wrap:wrap; margin-top:20px}
 .fc-progress{text-align:center; font-weight:800; margin-top:14px; font-variant-numeric:tabular-nums}
+.fc-autonote{text-align:center; font-weight:800; margin-top:10px; padding:12px 14px; border-radius:12px; background:var(--success-soft); color:var(--success); font-size:1.05em}
 
 /* Dialogue */
 .dlg-speed{display:flex; gap:10px; flex-wrap:wrap; align-items:center; margin-bottom:14px}
@@ -1360,6 +1361,8 @@ footer.site{padding-bottom:calc(120px + env(safe-area-inset-bottom,0px))}
 .an-toggle{border:2px solid var(--border-strong); background:var(--bg-soft); color:var(--ink); border-radius:var(--r-pill); padding:9px 20px; font-weight:800; font-size:.95em; cursor:pointer; min-height:48px}
 .an-toggle.on{background:var(--primary); border-color:var(--primary); color:#fff}
 .vocab-item.flash{animation:anFlash 2.2s ease}
+.speak-target.flash{animation:anFlash 2.2s ease; border-radius:10px}
+@media (prefers-reduced-motion: reduce){ .speak-target.flash{animation:none; box-shadow:0 0 0 3px var(--accent)} }
 @keyframes anFlash{0%,100%{box-shadow:none}25%,60%{box-shadow:0 0 0 3px var(--accent)}}
 @media (prefers-reduced-motion: reduce){ .vocab-item.flash{animation:none; box-shadow:0 0 0 3px var(--accent)} }
 .header-in{position:relative}
@@ -2082,7 +2085,7 @@ html[data-font="small"] .rb-close{font-size:max(14px,.88em)}
     <section class="tab-panel" id="panel-cards" role="tabpanel" aria-label="Thẻ ghi nhớ">
       <button type="button" class="part-prev" data-prevtab="vocab">← Phần trước: Từ vựng</button>
       <h2 class="sub-h">Thẻ ghi nhớ — bấm vào thẻ để lật</h2>
-      <p class="sub-p">Nhìn mặt tiếng Anh, thử tự nói nghĩa trước, rồi ấn vào thẻ để lật xem nghĩa. Đang ở mặt sau, ấn vào thẻ lần nữa sẽ sang từ tiếp theo. Đánh dấu “Đã thuộc” hay “Chưa thuộc” để trang web nhớ giúp bác.</p>
+      <p class="sub-p">Nhìn mặt tiếng Anh, thử tự nói nghĩa trước, rồi ấn vào thẻ để lật xem nghĩa. Đang ở mặt sau, ấn vào thẻ lần nữa sẽ sang từ tiếp theo. Đánh dấu “Đã thuộc” hay “Chưa thuộc” để trang web nhớ giúp bác. Khi bác đánh dấu đã thuộc <b>đủ cả 5 từ ngay trong phần thẻ này</b>, trang sẽ ăn mừng rồi <b>tự chuyển sang phần Hội thoại</b> cho bác.</p>
       <div class="fc-stage">
         <button type="button" class="fc-card" id="fcCard" aria-label="Thẻ ghi nhớ — ấn để xem nghĩa, ấn lần nữa để sang từ tiếp theo">
           <span class="fc-inner" id="fcInner">
@@ -2101,6 +2104,7 @@ html[data-font="small"] .rb-close{font-size:max(14px,.88em)}
         </button>
       </div>
       <p class="fc-progress" id="fcProgress">Thẻ 1 / 8 · Đã thuộc: 0 từ</p>
+      <p class="fc-autonote" id="fcAutoNote" role="status" style="display:none"></p>
       <div class="fc-controls">
         <button type="button" class="btn btn-ghost" id="fcPrev">← Thẻ trước</button>
         <button type="button" class="btn btn-soft" id="fcListen">Nghe từ này</button>
@@ -2136,7 +2140,7 @@ html[data-font="small"] .rb-close{font-size:max(14px,.88em)}
     <section class="tab-panel" id="panel-speak" role="tabpanel" aria-label="Luyện nói">
       <button type="button" class="part-prev" data-prevtab="dialogue">← Phần trước: Hội thoại</button>
       <h2 class="sub-h">Luyện nói theo câu mẫu</h2>
-      <p class="sub-p">Chọn một câu, bấm nút loa để nghe trước, rồi bấm nút mic tròn và đọc to câu đó. Trang web sẽ nghe và cho bác biết đã đúng chưa. Tính năng này dùng bộ nghe có sẵn trong <b>Google Chrome</b> (cần có mạng) — mở trang bằng Chrome là dùng được ngay.</p>
+      <p class="sub-p">Chọn một câu, bấm nút loa để nghe trước, rồi bấm nút mic tròn và đọc to câu đó. Trang web sẽ nghe và cho bác biết đã đúng chưa. <b>Nói đúng một câu, trang sẽ tự chuyển sang câu tiếp theo</b> cho bác luyện tiếp. Tính năng này dùng bộ nghe có sẵn trong <b>Google Chrome</b> (cần có mạng) — mở trang bằng Chrome là dùng được ngay.</p>
       <div id="speakSupported">
         <div class="speak-box">
           <div class="sentence-pick" id="speakPick"></div>
@@ -3077,6 +3081,11 @@ function updatePartProgress(name){
   }
 }
 function switchTab(name){
+  /* Người học tự chuyển phần → hủy mọi lần TỰ chuyển đang chờ (Thẻ ghi
+     nhớ → Hội thoại, Luyện nói sang câu kế): đã đi bằng tay thì không
+     được nhảy thêm nữa. Lần tự chuyển tự nó gọi goToPart SAU khi đã tự
+     xóa hẹn giờ của mình nên không bị nhánh này chặn. */
+  cancelFcAutoDialogue(); cancelSpeakAutoNext();
   MicSessions.cancelCurrent(); stopGameTimer();
   document.querySelectorAll(".tab-btn").forEach(function(b){
     b.setAttribute("aria-selected", b.getAttribute("data-tab")===name ? "true" : "false");
@@ -3237,13 +3246,50 @@ document.getElementById("fcCard").addEventListener("click", function(){
 document.getElementById("fcPrev").addEventListener("click", function(){ fcIndex = (fcIndex - 1 + currentLesson.vocab.length) % currentLesson.vocab.length; fcFlipped=false; renderFlashcard(); });
 document.getElementById("fcNext").addEventListener("click", function(){ fcIndex = (fcIndex + 1) % currentLesson.vocab.length; fcFlipped=false; renderFlashcard(); });
 document.getElementById("fcListen").addEventListener("click", function(){ speak(currentLesson.vocab[fcIndex].en, 0.8); });
+/* ================= THẺ GHI NHỚ: THUỘC ĐỦ 5/5 TỪ → TỰ SANG HỘI THOẠI =================
+   Chỉ kích hoạt bởi THAO TÁC đánh dấu “Đã thuộc” ngay trong phần Thẻ ghi
+   nhớ làm số từ đã thuộc của bài chuyển từ (tổng − 1) → đủ hết (Bài 1–9;
+   Bài 10 không có thẻ, chương phát âm dùng bộ thẻ riêng nên không dính).
+   Vào phần thẻ khi bài ĐÃ thuộc sẵn từ trước thì KHÔNG tự nhảy. Giữ
+   nguyên ăn mừng (tiếng + pháo giấy) của thao tác đó, hiện dòng báo rồi
+   sau ~1,8 giây chuyển hẳn bằng đúng goToPart hiện có. Chống kẹt: chỉ
+   một lần chờ tại một thời điểm; người học tự chuyển phần (switchTab
+   hủy), bấm “Chưa thuộc” làm hụt số từ, hoặc rời bài → hủy lần chờ; lúc
+   tới giờ còn kiểm tra lại: vẫn ở phần thẻ và vẫn đủ từ mới chuyển. */
+var fcAutoTimer = null;
+function cancelFcAutoDialogue(){
+  if(fcAutoTimer){ clearTimeout(fcAutoTimer); fcAutoTimer = null; }
+  var note = document.getElementById("fcAutoNote"); if(note) note.style.display = "none";
+}
+function scheduleFcAutoDialogue(){
+  cancelFcAutoDialogue();
+  var total = currentLesson.vocab.length;
+  var note = document.getElementById("fcAutoNote");
+  if(note){
+    note.textContent = "🎉 Đã thuộc đủ " + total + "/" + total + " từ của bài này! Đang chuyển sang phần Hội thoại…";
+    note.style.display = "block";
+  }
+  fcAutoTimer = setTimeout(function(){
+    fcAutoTimer = null;
+    if(note) note.style.display = "none";
+    if(!currentLesson || currentLesson.n === 10 || !lessonAllLearned()) return;
+    var panel = document.getElementById("panel-cards");
+    if(!panel || !panel.classList.contains("active")) return;
+    goToPart("dialogue");
+  }, 1800);
+}
 document.getElementById("fcKnown").addEventListener("click", function(){
+  var total = currentLesson.vocab.length;
+  var before = currentLesson.vocab.filter(function(x){ return isLearned(x.en); }).length;
   setLearned(currentLesson.vocab[fcIndex].en, true); renderFlashcard();
   celebrate(lessonAllLearned());
   toast(pickEnc("learned") + " Đã thuộc từ “" + currentLesson.vocab[fcIndex].en + "”");
   fcIndex = (fcIndex + 1) % currentLesson.vocab.length; fcFlipped=false; renderFlashcard();
+  /* Đủ từ NHỜ CHÍNH thao tác này (từ tổng−1 lên đủ) → hẹn tự sang Hội thoại. */
+  if(currentLesson.n !== 10 && before === total - 1 && lessonAllLearned()) scheduleFcAutoDialogue();
 });
 document.getElementById("fcUnknown").addEventListener("click", function(){
+  cancelFcAutoDialogue();
   setLearned(currentLesson.vocab[fcIndex].en, false); renderFlashcard();
   toast("Không sao cả — từ này sẽ hiện trong mục “Ôn lại hôm nay” cho bác.");
   fcIndex = (fcIndex + 1) % currentLesson.vocab.length; fcFlipped=false; renderFlashcard();
@@ -3404,6 +3450,7 @@ document.querySelectorAll("[data-role]").forEach(function(b){
 /* ================= SPEAK PRACTICE ================= */
 var speakItems = [], speakIndex = 0, recog = null, listening = false;
 function renderSpeakPick(){
+  cancelSpeakAutoNext();
   speakItems = currentLesson.phrases.concat(currentLesson.dialogue.map(function(d){ return {en:d.en, vi:d.vi}; })).slice(0,6);
   speakIndex = 0;
   var pick = document.getElementById("speakPick"); pick.innerHTML = "";
@@ -3411,6 +3458,7 @@ function renderSpeakPick(){
     var c = document.createElement("button"); c.type="button"; c.className="pick-chip";
     c.textContent = "Câu " + (i+1); c.setAttribute("aria-pressed", i===0 ? "true" : "false");
     c.addEventListener("click", function(){
+      cancelSpeakAutoNext();
       speakIndex = i;
       pick.querySelectorAll(".pick-chip").forEach(function(x,j){ x.setAttribute("aria-pressed", j===i ? "true":"false"); });
       syncSpeakTarget();
@@ -3430,6 +3478,58 @@ function syncSpeakTarget(){
   var f = document.getElementById("speakFeedback"); f.className = "feedback"; f.textContent = "";
   var pb = document.getElementById("speakPlayBtn"); if(pb) pb.style.display = "none";
   hideSpeakSelfCheck();
+}
+/* ================= LUYỆN NÓI: ĐÚNG CÂU NÀO TỰ SANG CÂU KẾ =================
+   LUÔN bật theo yêu cầu của người học (không phụ thuộc công tắc
+   tieng-anh-auto-next của phần Từ vựng). Chỉ áp Bài 1–9 của 6 chương
+   chính. Kích hoạt khi câu hiện tại được chấm ĐÚNG HẲN: nhánh đúng của
+   gradeSpeak (trùng khớp hoặc điểm ≥ 0,9 — nhánh “gần đúng” 0,55–0,9
+   KHÔNG chuyển) hoặc tự kiểm tra bấm “Tôi đọc đúng rồi”. Sau ~1,2 giây
+   (cùng nhịp tự sang từ) chuyển sang câu đích tiếp theo: dừng phiên
+   nghe/ghi âm đang chạy bằng MicSessions.cancelCurrent, cập nhật chip
+   chọn câu + chữ đích + nghĩa, cuộn và làm nổi bật câu mới. Đúng câu
+   CUỐI: chỉ hiện dòng báo hoàn thành + gợi ý nút Tiếp theo, KHÔNG tự
+   nhảy sang phần Trò chơi. An toàn phiên: người học tự bấm câu khác /
+   bấm mic mở phiên mới / chuyển phần (switchTab) / trang dựng lại danh
+   sách câu → hủy lần chờ; lúc tới giờ còn kiểm tra câu đích chưa bị ai
+   đổi và vẫn đang ở phần Luyện nói mới chuyển. */
+var speakAutoTimer = null;
+function cancelSpeakAutoNext(){
+  if(speakAutoTimer){ clearTimeout(speakAutoTimer); speakAutoTimer = null; }
+}
+function syncSpeakPickChips(){
+  document.querySelectorAll("#speakPick .pick-chip").forEach(function(x, j){
+    x.setAttribute("aria-pressed", j === speakIndex ? "true" : "false");
+  });
+}
+function scheduleSpeakAutoNext(){
+  if(!currentLesson || currentLesson.n === 10 || !speakItems.length) return;
+  cancelSpeakAutoNext();
+  var from = speakIndex;
+  speakAutoTimer = setTimeout(function(){
+    speakAutoTimer = null;
+    if(speakIndex !== from || !speakItems.length) return;
+    var panel = document.getElementById("panel-speak");
+    if(!panel || !panel.classList.contains("active")) return;
+    if(from >= speakItems.length - 1){
+      var fb = document.getElementById("speakFeedback");
+      fb.className = "feedback show good";
+      fb.textContent = "🎉 Bác đã luyện xong câu cuối của phần Luyện nói rồi — giỏi lắm! Bấm nút “Tiếp theo: Trò chơi cuối bài →” ở dưới để sang phần chơi nhé.";
+      spStatus("Đã hoàn thành phần Luyện nói. Bấm “Tiếp theo: Trò chơi cuối bài →” để chơi tiếp nhé.");
+      return;
+    }
+    MicSessions.cancelCurrent();
+    speakIndex = from + 1;
+    syncSpeakPickChips();
+    syncSpeakTarget();
+    var tgt = document.getElementById("speakTarget");
+    if(tgt){
+      var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      try{ tgt.scrollIntoView({ behavior: reduce ? "auto" : "smooth", block: "center" }); }catch(e){ try{ tgt.scrollIntoView(); }catch(e2){} }
+      tgt.classList.add("flash");
+      setTimeout(function(){ tgt.classList.remove("flash"); }, 2300);
+    }
+  }, 1200);
 }
 document.getElementById("speakListenN").addEventListener("click", function(){ if(speakItems.length) speak(speakItems[speakIndex].en, 1); });
 document.getElementById("speakListenS").addEventListener("click", function(){ if(speakItems.length) speak(speakItems[speakIndex].en, 0.5); });
@@ -3451,6 +3551,7 @@ function gradeSpeak(said){
     fb.textContent = pickEnc("praise") + " Bác nói câu này rất đúng và rõ — cứ phát huy như vậy nhé!";
     celebrate(false);
     status.textContent = "Đúng rồi! Bác thử câu tiếp theo hoặc nghe lại để so sánh.";
+    scheduleSpeakAutoNext();
   } else if(score >= 0.55){
     fb.className = "feedback show good";
     fb.textContent = pickEnc("near") + " Bác nghe lại câu mẫu bằng nút “Nghe chậm”, chú ý các từ còn thiếu rồi đọc lại một lần nữa nhé. Câu mẫu: “" + target + "”";
@@ -3551,6 +3652,7 @@ function spSRAdapter(session){
   };
 }
 document.getElementById("micBtn").addEventListener("click", function(){
+  cancelSpeakAutoNext();
   var cur = MicSessions.get();
   if(cur && cur.key === "speak"){
     if(cur.phase === "starting" || cur.phase === "grading") return;
@@ -3587,6 +3689,7 @@ document.getElementById("speakSelfOk").addEventListener("click", function(){
   fb.textContent = pickEnc("praise") + " Bác tự nghe lại và thấy mình đọc đúng rồi. Cứ phát huy nhé — chọn câu khác để luyện tiếp nào.";
   celebrate(false);
   spStatus("Đã tự đánh dấu đọc đúng (tự kiểm tra). Bác chọn câu khác để luyện tiếp nhé.");
+  scheduleSpeakAutoNext();
 });
 document.getElementById("speakSelfRetry").addEventListener("click", function(){
   hideSpeakSelfCheck();
