@@ -1342,6 +1342,19 @@ footer.site{padding-bottom:calc(120px + env(safe-area-inset-bottom,0px))}
 .wv-note .rb-actions{margin-top:8px}
 #speakInAppGuide{margin-top:12px}
 #speakInAppGuide .wv-note{margin-top:0}
+.chrome-banner{margin-top:14px; background:var(--accent-soft); border:1.5px solid var(--accent); border-radius:var(--r-md); padding:14px 16px}
+.chrome-banner p{font-weight:600; font-size:max(16px,1em); line-height:1.55}
+.chrome-banner-btns{display:flex; flex-wrap:wrap; gap:10px; margin-top:10px}
+.lesson-learn{margin:0 0 18px; background:var(--surface); border:1.5px solid var(--border); border-radius:var(--r-md); padding:14px 16px}
+.lesson-learn-text{font-weight:800; font-size:1.05em}
+.lesson-learn .bar{margin-top:10px}
+.auto-next-row{display:flex; flex-wrap:wrap; align-items:center; gap:12px; margin:0 0 18px; background:var(--surface); border:1.5px solid var(--border); border-radius:var(--r-md); padding:12px 16px}
+.auto-next-row .an-label{font-weight:700; flex:1 1 220px}
+.an-toggle{border:2px solid var(--border-strong); background:var(--bg-soft); color:var(--ink); border-radius:var(--r-pill); padding:9px 20px; font-weight:800; font-size:.95em; cursor:pointer; min-height:48px}
+.an-toggle.on{background:var(--primary); border-color:var(--primary); color:#fff}
+.vocab-item.flash{animation:anFlash 2.2s ease}
+@keyframes anFlash{0%,100%{box-shadow:none}25%,60%{box-shadow:0 0 0 3px var(--accent)}}
+@media (prefers-reduced-motion: reduce){ .vocab-item.flash{animation:none; box-shadow:0 0 0 3px var(--accent)} }
 .header-in{position:relative}
 .menu-wrap{position:static}
 .display-menu{overscroll-behavior:contain}
@@ -1634,6 +1647,15 @@ html[data-font="small"] .rb-close{font-size:max(14px,.88em)}
 </header>
 
 <main>
+<div class="wrap">
+  <div class="chrome-banner" id="chromeBanner" hidden role="note">
+    <p id="chromeBannerText"></p>
+    <div class="chrome-banner-btns">
+      <button type="button" class="btn btn-primary btn-sm" id="chromeBannerCopy">Sao chép địa chỉ</button>
+      <button type="button" class="btn btn-ghost btn-sm" id="chromeBannerClose" aria-label="Đóng thông báo này">Đóng ✕</button>
+    </div>
+  </div>
+</div>
 <!-- ================= HOME VIEW ================= -->
 <div class="view active" id="viewHome">
 
@@ -2026,6 +2048,14 @@ html[data-font="small"] .rb-close{font-size:max(14px,.88em)}
         <div class="rb-step"><b>Bước 1 · Nghe</b><span>Bấm Nghe thường, Nghe chậm hoặc Nghe rất chậm để nghe mẫu thật kỹ.</span></div>
         <div class="rb-step"><b>Bước 2 · Đọc lại</b><span>Bấm nút “Đọc lại” màu cam rồi đọc to vào mic, giống như mẫu vừa nghe.</span></div>
         <div class="rb-step"><b>Bước 3 · Sửa ngay</b><span>Từ đọc đúng sẽ tô xanh kèm dấu ✓, từ sai hoặc thiếu sẽ tô đỏ kèm dấu ✗ — nghe chậm lại và đọc lại ngay tại chỗ.</span></div>
+      </div>
+      <div class="lesson-learn" id="lessonLearn">
+        <p class="lesson-learn-text" id="lessonLearnText">Bạn đã thuộc 0/5 từ của Bài 1</p>
+        <div class="bar" role="progressbar" aria-label="Tiến độ thuộc từ của bài này" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="lessonLearnBar"><div class="bar-fill" id="lessonLearnFill"></div></div>
+      </div>
+      <div class="auto-next-row">
+        <span class="an-label" id="autoNextLabel">Tự động sang từ tiếp theo khi đọc đúng</span>
+        <button type="button" class="an-toggle" id="autoNextToggle" aria-pressed="false" aria-labelledby="autoNextLabel autoNextState"><span id="autoNextState">Đang tắt</span></button>
       </div>
       <div id="rbNoSupport" class="no-support" style="display:none; margin-bottom:20px">
         <p><b>Lưu ý:</b> trình duyệt này (như Safari trên iPhone) không có bộ nghe chấm tự động của Chrome. Nút <b>Đọc lại</b> ở đây sẽ chuyển sang <b>chế độ ghi âm tự kiểm tra</b>: bác ghi âm, nghe lại giọng mình (đã lọc bớt tạp âm) cạnh giọng mẫu, rồi tự bấm <b>“Tôi đọc đúng rồi”</b> hoặc <b>“Chưa đúng, đọc lại”</b>. Muốn được chấm tự động từng từ, bác mở trang bằng <b>Google Chrome</b> — bộ nghe có sẵn trong Chrome, dùng ngay, không phải tải thêm gì.</p>
@@ -2451,6 +2481,183 @@ function toast(msg){
   var t = document.getElementById("toast"); t.textContent = msg; t.classList.add("show");
   clearTimeout(toastTimer); toastTimer = setTimeout(function(){ t.classList.remove("show"); }, 3200);
 }
+
+/* ================= CHÚC MỪNG: TIẾNG CHUÔNG (WebAudio) + PHÁO GIẤY (canvas) =================
+   Không tải file hay thư viện ngoài: tiếng chuông tổng hợp bằng WebAudio
+   (2–4 nốt đi lên, chỉ phát sau thao tác bấm của người học), pháo giấy tự
+   vẽ bằng canvas phủ màn hình ~1,9 giây rồi tự dọn, không chặn thao tác
+   (pointer-events:none). Người dùng bật giảm chuyển động
+   (prefers-reduced-motion) thì chỉ phát tiếng, không pháo giấy. */
+var congratsCtx = null;
+function playCongrats(full){
+  try{
+    var AC = window.AudioContext || window.webkitAudioContext; if(!AC) return;
+    if(!congratsCtx) congratsCtx = new AC();
+    var ac = congratsCtx;
+    if(ac.state === "suspended"){ try{ ac.resume(); }catch(e){} }
+    var t0 = ac.currentTime + 0.02;
+    var notes = full ? [523.25, 659.25, 783.99, 1046.5] : [659.25, 783.99, 1046.5];
+    var peak = full ? 0.22 : 0.15;
+    notes.forEach(function(f, i){
+      var o = ac.createOscillator(), g = ac.createGain();
+      o.type = "sine"; o.frequency.value = f;
+      var t = t0 + i * 0.13;
+      g.gain.setValueAtTime(0.0001, t);
+      g.gain.exponentialRampToValueAtTime(peak, t + 0.03);
+      g.gain.exponentialRampToValueAtTime(0.0001, t + 0.55);
+      o.connect(g); g.connect(ac.destination);
+      o.start(t); o.stop(t + 0.6);
+    });
+  }catch(e){}
+}
+function fireConfetti(full){
+  if(window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  try{
+    var cv = document.createElement("canvas");
+    cv.className = "confetti-canvas";
+    cv.setAttribute("aria-hidden", "true");
+    cv.style.cssText = "position:fixed; inset:0; width:100%; height:100%; pointer-events:none; z-index:9999";
+    cv.width = window.innerWidth; cv.height = window.innerHeight;
+    document.body.appendChild(cv);
+    var g = cv.getContext("2d");
+    if(!g){ cv.remove(); return; }
+    var colors = ["#175C33", "#C2410C", "#E8A33D", "#2F7FBF", "#D4537E", "#7FBF92"];
+    var N = full ? 150 : 45, ps = [];
+    for(var i = 0; i < N; i++){
+      ps.push({ x: Math.random() * cv.width, y: -20 - Math.random() * cv.height * 0.35,
+        w: 6 + Math.random() * 6, h: 8 + Math.random() * 8,
+        vy: 2.2 + Math.random() * 2.6, vx: -1 + Math.random() * 2,
+        rot: Math.random() * Math.PI, vr: -0.12 + Math.random() * 0.24, c: colors[i % colors.length] });
+    }
+    var start = null;
+    function frame(ts){
+      if(!start) start = ts;
+      var el = ts - start;
+      g.clearRect(0, 0, cv.width, cv.height);
+      ps.forEach(function(p){
+        p.y += p.vy; p.x += p.vx + Math.sin((el / 300) + p.rot) * 0.6; p.rot += p.vr;
+        g.save(); g.translate(p.x, p.y); g.rotate(p.rot); g.fillStyle = p.c;
+        g.fillRect(-p.w / 2, -p.h / 2, p.w, p.h); g.restore();
+      });
+      if(el < 1900) requestAnimationFrame(frame); else cv.remove();
+    }
+    requestAnimationFrame(frame);
+  }catch(e){}
+}
+function celebrate(full){ playCongrats(full); fireConfetti(full); }
+function lessonAllLearned(){
+  return !!(currentLesson && currentLesson.vocab && currentLesson.vocab.length &&
+    currentLesson.vocab.every(function(v){ return isLearned(v.en); }));
+}
+
+/* ================= THANH % TỪ ĐÃ THUỘC CỦA BÀI ĐANG HỌC =================
+   Đọc từ chính nguồn tiến độ hiện tại (state.learned); cập nhật ngay mỗi
+   lần refreshProgress chạy (mọi thao tác Đã thuộc/bỏ thuộc/Đọc lại đúng
+   đều đi qua setLearned → refreshProgress). Bài 10 là bài kiểm tra tổng
+   hợp nên ẩn thanh này. */
+function updateLessonLearnBar(){
+  var box = document.getElementById("lessonLearn"); if(!box) return;
+  if(!currentLesson || currentLesson.n === 10 || !currentLesson.vocab || !currentLesson.vocab.length){
+    box.style.display = "none"; return;
+  }
+  box.style.display = "";
+  var total = currentLesson.vocab.length;
+  var n = currentLesson.vocab.filter(function(v){ return isLearned(v.en); }).length;
+  var pct = Math.round(n / total * 100);
+  var txt = document.getElementById("lessonLearnText");
+  if(txt) txt.textContent = "Bạn đã thuộc " + n + "/" + total + " từ của Bài " + currentLesson.n;
+  var fill = document.getElementById("lessonLearnFill");
+  if(fill) fill.style.transform = "scaleX(" + (n / total) + ")";
+  var bar = document.getElementById("lessonLearnBar");
+  if(bar) bar.setAttribute("aria-valuenow", String(pct));
+}
+
+/* ================= TỰ ĐỘNG SANG TỪ TIẾP THEO KHI ĐỌC ĐÚNG (tùy chọn, mặc định TẮT) =================
+   Khóa riêng “tieng-anh-auto-next” (không có khóa = Tắt). Chỉ áp dụng cho
+   từ vựng từng từ: đọc đúng (chấm tự động hoặc tự kiểm tra bấm “Tôi đọc
+   đúng rồi”) thì sau ~1,2 giây cuộn nhẹ tới thẻ từ tiếp theo trong bài và
+   làm nổi bật thẻ đó; ở từ cuối bài thì hiện dòng báo đã hết từ. */
+var AUTO_NEXT_KEY = "tieng-anh-auto-next";
+function autoNextOn(){ try{ return localStorage.getItem(AUTO_NEXT_KEY) === "1"; }catch(e){ return false; } }
+function scheduleAutoNext(ctx){
+  if(!autoNextOn() || !ctx || !ctx.isWord || !currentLesson || !currentLesson.vocab) return;
+  var idx = -1;
+  for(var i = 0; i < currentLesson.vocab.length; i++){
+    if(currentLesson.vocab[i].en === ctx.target){ idx = i; break; }
+  }
+  if(idx < 0) return;
+  if(idx >= currentLesson.vocab.length - 1){
+    setTimeout(function(){
+      if(ctx.panel){
+        var p = document.createElement("p"); p.className = "rb-line";
+        p.textContent = "Đã hết từ của bài này — bác đã đọc tới từ cuối cùng rồi. Giỏi lắm!";
+        ctx.panel.appendChild(p);
+      }
+    }, 600);
+    return;
+  }
+  setTimeout(function(){
+    var items = document.querySelectorAll("#vocabList .vocab-item");
+    var el = items[idx + 1]; if(!el) return;
+    var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    try{ el.scrollIntoView({ behavior: reduce ? "auto" : "smooth", block: "center" }); }catch(e){ el.scrollIntoView(); }
+    el.classList.add("flash");
+    setTimeout(function(){ el.classList.remove("flash"); }, 2300);
+  }, 1200);
+}
+function initAutoNextToggle(){
+  var btn = document.getElementById("autoNextToggle"); if(!btn) return;
+  function sync(){
+    var on = autoNextOn();
+    btn.setAttribute("aria-pressed", on ? "true" : "false");
+    btn.classList.toggle("on", on);
+    var st = document.getElementById("autoNextState");
+    if(st) st.textContent = on ? "Đang bật" : "Đang tắt";
+  }
+  btn.addEventListener("click", function(){
+    try{ localStorage.setItem(AUTO_NEXT_KEY, autoNextOn() ? "0" : "1"); }catch(e){}
+    sync();
+  });
+  sync();
+}
+
+/* ================= BANNER GỢI Ý CHROME (chỉ khi môi trường sẽ chạy ghi âm tự kiểm tra) =================
+   Điều kiện hiển thị dùng ĐÚNG phát hiện môi trường của bo mạch thích ứng:
+   đang mở trong webview/app nhúng (inAppBrowserInfo) hoặc trình duyệt
+   không có SpeechRecognition (Firefox, Safari cũ) — tức các trường hợp
+   pickVoiceEngine chọn ghi âm tự kiểm tra vì MÔI TRƯỜNG. Nơi chấm tự
+   động chạy được (Chrome/Edge/Samsung Internet, Safari/Chrome iOS có bộ
+   nghe) thì banner không xuất hiện. Đóng banner chỉ ghi nhớ trong phiên
+   (sessionStorage), lần mở trang sau vẫn gợi ý lại. */
+function bannerBrowserName(){
+  var info = (typeof inAppBrowserInfo === "function") ? inAppBrowserInfo() : null;
+  if(info) return "ứng dụng " + info.name;
+  var ua = navigator.userAgent || "";
+  if(/Firefox\//.test(ua)) return "trình duyệt Firefox";
+  if(/Safari\//.test(ua) && !/Chrome\/|Chromium\/|CriOS\//.test(ua)) return "trình duyệt Safari";
+  return "trình duyệt này";
+}
+function initChromeBanner(){
+  var b = document.getElementById("chromeBanner"); if(!b) return;
+  var closed = false;
+  try{ closed = sessionStorage.getItem("tieng-anh-chrome-banner-closed") === "1"; }catch(e){}
+  if(closed) return;
+  var info = (typeof inAppBrowserInfo === "function") ? inAppBrowserInfo() : null;
+  var noSR = (typeof rbSupported === "function") ? !rbSupported() : false;
+  if(!info && !noSR) return;
+  var t = document.getElementById("chromeBannerText");
+  if(t) t.textContent = "Bạn đang mở trang bằng " + bannerBrowserName() + ". Để dùng tính năng Đọc lại & chấm phát âm tự động, khuyên dùng trình duyệt Google Chrome. Mở bằng trình duyệt hiện tại vẫn học được bình thường — phần đọc sẽ dùng chế độ ghi âm nghe lại.";
+  b.hidden = false;
+  var copy = document.getElementById("chromeBannerCopy");
+  if(copy) copy.addEventListener("click", function(){ copyPageAddress(copy); });
+  var close = document.getElementById("chromeBannerClose");
+  if(close) close.addEventListener("click", function(){
+    b.hidden = true;
+    try{ sessionStorage.setItem("tieng-anh-chrome-banner-closed", "1"); }catch(e){}
+  });
+}
+initChromeBanner();
+initAutoNextToggle();
 /* Danh sách giọng của trình duyệt tải KHÔNG đồng bộ: lần bấm nghe đầu tiên
    thường chưa có giọng nào nên máy lấy giọng mặc định (có máy là giọng Việt
    đọc tiếng Anh, nghe rất khó hiểu). Vì vậy phải lưu sẵn danh sách ngay khi
@@ -2566,6 +2773,7 @@ function refreshProgress(){
   renderReview();
   renderRoadmap();
   syncLearnButtons();
+  updateLessonLearnBar();
 }
 
 /* ================= ROADMAP (reflects real stage-1 progress) ================= */
@@ -2796,6 +3004,7 @@ function learnToggle(en){
   b.addEventListener("click", function(){
     var now = !isLearned(en); setLearned(en, now);
     toast(now ? "Đã ghi nhớ: bác đã thuộc từ “" + en + "”" : "Đã bỏ đánh dấu thuộc từ “" + en + "”");
+    if(now) celebrate(lessonAllLearned());
   });
   return b;
 }
@@ -2865,6 +3074,7 @@ function renderVocab(){
     nw.appendChild(strip);
   }
   syncLearnButtons();
+  updateLessonLearnBar();
 }
 
 /* ================= FLASHCARDS ================= */
@@ -2887,6 +3097,7 @@ document.getElementById("fcNext").addEventListener("click", function(){ fcIndex 
 document.getElementById("fcListen").addEventListener("click", function(){ speak(currentLesson.vocab[fcIndex].en, 0.8); });
 document.getElementById("fcKnown").addEventListener("click", function(){
   setLearned(currentLesson.vocab[fcIndex].en, true); renderFlashcard();
+  celebrate(lessonAllLearned());
   toast("Giỏi lắm! Đã thuộc từ “" + currentLesson.vocab[fcIndex].en + "”");
   fcIndex = (fcIndex + 1) % currentLesson.vocab.length; fcFlipped=false; renderFlashcard();
 });
@@ -3096,6 +3307,7 @@ function gradeSpeak(said){
   if(normalize(said) === normalize(target) || score >= 0.9){
     fb.className = "feedback show good";
     fb.textContent = "Xuất sắc! Bác nói rất đúng và rõ. Cứ phát huy như vậy nhé!";
+    celebrate(false);
     status.textContent = "Đúng rồi! Bác thử câu tiếp theo hoặc nghe lại để so sánh.";
   } else if(score >= 0.55){
     fb.className = "feedback show good";
@@ -3231,6 +3443,7 @@ document.getElementById("speakSelfOk").addEventListener("click", function(){
   hideSpeakSelfCheck();
   var fb = document.getElementById("speakFeedback"); fb.className = "feedback show good";
   fb.textContent = "Tốt lắm! Bác tự nghe lại và thấy mình đọc đúng rồi. Cứ phát huy nhé — chọn câu khác để luyện tiếp nào.";
+  celebrate(false);
   spStatus("Đã tự đánh dấu đọc đúng (tự kiểm tra). Bác chọn câu khác để luyện tiếp nhé.");
 });
 document.getElementById("speakSelfRetry").addEventListener("click", function(){
@@ -4176,6 +4389,8 @@ function rbShowResult(ctx, best){
       setLearned(ctx.target, true);
       toast("Đọc đúng hết rồi! Đã đánh dấu “Đã thuộc”: " + ctx.target);
     }
+    celebrate(ctx.isWord && lessonAllLearned());
+    if(ctx.isWord) scheduleAutoNext(ctx);
   }
   /* Phân tích âm: ghép từng từ sai với từ máy nghe được (theo thứ tự), so dãy âm vị */
   var wrongIdx = [];
@@ -4341,6 +4556,8 @@ function rbShowSelfCheck(ctx, session, info){
     saveState();
     rbShowIdle(ctx, "Tốt lắm — bác tự đánh dấu đọc đúng!", "Đã ghi nhận: bác đã tự kiểm tra và đọc đúng " + (ctx.isWord ? "từ" : "câu") + " này " + state.practice[ctx.target] + " lần.");
     if(ctx.isWord && !isLearned(ctx.target)){ setLearned(ctx.target, true); toast("Đã đánh dấu “Đã thuộc”: " + ctx.target); }
+    celebrate(ctx.isWord && lessonAllLearned());
+    if(ctx.isWord) scheduleAutoNext(ctx);
   }, "vslow"));
   actions.appendChild(rbActionBtn("Chưa đúng, đọc lại", function(){ startReadback(ctx); }, "mic"));
   panel.appendChild(actions);
@@ -5260,11 +5477,13 @@ function renderGame(){
 function finishGame(pass, pct, headline, detail){
   stopGameTimer();
   var L = currentLesson; if(!L) return;
+  var wasDone = !!state.completed[L.id];
   if(pass){
     state.completed[L.id] = true;
     if(pct > (state.gameBest[L.id] || 0)) state.gameBest[L.id] = pct;
   }
   saveState(); refreshProgress();
+  if(pass && !wasDone) celebrate(true);
   var res = document.getElementById("gameResult"); if(!res) return;
   res.className = "quiz-result show"; res.innerHTML = "";
   res.style.background = pass ? "" : "var(--accent-soft)";
@@ -5893,6 +6112,7 @@ function buildChapterExamQuestions(L){
 function finishChapterExam(L, total, score, wrongs){
   var pass = score >= 16;
   var pct = Math.round(score / total * 100);
+  var wasDone = !!state.completed[L.id];
   if(pass){
     state.completed[L.id] = true;
     if(pct > (state.gameBest[L.id] || 0)) state.gameBest[L.id] = pct;
@@ -5900,6 +6120,7 @@ function finishChapterExam(L, total, score, wrongs){
     if(score > (examState.best[L.ch] || 0)) examState.best[L.ch] = score;
   }
   saveState(); examSave(); refreshProgress();
+  if(pass && !wasDone) celebrate(true);
   var res = document.getElementById("gameResult"); if(!res) return;
   res.className = "quiz-result show"; res.innerHTML = "";
   res.style.background = pass ? "" : "var(--accent-soft)";
