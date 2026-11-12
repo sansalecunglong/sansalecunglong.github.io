@@ -2974,10 +2974,15 @@ function pickEnVoice(){
    phát ngay cùng nhịp; (2) KHÔNG gán u.voice — chỉ đặt lang en-US để iOS
    tự dùng giọng Anh mặc định của máy. Ngoài iOS giữ nguyên đường cũ
    (cancel ngay + gán giọng Anh tốt nhất qua pickEnVoice).
-   CHÓT BẢO HIỂM (mọi nền tảng): utterance sau ~800ms vẫn CHƯA hề bắt đầu
-   phát (không onstart, không onerror) → tự thử lại ĐÚNG 1 lần bằng
-   utterance “trần” (chỉ lang en-US + rate như yêu cầu, không gán voice;
-   trên iOS lần thử lại cũng theo quy tắc trì hoãn sau cancel ở trên).
+   CHÓT BẢO HIỂM (mọi nền tảng): utterance sau ~1200ms vẫn CHƯA hề bắt đầu
+   phát (không onstart, không onerror) → kiểm tra trạng thái synth: còn
+   bận (speaking/pending) thì utterance có thể chỉ CHẬM (engine nguội, ví
+   dụ Xiaomi/MIUI) → gia hạn quan sát, KHÔNG thử lại (thử lại lúc này là
+   hai giọng đọc chồng nhau); chỉ khi synth rảnh hẳn mới kết luận bị nuốt
+   và tự thử lại ĐÚNG 1 lần bằng utterance “trần” (chỉ lang en-US + rate
+   như yêu cầu, không gán voice), và lần thử lại chỉ phát sau khi đã
+   cancel() + xác nhận synth rảnh hẳn (chi tiết ở ttsWatchSwallow /
+   ttsWaitIdleBeforeRetry bên dưới).
    Đã bắt đầu phát rồi thì tuyệt đối không phát lại (tránh đọc 2 lần).
    speakSeq tăng theo mỗi lần bấm nghe MỚI: utterance của lần bấm cũ bị
    lần bấm mới thay thế thì không tự thử lại nữa (tránh đọc chồng chữ cũ).
@@ -3008,9 +3013,95 @@ function ttsNoteListenOk(text){
   if(listenOkLogged) return; listenOkLogged = true;
   ttsLogListen("nghe-ok", text);
 }
+/* ===== PHÂN BIỆT “CHẬM” vs “BỊ NUỐT” (12/11 tối: Xiaomi báo 2 GIỌNG ĐỌC
+   CÙNG NHAU) =====
+   Watchdog cũ (800ms): utterance chưa onstart sau 800ms là coi như bị
+   nuốt và phát lại. Trên máy có bộ đọc khởi động CHẬM (Xiaomi/MIUI,
+   Google TTS còn nguội — lượt đầu sau khi mở trang dễ mất hơn 800ms mới
+   bắt đầu), utterance đầu chưa chết mà chỉ CHẬM; cancel() trên Android
+   không giết kịp utterance đã đẩy xuống engine nên lần thử lại vang
+   chồng lên lần đầu = hai giọng đọc cùng nhau. Nay watchdog quyết định
+   theo TRẠNG THÁI của synth lúc hết giờ:
+   - synth còn bận (speaking/pending) → utterance có thể chỉ đang CHẬM →
+     gia hạn quan sát (kiểm lại sau ~1500ms), TUYỆT ĐỐI không thử lại.
+     Tổng thời gian quan sát có trần ~12s; quá trần mà máy vẫn bận thì bỏ
+     cuộc, ghi nhật ký “nghe-skip-busy”, vẫn không phát chồng bằng mọi giá.
+   - synth RẢNH HẲN mà utterance chưa từng onstart/onerror → mới kết luận
+     bị nuốt. Trước lần thử lại: cancel() rồi CHỜ XÁC NHẬN RẢNH (thăm dò
+     mỗi ~60ms, tối đa ~600ms; iOS cộng thêm nhịp ~100ms sau khi rảnh như
+     quy tắc cũ); quá 600ms máy vẫn bận → BỎ lần thử lại, ghi
+     “nghe-skip-busy”. “nghe-retry” chỉ ghi khi thật sự sắp phát lại.
+   Watchdog lượt đầu nới từ 800ms lên ~1200ms cho engine nguội kịp dậy. */
+var TTS_WATCH_FIRST_MS = 1200;
+var TTS_WATCH_EXTEND_MS = 1500;
+var TTS_WATCH_MAX_MS = 12000;
+function ttsSynthBusy(){
+  var s = window.speechSynthesis;
+  try{ return !!(s && (s.speaking || s.pending)); }catch(e){ return false; }
+}
+function ttsWaitIdleBeforeRetry(cb){
+  var synth = window.speechSynthesis;
+  try{ synth.cancel(); }catch(e){}
+  var waited = 0;
+  (function poll(){
+    if(!ttsSynthBusy()){
+      if(ttsIsIOS()) setTimeout(function(){ cb(true); }, 100);
+      else cb(true);
+      return;
+    }
+    if(waited >= 600){ cb(false); return; }
+    waited += 60;
+    setTimeout(poll, 60);
+  })();
+}
+/* Theo dõi 1 utterance vừa speak(). getState() → {started, errored, done};
+   isValid() → lượt nghe này còn hiệu lực (chưa bị lần bấm mới thay thế /
+   hàng đợi chưa bị hủy). onSwallowed() được gọi ĐÚNG 1 lần khi kết luận
+   bị nuốt; onGiveUp() ĐÚNG 1 lần khi quan sát quá trần mà máy vẫn bận. */
+function ttsWatchSwallow(getState, isValid, onSwallowed, onGiveUp){
+  var fired = false, waited = 0;
+  function check(){
+    if(fired) return;
+    if(!isValid()) return;
+    var st = getState();
+    if(st.started || st.errored || st.done) return;
+    if(ttsSynthBusy()){
+      if(waited >= TTS_WATCH_MAX_MS){
+        fired = true;
+        if(onGiveUp) onGiveUp();
+        return;
+      }
+      waited += TTS_WATCH_EXTEND_MS;
+      setTimeout(check, TTS_WATCH_EXTEND_MS);
+      return;
+    }
+    fired = true;
+    onSwallowed();
+  }
+  setTimeout(check, TTS_WATCH_FIRST_MS);
+}
 var speakSeq = 0;
 function speakAttempt(text, rate, isRetry, seq){
   var synth = window.speechSynthesis;
+  function failFinal(){
+    if(seq !== speakSeq) return;
+    ttsLogListen("nghe-fail", text);
+    toast("Chưa đọc được lúc này, bác thử lại sau một chút nhé.");
+  }
+  /* Lần thử lại CHỈ phát sau khi synth đã rảnh hẳn (ttsWaitIdleBeforeRetry);
+     máy kẹt bận quá 600ms thì bỏ hẳn lần thử lại — thà mất một lượt đọc
+     còn hơn để hai giọng vang chồng nhau. */
+  function retryOnce(){
+    ttsWaitIdleBeforeRetry(function(idle){
+      if(seq !== speakSeq) return;
+      if(!idle){
+        ttsLogListen("nghe-skip-busy", text);
+        return;
+      }
+      ttsLogListen("nghe-retry", text);
+      speakAttempt(text, rate, true, seq);
+    });
+  }
   function doSpeak(){
     if(seq !== speakSeq) return;
     try{
@@ -3023,37 +3114,38 @@ function speakAttempt(text, rate, isRetry, seq){
         var voice = pickEnVoice();
         if(voice) u.voice = voice;
       }
-      var started = false, errored = false, done = false;
+      var st = { started:false, errored:false, done:false };
       u.onstart = function(){
-        started = true;
+        st.started = true;
         ttsNoteListenOk(text);
       };
+      u.onend = function(){ st.done = true; };
       u.onerror = function(){
-        errored = true;
+        st.errored = true;
         /* Chỉ lần THỬ LẠI mà còn lỗi trước khi kịp phát mới tính là tịt hẳn;
            lỗi của lượt đầu (kể cả bị cancel bởi lần bấm nghe khác) thì chốt
-           bảo hiểm tính theo mốc 800ms ở dưới, không xử lý ở đây. */
-        if(isRetry && !started && !done && seq === speakSeq){
-          done = true;
-          ttsLogListen("nghe-fail", text);
-          toast("Chưa đọc được lúc này, bác thử lại sau một chút nhé.");
+           bảo hiểm ở watchdog dưới quyết định, không xử lý ở đây. */
+        if(isRetry && !st.started && !st.done && seq === speakSeq){
+          st.done = true;
+          failFinal();
         }
       };
       synth.speak(u);
-      setTimeout(function(){
-        if(started || errored || done || seq !== speakSeq) return;
-        done = true;
-        if(!isRetry){
-          ttsLogListen("nghe-retry", text);
-          speakAttempt(text, rate, true, seq);
-        }else{
-          ttsLogListen("nghe-fail", text);
-          toast("Chưa đọc được lúc này, bác thử lại sau một chút nhé.");
+      ttsWatchSwallow(
+        function(){ return st; },
+        function(){ return seq === speakSeq && !st.done; },
+        function(){
+          st.done = true;
+          if(!isRetry) retryOnce(); else failFinal();
+        },
+        function(){
+          st.done = true;
+          ttsLogListen("nghe-skip-busy", text);
         }
-      }, 800);
+      );
     }catch(e){
-      if(!isRetry && seq === speakSeq){ ttsLogListen("nghe-retry", text); speakAttempt(text, rate, true, seq); }
-      else if(seq === speakSeq){ ttsLogListen("nghe-fail", text); toast("Chưa đọc được lúc này, bác thử lại sau một chút nhé."); }
+      if(seq !== speakSeq) return;
+      if(!isRetry) retryOnce(); else failFinal();
     }
   }
   try{
@@ -3640,11 +3732,15 @@ function playDialogueAll(){
       setTimeout(step, dlgRate === 1 ? 250 : 450);
     }
     /* Từng câu cũng hưởng gia cố iOS + chốt bảo hiểm như speak(): trên iOS
-       không gán voice; câu nào sau 800ms chưa hề bắt đầu phát thì thử lại
-       đúng 1 lần bằng utterance “trần” (hủy câu tịt trước, trên iOS chờ
-       thêm ~100ms sau cancel); thử lại vẫn tịt thì ghi nhật ký và chuyển
-       câu tiếp để hàng đợi không đứng chết. Cờ dead vô hiệu utterance cũ
-       để sự kiện onend/onerror về muộn của nó không nhảy câu 2 lần. */
+       không gán voice; câu nào bị kết luận NUỐT (synth rảnh hẳn mà chưa hề
+       bắt đầu phát — xem ttsWatchSwallow) thì thử lại đúng 1 lần bằng
+       utterance “trần”, và chỉ phát lại sau khi đã cancel + xác nhận synth
+       rảnh; câu chỉ CHẬM (synth còn bận, engine nguội kiểu Xiaomi) thì gia
+       hạn quan sát chứ KHÔNG phát lại — phát lại lúc đó là hai giọng đọc
+       chồng nhau. Thử lại vẫn tịt, hoặc máy kẹt bận không phát lại được,
+       thì ghi nhật ký và chuyển câu tiếp để hàng đợi không đứng chết. Cờ
+       dead vô hiệu utterance cũ để sự kiện onend/onerror về muộn của nó
+       không nhảy câu 2 lần. */
     var lineTried = false;
     function speakLine(){
       if(token !== dlgPlayToken || advanced) return;
@@ -3662,19 +3758,36 @@ function playDialogueAll(){
       u.onend = function(){ if(!dead){ dead = true; next(); } };
       u.onerror = function(){ if(!dead){ dead = true; next(); } };
       try{ window.speechSynthesis.speak(u); }catch(e){ if(!dead){ dead = true; next(); } return; }
-      setTimeout(function(){
-        if(started || dead || token !== dlgPlayToken || advanced) return;
-        if(!lineTried){
-          lineTried = true; dead = true;
-          ttsLogListen("nghe-retry", line.en);
-          try{ window.speechSynthesis.cancel(); }catch(e){}
-          if(ttsIsIOS()) setTimeout(speakLine, 100); else speakLine();
-        }else{
+      ttsWatchSwallow(
+        function(){ return { started: started, errored: false, done: dead }; },
+        function(){ return !dead && token === dlgPlayToken && !advanced; },
+        function(){
+          if(dead) return;
+          if(!lineTried){
+            lineTried = true; dead = true;
+            ttsWaitIdleBeforeRetry(function(idle){
+              if(token !== dlgPlayToken || advanced) return;
+              if(!idle){
+                ttsLogListen("nghe-skip-busy", line.en);
+                next();
+                return;
+              }
+              ttsLogListen("nghe-retry", line.en);
+              speakLine();
+            });
+          }else{
+            dead = true;
+            ttsLogListen("nghe-fail", line.en);
+            next();
+          }
+        },
+        function(){
+          if(dead) return;
           dead = true;
-          ttsLogListen("nghe-fail", line.en);
+          ttsLogListen("nghe-skip-busy", line.en);
           next();
         }
-      }, 800);
+      );
     }
     speakLine();
   }
