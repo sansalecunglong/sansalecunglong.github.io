@@ -2964,20 +2964,115 @@ function pickEnVoice(){
   }
   return best;
 }
+/* ===== GIA CỐ TTS CHO iOS (12/11: iPhone báo MỌI nút Nghe đều im lặng) =====
+   Trên iOS (Safari lẫn Chrome iOS — chung nhân WebKit), kiểu “cancel()
+   rồi speak() ngay trong cùng một nhịp” bị WebKit nuốt im lặng có tiếng:
+   nút Nghe nhận bấm mà không ra tiếng, cũng không báo lỗi. Gán ép một
+   giọng cụ thể (u.voice) cũng có thể tịt nếu giọng đó chưa sẵn sàng trên
+   máy. Vì vậy riêng trên iOS: (1) chỉ cancel() khi synth thật đang bận
+   (speaking/pending), và vừa cancel thì TRÌ HOÃN ~100ms mới phát thay vì
+   phát ngay cùng nhịp; (2) KHÔNG gán u.voice — chỉ đặt lang en-US để iOS
+   tự dùng giọng Anh mặc định của máy. Ngoài iOS giữ nguyên đường cũ
+   (cancel ngay + gán giọng Anh tốt nhất qua pickEnVoice).
+   CHÓT BẢO HIỂM (mọi nền tảng): utterance sau ~800ms vẫn CHƯA hề bắt đầu
+   phát (không onstart, không onerror) → tự thử lại ĐÚNG 1 lần bằng
+   utterance “trần” (chỉ lang en-US + rate như yêu cầu, không gán voice;
+   trên iOS lần thử lại cũng theo quy tắc trì hoãn sau cancel ở trên).
+   Đã bắt đầu phát rồi thì tuyệt đối không phát lại (tránh đọc 2 lần).
+   speakSeq tăng theo mỗi lần bấm nghe MỚI: utterance của lần bấm cũ bị
+   lần bấm mới thay thế thì không tự thử lại nữa (tránh đọc chồng chữ cũ).
+   Nhật ký: retry/fail và đúng 1 dòng “nghe-ok” cho lần phát thành công
+   đầu tiên sau khi trang tải được ghi vào khóa tieng-anh-voice-log
+   (xem ở Menu → Chẩn đoán giọng nói) để đối chiếu trên máy thật. */
+function ttsIsIOS(){
+  var ua = navigator.userAgent || "";
+  if(/iPhone|iPad|iPod/.test(ua)) return true;
+  /* iPadOS 13+ trá hình máy Mac: UA ghi Macintosh nhưng có cảm ứng đa điểm. */
+  if(navigator.platform === "MacIntel" && (navigator.maxTouchPoints || 0) > 1) return true;
+  return false;
+}
+function ttsPlatformName(){
+  if(ttsIsIOS()) return "iOS";
+  if(/Android/.test(navigator.userAgent || "")) return "Android";
+  return "khác";
+}
+var listenOkLogged = false;
+function ttsLogListen(name, text){
+  try{
+    var arr = voiceLogRead();
+    arr.push({ type: "listen", at: new Date().toISOString(), event: name, platform: ttsPlatformName(), text: String(text || "").slice(0, 60) });
+    voiceLogWrite(arr);
+  }catch(e){}
+}
+function ttsNoteListenOk(text){
+  if(listenOkLogged) return; listenOkLogged = true;
+  ttsLogListen("nghe-ok", text);
+}
+var speakSeq = 0;
+function speakAttempt(text, rate, isRetry, seq){
+  var synth = window.speechSynthesis;
+  function doSpeak(){
+    if(seq !== speakSeq) return;
+    try{
+      /* Chrome di động hay kẹt trạng thái paused sau lần phát trước: không
+         resume thì lần bấm này tịt hẳn dù utterance đã được tạo. */
+      if(synth.paused){ try{ synth.resume(); }catch(e){} }
+      var u = new SpeechSynthesisUtterance(text);
+      u.lang = "en-US"; u.rate = rate; u.pitch = 1;
+      if(!isRetry && !ttsIsIOS()){
+        var voice = pickEnVoice();
+        if(voice) u.voice = voice;
+      }
+      var started = false, errored = false, done = false;
+      u.onstart = function(){
+        started = true;
+        ttsNoteListenOk(text);
+      };
+      u.onerror = function(){
+        errored = true;
+        /* Chỉ lần THỬ LẠI mà còn lỗi trước khi kịp phát mới tính là tịt hẳn;
+           lỗi của lượt đầu (kể cả bị cancel bởi lần bấm nghe khác) thì chốt
+           bảo hiểm tính theo mốc 800ms ở dưới, không xử lý ở đây. */
+        if(isRetry && !started && !done && seq === speakSeq){
+          done = true;
+          ttsLogListen("nghe-fail", text);
+          toast("Chưa đọc được lúc này, bác thử lại sau một chút nhé.");
+        }
+      };
+      synth.speak(u);
+      setTimeout(function(){
+        if(started || errored || done || seq !== speakSeq) return;
+        done = true;
+        if(!isRetry){
+          ttsLogListen("nghe-retry", text);
+          speakAttempt(text, rate, true, seq);
+        }else{
+          ttsLogListen("nghe-fail", text);
+          toast("Chưa đọc được lúc này, bác thử lại sau một chút nhé.");
+        }
+      }, 800);
+    }catch(e){
+      if(!isRetry && seq === speakSeq){ ttsLogListen("nghe-retry", text); speakAttempt(text, rate, true, seq); }
+      else if(seq === speakSeq){ ttsLogListen("nghe-fail", text); toast("Chưa đọc được lúc này, bác thử lại sau một chút nhé."); }
+    }
+  }
+  try{
+    if(ttsIsIOS()){
+      if(synth.speaking || synth.pending){
+        try{ synth.cancel(); }catch(e){}
+        setTimeout(doSpeak, 100);
+      } else doSpeak();
+    }else{
+      try{ synth.cancel(); }catch(e){}
+      doSpeak();
+    }
+  }catch(e){ toast("Chưa đọc được lúc này, bác thử lại sau một chút nhé."); }
+}
 function speak(text, rate){
   if(!text) return;
   if(!ttsOK){ toast("Trình duyệt này chưa hỗ trợ giọng đọc. Bác hãy mở trang bằng Chrome hoặc Safari nhé."); return; }
-  try{
-    window.speechSynthesis.cancel();
-    /* Chrome di động hay kẹt trạng thái paused sau lần phát trước: không
-       resume thì lần bấm này tịt hẳn dù utterance đã được tạo. */
-    if(window.speechSynthesis.paused){ try{ window.speechSynthesis.resume(); }catch(e){} }
-    var u = new SpeechSynthesisUtterance(text);
-    u.lang = "en-US"; u.rate = rate || 1; u.pitch = 1;
-    var voice = pickEnVoice();
-    if(voice) u.voice = voice;
-    window.speechSynthesis.speak(u);
-  }catch(e){ toast("Chưa đọc được lúc này, bác thử lại sau một chút nhé."); }
+  speakSeq++;
+  speakAttempt(text, rate || 1, false, speakSeq);
 }
 if(ttsOK){
   refreshTtsVoices();
@@ -3537,10 +3632,6 @@ function playDialogueAll(){
     var rows = document.querySelectorAll("#dlgList .dlg-line");
     var row = rows[queue[pos]];
     if(row){ row.classList.add("playing"); try{ row.scrollIntoView({block:"nearest", behavior:"smooth"}); }catch(e){} }
-    var u = new SpeechSynthesisUtterance(line.en);
-    u.lang = "en-US"; u.rate = dlgRate; u.pitch = 1;
-    var voice = pickEnVoice();
-    if(voice) u.voice = voice;
     var advanced = false;
     function next(){
       if(advanced) return; advanced = true;
@@ -3548,11 +3639,56 @@ function playDialogueAll(){
       pos++;
       setTimeout(step, dlgRate === 1 ? 250 : 450);
     }
-    u.onend = next; u.onerror = next;
-    try{ window.speechSynthesis.speak(u); }catch(e){ next(); }
+    /* Từng câu cũng hưởng gia cố iOS + chốt bảo hiểm như speak(): trên iOS
+       không gán voice; câu nào sau 800ms chưa hề bắt đầu phát thì thử lại
+       đúng 1 lần bằng utterance “trần” (hủy câu tịt trước, trên iOS chờ
+       thêm ~100ms sau cancel); thử lại vẫn tịt thì ghi nhật ký và chuyển
+       câu tiếp để hàng đợi không đứng chết. Cờ dead vô hiệu utterance cũ
+       để sự kiện onend/onerror về muộn của nó không nhảy câu 2 lần. */
+    var lineTried = false;
+    function speakLine(){
+      if(token !== dlgPlayToken || advanced) return;
+      var u = new SpeechSynthesisUtterance(line.en);
+      u.lang = "en-US"; u.rate = dlgRate; u.pitch = 1;
+      if(!lineTried && !ttsIsIOS()){
+        var voice = pickEnVoice();
+        if(voice) u.voice = voice;
+      }
+      var started = false, dead = false;
+      u.onstart = function(){
+        started = true;
+        ttsNoteListenOk(line.en);
+      };
+      u.onend = function(){ if(!dead){ dead = true; next(); } };
+      u.onerror = function(){ if(!dead){ dead = true; next(); } };
+      try{ window.speechSynthesis.speak(u); }catch(e){ if(!dead){ dead = true; next(); } return; }
+      setTimeout(function(){
+        if(started || dead || token !== dlgPlayToken || advanced) return;
+        if(!lineTried){
+          lineTried = true; dead = true;
+          ttsLogListen("nghe-retry", line.en);
+          try{ window.speechSynthesis.cancel(); }catch(e){}
+          if(ttsIsIOS()) setTimeout(speakLine, 100); else speakLine();
+        }else{
+          dead = true;
+          ttsLogListen("nghe-fail", line.en);
+          next();
+        }
+      }, 800);
+    }
+    speakLine();
   }
-  if(window.speechSynthesis){ try{ window.speechSynthesis.cancel(); }catch(e){} }
-  step();
+  /* Mở hàng đợi cũng theo quy tắc iOS: synth đang bận mới cancel, và vừa
+     cancel thì chờ ~100ms mới phát câu đầu (phát ngay cùng nhịp bị nuốt). */
+  if(window.speechSynthesis){
+    if(ttsIsIOS() && (window.speechSynthesis.speaking || window.speechSynthesis.pending)){
+      try{ window.speechSynthesis.cancel(); }catch(e){}
+      setTimeout(function(){ if(token === dlgPlayToken) step(); }, 100);
+    }else{
+      try{ window.speechSynthesis.cancel(); }catch(e){}
+      step();
+    }
+  } else step();
 }
 var dlgPlayBtn = document.getElementById("dlgPlayAll");
 if(dlgPlayBtn) dlgPlayBtn.addEventListener("click", playDialogueAll);
@@ -4041,6 +4177,9 @@ function voiceLogText(){
       lines.push("Có SpeechRecognition: " + e.sr);
       lines.push("Quyền mic (navigator.permissions): " + e.micPerm);
       lines.push("Chế độ đã ghi nhớ (tieng-anh-voice-mode): " + e.storedMode);
+    } else if(e.type === "listen"){
+      lines.push("", "--- Sự kiện NGHE (TTS) · " + e.at + " ---");
+      lines.push("Sự kiện: " + e.event + " · Nền tảng: " + e.platform + " · Chữ: “" + e.text + "”");
     } else {
       n += 1;
       lines.push("", "--- Phiên " + n + " · " + e.at + " ---");
