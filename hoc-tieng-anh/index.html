@@ -470,6 +470,8 @@ html.hc .tab-btn[aria-selected="true"]{color:#fff}
 .vocab-row .v-vi{font-weight:600; font-size:1.02em}
 .vocab-row .v-ex{color:var(--muted); font-size:.9em; margin-top:2px}
 .vocab-row .v-btns{display:flex; gap:8px; flex-wrap:wrap}
+.vocab-row .v-thumb{width:68px; height:68px; flex:0 0 auto; border-radius:12px; object-fit:cover; background:var(--surface-2); border:2px solid var(--border)}
+.fc-img{display:block; max-height:110px; max-width:min(230px,72%); width:auto; height:auto; margin:0 auto; border-radius:12px; background:var(--surface-2); pointer-events:none}
 .learned-toggle{
   min-height:56px; padding:8px 16px; border-radius:var(--r-pill); font-weight:800; font-size:.85em;
   border:2px solid var(--border-strong); background:var(--surface); color:var(--ink);
@@ -2223,6 +2225,7 @@ html[data-font="small"] .hc-menu-btn, html[data-font="small"] .dm-nav-btn{font-s
           <span class="fc-inner" id="fcInner">
             <span class="fc-face fc-front">
               <span class="fc-hint">Ấn vào thẻ để xem nghĩa</span>
+              <img class="fc-img" id="fcImg" alt="" loading="lazy" style="display:none" onerror="this.style.display='none'">
               <span class="fc-word" id="fcWord">…</span>
               <span class="fc-ipa" id="fcIpaFront">…</span>
             </span>
@@ -2457,6 +2460,7 @@ html[data-font="small"] .hc-menu-btn, html[data-font="small"] .dm-nav-btn{font-s
   <div class="wrap">
     <p><b>Tiếng Anh Cho Người Mới</b> — Học chậm mà chắc. Mỗi ngày 10 phút, sau 60 bài nhỏ bác đã có thể giao tiếp những việc thường ngày.</p>
     <p style="margin-top:6px">Mẹo: Muốn chữ to hơn, bấm nút 3 gạch (Menu) ở góc trên bên phải rồi chọn Cỡ chữ. Cũng trong menu đó, bác bật “Tương phản cao” nếu thấy chữ chưa đủ rõ.</p>
+    <p style="margin-top:6px">Hình minh họa từ vựng Chương 1: ảnh từ Openverse / Wikimedia Commons; hình tượng hình ARASAAC (Sergio Palao — Gobierno de Aragón, giấy phép CC BY-NC-SA) và Mulberry Symbols (CC BY-SA 4.0); một vài hình vẽ bằng AI.</p>
   </div>
 </footer>
 
@@ -3670,6 +3674,64 @@ function syncLearnButtons(){
   });
   syncWotdBtn();
 }
+/* ============ HÌNH MINH HỌA TỪ VỰNG — CHỈ CHƯƠNG 1 ============
+   Hệ lai: ảnh thật (Openverse / Wikimedia Commons) + tượng hình ARASAAC
+   và Mulberry + 2 hình vẽ AI (me-too, you-are-welcome). Khóa bản đồ là
+   từ tiếng Anh đã chuẩn hóa: viết thường, bỏ dấu câu cuối (? . !).
+   Bài 10 dùng lại cùng slug với bài gốc. Chương khác: không có hình. */
+var CH1_VOCAB_IMG = {
+  "hello": "hello",
+  "good morning": "good-morning",
+  "good afternoon": "good-afternoon",
+  "good evening": "good-evening",
+  "hi": "hi",
+  "goodbye": "goodbye",
+  "see you tomorrow": "see-you-tomorrow",
+  "see you later": "see-you-later",
+  "have a nice day": "have-a-nice-day",
+  "good night": "good-night",
+  "name": "name",
+  "what is your name": "what-is-your-name",
+  "my name is": "my-name-is",
+  "i am": "i-am",
+  "me too": "me-too",
+  "where are you from": "where-are-you-from",
+  "i am from vietnam": "i-am-from-vietnam",
+  "hometown": "hometown",
+  "city": "city",
+  "village": "village",
+  "job": "job",
+  "teacher": "teacher",
+  "farmer": "farmer",
+  "worker": "worker",
+  "retired": "retired",
+  "please": "please",
+  "thank you": "thank-you",
+  "you are welcome": "you-are-welcome",
+  "sorry": "sorry",
+  "excuse me": "excuse-me",
+  "how are you": "how-are-you",
+  "i am fine": "i-am-fine",
+  "i am very well": "i-am-very-well",
+  "not bad": "not-bad",
+  "and you": "and-you",
+  "friend": "friend",
+  "this is my friend": "this-is-my-friend",
+  "he is": "he-is",
+  "she is": "she-is",
+  "meet": "meet",
+  "today": "today",
+  "happy": "happy",
+  "busy": "busy",
+  "sunny": "sunny",
+  "a good day": "a-good-day"
+};
+function vocabImgFor(v){
+  if(!currentLesson || currentLesson.ch !== 1 || !v || !v.en) return null;
+  var key = String(v.en).toLowerCase().trim().replace(/[?.!]+$/, "").trim();
+  var slug = CH1_VOCAB_IMG[key];
+  return slug ? ("assets/img/ch1/" + slug + ".webp") : null;
+}
 function renderVocab(){
   if(vocabFlow.lessonId !== currentLesson.id) resetVocabFlow(currentLesson.id);
   var list = document.getElementById("vocabList"); list.innerHTML = "";
@@ -3680,7 +3742,16 @@ function renderVocab(){
     var ipa = document.createElement("div"); ipa.className="v-ipa"; ipa.textContent = v.ipa;
     var vi = document.createElement("div"); vi.className="v-vi"; vi.textContent = v.vi;
     var ex = document.createElement("div"); ex.className="v-ex"; ex.textContent = "Ví dụ: " + v.ex;
-    main.appendChild(en); main.appendChild(ipa); main.appendChild(vi); main.appendChild(ex); row.appendChild(main);
+    main.appendChild(en); main.appendChild(ipa); main.appendChild(vi); main.appendChild(ex);
+    var imgSrc = vocabImgFor(v);
+    if(imgSrc){
+      var thumb = document.createElement("img");
+      thumb.className = "v-thumb"; thumb.src = imgSrc; thumb.alt = v.en;
+      thumb.setAttribute("loading", "lazy");
+      thumb.onerror = function(){ this.remove(); };
+      row.appendChild(thumb);
+    }
+    row.appendChild(main);
     var panel = document.createElement("div"); panel.className="rb-panel"; panel.setAttribute("aria-live","polite");
     var btns = document.createElement("div"); btns.className="v-btns";
     btns.appendChild(speakBtn(v.en, 1, "Nghe thường", false));
@@ -3738,6 +3809,12 @@ function renderFlashcard(){
   var card = document.getElementById("fcCard");
   card.classList.toggle("flipped", fcFlipped);
   document.getElementById("fcWord").textContent = v.en;
+  var fcImg = document.getElementById("fcImg");
+  if(fcImg){
+    var fcSrc = vocabImgFor(v);
+    if(fcSrc){ fcImg.src = fcSrc; fcImg.alt = v.en; fcImg.style.display = "block"; }
+    else { fcImg.removeAttribute("src"); fcImg.alt = ""; fcImg.style.display = "none"; }
+  }
   document.getElementById("fcIpaFront").textContent = v.ipa;
   document.getElementById("fcIpaBack").textContent = v.en + "  " + v.ipa;
   document.getElementById("fcVi").textContent = v.vi;
