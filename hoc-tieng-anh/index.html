@@ -8,7 +8,7 @@
 <meta name="keywords" content="học tiếng Anh cho người mới bắt đầu, học tiếng Anh miễn phí, học phát âm tiếng Anh, 44 âm IPA, học tiếng Anh cho người lớn tuổi, luyện nói tiếng Anh" />
 <meta name="robots" content="index, follow" />
 <meta name="author" content="Học Tiếng Anh Cho Người Mới Bắt Đầu" />
-<meta name="theme-color" content="#175C33" />
+<meta name="theme-color" content="#2563EB" />
 <link rel="canonical" href="https://sansalecunglong.github.io/hoc-tieng-anh/" />
 <meta property="og:type" content="website" />
 <meta property="og:locale" content="vi_VN" />
@@ -88,7 +88,7 @@
 </script>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&family=Lora:ital,wght@0,500;0,600;0,700;1,500&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
 <style>
 /* ============ HALLMARK TOKENS ============ */
 :root{
@@ -1757,6 +1757,230 @@ html[data-font="small"] .hc-menu-btn, html[data-font="small"] .dm-nav-btn{font-s
   html[data-font="small"] .rb-target-ipa{font-size:max(13px,.95em)}
   html[data-font="small"] .rb-close{font-size:max(13px,.88em)}
 }
+
+/* ============================================================
+   V22 — HỆ THIẾT KẾ MỚI (đã duyệt qua bản thảo thiết kế mới)
+   Thay TOÀN BỘ lớp trình bày sang hệ xanh dương: màu chính
+   #2563EB, navy #0B2A5B, nền #F0F6FF, thẻ trắng bo 18–20px bóng
+   mềm nhiều lớp, CTA pill gradient cam→vàng chữ navy, thanh
+   tiêu đề khối gradient navy→xanh, một cột tối đa 520px.
+   CHỈ đổi giá trị trình bày (màu, nền, viền, bóng, bo góc, bố
+   cục cột) — không đổi cỡ chữ, không đổi ngưỡng chạm, không
+   đụng vào bất kỳ quy tắc hành vi/cỡ chữ/tương phản nào ở trên.
+   ============================================================ */
+:root{
+  --bg:#F0F6FF; --bg-soft:#E4EEFD;
+  --surface:#FFFFFF; --surface-2:#F2F7FF;
+  --ink:#14243E; --ink-2:#33475F; --muted:#4A5B78;
+  --primary:#2563EB; --primary-strong:#1D4ED8; --primary-soft:#E1EEFF;
+  --on-primary:#FFFFFF;
+  --accent:#B45309; --accent-strong:#1D4ED8; --accent-soft:#FFF3D1;
+  --gold:#B45309;
+  --border:#DCE8FA; --border-strong:#AECBF5;
+  --success:#15803D; --success-soft:#E2F6EC;
+  --danger:#BE123C; --danger-soft:#FFE9F0;
+  --focus:#2563EB;
+  --shadow:0 2px 6px rgba(11,42,91,.06),0 14px 30px rgba(11,42,91,.09);
+  --shadow-sm:0 1px 3px rgba(11,42,91,.07),0 6px 16px rgba(11,42,91,.07);
+  --r-sm:14px; --r-md:18px; --r-lg:20px;
+  --font-display:"Be Vietnam Pro",system-ui,-apple-system,"Segoe UI",sans-serif;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#0A1628; --bg-soft:#0E1D38;
+    --surface:#12233F; --surface-2:#182C4E;
+    --ink:#EDF3FF; --ink-2:#C7D6F2; --muted:#A9BEDD;
+    --primary:#7FB0FF; --primary-strong:#A9C8FF; --primary-soft:#16305C;
+    --on-primary:#0B2A5B; --banner-ink:#0B2A5B;
+    --accent:#F5B04C; --accent-strong:#A9C8FF; --accent-soft:#3D3410;
+    --gold:#F5B04C;
+    --border:#22385C; --border-strong:#3A5A8C;
+    --success:#7FE3A8; --success-soft:#123524;
+    --danger:#FDA4AF; --danger-soft:#3D1224;
+    --focus:#7FB0FF;
+    --shadow:0 2px 6px rgba(0,0,0,.35),0 14px 30px rgba(0,0,0,.4);
+    --shadow-sm:0 1px 3px rgba(0,0,0,.35),0 6px 16px rgba(0,0,0,.35);
+  }
+  .btn-soft{color:var(--primary-strong)}
+  .word-chip{color:var(--primary-strong)}
+  .an-toggle.on{color:#0B2A5B}
+  .hero-mini b,.num-chip span{color:var(--primary)}
+}
+html.hc{
+  --bg:#FFFFFF; --bg-soft:#FFFFFF;
+  --surface:#FFFFFF; --surface-2:#F2F7FF;
+  --ink:#000000; --ink-2:#111111; --muted:#222222;
+  --primary:#0B2A5B; --primary-strong:#071F45; --primary-soft:#DCE8FA;
+  --on-primary:#FFFFFF;
+  --accent:#8F2D00; --accent-strong:#00306E; --accent-soft:#FFE4C2;
+  --gold:#8F2D00;
+  --border:#000000; --border-strong:#000000;
+  --success:#00572A; --success-soft:#DFF5E3;
+  --danger:#8F0F08; --danger-soft:#FDECEA;
+  --focus:#0000CC;
+  --shadow:none; --shadow-sm:none;
+}
+html.hc .btn-primary{color:#0B2A5B}
+html.hc .btn-soft, html.hc .word-chip{color:#071F45}
+html.hc .stat b, html.hc .hero-mini b, html.hc .num-chip span{color:#0B2A5B}
+html.hc .total-banner .btn{color:#0B2A5B}
+
+/* --- Bố cục một cột 520px như bản thảo; mọi lưới nhiều cột xếp thành một cột --- */
+.wrap{
+  max-width:520px;
+  padding-left:max(16px,env(safe-area-inset-left,0px));
+  padding-right:max(16px,env(safe-area-inset-right,0px));
+}
+.hero-grid,.steps,.tips,.two-col,.lesson-grid,.seo-chapters,.rb-steps{grid-template-columns:1fr}
+.q-opts{grid-template-columns:1fr}
+.progress-top{display:grid; grid-template-columns:1fr 1fr; gap:14px; align-items:stretch}
+
+/* --- Header trắng, bóng mềm --- */
+header.site{background:var(--surface); border-bottom:1px solid var(--border); box-shadow:var(--shadow-sm)}
+html.hc header.site{border-bottom:2px solid #000; box-shadow:none}
+.brand-mark{border-radius:16px}
+.brand .brand-mark{background:linear-gradient(135deg,#2563EB,#0B2A5B)}
+.brand img.brand-mark{background:none}
+.menu-toggle,.feedback-btn{box-shadow:var(--shadow-sm)}
+.menu-toggle[aria-expanded="true"]{background:linear-gradient(135deg,#2563EB,#1D4ED8); border-color:transparent; color:#fff}
+.display-menu{border:1.5px solid var(--border); box-shadow:var(--shadow)}
+html.hc .display-menu{border-color:#000}
+
+/* --- Hero: panel gradient navy→xanh như bản thảo, thẻ từ giữ nền trắng --- */
+.hero{padding:20px 0 12px}
+.hero .txt-card{
+  background:linear-gradient(160deg,#2563EB,#0B2A5B);
+  border:1.5px solid transparent; color:#fff; box-shadow:var(--shadow);
+}
+html.hc .hero .txt-card{background:#0B2A5B; border:2px solid #000}
+.hero h1{color:#fff}
+.hero h1 em{color:#FFD166}
+.hero-sub{color:#EAF2FF}
+.hero-eyebrow{background:rgba(11,42,91,.35); border-color:rgba(255,255,255,.4); color:#fff}
+.hero-note{color:#BCD6FF}
+.hero .btn-ghost{background:rgba(255,255,255,.10); border-color:rgba(255,255,255,.5); color:#fff}
+.hero .btn-ghost:hover{border-color:#fff; color:#fff}
+.hero-card{border:1.5px solid var(--border)}
+.hero-card .hc-tag{color:var(--accent)}
+
+/* --- Thanh tiêu đề khối: dải gradient navy→xanh dương, chữ trắng --- */
+.sec-head{
+  background:linear-gradient(90deg,#0B2A5B,#1D4ED8);
+  border-radius:15px; padding:14px 18px; box-shadow:var(--shadow-sm);
+}
+html.hc .sec-head{border:2px solid #000; box-shadow:none}
+.sec-head h2{color:#fff}
+.sec-head p{color:#EAF2FF}
+
+/* --- Nút bấm: CTA gradient cam→vàng chữ navy; phụ gradient xanh chữ trắng --- */
+.btn-primary{
+  background:linear-gradient(90deg,#FF9E2C,#FFB800);
+  color:#0B2A5B; border-color:transparent;
+  box-shadow:0 10px 22px rgba(255,158,44,.35);
+}
+.btn-primary:hover{background:linear-gradient(90deg,#FF9E2C,#FFB800); filter:brightness(1.05)}
+.btn-accent{
+  background:linear-gradient(90deg,#2563EB,#1D4ED8);
+  color:#fff; border-color:transparent;
+  box-shadow:0 8px 18px rgba(37,99,235,.30);
+}
+.btn-accent:hover{background:linear-gradient(90deg,#2563EB,#1D4ED8); filter:brightness(1.07)}
+.btn-ghost{background:var(--surface); border-color:var(--border-strong); color:var(--ink)}
+.btn-ghost:hover{border-color:var(--primary); color:var(--primary-strong)}
+html.hc .btn-primary, html.hc .btn-accent{box-shadow:none}
+
+/* --- Thẻ: viền mảnh xanh nhạt + bóng mềm (HC giữ viền đen qua token) --- */
+.panel,.step-card,.tip,.lesson-card,.chapter-card,.rm-card,.game-box,
+.quiz-q,.speak-box,.faq-item,.txt-card,.progress-card,.pair-card,
+.pron-listen-cell,.vocab-row,.backup-step,.game-head,.tf-card,.exam-context{
+  border:1.5px solid var(--border);
+}
+.fc-face{border:1.5px solid var(--border)}
+html.hc .fc-face{border-color:#000}
+.sub-p{border:1.5px solid var(--border)}
+
+/* --- Ô thống kê: biểu tượng trong ô vuông bo góc màu riêng (như bản thảo) --- */
+.stat{
+  display:flex; align-items:center; gap:12px;
+  background:var(--surface-2); border-radius:16px; padding:14px;
+}
+.stat-ic{width:48px; height:48px; flex:none; border-radius:14px; display:grid; place-items:center; color:#fff}
+.stat-ic svg{width:26px; height:26px}
+.ic-blue{background:linear-gradient(135deg,#3B82F6,#2563EB)}
+.ic-orange{background:linear-gradient(135deg,#FF9E2C,#F97316)}
+.ic-green{background:linear-gradient(135deg,#22C55E,#16A34A)}
+.ic-rose{background:linear-gradient(135deg,#F43F5E,#E11D63)}
+.stat-txt{flex:1; min-width:0}
+.stat b{color:var(--primary)}
+
+/* --- Thanh tiến độ: fill gradient xanh dương→xanh trời --- */
+.bar{border:1.5px solid var(--border)}
+.bar-fill{background:linear-gradient(90deg,#2563EB,#38BDF8)}
+
+/* --- Tab bài học: lưới 3 cột, ô đang chọn gradient xanh (như bản thảo) --- */
+.tabs{display:grid; grid-template-columns:repeat(3,1fr); gap:10px}
+.tab-btn{
+  border:2px solid transparent; border-radius:16px;
+  background:var(--surface); box-shadow:var(--shadow-sm); color:var(--ink);
+}
+.tab-btn[aria-selected="true"]{
+  background:linear-gradient(135deg,#2563EB,#1D4ED8);
+  border-color:transparent; color:#fff;
+  box-shadow:0 8px 18px rgba(37,99,235,.32);
+}
+@media (max-width:400px){ .tabs{grid-template-columns:repeat(2,1fr)} }
+
+/* --- Thẻ ghi nhớ: mặt sau gradient xanh như bản thảo --- */
+.fc-back{background:linear-gradient(155deg,#2563EB,#0B2A5B); color:#fff}
+.fc-back .fc-ex{opacity:.95}
+
+/* --- Hội thoại: bong bóng phía phải gradient xanh, chữ trắng --- */
+.dlg-line.right .bubble{
+  background:linear-gradient(140deg,#2563EB,#1D4ED8);
+  color:#fff; border-color:transparent;
+}
+.dlg-line.right .bubble .who{color:#EAF2FF}
+.dlg-line.right .bubble .vi{color:#fff}
+html.hc .dlg-line.right .bubble{border:2px solid #000}
+.dlg-line.right .bubble .rb-panel{color:var(--ink)}
+
+/* --- Nút mic: gradient hồng/đỏ như bản thảo --- */
+.mic-btn{
+  background:linear-gradient(135deg,#F43F5E,#E11D63);
+  border-color:transparent; color:#fff;
+  box-shadow:0 12px 24px rgba(225,29,99,.35);
+}
+.mic-btn.listening{background:var(--danger); border-color:transparent}
+
+/* --- Banner tổng hợp cuối trang chủ: gradient xanh --- */
+.total-banner{background:linear-gradient(135deg,#2563EB,#0B2A5B); color:#fff}
+.total-banner h2{color:#fff}
+.total-banner .btn{background:#fff; color:#1D4ED8}
+
+/* --- Trò chơi: ô úp gradient xanh; banner ghi nhớ 3 giây gradient navy --- */
+.mem-tile{background:linear-gradient(150deg,#2563EB,#0B2A5B); color:#fff; border-color:transparent}
+@media (prefers-color-scheme: dark){ .mem-tile{color:#fff} }
+html.hc .mem-tile{background:#0B2A5B; color:#fff}
+.mem-banner{
+  background:linear-gradient(140deg,#0B2A5B,#1D4ED8);
+  border:2.5px solid transparent; color:#fff; box-shadow:var(--shadow-sm);
+}
+.mem-count{color:#fff}
+.mem-sub{color:#E3E9FF}
+.mem-bar{background:rgba(255,255,255,.25); border-color:transparent}
+.mem-bar-fill{background:linear-gradient(90deg,#FF9E2C,#FFB800)}
+html.hc .mem-banner{background:#0B2A5B; border-color:#000; box-shadow:none}
+html.hc .mem-count{color:#fff}
+
+/* --- Lớp phủ hộp thoại + toast + bóng đổ theo hệ navy --- */
+.voice-diag-overlay,.backup-overlay,.feedback-overlay{background:rgba(10,22,40,.55)}
+.speak-target-sticky{box-shadow:0 12px 14px -12px rgba(11,42,91,.28)}
+.toast{background:#0B2A5B; color:#fff}
+
+/* --- Trọng lượng chữ tiêu đề theo hệ mới (Be Vietnam Pro 800) --- */
+.hero h1,.sec-head h2,.sub-h,.ch-title,.game-name,.fc-word,.wotd-word,
+.hero-card .hc-word,.speak-target,.dm-title,.backup-title,.feedback-title,
+.pron-banner h2,.lesson-head h1,.lesson-head h2{font-weight:800}
 </style>
 </head>
 <body>
@@ -1887,10 +2111,10 @@ html[data-font="small"] .hc-menu-btn, html[data-font="small"] .dm-nav-btn{font-s
           <p>Tiến độ được lưu ngay trên máy này — tắt trang đi, mai mở lại vẫn còn nguyên.</p>
         </div>
         <div class="progress-top">
-          <div class="stat"><b id="statPct">0%</b><span>Đã hoàn thành lộ trình</span></div>
-          <div class="stat"><b id="statWords">0 / 300</b><span>Từ vựng đã thuộc</span></div>
-          <div class="stat"><b id="statStreak">0 ngày</b><span>Chuỗi ngày học liên tục</span></div>
-          <div class="stat"><b id="statLessons">0 / 60</b><span>Bài đã hoàn thành</span></div>
+          <div class="stat"><span class="stat-ic ic-rose" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1"/></svg></span><div class="stat-txt"><b id="statPct">0%</b><span>Đã hoàn thành lộ trình</span></div></div>
+          <div class="stat"><span class="stat-ic ic-blue" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 4h6a4 4 0 0 1 4 4v13a3 3 0 0 0-3-3H2z"/><path d="M22 4h-6a4 4 0 0 0-4 4v13a3 3 0 0 1 3-3h7z"/></svg></span><div class="stat-txt"><b id="statWords">0 / 300</b><span>Từ vựng đã thuộc</span></div></div>
+          <div class="stat"><span class="stat-ic ic-orange" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.07-2.14-.22-4.05 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.15.43-2.29 1-3a2.5 2.5 0 0 0 2.5 2.5z"/></svg></span><div class="stat-txt"><b id="statStreak">0 ngày</b><span>Chuỗi ngày học liên tục</span></div></div>
+          <div class="stat"><span class="stat-ic ic-green" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="m8.5 12.2 2.4 2.4 4.6-5"/></svg></span><div class="stat-txt"><b id="statLessons">0 / 60</b><span>Bài đã hoàn thành</span></div></div>
         </div>
         <div class="bar" role="progressbar" aria-label="Phần trăm hoàn thành lộ trình" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="mainBar"><div class="bar-fill" id="mainBarFill"></div></div>
         <p class="bar-label" id="barLabel">Hãy bắt đầu với Chương 1 · Bài 1 — Chào hỏi trong ngày nhé!</p>
