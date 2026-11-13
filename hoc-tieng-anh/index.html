@@ -1411,6 +1411,8 @@ footer.site{padding-bottom:calc(120px + env(safe-area-inset-bottom,0px))}
 .an-toggle{border:2px solid var(--border-strong); background:var(--bg-soft); color:var(--ink); border-radius:var(--r-pill); padding:9px 20px; font-weight:800; font-size:.95em; cursor:pointer; min-height:48px}
 .an-toggle.on{background:var(--primary); border-color:var(--primary); color:#fff}
 .vocab-item.flash{animation:anFlash 2.2s ease}
+#vocabFlowNote{margin:0 0 14px}
+.vocab-flow-msg{font-weight:800}
 .speak-target.flash{animation:anFlash 2.2s ease; border-radius:10px}
 @media (prefers-reduced-motion: reduce){ .speak-target.flash{animation:none; box-shadow:0 0 0 3px var(--accent)} }
 @keyframes anFlash{0%,100%{box-shadow:none}25%,60%{box-shadow:0 0 0 3px var(--accent)}}
@@ -2198,8 +2200,9 @@ html[data-font="small"] .hc-menu-btn, html[data-font="small"] .dm-nav-btn{font-s
       </div>
       <div class="vocab-list" id="vocabList"></div>
       <div id="numbersWrap"></div>
-      <h3 class="sub-h" style="margin-top:30px">Câu mẫu dùng ngay</h3>
+      <h3 class="sub-h" id="phraseHeading" style="margin-top:30px">Câu mẫu dùng ngay</h3>
       <p class="sub-p">Đây là những câu hoàn chỉnh bác có thể dùng luôn trong đời sống. Cũng nghe 3 mức như trên, rồi bấm <b>Đọc lại</b> để tập nói cả câu — trang web chấm từng từ cho bác.</p>
+      <p class="fc-autonote" id="vocabFlowNote" role="status" style="display:none"></p>
       <div class="vocab-list" id="phraseList"></div>
       <div class="part-nav"><button type="button" class="btn btn-accent part-next" data-nexttab="cards">Tiếp theo: Lật thẻ ghi nhớ →</button></div>
     </section>
@@ -2888,6 +2891,136 @@ function initAutoNextToggle(){
   sync();
 }
 
+/* ================= TỪ VỰNG LIỀN MẠCH: 5 TỪ → CÂU MẪU → PHẦN TIẾP (LUÔN BẬT) =================
+   Yêu cầu 13/11, tiếp nối luồng Luyện nói → Trò chơi. Chỉ áp Bài 1–9 của
+   6 chương chính, chỉ cho các nút Đọc lại thuộc panel Từ vựng (từ đơn và
+   câu mẫu được gắn nhãn _flowKind lúc renderVocab dựng nút — nút Đọc lại
+   ở Hội thoại / chương Phát âm không có nhãn nên không dính).
+   LUÔN bật, không phụ thuộc công tắc tieng-anh-auto-next: công tắc giữ
+   nguyên vai trò cũ (từ → từ kế tiếp); khi mốc đủ 5 từ kích hoạt thì nó
+   THAY hành vi cũ của lần đọc đó (kể cả dòng “đã hết từ” ở từ cuối) nên
+   không bao giờ có hai thông báo / hai lần cuộn chồng nhau.
+   Ba hành vi:
+   1) Đọc đúng đủ 5/5 từ (mọi thứ tự, không trùng — tập hợp theo chỉ số
+      từ của bài hiện tại, reset khi đổi bài): hiện dòng báo rồi sau
+      ~1,2 giây cuộn mượt tới tiêu đề “Câu mẫu dùng ngay” (#phraseHeading)
+      và làm nổi bật khối câu mẫu.
+   2) Câu mẫu đọc đúng: sau ~1,2 giây cuộn tới thẻ câu mẫu kế tiếp +
+      làm nổi bật, cùng nhịp Luyện nói.
+   3) Đọc đúng hết các câu mẫu của bài (số câu theo dữ liệu thật): hiện
+      dòng báo rồi sau ~1,5 giây tự sang phần Thẻ ghi nhớ bằng đúng
+      goToPart("cards") của nút “Tiếp theo: Lật thẻ ghi nhớ →”.
+   “Đọc đúng” gồm cả hai đường như Luyện nói: chấm tự động đọc đúng hết
+   (rbShowResult perfect) và tự kiểm tra bấm “Tôi đọc đúng rồi”
+   (rbShowSelfCheck) — cả hai đều gọi noteVocabFlowCorrect(ctx).
+   Chống nhảy nhầm: một hẹn giờ chung vocabFlowTimer; đổi bài
+   (enterLesson reset cả tập hợp), chuyển phần bằng tay (switchTab /
+   showView hủy), bấm Đọc lại mở phiên mới (startReadback hủy) đều hủy
+   lần chờ; lúc tới giờ kiểm tra lại đúng bài, tập hợp chưa đổi và panel
+   Từ vựng còn active mới thực hiện; mỗi mốc chỉ kích hoạt đúng 1 lần
+   (cờ wordsFired / phrasesFired trong phiên của bài). */
+var vocabFlowTimer = null;
+var vocabFlow = { lessonId: null, words: {}, phrases: {}, wordsFired: false, phrasesFired: false };
+function vocabFlowCount(set){ var n = 0; for(var k in set){ if(set[k]) n++; } return n; }
+function cancelVocabFlow(){
+  if(vocabFlowTimer){ clearTimeout(vocabFlowTimer); vocabFlowTimer = null; }
+  var note = document.getElementById("vocabFlowNote");
+  if(note) note.style.display = "none";
+}
+function resetVocabFlow(lessonId){
+  if(vocabFlowTimer){ clearTimeout(vocabFlowTimer); vocabFlowTimer = null; }
+  vocabFlow = { lessonId: (lessonId == null ? null : lessonId), words: {}, phrases: {}, wordsFired: false, phrasesFired: false };
+  var note = document.getElementById("vocabFlowNote");
+  if(note){ note.style.display = "none"; note.textContent = ""; }
+}
+function vocabFlowActiveLesson(){
+  return !!(currentLesson && currentLesson.n !== 10 && currentLesson.vocab && currentLesson.phrases);
+}
+function vocabFlowMsg(ctx, text){
+  var note = document.getElementById("vocabFlowNote");
+  if(note){ note.textContent = text; note.style.display = "block"; }
+  if(ctx && ctx.panel){
+    var body = rbFindChildByClass(ctx.panel, "rb-body") || ctx.panel;
+    var p = document.createElement("p"); p.className = "rb-line vocab-flow-msg";
+    p.textContent = text;
+    body.appendChild(p);
+  }
+}
+function vocabFlowScrollTo(el, flashEls){
+  if(!el) return;
+  var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  try{ el.scrollIntoView({ behavior: reduce ? "auto" : "smooth", block: "center" }); }catch(e){ try{ el.scrollIntoView(); }catch(e2){} }
+  (flashEls || [el]).forEach(function(f){
+    if(!f || !f.classList) return;
+    f.classList.add(f.classList.contains("sub-h") ? "part-flash" : "flash");
+    setTimeout(function(){ f.classList.remove("flash"); f.classList.remove("part-flash"); }, 2300);
+  });
+}
+/* Trả về true khi luồng mới đã nhận lần đọc đúng này (đã hẹn cuộn/chuyển)
+   — nơi gọi sẽ bỏ qua scheduleAutoNext cũ cho lần đọc đó. */
+function noteVocabFlowCorrect(ctx){
+  if(!ctx || !ctx._flowKind || !vocabFlowActiveLesson()) return false;
+  if(ctx._flowLessonId !== currentLesson.id) return false;
+  if(vocabFlow.lessonId !== currentLesson.id) resetVocabFlow(currentLesson.id);
+  var pv = document.getElementById("panel-vocab");
+  if(!pv || !pv.classList.contains("active")) return false;
+  var lessonId = currentLesson.id;
+  if(ctx._flowKind === "word"){
+    vocabFlow.words[ctx._flowIndex] = true;
+    if(vocabFlowCount(vocabFlow.words) < currentLesson.vocab.length) return false;
+    if(vocabFlow.wordsFired) return false;
+    vocabFlow.wordsFired = true;
+    var wTotal = currentLesson.vocab.length;
+    vocabFlowMsg(ctx, "🎉 Bác đã đọc xong cả " + wTotal + " từ rồi! Mời bác luyện tiếp các câu mẫu dùng ngay ở ngay dưới đây.");
+    if(vocabFlowTimer){ clearTimeout(vocabFlowTimer); vocabFlowTimer = null; }
+    vocabFlowTimer = setTimeout(function(){
+      vocabFlowTimer = null;
+      if(!currentLesson || currentLesson.id !== lessonId || vocabFlow.lessonId !== lessonId || !vocabFlow.wordsFired) return;
+      if(vocabFlowCount(vocabFlow.words) < wTotal) return;
+      var panel = document.getElementById("panel-vocab");
+      if(!panel || !panel.classList.contains("active")) return;
+      var head = document.getElementById("phraseHeading"); if(!head) return;
+      var first = document.querySelector("#phraseList .vocab-item");
+      vocabFlowScrollTo(head, first ? [head, first] : [head]);
+    }, 1200);
+    return true;
+  }
+  if(ctx._flowKind === "phrase"){
+    vocabFlow.phrases[ctx._flowIndex] = true;
+    var pTotal = currentLesson.phrases.length;
+    if(vocabFlowCount(vocabFlow.phrases) >= pTotal){
+      if(vocabFlow.phrasesFired) return false;
+      vocabFlow.phrasesFired = true;
+      vocabFlowMsg(ctx, "🎉 Bác đã đọc đúng cả " + pTotal + " câu mẫu dùng ngay rồi — giỏi lắm! Đang chuyển sang phần Thẻ ghi nhớ…");
+      if(vocabFlowTimer){ clearTimeout(vocabFlowTimer); vocabFlowTimer = null; }
+      vocabFlowTimer = setTimeout(function(){
+        vocabFlowTimer = null;
+        if(!currentLesson || currentLesson.id !== lessonId || vocabFlow.lessonId !== lessonId || !vocabFlow.phrasesFired) return;
+        if(vocabFlowCount(vocabFlow.phrases) < pTotal) return;
+        var panel = document.getElementById("panel-vocab");
+        if(!panel || !panel.classList.contains("active")) return;
+        goToPart("cards");
+      }, 1500);
+      return true;
+    }
+    var from = ctx._flowIndex;
+    if(from < 0 || from >= pTotal - 1) return false;
+    if(vocabFlowTimer){ clearTimeout(vocabFlowTimer); vocabFlowTimer = null; }
+    vocabFlowTimer = setTimeout(function(){
+      vocabFlowTimer = null;
+      if(!currentLesson || currentLesson.id !== lessonId || vocabFlow.lessonId !== lessonId) return;
+      if(!vocabFlow.phrases[from]) return;
+      var panel = document.getElementById("panel-vocab");
+      if(!panel || !panel.classList.contains("active")) return;
+      var items = document.querySelectorAll("#phraseList .vocab-item");
+      var el = items[from + 1]; if(!el) return;
+      vocabFlowScrollTo(el, [el]);
+    }, 1200);
+    return true;
+  }
+  return false;
+}
+
 /* ================= BANNER GỢI Ý CHROME (chỉ khi môi trường sẽ chạy ghi âm tự kiểm tra) =================
    Điều kiện hiển thị dùng ĐÚNG phát hiện môi trường của bo mạch thích ứng:
    đang mở trong webview/app nhúng (inAppBrowserInfo) hoặc trình duyệt
@@ -3363,6 +3496,7 @@ function renderLessonGridCounts(){ renderLessonGrid(); }
 
 /* ================= VIEW SWITCHING ================= */
 function showView(id){
+  cancelVocabFlow();
   MicSessions.cancelCurrent(); stopGameTimer();
   if(typeof closeFsPanel === "function") closeFsPanel(false);
   ["viewHome","viewLesson","viewTotal","viewGate","viewPron"].forEach(function(v){
@@ -3382,6 +3516,7 @@ function openLesson(id, opts){
 }
 function enterLesson(L, tab){
   currentLesson = L;
+  resetVocabFlow(L.id);
   fcIndex = 0; fcFlipped = false;
   document.getElementById("lessonTitle").textContent = L.n === 10 ? ("Chương " + L.ch + " · Bài 10: Kiểm tra tổng hợp Chương " + L.ch) : ("Chương " + L.ch + " · Bài " + L.n + ": " + L.title);
   document.getElementById("lessonSub").textContent = L.n === 10 ? ("Chương " + L.ch + " · Bài 10 — Kiểm tra tổng hợp cuối chương") : L.sub;
@@ -3434,7 +3569,7 @@ function switchTab(name){
      nhớ → Hội thoại, Luyện nói sang câu kế): đã đi bằng tay thì không
      được nhảy thêm nữa. Lần tự chuyển tự nó gọi goToPart SAU khi đã tự
      xóa hẹn giờ của mình nên không bị nhánh này chặn. */
-  cancelFcAutoDialogue(); cancelSpeakAutoNext();
+  cancelFcAutoDialogue(); cancelSpeakAutoNext(); cancelVocabFlow();
   MicSessions.cancelCurrent(); stopGameTimer();
   document.querySelectorAll(".tab-btn").forEach(function(b){
     b.setAttribute("aria-selected", b.getAttribute("data-tab")===name ? "true" : "false");
@@ -3482,13 +3617,14 @@ document.querySelectorAll("[data-prevtab]").forEach(function(b){
 });
 
 /* ================= VOCAB RENDER ================= */
-function readbackBtn(target, ipa, vi, isWord, panel){
+function readbackBtn(target, ipa, vi, isWord, panel, flow){
   var b = document.createElement("button");
   b.type = "button"; b.className = "icon-btn mic";
   b.innerHTML = MIC_SVG + "<span>Đọc lại</span>";
   b.setAttribute("aria-label", "Đọc lại “" + target + "” để trang web nghe và chấm");
   b.addEventListener("click", function(){
-    startReadback({ target: target, ipa: ipa || "", vi: vi || "", isWord: !!isWord, panel: panel, btn: b, session: 0 });
+    startReadback({ target: target, ipa: ipa || "", vi: vi || "", isWord: !!isWord, panel: panel, btn: b, session: 0,
+      _flowKind: flow ? flow.kind : "", _flowIndex: flow ? flow.index : -1, _flowLessonId: flow ? flow.lessonId : null });
   });
   return b;
 }
@@ -3512,8 +3648,9 @@ function syncLearnButtons(){
   syncWotdBtn();
 }
 function renderVocab(){
+  if(vocabFlow.lessonId !== currentLesson.id) resetVocabFlow(currentLesson.id);
   var list = document.getElementById("vocabList"); list.innerHTML = "";
-  currentLesson.vocab.forEach(function(v){
+  currentLesson.vocab.forEach(function(v, vIdx){
     var row = document.createElement("div"); row.className="vocab-row";
     var main = document.createElement("div"); main.className="v-main";
     var en = document.createElement("div"); en.className="v-en"; en.textContent = v.en;
@@ -3526,7 +3663,7 @@ function renderVocab(){
     btns.appendChild(speakBtn(v.en, 1, "Nghe thường", false));
     btns.appendChild(speakBtn(v.en, 0.5, "Nghe chậm", true));
     btns.appendChild(speakBtn(v.en, 0.38, "Nghe rất chậm", false, "vslow"));
-    btns.appendChild(readbackBtn(v.en, v.ipa, v.vi, true, panel));
+    btns.appendChild(readbackBtn(v.en, v.ipa, v.vi, true, panel, { kind: "word", index: vIdx, lessonId: currentLesson.id }));
     btns.appendChild(learnToggle(v.en));
     row.appendChild(btns);
     row.appendChild(panel);
@@ -3534,7 +3671,7 @@ function renderVocab(){
     item.appendChild(row); list.appendChild(item);
   });
   var pl = document.getElementById("phraseList"); pl.innerHTML = "";
-  currentLesson.phrases.forEach(function(p){
+  currentLesson.phrases.forEach(function(p, pIdx){
     var row = document.createElement("div"); row.className="vocab-row";
     var main = document.createElement("div"); main.className="v-main";
     var en = document.createElement("div"); en.className="v-en"; en.style.fontSize="1.2em"; en.textContent = p.en;
@@ -3545,7 +3682,7 @@ function renderVocab(){
     btns.appendChild(speakBtn(p.en, 1, "Nghe thường", false));
     btns.appendChild(speakBtn(p.en, 0.5, "Nghe chậm", true));
     btns.appendChild(speakBtn(p.en, 0.38, "Nghe rất chậm", false, "vslow"));
-    btns.appendChild(readbackBtn(p.en, "", p.vi, false, panel));
+    btns.appendChild(readbackBtn(p.en, "", p.vi, false, panel, { kind: "phrase", index: pIdx, lessonId: currentLesson.id }));
     row.appendChild(btns);
     row.appendChild(panel);
     var item = document.createElement("div"); item.className="vocab-item";
@@ -5076,7 +5213,8 @@ function rbShowResult(ctx, best){
       toast(pickEnc("learned") + " Đã đánh dấu “Đã thuộc”: " + ctx.target);
     }
     celebrate(ctx.isWord && lessonAllLearned());
-    if(ctx.isWord) scheduleAutoNext(ctx);
+    var flowHandledSr = noteVocabFlowCorrect(ctx);
+    if(ctx.isWord && !flowHandledSr) scheduleAutoNext(ctx);
   }
   /* Phân tích âm: ghép từng từ sai với từ máy nghe được (theo thứ tự), so dãy âm vị */
   var wrongIdx = [];
@@ -5118,6 +5256,9 @@ function rbShowResult(ctx, best){
 }
 var rbOpenCtx = null;
 function startReadback(ctx){
+  /* Bắt đầu phiên đọc mới → hủy mọi lần tự cuộn/chuyển đang chờ của
+     luồng Từ vựng liền mạch: người học đã chọn đọc tiếp thì không kéo đi. */
+  cancelVocabFlow();
   if(window.speechSynthesis){ try{ window.speechSynthesis.cancel(); }catch(e){} }
   /* Accordion: toàn trang chỉ mở 1 panel chấm tại một thời điểm — kể cả
      panel của phiên trước đã kết thúc (kết quả/lỗi) cũng phải đóng lại. */
@@ -5243,7 +5384,8 @@ function rbShowSelfCheck(ctx, session, info){
     rbShowIdle(ctx, pickEnc("praise"), "Đã ghi nhận: bác đã tự kiểm tra và đọc đúng " + (ctx.isWord ? "từ" : "câu") + " này " + state.practice[ctx.target] + " lần.");
     if(ctx.isWord && !isLearned(ctx.target)){ setLearned(ctx.target, true); toast(pickEnc("learned") + " Đã đánh dấu “Đã thuộc”: " + ctx.target); }
     celebrate(ctx.isWord && lessonAllLearned());
-    if(ctx.isWord) scheduleAutoNext(ctx);
+    var flowHandledSelf = noteVocabFlowCorrect(ctx);
+    if(ctx.isWord && !flowHandledSelf) scheduleAutoNext(ctx);
   }, "vslow"));
   actions.appendChild(rbActionBtn("Chưa đúng, đọc lại", function(){ toast(pickEnc("retrySelf")); startReadback(ctx); }, "mic"));
   panel.appendChild(actions);
