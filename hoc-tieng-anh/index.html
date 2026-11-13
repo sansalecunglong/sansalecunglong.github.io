@@ -1272,6 +1272,12 @@ html.hc .exam-bar{background:#fff}
 .exam-wrong-item{background:var(--surface); border:1.5px solid var(--border-strong); border-radius:var(--r-sm); padding:14px 16px; font-size:max(16px,1em); line-height:1.6}
 .exam-wrong-item .ew-q{font-weight:700}
 .exam-wrong-item .ew-a b{color:var(--success)}
+/* Luyện nghe (phần 4): nhãn dạng câu, hàng nút nghe lớn, khung đối chiếu hiện sau khi trả lời */
+.listen-tag{font-size:max(15px,.85em); font-weight:800; letter-spacing:.04em; text-transform:uppercase; color:var(--accent-strong); margin-bottom:8px}
+.listen-btns{display:flex; gap:10px; flex-wrap:wrap; margin-bottom:12px}
+.listen-btns .icon-btn{min-height:60px; padding:14px 22px; font-size:max(17px,1.05em)}
+.listen-reveal{margin-top:14px}
+.listen-reveal-vi{font-weight:600; font-size:max(16px,1em); margin-top:6px}
 /* Điều hướng liền mạch giữa các phần trong bài */
 .part-nav{margin-top:30px; display:flex}
 .part-next{flex:1; min-height:64px; font-size:max(18px,1.05em); padding:14px 26px}
@@ -2166,7 +2172,7 @@ html[data-font="small"] .hc-menu-btn, html[data-font="small"] .dm-nav-btn{font-s
         <button type="button" class="btn btn-accent btn-sm" id="gateBannerBtn" style="margin-left:10px">Kiểm tra lại để mở bài mới</button>
       </div>
       <div class="part-progress" id="partProgress">
-        <span class="pp-text" id="partProgressText">Phần 1/5: Từ vựng</span>
+        <span class="pp-text" id="partProgressText">Phần 1/6: Từ vựng</span>
         <span class="pp-dots" id="partProgressDots" aria-hidden="true"></span>
       </div>
     </div>
@@ -2175,8 +2181,9 @@ html[data-font="small"] .hc-menu-btn, html[data-font="small"] .dm-nav-btn{font-s
       <button type="button" class="tab-btn" role="tab" data-tab="vocab" aria-selected="true">1 · Từ vựng</button>
       <button type="button" class="tab-btn" role="tab" data-tab="cards" aria-selected="false">2 · Thẻ ghi nhớ</button>
       <button type="button" class="tab-btn" role="tab" data-tab="dialogue" aria-selected="false">3 · Hội thoại</button>
-      <button type="button" class="tab-btn" role="tab" data-tab="speak" aria-selected="false">4 · Luyện nói</button>
-      <button type="button" class="tab-btn" role="tab" data-tab="quiz" aria-selected="false">5 · Trò chơi</button>
+      <button type="button" class="tab-btn" role="tab" data-tab="listen" aria-selected="false">4 · Luyện nghe</button>
+      <button type="button" class="tab-btn" role="tab" data-tab="speak" aria-selected="false">5 · Luyện nói</button>
+      <button type="button" class="tab-btn" role="tab" data-tab="quiz" aria-selected="false">6 · Trò chơi</button>
     </div>
 
     <section class="tab-panel active" id="panel-vocab" role="tabpanel" aria-label="Từ vựng">
@@ -2259,11 +2266,19 @@ html[data-font="small"] .hc-menu-btn, html[data-font="small"] .dm-nav-btn{font-s
         <button type="button" class="btn btn-ghost btn-sm" data-role="hideB">Đóng vai: tôi là Người A</button>
       </div>
       <div class="dlg" id="dlgList"></div>
+      <div class="part-nav"><button type="button" class="btn btn-accent part-next" data-nexttab="listen">Tiếp theo: Luyện nghe →</button></div>
+    </section>
+
+    <section class="tab-panel" id="panel-listen" role="tabpanel" aria-label="Luyện nghe">
+      <button type="button" class="part-prev" data-prevtab="dialogue">← Phần trước: Hội thoại</button>
+      <h2 class="sub-h">Luyện nghe — nghe rồi chọn đáp án</h2>
+      <p class="sub-p">Phần này luyện tai nghe: trang sẽ <b>đọc một câu</b> nhưng <b>không hiện chữ</b> — bác nghe kỹ rồi chọn đáp án. Bấm nút Nghe nghe lại bao nhiêu lần cũng được, có cả nút <b>Nghe chậm</b>. Trả lời xong, trang mới hiện câu tiếng Anh và nghĩa để bác đối chiếu. Đúng từ <b>4/5 câu</b> là đạt — đạt rồi trang sẽ <b>tự chuyển sang phần Luyện nói</b> cho bác. Chưa đạt thì làm lại thoải mái, không bị phạt gì đâu.</p>
+      <div id="listenWrap"></div>
       <div class="part-nav"><button type="button" class="btn btn-accent part-next" data-nexttab="speak">Tiếp theo: Luyện nói →</button></div>
     </section>
 
     <section class="tab-panel" id="panel-speak" role="tabpanel" aria-label="Luyện nói">
-      <button type="button" class="part-prev" data-prevtab="dialogue">← Phần trước: Hội thoại</button>
+      <button type="button" class="part-prev" data-prevtab="listen">← Phần trước: Luyện nghe</button>
       <h2 class="sub-h">Luyện nói theo câu mẫu</h2>
       <p class="sub-p">Chọn một câu, bấm nút loa để nghe trước, rồi bấm nút mic tròn và đọc to câu đó. Trang web sẽ nghe và cho bác biết đã đúng chưa. <b>Nói đúng một câu, trang sẽ tự chuyển sang câu tiếp theo</b> cho bác luyện tiếp. Tính năng này dùng bộ nghe có sẵn trong <b>Google Chrome</b> (cần có mạng) — mở trang bằng Chrome là dùng được ngay.</p>
       <div id="speakSupported">
@@ -3496,7 +3511,7 @@ function renderLessonGridCounts(){ renderLessonGrid(); }
 
 /* ================= VIEW SWITCHING ================= */
 function showView(id){
-  cancelVocabFlow();
+  cancelVocabFlow(); cancelListenAdvance();
   MicSessions.cancelCurrent(); stopGameTimer();
   if(typeof closeFsPanel === "function") closeFsPanel(false);
   ["viewHome","viewLesson","viewTotal","viewGate","viewPron"].forEach(function(v){
@@ -3524,7 +3539,12 @@ function enterLesson(L, tab){
   var quizHead = document.querySelector("#panel-quiz .sub-h");
   if(quizHead) quizHead.textContent = L.n === 10 ? ("Kiểm tra tổng hợp Chương " + L.ch + " — đạt là qua chương") : "Trò chơi cuối bài — chơi để hoàn thành bài";
   var quizTab = document.querySelector('.tab-btn[data-tab="quiz"]');
-  if(quizTab) quizTab.textContent = L.n === 10 ? "5 · Kiểm tra tổng hợp" : "5 · Trò chơi";
+  if(quizTab) quizTab.textContent = L.n === 10 ? "5 · Kiểm tra tổng hợp" : "6 · Trò chơi";
+  var speakTab = document.querySelector('.tab-btn[data-tab="speak"]');
+  if(speakTab) speakTab.textContent = L.n === 10 ? "4 · Luyện nói" : "5 · Luyện nói";
+  /* Bài 10 là màn hình kiểm tra tổng hợp riêng — không có phần Luyện nghe. */
+  var listenTab = document.querySelector('.tab-btn[data-tab="listen"]');
+  if(listenTab) listenTab.style.display = L.n === 10 ? "none" : "";
   /* THỨ TỰ QUAN TRỌNG: showView() và switchTab() đều gọi stopGameTimer()
      (dọn phiên game cũ). Phải cho hai hàm đó chạy TRƯỚC renderGame() —
      nếu renderGame() chạy trước, đồng hồ của game Săn điểm tốc độ vừa
@@ -3532,7 +3552,7 @@ function enterLesson(L, tab){
      và vòng từ mới bị chặn bởi mã phiên (gameSession), bài kẹt vĩnh viễn. */
   showView("viewLesson");
   switchTab(tab || "vocab");
-  renderVocab(); renderFlashcard(); renderDialogue(); renderSpeakPick(); renderGame();
+  renderVocab(); renderFlashcard(); renderDialogue(); renderListen(); renderSpeakPick(); renderGame();
   updateGateBanner();
 }
 function updateGateBanner(){
@@ -3545,7 +3565,7 @@ function updateGateBanner(){
 }
 /* Thứ tự + tên các phần của một bài thường (Bài 10 là màn hình kiểm tra
    tổng hợp riêng, giữ nguyên như cũ nên không hiện chỉ số phần). */
-var LESSON_PARTS = [["vocab","Từ vựng"],["cards","Thẻ ghi nhớ"],["dialogue","Hội thoại"],["speak","Luyện nói"],["quiz","Trò chơi cuối bài"]];
+var LESSON_PARTS = [["vocab","Từ vựng"],["cards","Thẻ ghi nhớ"],["dialogue","Hội thoại"],["listen","Luyện nghe"],["speak","Luyện nói"],["quiz","Trò chơi cuối bài"]];
 function updatePartProgress(name){
   var box = document.getElementById("partProgress"); if(!box) return;
   if(currentLesson && currentLesson.n === 10){ box.style.display = "none"; return; }
@@ -3569,7 +3589,7 @@ function switchTab(name){
      nhớ → Hội thoại, Luyện nói sang câu kế): đã đi bằng tay thì không
      được nhảy thêm nữa. Lần tự chuyển tự nó gọi goToPart SAU khi đã tự
      xóa hẹn giờ của mình nên không bị nhánh này chặn. */
-  cancelFcAutoDialogue(); cancelSpeakAutoNext(); cancelVocabFlow();
+  cancelFcAutoDialogue(); cancelSpeakAutoNext(); cancelVocabFlow(); cancelListenAdvance();
   MicSessions.cancelCurrent(); stopGameTimer();
   document.querySelectorAll(".tab-btn").forEach(function(b){
     b.setAttribute("aria-selected", b.getAttribute("data-tab")===name ? "true" : "false");
@@ -3578,6 +3598,9 @@ function switchTab(name){
     p.classList.toggle("active", p.id === "panel-" + name);
   });
   updatePartProgress(name);
+  /* Phòng hờ: vào phần Luyện nghe mà câu hỏi chưa được dựng cho bài
+     hiện tại (ví dụ vừa ở Bài 10 ra) thì dựng ngay. */
+  if(name === "listen" && currentLesson && currentLesson.n !== 10 && listenState.lessonId !== currentLesson.id) renderListen();
   /* Game Săn điểm tốc độ (Bài 6) sống bằng đồng hồ đếm ngược thật, mà
      stopGameTimer() ở đầu hàm này vừa dọn mọi đồng hồ đang chạy (đúng ý
      khi rời khỏi phần Trò chơi). Nên MỖI LẦN phần Trò chơi của Bài 6
@@ -4096,6 +4119,290 @@ function scheduleSpeakAutoNext(){
     }
   }, 1200);
 }
+/* ================= LUYỆN NGHE (Phần 4 — giữa Hội thoại và Luyện nói) =================
+   Chỉ Bài 1–9 của 6 chương chính. Mỗi lần vào bài / làm lại, sinh đúng
+   5 câu từ dữ liệu THẬT của chính bài đó (phrases + dialogue, kèm
+   who/name), xáo trộn, không trùng câu đích. Ba dạng theo tỉ lệ
+   2(a) + 2(b) + 1(c):
+   (a) Nghe → chọn câu tiếng Anh vừa nghe (2 nhiễu cùng bài, ưu tiên
+       câu dài tương đương);
+   (b) Nghe → chọn nghĩa tiếng Việt (2 nhiễu cùng bài);
+   (c) Nghe câu HỘI THOẠI → đoán người nói — chỉ sinh khi mỗi mã who
+       gắn với đúng 1 tên và có ≥ 2 người nói phân biệt rõ; không khả
+       thi thì bù thành 3(a) + 2(b), không bao giờ sinh câu hỏi không
+       có đáp án chắc chắn.
+   TRƯỚC khi trả lời, chữ của câu đích không xuất hiện ở bất cứ đâu
+   trong khối câu (nút nghe chỉ mang chữ trong thuộc tính phát âm,
+   không hiển thị). Trả lời xong mới hiện nguyên câu + nghĩa đối chiếu
+   kèm giải thích tiếng Việt. Phát âm đi qua speak() hiện có (Nghe
+   thường tốc độ 1, Nghe chậm 0.5, nghe lại không giới hạn).
+   Đạt ≥ 4/5: ăn mừng + báo “Bác nghe rất tốt! Đang chuyển sang phần
+   Luyện nói…” rồi sau ~1,5 giây TỰ sang Luyện nói bằng goToPart —
+   cùng cơ chế chống nhảy nhầm như Luyện nói → Trò chơi: người học tự
+   chuyển phần / rời bài / làm lại trong lúc chờ đều hủy lần chuyển
+   (switchTab, showView, renderListen cùng gọi cancelListenAdvance),
+   tới giờ còn kiểm tra lại trạng thái mới chuyển, không chuyển đôi.
+   Chưa đạt: liệt kê câu sai kèm đáp án đúng + nút nghe lại từng câu,
+   nút “Nghe lại từ đầu” làm lại với xáo trộn mới, không giới hạn,
+   không phạt. Trạng thái đạt chỉ giữ trong phiên (biến nhớ, KHÔNG
+   thêm khóa localStorage); đã đạt rồi làm lại chưa đạt vẫn giữ “đã
+   đạt” trong phiên. */
+var listenTimer = null;
+var listenState = { lessonId:null, questions:[], idx:0, score:0, wrongs:[], done:false, head:null, barFill:null, box:null };
+var listenPassedMap = {};
+function cancelListenAdvance(){
+  if(listenTimer){ clearTimeout(listenTimer); listenTimer = null; }
+}
+function listenPool(L){
+  var pool = [], seen = {};
+  (L.phrases || []).forEach(function(p){
+    var k = normalize(p.en);
+    if(k && !seen[k]){ seen[k] = 1; pool.push({ en:p.en, vi:p.vi, src:"phrase", who:"", name:"" }); }
+  });
+  (L.dialogue || []).forEach(function(d){
+    var k = normalize(d.en);
+    if(k && !seen[k]){ seen[k] = 1; pool.push({ en:d.en, vi:d.vi, src:"dialogue", who:d.who || "", name:d.name || "" }); }
+  });
+  return pool;
+}
+/* Người nói đoán chắc được: mỗi mã who chỉ gắn đúng 1 tên trong toàn
+   hội thoại và có ít nhất 2 mã như vậy với 2 tên khác nhau.
+   Trả về { who: tên } cho các mã hợp lệ, không đủ thì null. */
+function listenSpeakers(L){
+  var byWho = {};
+  (L.dialogue || []).forEach(function(d){
+    if(!d.who || !d.name) return;
+    if(!byWho[d.who]) byWho[d.who] = {};
+    byWho[d.who][d.name] = 1;
+  });
+  var ok = {}, namesSeen = {};
+  Object.keys(byWho).forEach(function(w){
+    var ns = Object.keys(byWho[w]);
+    if(ns.length === 1){ ok[w] = ns[0]; namesSeen[ns[0]] = 1; }
+  });
+  if(Object.keys(ok).length < 2 || Object.keys(namesSeen).length < 2) return null;
+  return ok;
+}
+function buildListenQuestions(L){
+  var pool = listenPool(L);
+  if(pool.length < 3) return [];
+  var speakers = listenSpeakers(L);
+  var targets = shuffle(pool.slice());
+  var usedTarget = {};
+  function takeTarget(){
+    while(targets.length){
+      var t = targets.shift();
+      var k = normalize(t.en);
+      if(!usedTarget[k]){ usedTarget[k] = 1; return t; }
+    }
+    return null;
+  }
+  function enDistractors(t, n){
+    var cands = shuffle(pool.filter(function(x){ return x.en !== t.en; }));
+    /* Ưu tiên câu dài tương đương để nhiễu “khó” hơn, vẫn ngẫu nhiên. */
+    cands.sort(function(a, b){ return Math.abs(a.en.length - t.en.length) - Math.abs(b.en.length - t.en.length); });
+    var out = [], seen = {};
+    for(var i = 0; i < cands.length && out.length < n; i++){
+      if(!seen[cands[i].en]){ seen[cands[i].en] = 1; out.push(cands[i].en); }
+    }
+    return out;
+  }
+  function viDistractors(t, n){
+    var cands = shuffle(pool.filter(function(x){ return x.vi !== t.vi; }));
+    var out = [], seen = {};
+    for(var i = 0; i < cands.length && out.length < n; i++){
+      if(!seen[cands[i].vi]){ seen[cands[i].vi] = 1; out.push(cands[i].vi); }
+    }
+    return out;
+  }
+  function mkA(t){
+    var d = enDistractors(t, 2); if(d.length < 2) return null;
+    return { kind:"a", tag:"Nghe và chọn câu", prompt:"Bác vừa nghe thấy câu nào?",
+      listen:t.en, revealEn:t.en, revealVi:t.vi, correctLabel:t.en,
+      options: shuffle([{label:t.en, ok:true}].concat(d.map(function(x){ return {label:x, ok:false}; }))),
+      explainOk:"Bác nghe chuẩn lắm — đó đúng là câu vừa đọc.",
+      explainNo:"Câu đúng là câu được tô xanh. Bác đối chiếu câu và nghĩa ở khung dưới đây, nghe lại một lần nữa cho quen tai nhé." };
+  }
+  function mkB(t){
+    var d = viDistractors(t, 2); if(d.length < 2) return null;
+    return { kind:"b", tag:"Nghe và chọn nghĩa", prompt:"Câu vừa nghe có nghĩa là gì?",
+      listen:t.en, revealEn:t.en, revealVi:t.vi, correctLabel:t.vi,
+      options: shuffle([{label:t.vi, ok:true}].concat(d.map(function(x){ return {label:x, ok:false}; }))),
+      explainOk:"Đúng rồi — bác nghe và hiểu đúng nghĩa của câu.",
+      explainNo:"Nghĩa đúng là đáp án được tô xanh. Bác xem câu tiếng Anh và nghĩa ở khung đối chiếu dưới đây nhé." };
+  }
+  function mkC(t){
+    var others = Object.keys(speakers).filter(function(w){ return speakers[w] !== t.name; });
+    if(!others.length) return null;
+    var otherName = speakers[others[Math.floor(Math.random() * others.length)]];
+    return { kind:"c", tag:"Nghe và đoán người nói", prompt:"Ai vừa nói câu này?",
+      listen:t.en, revealEn:t.en, revealVi:t.vi, correctLabel:t.name,
+      options: shuffle([{label:t.name, ok:true}, {label:otherName, ok:false}]),
+      explainOk:"Đúng rồi — trong hội thoại của bài, câu này là của " + t.name + ".",
+      explainNo:"Câu này là của " + t.name + " trong hội thoại của bài. Bác đối chiếu ở khung dưới đây nhé." };
+  }
+  var qs = [];
+  if(speakers){
+    var cands = shuffle(pool.filter(function(x){ return x.src === "dialogue" && speakers[x.who] && x.name === speakers[x.who]; }));
+    if(cands.length){
+      var tc = cands[0]; usedTarget[normalize(tc.en)] = 1;
+      var qc = mkC(tc); if(qc) qs.push(qc);
+    }
+  }
+  function fill(kind, count){
+    var made = 0, tries = 0;
+    while(made < count && tries < 40){
+      tries++;
+      var t = takeTarget(); if(!t) break;
+      var q = kind === "a" ? mkA(t) : mkB(t);
+      if(q){ qs.push(q); made++; }
+    }
+  }
+  fill("a", qs.length ? 2 : 3);
+  fill("b", 2);
+  /* Bù cho đủ 5 nếu một dạng thiếu dữ liệu hợp lệ. */
+  if(qs.length < 5) fill("a", 5 - qs.length);
+  if(qs.length < 5) fill("b", 5 - qs.length);
+  return shuffle(qs.slice(0, 5));
+}
+function renderListen(){
+  cancelListenAdvance();
+  var wrap = document.getElementById("listenWrap"); if(!wrap) return;
+  wrap.innerHTML = "";
+  if(!currentLesson || currentLesson.n === 10){
+    listenState = { lessonId:null, questions:[], idx:0, score:0, wrongs:[], done:false, head:null, barFill:null, box:null };
+    return;
+  }
+  var qs = buildListenQuestions(currentLesson);
+  listenState = { lessonId:currentLesson.id, questions:qs, idx:0, score:0, wrongs:[], done:false, head:null, barFill:null, box:null };
+  if(!qs.length){
+    wrap.appendChild(gEl("p", "game-note", "Bài này chưa đủ câu mẫu để luyện nghe. Bác cứ học tiếp các phần khác của bài nhé."));
+    return;
+  }
+  var head = gEl("p", "exam-progress"); wrap.appendChild(head);
+  var barWrap = gEl("div", "exam-bar");
+  var barFill = gEl("div", "exam-bar-fill"); barWrap.appendChild(barFill); wrap.appendChild(barWrap);
+  var box = gEl("div", ""); wrap.appendChild(box);
+  listenState.head = head; listenState.barFill = barFill; listenState.box = box;
+  renderListenQ();
+}
+function listenUpdHead(){
+  var st = listenState, total = st.questions.length;
+  if(!total) return;
+  if(st.head) st.head.textContent = "Câu " + Math.min(st.idx + 1, total) + " / " + total + " · Đã đúng: " + st.score + " · Đạt từ 4/" + total + " câu là qua phần này";
+  if(st.barFill) st.barFill.style.transform = "scaleX(" + (st.idx / total) + ")";
+}
+function renderListenQ(){
+  var st = listenState, box = st.box; if(!box) return;
+  box.innerHTML = "";
+  if(st.idx >= st.questions.length){ finishListen(); return; }
+  listenUpdHead();
+  var q = st.questions[st.idx];
+  var answered = false;
+  box.appendChild(gEl("div", "listen-tag", q.tag));
+  box.appendChild(gEl("p", "game-q", q.prompt));
+  var btns = gEl("div", "listen-btns");
+  btns.appendChild(speakBtn(q.listen, 1, "Nghe câu này", false));
+  btns.appendChild(speakBtn(q.listen, 0.5, "Nghe chậm", true));
+  box.appendChild(btns);
+  box.appendChild(gEl("p", "exam-hint", "Nghe kỹ rồi chọn một đáp án ở dưới. Nghe lại bao nhiêu lần cũng được — chữ của câu chỉ hiện ra sau khi bác trả lời."));
+  var grid = gEl("div", "q-opts one-col");
+  var correctBtn = null;
+  q.options.forEach(function(o){
+    var b = gEl("button", "q-opt", o.label); b.type = "button";
+    if(o.ok) correctBtn = b;
+    b.addEventListener("click", function(){
+      if(answered) return; answered = true;
+      grid.querySelectorAll(".q-opt").forEach(function(x){ x.disabled = true; });
+      if(correctBtn) correctBtn.classList.add("correct");
+      if(!o.ok) b.classList.add("wrong");
+      if(o.ok) st.score++; else st.wrongs.push({ q:q, userLabel:o.label });
+      listenUpdHead();
+      box.appendChild(gEl("p", "game-note", (o.ok ? "✓ Đúng rồi! " : "Chưa đúng. ") + (o.ok ? q.explainOk : q.explainNo)));
+      var rev = gEl("div", "exam-context listen-reveal");
+      rev.appendChild(gEl("div", "", "“" + q.revealEn + "”"));
+      rev.appendChild(gEl("p", "listen-reveal-vi", q.revealVi));
+      var rb = speakBtn(q.listen, 1, "Nghe lại câu này", false); rb.style.marginTop = "10px"; rev.appendChild(rb);
+      box.appendChild(rev);
+      var nb = bigBtn(st.idx === st.questions.length - 1 ? "Xem kết quả →" : "Câu tiếp theo →", "btn-primary btn-next-big");
+      nb.style.marginTop = "14px";
+      nb.addEventListener("click", function(){ st.idx++; renderListenQ(); });
+      box.appendChild(nb);
+      if(nb.scrollIntoView) nb.scrollIntoView({behavior:"smooth", block:"nearest"});
+    });
+    grid.appendChild(b);
+  });
+  box.appendChild(grid);
+  /* Tự phát câu khi người học đang thật sự đứng ở phần Luyện nghe
+     (như kiểm tra tổng hợp); lúc dựng nền trong enterLesson, phần này
+     chưa hiện nên không phát. Đã trả lời rồi thì không phát nữa. */
+  setTimeout(function(){
+    if(answered || listenState !== st || st.done) return;
+    var panel = document.getElementById("panel-listen");
+    if(panel && panel.classList.contains("active")) speak(q.listen, 1);
+  }, 350);
+}
+function finishListen(){
+  var st = listenState; st.done = true;
+  listenUpdHead();
+  if(st.barFill) st.barFill.style.transform = "scaleX(1)";
+  var box = st.box; if(!box) return;
+  box.innerHTML = "";
+  var L = currentLesson; if(!L || L.id !== st.lessonId) return;
+  var total = st.questions.length;
+  var need = Math.ceil(total * 0.8);
+  var pass = st.score >= need;
+  if(pass) listenPassedMap[L.id] = true;
+  var res = gEl("div", "quiz-result show");
+  res.appendChild(gEl("div", "score", st.score + " / " + total + " câu đúng"));
+  var msg = gEl("p", "", pass
+    ? "🎉 Bác nghe rất tốt! Đang chuyển sang phần Luyện nói…"
+    : (pickEnc("gameFail") + " Bác đúng " + st.score + "/" + total + " câu — cần đúng từ " + need + "/" + total + " câu là đạt phần này. Bác xem lại các câu sai ở dưới, nghe lại từng câu rồi bấm “Nghe lại từ đầu” để làm lại nhé — làm lại bao nhiêu lần cũng được, không bị phạt gì đâu."));
+  msg.style.fontWeight = "700"; msg.style.marginTop = "6px";
+  res.appendChild(msg);
+  box.appendChild(res);
+  if(pass) celebrate(false);
+  if(st.wrongs.length){
+    box.appendChild(gEl("h3", "sub-h", "Câu bác làm sai — nghe lại cho nhớ lâu:"));
+    var list = gEl("div", "exam-wrong-list");
+    st.wrongs.forEach(function(w, wi){
+      var item = gEl("div", "exam-wrong-item");
+      item.appendChild(gEl("p", "ew-q", (wi + 1) + ". " + w.q.prompt));
+      item.appendChild(gEl("p", "", "Bác đã chọn: " + w.userLabel));
+      var a = gEl("p", "ew-a", ""); a.appendChild(document.createTextNode("Đáp án đúng: "));
+      a.appendChild(gEl("b", "", w.q.correctLabel)); item.appendChild(a);
+      item.appendChild(gEl("p", "", "Câu vừa nghe: “" + w.q.revealEn + "” — " + w.q.revealVi));
+      var lb = speakBtn(w.q.listen, 1, "Nghe lại", false); lb.style.marginTop = "8px"; item.appendChild(lb);
+      list.appendChild(item);
+    });
+    box.appendChild(list);
+  }
+  var acts = gEl("div", "game-acts");
+  var again = bigBtn("Nghe lại từ đầu", pass ? "btn-ghost" : "btn-primary btn-next-big");
+  again.addEventListener("click", function(){ renderListen(); });
+  acts.appendChild(again);
+  if(!pass){
+    var toSpeak = bigBtn("Sang Luyện nói →", "btn-soft");
+    toSpeak.addEventListener("click", function(){ goToPart("speak"); });
+    acts.appendChild(toSpeak);
+  }
+  box.appendChild(acts);
+  res.scrollIntoView({behavior:"smooth", block:"center"});
+  if(pass){
+    var lid = L.id;
+    listenTimer = setTimeout(function(){
+      listenTimer = null;
+      if(!listenState.done || listenState.lessonId !== lid) return;
+      if(!currentLesson || currentLesson.id !== lid) return;
+      var view = document.getElementById("viewLesson");
+      if(!view || !view.classList.contains("active")) return;
+      var panel = document.getElementById("panel-listen");
+      if(!panel || !panel.classList.contains("active")) return;
+      goToPart("speak");
+    }, 1500);
+  }
+}
+
 document.getElementById("speakListenN").addEventListener("click", function(){ if(speakItems.length) speak(speakItems[speakIndex].en, 1); });
 document.getElementById("speakListenS").addEventListener("click", function(){ if(speakItems.length) speak(speakItems[speakIndex].en, 0.5); });
 function normalize(s){ return (s||"").toLowerCase().replace(/[^a-z0-9' ]/g," ").replace(/\s+/g," ").trim(); }
