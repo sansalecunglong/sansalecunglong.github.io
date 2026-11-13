@@ -2173,6 +2173,116 @@ html.hc .bottom-nav{border-top:2px solid #000; background:#fff; backdrop-filter:
 html.hc .bn-btn{color:#000}
 html.hc .bn-btn.on{background:#0B2A5B; color:#fff; box-shadow:none; border:2px solid #000}
 .toast{bottom:108px}
+
+/* ============================================================
+   V24 — BỎ KHUNG CỨNG: CHỮ TỰ CHẠY THEO MÀN HÌNH MỌI KHỔ × CỠ CHỮ
+   Lỗi máy thật (ảnh chủ trang): cột chữ thẻ chương bị bóp còn
+   ~0px, mô tả chương xếp dọc từng ký tự. Nguyên nhân đo được:
+   luật V21 (≤767px) đặt .ch-meta{width:100%} cho bố cục XẾP DỌC;
+   khối V23 sau đó ép .ch-head về HÀNG NGANG bằng selector có ID
+   nhưng không gỡ width:100% — cột meta chiếm trọn bề ngang đầu
+   thẻ lại thêm flex:none không chịu co, nên cột chữ (flex:1,
+   min-width:0) bị ép về 0. Bản vá này gỡ tận gốc và áp cùng một
+   nguyên tắc cho toàn trang: cột chữ luôn có minmax/min-width:0
+   để co giãn, phần tử phụ (badge, nhãn, nút) tự co hoặc tự
+   xuống dòng khi chật — không phần tử nào giữ bề rộng cứng bằng
+   px để bóp chữ. Giữ nguyên hệ màu, thứ tự khối, diện mạo V23.
+   ============================================================ */
+
+/* --- 1) Đầu thẻ chương + thẻ bài phát âm: gỡ width:100% rò rỉ,
+        meta tự co, chật nữa thì tự xuống hàng dưới --- */
+#viewHome .ch-head, #viewPron .ch-head{flex-wrap:wrap}
+#viewHome .ch-head-txt, #viewPron .ch-head-txt{flex:1 1 120px; min-width:0}
+#viewHome .ch-meta, #viewPron .ch-meta{
+  width:auto; max-width:100%; min-width:0; flex:0 1 auto; margin-left:auto;
+}
+#viewHome .ch-prog, #viewPron .ch-prog,
+#viewHome .ch-chev, #viewPron .ch-chev{white-space:normal; text-align:right}
+@media (max-width:370px){
+  #viewHome .ch-meta, #viewPron .ch-meta{
+    flex-basis:100%; flex-direction:row; align-items:center;
+    justify-content:flex-end; flex-wrap:wrap; gap:6px 12px;
+  }
+}
+.v23-ch-badge{white-space:normal; text-align:center; max-width:100%}
+#viewHome .ch-bar, #viewPron .ch-bar{margin-left:15px; margin-right:15px}
+#viewHome .ch-body, #viewPron .ch-body{padding-left:15px; padding-right:15px}
+
+/* --- 2) Header: ở các khổ/cỡ chữ từng bóp tiêu đề còn 35–60px,
+        hàng header tự xuống dòng và nút Góp ý / Menu tự co, thay
+        vì ép cột chữ. Khổ + cỡ chữ thường giữ nguyên như đã duyệt. --- */
+.feedback-btn-label, .menu-label{white-space:nowrap; overflow:hidden; text-overflow:ellipsis; min-width:0}
+.menu-toggle{max-width:100%}
+@media (max-width:380px){
+  .header-in{flex-wrap:wrap !important}
+  .brand{flex:1 1 160px}
+  .feedback-btn{flex:0 1 auto; min-width:0}
+  .menu-wrap{flex:0 1 auto; min-width:0}
+}
+@media (max-width:430px){
+  html[data-font="large"] .header-in, html[data-font="xlarge"] .header-in{flex-wrap:wrap !important}
+  html[data-font="large"] .brand, html[data-font="xlarge"] .brand{flex:1 1 170px}
+  html[data-font="large"] .feedback-btn, html[data-font="xlarge"] .feedback-btn,
+  html[data-font="large"] .menu-wrap, html[data-font="xlarge"] .menu-wrap{flex:0 1 auto; min-width:0}
+}
+
+/* Huy hiệu “Không bắt buộc” (banner + trong tiêu đề thẻ phát âm):
+   bỏ nowrap cứng — chữ dài tự xuống dòng trong huy hiệu thay vì
+   tràn khỏi màn hình ở 320px + cỡ chữ Lớn/Rất lớn. */
+.opt-badge{white-space:normal; text-align:center; max-width:100%}
+
+/* --- 3) Mọi lưới chứa chữ: track minmax(0,1fr) để cột luôn co
+        được theo màn hình (1fr trần có sàn = bề rộng nội dung,
+        chữ to là tràn). Kèm đúng các mốc media đang có. --- */
+.tabs{grid-template-columns:repeat(3,minmax(0,1fr))}
+.tab-btn{min-width:0; display:flex; align-items:center; justify-content:center; text-align:center}
+.pron-listen-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+@media (max-width:400px){ .pron-listen-grid{grid-template-columns:repeat(2,minmax(0,1fr))} }
+.progress-top{grid-template-columns:repeat(2,minmax(0,1fr))}
+.progress-top>*{min-width:0}
+.shortcuts{grid-template-columns:repeat(2,minmax(0,1fr))}
+.mem-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+@media (max-width:560px){ .mem-grid{grid-template-columns:repeat(2,minmax(0,1fr))} }
+.seo-chapters{grid-template-columns:repeat(2,minmax(0,1fr))}
+@media (max-width:700px){ .seo-chapters{grid-template-columns:minmax(0,1fr)} }
+.bottom-nav-in{grid-template-columns:repeat(3,minmax(0,1fr))}
+.bn-btn{min-width:0}
+
+/* --- 4) Các hàng flex còn lại: phần chữ luôn được quyền co --- */
+.hero-people span{flex:1 1 auto; min-width:0}
+.review-item .rw, .review-item .rv{min-width:0}
+.vocab-row .v-main{min-width:min(200px,100%)}
+.lr-status{flex:0 1 auto; min-width:0}
+
+/* --- 5) CỠ CHỮ TỰ CO THEO MÀN HÌNH HIỂN THỊ: cỡ chữ nền chạy
+        theo bề rộng viewport (clamp theo vw) trong từng mức
+        người dùng chọn — màn nhỏ chữ tự nhỏ lại vừa khung, màn
+        lớn chữ to lên tương xứng; mức chọn vẫn là thang phóng/thu
+        tương đối trên nền linh hoạt đó. Sàn mỗi mức giữ chữ nội
+        dung luôn ở mức đọc được, đoạn dài ngắt dòng tự nhiên. --- */
+:root{--fs-base:clamp(16.5px,4.9vw,19px)}
+html[data-font="small"]{--fs-base:clamp(15px,4.4vw,16.5px)}
+html[data-font="large"]{--fs-base:clamp(18px,5.4vw,21.5px)}
+html[data-font="xlarge"]{--fs-base:clamp(19px,5.9vw,24px)}
+
+/* --- 6) CÂN ĐỐI “TO NHỎ” TRONG CÁC KHỐI MỚI (giữ nguyên màu,
+        thứ tự, cấu trúc): khoảng cách lưới chung một thang 12px;
+        ô biểu tượng cùng cấp bằng nhau; huy hiệu/nút pill cùng
+        một đệm; dải chữ thay ảnh của thẻ Từ vựng hôm nay cao
+        bằng đúng ảnh (196px) để thẻ không nhảy cỡ to nhỏ. --- */
+.tabs{gap:12px}
+.pron-listen-grid{gap:12px}
+.bottom-nav-in{gap:12px}
+.progress-top{gap:12px}
+#v23Stats .stat{padding:14px 16px}
+#v23Stats .stat-ic{width:48px; height:48px}
+.shortcut{padding:16px}
+.shortcut h4{font-size:max(17px,1.02em)}
+.votd-letter{height:196px}
+.v23-ch-badge{padding:8px 14px}
+.hero-badge{padding:8px 14px}
+.sc-pill{padding:8px 14px}
+.bn-btn{font-size:15px}
 </style>
 </head>
 <body>
