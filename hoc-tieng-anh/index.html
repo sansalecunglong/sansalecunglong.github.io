@@ -3899,8 +3899,13 @@ function syncSpeakTarget(){
    (cùng nhịp tự sang từ) chuyển sang câu đích tiếp theo: dừng phiên
    nghe/ghi âm đang chạy bằng MicSessions.cancelCurrent, cập nhật chip
    chọn câu + chữ đích + nghĩa, cuộn và làm nổi bật câu mới. Đúng câu
-   CUỐI: chỉ hiện dòng báo hoàn thành + gợi ý nút Tiếp theo, KHÔNG tự
-   nhảy sang phần Trò chơi. An toàn phiên: người học tự bấm câu khác /
+   CUỐI (người học đổi ý, chốt 13/11 — thay quy tắc cũ 10/11 “dừng chờ
+   bấm Tiếp theo”): vẫn hiện dòng báo hoàn thành, nhưng nội dung báo sắp
+   chuyển, rồi sau ~1,5 giây TỰ sang phần Trò chơi bằng đúng goToPart
+   của nút “Tiếp theo: Trò chơi cuối bài →” (Bài 6 vào game là dựng lại
+   game săn điểm qua switchTab như bấm tay). Lần chờ chuyển này dùng
+   chung speakAutoTimer nên cancelSpeakAutoNext hủy được như lần chờ
+   sang câu kế. An toàn phiên: người học tự bấm câu khác /
    bấm mic mở phiên mới / chuyển phần (switchTab) / trang dựng lại danh
    sách câu → hủy lần chờ; lúc tới giờ còn kiểm tra câu đích chưa bị ai
    đổi và vẫn đang ở phần Luyện nói mới chuyển. */
@@ -3925,8 +3930,20 @@ function scheduleSpeakAutoNext(){
     if(from >= speakItems.length - 1){
       var fb = document.getElementById("speakFeedback");
       fb.className = "feedback show good";
-      fb.textContent = "🎉 Bác đã luyện xong câu cuối của phần Luyện nói rồi — giỏi lắm! Bấm nút “Tiếp theo: Trò chơi cuối bài →” ở dưới để sang phần chơi nhé.";
-      spStatus("Đã hoàn thành phần Luyện nói. Bấm “Tiếp theo: Trò chơi cuối bài →” để chơi tiếp nhé.");
+      fb.textContent = "🎉 Bác đã luyện xong câu cuối của phần Luyện nói rồi — giỏi lắm! Đang chuyển sang phần Trò chơi, bác chờ một chút nhé…";
+      spStatus("Đã hoàn thành phần Luyện nói — đang tự chuyển sang Trò chơi…");
+      /* Chờ ~1,5 giây cho người học kịp đọc lời chúc rồi mới chuyển,
+         bằng đúng đường của nút “Tiếp theo: Trò chơi cuối bài →”.
+         Dùng lại speakAutoTimer: người học tự chuyển phần / bấm câu
+         khác / bấm mic trong lúc chờ đều đi qua cancelSpeakAutoNext
+         nên lần chuyển này bị hủy, không kéo ngược về Trò chơi. */
+      speakAutoTimer = setTimeout(function(){
+        speakAutoTimer = null;
+        if(speakIndex !== from || !speakItems.length) return;
+        var panel2 = document.getElementById("panel-speak");
+        if(!panel2 || !panel2.classList.contains("active")) return;
+        goToPart("quiz");
+      }, 1500);
       return;
     }
     MicSessions.cancelCurrent();
