@@ -3545,6 +3545,7 @@ function renderLessonGridCounts(){ renderLessonGrid(); }
 
 /* ================= VIEW SWITCHING ================= */
 function showView(id){
+  flushPickAdvance();
   cancelVocabFlow(); cancelListenAdvance();
   MicSessions.cancelCurrent(); stopGameTimer();
   if(typeof closeFsPanel === "function") closeFsPanel(false);
@@ -3618,11 +3619,56 @@ function updatePartProgress(name){
     });
   }
 }
+/* Cuộn TỨC THÌ khi chuyển phần (switchTab): đưa ĐẦU panel vừa chọn lên
+   ngay dưới header cố định (header.site là sticky) để học viên thấy đầu
+   phần mình vừa chọn ngay, không phải tự cuộn tìm. Riêng phần Trò chơi
+   khi đang có phase ghi nhớ chờ (memPending) hoặc banner ghi nhớ đang
+   hiện: nếu cuộn tới đầu panel vẫn chưa đưa banner vào khung nhìn
+   (Bài 1: banner nằm ~465px dưới đầu panel — sau hộp giới thiệu dài +
+   thẻ tiêu đề game — nên học viên phải tự cuộn trong 3 giây đếm ngược
+   mới thấy thẻ) thì cuộn tiếp tới banner, để banner nằm gần đầu khung
+   nhìn và khu vực thẻ/nội dung ngay dưới nó. Cuộn phải TỨC THÌ: trang
+   có CSS scroll-behavior:smooth nên tắt tạm trong lúc cuộn (đúng mẫu
+   một luồng sẵn có trong trang đã dùng), và switchTab chỉ gọi
+   flushPendingMemPhase() SAU khi cuộn xong — đếm ngược 3 giây không bị
+   hao bởi thời gian cuộn. */
+function scrollSwitchedPanelIntoView(name){
+  var panel = document.getElementById("panel-" + name);
+  if(!panel) return;
+  var header = document.querySelector("header.site");
+  var offset = (header ? header.getBoundingClientRect().height : 0) + 10;
+  var sy = window.pageYOffset || document.documentElement.scrollTop || 0;
+  var y = panel.getBoundingClientRect().top + sy - offset;
+  if(name === "quiz"){
+    var banner = null;
+    if(memPending && memPending.banner && memPending.banner.isConnected) banner = memPending.banner;
+    else {
+      var bn = panel.querySelector(".mem-banner");
+      if(bn && bn.style.display !== "none") banner = bn;
+    }
+    if(banner){
+      var br = banner.getBoundingClientRect();
+      var bannerTop = br.top + sy;
+      var topAfter = bannerTop - y;
+      var vh = window.innerHeight || 0;
+      if(topAfter < offset || topAfter + br.height > vh - 4) y = bannerTop - offset;
+    }
+  }
+  if(y < 0) y = 0;
+  var root = document.documentElement;
+  var prevSB = root.style.scrollBehavior;
+  try{
+    root.style.scrollBehavior = "auto";
+    window.scrollTo(0, y);
+  }catch(e){}
+  root.style.scrollBehavior = prevSB;
+}
 function switchTab(name){
   /* Người học tự chuyển phần → hủy mọi lần TỰ chuyển đang chờ (Thẻ ghi
      nhớ → Hội thoại, Luyện nói sang câu kế): đã đi bằng tay thì không
      được nhảy thêm nữa. Lần tự chuyển tự nó gọi goToPart SAU khi đã tự
      xóa hẹn giờ của mình nên không bị nhánh này chặn. */
+  flushPickAdvance();
   cancelFcAutoDialogue(); cancelSpeakAutoNext(); cancelVocabFlow(); cancelListenAdvance();
   MicSessions.cancelCurrent(); stopGameTimer();
   document.querySelectorAll(".tab-btn").forEach(function(b){
@@ -3647,7 +3693,11 @@ function switchTab(name){
      từ lúc mở bài, khi Phần 6 còn ẩn, nên bị hoãn trong memPending —
      Phần 6 vừa hiện ra là chạy đếm ngược ngay tại đây, đúng lúc học
      viên nhìn thấy. stopGameTimer() ở đầu hàm chỉ hủy phase ĐANG CHẠY
-     (memActive), không đụng memPending nên phase hoãn còn nguyên. */
+     (memActive), không đụng memPending nên phase hoãn còn nguyên.
+     Cuộn TỨC THÌ tới đầu panel (riêng Trò chơi có phase chờ: cuộn tiếp
+     tới banner ghi nhớ) PHẢI xong trước khi flush chạy đếm ngược, nên
+     lần cuộn nằm ngay trước lần flush này. */
+  scrollSwitchedPanelIntoView(name);
   if(name === "quiz") flushPendingMemPhase();
 }
 document.querySelectorAll(".tab-btn").forEach(function(b){
@@ -4266,6 +4316,44 @@ var listenPassedMap = {};
 function cancelListenAdvance(){
   if(listenTimer){ clearTimeout(listenTimer); listenTimer = null; }
 }
+/* ================= TỰ ĐỘNG SANG CÂU TIẾP THEO KHI CHỌN ĐÁP ÁN (dùng chung toàn trang) =================
+   Yêu cầu của chủ trang: ở MỌI nội dung có chọn đáp án, chọn xong là TỰ
+   chuyển sang câu/lượt tiếp theo cho liền mạch, không bắt học viên bấm
+   nút chuyển câu nữa. Một cơ chế hẹn giờ duy nhất cho mọi nơi:
+   · Chọn ĐÚNG → hiện phản hồi như cũ rồi chuyển sau 1,0 giây.
+   · Chọn SAI → hiện phản hồi + đáp án đúng như cũ, để 2,0 giây cho kịp
+     đọc rồi mới chuyển.
+   · Nơi đáp án chưa chấm ngay (kiểm tra cổng / kiểm tra nhanh cuối khóa:
+     chọn xong chỉ đánh dấu, chấm khi nộp bài) → 0,5 giây sau tự cuộn
+     sang câu tiếp theo.
+   Mỗi lần hẹn đều mang theo “chốt danh tính” của chính bộ câu đó (đối
+   tượng trạng thái + chỉ số câu + phiên game + bài học) — callback tự
+   kiểm tra lại trước khi chạy nên một lần hẹn cũ không bao giờ nhảy
+   câu ở phần/bài khác. Dựng lại bộ câu (renderListen / renderGame /
+   startGateCheck / buildQuiz / renderPronGame) đều hủy lần hẹn đang
+   chờ; học viên tự rời phần/bài giữa chừng thì switchTab / showView
+   CHỐT NGAY lần hẹn đó (flushPickAdvance: chạy nốt bước chuyển của
+   chính câu vừa trả lời rồi thôi) để câu đã trả lời không kẹt ở trạng
+   thái đã khóa nút mà không có đường đi tiếp. */
+var pickAdvanceTimer = null, pickAdvanceFn = null;
+function cancelPickAdvance(){
+  if(pickAdvanceTimer){ clearTimeout(pickAdvanceTimer); pickAdvanceTimer = null; }
+  pickAdvanceFn = null;
+}
+function flushPickAdvance(){
+  if(!pickAdvanceTimer) return;
+  clearTimeout(pickAdvanceTimer); pickAdvanceTimer = null;
+  var fn = pickAdvanceFn; pickAdvanceFn = null;
+  if(fn) fn();
+}
+function schedulePickAdvance(delay, fn){
+  cancelPickAdvance();
+  pickAdvanceFn = fn;
+  pickAdvanceTimer = setTimeout(function(){
+    pickAdvanceTimer = null; pickAdvanceFn = null; fn();
+  }, delay);
+}
+function pickDelay(ok){ return ok ? 1000 : 2000; }
 function listenPool(L){
   var pool = [], seen = {};
   (L.phrases || []).forEach(function(p){
@@ -4379,7 +4467,7 @@ function buildListenQuestions(L){
   return shuffle(qs.slice(0, 5));
 }
 function renderListen(){
-  cancelListenAdvance();
+  cancelListenAdvance(); cancelPickAdvance();
   var wrap = document.getElementById("listenWrap"); if(!wrap) return;
   wrap.innerHTML = "";
   if(!currentLesson || currentLesson.n === 10){
@@ -4437,11 +4525,15 @@ function renderListenQ(){
       rev.appendChild(gEl("p", "listen-reveal-vi", q.revealVi));
       var rb = speakBtn(q.listen, 1, "Nghe lại câu này", false); rb.style.marginTop = "10px"; rev.appendChild(rb);
       box.appendChild(rev);
-      var nb = bigBtn(st.idx === st.questions.length - 1 ? "Xem kết quả →" : "Câu tiếp theo →", "btn-primary btn-next-big");
-      nb.style.marginTop = "14px";
-      nb.addEventListener("click", function(){ st.idx++; renderListenQ(); });
-      box.appendChild(nb);
-      if(nb.scrollIntoView) nb.scrollIntoView({behavior:"smooth", block:"nearest"});
+      /* Tự chuyển câu: đúng → 1 giây, sai → 2 giây (kịp đọc đáp án
+         đúng + khung đối chiếu). Không còn nút “Câu tiếp theo” —
+         câu cuối cũng tự sang màn hình kết quả như cũ. */
+      var myIdx = st.idx;
+      schedulePickAdvance(pickDelay(o.ok), function(){
+        if(listenState !== st || st.done || st.idx !== myIdx) return;
+        st.idx++; renderListenQ();
+      });
+      if(rev.scrollIntoView) rev.scrollIntoView({behavior:"smooth", block:"nearest"});
     });
     grid.appendChild(b);
   });
@@ -6469,6 +6561,7 @@ function stopCaptureAndGrade(session){
 /* ================= QUIZ ENGINE ================= */
 function shuffle(arr){ var a = arr.slice(); for(var i=a.length-1;i>0;i--){ var j = Math.floor(Math.random()*(i+1)); var t=a[i]; a[i]=a[j]; a[j]=t; } return a; }
 function buildQuiz(questions, wrap){
+  cancelPickAdvance();
   wrap.innerHTML = "";
   questions.forEach(function(q, qi){
     var box = document.createElement("div"); box.className="quiz-q"; box.setAttribute("data-q", qi);
@@ -6480,7 +6573,7 @@ function buildQuiz(questions, wrap){
       box.appendChild(lb);
     }
     if(q.type === "order"){
-      var zone = document.createElement("div"); zone.className="order-zone"; zone.setAttribute("data-zone", qi);
+      var zone = document.createElement("div"); zone.className="order-zone"; zone.setAttribute("data-zone", qi); zone.setAttribute("data-total", q.words.length);
       var empty = document.createElement("span"); empty.className="oz-empty"; empty.textContent = "Câu của bác sẽ hiện ở đây… (bấm vào từ đã chọn để bỏ ra)";
       zone.appendChild(empty); box.appendChild(zone);
       var bank = document.createElement("div"); bank.className="word-bank"; bank.setAttribute("data-bank", qi);
@@ -6499,6 +6592,15 @@ function buildQuiz(questions, wrap){
         b.addEventListener("click", function(){
           opts.querySelectorAll(".q-opt").forEach(function(x){ x.classList.remove("selected"); });
           b.classList.add("selected");
+          /* Đáp án ở đây chưa chấm ngay (chấm khi nộp bài) → chọn xong
+             0,5 giây sau tự cuộn sang câu tiếp theo cho liền mạch.
+             Đổi ý chọn lại đáp án khác thì lần hẹn cũ tự hủy, hẹn lại
+             từ đầu. Câu cuối thì thôi — nút nộp bài ở ngay dưới. */
+          schedulePickAdvance(500, function(){
+            if(!box.isConnected) return;
+            var nb2 = wrap.querySelector('[data-q="' + (qi + 1) + '"]');
+            if(nb2 && nb2.scrollIntoView) nb2.scrollIntoView({behavior:"smooth", block:"center"});
+          });
         });
         opts.appendChild(b);
       });
@@ -6524,6 +6626,18 @@ function toggleOrderWord(qi, chip, zone, bank){
     }
   });
   zone.appendChild(placed);
+  /* Xếp đủ mọi từ của câu sắp xếp → coi như đã chọn xong đáp án:
+     0,5 giây sau tự cuộn sang câu tiếp theo (chưa chấm ngay như
+     các câu trắc nghiệm cùng bài). */
+  var totalW = parseInt(zone.getAttribute("data-total") || "0", 10);
+  if(totalW && zone.querySelectorAll("[data-placed]").length === totalW){
+    var boxEl = zone.parentElement;
+    schedulePickAdvance(500, function(){
+      if(!boxEl || !boxEl.isConnected) return;
+      var nx = boxEl.nextElementSibling;
+      if(nx && nx.scrollIntoView) nx.scrollIntoView({behavior:"smooth", block:"center"});
+    });
+  }
 }
 function gradeQuiz(questions, wrap){
   var score = 0, answeredAll = true;
@@ -6570,7 +6684,7 @@ function resetQuizUI(kind){
 
 /* ================= KIỂM TRA BÀI CŨ + KHÓA BÀI + TRÒ CHƠI CUỐI BÀI ================= */
 var gameTimer = null, gameSession = 0, pendingGateTarget = 0, gateTarget = 0, gateQuestions = [];
-function stopGameTimer(){ if(gameTimer){ clearInterval(gameTimer); gameTimer = null; } cancelMemPhase(); gameSession++; }
+function stopGameTimer(){ if(gameTimer){ clearInterval(gameTimer); gameTimer = null; } cancelMemPhase(); cancelPickAdvance(); gameSession++; }
 function lessonById(id){ return LESSONS.filter(function(L){ return L.id===id; })[0] || null; }
 function isUnlocked(L){ return !!L && (L.id === 1 || !!state.completed[L.id - 1]); }
 function nextLessonLabel(){ var nx = LESSONS.filter(function(L){ return !state.completed[L.id]; })[0]; return nx ? ("Chương " + nx.ch + " · Bài " + nx.n + " — " + nx.title) : "bài ôn tập cuối khóa"; }
@@ -6971,7 +7085,12 @@ function gameListenPick(wrap, L){
       markPick(g, btn, it.ok);
       if(it.ok) score++; else recordWrong(v.en);
       idx++;
-      setTimeout(next, 1000);
+      /* Tự sang câu sau: đúng 1 giây, sai 2 giây cho kịp nhìn lại. */
+      var sess2 = gameSession, les2 = L;
+      schedulePickAdvance(pickDelay(it.ok), function(){
+        if(sess2 !== gameSession || currentLesson !== les2) return;
+        next();
+      });
     });
     box.appendChild(grid);
     setTimeout(function(){ speak(v.en, 0.85); }, 350);
@@ -7027,9 +7146,15 @@ function gameOrder(wrap, L){
       if(ok) score++;
       chk.disabled = true;
       box.appendChild(gEl("p", "game-note", ok ? ("✓ Đúng rồi! Câu đúng: “" + s.en + "”") : ("Chưa đúng. Câu đúng là: “" + s.en + "”")));
-      var nx = bigBtn("Câu tiếp theo →", "btn-accent"); nx.style.marginTop = "10px";
-      nx.addEventListener("click", function(){ idx++; next(); });
-      box.appendChild(nx);
+      /* Tự sang câu sau (bỏ nút “Câu tiếp theo”): đúng 1 giây, sai
+         2 giây cho kịp đọc câu đúng. Lượt sau vẫn mở đầu bằng giai
+         đoạn ghi nhớ 3 giây như cũ — nhịp tự chuyển không rút ngắn
+         3 giây đó. Câu cuối tự sang màn hình kết quả. */
+      var myIdx3 = idx, sess3 = gameSession, les3 = L;
+      schedulePickAdvance(pickDelay(ok), function(){
+        if(sess3 !== gameSession || currentLesson !== les3 || idx !== myIdx3) return;
+        idx++; next();
+      });
     });
     box.appendChild(chk);
     /* GIAI ĐOẠN GHI NHỚ 3 GIÂY của lượt này: hiện câu đúng kèm đếm
@@ -7102,10 +7227,15 @@ function gameFill(wrap, L){
         var ok = positions.every(function(p, i){ return blanks[i] === word[p]; });
         if(ok) score++; else recordWrong(v.en);
         box.appendChild(gEl("p", "game-note", ok ? ("✓ Đúng rồi! Từ đúng: " + word) : ("Chưa đúng. Từ đúng là: " + word)));
-        var nx = bigBtn("Từ tiếp theo →", "btn-accent"); nx.style.marginTop = "10px";
-        nx.addEventListener("click", function(){ idx++; next(); });
-        box.appendChild(nx);
         chk.disabled = true;
+        /* Tự sang từ sau (bỏ nút “Từ tiếp theo”): đúng 1 giây, sai
+           2 giây cho kịp đọc từ đúng. Lượt sau vẫn có 3 giây ghi
+           nhớ mặt chữ như cũ. Từ cuối tự sang màn hình kết quả. */
+        var myIdx4 = idx, sess4 = gameSession, les4 = L;
+        schedulePickAdvance(pickDelay(ok), function(){
+          if(sess4 !== gameSession || currentLesson !== les4 || idx !== myIdx4) return;
+          idx++; next();
+        });
       });
       bank.appendChild(chk);
     }
@@ -7327,7 +7457,12 @@ function gameListenSentence(wrap, L){
       markPick(g, btn, it.ok);
       if(it.ok) score++;
       idx++;
-      setTimeout(next, 1100);
+      /* Tự sang câu sau: đúng 1 giây, sai 2 giây cho kịp nhìn lại. */
+      var sess7 = gameSession, les7 = L;
+      schedulePickAdvance(pickDelay(it.ok), function(){
+        if(sess7 !== gameSession || currentLesson !== les7) return;
+        next();
+      });
     });
     grid.classList.add("one-col");
     box.appendChild(grid);
@@ -7370,9 +7505,14 @@ function gameTrueFalse(wrap, L){
         if(ok) score++; else recordWrong(v.en);
         row.querySelectorAll("button").forEach(function(x){ x.disabled = true; });
         box.appendChild(gEl("p", "game-note", ok ? ("✓ Đúng rồi! “" + v.en + "” = " + v.vi) : ("Chưa đúng. “" + v.en + "” = " + v.vi)));
-        var nx = bigBtn("Câu tiếp theo →", "btn-primary"); nx.style.marginTop = "10px";
-        nx.addEventListener("click", function(){ idx++; next(); });
-        box.appendChild(nx);
+        /* Tự sang câu sau (bỏ nút “Câu tiếp theo”): đúng 1 giây,
+           sai 2 giây cho kịp đọc nghĩa đúng. Câu cuối tự sang màn
+           hình kết quả. */
+        var myIdx8 = idx, sess8 = gameSession, les8 = L;
+        schedulePickAdvance(pickDelay(ok), function(){
+          if(sess8 !== gameSession || currentLesson !== les8 || idx !== myIdx8) return;
+          idx++; next();
+        });
       });
       row.appendChild(b);
     });
@@ -7706,11 +7846,15 @@ function gameChallenge(wrap, L){
     }
     updHead();
   }
-  function nextButton(){
-    var b = bigBtn(idx === questions.length - 1 ? "Xem kết quả →" : "Câu tiếp theo →", "btn-primary btn-next-big");
-    b.style.marginTop = "14px";
-    b.addEventListener("click", function(){ idx++; renderQ(); });
-    return b;
+  /* Tự chuyển câu sau khi trả lời (không còn nút “Câu tiếp theo”):
+     đúng → 1 giây, sai → 2 giây cho kịp đọc giải thích + đáp án đúng.
+     Câu cuối tự sang màn hình kết quả như cũ. */
+  function autoNextExam(ok){
+    var myIdx = idx, sessE = gameSession, lesE = L;
+    schedulePickAdvance(pickDelay(ok), function(){
+      if(sessE !== gameSession || currentLesson !== lesE || idx !== myIdx) return;
+      idx++; renderQ();
+    });
   }
   function renderChoiceQ(q){
     var grid = gEl("div", "q-opts");
@@ -7725,9 +7869,10 @@ function gameChallenge(wrap, L){
         if(correctBtn) correctBtn.classList.add("correct");
         if(!o.ok) b.classList.add("wrong");
         recordResult(o.ok, q, o.label);
-        box.appendChild(gEl("p", "game-note", (o.ok ? "✓ Đúng rồi! " : "Chưa đúng. ") + q.explain));
-        box.appendChild(nextButton());
-        var nb = box.lastChild; if(nb && nb.scrollIntoView) nb.scrollIntoView({behavior:"smooth", block:"nearest"});
+        var note = gEl("p", "game-note", (o.ok ? "✓ Đúng rồi! " : "Chưa đúng. ") + q.explain);
+        box.appendChild(note);
+        autoNextExam(o.ok);
+        if(note.scrollIntoView) note.scrollIntoView({behavior:"smooth", block:"nearest"});
       });
       grid.appendChild(b);
     });
@@ -7765,7 +7910,7 @@ function gameChallenge(wrap, L){
       placedEls.forEach(function(p){ p.disabled = true; });
       recordResult(ok, q, built);
       box.appendChild(gEl("p", "game-note", (ok ? "✓ Đúng rồi! " : "Chưa đúng. ") + q.explain));
-      box.appendChild(nextButton());
+      autoNextExam(ok);
     });
     box.appendChild(chk);
   }
@@ -8445,6 +8590,7 @@ function pronGoPart(delta){
 /* ---------- Trò chơi phát âm: Nghe từ, chọn ký hiệu âm ---------- */
 function ipaInWord(wordIpa, sym){ return wordIpa.replace(/\//g, "").indexOf(sym) >= 0; }
 function renderPronGame(){
+  cancelPickAdvance();
   var wrap = document.getElementById("pronGameWrap"); if(!wrap || !pronCurrent) return;
   var res = document.getElementById("pronGameResult");
   res.className = "quiz-result"; res.innerHTML = ""; res.style.background = ""; res.style.borderColor = "";
@@ -8486,7 +8632,12 @@ function renderPronGame(){
       markPick(g, btn, it.ok);
       if(it.ok) score++;
       idx++;
-      setTimeout(next, 1000);
+      /* Tự sang câu sau: đúng 1 giây, sai 2 giây cho kịp nhìn lại. */
+      var lesP = L;
+      schedulePickAdvance(pickDelay(it.ok), function(){
+        if(pronCurrent !== lesP) return;
+        next();
+      });
     });
     inner.appendChild(grid);
     setTimeout(function(){ speak(ex[0], 0.85); }, 350);
