@@ -2431,6 +2431,27 @@ html[data-font="xlarge"]{--fs-base:clamp(19px,5.9vw,24px)}
    ============================================================ */
 .total-banner h2.lbl-center{ text-align:center !important; }
 .total-banner h2.lbl-center.fit-left{ text-align:center !important; }
+/* ============================================================
+   V32 — KHUNG “TIẾN ĐỘ HỌC CỦA BÁC” (chủ trang chốt theo ảnh
+   khoanh đỏ): đoạn chữ động viên (#barLabel) LÙI VỀ SÁT TRÁI —
+   ra khỏi cột phải cạnh vòng %, dùng hết bề ngang khung như
+   các đoạn chữ thường trong khung (script V23 đặt #barLabel và
+   #progNext ngay dưới hàng vòng %/thanh tiến độ, không còn nằm
+   trong .prog-main). Phần chỉ bài tiếp theo tách thành ĐÚNG 2
+   DÒNG RIÊNG căn giữa ở cuối đoạn động viên: “Chương <số>:
+   <tên chương>” / “Bài <số>: <tên bài>” (.pn-line), mỗi dòng
+   đúng một hàng (tràn thì hàm fitProgNext co đồng đều cả hai
+   dòng, sàn 60% cỡ nền, không cắt chữ). Danh sách chip tóm tắt
+   từng chương “☆ Chương X: … (n/10)” trong khung đã GỠ hẳn ở
+   refreshProgress — thông tin chương đã có ở danh sách chương
+   chính phía dưới trang; huy hiệu đạt kiểm tra tổng hợp giữ
+   nguyên. Vòng %, thanh tiến độ, tiêu đề khung và dòng mô tả
+   lưu tiến độ không đổi.
+   ============================================================ */
+.prog-next{ margin-top:12px; }
+.pn-line{ display:block; white-space:nowrap; text-align:center; font-weight:800; line-height:1.35; }
+.pn-ch{ font-size:max(16px,1em); color:var(--primary-strong, var(--primary)); }
+.pn-ls{ font-size:max(18px,1.12em); color:var(--ink); margin-top:2px; }
 </style>
 </head>
 <body>
@@ -2578,7 +2599,8 @@ html[data-font="xlarge"]{--fs-base:clamp(19px,5.9vw,24px)}
           <div class="stat"><span class="stat-ic ic-green" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="m8.5 12.2 2.4 2.4 4.6-5"/></svg></span><div class="stat-txt"><b id="statLessons">0 / 60</b><span>Bài đã hoàn thành</span></div></div>
         </div>
         <div class="bar" role="progressbar" aria-label="Phần trăm hoàn thành lộ trình" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="mainBar"><div class="bar-fill" id="mainBarFill"></div></div>
-        <p class="bar-label" id="barLabel">Hãy bắt đầu với Chương 1 · Bài 1 — Chào hỏi trong ngày nhé!</p>
+        <p class="bar-label" id="barLabel">Hãy bắt đầu với bài học đầu tiên nhé!</p>
+        <div class="prog-next" id="progNext"><span class="pn-line pn-ch" id="progNextCh">Chương 1: Chào hỏi &amp; giới thiệu</span><span class="pn-line pn-ls" id="progNextLs">Bài 1: Chào hỏi trong ngày</span></div>
         <div class="badges-row" id="badgesRow" aria-label="Huy hiệu đã đạt"></div>
       </div>
     </div>
@@ -4100,19 +4122,29 @@ function refreshProgress(){
   document.getElementById("mainBarFill").style.transform = "scaleX(" + (pct / 100) + ")";
   bar.setAttribute("aria-valuenow", String(pct));
   var label = document.getElementById("barLabel");
-  if(done===0) label.textContent = "Hãy bắt đầu với " + nextLessonLabel() + " nhé!";
-  else if(done<LESSONS.length) label.textContent = "Tốt lắm! Bác đã xong " + done + " / " + LESSONS.length + " bài. Cứ thong thả học tiếp " + nextLessonLabel() + " nhé.";
+  /* V32: đoạn động viên KHÔNG còn chứa định danh chương/bài —
+     phần chỉ bài tiếp theo tách xuống 2 dòng riêng #progNext. */
+  if(done===0) label.textContent = "Hãy bắt đầu với bài học đầu tiên nhé!";
+  else if(done<LESSONS.length) label.textContent = "Tốt lắm! Bác đã xong " + done + " / " + LESSONS.length + " bài. Cứ thong thả học tiếp nhé.";
   else label.textContent = "Tuyệt vời! Bác đã hoàn thành cả 60 bài nhỏ. Hãy ôn lại thường xuyên để nhớ lâu nhé!";
+  var pn = document.getElementById("progNext");
+  if(pn){
+    var nx = LESSONS.filter(function(L){ return !state.completed[L.id]; })[0];
+    if(nx){
+      pn.style.display = "";
+      document.getElementById("progNextCh").textContent = "Chương " + nx.ch + ": " + ((CHAPTERS[nx.ch - 1] || {}).title || "");
+      document.getElementById("progNextLs").textContent = nx.n === 10 ? ("Bài 10: Kiểm tra tổng hợp Chương " + nx.ch) : ("Bài " + nx.n + ": " + nx.title);
+    } else {
+      pn.style.display = "none";
+    }
+    if(typeof fitProgNext === "function") fitProgNext();
+  }
   var br = document.getElementById("badgesRow"); br.innerHTML = "";
-  CHAPTERS.forEach(function(C){
-    var inCh = LESSONS.filter(function(L){ return L.ch===C.id; });
-    var dn = inCh.filter(function(L){ return state.completed[L.id]; }).length;
-    var s = document.createElement("span");
-    var earned = dn === inCh.length;
-    s.className = "badge-chip" + (earned ? " earned" : "");
-    s.textContent = (earned ? "🏅 " : "☆ ") + "Chương " + C.id + ": " + C.title + " (" + dn + "/10)";
-    br.appendChild(s);
-  });
+  /* V32: đã GỠ hẳn danh sách chip tóm tắt từng chương dạng
+     “☆ Chương X: <tên chương> (n/10)” khỏi khung Tiến độ —
+     thông tin chương đã có ở danh sách chương chính phía dưới
+     trang. Chỉ giữ các huy hiệu thành tích kiểm tra tổng hợp
+     được dựng ngay bên dưới đây. */
   CHAPTERS.forEach(function(C){
     if(typeof examPassed === "function" && examPassed(C.id)){
       var es = document.createElement("span"); es.className = "badge-chip earned";
@@ -4131,6 +4163,49 @@ function refreshProgress(){
   syncLearnButtons();
   updateLessonLearnBar();
 }
+
+/* V32 — CO CHỮ cho 2 dòng định danh bài tiếp theo trong khung
+   Tiến độ (.pn-line): mỗi dòng luôn đúng MỘT HÀNG (nowrap trong
+   CSS). Đo bề rộng chữ thật của từng dòng, dòng nào tràn thì hạ
+   cỡ theo nấc 2% tới sàn 60% cỡ nền; hệ số nhỏ nhất áp ĐỒNG ĐỀU
+   cho cả hai dòng, không cắt chữ. Đo lại khi refreshProgress
+   chạy, đổi khổ máy, xoay máy, đổi mức cỡ chữ và font tải xong. */
+var pnFitTimer = null;
+function schedulePnFit(){
+  if(pnFitTimer) clearTimeout(pnFitTimer);
+  pnFitTimer = setTimeout(function(){ pnFitTimer = null; try{ fitProgNext(); }catch(e){} }, 120);
+}
+function fitProgNext(){
+  var chEl = document.getElementById("progNextCh"),
+      lsEl = document.getElementById("progNextLs"),
+      pn = document.getElementById("progNext");
+  if(!chEl || !lsEl || !pn || pn.style.display === "none") return;
+  if(!chEl.clientWidth) return;
+  var FLOOR = 0.6, need = 1, bases = [];
+  [chEl, lsEl].forEach(function(el, i){
+    el.style.fontSize = "";
+    var base = parseFloat(getComputedStyle(el).fontSize) || 16;
+    bases[i] = base;
+    var nf = 1;
+    while(nf > FLOOR && el.scrollWidth > el.clientWidth + 1){
+      nf = Math.round((nf - 0.02) * 100) / 100;
+      if(nf < FLOOR) nf = FLOOR;
+      el.style.fontSize = (base * nf) + "px";
+    }
+    el.style.fontSize = "";
+    if(nf < need) need = nf;
+  });
+  if(need < 1){
+    [chEl, lsEl].forEach(function(el, i){ el.style.fontSize = (bases[i] * need) + "px"; });
+  }
+}
+window.addEventListener("resize", schedulePnFit);
+window.addEventListener("orientationchange", schedulePnFit);
+if(window.MutationObserver){
+  new MutationObserver(function(){ schedulePnFit(); }).observe(document.documentElement, { attributes:true, attributeFilter:["data-font"] });
+}
+if(document.fonts && document.fonts.ready) document.fonts.ready.then(function(){ schedulePnFit(); });
+setTimeout(schedulePnFit, 700);
 
 /* ================= ROADMAP (reflects real stage-1 progress) ================= */
 function renderRoadmap(){
@@ -10450,11 +10525,18 @@ try{
     var bar = document.getElementById("mainBar"), lbl = document.getElementById("barLabel"), badges = document.getElementById("badgesRow");
     flex.appendChild(ring);
     if(bar) main.appendChild(bar);
-    if(lbl) main.appendChild(lbl);
     if(badges) main.appendChild(badges);
     flex.appendChild(main);
     var head = pCard.querySelector(".sec-head");
     if(head && head.nextSibling) pCard.insertBefore(flex, head.nextSibling); else pCard.appendChild(flex);
+    /* V32: đoạn động viên #barLabel + khối 2 dòng định danh bài
+       tiếp theo #progNext KHÔNG nằm trong cột phải .prog-main
+       nữa — chuyển xuống ngay dưới hàng vòng %/thanh tiến độ,
+       dùng hết bề ngang khung, chữ bắt đầu sát lề trái khung. */
+    if(lbl) pCard.appendChild(lbl);
+    var pnEl = document.getElementById("progNext");
+    if(pnEl) pCard.appendChild(pnEl);
+    if(typeof fitProgNext === "function") fitProgNext();
     var CIRC = 263.9;
     function syncRing(){
       var t = document.getElementById("statPct");
