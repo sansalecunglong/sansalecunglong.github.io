@@ -2452,6 +2452,25 @@ html[data-font="xlarge"]{--fs-base:clamp(19px,5.9vw,24px)}
 .pn-line{ display:block; white-space:nowrap; text-align:center; font-weight:800; line-height:1.35; }
 .pn-ch{ font-size:max(16px,1em); color:var(--primary-strong, var(--primary)); }
 .pn-ls{ font-size:max(18px,1.12em); color:var(--ink); margin-top:2px; }
+/* ============================================================
+   V33 — SỬA CỘT CHỮ THƯƠNG HIỆU BỊ BÓP Ở KHỔ 390/430px
+   Ở 390/430px + cỡ chữ mặc định, hai nút Góp ý + Menu nằm ngang
+   một hàng đã ép cột chữ còn 72–100px (tên trang rớt 4–6 dòng,
+   header phình tới 158px). Nay ở khổ điện thoại (≤560px) tên
+   trang chiếm trọn hàng trên — cột chữ luôn đủ rộng (khoảng
+   240px ở khổ 320px, 300px ở khổ 390px) nên tên trang tối đa
+   2 dòng ở mọi cỡ chữ — còn hai nút Góp ý/Menu xuống hàng dưới,
+   vẫn giữ nguyên kích thước ≥56px bấm thoải mái: Góp ý bên
+   trái, Menu bên phải như vị trí quen thuộc. Chỉ đổi đúng
+   vùng header; ngoài header không đổi gì.
+   ============================================================ */
+@media (max-width:560px){
+  .header-in{flex-wrap:wrap !important; flex-direction:row !important; align-items:center; gap:8px 10px}
+  .brand{flex:1 1 100% !important; min-width:0; margin-right:0}
+  .brand-txt{flex:1 1 auto; min-width:0}
+  .feedback-btn{flex:0 0 auto}
+  .menu-wrap{flex:0 0 auto; min-width:0; margin-left:auto}
+}
 </style>
 </head>
 <body>
@@ -4388,6 +4407,7 @@ function openLesson(id, opts){
 }
 function enterLesson(L, tab){
   currentLesson = L;
+  if(window.enTrackLesson) window.enTrackLesson("ch" + L.ch + "-b" + L.n);
   /* Hướng dẫn cách học/cách dùng GIỐNG HỆT ở mọi bài (khối .guide-once
      ở đầu các Phần 1–5) chỉ hiện ở Bài 1 Chương 1 — lần gặp đầu tiên
      theo thứ tự học tuyến tính. Mọi bài sau (kể cả chương sau) vào
@@ -9215,6 +9235,7 @@ var pronCurrent = null, pfcIndex = 0, pfcFlipped = false;
 function openPronLesson(id){
   var L = pronLessonById(id); if(!L) return;
   pronCurrent = L; pfcIndex = 0; pfcFlipped = false; pronPartIdx = 0;
+  if(window.enTrackLesson) window.enTrackLesson("ph-b" + L.n);
   /* Hướng dẫn dùng chung của chương Phát Âm (.guide-once) chỉ hiện ở
      Bài 1 của chương; Bài 2–5 vào thẳng nội dung. (Phần “Các cặp âm dễ
      nhầm” chỉ có ở Bài 5 nên phần giải thích của nó không gắn nhãn —
@@ -10611,6 +10632,39 @@ try{
   syncVotd();
   window.addEventListener("load", syncVotd);
   setTimeout(syncVotd, 800);
+})();
+</script>
+<script>
+/* Bộ đếm truy cập — đếm ẩn lượt mở trang và lượt mở bài học qua
+   Supabase (bảng en_page_views; khóa công khai chỉ có quyền GHI,
+   không đọc được số liệu). Không hiển thị gì lên giao diện,
+   không lưu gì trên máy người học. Fire-and-forget: lỗi mạng
+   hay máy chủ bận đều bỏ qua lặng lẽ, không ảnh hưởng việc học. */
+(function(){
+  try{
+    if(typeof fetch !== "function") return;
+    var TRACK_URL = "https://lfkqtojdhelnlkskkhhw.supabase.co/rest/v1/en_page_views";
+    var TRACK_KEY = "sb_publishable_XVS4Qg1klhp8UskLGo6yZw_F-FgjJTy";
+    function trackSend(payload){
+      try{
+        fetch(TRACK_URL, {
+          method: "POST",
+          headers: {
+            "apikey": TRACK_KEY,
+            "Authorization": "Bearer " + TRACK_KEY,
+            "Content-Type": "application/json",
+            "Prefer": "return=minimal"
+          },
+          body: JSON.stringify(payload),
+          keepalive: true
+        }).catch(function(){});
+      }catch(e){}
+    }
+    window.enTrackLesson = function(detail){
+      trackSend({event:"lesson", detail:detail, path:location.pathname, screen_w:window.innerWidth});
+    };
+    trackSend({event:"view", path:location.pathname, referrer:document.referrer || "", screen_w:window.innerWidth});
+  }catch(e){}
 })();
 </script>
 </body>
