@@ -4309,7 +4309,7 @@ function switchTab(name){
      từ lúc mới vào bài và không bao giờ ở trạng thái “đứng yên”. Các
      game khác không dùng đồng hồ nên giữ nguyên trạng thái đã dựng. */
   if(name === "quiz" && currentLesson && currentLesson.n === 6) renderGame();
-  /* Phase ghi nhớ 3 giây của ván/lượt ĐẦU TIÊN (Bài 1/3/4/5/9) được dựng
+  /* Phase ghi nhớ 3 giây của ván ĐẦU TIÊN (chỉ còn Bài 1) được dựng
      từ lúc mở bài, khi Phần 6 còn ẩn, nên bị hoãn trong memPending —
      Phần 6 vừa hiện ra là chạy đếm ngược ngay tại đây, đúng lúc học
      viên nhìn thấy. stopGameTimer() ở đầu hàm chỉ hủy phase ĐANG CHẠY
@@ -7498,13 +7498,13 @@ if(gateBannerBtn) gateBannerBtn.addEventListener("click", function(){ var T = le
 var GAME_INFO = {
   1:{name:"Lật thẻ trí nhớ", intro:"Trước khi chơi, trang mở hết cả 10 thẻ trong 3 giây để bác nhìn và ghi nhớ vị trí từng cặp, rồi mới úp xuống. Sau đó bác lật hai thẻ bất kỳ — một thẻ tiếng Anh và một thẻ nghĩa tiếng Việt giống nhau là ghép được một cặp. Lúc nào muốn nhớ lại, bác bấm nút “👀 Xem lại 3 giây” ở dưới.", rule:"Ghép hết 5 cặp là xong. Lật sai mỗi lần trừ 5 điểm — đạt từ 80 điểm là hoàn thành bài."},
   2:{name:"Nghe và chọn đúng", intro:"Nghe máy đọc một từ, rồi chọn nghĩa tiếng Việt đúng của từ đó.", rule:"Có 5 câu — đúng từ 4 câu (80%) là hoàn thành bài."},
-  3:{name:"Sắp xếp từ thành câu", intro:"Mỗi câu, trang hiện câu đúng trong 3 giây để bác ghi nhớ thứ tự các từ, rồi mới ẩn đi. Sau đó bác bấm các từ theo đúng thứ tự để tạo thành câu hoàn chỉnh. Muốn nhớ lại thì bấm nút “👀 Xem lại 3 giây”.", rule:"Có 5 câu — xếp đúng từ 4 câu (80%) là hoàn thành bài."},
-  4:{name:"Điền chữ còn thiếu", intro:"Mỗi từ, trang hiện từ đầy đủ trong 3 giây để bác ghi nhớ mặt chữ, rồi mới che đi một hoặc hai chữ cái. Sau đó bác bấm chữ đúng để điền vào chỗ trống. Muốn nhớ lại thì bấm nút “👀 Xem lại 3 giây”.", rule:"Có 5 từ — điền đúng từ 4 từ (80%) là hoàn thành bài."},
-  5:{name:"Nối cặp từ", intro:"Trước khi chơi, trang hiện tất cả các cặp đúng trong 3 giây để bác ghi nhớ, rồi mới ẩn đi. Sau đó bác chạm một từ tiếng Anh ở cột trái, rồi chạm nghĩa tiếng Việt đúng của nó ở cột phải. Muốn nhớ lại thì bấm nút “👀 Xem lại 3 giây”.", rule:"Nối chuẩn ngay lần đầu từ 4 cặp (80%) là hoàn thành bài."},
+  3:{name:"Sắp xếp từ thành câu", intro:"Nhìn nghĩa tiếng Việt của câu, rồi bấm các từ theo đúng thứ tự để tạo thành câu hoàn chỉnh.", rule:"Có 5 câu — xếp đúng từ 4 câu (80%) là hoàn thành bài."},
+  4:{name:"Điền chữ còn thiếu", intro:"Trang hiện một từ bị che mất một hoặc hai chữ cái — bác chọn chữ đúng để điền vào chỗ trống.", rule:"Có 5 từ — điền đúng từ 4 từ (80%) là hoàn thành bài."},
+  5:{name:"Nối cặp từ", intro:"Bác chạm một từ tiếng Anh ở cột trái, rồi chạm nghĩa tiếng Việt đúng của nó ở cột phải.", rule:"Nối chuẩn ngay lần đầu từ 4 cặp (80%) là hoàn thành bài."},
   6:{name:"Săn điểm tốc độ", intro:"Nhìn nghĩa tiếng Việt, bấm ngay từ tiếng Anh đúng. Câu hỏi rút từ 30 từ của Bài 1 đến Bài 6 trong chương và không lặp lại trong một ván — bác chơi nhanh tới đâu cũng gặp từ mới. Đúng được 10 điểm, đúng 3 lần liền được cộng thêm 5 điểm, sai bị trừ 3 giây.", rule:"Trong 60 giây, đạt từ 50 điểm là hoàn thành bài."},
   7:{name:"Nghe và chọn câu đúng", intro:"Nghe máy đọc một câu hoàn chỉnh, rồi chọn đúng câu bác vừa nghe.", rule:"Có 5 câu — đúng từ 4 câu (80%) là hoàn thành bài."},
   8:{name:"Đúng hay Sai", intro:"Trang web hiện một từ cùng một nghĩa — bác xem nghĩa đó đúng hay sai rồi bấm nút.", rule:"Có 5 câu — đúng từ 4 câu (80%) là hoàn thành bài."},
-  9:{name:"Ghép hội thoại", intro:"Trước khi chơi, trang hiện cả đoạn hội thoại theo đúng thứ tự trong 3 giây để bác ghi nhớ, rồi mới ẩn đi. Sau đó bác bấm các câu hội thoại theo đúng thứ tự nói chuyện, từ câu đầu tiên đến câu cuối cùng. Muốn nhớ lại thì bấm nút “👀 Xem lại 3 giây”.", rule:"Bấm nhầm không quá 1 lần (đạt từ 80%) là hoàn thành bài."},
+  9:{name:"Ghép hội thoại", intro:"Bác bấm các câu hội thoại theo đúng thứ tự nói chuyện, từ câu đầu tiên đến câu cuối cùng.", rule:"Bấm nhầm không quá 1 lần (đạt từ 80%) là hoàn thành bài."},
   10:{name:"Kiểm tra tổng hợp chương", intro:"Bài kiểm tra thật của cả chương: 20 câu với 6 dạng — chọn nghĩa đúng, chọn từ tiếng Anh, nghe và chọn, điền từ vào câu, sắp xếp từ thành câu, đọc hội thoại và chọn đáp án. Câu hỏi lấy từ tất cả 9 bài của chương và xáo trộn mỗi lần làm. Không giới hạn thời gian, bác cứ thong thả.", rule:"Đúng từ 16/20 câu (80%) là đạt: hoàn thành chương này và mở Bài 1 của chương tiếp theo. Chưa đạt thì ôn lại rồi làm lại thoải mái — không giới hạn số lần, không phạt."}
 };
 function renderGame(){
@@ -7573,21 +7573,22 @@ function finishGame(pass, pct, headline, detail){
   res.scrollIntoView({behavior:"smooth", block:"center"});
 }
 
-/* ================= GIAI ĐOẠN GHI NHỚ 3 GIÂY (Phần 6 · Trò chơi) =================
-   Yêu cầu của chủ trang: trò chơi nào có nội dung/đáp án bị ẩn thì phải
-   HIỆN hết nội dung trong 3 giây cho học viên nhìn và ghi nhớ (kèm đếm
-   ngược 3 → 2 → 1 rõ ràng, khóa bấm/chạm), hết 3 giây mới tự ẨN đi và
-   bắt đầu chơi. Áp dụng cho: Bài 1 Lật thẻ (thẻ úp), Bài 3 Sắp xếp câu
-   (thứ tự đúng bị ẩn — hiện mỗi câu 3 giây ở đầu lượt), Bài 4 Điền chữ
-   (chữ bị che — hiện từ đầy đủ 3 giây ở đầu lượt), Bài 5 Nối cặp (cặp
-   đúng không hiện sẵn), Bài 9 Ghép hội thoại (thứ tự đúng bị ẩn).
-   Bài 2/6/7/8 nội dung vốn được hiện hoặc đọc rõ ở từng lượt, Bài 10 là
-   bài Kiểm tra tổng hợp — giữ nguyên, không thêm bước này.
-   Nút “👀 Xem lại 3 giây” hiện lại nội dung 3 giây rồi ẩn tiếp: không
-   trừ điểm, không đặt lại tiến trình ván đang chơi. Khi rời phần Trò
-   chơi giữa chừng, stopGameTimer() gọi cancelMemPhase() để kết thúc
-   ngay giai đoạn ghi nhớ (nội dung ẩn xuống, nút bấm mở lại) nên ván
-   chơi không bao giờ kẹt ở trạng thái đang hiện đáp án. */
+/* ================= GIAI ĐOẠN GHI NHỚ 3 GIÂY (Phần 6 · CHỈ Bài 1) =================
+   Lệnh của chủ trang: KHÔNG phải trò nào cũng cho xem lại — tính năng
+   xem 3 giây CHỈ còn áp dụng cho trò của Bài 1 Lật thẻ (10 thẻ úp):
+   mở ván HIỆN hết thẻ trong 3 giây cho học viên nhìn và ghi nhớ (kèm
+   đếm ngược 3 → 2 → 1 rõ ràng, khóa bấm/chạm), hết 3 giây mới tự ÚP
+   xuống và bắt đầu chơi; trong lúc chơi có nút “👀 Xem lại 3 giây”
+   hiện lại thẻ 3 giây rồi úp tiếp — không trừ điểm, không đặt lại
+   tiến trình ván đang chơi.
+   Các trò Bài 3 Sắp xếp câu, Bài 4 Điền chữ, Bài 5 Nối cặp, Bài 9 Ghép
+   hội thoại đã GỠ hẳn tính năng này: không giai đoạn xem mở đầu, không
+   nút “Xem lại” — vào tab là chơi ngay với nội dung ẩn như thiết kế
+   gốc. Bài 2/6/7/8/10 và trò Chương Phát Âm vốn không có, giữ nguyên.
+   Khi rời phần Trò chơi giữa chừng, stopGameTimer() gọi
+   cancelMemPhase() để kết thúc ngay giai đoạn ghi nhớ (thẻ úp xuống,
+   nút bấm mở lại) nên ván Bài 1 không bao giờ kẹt ở trạng thái đang
+   hiện đáp án. */
 var memActive = null;
 /* Phase ghi nhớ của VÁN/LƯỢT ĐẦU TIÊN bị hoãn khi Phần 6 còn đang ẩn:
    trò chơi được dựng ngay lúc mở bài (học viên đang ở Phần 1) — nếu cho
@@ -7596,9 +7597,10 @@ var memActive = null;
    startMemPhase() khi thấy banner chưa nằm trong panel đang hiện sẽ chỉ
    MỞ nội dung + khóa nút rồi ghi vào memPending; switchTab() gọi
    flushPendingMemPhase() ngay khi Phần 6 thật sự hiện ra để bắt đầu đếm
-   ngược 3 giây lúc đó. Nội dung chỉ được onShow() đúng MỘT lần (các hàm
-   onShow của Bài 3/4/5/9 chụp lại trạng thái nút qua lockButtons() — gọi
-   lần hai sẽ chụp nhầm trạng thái đã khóa và làm nút kẹt). */
+   ngược 3 giây lúc đó. Nội dung chỉ được onShow() đúng MỘT lần (hàm
+   onShow của Bài 1 tự khóa/mở thẻ — gọi lần hai sẽ làm thẻ kẹt). Cơ chế
+   pending này nay CHỈ còn Bài 1 dùng; Bài 3/4/5/9 không dựng phase nào
+   nên vào tab Trò chơi của các bài đó không kích hoạt đếm ngược nào. */
 var memPending = null;
 function memPhaseInView(banner){
   var p = (banner && banner.closest) ? banner.closest(".tab-panel") : null;
@@ -7629,12 +7631,6 @@ function memBannerEl(){
   return bn;
 }
 function memPeekBtn(){ return bigBtn("👀 Xem lại 3 giây", "btn-soft mem-peek"); }
-function lockButtons(container, except){
-  var btns = Array.prototype.slice.call(container.querySelectorAll("button")).filter(function(b){ return b !== except; });
-  var snap = btns.map(function(b){ return [b, b.disabled]; });
-  btns.forEach(function(b){ b.disabled = true; });
-  return function(){ snap.forEach(function(pr){ pr[0].disabled = pr[1]; }); };
-}
 function cancelMemPhase(){
   if(!memActive) return;
   var a = memActive; memActive = null;
@@ -7834,9 +7830,7 @@ function gameOrder(wrap, L){
       chk.disabled = true;
       box.appendChild(gEl("p", "game-note", ok ? ("✓ Đúng rồi! Câu đúng: “" + s.en + "”") : ("Chưa đúng. Câu đúng là: “" + s.en + "”")));
       /* Tự sang câu sau (bỏ nút “Câu tiếp theo”): đúng 1 giây, sai
-         2 giây cho kịp đọc câu đúng. Lượt sau vẫn mở đầu bằng giai
-         đoạn ghi nhớ 3 giây như cũ — nhịp tự chuyển không rút ngắn
-         3 giây đó. Câu cuối tự sang màn hình kết quả. */
+         2 giây cho kịp đọc câu đúng. Câu cuối tự sang màn hình kết quả. */
       var myIdx3 = idx, sess3 = gameSession, les3 = L;
       schedulePickAdvance(pickDelay(ok), function(){
         if(sess3 !== gameSession || currentLesson !== les3 || idx !== myIdx3) return;
@@ -7844,23 +7838,9 @@ function gameOrder(wrap, L){
       });
     });
     box.appendChild(chk);
-    /* GIAI ĐOẠN GHI NHỚ 3 GIÂY của lượt này: hiện câu đúng kèm đếm
-       ngược, khóa mọi nút trong ô chơi; hết giờ tự ẩn rồi mới xếp từ.
-       “Xem lại 3 giây” hiện lại câu — không trừ điểm, không đổi các
-       từ bác đã xếp. */
-    var banner3 = memBannerEl();
-    var flash3 = gEl("div", "mem-flash");
-    flash3.appendChild(gEl("p", "mem-flash-title", "✅ Câu đúng — bác ghi nhớ thứ tự các từ nhé:"));
-    flash3.appendChild(gEl("p", "mem-flash-sentence", s.en));
-    box.insertBefore(flash3, box.firstChild);
-    box.insertBefore(banner3, box.firstChild);
-    var peekRow3 = gEl("div", "mem-peek-row");
-    var peekBtn3 = memPeekBtn(); peekRow3.appendChild(peekBtn3); box.appendChild(peekRow3);
-    var unlock3 = null;
-    function showSentence(){ flash3.style.display = ""; unlock3 = lockButtons(box, peekBtn3); }
-    function hideSentence(){ flash3.style.display = "none"; if(unlock3){ unlock3(); unlock3 = null; } }
-    peekBtn3.addEventListener("click", function(){ startMemPhase(banner3, showSentence, hideSentence, peekBtn3); });
-    startMemPhase(banner3, showSentence, hideSentence, peekBtn3);
+    /* Nguyên tắc cũ (lệnh chủ trang): trò này KHÔNG có giai đoạn xem
+       3 giây mở đầu và KHÔNG có nút “Xem lại” — vào tab là xếp từ ngay,
+       câu đúng chỉ hiện ở dòng nghĩa tiếng Việt phía trên. */
   }
   next();
 }
@@ -7916,8 +7896,7 @@ function gameFill(wrap, L){
         box.appendChild(gEl("p", "game-note", ok ? ("✓ Đúng rồi! Từ đúng: " + word) : ("Chưa đúng. Từ đúng là: " + word)));
         chk.disabled = true;
         /* Tự sang từ sau (bỏ nút “Từ tiếp theo”): đúng 1 giây, sai
-           2 giây cho kịp đọc từ đúng. Lượt sau vẫn có 3 giây ghi
-           nhớ mặt chữ như cũ. Từ cuối tự sang màn hình kết quả. */
+           2 giây cho kịp đọc từ đúng. Từ cuối tự sang màn hình kết quả. */
         var myIdx4 = idx, sess4 = gameSession, les4 = L;
         schedulePickAdvance(pickDelay(ok), function(){
           if(sess4 !== gameSession || currentLesson !== les4 || idx !== myIdx4) return;
@@ -7946,44 +7925,20 @@ function gameFill(wrap, L){
       });
     }
     renderBank(0);
-    /* GIAI ĐOẠN GHI NHỚ 3 GIÂY của lượt này: hiện từ đầy đủ kèm đếm
-       ngược, khóa các nút chữ; hết giờ tự ẩn rồi mới điền chữ còn
-       thiếu. “Xem lại 3 giây” hiện lại từ — không trừ điểm, không
-       đổi phần bác đã điền. */
-    var banner4 = memBannerEl();
-    var flash4 = gEl("div", "mem-flash");
-    flash4.appendChild(gEl("p", "mem-flash-title", "✍️ Từ đầy đủ — bác ghi nhớ mặt chữ nhé:"));
-    flash4.appendChild(gEl("p", "mem-flash-word", word));
-    if(v.en && v.en.toLowerCase() !== word) flash4.appendChild(gEl("p", "mem-flash-line", "Từ trong bài: " + v.en + " — " + v.vi));
-    box.insertBefore(flash4, box.firstChild);
-    box.insertBefore(banner4, box.firstChild);
-    var peekRow4 = gEl("div", "mem-peek-row");
-    var peekBtn4 = memPeekBtn(); peekRow4.appendChild(peekBtn4); box.appendChild(peekRow4);
-    var unlock4 = null;
-    function showWord(){ flash4.style.display = ""; unlock4 = lockButtons(box, peekBtn4); }
-    function hideWord(){ flash4.style.display = "none"; if(unlock4){ unlock4(); unlock4 = null; } }
-    peekBtn4.addEventListener("click", function(){ startMemPhase(banner4, showWord, hideWord, peekBtn4); });
-    startMemPhase(banner4, showWord, hideWord, peekBtn4);
+    /* Nguyên tắc cũ (lệnh chủ trang): trò này KHÔNG có giai đoạn xem
+       3 giây mở đầu và KHÔNG có nút “Xem lại” — vào tab là điền chữ
+       ngay, từ hiện sẵn dạng bị che chữ như thiết kế gốc. */
   }
   next();
 }
 
 /* ---------- Game 5: Nối cặp ---------- */
 function gameMatch(wrap, L){
-  var banner5 = memBannerEl(); wrap.appendChild(banner5);
   var status = gEl("p", "game-status"); wrap.appendChild(status);
-  /* Bảng ghi nhớ: các cặp đúng — chỉ hiện trong giai đoạn 3 giây. */
-  var flash5 = gEl("div", "mem-flash");
-  flash5.appendChild(gEl("p", "mem-flash-title", "🔗 Các cặp đúng — bác ghi nhớ nhé:"));
-  L.vocab.forEach(function(v){ flash5.appendChild(gEl("p", "mem-flash-line", v.en + "  =  " + v.vi)); });
-  wrap.appendChild(flash5);
+  /* Nguyên tắc cũ (lệnh chủ trang): trò này KHÔNG có giai đoạn xem
+     3 giây mở đầu và KHÔNG có nút “Xem lại” — vào tab là nối cặp ngay,
+     hai cột từ hiện sẵn để bác tự tìm cặp đúng như thiết kế gốc. */
   var cols = gEl("div", "match-cols"); wrap.appendChild(cols);
-  var peekRow5 = gEl("div", "mem-peek-row");
-  var peekBtn5 = memPeekBtn(); peekRow5.appendChild(peekBtn5); wrap.appendChild(peekRow5);
-  var unlock5 = null;
-  function showPairs(){ flash5.style.display = ""; unlock5 = lockButtons(cols, null); }
-  function hidePairs(){ flash5.style.display = "none"; if(unlock5){ unlock5(); unlock5 = null; } }
-  peekBtn5.addEventListener("click", function(){ startMemPhase(banner5, showPairs, hidePairs, peekBtn5); });
   var colEn = gEl("div", "match-col"); var colVi = gEl("div", "match-col");
   cols.appendChild(colEn); cols.appendChild(colVi);
   var sel = null, matched = 0, firstTry = 0, errored = {};
@@ -8020,9 +7975,6 @@ function gameMatch(wrap, L){
     });
     colVi.appendChild(b);
   });
-  /* Mở ván: hiện các cặp đúng đúng 3 giây (đếm ngược, khóa nút nối),
-     hết giờ tự ẩn rồi mới cho nối. */
-  startMemPhase(banner5, showPairs, hidePairs, peekBtn5);
 }
 
 /* ---------- Game 6: Săn điểm tốc độ ---------- */
@@ -8211,14 +8163,10 @@ function gameTrueFalse(wrap, L){
 /* ---------- Game 9: Ghép hội thoại ---------- */
 function gameDialogueOrder(wrap, L){
   var lines = L.dialogue.slice();
-  var banner9 = memBannerEl(); wrap.appendChild(banner9);
   var status = gEl("p", "game-status"); wrap.appendChild(status);
-  /* Bảng ghi nhớ: cả đoạn hội thoại theo đúng thứ tự — chỉ hiện
-     trong giai đoạn 3 giây. */
-  var flash9 = gEl("div", "mem-flash");
-  flash9.appendChild(gEl("p", "mem-flash-title", "💬 Đoạn hội thoại đúng thứ tự — bác ghi nhớ nhé:"));
-  lines.forEach(function(d, i){ flash9.appendChild(gEl("p", "mem-flash-line", (i + 1) + ". " + d.en + (d.vi ? (" — " + d.vi) : ""))); });
-  wrap.appendChild(flash9);
+  /* Nguyên tắc cũ (lệnh chủ trang): trò này KHÔNG có giai đoạn xem
+     3 giây mở đầu và KHÔNG có nút “Xem lại” — vào tab là xếp câu ngay,
+     thứ tự đúng không hiện sẵn như thiết kế gốc. */
   var placed = gEl("div", "order-zone dlg-placed"); wrap.appendChild(placed);
   placed.appendChild(gEl("span", "oz-empty", "Các câu bác chọn đúng thứ tự sẽ hiện ở đây…"));
   var list = gEl("div", "dlg-pick"); wrap.appendChild(list);
@@ -8249,15 +8197,6 @@ function gameDialogueOrder(wrap, L){
     });
     list.appendChild(b);
   });
-  var peekRow9 = gEl("div", "mem-peek-row");
-  var peekBtn9 = memPeekBtn(); peekRow9.appendChild(peekBtn9); wrap.appendChild(peekRow9);
-  var unlock9 = null;
-  function showOrder(){ flash9.style.display = ""; unlock9 = lockButtons(list, null); }
-  function hideOrder(){ flash9.style.display = "none"; if(unlock9){ unlock9(); unlock9 = null; } }
-  peekBtn9.addEventListener("click", function(){ startMemPhase(banner9, showOrder, hideOrder, peekBtn9); });
-  /* Mở ván: hiện đoạn hội thoại đúng thứ tự đúng 3 giây (đếm ngược,
-     khóa nút chọn câu), hết giờ tự ẩn rồi mới cho xếp. */
-  startMemPhase(banner9, showOrder, hideOrder, peekBtn9);
 }
 
 /* ---------- Bài 10: KIỂM TRA TỔNG HỢP CUỐI CHƯƠNG ----------
