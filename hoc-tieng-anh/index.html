@@ -2344,9 +2344,55 @@ html[data-font="xlarge"]{--fs-base:clamp(19px,5.9vw,24px)}
 .step-card p, .tip p, .lesson-goal,
 .faq-item p, .seo-intro-txt, .seo-chapters p,
 .rb-note, .rb-line, .rb-phon p, .sg-row, .rb-step span,
-.game-note, .exam-hint{
+.game-note, .exam-hint,
+.hero h1, .sec-head h2, .sub-h, .ch-title,
+.lesson-head h2, .game-name, #pronBannerTitle{
   text-align:justify;
 }
+/* ============================================================
+   V26 — TRÒ ĐẶC TRƯNG TỪNG CHƯƠNG + CHỮ TỰ CHỈNH HÀI HÒA:
+   hàng trò trong thẻ chương (gradient khác hẳn hàng bài thường),
+   lưới bingo / kệ hàng / bản đồ dẫn đường. Nút và ô chạm đều
+   ≥56px. Màu lấy đúng hệ biến hiện có nên tương phản cao (html.hc)
+   và nền tối vẫn tự khớp.
+   ============================================================ */
+.cg-row{display:flex; justify-content:space-between; align-items:center; gap:12px; flex-wrap:wrap; width:100%; min-height:60px; padding:14px 16px; border:2px solid var(--accent); border-radius:var(--r-sm); background:linear-gradient(90deg,var(--accent-soft),var(--primary-soft)); font:inherit; font-weight:700; color:var(--ink); cursor:pointer; text-align:left}
+.cg-row:hover{border-color:var(--primary)}
+.cg-row:active{transform:scale(.99)}
+.cg-row.is-locked{opacity:.78}
+.cg-row .lr-status{color:var(--accent-strong); font-weight:800; white-space:nowrap}
+.cg-q-en{font-family:var(--font-display); font-size:max(22px,1.45em); font-weight:700; margin-bottom:6px; overflow-wrap:break-word}
+.cg-q-vi{color:var(--muted); font-weight:600; margin-bottom:12px}
+.cg-big-en{font-family:var(--font-display); font-size:max(26px,1.8em); font-weight:700; text-align:center; margin-bottom:8px; overflow-wrap:break-word}
+.bingo-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:10px; max-width:430px; margin:0 auto}
+.bingo-cell{min-height:64px; font-size:max(22px,1.4em); font-weight:800; border:2px solid var(--border-strong); border-radius:var(--r-sm); background:var(--surface-2); color:var(--ink); cursor:pointer; font-variant-numeric:tabular-nums}
+.bingo-cell.on{background:var(--success); border-color:var(--success); color:#fff}
+.bingo-cell.bad{border-color:var(--danger); background:var(--danger-soft)}
+.shelf-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:10px}
+@media (max-width:480px){ .shelf-grid{grid-template-columns:repeat(2,1fr)} }
+.shelf-item{min-height:64px; padding:10px 8px; border:2px solid var(--border-strong); border-radius:var(--r-sm); background:var(--surface-2); color:var(--ink); cursor:pointer; font-weight:700; font-size:max(16px,1em); display:flex; flex-direction:column; gap:2px; align-items:center; justify-content:center; text-align:center; overflow-wrap:break-word}
+.shelf-item small{font-weight:600; color:var(--muted)}
+.shelf-item.got{background:var(--success-soft); border-color:var(--success)}
+.shelf-item.bad{border-color:var(--danger); background:var(--danger-soft)}
+.shop-list{display:flex; flex-direction:column; gap:8px; margin-bottom:14px}
+.shop-li{display:flex; justify-content:space-between; gap:10px; flex-wrap:wrap; border:2px solid var(--border); border-radius:var(--r-sm); background:var(--surface-2); padding:10px 14px; font-weight:700}
+.shop-li .got{color:var(--success); font-weight:800}
+.map-grid{display:grid; grid-template-columns:repeat(4,1fr); gap:6px; max-width:430px; margin:0 auto 14px}
+.map-cell{aspect-ratio:1/1; min-height:56px; border:2px solid var(--border); border-radius:8px; background:var(--surface-2); display:flex; align-items:center; justify-content:center; font-size:max(22px,1.5em)}
+.map-cell.home{background:var(--accent-soft); border-color:var(--accent)}
+.map-cell.me{background:var(--primary-soft); border-color:var(--primary); color:var(--primary-strong); font-weight:900}
+.dir-row{display:flex; gap:10px; flex-wrap:wrap; justify-content:center}
+.dir-row .btn{flex:1 1 140px; min-height:60px; white-space:normal; text-align:center}
+.price-big{font-family:var(--font-display); font-size:max(28px,1.9em); font-weight:700; text-align:center; font-variant-numeric:tabular-nums; overflow-wrap:break-word}
+.cg-item-name{font-family:var(--font-display); font-size:max(22px,1.4em); font-weight:700; text-align:center; margin-bottom:4px}
+/* ============================================================
+   V27 — LUẬT DỰ PHÒNG HÀI HÒA: phần tử thuộc diện giãn đều mà
+   sau khi cơ chế fit đã co chữ tới sàn 88% vẫn còn dòng giãn
+   >0,45em thì TỰ BỎ justify, về căn trái tự nhiên (script fit
+   gắn/gỡ lớp này sau mỗi lần đo — hài hòa quan trọng hơn giãn
+   đều). Áp cho cả tiêu đề lẫn đoạn văn, mọi khổ màn hình.
+   ============================================================ */
+.fit-left{ text-align:left !important; }
 </style>
 </head>
 <body>
@@ -3082,6 +3128,20 @@ html[data-font="xlarge"]{--fs-base:clamp(19px,5.9vw,24px)}
       <button type="button" class="btn btn-soft" id="totalDone" style="display:none">Về trang chính</button>
     </div>
     <div class="quiz-result" id="totalResult" role="status"></div>
+  </div>
+</div>
+
+<!-- ================= CHAPTER SPECIAL GAME VIEW ================= -->
+<div class="view" id="viewChGame">
+  <div class="wrap">
+    <div class="lesson-head txt-card">
+      <button type="button" class="btn btn-ghost btn-sm" id="cgBack">← Quay lại trang chính</button>
+      <h2 id="cgTitle">Trò đặc trưng của chương</h2>
+      <p id="cgSub" style="color:var(--muted); font-weight:600"></p>
+      <div class="lesson-goal" id="cgIntro"></div>
+    </div>
+    <div id="cgWrap" style="margin-top:16px"></div>
+    <div class="quiz-result" id="cgResult" role="status"></div>
   </div>
 </div>
 </main>
@@ -4151,6 +4211,28 @@ function renderLessonGrid(){
       row.addEventListener("click", function(){ openLesson(L.id); });
       body.appendChild(row);
     });
+    /* V26: hàng TRÒ ĐẶC TRƯNG của chương — nằm cuối danh sách bài,
+       nổi bật bằng gradient + biểu tượng 🎮. Trò là BONUS: không khóa
+       theo từng bài, chỉ khóa theo cả chương (Bài 1 của chương chưa mở
+       thì hàng trò cũng khóa như các bài). */
+    if(typeof CH_GAMES !== "undefined" && CH_GAMES[C.id]){
+      var cgSpec = CH_GAMES[C.id];
+      var cgLocked = !isUnlocked(inCh[0]);
+      var cgRow = document.createElement("button"); cgRow.type = "button";
+      cgRow.className = "cg-row" + (cgLocked ? " is-locked" : "");
+      var cgNm = document.createElement("span"); cgNm.className = "lr-name";
+      cgNm.textContent = "🎮 Trò đặc trưng của chương — " + cgSpec.name;
+      var cgSt = document.createElement("span"); cgSt.className = "lr-status";
+      cgSt.textContent = cgLocked ? "🔒 Đang khóa" : "▶ Chơi thử";
+      cgRow.appendChild(cgNm); cgRow.appendChild(cgSt);
+      (function(chId, firstLesson){
+        cgRow.addEventListener("click", function(){
+          if(!isUnlocked(firstLesson)){ openLesson(firstLesson.id); return; }
+          openChGame(chId);
+        });
+      })(C.id, inCh[0]);
+      body.appendChild(cgRow);
+    }
     card.appendChild(body);
     head.addEventListener("click", function(){
       openChapters[C.id] = !openChapters[C.id];
@@ -4168,11 +4250,13 @@ function showView(id){
   flushPickAdvance();
   cancelVocabFlow(); cancelListenAdvance(); cancelDlgFlow();
   MicSessions.cancelCurrent(); stopGameTimer();
+  if(typeof stopChGame === "function") stopChGame();
   if(typeof closeFsPanel === "function") closeFsPanel(false);
-  ["viewHome","viewLesson","viewTotal","viewGate","viewPron"].forEach(function(v){
+  ["viewHome","viewLesson","viewTotal","viewGate","viewPron","viewChGame"].forEach(function(v){
     document.getElementById(v).classList.toggle("active", v===id);
   });
   window.scrollTo({top:0, behavior:"smooth"});
+  if(typeof scheduleFit === "function") scheduleFit();
 }
 var currentLesson = null, fcIndex = 0, fcFlipped = false;
 
@@ -9534,6 +9618,606 @@ function closeBackup(){ var ov=document.getElementById("backupOverlay"); if(ov) 
   });
   try{ if(sessionStorage.getItem("ta-restore-ok")==="1"){ sessionStorage.removeItem("ta-restore-ok"); setTimeout(function(){ toast("Đã khôi phục tiến độ thành công ✓"); },600); } }catch(e){}
 })();
+
+/* ================================================================
+   V26 — TRÒ ĐẶC TRƯNG RIÊNG TỪNG CHƯƠNG (BONUS)
+   · Mỗi chương 1 trò theo đúng chủ đề chương, nội dung SINH TỪ DỮ
+     LIỆU THẬT của chính chương đó (từ vựng + cụm + hội thoại).
+   · Chỉ thao tác CHẠM, không micro. Trò KHÔNG ghi tiến độ, KHÔNG
+     thêm khóa localStorage mới, không ảnh hưởng khóa tuyến tính
+     hay điều kiện qua chương.
+   · Nhịp tự chuyển lượt dùng lại pickDelay() hiện có (đúng ~1s,
+     sai ~2s); phiên chơi guard bằng cgSession, rời màn hình là
+     stopChGame() hủy mọi lần hẹn đang chờ (showView đã gọi).
+   ================================================================ */
+var CH_GAMES = {
+  1:{ name:"Đối đáp chào hỏi", intro:"Máy đưa ra một câu chào hoặc câu hỏi xã giao lấy từ hội thoại của Chương 1 (bác bấm Nghe để nghe câu đó). Bác chọn câu ĐÁP tự nhiên và đúng nhất trong 3 lựa chọn. Mỗi ván 8 lượt — trả lời đúng càng nhiều, điểm càng cao. Chơi cho vui và ôn lại cách đối đáp, không tính vào tiến độ bài học." },
+  2:{ name:"Bingo con số", intro:"Bảng bingo 3×3 gồm 9 chữ số khác nhau lấy từ các số bác đã học trong Chương 2. Máy lần lượt gọi một số bằng tiếng Anh — bác nghe (hoặc đọc chữ hiện trên màn hình) rồi chạm vào ô có chữ số đó. Chạm đúng, ô sẽ sáng lên. Đánh dấu đủ một hàng ngang, hàng dọc hoặc hàng chéo là BINGO — thắng ván ngay. Máy gọi tối đa 12 số trong một ván; nếu số được gọi không có trên bảng của bác, trang sẽ báo rõ và bác bấm nút “Gọi số tiếp theo”." },
+  3:{ name:"Giỏ đi chợ", intro:"Đầu ván, trang hiện danh sách 4 món cần mua (tên tiếng Anh và nghĩa tiếng Việt) — bác xem và ghi nhớ. Bấm “Đi chợ” để tới kệ hàng gồm 9 món lẫn lộn của Chương 3: chạm vào đúng món trong danh sách để bỏ vào giỏ. Lấy đủ 4 món đúng là thắng. Chạm sai món sẽ bị trừ điểm. Lúc quên, bác bấm “Xem lại danh sách” (tối đa 3 lần, không bị trừ điểm)." },
+  4:{ name:"Dẫn đường về nhà", intro:"Bản đồ là lưới 4×4: ô có ngôi nhà 🏠 là đích, mũi tên là bác. Mỗi bước, trang hiện một chỉ dẫn tiếng Anh. QUY ƯỚC: “Go straight” = đi thẳng 1 ô theo hướng mũi tên đang chỉ; “Turn left” = quay sang trái rồi bước 1 ô; “Turn right” = quay sang phải rồi bước 1 ô. Bác chạm 1 trong 3 nút hướng đi cho khớp với chỉ dẫn. Chạm sai: nhân vật đứng yên, bị trừ 10 điểm và bác thử lại bước đó. Đi đúng tới ô nhà trong 6–8 bước là thắng ván." },
+  5:{ name:"Bác sĩ khuyên", intro:"Trang hiện một tình huống sức khỏe ngắn lấy từ câu mẫu của Chương 5 (tiếng Anh kèm nghĩa tiếng Việt). Bác chọn LỜI KHUYÊN hợp lý nhất trong 3 lựa chọn — đều là các cụm hành động sức khỏe của chương. Mỗi ván 8 lượt, chọn đúng càng nhiều điểm càng cao." },
+  6:{ name:"Mặc cả hay", intro:"Một món đồ của Chương 6 hiện giá ban đầu và GIÁ MỤC TIÊU bác cần mua được (thấp hơn giá đầu). Qua 3 vòng, mỗi vòng bác chọn 1 trong 3 câu tiếng Anh để nói với chủ sạp: câu khéo thì giá giảm nhiều, câu ưng giá thì giá giữ nguyên. Sau 3 vòng, giá cuối nhỏ hơn hoặc bằng giá mục tiêu là thắng. Điểm tính theo phần trăm giá bác mặc cả giảm được." }
+};
+var cgSession = 0, cgTimers = [], cgCh = 0;
+function stopChGame(){ cgSession++; cgTimers.forEach(function(t){ clearTimeout(t); }); cgTimers = []; }
+function cgLater(ms, fn){ var s = cgSession; var t = setTimeout(function(){ if(s === cgSession) fn(); }, ms); cgTimers.push(t); }
+function cgFmtMoney(n){ return String(Math.round(n)).replace(/\B(?=(\d{3})+(?!\d))/g, ".") + "đ"; }
+function openChGame(ch){
+  var spec = CH_GAMES[ch]; if(!spec) return;
+  stopGameTimer(); stopChGame(); cgCh = ch;
+  document.getElementById("cgTitle").textContent = "🎮 " + spec.name;
+  document.getElementById("cgSub").textContent = "Trò đặc trưng · Chương " + ch + ": " + CHAPTERS[ch - 1].title + " — trò chơi thêm cho vui, không tính vào tiến độ bài học.";
+  document.getElementById("cgIntro").textContent = spec.intro;
+  var res = document.getElementById("cgResult"); res.className = "quiz-result"; res.innerHTML = "";
+  showView("viewChGame");
+  var wrap = document.getElementById("cgWrap"); wrap.innerHTML = "";
+  var box = gEl("div", "game-box"); wrap.appendChild(box);
+  var builders = { 1:cgGreet, 2:cgBingo, 3:cgMarket, 4:cgMap, 5:cgDoctor, 6:cgBargain };
+  builders[ch](box, ch);
+  if(typeof scheduleFit === "function") scheduleFit();
+}
+function cgBackToChapter(ch){
+  openChapters = {}; openChapters[ch] = true;
+  renderLessonGrid(); showView("viewHome"); refreshProgress();
+  setTimeout(function(){
+    var cards = document.querySelectorAll("#chapterList .chapter-card");
+    if(cards[ch - 1]) cards[ch - 1].scrollIntoView({ behavior:"smooth", block:"start" });
+  }, 90);
+}
+function finishChGame(pass, headline, detail){
+  stopChGame();
+  var res = document.getElementById("cgResult"); if(!res) return;
+  res.className = "quiz-result show"; res.innerHTML = "";
+  res.style.background = pass ? "" : "var(--accent-soft)";
+  res.style.borderColor = pass ? "" : "var(--accent)";
+  res.appendChild(gEl("div", "score", headline));
+  var msg = gEl("p", "", (pass ? pickEnc("gamePass") : pickEnc("gameFail")) + " " + detail);
+  msg.style.fontWeight = "700"; msg.style.marginTop = "6px"; res.appendChild(msg);
+  var acts = gEl("div", "game-acts");
+  var again = bigBtn("Chơi lại trò này", "btn-ghost");
+  (function(ch){ again.addEventListener("click", function(){ openChGame(ch); }); })(cgCh);
+  acts.appendChild(again);
+  var back = bigBtn("Quay về chương", "btn-primary btn-next-big");
+  (function(ch){ back.addEventListener("click", function(){ cgBackToChapter(ch); }); })(cgCh);
+  acts.appendChild(back);
+  res.appendChild(acts);
+  if(pass) celebrate(true);
+  res.scrollIntoView({ behavior:"smooth", block:"center" });
+  if(typeof scheduleFit === "function") scheduleFit();
+}
+document.getElementById("cgBack").addEventListener("click", function(){ showView("viewHome"); refreshProgress(); });
+
+/* ---------- Trò Chương 1: Đối đáp chào hỏi ---------- */
+function cgGreet(wrap, ch){
+  var pairs = [], seen = {};
+  chapterLessons(ch).forEach(function(L){
+    L.dialogue.forEach(function(d, i){
+      if(i + 1 >= L.dialogue.length) return;
+      var q = d, a = L.dialogue[i + 1];
+      var isQ = /\?/.test(q.en);
+      var isGreet = /^(Hello|Hi|Good morning|Good afternoon|Good evening|Goodbye|Thank you|Nice to meet you)/.test(q.en);
+      if((isQ || isGreet) && !seen[q.en]){ seen[q.en] = 1; pairs.push({ q:q, a:a }); }
+    });
+  });
+  var rounds = shuffle(pairs).slice(0, 8);
+  var idx = 0, score = 0;
+  var status = gEl("p", "game-status"); wrap.appendChild(status);
+  var box = gEl("div", ""); wrap.appendChild(box);
+  function next(){
+    box.innerHTML = "";
+    if(idx >= rounds.length){
+      finishChGame(score >= 6, "Đúng " + score + " / " + rounds.length + " lượt đối đáp",
+        score >= 6 ? "Bác đối đáp chào hỏi rất tự nhiên — đúng chất Chương 1!" : "Đạt từ 6/8 lượt là thắng ván này. Bác nghe lại hội thoại Chương 1 rồi chơi lại nhé.");
+      return;
+    }
+    var r = rounds[idx];
+    status.textContent = "Lượt " + (idx + 1) + " / " + rounds.length + " · Đúng: " + score;
+    box.appendChild(gEl("p", "game-q", "Người kia nói:"));
+    box.appendChild(gEl("p", "cg-q-en", "“" + r.q.en + "”"));
+    box.appendChild(gEl("p", "cg-q-vi", r.q.vi));
+    var lb = speakBtn(r.q.en, 0.85, "Nghe câu này", false); lb.style.marginBottom = "14px"; box.appendChild(lb);
+    box.appendChild(gEl("p", "game-q", "Bác đáp lại thế nào là tự nhiên nhất?"));
+    var others = shuffle(pairs.filter(function(p){ return p.a.en !== r.a.en; })).slice(0, 2);
+    var items = shuffle([{ label:r.a.en, ok:true }].concat(others.map(function(o){ return { label:o.a.en, ok:false }; })));
+    var grid = optGrid(items, function(it, btn, g){
+      markPick(g, btn, it.ok);
+      if(it.ok) score++;
+      box.appendChild(gEl("p", "game-note", it.ok ? ("✓ Đúng rồi! “" + r.a.en + "” — " + r.a.vi) : ("Chưa đúng. Câu đáp tự nhiên là: “" + r.a.en + "” — " + r.a.vi)));
+      idx++;
+      cgLater(pickDelay(it.ok), next);
+    });
+    grid.classList.add("one-col");
+    box.appendChild(grid);
+  }
+  next();
+}
+
+/* ---------- Trò Chương 2: Bingo con số ---------- */
+function cgBingo(wrap, ch){
+  var pool = [];
+  chapterVocab(ch).forEach(function(v){
+    var m = /^Số (\d+)$/.exec(v.vi || "");
+    if(m) pool.push({ en:v.en, num:parseInt(m[1], 10) });
+  });
+  pool = pool.filter(function(p, i, a){ return a.findIndex(function(x){ return x.num === p.num; }) === i; });
+  var board = shuffle(pool).slice(0, 9);
+  var rest = shuffle(pool.filter(function(p){ return board.indexOf(p) === -1; })).slice(0, 3);
+  var calls = shuffle(board.concat(rest));
+  var marked = {}, errors = 0, ci = 0, locked = false;
+  var status = gEl("p", "game-status"); wrap.appendChild(status);
+  var callBox = gEl("div", "bingo-call"); wrap.appendChild(callBox);
+  var grid = gEl("div", "bingo-grid"); wrap.appendChild(grid);
+  var noteBox = gEl("div", ""); wrap.appendChild(noteBox);
+  var cellBtns = [];
+  board.forEach(function(p, i){
+    var b = gEl("button", "bingo-cell", String(p.num)); b.type = "button";
+    b.addEventListener("click", function(){ pick(i, b); });
+    grid.appendChild(b); cellBtns.push(b);
+  });
+  function hasLine(){
+    var L = [[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];
+    return L.some(function(ln){ return ln.every(function(i){ return marked[i]; }); });
+  }
+  function drawCall(){
+    locked = false; noteBox.innerHTML = "";
+    if(ci >= calls.length){
+      finishChGame(false, "Đánh dấu được " + Object.keys(marked).length + " / 9 ô — chưa thành hàng",
+        "Suýt nữa là bingo rồi! Bác nghe kỹ từng số, ván sau mình thắng nhé.");
+      return;
+    }
+    var c = calls[ci];
+    status.textContent = "Số gọi thứ " + (ci + 1) + " / " + calls.length + " · Đã đánh dấu: " + Object.keys(marked).length + " ô · Sai: " + errors;
+    callBox.innerHTML = "";
+    callBox.appendChild(gEl("p", "game-q", "Máy gọi số:"));
+    callBox.appendChild(gEl("p", "cg-big-en", c.en));
+    var lb = speakBtn(c.en, 0.85, "Nghe số này", false); callBox.appendChild(lb);
+    cgLater(350, function(){ speak(c.en, 0.85); });
+    var onBoard = board.some(function(p){ return p.num === c.num; });
+    if(!onBoard){
+      noteBox.appendChild(gEl("p", "game-note", "Số “" + c.en + "” (chữ số " + c.num + ") không có trên bảng của bác — bấm nút dưới để máy gọi số tiếp theo."));
+      var nb = bigBtn("Gọi số tiếp theo →", "btn-primary");
+      nb.addEventListener("click", function(){ if(locked) return; locked = true; ci++; drawCall(); });
+      var na = gEl("div", "game-acts"); na.appendChild(nb); noteBox.appendChild(na);
+    }
+  }
+  function pick(i, b){
+    if(locked || marked[i]) return;
+    var c = calls[ci]; if(!c) return;
+    if(board[i].num === c.num){
+      marked[i] = 1; b.classList.add("on"); b.disabled = true; locked = true;
+      if(hasLine()){
+        var pts = Math.max(10, 100 - errors * 10);
+        finishChGame(true, "🎉 BINGO! Điểm: " + pts + " — đánh dấu " + Object.keys(marked).length + " ô, sai " + errors + " lần",
+          "Bác nghe số tiếng Anh rất chuẩn — thắng ván bingo của Chương 2 rồi!");
+        return;
+      }
+      ci++; cgLater(900, drawCall);
+    } else {
+      errors++; b.classList.add("bad"); locked = true;
+      noteBox.innerHTML = "";
+      noteBox.appendChild(gEl("p", "game-note", "Chưa đúng. Số vừa gọi là “" + c.en + "” — tức chữ số " + c.num + ". Mình sang số gọi tiếp theo nhé."));
+      status.textContent = "Số gọi thứ " + (ci + 1) + " / " + calls.length + " · Đã đánh dấu: " + Object.keys(marked).length + " ô · Sai: " + errors;
+      ci++; cgLater(pickDelay(false), drawCall);
+    }
+  }
+  drawCall();
+}
+
+/* ---------- Trò Chương 3: Giỏ đi chợ ---------- */
+function cgMarket(wrap, ch){
+  var pool = chapterVocab(ch).filter(function(v, i, a){ return a.findIndex(function(x){ return x.en === v.en; }) === i; });
+  var targets = shuffle(pool).slice(0, 4);
+  var distract = shuffle(pool.filter(function(v){ return targets.indexOf(v) === -1; })).slice(0, 5);
+  var shelf = shuffle(targets.concat(distract));
+  var found = {}, errors = 0, reviews = 3;
+  var status = gEl("p", "game-status"); wrap.appendChild(status);
+  var box = gEl("div", ""); wrap.appendChild(box);
+  function isTarget(v){ return targets.some(function(t){ return t.en === v.en; }); }
+  function listHTML(showState){
+    var list = gEl("div", "shop-list");
+    targets.forEach(function(t){
+      var row = gEl("div", "shop-li");
+      row.appendChild(gEl("span", "", t.en + " — " + t.vi));
+      if(showState) row.appendChild(gEl("span", found[t.en] ? "got" : "", found[t.en] ? "✓ Đã lấy" : "Chưa lấy"));
+      list.appendChild(row);
+    });
+    return list;
+  }
+  function phaseList(){
+    box.innerHTML = "";
+    status.textContent = "Danh sách cần mua: 4 món — bác xem kỹ rồi bấm Đi chợ";
+    box.appendChild(gEl("p", "game-q", "Hôm nay mình cần mua 4 món này:"));
+    box.appendChild(listHTML(false));
+    var go = bigBtn("Đi chợ →", "btn-primary");
+    go.addEventListener("click", phaseShelf);
+    var acts = gEl("div", "game-acts"); acts.appendChild(go); box.appendChild(acts);
+  }
+  function phaseShelf(){
+    box.innerHTML = "";
+    status.textContent = "Giỏ: 0 / 4 món · Sai: 0";
+    box.appendChild(gEl("p", "game-q", "Chạm vào đúng món trong danh sách để bỏ vào giỏ:"));
+    var reviewPanel = gEl("div", ""); box.appendChild(reviewPanel);
+    var grid = gEl("div", "shelf-grid"); box.appendChild(grid);
+    var noteBox = gEl("div", ""); box.appendChild(noteBox);
+    shelf.forEach(function(v){
+      var b = gEl("button", "shelf-item"); b.type = "button";
+      b.appendChild(gEl("span", "", v.en));
+      b.appendChild(gEl("small", "", v.vi));
+      b.addEventListener("click", function(){
+        if(found[v.en]) return;
+        if(isTarget(v)){
+          found[v.en] = 1; b.classList.add("got"); b.disabled = true;
+          var n = Object.keys(found).length;
+          status.textContent = "Giỏ: " + n + " / 4 món · Sai: " + errors;
+          noteBox.innerHTML = ""; noteBox.appendChild(gEl("p", "game-note", "✓ Đúng món! “" + v.en + "” — " + v.vi + " đã vào giỏ."));
+          if(n >= 4){
+            var pts = Math.max(0, 4 - errors);
+            cgLater(700, function(){
+              finishChGame(true, "Lấy đủ 4 / 4 món! Điểm: " + pts + " (4 đúng − " + errors + " sai)",
+                "Bác đi chợ bằng tiếng Anh rất khéo — giỏ đầy đủ cả 4 món của Chương 3!");
+            });
+          }
+        } else {
+          errors++; b.classList.add("bad");
+          status.textContent = "Giỏ: " + Object.keys(found).length + " / 4 món · Sai: " + errors;
+          noteBox.innerHTML = ""; noteBox.appendChild(gEl("p", "game-note", "Món “" + v.en + "” không có trong danh sách — mình bỏ qua món này nhé, điểm bị trừ 1."));
+          cgLater(1200, function(){ b.classList.remove("bad"); });
+        }
+      });
+      grid.appendChild(b);
+    });
+    var acts = gEl("div", "game-acts");
+    var rev = bigBtn("Xem lại danh sách (còn " + reviews + " lần)", "btn-soft");
+    rev.addEventListener("click", function(){
+      if(reviews <= 0) return;
+      reviews--; rev.textContent = "Xem lại danh sách (còn " + reviews + " lần)";
+      if(reviews <= 0) rev.disabled = true;
+      reviewPanel.innerHTML = "";
+      reviewPanel.appendChild(listHTML(true));
+      var done = bigBtn("Đã nhớ — đi chợ tiếp", "btn-ghost");
+      done.addEventListener("click", function(){ reviewPanel.innerHTML = ""; });
+      var a2 = gEl("div", "game-acts"); a2.appendChild(done); reviewPanel.appendChild(a2);
+    });
+    acts.appendChild(rev); box.appendChild(acts);
+  }
+  phaseList();
+}
+
+/* ---------- Trò Chương 4: Dẫn đường về nhà ---------- */
+function cgMap(wrap, ch){
+  var DIRS = [ { dx:0, dy:-1, ar:"▲", ten:"phía trên" }, { dx:1, dy:0, ar:"▶", ten:"bên phải" }, { dx:0, dy:1, ar:"▼", ten:"phía dưới" }, { dx:-1, dy:0, ar:"◀", ten:"bên trái" } ];
+  var CMDS = [ { key:"S", en:"Go straight", vi:"Đi thẳng" }, { key:"L", en:"Turn left", vi:"Rẽ trái" }, { key:"R", en:"Turn right", vi:"Rẽ phải" } ];
+  function genPath(){
+    for(var t = 0; t < 80; t++){
+      var sx = Math.floor(Math.random() * 4), sy = Math.floor(Math.random() * 4);
+      var face = Math.floor(Math.random() * 4);
+      var x = sx, y = sy, f = face, steps = [], seen = {}; seen[x + "," + y] = 1;
+      var want = 6 + Math.floor(Math.random() * 3);
+      for(var s = 0; s < want; s++){
+        var opts = shuffle(CMDS.slice()).map(function(c){
+          var nf = c.key === "S" ? f : (c.key === "L" ? (f + 3) % 4 : (f + 1) % 4);
+          return { cmd:c, nf:nf, nx:x + DIRS[nf].dx, ny:y + DIRS[nf].dy };
+        }).filter(function(o){ return o.nx >= 0 && o.nx < 4 && o.ny >= 0 && o.ny < 4; });
+        if(!opts.length) break;
+        var fresh = opts.filter(function(o){ return !seen[o.nx + "," + o.ny]; });
+        var pick = (fresh.length ? fresh : opts)[0];
+        steps.push(pick); x = pick.nx; y = pick.ny; f = pick.nf; seen[x + "," + y] = 1;
+      }
+      if(steps.length >= 6 && (x !== sx || y !== sy)) return { sx:sx, sy:sy, face:face, steps:steps, hx:x, hy:y };
+    }
+    var fb = [], fx = 0, fy = 3, ff = 0;
+    [["S"],["S"],["S"],["R"],["S"],["S"]].forEach(function(k){
+      var c = CMDS.filter(function(x){ return x.key === k[0]; })[0];
+      var nf = c.key === "S" ? ff : (c.key === "L" ? (ff + 3) % 4 : (ff + 1) % 4);
+      fx += DIRS[nf].dx; fy += DIRS[nf].dy; ff = nf;
+      fb.push({ cmd:c, nf:nf, nx:fx, ny:fy });
+    });
+    return { sx:0, sy:3, face:0, steps:fb, hx:fx, hy:fy };
+  }
+  var P = genPath();
+  var px = P.sx, py = P.sy, face = P.face, idx = 0, errors = 0;
+  var status = gEl("p", "game-status"); wrap.appendChild(status);
+  var gridBox = gEl("div", ""); wrap.appendChild(gridBox);
+  var box = gEl("div", ""); wrap.appendChild(box);
+  function drawGrid(){
+    gridBox.innerHTML = "";
+    var g = gEl("div", "map-grid");
+    for(var y = 0; y < 4; y++) for(var x = 0; x < 4; x++){
+      var c = gEl("div", "map-cell");
+      if(x === P.hx && y === P.hy){ c.classList.add("home"); c.textContent = "🏠"; }
+      if(x === px && y === py){ c.classList.add("me"); c.textContent = DIRS[face].ar; }
+      g.appendChild(c);
+    }
+    gridBox.appendChild(g);
+  }
+  function drawStep(){
+    drawGrid(); box.innerHTML = "";
+    status.textContent = "Bước " + (idx + 1) + " / " + P.steps.length + " · Điểm: " + Math.max(0, 100 - errors * 10) + " · Mũi tên đang hướng " + DIRS[face].ten + " " + DIRS[face].ar;
+    var step = P.steps[idx]; if(!step) return;
+    box.appendChild(gEl("p", "game-q", "Chỉ dẫn của bước này:"));
+    box.appendChild(gEl("p", "cg-q-en", "“" + step.cmd.en + "”"));
+    box.appendChild(gEl("p", "cg-q-vi", step.cmd.vi + " — rồi bước 1 ô"));
+    var lb = speakBtn(step.cmd.en, 0.85, "Nghe chỉ dẫn", false); lb.style.marginBottom = "14px"; box.appendChild(lb);
+    box.appendChild(gEl("p", "game-q", "Bác chạm nút hướng đi cho khớp:"));
+    var row = gEl("div", "dir-row");
+    CMDS.forEach(function(c){
+      var b = bigBtn(c.en + " — " + c.vi, c.key === "S" ? "btn-primary" : "btn-accent");
+      b.addEventListener("click", function(){
+        if(c.key === step.cmd.key){
+          px = step.nx; py = step.ny; face = step.nf; idx++;
+          if(idx >= P.steps.length){
+            drawGrid(); box.innerHTML = "";
+            var pts = Math.max(0, 100 - errors * 10);
+            finishChGame(pts >= 50, "Về tới nhà! 🏠 Điểm: " + pts + " — đi " + P.steps.length + " bước, chạm sai " + errors + " lần",
+              pts >= 50 ? "Bác dẫn đường bằng tiếng Anh rất chuẩn — về nhà an toàn rồi!" : "Đã về tới nhà nhưng sai hơi nhiều lần. Bác xem lại quy ước hướng đi rồi chơi lại nhé.");
+            return;
+          }
+          drawStep();
+        } else {
+          errors++;
+          status.textContent = "Bước " + (idx + 1) + " / " + P.steps.length + " · Điểm: " + Math.max(0, 100 - errors * 10) + " · Mũi tên đang hướng " + DIRS[face].ten + " " + DIRS[face].ar;
+          var old = box.querySelector(".game-note"); if(old) old.remove();
+          box.appendChild(gEl("p", "game-note", "Chưa đúng — nhân vật chưa di chuyển. Chỉ dẫn là “" + step.cmd.en + "” (" + step.cmd.vi + "). Bác thử lại bước này nhé."));
+        }
+      });
+      row.appendChild(b);
+    });
+    box.appendChild(row);
+  }
+  drawStep();
+}
+
+/* ---------- Trò Chương 5: Bác sĩ khuyên ---------- */
+function cgDoctor(wrap, ch){
+  var phraseMap = {};
+  chapterLessons(ch).forEach(function(L){ L.phrases.forEach(function(p){ phraseMap[p.en] = p; }); });
+  var PAIRS = [
+    ["I have a fever.", "I need to see a doctor."],
+    ["I feel sick today.", "I need to see a doctor."],
+    ["This is an emergency.", "Call an ambulance now."],
+    ["I have a headache.", "Take this medicine and rest."],
+    ["My head hurts.", "Take this medicine and rest."],
+    ["I feel dizzy.", "You need to rest."],
+    ["I am very tired today.", "You need to rest."],
+    ["My body needs rest.", "You need to rest."],
+    ["My eyes are tired.", "You need to rest."],
+    ["I want to be healthy.", "Exercise is good for you."]
+  ].filter(function(pr){ return phraseMap[pr[0]] && phraseMap[pr[1]]; });
+  var ADVICE = ["I need to see a doctor.", "Take this medicine and rest.", "Take this medicine twice a day.", "You need to rest.", "Call an ambulance now.", "Walk every day.", "Exercise is good for you.", "Wash your hands with soap.", "Brush your teeth every day."].filter(function(a){ return phraseMap[a]; });
+  var rounds = shuffle(PAIRS.slice()).slice(0, 8);
+  var idx = 0, score = 0;
+  var status = gEl("p", "game-status"); wrap.appendChild(status);
+  var box = gEl("div", ""); wrap.appendChild(box);
+  function next(){
+    box.innerHTML = "";
+    if(idx >= rounds.length){
+      finishChGame(score >= 6, "Đúng " + score + " / " + rounds.length + " lượt tư vấn",
+        score >= 6 ? "Bác chọn lời khuyên sức khỏe rất hợp lý — đúng bài bản Chương 5!" : "Đạt từ 6/8 lượt là thắng ván này. Bác ôn lại các câu mẫu sức khỏe rồi chơi lại nhé.");
+      return;
+    }
+    var sit = phraseMap[rounds[idx][0]], adv = phraseMap[rounds[idx][1]];
+    status.textContent = "Lượt " + (idx + 1) + " / " + rounds.length + " · Đúng: " + score;
+    box.appendChild(gEl("p", "game-q", "Tình huống:"));
+    box.appendChild(gEl("p", "cg-q-en", "“" + sit.en + "”"));
+    box.appendChild(gEl("p", "cg-q-vi", sit.vi));
+    box.appendChild(gEl("p", "game-q", "Bác sĩ nên khuyên thế nào là hợp lý nhất?"));
+    var others = shuffle(ADVICE.filter(function(a){ return a !== adv.en; })).slice(0, 2);
+    var items = shuffle([{ label:adv.en + " — " + adv.vi, ok:true }].concat(others.map(function(o){ return { label:o + " — " + phraseMap[o].vi, ok:false }; })));
+    var grid = optGrid(items, function(it, btn, g){
+      markPick(g, btn, it.ok);
+      if(it.ok) score++;
+      box.appendChild(gEl("p", "game-note", it.ok ? ("✓ Hợp lý! “" + adv.en + "” — " + adv.vi) : ("Chưa hợp lý nhất. Với tình huống này nên: “" + adv.en + "” — " + adv.vi)));
+      idx++;
+      cgLater(pickDelay(it.ok), next);
+    });
+    grid.classList.add("one-col");
+    box.appendChild(grid);
+  }
+  next();
+}
+
+/* ---------- Trò Chương 6: Mặc cả hay ---------- */
+function cgBargain(wrap, ch){
+  var goods = [];
+  chapterLessons(ch).forEach(function(L){ if(L.n === 1 || L.n === 2 || L.n === 7) L.vocab.forEach(function(v){ goods.push(v); }); });
+  var item = goods[Math.floor(Math.random() * goods.length)];
+  var PRICES = [120000, 150000, 180000, 200000, 250000, 300000, 350000, 400000];
+  var start = PRICES[Math.floor(Math.random() * PRICES.length)];
+  var target = Math.round(start * 0.7 / 5000) * 5000;
+  var price = start, round = 0;
+  var OPTS = [
+    { en:"It is too expensive.", vi:"Nó đắt quá.", rate:0.15, reply:"Chủ sạp: “Thôi được bác ơi, cháu giảm thêm cho bác đấy!”" },
+    { en:"Is there a discount?", vi:"Có giảm giá không?", rate:0.10, reply:"Chủ sạp: “Có chứ bác, cháu bớt cho bác một ít.”" },
+    { en:"The price is good.", vi:"Giá này tốt.", rate:0, reply:"Chủ sạp: “Bác ưng giá này thì cháu giữ nguyên giá nhé.”" }
+  ];
+  var phraseMap = {};
+  chapterLessons(ch).forEach(function(L){ L.phrases.forEach(function(p){ phraseMap[p.en] = p; }); });
+  OPTS.forEach(function(o){ if(phraseMap[o.en]) o.vi = phraseMap[o.en].vi; });
+  var status = gEl("p", "game-status"); wrap.appendChild(status);
+  var box = gEl("div", ""); wrap.appendChild(box);
+  function draw(){
+    box.innerHTML = "";
+    status.textContent = "Vòng " + Math.min(round + 1, 3) + " / 3 · Giá mục tiêu: ≤ " + cgFmtMoney(target);
+    box.appendChild(gEl("p", "cg-item-name", item.en + " — " + item.vi));
+    box.appendChild(gEl("p", "game-q", "Giá hiện tại:"));
+    box.appendChild(gEl("p", "price-big", cgFmtMoney(price)));
+    if(round >= 3){
+      var pct = Math.round((start - price) / start * 100);
+      var pass = price <= target;
+      finishChGame(pass, "Giá cuối: " + cgFmtMoney(price) + " (giảm " + pct + "%) — mục tiêu ≤ " + cgFmtMoney(target),
+        pass ? "Bác mặc cả rất hay — mua được " + item.en + " đúng giá mục tiêu của Chương 6!" : "Chưa chạm giá mục tiêu. Ván sau bác chọn câu “It is too expensive.” nhiều hơn để giá giảm sâu nhé.");
+      return;
+    }
+    box.appendChild(gEl("p", "game-q", "Bác nói câu nào với chủ sạp?"));
+    var items = shuffle(OPTS.map(function(o){ return { label:o.en + " — " + o.vi, opt:o }; }));
+    var grid = optGrid(items, function(it, btn, g){
+      grid.querySelectorAll(".q-opt").forEach(function(x){ x.disabled = true; });
+      btn.classList.add(it.opt.rate > 0 ? "correct" : "wrong");
+      price = Math.round(price * (1 - it.opt.rate) / 1000) * 1000;
+      round++;
+      box.appendChild(gEl("p", "game-note", it.opt.reply + " Giá mới: " + cgFmtMoney(price) + (it.opt.rate > 0 ? " (giảm " + Math.round(it.opt.rate * 100) + "%)" : " (giữ nguyên)")));
+      cgLater(1800, draw);
+    });
+    grid.classList.add("one-col");
+    box.appendChild(grid);
+  }
+  draw();
+}
+
+/* ================================================================
+   V27 — CHỮ TỰ CHỈNH HÀI HÒA (FIT-TEXT, thay bản V26):
+   Áp cho đúng tập phần tử đang giãn đều 2 bên (đoạn văn V25 +
+   tiêu đề V26). BẢN V26 ĐO SAI tiêu đề hero: bản sao ẩn chỉ lấy
+   textContent thuần nên phần chữ nằm trong thẻ con (<em> màu
+   riêng ở hero) bị dẹt mất định dạng, và công thức chỉ tính
+   khoảng giãn THÊM trên bản căn trái chứ không phải khoảng cách
+   từ THẬT sau khi justify. V27 đo lại từ đầu:
+   · Bản sao ẩn giữ nguyên innerHTML (mọi thẻ con, gồm <em>/<span>
+     màu riêng) + đúng bề ngang/cỡ chữ hiện tại của phần tử VÀ
+     chép cả text-wrap (balance ở tiêu đề / pretty ở đoạn văn —
+     thiếu nó bản sao ngắt dòng khác hẳn trang thật, đo sai), dựng
+     ở chế độ text-align:justify như hiển thị thật; vị trí từng từ
+     lấy bằng Range trên CHÍNH các nút chữ của bản sao — từ nối
+     qua ranh giới thẻ con (vd "0," nửa trong <em> nửa ngoài) được
+     ghép thành một từ, không tính oan khoảng trước dấu câu.
+   · Khoảng giãn của một dòng = khoảng cách từ lớn nhất giữa hai
+     từ kề nhau trên dòng đó (trừ dòng cuối, justify không kéo
+     giãn), tính trên TOÀN BỘ các dòng. Giãn quá đà (>0,45em) thì
+     CO cỡ chữ từng nấc 2% (sàn 88% cỡ nền); tiêu đề 1 dòng còn
+     trống >18% bề ngang thì TĂNG từng nấc 2% (trần 112%), tăng mà
+     xuống 2 dòng thì lùi lại nấc trước.
+   · LUẬT DỰ PHÒNG TOÀN CỤC: đã co tới sàn mà vẫn còn dòng giãn
+     >0,45em → phần tử TỰ BỎ justify về căn trái tự nhiên (lớp
+     .fit-left + data-fitfb="left"), áp cho cả tiêu đề lẫn đoạn
+     văn ở mọi kích thước màn hình; khi điều kiện đổi (xoay máy,
+     đổi cỡ chữ) đo lại từ đầu và tự gỡ dự phòng nếu hết cần.
+   Cỡ nền vẫn do người dùng chọn (4 mức + linh hoạt theo bề rộng
+   màn hình như V24) — cơ chế này chỉ tinh chỉnh TƯƠNG ĐỐI qua
+   data-fitf và cỡ chữ nội tuyến của chính phần tử đó, không đụng
+   biến toàn trang, không áp cho nút/huy hiệu/nhãn/tab/bong bóng
+   hội thoại/ô từ vựng/số liệu (không nằm trong danh sách dưới).
+   ================================================================ */
+var FIT_SEL = ".sec-head p, .hero-sub, .sub-p, .ch-desc, .rm-desc, .rm-goal, .rm-note, .step-card p, .tip p, .lesson-goal, .faq-item p, .seo-intro-txt, .seo-chapters p, .rb-note, .rb-line, .rb-phon p, .sg-row, .rb-step span, .game-note, .exam-hint, .hero h1, .sec-head h2, .sub-h, .ch-title, .lesson-head h2, .game-name, #pronBannerTitle";
+var FIT_MAX_GAP = 0.45, FIT_FLOOR = 0.88, FIT_CEIL = 1.12, FIT_STEP = 0.02;
+var fitTimer = null;
+function scheduleFit(){
+  if(fitTimer) clearTimeout(fitTimer);
+  fitTimer = setTimeout(function(){ fitTimer = null; try{ fitAll(); }catch(e){} }, 140);
+}
+function fitMeasure(el, mode){
+  var cs = getComputedStyle(el);
+  var w = el.clientWidth || el.getBoundingClientRect().width;
+  if(!w) return null;
+  var innerW = w - (parseFloat(cs.paddingLeft) || 0) - (parseFloat(cs.paddingRight) || 0);
+  if(innerW <= 0) return null;
+  if(!(el.textContent || "").trim()) return null;
+  var mirror = document.createElement("div");
+  mirror.style.cssText = "position:absolute; left:-9999px; top:0; visibility:hidden; pointer-events:none; margin:0; padding:0; border:0;";
+  ["fontFamily", "fontWeight", "fontStyle", "letterSpacing", "wordSpacing", "lineHeight", "textTransform", "overflowWrap", "wordBreak", "textWrap"].forEach(function(p){ mirror.style[p] = cs[p]; });
+  mirror.style.fontSize = cs.fontSize;
+  mirror.style.width = innerW + "px";
+  mirror.style.textAlign = (mode === "justify") ? "justify" : "left";
+  mirror.innerHTML = el.innerHTML;
+  document.body.appendChild(mirror);
+  var res = null;
+  try{
+    /* Gom mọi nút chữ theo thứ tự đọc, lập bản đồ ký tự → (nút, vị
+       trí) để từ chạy qua ranh giới thẻ con vẫn là MỘT từ. */
+    var walker = document.createTreeWalker(mirror, NodeFilter.SHOW_TEXT_NODE);
+    var chars = [], n;
+    while((n = walker.nextNode())){
+      if(n.nodeType !== 3) continue;
+      var txt = n.textContent || "";
+      for(var ci = 0; ci < txt.length; ci++) chars.push({ node:n, off:ci, ch:txt.charAt(ci) });
+    }
+    var words = [], cur = null;
+    for(var k = 0; k <= chars.length; k++){
+      var c = (k < chars.length) ? chars[k] : null;
+      if(c && !/\s/.test(c.ch)){ if(!cur) cur = { sNode:c.node, sOff:c.off, eNode:c.node, eOff:c.off + 1 }; else { cur.eNode = c.node; cur.eOff = c.off + 1; } }
+      else if(cur){ words.push(cur); cur = null; }
+    }
+    if(words.length){
+      var range = document.createRange(), lines = [], curL = null;
+      for(var wi = 0; wi < words.length; wi++){
+        var wd = words[wi];
+        range.setStart(wd.sNode, wd.sOff); range.setEnd(wd.eNode, wd.eOff);
+        var r = range.getBoundingClientRect();
+        if(!r.width && !r.height) continue;
+        if(!curL || Math.abs(r.top - curL.top) > 2){ curL = { top:r.top, left:r.left, right:r.right, items:[{ l:r.left, r:r.right }] }; lines.push(curL); }
+        else { curL.right = r.right; curL.items.push({ l:r.left, r:r.right }); }
+      }
+      if(lines.length){
+        var fs = parseFloat(cs.fontSize) || 16, maxGap = 0;
+        for(var li = 0; li < lines.length - 1; li++){
+          var items = lines[li].items;
+          for(var gi = 1; gi < items.length; gi++){
+            var gap = (items[gi].l - items[gi - 1].r) / fs;
+            if(gap > maxGap) maxGap = gap;
+          }
+        }
+        var lastL = lines[lines.length - 1];
+        res = { lines:lines.length, maxGapEm:maxGap, fill:(lastL.right - lastL.left) / innerW };
+      }
+    }
+  }catch(e){}
+  document.body.removeChild(mirror);
+  return res;
+}
+function fitAll(){
+  document.querySelectorAll(FIT_SEL).forEach(function(el){
+    if(!el.getClientRects().length || !(el.textContent || "").trim()) return;
+    el.classList.remove("fit-left");
+    el.removeAttribute("data-fitfb");
+    el.style.fontSize = "";
+    var base = parseFloat(getComputedStyle(el).fontSize) || 16;
+    var m = fitMeasure(el, "left"); if(!m) return;
+    var f = 1;
+    if(m.lines > 1){
+      var mj = fitMeasure(el, "justify");
+      if(mj && mj.maxGapEm > FIT_MAX_GAP){
+        while(f > FIT_FLOOR){
+          var nf = Math.round((f - FIT_STEP) * 100) / 100;
+          el.style.fontSize = (base * nf) + "px";
+          var m2 = fitMeasure(el, "justify");
+          f = nf;
+          if(!m2 || m2.maxGapEm <= FIT_MAX_GAP || m2.lines < 2) break;
+        }
+        var mf = fitMeasure(el, "justify");
+        if(mf && mf.lines > 1 && mf.maxGapEm > FIT_MAX_GAP){
+          el.classList.add("fit-left");
+          el.setAttribute("data-fitfb", "left");
+        }
+      }
+    } else if(m.fill < 0.82){
+      var g = 1;
+      while(g < FIT_CEIL){
+        var ng = Math.min(FIT_CEIL, Math.round((g + FIT_STEP) * 100) / 100);
+        el.style.fontSize = (base * ng) + "px";
+        var m3 = fitMeasure(el, "left");
+        if(!m3 || m3.lines > 1) break;
+        g = ng;
+        if(m3.fill >= 0.97) break;
+      }
+      f = g;
+    }
+    if(f === 1){ el.style.fontSize = ""; el.removeAttribute("data-fitf"); }
+    else { el.style.fontSize = (base * f) + "px"; el.setAttribute("data-fitf", f.toFixed(2)); }
+  });
+}
+window.addEventListener("resize", scheduleFit);
+window.addEventListener("orientationchange", scheduleFit);
+if(window.MutationObserver){
+  new MutationObserver(function(){ scheduleFit(); }).observe(document.documentElement, { attributes:true, attributeFilter:["data-font", "class"] });
+  ["chapterList", "cgWrap", "gameWrap"].forEach(function(id){
+    var n = document.getElementById(id);
+    if(n) new MutationObserver(function(){ scheduleFit(); }).observe(n, { childList:true, subtree:true });
+  });
+}
+if(document.fonts && document.fonts.ready) document.fonts.ready.then(function(){ scheduleFit(); });
+if(document.readyState === "complete") scheduleFit();
+else window.addEventListener("load", scheduleFit);
+setTimeout(scheduleFit, 700);
+try{ renderLessonGrid(); }catch(e){}
 
 /* ---------- Khởi tạo phần phát âm (độc lập, lỗi thì bỏ qua) ---------- */
 try{
