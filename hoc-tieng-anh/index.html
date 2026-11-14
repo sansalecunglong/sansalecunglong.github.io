@@ -2283,6 +2283,70 @@ html[data-font="xlarge"]{--fs-base:clamp(19px,5.9vw,24px)}
 .hero-badge{padding:8px 14px}
 .sc-pill{padding:8px 14px}
 .bn-btn{font-size:15px}
+
+/* ============================================================
+   V25 — ĐẦU THẺ CHƯƠNG XẾP DỌC (chủ trang chốt theo ảnh chụp):
+   bỏ hàng ngang 3 cột ở đầu thẻ chương (ô số | cột chữ | cột
+   trạng thái) vì cột trạng thái tranh bề ngang làm tên chương
+   bị bó, xuống nhiều dòng chật chội. Xếp lại:
+   · Dòng 1: ô số chương (::before) + TÊN CHƯƠNG — tên chiếm
+     toàn bộ bề ngang còn lại của dòng, ngắt dòng tự nhiên.
+   · Dòng 2: dòng TRẠNG THÁI — huy hiệu trạng thái + số bài +
+     nút Thu gọn/Mở rộng trên cùng một hàng, nút mở rộng đẩy
+     về mép phải (margin-left:auto). Khối .ch-meta giữ nguyên
+     vị trí trong DOM tương đối với thẻ (script V23 vẫn tìm
+     thấy để gắn huy hiệu), chỉ đổi thành hàng ngang full-width.
+   · Dưới đầu thẻ: đoạn MÔ TẢ chương (.ch-desc, đã chuyển ra
+     khỏi nút đầu thẻ thành khối riêng) chạy trọn bề ngang thẻ,
+     rồi thanh tiến độ, rồi danh sách bài như cũ.
+   Khung thẻ, màu sắc, huy hiệu, số liệu và cơ chế chữ tự co
+   V24 giữ nguyên; hàng meta là flex-basis:100% + flex-wrap
+   nên ở mọi khổ × cỡ chữ phần tử chật thì tự xuống dòng trong
+   hàng trạng thái, không bóp cột chữ nào cả.
+   ============================================================ */
+#viewHome .ch-head, #viewPron .ch-head{row-gap:10px}
+#viewHome .ch-meta, #viewPron .ch-meta{
+  flex:1 1 100%; flex-direction:row; align-items:center; justify-content:flex-start;
+  flex-wrap:wrap; gap:6px 10px; margin-left:0; width:auto; max-width:100%;
+}
+@media (max-width:370px){
+  #viewHome .ch-meta, #viewPron .ch-meta{gap:6px 8px}
+}
+#viewHome .ch-meta .v23-ch-badge, #viewPron .ch-meta .v23-ch-badge{flex:0 1 auto}
+#viewHome .ch-meta .ch-prog, #viewPron .ch-meta .ch-prog{text-align:left}
+#viewHome .ch-meta .ch-chev, #viewPron .ch-meta .ch-chev{margin-left:auto; text-align:right}
+.chapter-card>.ch-desc{display:block; padding:2px 15px 0}
+#pronLessonList .chapter-card>.ch-desc{padding-bottom:14px}
+
+/* Câu hội thoại được làm nổi bật khi luồng đọc đúng tự chuyển tới */
+.dlg-line.flash{animation:anFlash 2.2s ease}
+@media (prefers-reduced-motion: reduce){ .dlg-line.flash{animation:none; box-shadow:0 0 0 3px var(--accent)} }
+
+/* ============================================================
+   V25 (tiếp) — CHỮ TRONG KHUNG CÂN ĐỀU 2 BÊN (JUSTIFY):
+   chủ trang chỉ vào khung Bản đồ lộ trình: chữ căn trái để lại
+   mép phải răng cưa, nhìn méo. Các ĐOẠN VĂN mô tả/giới thiệu
+   trong khung/thẻ nay căn đều như Word — mọi dòng (trừ dòng
+   cuối, giữ căn trái tự nhiên theo đúng hành vi justify mặc
+   định, không đặt text-align-last) giãn đều chạm cả hai mép.
+   CHỈ áp cho đoạn văn dài: giới thiệu mục/khung, mô tả chương,
+   giới thiệu từng phần học, khối hướng dẫn/cách học, ghi chú
+   trong panel. KHÔNG áp cho tiêu đề, nút, huy hiệu/nhãn, tab,
+   ô từ vựng, thẻ ghi nhớ, bong bóng hội thoại, câu mẫu, số
+   liệu — các phần tử đó không nằm trong danh sách dưới đây.
+   Các đoạn trong lưới nhiều cột (.step-card/.tip/.seo-chapters)
+   chỉ ở cột hẹp khi màn hình rộng; ở khổ điện thoại các lưới đó
+   đã xếp 1 cột trọn bề ngang nên justify không kéo giãn thô —
+   và đoạn nào chỉ có 1 dòng thì justify vốn không đổi gì.
+   ============================================================ */
+.sec-head p, .hero-sub, .sub-p, .ch-desc,
+.rm-desc, .rm-goal, .rm-note,
+.step-card p, .tip p, .lesson-goal,
+.faq-item p, .seo-intro-txt, .seo-chapters p,
+.rb-note, .rb-line, .rb-phon p, .sg-row, .rb-step span,
+.game-note, .exam-hint{
+  text-align:justify;
+}
 </style>
 </head>
 <body>
@@ -2501,10 +2565,10 @@ html[data-font="xlarge"]{--fs-base:clamp(19px,5.9vw,24px)}
         <button type="button" class="ch-head" id="pronHomeHead" aria-label="Mở Chương Mở Đầu — Học Phát Âm, 44 âm IPA, không bắt buộc">
           <span class="ch-head-txt">
             <span class="ch-title">Chương Mở Đầu: Học Phát Âm — 44 âm IPA <span class="opt-badge">Không bắt buộc</span></span>
-            <span class="ch-desc">5 bài nhỏ: nguyên âm ngắn, nguyên âm dài, nguyên âm đôi và phụ âm. Học trước giúp đọc đúng mọi từ về sau — hoặc bỏ qua, vào thẳng Chương 1, không bị khóa gì cả.</span>
           </span>
           <span class="ch-meta"><span class="ch-prog" id="pronHomeProg">0 / 5 bài · 0 / 44 âm</span><span class="ch-chev" aria-hidden="true">▸ Vào chương</span></span>
         </button>
+        <div class="ch-desc">5 bài nhỏ: nguyên âm ngắn, nguyên âm dài, nguyên âm đôi và phụ âm. Học trước giúp đọc đúng mọi từ về sau — hoặc bỏ qua, vào thẳng Chương 1, không bị khóa gì cả.</div>
         <div class="lc-mini-bar ch-bar"><div class="lc-mini-fill" id="pronHomeFill"></div></div>
         <div style="padding:0 20px 18px; display:flex; gap:10px; flex-wrap:wrap">
           <button type="button" class="btn btn-ghost btn-sm" data-skip-ch1>Bỏ qua, vào thẳng Chương 1 →</button>
@@ -4060,8 +4124,11 @@ function renderLessonGrid(){
     head.setAttribute("aria-expanded", openChapters[C.id] ? "true" : "false");
     var htxt = document.createElement("span"); htxt.className = "ch-head-txt";
     var h3 = document.createElement("span"); h3.className = "ch-title"; h3.textContent = "Chương " + C.id + ": " + C.title;
-    var hd = document.createElement("span"); hd.className = "ch-desc"; hd.textContent = C.desc;
-    htxt.appendChild(h3); htxt.appendChild(hd); head.appendChild(htxt);
+    htxt.appendChild(h3); head.appendChild(htxt);
+    /* V25: mô tả chương là khối riêng NGANG TRỌN thẻ, nằm dưới đầu
+       thẻ (dưới dòng trạng thái) — không còn nằm trong cột chữ của
+       đầu thẻ như bố cục hàng ngang 3 cột cũ. */
+    var hd = document.createElement("div"); hd.className = "ch-desc"; hd.textContent = C.desc;
     var hmeta = document.createElement("span"); hmeta.className = "ch-meta";
     var hp = document.createElement("span"); hp.className = "ch-prog"; hp.textContent = dn + " / 10 bài";
     var chev = document.createElement("span"); chev.className = "ch-chev"; chev.setAttribute("aria-hidden","true");
@@ -4069,7 +4136,7 @@ function renderLessonGrid(){
     hmeta.appendChild(hp); hmeta.appendChild(chev); head.appendChild(hmeta);
     var bar = document.createElement("div"); bar.className = "lc-mini-bar ch-bar";
     var fill = document.createElement("div"); fill.className = "lc-mini-fill"; fill.style.transform = "scaleX(" + (dn / 10) + ")";
-    bar.appendChild(fill); card.appendChild(head); card.appendChild(bar);
+    bar.appendChild(fill); card.appendChild(head); card.appendChild(hd); card.appendChild(bar);
     var body = document.createElement("div"); body.className = "ch-body";
     body.style.display = openChapters[C.id] ? "flex" : "none";
     inCh.forEach(function(L){
@@ -4099,7 +4166,7 @@ function renderLessonGridCounts(){ renderLessonGrid(); }
 /* ================= VIEW SWITCHING ================= */
 function showView(id){
   flushPickAdvance();
-  cancelVocabFlow(); cancelListenAdvance();
+  cancelVocabFlow(); cancelListenAdvance(); cancelDlgFlow();
   MicSessions.cancelCurrent(); stopGameTimer();
   if(typeof closeFsPanel === "function") closeFsPanel(false);
   ["viewHome","viewLesson","viewTotal","viewGate","viewPron"].forEach(function(v){
@@ -4222,7 +4289,7 @@ function switchTab(name){
      được nhảy thêm nữa. Lần tự chuyển tự nó gọi goToPart SAU khi đã tự
      xóa hẹn giờ của mình nên không bị nhánh này chặn. */
   flushPickAdvance();
-  cancelFcAutoDialogue(); cancelSpeakAutoNext(); cancelVocabFlow(); cancelListenAdvance();
+  cancelFcAutoDialogue(); cancelSpeakAutoNext(); cancelVocabFlow(); cancelListenAdvance(); cancelDlgFlow();
   MicSessions.cancelCurrent(); stopGameTimer();
   document.querySelectorAll(".tab-btn").forEach(function(b){
     b.setAttribute("aria-selected", b.getAttribute("data-tab")===name ? "true" : "false");
@@ -4683,8 +4750,10 @@ var dlgPlayBtn = document.getElementById("dlgPlayAll");
 if(dlgPlayBtn) dlgPlayBtn.addEventListener("click", playDialogueAll);
 function renderDialogue(){
   stopDlgPlayback();
+  cancelDlgFlow();
+  dlgLineRefs = [];
   var wrap = document.getElementById("dlgList"); wrap.innerHTML = "";
-  currentLesson.dialogue.forEach(function(line){
+  currentLesson.dialogue.forEach(function(line, dlgIdx){
     var row = document.createElement("div");
     row.className = "dlg-line" + (line.who==="B" ? " right" : "");
     var av = document.createElement("div");
@@ -4713,14 +4782,16 @@ function renderDialogue(){
        bóng câu, mang khối chữ đích TO cố định như ở thẻ từ vựng.
        Câu đang bị che khi Đóng vai thì KHÔNG gắn nút — tránh panel
        lộ đáp án của phần người học phải tự nói. */
-    var dlgRbPanel = null;
+    var dlgRbPanel = null, dlgRbBtn = null;
     if(!hide){
       dlgRbPanel = document.createElement("div"); dlgRbPanel.className = "rb-panel"; dlgRbPanel.setAttribute("aria-live", "polite");
-      btns.appendChild(readbackBtn(line.en, "", line.vi, false, dlgRbPanel));
+      dlgRbBtn = readbackBtn(line.en, "", line.vi, false, dlgRbPanel, { kind: "dlg", index: dlgIdx, lessonId: currentLesson.id });
+      btns.appendChild(dlgRbBtn);
     }
     bub.appendChild(who); bub.appendChild(en); bub.appendChild(vi); bub.appendChild(btns);
     if(dlgRbPanel) bub.appendChild(dlgRbPanel);
     row.appendChild(av); row.appendChild(bub); wrap.appendChild(row);
+    dlgLineRefs[dlgIdx] = { row: row, panel: dlgRbPanel, btn: dlgRbBtn, line: line };
   });
 }
 syncDlgRateUI();
@@ -4733,6 +4804,66 @@ document.querySelectorAll("[data-role]").forEach(function(b){
     if(roleMode!=="all") toast("Chế độ đóng vai: phần bị che là phần của bác — hãy tự nói thành tiếng nhé!");
   });
 });
+
+/* ================= HỘI THOẠI: ĐỌC ĐÚNG TỰ SANG CÂU KẾ =================
+   Yêu cầu của chủ trang: “phần hội thoại ấy thì khi mà người ta đọc
+   xong một câu đúng thì chuyển sang câu tiếp theo” — cùng nhịp tự
+   chuyển của phần Luyện nói. Chỉ kích hoạt từ một lần chấm ĐÚNG của
+   nút Đọc lại trong chính câu thoại đó: chấm tự động đọc đúng hết
+   (rbShowResult perfect — đúng ngưỡng hiện có, không đổi) hoặc tự
+   kiểm tra bấm “Tôi đọc đúng rồi” (rbShowSelfCheck); cả hai đường
+   đều gọi noteDlgFlowCorrect(ctx) với ctx mang nhãn _flowKind
+   “dlg” được gắn lúc renderDialogue dựng nút. Đọc sai/chưa đạt:
+   không hẹn gì cả, ở nguyên câu đó như cũ.
+   Sau ~1,2 giây: dừng phiên mic còn sót, cuộn câu KẾ TIẾP vào giữa
+   khung nhìn (vocabFlowScrollTo — trừ hao sẵn nhờ block:"center"),
+   làm nổi bật câu đó và ĐẶT SẴN panel Đọc lại của câu mới ở trạng
+   thái mở với khối chữ đích to (rbShowIdle dựng qua rbPreparePanel)
+   để học viên bấm Đọc lại đọc tiếp ngay.
+   Câu CUỐI đọc đúng: KHÔNG hẹn chuyển — ở lại câu cuối, lời khích
+   lệ của kết quả chấm hiện như thường, và Hội thoại vẫn không tự
+   chuyển sang phần khác (khác Luyện nói là chủ đích).
+   Chống nhảy nhầm: một hẹn giờ chung dlgFlowTimer; học viên tự bấm
+   Đọc lại ở bất kỳ câu nào (startReadback hủy), tự chuyển phần
+   (switchTab hủy), rời bài (showView hủy) hoặc danh sách thoại dựng
+   lại (renderDialogue hủy) đều hủy lần chờ; lúc tới giờ còn kiểm
+   tra lại: đúng bài, vẫn ở phần Hội thoại, và học viên chưa tự mở
+   panel của câu thoại khác trong lúc chờ. Câu kế đang bị che bởi
+   chế độ Đóng vai (không có panel Đọc lại) thì chỉ cuộn + làm nổi
+   bật, không đặt sẵn panel. */
+var dlgFlowTimer = null;
+var dlgLineRefs = [];
+function cancelDlgFlow(){
+  if(dlgFlowTimer){ clearTimeout(dlgFlowTimer); dlgFlowTimer = null; }
+}
+function noteDlgFlowCorrect(ctx){
+  if(!ctx || ctx._flowKind !== "dlg" || !currentLesson) return false;
+  if(ctx._flowLessonId !== currentLesson.id) return false;
+  var panel = document.getElementById("panel-dialogue");
+  if(!panel || !panel.classList.contains("active")) return false;
+  var from = ctx._flowIndex;
+  var total = currentLesson.dialogue ? currentLesson.dialogue.length : 0;
+  if(from < 0 || from >= total - 1) return false;
+  var lessonId = currentLesson.id;
+  cancelDlgFlow();
+  dlgFlowTimer = setTimeout(function(){
+    dlgFlowTimer = null;
+    if(!currentLesson || currentLesson.id !== lessonId) return;
+    var p2 = document.getElementById("panel-dialogue");
+    if(!p2 || !p2.classList.contains("active")) return;
+    if(rbOpenCtx && rbOpenCtx !== ctx && rbOpenCtx._flowKind === "dlg") return;
+    var ref = dlgLineRefs[from + 1];
+    if(!ref || !ref.row) return;
+    MicSessions.cancelCurrent();
+    if(ref.panel && ref.btn){
+      var nctx = { target: ref.line.en, ipa: "", vi: ref.line.vi, isWord: false, panel: ref.panel, btn: ref.btn, session: 0,
+        _flowKind: "dlg", _flowIndex: from + 1, _flowLessonId: lessonId };
+      rbShowIdle(nctx, "Câu tiếp theo — mời bác đọc câu này", "Bác đọc đúng câu vừa rồi! Bác nghe mẫu trước nếu cần, rồi bấm “Đọc lại” và đọc to câu ở trên nhé.");
+    }
+    vocabFlowScrollTo(ref.row, [ref.row]);
+  }, 1200);
+  return true;
+}
 
 /* ================= SPEAK PRACTICE ================= */
 var speakItems = [], speakIndex = 0, recog = null, listening = false;
@@ -6279,6 +6410,7 @@ function rbShowResult(ctx, best){
     }
     celebrate(ctx.isWord && lessonAllLearned());
     var flowHandledSr = noteVocabFlowCorrect(ctx);
+    noteDlgFlowCorrect(ctx);
     if(ctx.isWord && !flowHandledSr) scheduleAutoNext(ctx);
   }
   /* Phân tích âm: ghép từng từ sai với từ máy nghe được (theo thứ tự), so dãy âm vị */
@@ -6322,8 +6454,9 @@ function rbShowResult(ctx, best){
 var rbOpenCtx = null;
 function startReadback(ctx){
   /* Bắt đầu phiên đọc mới → hủy mọi lần tự cuộn/chuyển đang chờ của
-     luồng Từ vựng liền mạch: người học đã chọn đọc tiếp thì không kéo đi. */
-  cancelVocabFlow();
+     luồng Từ vựng liền mạch và luồng Hội thoại tự sang câu kế:
+     người học đã chọn đọc tiếp thì không kéo đi. */
+  cancelVocabFlow(); cancelDlgFlow();
   if(window.speechSynthesis){ try{ window.speechSynthesis.cancel(); }catch(e){} }
   /* Accordion: toàn trang chỉ mở 1 panel chấm tại một thời điểm — kể cả
      panel của phiên trước đã kết thúc (kết quả/lỗi) cũng phải đóng lại. */
@@ -6450,6 +6583,7 @@ function rbShowSelfCheck(ctx, session, info){
     if(ctx.isWord && !isLearned(ctx.target)){ setLearned(ctx.target, true); toast(pickEnc("learned") + " Đã đánh dấu “Đã thuộc”: " + ctx.target); }
     celebrate(ctx.isWord && lessonAllLearned());
     var flowHandledSelf = noteVocabFlowCorrect(ctx);
+    noteDlgFlowCorrect(ctx);
     if(ctx.isWord && !flowHandledSelf) scheduleAutoNext(ctx);
   }, "vslow"));
   actions.appendChild(rbActionBtn("Chưa đúng, đọc lại", function(){ toast(pickEnc("retrySelf")); startReadback(ctx); }, "mic"));
@@ -8903,8 +9037,8 @@ function renderPronIndex(){
     row.setAttribute("aria-label", "Mở Bài " + L.n + " — " + L.title + ", " + L.sounds.length + " âm");
     var htxt = document.createElement("span"); htxt.className = "ch-head-txt";
     var t = document.createElement("span"); t.className = "ch-title"; t.textContent = "Bài " + L.n + ": " + L.title + " (" + L.sounds.length + " âm)";
-    var d = document.createElement("span"); d.className = "ch-desc"; d.textContent = L.goal;
-    htxt.appendChild(t); htxt.appendChild(d); row.appendChild(htxt);
+    var d = document.createElement("div"); d.className = "ch-desc"; d.textContent = L.goal;
+    htxt.appendChild(t); row.appendChild(htxt);
     var meta = document.createElement("span"); meta.className = "ch-meta";
     var done = !!pronState.completed[L.id];
     var st = document.createElement("span"); st.className = "ch-prog";
@@ -8913,6 +9047,7 @@ function renderPronIndex(){
     meta.appendChild(st); meta.appendChild(chev); row.appendChild(meta);
     row.addEventListener("click", function(){ openPronLesson(L.id); });
     card.appendChild(row);
+    card.appendChild(d);
     wrap.appendChild(card);
   });
 }
