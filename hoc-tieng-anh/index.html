@@ -2396,6 +2396,41 @@ html[data-font="xlarge"]{--fs-base:clamp(19px,5.9vw,24px)}
    đều). Áp cho cả tiêu đề lẫn đoạn văn, mọi khổ màn hình.
    ============================================================ */
 .fit-left{ text-align:left !important; }
+/* ============================================================
+   V29 — NHÃN MỤC NGẮN CĂN GIỮA (chủ trang chốt): các tiêu đề
+   ngắn kiểu NHÃN MỤC một dòng trong thanh đề mục .sec-head
+   (lớp .lbl-center gắn ở HTML tĩnh + script V23) CĂN GIỮA theo
+   đúng bề ngang thanh chứa, cố định ở mọi khổ máy × mức cỡ chữ.
+   Nhãn thuộc diện này bị LOẠI khỏi hệ chữ tự chỉnh hài hòa:
+   không justify, không fit co/tăng cỡ, không fit-left (luật
+   dưới đây thắng cả .fit-left nhờ !important + độ ưu tiên cao
+   hơn; script fit cũng bỏ qua hẳn phần tử .lbl-center).
+   KHÔNG đổi: tiêu đề dài nhiều dòng (hero, Lộ trình 6 chương,
+   Bản đồ lộ trình, Giới thiệu khóa học, 3 bước, Lời khuyên…),
+   tên chương .ch-title, tiêu đề phần học .sub-h và mọi đoạn
+   văn vẫn giãn đều + fit như V25–V28; đoạn mô tả <p> ngay dưới
+   nhãn trong cùng thanh .sec-head cũng giữ nguyên giãn đều.
+   ============================================================ */
+.sec-head h2.lbl-center{ text-align:center !important; }
+.sec-head h2.lbl-center.fit-left{ text-align:center !important; }
+/* ============================================================
+   V30 — BỔ SUNG NHÃN MỤC CÒN SÓT NGOÀI .sec-head: tiêu đề
+   “Bài kiểm tra tổng hợp” (#totalTitle) nằm trong banner
+   .total-banner ở trang chủ — cùng vai trò nhãn mục ngắn một
+   dòng như 6 nhãn V29 nên căn giữa trong khung chứa của nó và
+   cố định ở mọi khổ máy × mức cỡ chữ. Phần tử này vốn không
+   nằm trong FIT_SEL nên hệ fit không hề chạm tới; luật dưới
+   đây chỉ ghim căn giữa + thắng .fit-left nếu sau này có lớp.
+   Đã quét lại toàn trang (trang chủ, màn bài học, màn phát âm,
+   các view kiểm tra/trò chương, panel/modal/menu): các tiêu đề
+   còn lại hoặc là tiêu đề dài nhiều dòng (hero, banner phát âm,
+   Lộ trình, Bản đồ lộ trình, 3 bước, Lời khuyên, Giới thiệu khóa
+   học), hoặc là tiêu đề nội dung (tên bài/chương/âm/trò, tiêu đề
+   phần học .sub-h, đầu các view) — giữ nguyên giãn đều/căn trái
+   như V25–V29 đã chốt.
+   ============================================================ */
+.total-banner h2.lbl-center{ text-align:center !important; }
+.total-banner h2.lbl-center.fit-left{ text-align:center !important; }
 </style>
 </head>
 <body>
@@ -2533,7 +2568,7 @@ html[data-font="xlarge"]{--fs-base:clamp(19px,5.9vw,24px)}
     <div class="wrap">
       <div class="progress-card">
         <div class="sec-head" style="margin-bottom:4px">
-          <h2 id="progTitle">Tiến độ học của bác</h2>
+          <h2 id="progTitle" class="lbl-center">Tiến độ học của bác</h2>
           <p>Tiến độ được lưu ngay trên máy này — tắt trang đi, mai mở lại vẫn còn nguyên.</p>
         </div>
         <div class="progress-top">
@@ -2578,7 +2613,7 @@ html[data-font="xlarge"]{--fs-base:clamp(19px,5.9vw,24px)}
   <section class="block" aria-labelledby="todayTitle" style="padding-top:6px">
     <div class="wrap">
       <div class="sec-head">
-        <h2 id="todayTitle">Hôm nay học gì?</h2>
+        <h2 id="todayTitle" class="lbl-center">Hôm nay học gì?</h2>
         <p>Một từ mới mỗi ngày và danh sách những từ bác chưa thuộc để ôn lại nhanh.</p>
       </div>
       <div class="two-col">
@@ -2734,7 +2769,7 @@ html[data-font="xlarge"]{--fs-base:clamp(19px,5.9vw,24px)}
     <div class="wrap">
       <div class="total-banner">
         <div>
-          <h2 id="totalTitle">Bài kiểm tra tổng hợp</h2>
+          <h2 id="totalTitle" class="lbl-center">Bài kiểm tra tổng hợp</h2>
           <p>Học xong vài bài rồi? Thử sức với 6 câu hỏi trộn từ tất cả các chương để xem bác nhớ được bao nhiêu.</p>
         </div>
         <button type="button" class="btn" id="openTotalQuiz">Làm bài tổng hợp</button>
@@ -2808,7 +2843,7 @@ html[data-font="xlarge"]{--fs-base:clamp(19px,5.9vw,24px)}
   <section class="block" id="faqSection" aria-labelledby="faqTitle" style="padding-top:6px">
     <div class="wrap">
       <div class="sec-head">
-        <h2 id="faqTitle">Câu hỏi thường gặp</h2>
+        <h2 id="faqTitle" class="lbl-center">Câu hỏi thường gặp</h2>
         <p>Những điều người mới học hay hỏi nhất về trang này.</p>
       </div>
       <div class="faq-list">
@@ -10203,6 +10238,13 @@ function fitMeasure(el, mode){
 }
 function fitAll(){
   document.querySelectorAll(FIT_SEL).forEach(function(el){
+    /* V29: nhãn mục ngắn .lbl-center căn giữa cố định — loại hẳn
+       khỏi hệ fit: dọn mọi dấu vết fit cũ rồi bỏ qua phần tử này. */
+    if(el.classList && el.classList.contains("lbl-center")){
+      el.style.fontSize = ""; el.removeAttribute("data-fitf");
+      el.removeAttribute("data-fitfb"); el.classList.remove("fit-left");
+      return;
+    }
     if(!el.getClientRects().length || !(el.textContent || "").trim()) return;
     el.classList.remove("fit-left");
     el.removeAttribute("data-fitfb");
@@ -10283,7 +10325,10 @@ try{
     sec.setAttribute("aria-label", title);
     var wrap = el("div", "wrap");
     var head = el("div", "sec-head");
-    head.appendChild(el("h2", null, title));
+    /* V29: cả 3 mục dựng ở đây (Thành tích của bạn / Từ vựng hôm
+       nay / Lối tắt học nhanh) đều là nhãn mục ngắn một dòng —
+       gắn .lbl-center để căn giữa và loại khỏi hệ fit (xem V29). */
+    head.appendChild(el("h2", "lbl-center", title));
     wrap.appendChild(head);
     sec.appendChild(wrap);
     return { sec: sec, wrap: wrap };
