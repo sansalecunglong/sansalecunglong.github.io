@@ -2471,6 +2471,104 @@ html[data-font="xlarge"]{--fs-base:clamp(19px,5.9vw,24px)}
   .feedback-btn{flex:0 0 auto}
   .menu-wrap{flex:0 0 auto; min-width:0; margin-left:auto}
 }
+
+/* ============================================================
+   V34 — BẢN MÁY TÍNH (DESKTOP ≥1024px): DÀN RỘNG NHƯ BẢN ĐẦU
+   Chủ trang chốt: mở trên máy tính thì trang tràn rộng ra như
+   bản desktop đầu tiên đã ưng (container ~1160px, lưới 2 cột
+   thoáng, đúng hệ xanh dương V2 hiện tại); điện thoại giữ
+   NGUYÊN bản đang sửa. Vì vậy TOÀN BỘ khối này chỉ sống trong
+   @media (min-width:1024px) — dưới 1024px không một luật nào
+   ở đây chạm được vào trang, kể cả header V33 và cỡ chữ Rất
+   lớn. Thuần CSS: không đổi DOM, JS, nội dung hay luật học.
+   Chống chỉ định cũ: không lưới 3+ cột cho thẻ chương, không
+   dàn kiểu trang tin tức — thẻ chương/vocabulary tối đa 2 cột,
+   khoảng trắng thoáng như bản đầu.
+   ============================================================ */
+@media (min-width:1024px){
+  /* --- 1) Container chính 1160px, đệm 24px hai bên --- */
+  .wrap{max-width:1160px; padding-left:24px; padding-right:24px}
+  /* Màn bài học / kiểm tra / trò chương: cột đọc 880px căn giữa
+     (928px trừ đệm 2×24px) — chữ không dàn hết 1160px. */
+  #viewLesson .wrap, #viewGate .wrap, #viewTotal .wrap, #viewChGame .wrap{max-width:928px}
+  section.block{padding:36px 0}
+
+  /* --- Header: một hàng ngang thoáng trong container rộng ---
+     logo + tên trang MỘT dòng + Góp ý/Menu bên phải; nút ≥56px. */
+  .header-in{flex-wrap:nowrap !important; flex-direction:row !important; align-items:center; gap:14px; padding-top:12px; padding-bottom:12px}
+  .brand{flex:0 1 auto; min-width:0; margin-right:auto}
+  .brand-txt{flex:0 1 auto; min-width:0}
+  .brand-txt b{white-space:nowrap}
+  .brand-txt span{display:block}
+  .feedback-btn{flex:0 0 auto; min-height:56px}
+  .menu-wrap{flex:0 0 auto; min-width:0; margin-left:0}
+  .menu-toggle{min-height:56px}
+  .display-menu{width:368px}
+
+  /* --- 2) Hero dàn ngang: ảnh một bên, chữ/CTA một bên --- */
+  .hero{padding:32px 0 18px}
+  .hero-grid{grid-template-columns:minmax(0,1fr); gap:22px}
+  .hero-panel{display:grid; grid-template-columns:minmax(0,.92fr) minmax(0,1.08fr); align-items:stretch}
+  .hero-img{height:auto; min-height:340px}
+  .hero-img img{position:absolute; inset:0; width:100%; height:100%}
+  .hero .txt-card{padding:30px 32px; display:flex; flex-direction:column; justify-content:center}
+  .hero-cta .btn{flex:0 1 auto}
+
+  /* --- 3) Các khối trang chủ ---
+     Hàng thống kê “Thành tích”: 4 ô NGANG một hàng. */
+  #v23Stats .progress-top{display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:16px}
+  /* Thẻ “Từ vựng hôm nay”: ảnh/dải chữ một bên, nội dung một bên
+     (ảnh và dải chữ thay nhau hiện nên cùng nằm ở cột 1). */
+  #v23Votd .hero-card{display:grid; grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr); align-items:stretch}
+  #v23Votd #wotdImg{grid-column:1; grid-row:1; height:100%; min-height:280px}
+  #v23Votd .votd-letter{grid-column:1; grid-row:1; height:auto; min-height:280px}
+  #v23Votd .votd-body{grid-column:2; grid-row:1; display:flex; flex-direction:column; justify-content:center}
+  /* Lối tắt học nhanh: 4 ô một hàng. */
+  .shortcuts{grid-template-columns:repeat(4,minmax(0,1fr)); gap:16px}
+  /* 3 bước + lời khuyên 3 cột; “Hôm nay học gì?” 2 cột; FAQ 2 cột. */
+  .steps{grid-template-columns:repeat(3,minmax(0,1fr)); gap:20px}
+  .tips{grid-template-columns:repeat(3,minmax(0,1fr)); gap:20px}
+  .two-col{grid-template-columns:minmax(0,1fr) minmax(0,1fr); gap:20px}
+  .seo-chapters{grid-template-columns:repeat(2,minmax(0,1fr)); gap:14px}
+  .faq-list{display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:14px; align-items:start}
+  .total-banner{flex-wrap:nowrap}
+  .total-banner>div{flex:1; min-width:0}
+  .total-banner .btn{flex:none; margin-left:auto}
+
+  /* --- 4) Danh sách chương: lưới 2 cột, mỗi thẻ một ô; thẻ mở
+     rộng vẫn mở TRONG ô của nó (align-items:start), danh sách
+     bài bên trong giữ 1 cột. Áp cả danh sách bài Phát âm. --- */
+  .chapter-list{display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:20px; align-items:start}
+
+  /* --- 5) Màn bài học (cột 880px ở trên) --- */
+  .tabs{grid-template-columns:repeat(3,minmax(0,1fr)); gap:12px}
+  .vocab-list{display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:14px; align-items:start}
+  .rb-steps{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .fc-stage{max-width:640px}
+  .fc-card{height:340px}
+  .dlg, .dlg-speed, .dlg-playbar, .role-bar{max-width:760px; margin-left:auto; margin-right:auto}
+  .dlg-line{max-width:760px}
+  .speak-box{margin-left:auto; margin-right:auto}
+  .q-opts{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .q-opts.one-col{grid-template-columns:minmax(0,1fr)}
+
+  /* --- 6) Màn Phát âm: lưới 44 âm 6 cột; thẻ cặp âm 2 cột --- */
+  .pron-listen-grid{grid-template-columns:repeat(6,minmax(0,1fr)); gap:12px}
+  #pronPairs{display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:14px; align-items:start}
+  #pronPairs .pair-card{margin-bottom:0}
+
+  /* --- 7) Thanh điều hướng dưới: 3 mục căn giữa trong khung
+     1160px, mỗi nút tối đa 280px — không kéo giãn hết màn. --- */
+  .bottom-nav-in{max-width:1160px; grid-template-columns:repeat(3,minmax(180px,280px)); justify-content:center; gap:12px}
+
+  /* --- 8) Trò chơi: lưới chơi giữ cỡ thoải mái, căn giữa --- */
+  .bingo-grid{max-width:460px}
+  .map-grid{max-width:460px}
+}
+/* Màn thật rộng: lưới 44 âm lên 8 cột */
+@media (min-width:1400px){
+  .pron-listen-grid{grid-template-columns:repeat(8,minmax(0,1fr))}
+}
 </style>
 </head>
 <body>
