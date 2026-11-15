@@ -2164,7 +2164,7 @@ body{padding-bottom:calc(88px + env(safe-area-inset-bottom,0px))}
   border-top:1.5px solid var(--border);
 }
 html.hc .bottom-nav{border-top:2px solid #000; background:#fff; backdrop-filter:none; -webkit-backdrop-filter:none}
-.bottom-nav-in{max-width:520px; margin:0 auto; display:grid; grid-template-columns:repeat(3,1fr); gap:9px}
+.bottom-nav-in{max-width:520px; margin:0 auto; display:grid; grid-template-columns:repeat(4,1fr); gap:9px}
 .bn-btn{
   min-height:56px; border:none; border-radius:15px; background:transparent;
   font-size:15.5px; font-weight:800; color:var(--muted);
@@ -2248,7 +2248,7 @@ html.hc .bn-btn.on{background:#0B2A5B; color:#fff; box-shadow:none; border:2px s
 @media (max-width:560px){ .mem-grid{grid-template-columns:repeat(2,minmax(0,1fr))} }
 .seo-chapters{grid-template-columns:repeat(2,minmax(0,1fr))}
 @media (max-width:700px){ .seo-chapters{grid-template-columns:minmax(0,1fr)} }
-.bottom-nav-in{grid-template-columns:repeat(3,minmax(0,1fr))}
+.bottom-nav-in{grid-template-columns:repeat(4,minmax(0,1fr))}
 .bn-btn{min-width:0}
 
 /* --- 4) Các hàng flex còn lại: phần chữ luôn được quyền co --- */
@@ -2490,7 +2490,7 @@ html[data-font="xlarge"]{--fs-base:clamp(19px,5.9vw,24px)}
   .wrap{max-width:1160px; padding-left:24px; padding-right:24px}
   /* Màn bài học / kiểm tra / trò chương: cột đọc 880px căn giữa
      (928px trừ đệm 2×24px) — chữ không dàn hết 1160px. */
-  #viewLesson .wrap, #viewGate .wrap, #viewTotal .wrap, #viewChGame .wrap{max-width:928px}
+  #viewLesson .wrap, #viewGate .wrap, #viewTotal .wrap, #viewChGame .wrap, #viewReview .wrap{max-width:928px}
   section.block{padding:36px 0}
 
   /* --- Header: một hàng ngang thoáng trong container rộng ---
@@ -2559,7 +2559,7 @@ html[data-font="xlarge"]{--fs-base:clamp(19px,5.9vw,24px)}
 
   /* --- 7) Thanh điều hướng dưới: 3 mục căn giữa trong khung
      1160px, mỗi nút tối đa 280px — không kéo giãn hết màn. --- */
-  .bottom-nav-in{max-width:1160px; grid-template-columns:repeat(3,minmax(180px,280px)); justify-content:center; gap:12px}
+  .bottom-nav-in{max-width:1160px; grid-template-columns:repeat(4,minmax(180px,280px)); justify-content:center; gap:12px}
 
   /* --- 8) Trò chơi: lưới chơi giữ cỡ thoải mái, căn giữa --- */
   .bingo-grid{max-width:460px}
@@ -2591,6 +2591,31 @@ html[data-font="xlarge"]{--fs-base:clamp(19px,5.9vw,24px)}
   font-size:clamp(22px,6.8vw,40px);
 }
 #lessonTitle.fit-left{ text-align:center !important; }
+
+/* ============================================================
+   V36 — THANH ĐẦU TRANG TỰ ẨN KHI CUỘN + MỤC “KIỂM TRA BÀI CŨ”
+   Ở THANH DƯỚI (chủ trang chốt):
+   · header.site vẫn sticky và giữ nguyên mọi số đo khi đang
+     hiện; khi cuộn xuống quá ~80px nó chỉ TRƯỢT LÊN ẩn bằng
+     transform (script gắn lớp .nav-hidden), cuộn lên là hiện
+     lại — thanh vẫn chiếm chỗ trong luồng nên nội dung không
+     nhảy. Thanh dưới luôn hiện như cũ.
+   · Thanh dưới thành 4 mục: nhãn được xuống 2 dòng gọn
+     (line-height rút lại, căn giữa) thay vì bị cắt ở khổ hẹp;
+     đệm dưới của trang tăng tương ứng để chân trang không bị
+     thanh che khi nhãn xuống 2 dòng.
+   · Tiêu đề màn Kiểm tra bài cũ #reviewTitle căn giữa thật và
+     loại khỏi hệ fit, đúng như #lessonTitle ở V35.
+   ============================================================ */
+header.site{transition:transform .25s ease}
+header.site.nav-hidden{transform:translateY(-100%)}
+@media (prefers-reduced-motion: reduce){
+  header.site{transition:none}
+}
+.bn-btn span{text-align:center; line-height:1.3}
+body{padding-bottom:calc(108px + env(safe-area-inset-bottom,0px))}
+#reviewTitle{ text-align:center !important; text-wrap:balance; }
+#reviewTitle.fit-left{ text-align:center !important; }
 </style>
 </head>
 <body>
@@ -3347,6 +3372,26 @@ html[data-font="xlarge"]{--fs-base:clamp(19px,5.9vw,24px)}
     <div class="quiz-result" id="cgResult" role="status"></div>
   </div>
 </div>
+
+<!-- ================= REVIEW OLD LESSONS VIEW ================= -->
+<div class="view" id="viewReview">
+  <div class="wrap">
+    <div class="lesson-head txt-card">
+      <button type="button" class="btn btn-ghost btn-sm" data-backhome>← Quay lại trang chính</button>
+      <h2 id="reviewTitle">Kiểm tra bài cũ</h2>
+      <div class="lesson-goal" id="reviewIntro"></div>
+    </div>
+    <div id="reviewEmpty" style="display:none; margin-top:16px">
+      <div class="txt-card" style="padding:22px">
+        <p style="font-weight:700">Bác chưa học xong bài nào nên chưa có bài cũ để kiểm tra.</p>
+        <p class="sub-p" style="margin-top:8px">Học xong bài đầu tiên là quay lại đây được ngay — trang sẽ tự ra một đề 10 câu lấy từ đúng những gì bác đã học, và mỗi lần mở là một đề khác nhau.</p>
+        <button type="button" class="btn btn-primary" id="reviewGoFirst" style="margin-top:16px">Vào học bài đầu tiên</button>
+      </div>
+    </div>
+    <div id="reviewWrap" style="margin-top:16px"></div>
+    <div class="quiz-result" id="reviewResult" role="status"></div>
+  </div>
+</div>
 </main>
 
 <nav class="bottom-nav" id="bottomNav" aria-label="Điều hướng chính">
@@ -3362,6 +3407,10 @@ html[data-font="xlarge"]{--fs-base:clamp(19px,5.9vw,24px)}
     <button type="button" class="bn-btn" id="bnPron" aria-label="Vào chương phát âm">
       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2a3 3 0 0 0-3 3v6a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z"/><path d="M19 10v1a7 7 0 0 1-14 0v-1M12 18v4"/></svg>
       <span>Phát âm</span>
+    </button>
+    <button type="button" class="bn-btn" id="bnReview" aria-label="Kiểm tra lại các bài đã học">
+      <span aria-hidden="true" style="font-size:21px; line-height:24px; height:24px">📝</span>
+      <span>Kiểm tra bài cũ</span>
     </button>
   </div>
 </nav>
@@ -4508,7 +4557,7 @@ function showView(id){
   MicSessions.cancelCurrent(); stopGameTimer();
   if(typeof stopChGame === "function") stopChGame();
   if(typeof closeFsPanel === "function") closeFsPanel(false);
-  ["viewHome","viewLesson","viewTotal","viewGate","viewPron","viewChGame"].forEach(function(v){
+  ["viewHome","viewLesson","viewTotal","viewGate","viewPron","viewChGame","viewReview"].forEach(function(v){
     document.getElementById(v).classList.toggle("active", v===id);
   });
   window.scrollTo({top:0, behavior:"smooth"});
@@ -8917,6 +8966,251 @@ function gameChallenge(wrap, L){
 }
 
 
+/* ================= KIỂM TRA BÀI CŨ — ĐỀ CÁ NHÂN HÓA THEO TIẾN ĐỘ =================
+   Mỗi lần mở là một ĐỀ MỚI gồm 10 câu trộn ngẫu nhiên, CHỈ lấy từ
+   nội dung các bài 1–9 mà người học ĐÃ HOÀN THÀNH theo
+   state.completed lưu trên máy của chính họ (từ vựng + câu mẫu +
+   hội thoại của đúng những bài đó). 4 dạng quen thuộc của trang:
+   chọn nghĩa Anh→Việt, chọn từ Việt→Anh, nghe rồi chọn (TTS 2 tốc
+   độ Thường/Chậm), điền từ còn thiếu (đúng bộ sinh
+   buildFillQuestions của kiểm tra tổng hợp). Đáp án nhiễu lấy
+   trong kho đã học; kho quá ít thì lấy thêm từ vựng các bài khác
+   CÙNG CHƯƠNG. Trạng thái bài kiểm tra chỉ sống trong phiên (biến
+   nhớ tạm): TUYỆT ĐỐI không ghi localStorage, không đụng tiến
+   độ/khóa bài, không ghi sự kiện bộ đếm. Tự chuyển câu đúng nhịp
+   toàn trang (đúng ~1s, sai ~2s qua schedulePickAdvance/pickDelay)
+   kèm chốt phiên + chốt số câu chống nhảy 2 câu. */
+var reviewSession = 0;
+function reviewPools(){
+  var lessons = LESSONS.filter(function(L){ return L.n <= 9 && state.completed[L.id]; });
+  var vocab = [], phrases = [], dlg = [], seenV = {}, seenP = {}, seenD = {};
+  lessons.forEach(function(L){
+    L.vocab.forEach(function(v){
+      var k = v.en.toLowerCase();
+      if(seenV[k]) return; seenV[k] = 1;
+      vocab.push({en:v.en, ipa:v.ipa, vi:v.vi, ex:v.ex, lessonN:L.n, ch:L.ch});
+    });
+    L.phrases.forEach(function(p){
+      var k = p.en.toLowerCase();
+      if(seenP[k]) return; seenP[k] = 1;
+      phrases.push({en:p.en, vi:p.vi, lessonN:L.n, ch:L.ch});
+    });
+    L.dialogue.forEach(function(d){
+      var k = d.en.toLowerCase();
+      if(seenD[k]) return; seenD[k] = 1;
+      dlg.push({en:d.en, vi:d.vi, who:d.who, name:d.name, lessonN:L.n, ch:L.ch});
+    });
+  });
+  /* Kho nhiễu dự phòng: từ vựng các bài CHƯA học nhưng CÙNG CHƯƠNG
+     với bài đã học — chỉ dùng làm đáp án nhiễu khi cần. */
+  var chs = {};
+  lessons.forEach(function(L){ chs[L.ch] = 1; });
+  var extra = [];
+  LESSONS.forEach(function(L){
+    if(L.n > 9 || !chs[L.ch] || state.completed[L.id]) return;
+    L.vocab.forEach(function(v){
+      var k = v.en.toLowerCase();
+      if(seenV[k]) return; seenV[k] = 1;
+      extra.push({en:v.en, ipa:v.ipa, vi:v.vi, lessonN:L.n, ch:L.ch});
+    });
+  });
+  return { lessons:lessons, vocab:vocab, phrases:phrases, dlg:dlg, extra:extra };
+}
+function reviewDistractors(pool, extra, key, correctLabel, n){
+  var out = [], seen = {};
+  seen[correctLabel] = 1;
+  shuffle(pool.concat(extra)).forEach(function(x){
+    if(out.length >= n) return;
+    var lab = x[key];
+    if(!lab || seen[lab]) return;
+    seen[lab] = 1; out.push(lab);
+  });
+  return out;
+}
+function buildReviewQuestions(P){
+  var qs = [], usedQ = {};
+  function mkQ(typeLabel, prompt, correctLabel, distractors, explain, extra){
+    var opts = shuffle([{label:correctLabel, ok:true}].concat(distractors.map(function(d){ return {label:d, ok:false}; })));
+    var q = { kind:"choice", typeLabel:typeLabel, prompt:prompt, options:opts, explain:explain, correctLabel:correctLabel };
+    if(extra) for(var k in extra) q[k] = extra[k];
+    qs.push(q); return q;
+  }
+  function addVocabQ(v, dir){
+    var key = dir + "|" + v.en.toLowerCase();
+    if(usedQ[key]) return false;
+    usedQ[key] = 1;
+    if(dir === "vi"){
+      mkQ("Dạng 1 · Chọn nghĩa đúng", "“" + v.en + "” nghĩa là gì?", v.vi,
+        reviewDistractors(P.vocab, P.extra, "vi", v.vi, 3),
+        "“" + v.en + "” " + (v.ipa || "") + " = " + v.vi + ". (Bài " + v.lessonN + " · Chương " + v.ch + ")",
+        { listenText:v.en });
+    } else if(dir === "en"){
+      mkQ("Dạng 2 · Chọn từ tiếng Anh đúng", "“" + v.vi + "” trong tiếng Anh là…?", v.en,
+        reviewDistractors(P.vocab, P.extra, "en", v.en, 3),
+        "“" + v.vi + "” = “" + v.en + "”. (Bài " + v.lessonN + " · Chương " + v.ch + ")",
+        { listenText:v.en });
+    } else {
+      mkQ("Dạng 3 · Nghe và chọn từ đúng", "Bấm nút nghe, rồi chọn từ bác vừa nghe được:", v.en,
+        reviewDistractors(P.vocab, P.extra, "en", v.en, 3),
+        "Từ vừa đọc là “" + v.en + "” — " + v.vi + ".",
+        { listen:v.en, listenText:v.en });
+    }
+    return true;
+  }
+  var vSpread = spreadPick(P.vocab, 10);
+  /* Dạng 1 · Chọn nghĩa đúng (Anh → Việt) × 3 */
+  vSpread.slice(0, 3).forEach(function(v){ addVocabQ(v, "vi"); });
+  /* Dạng 2 · Chọn từ tiếng Anh đúng (Việt → Anh) × 3 */
+  vSpread.slice(3, 6).forEach(function(v){ addVocabQ(v, "en"); });
+  /* Dạng 4 · Điền từ còn thiếu × 2 — đúng bộ sinh của kiểm tra tổng hợp */
+  var fillQs = buildFillQuestions(P.vocab, P.phrases, P.dlg).slice(0, 2);
+  var usedSent = {};
+  fillQs.forEach(function(q){ qs.push(q); if(q.listenText) usedSent[q.listenText] = 1; });
+  /* Dạng 3 · Nghe và chọn đúng × 2 (1 từ + 1 câu, tránh câu đã dùng ở phần điền) */
+  var lv = vSpread.slice(6, 7)[0] || vSpread[0];
+  if(lv) addVocabQ(lv, "listen");
+  var sentPool = P.phrases.concat(P.dlg).filter(function(s){ return !usedSent[s.en]; });
+  var sp = spreadPick(sentPool, 1)[0];
+  if(sp){
+    mkQ("Dạng 3 · Nghe và chọn câu đúng", "Bấm nút nghe, rồi chọn câu bác vừa nghe được:", sp.en,
+      reviewDistractors(sentPool, [], "en", sp.en, 3),
+      "Câu vừa đọc là “" + sp.en + "” — " + sp.vi + ".",
+      { listen:sp.en, listenText:sp.en });
+  }
+  /* Bù đủ 10 câu từ chính kho đã học nếu một dạng nào đó thiếu dữ
+     liệu (kho nhỏ): luân phiên hai chiều hỏi + nghe, không trùng
+     đúng câu đã ra (chốt usedQ trong addVocabQ). */
+  var pool2 = shuffle(P.vocab.slice());
+  var guard = 0;
+  while(qs.length < 10 && pool2.length && guard < 80){
+    guard++;
+    var v = pool2[guard % pool2.length];
+    if(addVocabQ(v, guard % 2 ? "vi" : "en")) continue;
+    if(addVocabQ(v, guard % 2 ? "en" : "vi")) continue;
+    addVocabQ(v, "listen");
+  }
+  if(qs.length > 10) qs = qs.slice(0, 10);
+  return shuffle(qs);
+}
+function openReview(){
+  reviewSession++;
+  var sess = reviewSession;
+  var P = reviewPools();
+  var intro = document.getElementById("reviewIntro");
+  var empty = document.getElementById("reviewEmpty");
+  var wrap = document.getElementById("reviewWrap");
+  var res = document.getElementById("reviewResult");
+  res.className = "quiz-result"; res.innerHTML = "";
+  wrap.innerHTML = "";
+  if(!P.lessons.length){
+    intro.textContent = "Phần này ra đề từ đúng những bài bác đã học xong: bác học xong bài nào thì câu hỏi của bài đó sẽ có mặt trong đề kiểm tra bài cũ.";
+    empty.style.display = "";
+    showView("viewReview");
+    return;
+  }
+  empty.style.display = "none";
+  intro.textContent = "Đề gồm 10 câu hỏi trộn từ " + P.lessons.length + " bài bác đã học xong — chỉ lấy đúng nội dung các bài đó, mỗi lần mở là một đề mới. Làm bài này không ảnh hưởng gì tới tiến độ học của bác.";
+  showView("viewReview");
+  runReviewQuiz(buildReviewQuestions(P), sess);
+}
+function runReviewQuiz(questions, sess){
+  var wrap = document.getElementById("reviewWrap");
+  var idx = 0, score = 0;
+  var head = gEl("p", "exam-progress"); wrap.appendChild(head);
+  var barWrap = gEl("div", "exam-bar");
+  var barFill = gEl("div", "exam-bar-fill"); barWrap.appendChild(barFill); wrap.appendChild(barWrap);
+  var box = gEl("div", ""); wrap.appendChild(box);
+  function updHead(){
+    head.textContent = "Câu " + Math.min(idx + 1, questions.length) + " / " + questions.length + " · Đã đúng: " + score;
+    barFill.style.transform = "scaleX(" + (idx / questions.length) + ")";
+  }
+  function autoNext(ok){
+    var myIdx = idx;
+    schedulePickAdvance(pickDelay(ok), function(){
+      if(sess !== reviewSession || idx !== myIdx) return;
+      if(!document.getElementById("viewReview").classList.contains("active")) return;
+      idx++; renderQ();
+    });
+  }
+  function renderChoiceQ(q){
+    var grid = gEl("div", "q-opts");
+    var wide = q.options.some(function(o){ return o.label.length > 24; });
+    if(wide || q.options.length <= 3) grid.classList.add("one-col");
+    var correctBtn = null;
+    q.options.forEach(function(o){
+      var b = gEl("button", "q-opt", o.label); b.type = "button";
+      if(o.ok) correctBtn = b;
+      b.addEventListener("click", function(){
+        grid.querySelectorAll(".q-opt").forEach(function(x){ x.disabled = true; });
+        if(correctBtn) correctBtn.classList.add("correct");
+        if(!o.ok) b.classList.add("wrong");
+        if(o.ok) score++;
+        updHead();
+        var note = gEl("p", "game-note", (o.ok ? "✓ Đúng rồi! " : "Chưa đúng. ") + q.explain);
+        box.appendChild(note);
+        autoNext(o.ok);
+        if(note.scrollIntoView) note.scrollIntoView({behavior:"smooth", block:"nearest"});
+      });
+      grid.appendChild(b);
+    });
+    box.appendChild(grid);
+  }
+  function renderQ(){
+    box.innerHTML = "";
+    if(idx >= questions.length){ finishReview(questions.length, score, sess); return; }
+    updHead();
+    var q = questions[idx];
+    box.appendChild(gEl("div", "q-tag", q.typeLabel));
+    if(q.context) box.appendChild(gEl("div", "exam-context", q.context));
+    box.appendChild(gEl("p", "game-q", q.prompt));
+    if(q.contextVi) box.appendChild(gEl("p", "exam-hint", q.contextVi));
+    if(q.listen){
+      var btns = gEl("div", "listen-btns");
+      btns.appendChild(speakBtn(q.listen, 1, "Nghe", false));
+      btns.appendChild(speakBtn(q.listen, 0.5, "Nghe chậm", true));
+      box.appendChild(btns);
+      setTimeout(function(){
+        if(sess === reviewSession && document.getElementById("viewReview").classList.contains("active")) speak(q.listen, 1);
+      }, 350);
+    }
+    renderChoiceQ(q);
+  }
+  renderQ();
+}
+function finishReview(total, score, sess){
+  if(sess !== reviewSession) return;
+  var wrap = document.getElementById("reviewWrap");
+  wrap.innerHTML = "";
+  var res = document.getElementById("reviewResult");
+  res.className = "quiz-result show"; res.innerHTML = "";
+  res.appendChild(gEl("div", "score", score + " / " + total + " câu đúng"));
+  var msg = gEl("p", "");
+  msg.style.fontWeight = "700"; msg.style.marginTop = "6px";
+  if(score >= 8){
+    msg.textContent = pickEnc("praise") + " Bác nhớ bài cũ rất chắc. Cứ ôn lại thế này thường xuyên là nhớ lâu lắm đấy.";
+    celebrate(true);
+  } else if(score >= 5){
+    msg.textContent = pickEnc("near") + " Bác đã nhớ được kha khá rồi. Làm thêm một đề mới nữa là chắc hơn nữa nhé.";
+  } else {
+    msg.textContent = pickEnc("gameFail") + " Bác cứ thong thả ôn lại từng bài đã học, rồi quay lại làm đề mới nhé.";
+  }
+  res.appendChild(msg);
+  var acts = gEl("div", "");
+  acts.style.cssText = "display:flex; gap:12px; flex-wrap:wrap; margin-top:16px";
+  var again = bigBtn("Làm lại đề mới", "btn-primary");
+  again.addEventListener("click", function(){ openReview(); });
+  acts.appendChild(again);
+  var home = bigBtn("Về trang chủ", "btn-soft");
+  home.addEventListener("click", function(){ showView("viewHome"); refreshProgress(); });
+  acts.appendChild(home);
+  res.appendChild(acts);
+  res.scrollIntoView({behavior:"smooth", block:"center"});
+}
+document.getElementById("reviewGoFirst").addEventListener("click", function(){
+  showView("viewHome"); refreshProgress();
+  setTimeout(function(){ var s = document.getElementById("lessonsSection"); if(s) s.scrollIntoView({behavior:"smooth", block:"start"}); }, 80);
+});
+
 /* Total quiz */
 document.getElementById("openTotalQuiz").addEventListener("click", function(){
   buildQuiz(TOTAL_QUIZ, document.getElementById("totalQuizWrap")); resetQuizUI("total"); showView("viewTotal");
@@ -10462,7 +10756,7 @@ function fitAll(){
     /* V35: tiêu đề bài học #lessonTitle căn giữa thật — cũng loại
        hẳn khỏi hệ fit (không justify, không co/tăng cỡ, không
        fit-left): dọn mọi dấu vết fit cũ rồi bỏ qua phần tử này. */
-    if(el.id === "lessonTitle"){
+    if(el.id === "lessonTitle" || el.id === "reviewTitle"){
       el.style.fontSize = ""; el.removeAttribute("data-fitf");
       el.removeAttribute("data-fitfb"); el.classList.remove("fit-left");
       return;
@@ -10512,7 +10806,7 @@ window.addEventListener("resize", scheduleFit);
 window.addEventListener("orientationchange", scheduleFit);
 if(window.MutationObserver){
   new MutationObserver(function(){ scheduleFit(); }).observe(document.documentElement, { attributes:true, attributeFilter:["data-font", "class"] });
-  ["chapterList", "cgWrap", "gameWrap"].forEach(function(id){
+  ["chapterList", "cgWrap", "gameWrap", "reviewWrap"].forEach(function(id){
     var n = document.getElementById(id);
     if(n) new MutationObserver(function(){ scheduleFit(); }).observe(n, { childList:true, subtree:true });
   });
@@ -10729,15 +11023,15 @@ try{
   }
 
   /* --- 7) THANH ĐIỀU HƯỚNG DƯỚI: nối vào các màn hình thật --- */
-  var bnHome = document.getElementById("bnHome"), bnLesson = document.getElementById("bnLesson"), bnPron = document.getElementById("bnPron");
+  var bnHome = document.getElementById("bnHome"), bnLesson = document.getElementById("bnLesson"), bnPron = document.getElementById("bnPron"), bnReview = document.getElementById("bnReview");
   function syncNav(){
-    var map = { viewHome: "bnHome", viewLesson: "bnLesson", viewGate: "bnLesson", viewTotal: "bnLesson", viewPron: "bnPron" };
+    var map = { viewHome: "bnHome", viewLesson: "bnLesson", viewGate: "bnLesson", viewTotal: "bnLesson", viewPron: "bnPron", viewReview: "bnReview" };
     var active = "bnHome";
     Object.keys(map).forEach(function(id){
       var v = document.getElementById(id);
       if(v && v.classList.contains("active")) active = map[id];
     });
-    ["bnHome", "bnLesson", "bnPron"].forEach(function(id){
+    ["bnHome", "bnLesson", "bnPron", "bnReview"].forEach(function(id){
       var b = document.getElementById(id);
       if(b) b.classList.toggle("on", id === active);
     });
@@ -10750,11 +11044,38 @@ try{
     else { var c = document.getElementById("ctaStart"); if(c) c.click(); }
   });
   if(bnPron) bnPron.addEventListener("click", function(){ openPron(); });
-  ["viewHome", "viewLesson", "viewGate", "viewTotal", "viewPron"].forEach(function(id){
+  if(bnReview) bnReview.addEventListener("click", function(){ openReview(); });
+  ["viewHome", "viewLesson", "viewGate", "viewTotal", "viewPron", "viewReview"].forEach(function(id){
     var v = document.getElementById(id);
     if(v && window.MutationObserver) new MutationObserver(syncNav).observe(v, { attributes: true, attributeFilter: ["class"] });
   });
   syncNav();
+
+  /* --- 8) THANH ĐẦU TRANG TỰ ẨN KHI CUỘN: cuộn XUỐNG quá ~80px
+     thì header trượt lên ẩn hẳn (lớp .nav-hidden — CSS lo phần
+     transform .25s); cuộn LÊN một đoạn là hiện lại ngay; ở gần
+     đầu trang (scrollY ≤ 10px) luôn hiện. Vùng chết 5px chống
+     giật, listener passive + rAF cho nhẹ. Menu hiển thị đang mở
+     thì giữ header lại để khỏi mất menu giữa chừng. Áp dụng ở
+     mọi màn hình; thanh dưới không đổi, luôn hiện. --- */
+  var siteHeader = document.querySelector("header.site");
+  if(siteHeader){
+    var lastHdrY = window.scrollY || 0, hdrTick = false;
+    var updHeader = function(){
+      hdrTick = false;
+      var y = window.scrollY || 0;
+      if(y <= 10){ siteHeader.classList.remove("nav-hidden"); lastHdrY = y; return; }
+      var dy = y - lastHdrY;
+      if(Math.abs(dy) < 5) return;
+      var menu = document.getElementById("displayMenu");
+      if(dy > 0 && y > 80 && !(menu && !menu.hidden)) siteHeader.classList.add("nav-hidden");
+      else if(dy < 0) siteHeader.classList.remove("nav-hidden");
+      lastHdrY = y;
+    };
+    window.addEventListener("scroll", function(){
+      if(!hdrTick){ hdrTick = true; requestAnimationFrame(updHeader); }
+    }, { passive: true });
+  }
   syncVotd();
   window.addEventListener("load", syncVotd);
   setTimeout(syncVotd, 800);
