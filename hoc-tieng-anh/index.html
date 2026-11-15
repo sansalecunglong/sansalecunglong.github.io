@@ -2827,10 +2827,10 @@ body{padding-bottom:calc(108px + env(safe-area-inset-bottom,0px))}
           <p>Tiến độ được lưu ngay trên máy này — tắt trang đi, mai mở lại vẫn còn nguyên.</p>
         </div>
         <div class="progress-top">
-          <div class="stat">\g<1><svg class="ic" aria-hidden="true"><use href="#ic-check-circle"></use></svg></span><div class="stat-txt"><b id="statPct">0%</b><span>Đã hoàn thành lộ trình</span></div></div>
-          <div class="stat">\g<1><svg class="ic" aria-hidden="true"><use href="#ic-book-open"></use></svg></span><div class="stat-txt"><b id="statWords">0 / 300</b><span>Từ vựng đã thuộc</span></div></div>
-          <div class="stat">\g<1><svg class="ic" aria-hidden="true"><use href="#ic-fire"></use></svg></span><div class="stat-txt"><b id="statStreak">0 ngày</b><span>Chuỗi ngày học liên tục</span></div></div>
-          <div class="stat">\g<1><svg class="ic" aria-hidden="true"><use href="#ic-graduation-cap"></use></svg></span><div class="stat-txt"><b id="statLessons">0 / 60</b><span>Bài đã hoàn thành</span></div></div>
+          <div class="stat"><span class="stat-ic ic-rose" aria-hidden="true"><svg class="ic" aria-hidden="true"><use href="#ic-check-circle"></use></svg></span><div class="stat-txt"><b id="statPct">0%</b><span>Đã hoàn thành lộ trình</span></div></div>
+          <div class="stat"><span class="stat-ic ic-blue" aria-hidden="true"><svg class="ic" aria-hidden="true"><use href="#ic-book-open"></use></svg></span><div class="stat-txt"><b id="statWords">0 / 300</b><span>Từ vựng đã thuộc</span></div></div>
+          <div class="stat"><span class="stat-ic ic-orange" aria-hidden="true"><svg class="ic" aria-hidden="true"><use href="#ic-fire"></use></svg></span><div class="stat-txt"><b id="statStreak">0 ngày</b><span>Chuỗi ngày học liên tục</span></div></div>
+          <div class="stat"><span class="stat-ic ic-green" aria-hidden="true"><svg class="ic" aria-hidden="true"><use href="#ic-graduation-cap"></use></svg></span><div class="stat-txt"><b id="statLessons">0 / 60</b><span>Bài đã hoàn thành</span></div></div>
         </div>
         <div class="bar" role="progressbar" aria-label="Phần trăm hoàn thành lộ trình" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="mainBar"><div class="bar-fill" id="mainBarFill"></div></div>
         <p class="bar-label" id="barLabel">Hãy bắt đầu với bài học đầu tiên nhé!</p>
@@ -3150,12 +3150,12 @@ body{padding-bottom:calc(108px + env(safe-area-inset-bottom,0px))}
     </div>
 
     <div class="tabs" role="tablist" aria-label="Các phần của bài học">
-      <button type="button" class="tab-btn" role="tab" \g<1><svg class="ic" aria-hidden="true"><use href="#ic-book-open"></use></svg>1 · Từ vựng</button>
-      <button type="button" class="tab-btn" role="tab" \g<1><svg class="ic" aria-hidden="true"><use href="#ic-cards"></use></svg>2 · Thẻ ghi nhớ</button>
-      <button type="button" class="tab-btn" role="tab" \g<1><svg class="ic" aria-hidden="true"><use href="#ic-translate"></use></svg>3 · Hội thoại</button>
-      <button type="button" class="tab-btn" role="tab" \g<1><svg class="ic" aria-hidden="true"><use href="#ic-headphones"></use></svg>4 · Luyện nghe</button>
-      <button type="button" class="tab-btn" role="tab" \g<1><svg class="ic" aria-hidden="true"><use href="#ic-microphone"></use></svg>5 · Luyện nói</button>
-      <button type="button" class="tab-btn" role="tab" \g<1><svg class="ic" aria-hidden="true"><use href="#ic-game-controller"></use></svg>6 · Trò chơi</button>
+      <button type="button" class="tab-btn" role="tab" data-tab="vocab" aria-selected="true"><svg class="ic" aria-hidden="true"><use href="#ic-book-open"></use></svg>1 · Từ vựng</button>
+      <button type="button" class="tab-btn" role="tab" data-tab="cards" aria-selected="false"><svg class="ic" aria-hidden="true"><use href="#ic-cards"></use></svg>2 · Thẻ ghi nhớ</button>
+      <button type="button" class="tab-btn" role="tab" data-tab="dialogue" aria-selected="false"><svg class="ic" aria-hidden="true"><use href="#ic-translate"></use></svg>3 · Hội thoại</button>
+      <button type="button" class="tab-btn" role="tab" data-tab="listen" aria-selected="false"><svg class="ic" aria-hidden="true"><use href="#ic-headphones"></use></svg>4 · Luyện nghe</button>
+      <button type="button" class="tab-btn" role="tab" data-tab="speak" aria-selected="false"><svg class="ic" aria-hidden="true"><use href="#ic-microphone"></use></svg>5 · Luyện nói</button>
+      <button type="button" class="tab-btn" role="tab" data-tab="quiz" aria-selected="false"><svg class="ic" aria-hidden="true"><use href="#ic-game-controller"></use></svg>6 · Trò chơi</button>
     </div>
 
     <section class="tab-panel active" id="panel-vocab" role="tabpanel" aria-label="Từ vựng">
@@ -4673,10 +4673,20 @@ function enterLesson(L, tab){
   document.getElementById("lessonGoal").textContent = L.n === 10 ? "Đây là bài kiểm tra cuối chương: 20 câu trộn đủ 6 dạng, lấy từ tất cả 9 bài của chương này. Đúng từ 16/20 câu là đạt — chương hoàn thành và Bài 1 của chương tiếp theo sẽ mở ra. Chưa đạt thì ôn lại rồi làm lại thoải mái, không giới hạn số lần." : L.goal;
   var quizHead = document.querySelector("#panel-quiz .sub-h");
   if(quizHead) quizHead.textContent = L.n === 10 ? ("Kiểm tra tổng hợp Chương " + L.ch + " — đạt là qua chương") : "Trò chơi cuối bài — chơi để hoàn thành bài";
+  /* Đổi nhãn tab chỉ thay nút chữ, giữ nguyên icon SVG ở đầu nút —
+     gán textContent như trước sẽ xóa mất icon ngay khi mở bài. */
+  function setTabLabel(btn, label){
+    if(!btn) return;
+    var nodes = btn.childNodes;
+    for(var i = nodes.length - 1; i >= 0; i--){
+      if(nodes[i].nodeType === 3){ nodes[i].textContent = label; return; }
+    }
+    btn.appendChild(document.createTextNode(label));
+  }
   var quizTab = document.querySelector('.tab-btn[data-tab="quiz"]');
-  if(quizTab) quizTab.textContent = L.n === 10 ? "5 · Kiểm tra tổng hợp" : "6 · Trò chơi";
+  setTabLabel(quizTab, L.n === 10 ? "5 · Kiểm tra tổng hợp" : "6 · Trò chơi");
   var speakTab = document.querySelector('.tab-btn[data-tab="speak"]');
-  if(speakTab) speakTab.textContent = L.n === 10 ? "4 · Luyện nói" : "5 · Luyện nói";
+  setTabLabel(speakTab, L.n === 10 ? "4 · Luyện nói" : "5 · Luyện nói");
   /* Bài 10 là màn hình kiểm tra tổng hợp riêng — không có phần Luyện nghe. */
   var listenTab = document.querySelector('.tab-btn[data-tab="listen"]');
   if(listenTab) listenTab.style.display = L.n === 10 ? "none" : "";
