@@ -2569,6 +2569,28 @@ html[data-font="xlarge"]{--fs-base:clamp(19px,5.9vw,24px)}
 @media (min-width:1400px){
   .pron-listen-grid{grid-template-columns:repeat(8,minmax(0,1fr))}
 }
+/* ============================================================
+   V35 — ĐẦU MÀN BÀI HỌC (chủ trang chốt theo ảnh chụp): dòng nhỏ
+   #lessonSub trùng lặp ngay dưới tiêu đề lớn ("Chương X | Bài Y
+   — <tên bài>") đã XÓA HẲN khỏi HTML và gỡ dòng JS ghi vào nó —
+   hộp "Mục tiêu:" dịch lên sát tiêu đề, không còn khoảng trống
+   thừa. Tiêu đề lớn #lessonTitle CĂN GIỮA THẬT ở mọi bề rộng và
+   THOÁT khỏi hệ giãn-đều/co-chữ V25–V28 (script fit bỏ qua hẳn
+   phần tử này như .lbl-center; luật dưới đây thắng cả justify
+   của .lesson-head h2 lẫn .fit-left). Cỡ chữ giảm nhẹ độ dốc vw
+   và text-wrap:balance giúp tên dài nhất trong dữ liệu (bài
+   "Kiểm tra tổng hợp", 45 ký tự) vẫn gọn trong tối đa 2 dòng —
+   cả hai dòng đều căn giữa, không tràn ngang, không cắt chữ ở
+   320–430px lẫn desktop. Đầu màn Phát Âm đã kiểm tra: dòng nhỏ
+   dưới tiêu đề ở đó mang thông tin KHÁC (44 âm IPA · không bắt
+   buộc), không trùng lặp nên GIỮ NGUYÊN, không đụng vào.
+   ============================================================ */
+#lessonTitle{
+  text-align:center !important;
+  text-wrap:balance;
+  font-size:clamp(22px,6.8vw,40px);
+}
+#lessonTitle.fit-left{ text-align:center !important; }
 </style>
 </head>
 <body>
@@ -3021,7 +3043,6 @@ html[data-font="xlarge"]{--fs-base:clamp(19px,5.9vw,24px)}
     <div class="lesson-head txt-card">
       <button type="button" class="btn btn-ghost btn-sm" id="backHome">← Quay lại trang chính</button>
       <h2 id="lessonTitle">Bài học</h2>
-      <p id="lessonSub" style="color:var(--muted); font-weight:600"></p>
       <div class="lesson-goal" id="lessonGoal"></div>
       <div id="gateBanner" class="lesson-goal" style="display:none; margin-top:10px">
         <span id="gateBannerText"></span>
@@ -4518,7 +4539,6 @@ function enterLesson(L, tab){
   resetVocabFlow(L.id);
   fcIndex = 0; fcFlipped = false;
   document.getElementById("lessonTitle").textContent = L.n === 10 ? ("Chương " + L.ch + " · Bài 10: Kiểm tra tổng hợp Chương " + L.ch) : ("Chương " + L.ch + " · Bài " + L.n + ": " + L.title);
-  document.getElementById("lessonSub").textContent = L.n === 10 ? ("Chương " + L.ch + " · Bài 10 — Kiểm tra tổng hợp cuối chương") : L.sub;
   document.getElementById("lessonGoal").textContent = L.n === 10 ? "Đây là bài kiểm tra cuối chương: 20 câu trộn đủ 6 dạng, lấy từ tất cả 9 bài của chương này. Đúng từ 16/20 câu là đạt — chương hoàn thành và Bài 1 của chương tiếp theo sẽ mở ra. Chưa đạt thì ôn lại rồi làm lại thoải mái, không giới hạn số lần." : L.goal;
   var quizHead = document.querySelector("#panel-quiz .sub-h");
   if(quizHead) quizHead.textContent = L.n === 10 ? ("Kiểm tra tổng hợp Chương " + L.ch + " — đạt là qua chương") : "Trò chơi cuối bài — chơi để hoàn thành bài";
@@ -10435,6 +10455,14 @@ function fitAll(){
     /* V29: nhãn mục ngắn .lbl-center căn giữa cố định — loại hẳn
        khỏi hệ fit: dọn mọi dấu vết fit cũ rồi bỏ qua phần tử này. */
     if(el.classList && el.classList.contains("lbl-center")){
+      el.style.fontSize = ""; el.removeAttribute("data-fitf");
+      el.removeAttribute("data-fitfb"); el.classList.remove("fit-left");
+      return;
+    }
+    /* V35: tiêu đề bài học #lessonTitle căn giữa thật — cũng loại
+       hẳn khỏi hệ fit (không justify, không co/tăng cỡ, không
+       fit-left): dọn mọi dấu vết fit cũ rồi bỏ qua phần tử này. */
+    if(el.id === "lessonTitle"){
       el.style.fontSize = ""; el.removeAttribute("data-fitf");
       el.removeAttribute("data-fitfb"); el.classList.remove("fit-left");
       return;
