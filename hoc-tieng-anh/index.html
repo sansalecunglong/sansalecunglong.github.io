@@ -2616,6 +2616,22 @@ header.site.nav-hidden{transform:translateY(-100%)}
 body{padding-bottom:calc(108px + env(safe-area-inset-bottom,0px))}
 #reviewTitle{ text-align:center !important; text-wrap:balance; }
 #reviewTitle.fit-left{ text-align:center !important; }
+
+/* ============================================================
+   V37 — MÀN KIỂM TRA BÀI CŨ GỌN LẠI (chủ trang chốt: bỏ các
+   đoạn giải thích loằng ngoằng, CHỈ ở màn này):
+   · Đoạn văn giới thiệu đề trong #reviewIntro đã XÓA: thay bằng
+     MỘT dòng số liệu ngắn "10 câu · N bài đã học" do openReview
+     ghi vào; trường hợp chưa học xong bài nào thì hộp này ẩn hẳn
+     (display:none) để không để lại khoảng trống.
+   · Màn trống rút còn đúng một câu ngắn + nút "Vào học bài đầu
+     tiên" (đoạn giải thích phụ .sub-p đã gỡ khỏi HTML, đệm thẻ
+     22px → 20px). Nhờ bỏ hai khối chữ đó (~260px chiều cao),
+     nút không còn bị thanh điều hướng dưới che lúc mới mở ở
+     390×844 lẫn 320×700 — bấm được ngay không cần cuộn.
+   · Cơ chế sinh đề, chấm điểm, màn kết quả (điểm + một câu
+     động viên + 2 nút) và phản hồi từng câu giữ nguyên.
+   ============================================================ */
 </style>
 </head>
 <body>
@@ -3382,10 +3398,9 @@ body{padding-bottom:calc(108px + env(safe-area-inset-bottom,0px))}
       <div class="lesson-goal" id="reviewIntro"></div>
     </div>
     <div id="reviewEmpty" style="display:none; margin-top:16px">
-      <div class="txt-card" style="padding:22px">
+      <div class="txt-card" style="padding:20px">
         <p style="font-weight:700">Bác chưa học xong bài nào nên chưa có bài cũ để kiểm tra.</p>
-        <p class="sub-p" style="margin-top:8px">Học xong bài đầu tiên là quay lại đây được ngay — trang sẽ tự ra một đề 10 câu lấy từ đúng những gì bác đã học, và mỗi lần mở là một đề khác nhau.</p>
-        <button type="button" class="btn btn-primary" id="reviewGoFirst" style="margin-top:16px">Vào học bài đầu tiên</button>
+        <button type="button" class="btn btn-primary" id="reviewGoFirst" style="margin-top:14px">Vào học bài đầu tiên</button>
       </div>
     </div>
     <div id="reviewWrap" style="margin-top:16px"></div>
@@ -9103,15 +9118,18 @@ function openReview(){
   res.className = "quiz-result"; res.innerHTML = "";
   wrap.innerHTML = "";
   if(!P.lessons.length){
-    intro.textContent = "Phần này ra đề từ đúng những bài bác đã học xong: bác học xong bài nào thì câu hỏi của bài đó sẽ có mặt trong đề kiểm tra bài cũ.";
+    intro.textContent = "";
+    intro.style.display = "none";
     empty.style.display = "";
     showView("viewReview");
     return;
   }
   empty.style.display = "none";
-  intro.textContent = "Đề gồm 10 câu hỏi trộn từ " + P.lessons.length + " bài bác đã học xong — chỉ lấy đúng nội dung các bài đó, mỗi lần mở là một đề mới. Làm bài này không ảnh hưởng gì tới tiến độ học của bác.";
+  var reviewQs = buildReviewQuestions(P);
+  intro.style.display = "";
+  intro.textContent = reviewQs.length + " câu · " + P.lessons.length + " bài đã học";
   showView("viewReview");
-  runReviewQuiz(buildReviewQuestions(P), sess);
+  runReviewQuiz(reviewQs, sess);
 }
 function runReviewQuiz(questions, sess){
   var wrap = document.getElementById("reviewWrap");
