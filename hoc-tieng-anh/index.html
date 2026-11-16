@@ -2659,6 +2659,25 @@ body{padding-bottom:calc(108px + env(safe-area-inset-bottom,0px))}
 .tab-btn{gap:6px}
 .fs-check .ic{width:16px;height:16px}
 .lr-status .ic,.badge-chip .ic{color:inherit}
+
+/* ============================================================
+   V43 BO HEADER CAI DAT TOAN MAN HINH
+   · Header/banner trên cùng đã gỡ hẳn khỏi DOM (mọi màn hình).
+   · Panel Menu cũ thành nội dung của màn Cài đặt toàn trang:
+     bỏ định vị thả xuống, trải full bề ngang thẻ như một bài học.
+   · Nút Góp ý ở đầu màn Cài đặt: full bề ngang, cao 60px.
+   ============================================================ */
+#viewSettings .display-menu{
+  display:block; position:static; width:100%; max-width:820px; margin:18px auto 0;
+  max-height:none; overflow:visible; padding:22px;
+}
+#viewSettings .feedback-btn.settings-feedback{
+  display:flex; width:100%; max-width:820px; margin:18px auto 0;
+  min-height:60px; align-items:center; justify-content:center; gap:10px;
+  font-size:max(18px,1em);
+}
+#settingsTitle{font-size:clamp(26px,7vw,36px); line-height:1.3; margin:12px 0 6px; text-align:center}
+@media (min-width:1024px){ #viewSettings .wrap{max-width:928px} }
 </style>
 </head>
 <body>
@@ -2699,62 +2718,7 @@ body{padding-bottom:calc(108px + env(safe-area-inset-bottom,0px))}
 <symbol id="ic-envelope-simple" viewBox="0 0 256 256" fill="currentColor"><path d="M224,56l-96,88L32,56Z" opacity="0.2"/><path d="M224,48H32a8,8,0,0,0-8,8V192a16,16,0,0,0,16,16H216a16,16,0,0,0,16-16V56A8,8,0,0,0,224,48ZM203.43,64,128,133.15,52.57,64ZM216,192H40V74.19l82.59,75.71a8,8,0,0,0,10.82,0L216,74.19V192Z"/></symbol>
 </defs></svg>
 
-<header class="site">
-  <div class="wrap header-in">
-    <a class="brand" href="#" id="brandHome" aria-label="Về trang chính">
-      <img class="brand-mark" src="data:image/jpeg;base64,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" alt="Ảnh của Long" width="52" height="52" decoding="async" />
-      <span class="brand-txt"><b>Tiếng Anh Cho Người Mới Bắt Đầu</b><span>Học chậm mà chắc — mỗi ngày 10 phút</span></span>
-    </a>
-    <button type="button" class="feedback-btn" id="feedbackOpenBtn" aria-label="Mở hòm thư góp ý">
-      <span class="feedback-btn-icon" aria-hidden="true"><svg class="ic" aria-hidden="true"><use href="#ic-chat-circle"></use></svg></span>
-      <span class="feedback-btn-label">Góp ý</span>
-    </button>
-    <div class="menu-wrap">
-      <button type="button" class="menu-toggle" id="menuToggle" aria-haspopup="true" aria-expanded="false" aria-controls="displayMenu" aria-label="Mở menu cài đặt hiển thị">
-        <span class="menu-symbol" id="menuSymbol" aria-hidden="true"><svg class="ic" aria-hidden="true"><use href="#ic-list"></use></svg></span>
-        <span class="menu-label">Menu</span>
-      </button>
-      <div class="display-menu" id="displayMenu" hidden role="group" aria-label="Cài đặt hiển thị">
-        <div class="dm-title">Cài đặt hiển thị</div>
-        <div class="dm-section">
-          <div class="dm-label" id="fsLabel">Cỡ chữ <span class="dm-current">— đang dùng: <b id="fsCurrentName">Thường</b></span></div>
-          <div class="fs-grid" role="group" aria-labelledby="fsLabel">
-            <button type="button" class="fs-opt" data-fs="small" aria-pressed="false"><span class="fs-opt-name">Nhỏ</span><span class="fs-check" aria-hidden="true"><svg class="ic" aria-hidden="true"><use href="#ic-check"></use></svg></span></button>
-            <button type="button" class="fs-opt" data-fs="normal" aria-pressed="true"><span class="fs-opt-name">Thường</span><span class="fs-check" aria-hidden="true"><svg class="ic" aria-hidden="true"><use href="#ic-check"></use></svg></span></button>
-            <button type="button" class="fs-opt" data-fs="large" aria-pressed="false"><span class="fs-opt-name">Lớn</span><span class="fs-check" aria-hidden="true"><svg class="ic" aria-hidden="true"><use href="#ic-check"></use></svg></span></button>
-            <button type="button" class="fs-opt" data-fs="xlarge" aria-pressed="false"><span class="fs-opt-name">Rất lớn</span><span class="fs-check" aria-hidden="true"><svg class="ic" aria-hidden="true"><use href="#ic-check"></use></svg></span></button>
-          </div>
-          <p class="fs-sample" id="fsSample" aria-hidden="true">Chữ mẫu Aa — Học tiếng Anh mỗi ngày</p>
-        </div>
-        <div class="dm-section">
-          <div class="dm-label" id="hcLabel">Tương phản cao</div>
-          <button type="button" class="hc-menu-btn" id="hcToggle" aria-pressed="false" aria-labelledby="hcLabel hcState">
-            <span>Tương phản cao</span>
-            <span class="hc-state" id="hcState">Đang tắt</span>
-          </button>
-          <p class="dm-note">Bật lên thì chữ đậm và rõ hơn, dễ đọc hơn khi mắt mỏi.</p>
-        </div>
-        <div class="dm-section">
-          <div class="dm-label">Đi nhanh tới</div>
-          <button type="button" class="dm-nav-btn" id="menuGotoPron"><span>Chương mở đầu · Phát âm (không bắt buộc)</span><span class="dm-arrow" aria-hidden="true">→</span></button>
-          <button type="button" class="dm-nav-btn" data-menu-goto="lessonsSection"><span>Lộ trình 6 chương · 60 bài</span><span class="dm-arrow" aria-hidden="true">→</span></button>
-          <button type="button" class="dm-nav-btn" data-menu-goto="roadmapSection"><span>Bản đồ lộ trình</span><span class="dm-arrow" aria-hidden="true">→</span></button>
-          <button type="button" class="dm-nav-btn" data-menu-goto="guideSection"><span>Cách học 3 bước</span><span class="dm-arrow" aria-hidden="true">→</span></button>
-        </div>
-        <div class="dm-section">
-          <div class="dm-label">Sao lưu &amp; khôi phục tiến độ</div>
-          <p class="dm-note">Tiến độ học đang lưu trên máy này. Nếu đổi điện thoại hoặc lỡ xóa dữ liệu web, hãy sao lưu trước để lấy lại tiến độ.</p>
-          <button type="button" class="dm-nav-btn" id="backupOpenBtn"><span>Sao lưu &amp; khôi phục tiến độ</span><span class="dm-arrow" aria-hidden="true">→</span></button>
-        </div>
-        <div class="dm-section">
-          <div class="dm-label">Hỗ trợ kỹ thuật</div>
-          <button type="button" class="dm-nav-btn" id="voiceDiagBtn"><span>Chẩn đoán giọng nói</span><span class="dm-arrow" aria-hidden="true">→</span></button>
-          <p class="dm-note">Xem nhật ký các lần bấm mic gần nhất. Nếu mic bị lỗi, chép nhật ký ở đây gửi lại để được sửa đúng chỗ.</p>
-        </div>
-      </div>
-    </div>
-  </div>
-</header>
+
 
 <main>
 <div class="wrap">
@@ -2853,7 +2817,7 @@ body{padding-bottom:calc(108px + env(safe-area-inset-bottom,0px))}
     <div class="wrap">
       <div class="sec-head">
         <h2 id="guideTitle">Bắt đầu chỉ với 3 bước rất đơn giản</h2>
-        <p>Trang này được thiết kế riêng cho người lớn tuổi: chữ to, ít nút, không có gì rối rắm. Cứ làm theo 3 bước dưới đây. Muốn chữ to hơn nữa, bấm nút 3 gạch (Menu) ở góc trên bên phải rồi chọn Cỡ chữ.</p>
+        <p>Trang này được thiết kế riêng cho người lớn tuổi: chữ to, ít nút, không có gì rối rắm. Cứ làm theo 3 bước dưới đây. Muốn chữ to hơn nữa, bấm nút ⚙ Cài đặt ở thanh dưới cùng rồi chọn Cỡ chữ.</p>
       </div>
       <div class="steps">
         <div class="step-card">
@@ -3470,6 +3434,63 @@ body{padding-bottom:calc(108px + env(safe-area-inset-bottom,0px))}
     <div class="quiz-result" id="reviewResult" role="status"></div>
   </div>
 </div>
+
+<!-- ================= SETTINGS VIEW ================= -->
+<!-- V43 BO HEADER CAI DAT TOAN MAN HINH: màn Cài đặt riêng toàn trang.
+     Góp ý ở ngay đầu màn; toàn bộ panel Menu cũ (cùng phần tử, cùng
+     handler, cùng khóa localStorage) chuyển nguyên vào đây. -->
+<div class="view" id="viewSettings">
+  <div class="wrap">
+    <div class="lesson-head txt-card">
+      <button type="button" class="btn btn-ghost btn-sm" id="settingsBack"><svg class="ic" aria-hidden="true"><use href="#ic-arrow-left"></use></svg> Quay lại</button>
+      <h2 id="settingsTitle">Cài đặt</h2>
+      <p style="color:var(--muted); font-weight:600">Chữ to nhỏ, tương phản, sao lưu tiến độ và góp ý — tất cả ở ngay đây.</p>
+    </div>
+    <button type="button" class="feedback-btn settings-feedback" id="feedbackOpenBtn" aria-label="Mở hòm thư góp ý">
+      <span class="feedback-btn-icon" aria-hidden="true"><svg class="ic" aria-hidden="true"><use href="#ic-chat-circle"></use></svg></span>
+      <span class="feedback-btn-label">Góp ý</span>
+    </button>
+    <div class="display-menu" id="displayMenu" role="group" aria-label="Cài đặt hiển thị">
+        <div class="dm-title">Cài đặt hiển thị</div>
+        <div class="dm-section">
+          <div class="dm-label" id="fsLabel">Cỡ chữ <span class="dm-current">— đang dùng: <b id="fsCurrentName">Thường</b></span></div>
+          <div class="fs-grid" role="group" aria-labelledby="fsLabel">
+            <button type="button" class="fs-opt" data-fs="small" aria-pressed="false"><span class="fs-opt-name">Nhỏ</span><span class="fs-check" aria-hidden="true"><svg class="ic" aria-hidden="true"><use href="#ic-check"></use></svg></span></button>
+            <button type="button" class="fs-opt" data-fs="normal" aria-pressed="true"><span class="fs-opt-name">Thường</span><span class="fs-check" aria-hidden="true"><svg class="ic" aria-hidden="true"><use href="#ic-check"></use></svg></span></button>
+            <button type="button" class="fs-opt" data-fs="large" aria-pressed="false"><span class="fs-opt-name">Lớn</span><span class="fs-check" aria-hidden="true"><svg class="ic" aria-hidden="true"><use href="#ic-check"></use></svg></span></button>
+            <button type="button" class="fs-opt" data-fs="xlarge" aria-pressed="false"><span class="fs-opt-name">Rất lớn</span><span class="fs-check" aria-hidden="true"><svg class="ic" aria-hidden="true"><use href="#ic-check"></use></svg></span></button>
+          </div>
+          <p class="fs-sample" id="fsSample" aria-hidden="true">Chữ mẫu Aa — Học tiếng Anh mỗi ngày</p>
+        </div>
+        <div class="dm-section">
+          <div class="dm-label" id="hcLabel">Tương phản cao</div>
+          <button type="button" class="hc-menu-btn" id="hcToggle" aria-pressed="false" aria-labelledby="hcLabel hcState">
+            <span>Tương phản cao</span>
+            <span class="hc-state" id="hcState">Đang tắt</span>
+          </button>
+          <p class="dm-note">Bật lên thì chữ đậm và rõ hơn, dễ đọc hơn khi mắt mỏi.</p>
+        </div>
+        <div class="dm-section">
+          <div class="dm-label">Đi nhanh tới</div>
+          <button type="button" class="dm-nav-btn" id="menuGotoPron"><span>Chương mở đầu · Phát âm (không bắt buộc)</span><span class="dm-arrow" aria-hidden="true">→</span></button>
+          <button type="button" class="dm-nav-btn" data-menu-goto="lessonsSection"><span>Lộ trình 6 chương · 60 bài</span><span class="dm-arrow" aria-hidden="true">→</span></button>
+          <button type="button" class="dm-nav-btn" data-menu-goto="roadmapSection"><span>Bản đồ lộ trình</span><span class="dm-arrow" aria-hidden="true">→</span></button>
+          <button type="button" class="dm-nav-btn" data-menu-goto="guideSection"><span>Cách học 3 bước</span><span class="dm-arrow" aria-hidden="true">→</span></button>
+        </div>
+        <div class="dm-section">
+          <div class="dm-label">Sao lưu &amp; khôi phục tiến độ</div>
+          <p class="dm-note">Tiến độ học đang lưu trên máy này. Nếu đổi điện thoại hoặc lỡ xóa dữ liệu web, hãy sao lưu trước để lấy lại tiến độ.</p>
+          <button type="button" class="dm-nav-btn" id="backupOpenBtn"><span>Sao lưu &amp; khôi phục tiến độ</span><span class="dm-arrow" aria-hidden="true">→</span></button>
+        </div>
+        <div class="dm-section">
+          <div class="dm-label">Hỗ trợ kỹ thuật</div>
+          <button type="button" class="dm-nav-btn" id="voiceDiagBtn"><span>Chẩn đoán giọng nói</span><span class="dm-arrow" aria-hidden="true">→</span></button>
+          <p class="dm-note">Xem nhật ký các lần bấm mic gần nhất. Nếu mic bị lỗi, chép nhật ký ở đây gửi lại để được sửa đúng chỗ.</p>
+        </div>
+      </div>
+
+  </div>
+</div>
 </main>
 
 <nav class="bottom-nav" id="bottomNav" aria-label="Điều hướng chính">
@@ -3490,8 +3511,8 @@ body{padding-bottom:calc(108px + env(safe-area-inset-bottom,0px))}
       <svg class="ic" aria-hidden="true"><use href="#ic-clipboard-text"></use></svg>
       <span>Kiểm tra bài cũ</span>
     </button>
-    <!-- V42 NUT CAI DAT: mở đúng panel Menu của header (dùng chung một panel/hàm), để đang trong bài học — header đang ẩn hẳn — vẫn mở được cài đặt từ thanh dưới -->
-    <button type="button" class="bn-btn" id="bnSettings" aria-label="Mở cài đặt hiển thị">
+    <!-- V43 BO HEADER CAI DAT TOAN MAN HINH: mục Cài đặt ở thanh dưới mở màn Cài đặt riêng toàn trang -->
+    <button type="button" class="bn-btn" id="bnSettings" aria-label="Mở màn cài đặt">
       <svg class="ic" aria-hidden="true"><use href="#ic-gear"></use></svg>
       <span>Cài đặt</span>
     </button>
@@ -3501,7 +3522,7 @@ body{padding-bottom:calc(108px + env(safe-area-inset-bottom,0px))}
 <footer class="site">
   <div class="wrap">
     <p><b>Tiếng Anh Cho Người Mới</b> — Học chậm mà chắc. Mỗi ngày 10 phút, sau 60 bài nhỏ bác đã có thể giao tiếp những việc thường ngày.</p>
-    <p style="margin-top:6px">Mẹo: Muốn chữ to hơn, bấm nút 3 gạch (Menu) ở góc trên bên phải rồi chọn Cỡ chữ. Cũng trong menu đó, bác bật “Tương phản cao” nếu thấy chữ chưa đủ rõ.</p>
+    <p style="margin-top:6px">Mẹo: Muốn chữ to hơn, bấm nút ⚙ Cài đặt ở thanh dưới cùng rồi chọn Cỡ chữ. Cũng trong màn Cài đặt đó, bác bật “Tương phản cao” nếu thấy chữ chưa đủ rõ.</p>
     <!-- Hình minh họa từ vựng Chương 1–6: ảnh từ Openverse / Wikimedia Commons; hình tượng hình ARASAAC (Sergio Palao — Gobierno de Aragón, giấy phép CC BY-NC-SA) và Mulberry Symbols (CC BY-SA 4.0); một vài hình vẽ bằng AI. -->
   </div>
 </footer>
@@ -4653,20 +4674,10 @@ function showView(id){
   MicSessions.cancelCurrent(); stopGameTimer();
   if(typeof stopChGame === "function") stopChGame();
   if(typeof closeFsPanel === "function") closeFsPanel(false);
-  ["viewHome","viewLesson","viewTotal","viewGate","viewPron","viewChGame","viewReview"].forEach(function(v){
+  ["viewHome","viewLesson","viewTotal","viewGate","viewPron","viewChGame","viewReview","viewSettings"].forEach(function(v){
     document.getElementById(v).classList.toggle("active", v===id);
   });
-  /* V42 AN HEADER TRONG BAI HOC: vào một màn học (bài học / Phát âm /
-     Kiểm tra bài cũ) thì khóa ẩn header NGAY (gắn .nav-hidden — cùng
-     trạng thái ẩn sẵn có, header vẫn chiếm chỗ trong luồng nên nội
-     dung không giật); về trang chủ thì gỡ khóa, header hiện ở đầu
-     trang và trở lại cơ chế tự ẩn/hiện theo cuộn như cũ. Listener
-     cuộn ở khối V42 dưới cuối trang giữ khóa này trong suốt màn học. */
-  var v42Hdr = document.querySelector("header.site");
-  if(v42Hdr){
-    if(id === "viewLesson" || id === "viewPron" || id === "viewReview") v42Hdr.classList.add("nav-hidden");
-    else if(id === "viewHome") v42Hdr.classList.remove("nav-hidden");
-  }
+  /* V43 BO HEADER CAI DAT TOAN MAN HINH: không còn header để ẩn/hiện nữa. */
   window.scrollTo({top:0, behavior:"smooth"});
   if(typeof scheduleFit === "function") scheduleFit();
 }
@@ -9433,7 +9444,7 @@ document.getElementById("totalDone").addEventListener("click", function(){ showV
 /* ================= NAV & CONTROLS ================= */
 document.getElementById("backHome").addEventListener("click", function(){ showView("viewHome"); refreshProgress(); });
 document.querySelectorAll("[data-backhome]").forEach(function(b){ b.addEventListener("click", function(){ showView("viewHome"); refreshProgress(); }); });
-document.getElementById("brandHome").addEventListener("click", function(e){ e.preventDefault(); showView("viewHome"); });
+/* V43: nút logo/brandHome đã gỡ cùng header. */
 document.getElementById("ctaStart").addEventListener("click", function(){
   var next = LESSONS.filter(function(L){ return !state.completed[L.id]; })[0] || LESSONS[0];
   openLesson(next.id);
@@ -9453,29 +9464,41 @@ document.getElementById("wotdLearnBtn").addEventListener("click", function(){
    Chọn cỡ chữ hoặc bật/tắt tương phản xong menu TỰ ĐÓNG,
    mở lại vẫn thấy đúng mức đang dùng (✓ + nhãn “đang dùng”). */
 var FS_NAMES = { small:"Nhỏ", normal:"Thường", large:"Lớn", xlarge:"Rất lớn" };
-var menuToggle = document.getElementById("menuToggle");
+/* V43 BO HEADER CAI DAT TOAN MAN HINH: không còn header, không còn
+   nút Menu, không còn panel thả xuống. Panel cũ nay là nội dung của
+   màn Cài đặt toàn trang (#viewSettings). Các tên hàm cũ giữ lại để
+   mọi lời gọi rải rác trong trang (showView, mở Sao lưu / Chẩn đoán /
+   Góp ý...) không lỗi: menuOpen() = đang ở màn Cài đặt;
+   openDisplayMenu() = mở màn Cài đặt; closeDisplayMenu() = no-op. */
+var menuToggle = null;
 var displayMenu = document.getElementById("displayMenu");
-var menuSymbol = document.getElementById("menuSymbol");
-function menuOpen(){ return displayMenu && !displayMenu.hidden; }
-function openDisplayMenu(){
-  if(!displayMenu) return;
-  displayMenu.hidden = false;
-  menuToggle.setAttribute("aria-expanded", "true");
-  menuToggle.setAttribute("aria-label", "Đóng menu cài đặt hiển thị");
-  if(menuSymbol) menuSymbol.innerHTML = X_IC;
-  var first = displayMenu.querySelector("[data-fs]");
-  if(first) first.focus();
-}
-function closeDisplayMenu(refocus){
-  if(!displayMenu || displayMenu.hidden) return;
-  displayMenu.hidden = true;
-  menuToggle.setAttribute("aria-expanded", "false");
-  menuToggle.setAttribute("aria-label", "Mở menu cài đặt hiển thị");
-  if(menuSymbol) menuSymbol.innerHTML = LIST_IC;
-  if(refocus) menuToggle.focus();
-}
+var menuSymbol = null;
+function menuOpen(){ var v = document.getElementById("viewSettings"); return !!(v && v.classList.contains("active")); }
+function openDisplayMenu(){ openSettingsView(); }
+function closeDisplayMenu(refocus){ /* V43: không còn panel thả xuống để đóng */ }
 /* Tên cũ giữ lại làm alias: showView() và các chỗ khác vẫn gọi closeFsPanel */
 function closeFsPanel(refocus){ closeDisplayMenu(refocus); }
+/* Màn Cài đặt toàn trang: nhớ màn trước để nút "Quay lại" trở về
+   đúng chỗ cũ (các view chỉ ẩn/hiện nên trạng thái học giữ nguyên). */
+var settingsPrevView = "viewHome";
+function activeViewId(){
+  var vs = document.querySelectorAll(".view.active");
+  for(var i = 0; i < vs.length; i++){ if(vs[i].id) return vs[i].id; }
+  return "viewHome";
+}
+function openSettingsView(){
+  var cur = activeViewId();
+  if(cur !== "viewSettings") settingsPrevView = cur;
+  showView("viewSettings");
+}
+function settingsGoBack(){
+  var target = settingsPrevView || "viewHome";
+  if(target === "viewSettings") target = "viewHome";
+  showView(target);
+  if(target === "viewHome" && typeof refreshProgress === "function") refreshProgress();
+}
+var settingsBackBtn = document.getElementById("settingsBack");
+if(settingsBackBtn) settingsBackBtn.addEventListener("click", settingsGoBack);
 function applyFontSize(level){
   document.documentElement.setAttribute("data-font", level);
   document.querySelectorAll("[data-fs]").forEach(function(b){ b.setAttribute("aria-pressed", b.getAttribute("data-fs")===level ? "true":"false"); });
@@ -9483,15 +9506,10 @@ function applyFontSize(level){
   if(nm) nm.textContent = FS_NAMES[level] || level;
   try{ localStorage.setItem("tieng-anh-font", level); }catch(e){}
 }
-if(menuToggle){
-  menuToggle.addEventListener("click", function(){
-    if(menuOpen()) closeDisplayMenu(false); else openDisplayMenu();
-  });
-}
+/* V43: nút Menu trên header đã gỡ cùng header. */
 document.querySelectorAll("[data-fs]").forEach(function(b){
   b.addEventListener("click", function(){
-    applyFontSize(b.getAttribute("data-fs"));
-    closeDisplayMenu(true); /* chọn xong là menu tự đóng, focus về nút 3 gạch */
+    applyFontSize(b.getAttribute("data-fs")); /* V43: đang ở màn Cài đặt toàn trang — chọn xong ở lại màn, chữ đổi ngay */
   });
 });
 /* Lối tắt trong menu: đóng menu, về trang chính (nếu đang ở bài học) rồi cuộn tới mục */
@@ -9504,15 +9522,11 @@ document.querySelectorAll("[data-menu-goto]").forEach(function(b){
     var home = document.getElementById("viewHome");
     if(home && !home.classList.contains("active")) showView("viewHome");
     setTimeout(function(){ el.scrollIntoView({behavior:"smooth", block:"start"}); }, 60);
-    if(menuToggle) menuToggle.focus();
+    /* V43: không còn nút Menu để trả focus */
   });
 });
 /* Đóng menu khi bấm ra ngoài */
-document.addEventListener("pointerdown", function(e){
-  if(!menuOpen()) return;
-  var wrap = menuToggle.closest(".menu-wrap");
-  if(wrap && !wrap.contains(e.target)) closeDisplayMenu(false);
-});
+/* V43: không còn panel thả xuống nên không cần đóng-khi-bấm-ra-ngoài. */
 /* Đóng menu khi bấm Esc */
 document.addEventListener("keydown", function(e){
   if((e.key === "Escape" || e.key === "Esc") && menuOpen()) closeDisplayMenu(true);
@@ -9537,7 +9551,7 @@ document.getElementById("hcToggle").addEventListener("click", function(){
   var on = !document.documentElement.classList.contains("hc");
   applyContrast(on);
   toast(on ? "Đã bật tương phản cao — chữ sẽ rõ và đậm hơn." : "Đã tắt tương phản cao.");
-  closeDisplayMenu(true); /* bấm xong menu cũng tự đóng, focus về nút 3 gạch */
+  /* V43: ở lại màn Cài đặt để bác thấy chữ đổi ngay */
 });
 (function restorePrefs(){
   try{
@@ -11220,13 +11234,13 @@ try{
   /* --- 7) THANH ĐIỀU HƯỚNG DƯỚI: nối vào các màn hình thật --- */
   var bnHome = document.getElementById("bnHome"), bnLesson = document.getElementById("bnLesson"), bnPron = document.getElementById("bnPron"), bnReview = document.getElementById("bnReview");
   function syncNav(){
-    var map = { viewHome: "bnHome", viewLesson: "bnLesson", viewGate: "bnLesson", viewTotal: "bnLesson", viewPron: "bnPron", viewReview: "bnReview" };
+    var map = { viewHome: "bnHome", viewLesson: "bnLesson", viewGate: "bnLesson", viewTotal: "bnLesson", viewPron: "bnPron", viewReview: "bnReview", viewSettings: "bnSettings" };
     var active = "bnHome";
     Object.keys(map).forEach(function(id){
       var v = document.getElementById(id);
       if(v && v.classList.contains("active")) active = map[id];
     });
-    ["bnHome", "bnLesson", "bnPron", "bnReview"].forEach(function(id){
+    ["bnHome", "bnLesson", "bnPron", "bnReview", "bnSettings"].forEach(function(id){
       var b = document.getElementById(id);
       if(b) b.classList.toggle("on", id === active);
     });
@@ -11250,74 +11264,23 @@ try{
      của document đã tự đóng panel trước khi click tới nút này, nên
      phải nhớ trạng thái panel lúc pointerdown để lần bấm đó chỉ đóng
      chứ không mở lại ngay. */
+  /* V43 BO HEADER CAI DAT TOAN MAN HINH: mục "Cài đặt" ở thanh dưới
+     mở màn Cài đặt RIÊNG toàn trang (như mở một bài học) và tham gia
+     trạng thái active của thanh dưới như 4 mục còn lại. */
   var bnSettings = document.getElementById("bnSettings");
   if(bnSettings){
-    var bnSetWasOpen = false;
-    bnSettings.addEventListener("pointerdown", function(){ bnSetWasOpen = (typeof menuOpen === "function") && menuOpen(); });
     bnSettings.addEventListener("click", function(){
-      if(typeof openDisplayMenu !== "function" || typeof menuOpen !== "function") return;
-      if(bnSetWasOpen){ bnSetWasOpen = false; return; }
-      if(!menuOpen()) openDisplayMenu();
+      if(menuOpen()){ window.scrollTo({ top: 0, behavior: "smooth" }); return; }
+      openSettingsView();
     });
   }
-  ["viewHome", "viewLesson", "viewGate", "viewTotal", "viewPron", "viewReview"].forEach(function(id){
+  ["viewHome", "viewLesson", "viewGate", "viewTotal", "viewPron", "viewReview", "viewSettings"].forEach(function(id){
     var v = document.getElementById(id);
     if(v && window.MutationObserver) new MutationObserver(syncNav).observe(v, { attributes: true, attributeFilter: ["class"] });
   });
   syncNav();
 
-  /* --- 8) THANH ĐẦU TRANG TỰ ẨN KHI CUỘN: cuộn XUỐNG quá ~80px
-     thì header trượt lên ẩn hẳn (lớp .nav-hidden — CSS lo phần
-     transform .25s); cuộn LÊN một đoạn là hiện lại ngay; ở gần
-     đầu trang (scrollY ≤ 10px) luôn hiện. Vùng chết 5px chống
-     giật, listener passive + rAF cho nhẹ. Menu hiển thị đang mở
-     thì giữ header lại để khỏi mất menu giữa chừng. Áp dụng ở
-     mọi màn hình; thanh dưới không đổi, luôn hiện. --- */
-  var siteHeader = document.querySelector("header.site");
-  if(siteHeader){
-    var lastHdrY = window.scrollY || 0, hdrTick = false;
-    /* V42 AN HEADER TRONG BAI HOC: đang ở một màn học (bài học /
-       Phát âm / Kiểm tra bài cũ) thì header bị KHÓA ẨN 100% —
-       listener cuộn KHÔNG được gỡ .nav-hidden trong mọi trường hợp
-       (cuộn lên, cuộn xuống, bấm Nghe/Đọc lại, trang tự cuộn theo
-       luồng học). Ngoại lệ duy nhất: panel Cài đặt đang mở thì
-       header hiện để dùng panel (đúng như cơ chế cũ “menu mở thì
-       giữ header”); đóng panel là khóa ẩn lại ngay (MutationObserver
-       theo dõi thuộc tính hidden của panel). Rời màn học về trang
-       chủ, cơ chế tự ẩn/hiện theo cuộn cũ chạy lại nguyên vẹn. */
-    var v42LearnIds = ["viewLesson", "viewPron", "viewReview"];
-    var v42InLearn = function(){
-      for(var i = 0; i < v42LearnIds.length; i++){
-        var v = document.getElementById(v42LearnIds[i]);
-        if(v && v.classList.contains("active")) return true;
-      }
-      return false;
-    };
-    var v42SyncHdr = function(){
-      if(!v42InLearn()) return;
-      var menu = document.getElementById("displayMenu");
-      if(menu && !menu.hidden) siteHeader.classList.remove("nav-hidden");
-      else siteHeader.classList.add("nav-hidden");
-    };
-    var updHeader = function(){
-      hdrTick = false;
-      var y = window.scrollY || 0;
-      if(v42InLearn()){ v42SyncHdr(); lastHdrY = y; return; }
-      if(y <= 10){ siteHeader.classList.remove("nav-hidden"); lastHdrY = y; return; }
-      var dy = y - lastHdrY;
-      if(Math.abs(dy) < 5) return;
-      var menu = document.getElementById("displayMenu");
-      if(dy > 0 && y > 80 && !(menu && !menu.hidden)) siteHeader.classList.add("nav-hidden");
-      else if(dy < 0) siteHeader.classList.remove("nav-hidden");
-      lastHdrY = y;
-    };
-    window.addEventListener("scroll", function(){
-      if(!hdrTick){ hdrTick = true; requestAnimationFrame(updHeader); }
-    }, { passive: true });
-    var v42MenuEl = document.getElementById("displayMenu");
-    if(v42MenuEl && window.MutationObserver) new MutationObserver(v42SyncHdr).observe(v42MenuEl, { attributes: true, attributeFilter: ["hidden"] });
-    v42SyncHdr();
-  }
+  /* V43: đã gỡ hẳn header nên không còn logic tự ẩn/hiện theo cuộn. */
   syncVotd();
   window.addEventListener("load", syncVotd);
   setTimeout(syncVotd, 800);
