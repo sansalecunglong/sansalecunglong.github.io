@@ -2695,19 +2695,28 @@ body{padding-bottom:calc(108px + env(safe-area-inset-bottom,0px))}
    gọn lại (đệm 8px trên/dưới, nút 56px → tổng 72px) và đệm
    dưới của trang khớp đúng chiều cao thanh mới + 12px thở.
    ============================================================ */
+/* ============================================================
+   V45 THANH DUOI THAP — hạ thấp thanh điều hướng dưới (chủ
+   trang chê cao quá): nút 56px → 48px, icon 30px → 27px,
+   đệm dọc thanh 8px → 5px (tổng thanh ≈ 58px + safe-area);
+   đệm dưới của trang và mốc neo của toast dời từ 84px về
+   70px + safe-area cho khớp chiều cao thanh mới + ~12px thở.
+   Màu Bộ 3 Trái cây, nền pill active, thứ tự và trạng thái
+   active giữ nguyên như V44.
+   ============================================================ */
 #bnHome{--bn:#DC2626}
 #bnLesson{--bn:#65A30D}
 #bnPron{--bn:#7C3AED}
 #bnReview{--bn:#F97316}
 #bnSettings{--bn:#0891B2}
-.bottom-nav{padding:8px 12px calc(8px + env(safe-area-inset-bottom,0px))}
+.bottom-nav{padding:5px 12px calc(5px + env(safe-area-inset-bottom,0px))}
 .bottom-nav .bn-btn{
-  min-height:56px; min-width:0; border-radius:var(--r-pill);
+  min-height:48px; min-width:0; border-radius:var(--r-pill);
   flex-direction:row; gap:0; background:transparent; box-shadow:none;
   color:var(--bn, var(--muted));
 }
 .bottom-nav .bn-btn .ic{
-  width:30px; height:30px; color:var(--bn, var(--muted)); opacity:.7;
+  width:27px; height:27px; color:var(--bn, var(--muted)); opacity:.7;
   transition:opacity .18s ease;
 }
 .bottom-nav .bn-btn.on{
@@ -2715,8 +2724,8 @@ body{padding-bottom:calc(108px + env(safe-area-inset-bottom,0px))}
   color:var(--bn); box-shadow:none;
 }
 .bottom-nav .bn-btn.on .ic{opacity:1}
-body{padding-bottom:calc(84px + env(safe-area-inset-bottom,0px))}
-.toast{bottom:calc(84px + env(safe-area-inset-bottom,0px))}
+body{padding-bottom:calc(70px + env(safe-area-inset-bottom,0px))}
+.toast{bottom:calc(70px + env(safe-area-inset-bottom,0px))}
 </style>
 </head>
 <body>
