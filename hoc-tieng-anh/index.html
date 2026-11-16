@@ -3488,7 +3488,7 @@ body{padding-bottom:calc(108px + env(safe-area-inset-bottom,0px))}
   <div class="wrap">
     <p><b>Tiếng Anh Cho Người Mới</b> — Học chậm mà chắc. Mỗi ngày 10 phút, sau 60 bài nhỏ bác đã có thể giao tiếp những việc thường ngày.</p>
     <p style="margin-top:6px">Mẹo: Muốn chữ to hơn, bấm nút 3 gạch (Menu) ở góc trên bên phải rồi chọn Cỡ chữ. Cũng trong menu đó, bác bật “Tương phản cao” nếu thấy chữ chưa đủ rõ.</p>
-    <!-- Hình minh họa từ vựng Chương 1: ảnh từ Openverse / Wikimedia Commons; hình tượng hình ARASAAC (Sergio Palao — Gobierno de Aragón, giấy phép CC BY-NC-SA) và Mulberry Symbols (CC BY-SA 4.0); một vài hình vẽ bằng AI. -->
+    <!-- Hình minh họa từ vựng Chương 1–6: ảnh từ Openverse / Wikimedia Commons; hình tượng hình ARASAAC (Sergio Palao — Gobierno de Aragón, giấy phép CC BY-NC-SA) và Mulberry Symbols (CC BY-SA 4.0); một vài hình vẽ bằng AI. -->
   </div>
 </footer>
 
@@ -4922,11 +4922,84 @@ var CH1_VOCAB_IMG = {
   "sunny": "sunny",
   "a good day": "a-good-day"
 };
+/* V41 ANH TU VUNG CH2-6: bản đồ hình theo từng chương cho Chương 2–6.
+   Khóa tra cứu = chuỗi tiếng Anh CHÍNH XÁC như trong dữ liệu từ vựng
+   của trang (giữ nguyên hoa/thường và dấu câu cuối như “?” “!”);
+   giá trị = tên file trong assets/img/ch<N>/ (cùng quy ước URL của
+   Chương 1). Chương 4: “Where” và “Where is” dùng CHUNG where.webp.
+   Chương 1 giữ nguyên tuyệt đối CH1_VOCAB_IMG và cách tra cũ. */
+var VOCAB_IMG_BY_CH = {
+  2: {
+    "Mother": "mother.webp", "Father": "father.webp", "Parents": "parents.webp", "Mom": "mom.webp", "Dad": "dad.webp",
+    "Brother": "brother.webp", "Sister": "sister.webp", "Older sister": "older-sister.webp", "Only child": "only-child.webp", "Together": "together.webp",
+    "Son": "son.webp", "Daughter": "daughter.webp", "Children": "children.webp", "Baby": "baby.webp", "Kid": "kid.webp",
+    "Grandmother": "grandmother.webp", "Grandfather": "grandfather.webp", "Grandchildren": "grandchildren.webp", "Uncle": "uncle.webp", "Aunt": "aunt.webp",
+    "One": "one.webp", "Two": "two.webp", "Three": "three.webp", "Four": "four.webp", "Five": "five.webp",
+    "Eleven": "eleven.webp", "Twelve": "twelve.webp", "Thirteen": "thirteen.webp", "Fourteen": "fourteen.webp", "Fifteen": "fifteen.webp",
+    "Twenty": "twenty.webp", "Thirty": "thirty.webp", "Forty": "forty.webp", "Fifty": "fifty.webp", "One hundred": "one-hundred.webp",
+    "Age": "age.webp", "How old are you?": "how-old-are-you.webp", "Years old": "years-old.webp", "Young": "young.webp", "Old": "old.webp",
+    "Family": "family.webp", "People": "people.webp", "How many?": "how-many.webp", "Live with": "live-with.webp", "House": "house.webp"
+  },
+  3: {
+    "Rice": "rice.webp", "Noodles": "noodles.webp", "Bread": "bread.webp", "Soup": "soup.webp", "Fish": "fish.webp",
+    "Vegetables": "vegetables.webp", "Tomato": "tomato.webp", "Potato": "potato.webp", "Carrot": "carrot.webp", "Onion": "onion.webp",
+    "Fruit": "fruit.webp", "Banana": "banana.webp", "Orange": "orange.webp", "Apple": "apple.webp", "Mango": "mango.webp",
+    "Water": "water.webp", "Tea": "tea.webp", "Coffee": "coffee.webp", "Milk": "milk.webp", "Juice": "juice.webp",
+    "Delicious": "delicious.webp", "Hungry": "hungry.webp", "Thirsty": "thirsty.webp", "Full": "full.webp", "Sweet": "sweet.webp",
+    "Breakfast": "breakfast.webp", "Lunch": "lunch.webp", "Dinner": "dinner.webp", "Eat": "eat.webp", "Drink": "drink.webp",
+    "Menu": "menu.webp", "Order": "order.webp", "Waiter": "waiter.webp", "Table": "table.webp", "Bill": "bill.webp",
+    "Cook": "cook.webp", "Boil": "boil.webp", "Fry": "fry.webp", "Salt": "salt.webp", "Sugar": "sugar.webp",
+    "Market": "market.webp", "Kilo": "kilo.webp", "Fresh": "fresh.webp", "Basket": "basket.webp", "Seller": "seller.webp"
+  },
+  4: {
+    "Left": "left.webp", "Right": "right.webp", "Straight": "straight.webp", "Turn": "turn.webp", "Go": "go.webp",
+    "Near": "near.webp", "Far": "far.webp", "Here": "here.webp", "There": "there.webp", "Where": "where.webp",
+    "Where is": "where.webp", "Street": "street.webp", "On the left": "on-the-left.webp", "On the right": "on-the-right.webp", "Is it far?": "is-it-far.webp",
+    "Bus": "bus.webp", "Car": "car.webp", "Motorbike": "motorbike.webp", "Bicycle": "bicycle.webp", "Train": "train.webp",
+    "Walk": "walk.webp", "Cross": "cross.webp", "Careful": "careful.webp", "Traffic light": "traffic-light.webp", "Sidewalk": "sidewalk.webp",
+    "Taxi": "taxi.webp", "Driver": "driver.webp", "Stop here please": "stop-here-please.webp", "Address": "address.webp", "Slow down": "slow-down.webp",
+    "Minute": "minute.webp", "Hour": "hour.webp", "How long?": "how-long.webp", "Fast": "fast.webp", "Slow": "slow.webp",
+    "Bus stop": "bus-stop.webp", "Airport": "airport.webp", "Park": "park.webp", "Bank": "bank.webp", "Post office": "post-office.webp",
+    "Go straight": "go-straight.webp", "Turn left": "turn-left.webp", "Turn right": "turn-right.webp", "At the corner": "at-the-corner.webp", "You will see": "you-will-see.webp"
+  },
+  5: {
+    "Head": "head.webp", "Eye": "eye.webp", "Ear": "ear.webp", "Nose": "nose.webp", "Mouth": "mouth.webp",
+    "Hand": "hand.webp", "Leg": "leg.webp", "Back": "back.webp", "Stomach": "stomach.webp", "Body": "body.webp",
+    "Headache": "headache.webp", "Fever": "fever.webp", "Cough": "cough.webp", "Pain": "pain.webp", "Sick": "sick.webp",
+    "Tired": "tired.webp", "Dizzy": "dizzy.webp", "Weak": "weak.webp", "Sleep": "sleep.webp", "Rest": "rest.webp",
+    "Doctor": "doctor.webp", "Hospital": "hospital.webp", "Nurse": "nurse.webp", "Appointment": "appointment.webp", "Check": "check.webp",
+    "Medicine": "medicine.webp", "Pill": "pill.webp", "Twice a day": "twice-a-day.webp", "Before meals": "before-meals.webp", "After meals": "after-meals.webp",
+    "Healthy": "healthy.webp", "Exercise": "exercise.webp", "Every day": "every-day.webp", "Early": "early.webp", "Good for you": "good-for-you.webp",
+    "Help!": "help.webp", "Call": "call.webp", "Ambulance": "ambulance.webp", "Emergency": "emergency.webp", "Hurry": "hurry.webp",
+    "Wash": "wash.webp", "Soap": "soap.webp", "Teeth": "teeth.webp", "Brush": "brush.webp", "Clean": "clean.webp"
+  },
+  6: {
+    "Shirt": "shirt.webp", "Dress": "dress.webp", "Pants": "pants.webp", "Hat": "hat.webp", "Shoes": "shoes.webp",
+    "Red": "red.webp", "Blue": "blue.webp", "Green": "green.webp", "White": "white.webp", "Black": "black.webp",
+    "Big": "big.webp", "Small": "small.webp", "Size": "size.webp", "Fit": "fit.webp", "Too big": "too-big.webp",
+    "How much?": "how-much.webp", "Price": "price.webp", "Cheap": "cheap.webp", "Expensive": "expensive.webp", "Discount": "discount.webp",
+    "Beautiful": "beautiful.webp", "Nice": "nice.webp", "New": "new.webp", "Good": "good.webp", "Bad": "bad.webp",
+    "Money": "money.webp", "Pay": "pay.webp", "Cash": "cash.webp", "Card": "card.webp", "Change": "change.webp",
+    "Gift": "gift.webp", "Bag": "bag.webp", "Watch": "watch.webp", "Phone": "phone.webp", "Toy": "toy.webp",
+    "Want": "want.webp", "Need": "need.webp", "Choose": "choose.webp", "Like": "like.webp", "This one": "this-one.webp",
+    "Exchange": "exchange.webp", "Return": "return.webp", "Broken": "broken.webp", "Receipt": "receipt.webp", "Another one": "another-one.webp"
+  }
+};
+function vocabImgUrlFor(ch, en){
+  if(en === null || en === undefined) return null;
+  if(ch === 1){
+    var key = String(en).toLowerCase().trim().replace(/[?.!]+$/, "").trim();
+    var slug = CH1_VOCAB_IMG[key];
+    return slug ? ("assets/img/ch1/" + slug + ".webp") : null;
+  }
+  var map = VOCAB_IMG_BY_CH[ch];
+  if(!map) return null;
+  var file = map[String(en).trim()];
+  return file ? ("assets/img/ch" + ch + "/" + file) : null;
+}
 function vocabImgFor(v){
-  if(!currentLesson || currentLesson.ch !== 1 || !v || !v.en) return null;
-  var key = String(v.en).toLowerCase().trim().replace(/[?.!]+$/, "").trim();
-  var slug = CH1_VOCAB_IMG[key];
-  return slug ? ("assets/img/ch1/" + slug + ".webp") : null;
+  if(!currentLesson || !v || !v.en) return null;
+  return vocabImgUrlFor(currentLesson.ch, v.en);
 }
 function renderVocab(){
   if(vocabFlow.lessonId !== currentLesson.id) resetVocabFlow(currentLesson.id);
@@ -10988,10 +11061,11 @@ try{
     var src = null;
     try{
       var L = lessonById(wotd.lesson);
-      if(L && L.ch === 1 && typeof CH1_VOCAB_IMG !== "undefined"){
-        var key = String(wotd.en).toLowerCase().trim().replace(/[?.!]+$/, "").trim();
-        var slug = CH1_VOCAB_IMG[key];
-        if(slug) src = "assets/img/ch1/" + slug + ".webp";
+      /* V41 ANH TU VUNG CH2-6: tra hình theo chương qua cùng một hàm
+         với phần Từ vựng / Thẻ ghi nhớ — từ của ngày thuộc chương nào
+         cũng hiện hình thật của chương đó (Chương 1 giữ nguyên). */
+      if(L && typeof vocabImgUrlFor === "function"){
+        src = vocabImgUrlFor(L.ch, wotd.en);
       }
     }catch(e){}
     if(img){
