@@ -5953,10 +5953,10 @@ document.getElementById("speakListenN").addEventListener("click", function(){ if
 document.getElementById("speakListenS").addEventListener("click", function(){ if(speakItems.length) speak(speakItems[speakIndex].en, 0.5); });
 function normalize(s){ return (s||"").toLowerCase().replace(/[^a-z0-9' ]/g," ").replace(/\s+/g," ").trim(); }
 function similarity(a, b){
-  var wa = normalize(a).split(" ").filter(Boolean), wb = normalize(b).split(" ").filter(Boolean);
+  /* V51 CHAM THEO AM: tỉ lệ qua (passRatio) từ alignWords mới */
+  var wb = normalize(b).split(" ").filter(Boolean);
   if(!wb.length) return 0;
-  var hit = 0; wb.forEach(function(w){ if(wa.indexOf(w) >= 0) hit++; });
-  return hit / wb.length;
+  return alignWords(wb, normalize(a).split(" ").filter(Boolean)).passRatio;
 }
 /* V50 MOT BO NGHE TREN MAY: cờ bật trong lúc gradeSpeak chấm một
    bản chép lời đến từ bộ nghe trên máy — khi đó cả phía đích lẫn
@@ -5967,17 +5967,18 @@ function gradeSpeak(said){
   var heard = document.getElementById("speakHeard"), fb = document.getElementById("speakFeedback"), status = document.getElementById("speakStatus");
   heard.textContent = "Trang web nghe được: “" + said + "”";
   var target = speakItems[speakIndex].en;
+  /* V51 CHAM THEO AM: Luyện nói dùng chung hàm chấm — qua khi passRatio ≥ 0,8 */
   var score = speakFromLocal ? localSimilarity(said, target) : similarity(said, target);
   fb.classList.add("show");
-  if((speakFromLocal ? localNormalize(said) === localNormalize(target) : normalize(said) === normalize(target)) || score >= 0.9){
+  if(score >= 0.8){
     fb.className = "feedback show good";
     fb.textContent = pickEnc("praise") + " Bác nói câu này rất đúng và rõ — cứ phát huy như vậy nhé!";
     celebrate(false);
     status.textContent = "Đúng rồi! Bác thử câu tiếp theo hoặc nghe lại để so sánh.";
     scheduleSpeakAutoNext();
-  } else if(score >= 0.55){
+  } else if(score >= 0.5){
     fb.className = "feedback show good";
-    fb.textContent = pickEnc("near") + " Bác nghe lại câu mẫu bằng nút “Nghe chậm”, chú ý các từ còn thiếu rồi đọc lại một lần nữa nhé. Câu mẫu: “" + target + "”";
+    fb.textContent = pickEnc("near") + " Gần được rồi, bác đọc lại nhé. Bác nghe lại câu mẫu bằng nút “Nghe chậm”, chú ý các từ còn thiếu rồi đọc lại một lần nữa nhé. Câu mẫu: “" + target + "”";
     status.textContent = "Mình thử lại một lần nữa nhé!";
   } else {
     fb.className = "feedback show try";
@@ -6859,25 +6860,174 @@ function srKind(kind){
   var known = { "not-allowed": 1, "service-not-allowed": 1, "no-speech": 1, "network": 1, "audio-capture": 1 };
   return known[kind] ? kind : "error";
 }
-function alignWords(tWords, hWords){
-  var n = tWords.length, m = hWords.length, i, j;
-  var dp = [];
-  for(i = 0; i <= n; i++){ dp.push([]); for(j = 0; j <= m; j++){ dp[i][j] = 0; } }
-  for(i = n - 1; i >= 0; i--){
-    for(j = m - 1; j >= 0; j--){
-      dp[i][j] = (tWords[i] === hWords[j]) ? dp[i+1][j+1] + 1 : Math.max(dp[i+1][j], dp[i][j+1]);
+/* ================================================================
+   V51 CHAM THEO AM — CHẤM THEO ÂM + DUNG SAI CHÉP LỆCH
+   Hàm chấm DÙNG CHUNG cho mọi đường (bộ nghe sẵn SR + bộ nghe trên
+   máy local): vẫn căn chỉnh theo thứ tự như LCS cũ, nhưng một từ
+   đích được tính ĐÚNG khi từ nghe được thỏa MỘT trong:
+   (a) khớp chính xác sau chuẩn hóa (như cũ);
+   (b) ĐỒNG ÂM / biến thể chính tả (bảng SOUND_ALIKE_GROUPS);
+   (c) GIỐNG ÂM: khóa âm phoneticKey bằng nhau (chỉ câu/nhiều từ);
+   (d) LỆCH NHẸ: edit distance ≤1 (từ 4–5 ký tự), ≤2 (từ ≥6 ký tự);
+       từ ≤3 ký tự không dùng (d);
+   (e) TÁCH/GỘP TỪ: 1 từ đích ~ 2 từ nghe gộp lại và ngược lại
+       (chỉ câu/nhiều từ).
+   Đích ĐƠN LẺ (1 từ): quy tắc CHẶT — chỉ (a), (b), (d) với ≤1;
+   không (c), không (e), không nửa điểm.
+   NGƯỠNG QUA: tỉ lệ qua (passRatio) ≥ 0,8 là "đọc đúng"; từ chức
+   năng ngắn bị thiếu hẳn (không có từ nghe thay thế ở vị trí đó)
+   được tính nửa điểm khi tính passRatio — điểm hiển thị "đúng X/Y"
+   vẫn là số từ đúng nguyên. count = số từ đúng; tolerant = số từ
+   đúng nhờ (b)/(c)/(d)/(e) (ghi vào nhật ký dung-sai=).
+   ================================================================ */
+var SOUND_ALIKE_GROUPS = [
+  ["to","too","two"],["there","their","theyre"],["your","youre"],["its"],
+  ["hear","here"],["where","wear"],["right","write"],["sea","see"],
+  ["sun","son"],["by","buy","bye"],["know","no"],["week","weak"],
+  ["hour","our"],["are","r"],["for","four"],["one","won"],["eight","ate"],
+  ["i","eye"],["we","wee"],["be","bee"],["meat","meet"],
+  ["peace","piece","peas"],["flour","flower"],["night","knight"],
+  ["mail","male"],["sail","sale"],["tail","tale"],["road","rode"],
+  ["sole","soul"],["hole","whole"],["wait","weight"],["break","brake"],
+  ["plain","plane"],["rain","rein"],["would","wood"],["through","threw"],
+  ["cell","sell"],["cent","sent"],["dear","deer"],["fair","fare"],
+  ["hair","hare"],["heal","heel"],["hi","high"],["him","hymn"],
+  ["idle","idol"],["knew","new"],["knot","not"],["made","maid"],
+  ["main","mane"],["none","nun"],["oar","or"],["pair","pear"],
+  ["past","passed"],["patients","patience"],["poor","pour"],
+  ["pray","prey"],["principal","principle"],["profit","prophet"],
+  ["real","reel"],["red","read"],["ring","wring"],["role","roll"],
+  ["scene","seen"],["seam","seem"],["sew","so"],["sight","site"],
+  ["stair","stare"],["stationary","stationery"],["steal","steel"],
+  ["sweet","suite"],["tide","tied"],["vain","vein"],["waist","waste"],
+  ["way","weigh"],["weather","whether"],["which","witch"],["whos","whose"],
+  ["mom","mum"],["gray","grey"],["color","colour"],["favorite","favourite"],
+  ["center","centre"],["theater","theatre"],["yes","ya","yeah","yea"]
+];
+var SOUND_ALIKE_MAP = {};
+SOUND_ALIKE_GROUPS.forEach(function(g, gi){ g.forEach(function(w){ SOUND_ALIKE_MAP[w] = gi; }); });
+/* Từ chức năng bắt đầu bằng th-: người học Việt hay đọc the/this lẫn
+   nhau và bộ nghe nhỏ cũng chép lẫn — khóa âm gộp chung một nhóm. */
+var TH_FUNC = { "the":1, "this":1, "that":1, "these":1, "those":1, "they":1, "them":1, "their":1, "theirs":1, "there":1, "then":1, "than":1 };
+var FUNC_WORDS = { "my":1,"is":1,"are":1,"the":1,"a":1,"an":1,"and":1,"of":1,"to":1,"in":1,"on":1,"at":1,"it":1,"am":1,"was":1,"were":1,"be":1,"do":1,"does":1,"did":1,"have":1,"has":1,"had":1,"will":1,"would":1,"can":1,"could":1,"your":1,"his":1,"her":1,"their":1,"our":1,"me":1,"you":1,"he":1,"she":1,"we":1,"they":1,"i":1,"this":1,"that":1,"with":1,"for":1,"from":1,"by":1 };
+function stripApos(w){ return String(w || "").replace(/'/g, ""); }
+function editDist(a, b){
+  var n = a.length, m = b.length, i, j;
+  if(Math.abs(n - m) > 2) { /* vẫn tính đầy đủ: từ ngắn, rẻ */ }
+  var prev = [], cur = [];
+  for(j = 0; j <= m; j++) prev[j] = j;
+  for(i = 1; i <= n; i++){
+    cur[0] = i;
+    for(j = 1; j <= m; j++){
+      cur[j] = Math.min(prev[j] + 1, cur[j - 1] + 1, prev[j - 1] + (a.charAt(i - 1) === b.charAt(j - 1) ? 0 : 1));
     }
+    var tmp = prev; prev = cur; cur = tmp;
   }
-  var matched = {}, extras = [], ti = 0, hj = 0;
-  while(ti < n && hj < m){
-    if(tWords[ti] === hWords[hj]){ matched[ti] = true; ti++; hj++; }
-    else if(dp[ti+1][hj] >= dp[ti][hj+1]){ ti++; }
-    else { extras.push(hWords[hj]); hj++; }
-  }
-  while(hj < m){ extras.push(hWords[hj]); hj++; }
-  var count = 0; for(var k in matched){ if(matched.hasOwnProperty(k)) count++; }
-  return { matched: matched, extras: extras, count: count };
+  return prev[m];
 }
+/* Khóa âm gọn kiểu Metaphone: gộp phụ âm đồng âm (ph→f, c/k/q→k,
+   g mềm→j, z→s, x→ks), th/sh/ch/ng giữ riêng, lược e câm cuối,
+   gấp đôi phụ âm thành một, chuẩn hóa oo→u, ee→i, vô thanh hóa âm
+   cuối (d→t, b→p, v→f). NGUYÊN ÂM được GIỮ (trừ từ chức năng th-)
+   nên cat (kat) khác cut (kut) — âm giữa khác hẳn thì không qua. */
+function phoneticKey(w){
+  var x = String(w || "").toLowerCase().replace(/[^a-z]/g, "");
+  if(!x) return "";
+  if(TH_FUNC[x]) return "thf";
+  x = x.replace(/ph/g, "f").replace(/ck/g, "k").replace(/qu/g, "k");
+  x = x.replace(/th/g, "0").replace(/sh/g, "1").replace(/ch/g, "2").replace(/ng/g, "3");
+  x = x.replace(/c([eiy])/g, "s$1").replace(/c/g, "k");
+  x = x.replace(/g([eiy])/g, "j$1").replace(/g/g, "k");
+  x = x.replace(/q/g, "k").replace(/x/g, "ks").replace(/z/g, "s");
+  if(x.length > 2 && x.charAt(x.length - 1) === "e") x = x.slice(0, -1);
+  if(x.length > 1) x = x.charAt(0) + x.slice(1).replace(/h/g, "");
+  x = x.replace(/oo/g, "u").replace(/ee/g, "i");
+  x = x.replace(/(.)\1+/g, "$1");
+  var last = x.charAt(x.length - 1);
+  var dev = { "b": "p", "d": "t", "v": "f" };
+  if(dev[last]) x = x.slice(0, -1) + dev[last];
+  if(x.charAt(x.length - 1) === "y") x = x.slice(0, -1) + "i";
+  return x;
+}
+/* Một cặp từ có được tính đúng không; strict = đích đơn lẻ.
+   Trả {ok, kind} với kind: exact|alike|phonetic|edit|split|merge. */
+function wordMatchV51(t, h, strict){
+  var tt = stripApos(t), hh = stripApos(h);
+  if(tt === hh) return { ok: true, kind: "exact" };
+  var ga = SOUND_ALIKE_MAP[tt], gb = SOUND_ALIKE_MAP[hh];
+  if(ga !== undefined && ga === gb) return { ok: true, kind: "alike" };
+  if(strict){
+    if(editDist(tt, hh) <= 1) return { ok: true, kind: "edit" };
+    return { ok: false, kind: "" };
+  }
+  var pk = phoneticKey(tt);
+  if(pk && pk === phoneticKey(hh)) return { ok: true, kind: "phonetic" };
+  var lim = tt.length >= 6 ? 2 : (tt.length >= 4 ? 1 : 0);
+  if(lim > 0 && editDist(tt, hh) <= lim) return { ok: true, kind: "edit" };
+  return { ok: false, kind: "" };
+}
+function alignWords(tWords, hWords){
+  var n = tWords.length, m = hWords.length;
+  var strict = (n === 1);
+  var memo = {};
+  function best(i, j){
+    var key = i + "," + j;
+    if(memo[key]) return memo[key];
+    var res;
+    if(i >= n){ res = { count: 0, extras: m - j, tol: 0 }; memo[key] = res; return res; }
+    if(j >= m){ res = { count: 0, extras: 0, tol: 0 }; memo[key] = res; return res; }
+    var cands = [];
+    var skipT = best(i + 1, j); cands.push({ count: skipT.count, extras: skipT.extras, tol: skipT.tol, op: "skipT" });
+    var skipH = best(i, j + 1); cands.push({ count: skipH.count, extras: skipH.extras + 1, tol: skipH.tol, op: "skipH" });
+    var w11 = wordMatchV51(tWords[i], hWords[j], strict);
+    if(w11.ok){ var r11 = best(i + 1, j + 1); cands.push({ count: r11.count + 1, extras: r11.extras, tol: r11.tol + (w11.kind === "exact" ? 0 : 1), op: "m11", kind: w11.kind }); }
+    if(!strict && j + 1 < m){
+      var cat2 = stripApos(hWords[j]) + stripApos(hWords[j + 1]);
+      /* Tách/gộp chỉ nhận khớp chính xác theo mặt gộp hoặc cùng khóa
+         âm — KHÔNG dùng edit distance trên chuỗi gộp (tránh nuốt mất
+         một từ ngắn, ví dụ "my father" nghe thiếu "my"). */
+      var ok12 = (stripApos(tWords[i]) === cat2) || (phoneticKey(tWords[i]) !== "" && phoneticKey(tWords[i]) === phoneticKey(cat2));
+      if(ok12){ var r12 = best(i + 1, j + 2); cands.push({ count: r12.count + 1, extras: r12.extras, tol: r12.tol + (stripApos(tWords[i]) === cat2 ? 0 : 1), op: "m12", kind: "split" }); }
+    }
+    if(!strict && i + 1 < n){
+      var catT = stripApos(tWords[i]) + stripApos(tWords[i + 1]);
+      var ok21 = (catT === stripApos(hWords[j])) || (phoneticKey(catT) !== "" && phoneticKey(catT) === phoneticKey(hWords[j]));
+      if(ok21){ var r21 = best(i + 2, j + 1); cands.push({ count: r21.count + 2, extras: r21.extras, tol: r21.tol + (catT === stripApos(hWords[j]) ? 0 : 1), op: "m21", kind: "merge" }); }
+    }
+    cands.sort(function(a, b){ if(b.count !== a.count) return b.count - a.count; if(a.extras !== b.extras) return a.extras - b.extras; return a.tol - b.tol; });
+    res = cands[0]; memo[key] = res; return res;
+  }
+  var matched = {}, kinds = {}, extras = [];
+  var i = 0, j = 0;
+  while(i < n && j < m){
+    var cur = best(i, j);
+    if(cur.op === "m11"){ matched[i] = true; kinds[i] = cur.kind; i++; j++; }
+    else if(cur.op === "m12"){ matched[i] = true; kinds[i] = "split"; i++; j += 2; }
+    else if(cur.op === "m21"){ matched[i] = true; kinds[i] = "merge"; matched[i + 1] = true; kinds[i + 1] = "merge"; i += 2; j++; }
+    else if(cur.op === "skipH"){ extras.push(hWords[j]); j++; }
+    else { i++; }
+  }
+  while(j < m){ extras.push(hWords[j]); j++; }
+  var count = 0, tolerant = 0;
+  for(var k = 0; k < n; k++){ if(matched[k]){ count++; if(kinds[k] && kinds[k] !== "exact") tolerant++; } }
+  var ratio = n ? count / n : 0;
+  var half = 0;
+  if(!strict && n > 1){
+    for(var q = 0; q < n; q++){ if(!matched[q] && FUNC_WORDS[stripApos(tWords[q])]) half += 0.5; }
+  }
+  var passRatio = n ? Math.min(1, (count + half) / n) : 0;
+  return { matched: matched, extras: extras, count: count, tolerant: tolerant, kinds: kinds, ratio: ratio, passRatio: passRatio, pass: passRatio >= 0.8 };
+}
+/* Hàm chấm trọn gói cho tự kiểm tra + dùng chung: gradeV51(đích, nghe được, dùng localNormalize?) */
+function gradeV51(target, said, useLocal){
+  var tW = useLocal ? localWords(target) : normalize(target).split(" ").filter(Boolean);
+  var hW = useLocal ? localWords(said) : normalize(said).split(" ").filter(Boolean);
+  var al = alignWords(tW, hW);
+  var wrong = [];
+  for(var i = 0; i < tW.length; i++){ if(!al.matched[i]) wrong.push(tW[i]); }
+  return { tWords: tW, hWords: hW, al: al, count: al.count, total: tW.length, ratio: al.ratio, passRatio: al.passRatio, pass: al.pass, tolerant: al.tolerant, wrong: wrong };
+}
+try{ window.gradeV51 = gradeV51; window.phoneticKeyV51 = phoneticKey; window.wordMatchV51 = wordMatchV51; }catch(e){}
 /* ================= PHÂN TÍCH ÂM (bảng âm vị IPA cho các từ trong 6 bài) =================
    Mỗi từ -> dãy âm vị IPA (Anh-Mỹ, khớp phiên âm trang đã có). Từ không có
    trong bảng (tên riêng…) thì bỏ qua phân tích âm, chỉ chấm từ như cũ. */
@@ -7072,11 +7222,20 @@ function rbShowResult(ctx, best){
   var missing = [];
   tWords.forEach(function(w, i){ if(!best.al.matched[i]) missing.push(disp[i]); });
   var note = document.createElement("p"); note.className = "rb-note";
-  var perfect = (good === total);
-  if(perfect && best.al.extras.length === 0){
+  /* V51 CHAM THEO AM: QUA khi tỉ lệ qua (passRatio, đã gồm dung sai
+     theo âm + nửa điểm từ chức năng bị thiếu) ≥ 0,8 — không còn đòi
+     gần như trọn vẹn như trước. 0,5–0,8: gần được, chưa cho qua. */
+  var passRatio = (typeof best.al.passRatio === "number") ? best.al.passRatio : (total ? good / total : 0);
+  var perfect = (passRatio >= 0.8);
+  var fullExact = (good === total);
+  if(fullExact && best.al.extras.length === 0){
     note.textContent = pickEnc("praise") + " Bác đọc đúng hết " + total + "/" + total + " từ.";
-  } else if(perfect){
+  } else if(fullExact){
     note.textContent = pickEnc("praise") + " Bác đã đọc đủ và đúng tất cả các từ chính. (Web có nghe thêm từ “" + best.al.extras[0] + "” — không sao đâu bác.)";
+  } else if(perfect){
+    note.textContent = pickEnc("praise") + " Bác đọc đúng " + good + "/" + total + " từ — vậy là đạt rồi, cứ phát huy nhé!" + (missing.length ? " Từ “" + missing[0] + "” lần sau bác đọc rõ hơn một chút là trọn vẹn." : "");
+  } else if(passRatio >= 0.5){
+    note.textContent = pickEnc("near") + " Gần được rồi, bác đọc lại nhé. " + (missing.length ? ("Còn chưa rõ từ “" + missing[0] + "”" + (missing.length > 1 ? " và " + (missing.length - 1) + " từ nữa" : "") + ". Bác bấm “Nghe chậm lại”, nghe kỹ rồi đọc lại nhé.") : "Bác bấm “Nghe chậm lại” rồi đọc lại một lần nữa nhé.");
   } else {
     /* GẦN ĐÚNG: có ít nhất một phần đúng (vài từ đã khớp — còn chữ xanh)
        hoặc từ máy nghe được gần giống từ đích (cùng âm đầu / chứa nhau).
@@ -7713,6 +7872,8 @@ function startSRReadback(ctx, session){
         var sc = al.count - al.extras.length * 0.25;
         if(!best || sc > best.score) best = { said: said, al: al, score: sc };
       }
+      /* V51 CHAM THEO AM: ghi dung-sai vào nhật ký cho đường SR */
+      if(best && session.voiceLog){ try{ session.voiceLog.ev("stt-result", "engine=sr · dung-sai=" + (best.al.tolerant || 0) + " · “" + String(best.said || "").slice(0, 60) + "”"); }catch(e){} }
       if(ctx.btn) ctx.btn.classList.remove("listening");
       if(best) rbShowResult(ctx, best);
     },
@@ -7932,12 +8093,11 @@ function localNormalize(s){
   }).join(" ").replace(/\s+/g, " ").trim();
 }
 function localWords(s){ return localNormalize(s).split(" ").filter(Boolean); }
-/* Cùng cách tính với similarity() nhưng trên từ đã qua localNormalize */
+/* V51 CHAM THEO AM: cùng cách tính với similarity() nhưng trên từ đã qua localNormalize */
 function localSimilarity(a, b){
-  var wa = localWords(a), wb = localWords(b);
+  var wb = localWords(b);
   if(!wb.length) return 0;
-  var hit = 0; wb.forEach(function(w){ if(wa.indexOf(w) >= 0) hit++; });
-  return hit / wb.length;
+  return alignWords(wb, localWords(a)).passRatio;
 }
 /* Chọn mimeType cho bản ghi chấm trên máy đúng thứ tự đã kiểm chứng */
 function localPickMime(){
@@ -8246,9 +8406,14 @@ function beginLocalWithStream(session, adapter, stream){
     }
     function localWin(text){
       if(!MicSessions.isCurrent(session.id)) return;
-      /* Định dạng dòng stt-result giữ nguyên như các bản trước;
-         engine từ nay chỉ còn "local". */
-      if(log){ log.ev("stt-result", "engine=local · chờ " + (Date.now() - localStopAt) + "ms · “" + String(text).slice(0, 60) + "”"); log.finish(); }
+      /* V51 CHAM THEO AM: dòng stt-result ghi thêm dung-sai=<số từ
+         đúng nhờ đồng âm/khóa âm/lệch nhẹ/tách-gộp> để tinh chỉnh sau. */
+      var dsTol = 0;
+      try{
+        var dsTarget = (session.ownerCtx && session.ownerCtx.target) || (session.key === "speak" && typeof speakItems !== "undefined" && speakItems[speakIndex] ? speakItems[speakIndex].en : "");
+        if(dsTarget) dsTol = alignWords(localWords(dsTarget), localWords(text)).tolerant || 0;
+      }catch(e){}
+      if(log){ log.ev("stt-result", "engine=local · chờ " + (Date.now() - localStopAt) + "ms · dung-sai=" + dsTol + " · “" + String(text).slice(0, 60) + "”"); log.finish(); }
       MicSessions.finish(session);
       adapter.result(text, blob, durSec);
     }
