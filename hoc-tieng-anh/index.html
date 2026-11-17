@@ -1142,10 +1142,12 @@ html.hc .hc-menu-btn[aria-pressed="true"] .hc-state{color:#fff}
 }
 .voice-diag-actions{display:flex; gap:10px; flex-wrap:wrap}
 .voice-diag-actions .btn{flex:1 1 auto; min-height:52px}
-/* V49 WHISPER TREN MAY + MIC MOT LAN: khối tải bộ nghe dự phòng trong Chẩn đoán giọng nói */
+/* V50 MOT BO NGHE TREN MAY: khối trạng thái bộ nghe trên máy trong Chẩn đoán giọng nói */
 .voice-diag-local{margin-top:14px; border-top:1.5px dashed var(--border-strong); padding-top:14px}
 .voice-diag-local .btn{width:100%; min-height:52px}
 .voice-diag-local-status{margin-top:8px; font-weight:600; color:var(--muted); font-size:max(16px,.92em); line-height:1.55}
+.voice-diag-local-title{font-weight:800; font-size:max(16px,1em); line-height:1.4}
+.voice-diag-local .btn[hidden]{display:none}
 /* Sao lưu & khôi phục tiến độ */
 .backup-overlay{position:fixed; inset:0; z-index:200; background:rgba(18,24,18,.55); display:flex; align-items:flex-end; justify-content:center}
 .backup-overlay[hidden]{display:none}
@@ -3200,7 +3202,7 @@ body{padding-bottom:calc(70px + env(safe-area-inset-bottom,0px))}
         <button type="button" class="an-toggle" id="autoNextToggle" aria-pressed="false" aria-labelledby="autoNextLabel autoNextState"><span id="autoNextState">Đang tắt</span></button>
       </div>
       <div id="rbNoSupport" class="no-support" style="display:none; margin-bottom:20px">
-        <p><b>Lưu ý:</b> trình duyệt này (như Safari trên iPhone) không có bộ nghe chấm tự động của Chrome. Nút <b>Đọc lại</b> ở đây sẽ chuyển sang <b>chế độ ghi âm tự kiểm tra</b>: bác ghi âm, nghe lại giọng mình (đã lọc bớt tạp âm) cạnh giọng mẫu, rồi tự bấm <b>“Tôi đọc đúng rồi”</b> hoặc <b>“Chưa đúng, đọc lại”</b>. Muốn được chấm tự động từng từ, bác mở trang bằng <b>Google Chrome</b> — bộ nghe có sẵn trong Chrome, dùng ngay, không phải tải thêm gì.</p>
+        <p><b>Lưu ý:</b> trình duyệt này không có bộ nghe có sẵn. Nút <b>Đọc lại</b> ở đây sẽ dùng <b>bộ nghe chấm điểm ngay trên máy</b> của trang: trang tự tải bộ nghe về máy ở lần mở đầu (khoảng 54MB), từ đó bác đọc xong là máy chấm từng từ ngay tại chỗ, không gửi bản ghi đi đâu. Nếu máy không chạy được bộ nghe đó, trang mới chuyển sang <b>chế độ ghi âm tự kiểm tra</b>: bác ghi âm, nghe lại giọng mình (đã lọc bớt tạp âm) cạnh giọng mẫu, rồi tự bấm <b>“Tôi đọc đúng rồi”</b> hoặc <b>“Chưa đúng, đọc lại”</b>.</p>
       </div>
       <div class="vocab-list" id="vocabList"></div>
       <div id="numbersWrap"></div>
@@ -3304,8 +3306,8 @@ body{padding-bottom:calc(70px + env(safe-area-inset-bottom,0px))}
         </div>
       </div>
       <div id="speakUnsupported" class="no-support" style="display:none">
-        <p><b>Trình duyệt này không có bộ nghe chấm tự động.</b></p>
-        <p style="margin-top:8px">Phần luyện nói vẫn dùng được ở <b>chế độ tự kiểm tra</b>: bấm nút mic để ghi âm, nghe lại giọng của mình rồi tự đánh giá bằng 2 nút lớn hiện ra dưới nút mic. Nếu muốn trang tự chấm giọng nói, hãy mở trang này bằng <b>Google Chrome</b> — bộ nghe có sẵn trong Chrome, dùng ngay, không phải tải thêm gì.</p>
+        <p><b>Trình duyệt này không có bộ nghe có sẵn.</b></p>
+        <p style="margin-top:8px">Phần luyện nói sẽ dùng <b>bộ nghe chấm điểm ngay trên máy</b> của trang (tự tải về máy ở lần mở trang đầu, khoảng 54MB) — bác đọc xong là máy chấm ngay tại chỗ, không gửi bản ghi đi đâu. Nếu máy không chạy được bộ nghe đó, phần này vẫn dùng được ở <b>chế độ tự kiểm tra</b>: bấm nút mic để ghi âm, nghe lại giọng của mình rồi tự đánh giá bằng 2 nút lớn hiện ra dưới nút mic.</p>
       </div>
       <div class="part-nav"><button type="button" class="btn btn-accent part-next" data-nexttab="quiz">Tiếp theo: Trò chơi cuối bài →</button></div>
     </section>
@@ -3587,8 +3589,9 @@ body{padding-bottom:calc(70px + env(safe-area-inset-bottom,0px))}
       <button type="button" class="btn btn-primary" id="voiceDiagCopy">Sao chép nhật ký</button>
     </div>
     <div class="voice-diag-local">
-      <button type="button" class="btn btn-ghost" id="localWhisperBtn">Tải bộ nghe dự phòng về máy (khoảng 54MB)</button>
-      <p class="voice-diag-local-status" id="localWhisperStatus" role="status" aria-live="polite">Bộ nghe dự phòng chạy ngay trên máy: khi đường chấm qua mạng trục trặc, máy tự dùng bộ này để chấm luôn bản ghi vừa đọc, bác không phải đọc lại. Chỉ tải một lần đầu, các lần sau dùng ngay.</p>
+      <p class="voice-diag-local-title">Bộ nghe chấm điểm trên máy</p>
+      <p class="voice-diag-local-status" id="localWhisperStatus" role="status" aria-live="polite">Bộ nghe chấm điểm chạy ngay trên máy này — trang tự tải về khi mở trang, bác không cần làm gì thêm.</p>
+      <button type="button" class="btn btn-ghost" id="localWhisperBtn" hidden>Tải lại bộ nghe</button>
     </div>
   </div>
 </div>
@@ -5955,18 +5958,18 @@ function similarity(a, b){
   var hit = 0; wb.forEach(function(w){ if(wa.indexOf(w) >= 0) hit++; });
   return hit / wb.length;
 }
-/* V46 GHI AM STT CLOUDFLARE: cờ bật trong lúc gradeSpeak chấm một
-   bản chép lời đến từ đường STT — khi đó cả phía đích lẫn phía nghe
-   được đều qua sttNormalize (mở rộng viết tắt) trước khi so khớp,
-   thay cho normalize thường. Ngoài đường STT cờ luôn tắt. */
-var speakFromStt = false;
+/* V50 MOT BO NGHE TREN MAY: cờ bật trong lúc gradeSpeak chấm một
+   bản chép lời đến từ bộ nghe trên máy — khi đó cả phía đích lẫn
+   phía nghe được đều qua localNormalize (mở rộng viết tắt) trước khi
+   so khớp, thay cho normalize thường. Ngoài đường đó cờ luôn tắt. */
+var speakFromLocal = false;
 function gradeSpeak(said){
   var heard = document.getElementById("speakHeard"), fb = document.getElementById("speakFeedback"), status = document.getElementById("speakStatus");
   heard.textContent = "Trang web nghe được: “" + said + "”";
   var target = speakItems[speakIndex].en;
-  var score = speakFromStt ? sttSimilarity(said, target) : similarity(said, target);
+  var score = speakFromLocal ? localSimilarity(said, target) : similarity(said, target);
   fb.classList.add("show");
-  if((speakFromStt ? sttNormalize(said) === sttNormalize(target) : normalize(said) === normalize(target)) || score >= 0.9){
+  if((speakFromLocal ? localNormalize(said) === localNormalize(target) : normalize(said) === normalize(target)) || score >= 0.9){
     fb.className = "feedback show good";
     fb.textContent = pickEnc("praise") + " Bác nói câu này rất đúng và rõ — cứ phát huy như vậy nhé!";
     celebrate(false);
@@ -6085,13 +6088,13 @@ document.getElementById("micBtn").addEventListener("click", function(){
   if(window.speechSynthesis){ try{ window.speechSynthesis.cancel(); }catch(e){} }
   hideSpeakSelfCheck();
   hideSpeakVoiceRetry();
-  speakSttTried = false;
-  /* V46 GHI AM STT CLOUDFLARE: trên Chrome iPhone (CriOS) hoặc trình
-     duyệt không có bộ nghe (Safari, Firefox), ghi âm gửi Cloudflare
-     STT là đường chấm CHÍNH của Luyện nói. Người học đã chủ động chọn
+  speakLocalTried = false;
+  /* V50 MOT BO NGHE TREN MAY: trên Chrome iPhone (CriOS) hoặc trình
+     duyệt không có bộ nghe sẵn (Firefox…), ghi âm + bộ nghe trên máy
+     là đường chấm CHÍNH của Luyện nói. Người học đã chủ động chọn
      ghi âm tự kiểm tra (speakForceRecord) thì giữ lựa chọn đó. */
-  if(!speakForceRecord && sttIsPrimary()){
-    speakStartSttSession();
+  if(!speakForceRecord && localIsPrimary()){
+    speakStartLocalSession();
     return;
   }
   /* Bo mạch thích ứng quyết định cơ chế: webview app khác / máy đã
@@ -6103,18 +6106,18 @@ document.getElementById("micBtn").addEventListener("click", function(){
       closeUI: function(){ closeSpeakUI(); }
     });
     session.voiceLog = voiceLogBegin("Luyện nói", speakItems[speakIndex] ? speakItems[speakIndex].en : "", "recognition");
-    /* V46: bộ nghe lỗi hoặc kết thúc không có kết quả (sau mọi cơ chế
-       nghe lại sẵn có trong startSRSession) → TỰ rơi xuống đường STT
-       trong cùng lần bấm này, đúng một lần; STT cũng lỗi thì mới về
-       các đường xử lý cũ của spSRAdapter. */
+    /* V50: bộ nghe sẵn lỗi hoặc kết thúc không có kết quả (sau mọi cơ
+       chế nghe lại sẵn có trong startSRSession) → TỰ rơi xuống ghi âm
+       + bộ nghe trên máy trong cùng lần bấm này, đúng một lần; đường
+       đó cũng lỗi thì mới về các đường xử lý cũ của spSRAdapter. */
     var spAd = spSRAdapter(session);
     var spErr0 = spAd.error, spEnd0 = spAd.ended;
     spAd.error = function(kind, meta){
-      if(kind !== "not-allowed" && !speakSttTried){ speakSttTried = true; if(session.voiceLog){ try{ session.voiceLog.ev("stt-fallback", "recognition lỗi (" + kind + ") — chuyển ghi âm STT"); }catch(e){} } speakStartSttSession(); return; }
+      if(kind !== "not-allowed" && !speakLocalTried){ speakLocalTried = true; if(session.voiceLog){ try{ session.voiceLog.ev("local-fallback", "recognition lỗi (" + kind + ") — chuyển ghi âm + bộ nghe trên máy"); }catch(e){} } speakStartLocalSession(); return; }
       spErr0(kind, meta);
     };
     spAd.ended = function(gotResult, meta){
-      if(!gotResult && !session._userStop && !speakSttTried){ speakSttTried = true; if(session.voiceLog){ try{ session.voiceLog.ev("stt-fallback", "recognition không có kết quả — chuyển ghi âm STT"); }catch(e){} } speakStartSttSession(); return; }
+      if(!gotResult && !session._userStop && !speakLocalTried){ speakLocalTried = true; if(session.voiceLog){ try{ session.voiceLog.ev("local-fallback", "recognition không có kết quả — chuyển ghi âm + bộ nghe trên máy"); }catch(e){} } speakStartLocalSession(); return; }
       spEnd0(gotResult, meta);
     };
     startSRSession(session, spAd); return;
@@ -6338,9 +6341,9 @@ function voiceLogText(){
 }
 function openVoiceDiag(){
   closeDisplayMenu(false);
-  /* V49: mở Chẩn đoán thì đồng bộ lại trạng thái nút bộ nghe dự phòng
-     (có thể nó đã tự sẵn sàng sau một lần cứu nguy). Hàm khai báo ở
-     phần INIT phía dưới — chỉ gọi khi đã tồn tại. */
+  /* V50: mở Chẩn đoán thì đồng bộ lại trạng thái bộ nghe trên máy
+     (tải nền có thể đã xong hoặc đang chạy). Hàm khai báo ở phần
+     INIT phía dưới — chỉ gọi khi đã tồn tại. */
   if(typeof refreshLocalWhisperBtn === "function") refreshLocalWhisperBtn();
   var pre = document.getElementById("voiceDiagText");
   if(pre) pre.textContent = voiceLogText();
@@ -6681,7 +6684,7 @@ function makeEndpointDetector(opts){
 }
 /* ===== GIỮ MỘT STREAM MIC DUY NHẤT CHO CẢ BUỔI HỌC (MicStreamKeeper) =====
    V49 WHISPER TREN MAY + MIC MOT LAN: xin mic đúng MỘT lần ở lần bấm ghi
-   đầu tiên của phiên trang; mọi phiên ghi âm sau (STT + ghi âm tự kiểm
+   đầu tiên của phiên trang; mọi phiên ghi âm sau (ghi âm chấm trên máy + ghi âm tự kiểm
    tra) tái dùng stream đang sống — kiểm tra track readyState trước khi
    dùng lại, KHÔNG gọi lại getUserMedia, KHÔNG stop() track giữa các lần
    đọc — nên trình duyệt không hỏi lại quyền mic mỗi lần bấm Đọc lại.
@@ -7041,10 +7044,10 @@ function rbShowMessage(ctx, kind){
 function rbShowResult(ctx, best){
   ctx._errStreak = 0;
   var panel = rbPreparePanel(ctx);
-  /* V46 GHI AM STT CLOUDFLARE: kết quả đến từ đường STT thì phía đích
-     cũng tách từ bằng sttNormalize (đã mở rộng viết tắt) để khớp đúng
-     với cách best.al đã được tính ở startSttReadback. */
-  var tWords = ctx._fromStt ? sttWords(ctx.target) : normalize(ctx.target).split(" ").filter(Boolean);
+  /* V50 MOT BO NGHE TREN MAY: kết quả đến từ bộ nghe trên máy thì phía đích
+     cũng tách từ bằng localNormalize (đã mở rộng viết tắt) để khớp đúng
+     với cách best.al đã được tính ở startLocalReadback. */
+  var tWords = ctx._fromLocal ? localWords(ctx.target) : normalize(ctx.target).split(" ").filter(Boolean);
   var rawTokens = ctx.target.split(/\s+/).map(function(w){ return w.replace(/^[^A-Za-z0-9']+|[^A-Za-z0-9']+$/g, ""); }).filter(Boolean);
   var disp = (rawTokens.length === tWords.length) ? rawTokens : tWords;
   var total = tWords.length, good = best.al.count;
@@ -7166,21 +7169,21 @@ function startReadback(ctx){
      trường: webview app khác / máy đã nhớ chế độ ghi âm → ghi âm tự
      kiểm tra ngay từ lần bấm đầu tiên; còn lại bộ chấm tự động. */
   var useSR = pickVoiceEngine(ctx._forceRecord) === "sr";
-  /* V46 GHI AM STT CLOUDFLARE: Chrome iPhone (CriOS) hoặc trình duyệt
-     không có bộ nghe (Safari, Firefox) → ghi âm gửi Cloudflare STT là
+  /* V50 MOT BO NGHE TREN MAY: Chrome iPhone (CriOS) hoặc trình duyệt
+     không có bộ nghe sẵn (Firefox…) → ghi âm + bộ nghe trên máy là
      đường chấm CHÍNH. Lựa chọn ghi âm tự kiểm tra chủ động của người
      học (_forceRecord) vẫn thắng. Mỗi lần bấm là một phiên mới hoàn
      toàn: hai cờ dưới đây luôn được đặt lại từ đầu. */
-  var useStt = !ctx._forceRecord && sttIsPrimary();
-  ctx._sttTried = false;
-  ctx._fromStt = false;
+  var useLocal = !ctx._forceRecord && localIsPrimary();
+  ctx._localTried = false;
+  ctx._fromLocal = false;
   var session = MicSessions.begin({
     key: "readback", ownerCtx: ctx,
-    kind: useStt ? "stt" : (useSR ? "sr" : "record"),
-    capMs: useStt ? 10000 : capMsForTarget(ctx),
+    kind: useLocal ? "local" : (useSR ? "sr" : "record"),
+    capMs: useLocal ? 10000 : capMsForTarget(ctx),
     closeUI: function(s){ closeReadbackPanel(s.ownerCtx); }
   });
-  if(useStt){ startSttReadback(ctx, session); return; }
+  if(useLocal){ startLocalReadback(ctx, session); return; }
   if(useSR){ startSRReadback(ctx, session); return; }
   startRecorderCapture(session, rbSelfAdapter(ctx, session));
 }
@@ -7662,25 +7665,25 @@ function startSRReadback(ctx, session){
     rbRescueToRecorder(ctx);
     return true;
   }
-  /* V46 GHI AM STT CLOUDFLARE: bộ nghe có sẵn lỗi hoặc kết thúc mà
+  /* V50 MOT BO NGHE TREN MAY: bộ nghe có sẵn lỗi hoặc kết thúc mà
      không có kết quả (sau khi startSRSession đã dùng hết cơ chế nghe
-     lại của nó) → TỰ rơi xuống đường STT trong cùng lần bấm này, đúng
-     một lần cho mỗi lần bấm. Riêng lỗi mic bị từ chối (not-allowed)
-     thì không thử STT vì STT cũng cần mic như vậy. */
-  function rbSrFallbackToStt(){
-    if(ctx._sttTried) return false;
-    ctx._sttTried = true;
-    /* V48 NGHE SAN LAM CHINH: ghi sự kiện rơi đường vào nhật ký của
-       chính phiên recognition vừa kết thúc (handle ev() vẫn ghi được
-       sau finish) để lần chẩn đoán sau đọc được vì sao phiên này
-       chuyển sang ghi âm STT; chế độ của phiên STT mới vẫn ghi
-       "cloudflare-stt" như hiện tại. */
-    if(session.voiceLog){ try{ session.voiceLog.ev("stt-fallback", "recognition không có kết quả — chuyển ghi âm STT"); }catch(e){} }
+     lại của nó) → TỰ rơi xuống ghi âm + bộ nghe trên máy trong cùng
+     lần bấm này, đúng một lần cho mỗi lần bấm. Riêng lỗi mic bị từ
+     chối (not-allowed) thì không thử đường ghi âm vì đường đó cũng
+     cần mic như vậy. */
+  function rbSrFallbackToLocal(){
+    if(ctx._localTried) return false;
+    ctx._localTried = true;
+    /* Ghi sự kiện rơi đường vào nhật ký của chính phiên recognition
+       vừa kết thúc (handle ev() vẫn ghi được sau finish) để lần chẩn
+       đoán sau đọc được vì sao phiên này chuyển sang ghi âm + bộ nghe
+       trên máy; chế độ của phiên mới ghi "local". */
+    if(session.voiceLog){ try{ session.voiceLog.ev("local-fallback", "recognition không có kết quả — chuyển ghi âm + bộ nghe trên máy"); }catch(e){} }
     var s = MicSessions.begin({
-      key: "readback", ownerCtx: ctx, kind: "stt", capMs: 10000,
+      key: "readback", ownerCtx: ctx, kind: "local", capMs: 10000,
       closeUI: function(s2){ closeReadbackPanel(s2.ownerCtx); }
     });
-    startSttReadback(ctx, s);
+    startLocalReadback(ctx, s);
     return true;
   }
   startSRSession(session, {
@@ -7716,8 +7719,8 @@ function startSRReadback(ctx, session){
     error: function(kind, meta){
       if(ctx.btn) ctx.btn.classList.remove("listening");
       kind = srKind(kind);
-      /* V46: thử đường STT trước khi về các xử lý lỗi cũ bên dưới. */
-      if(kind !== "not-allowed" && rbSrFallbackToStt()) return;
+      /* V50: thử ghi âm + bộ nghe trên máy trước khi về các xử lý lỗi cũ bên dưới. */
+      if(kind !== "not-allowed" && rbSrFallbackToLocal()) return;
       /* no-speech ập tới khi bộ nghe chưa hề bắt đầu (không onstart)
          = phiên chết lặng của nền tảng ⇒ tự cứu như watchdog. */
       if(kind === "no-speech" && meta && !meta.started){ if(noteDead()) return; }
@@ -7735,9 +7738,9 @@ function startSRReadback(ctx, session){
     ended: function(gotResult, meta){
       if(ctx.btn) ctx.btn.classList.remove("listening");
       if(gotResult){ ctx._srDeadStreak = 0; noteSrSessionAudible(); return; }
-      /* V46: phiên tự kết thúc không kết quả (không phải người học tự
-         dừng) → thử đường STT trong cùng lần bấm trước. */
-      if(!session._userStop && rbSrFallbackToStt()) return;
+      /* V50: phiên tự kết thúc không kết quả (không phải người học tự
+         dừng) → thử ghi âm + bộ nghe trên máy trong cùng lần bấm trước. */
+      if(!session._userStop && rbSrFallbackToLocal()) return;
       if(meta && meta.dead){ if(noteDead()) return; }
       /* Phiên tự kết thúc không lỗi, không kết quả, nhưng bộ nghe ĐÃ
          bắt đầu nghe (người học có nói mà máy thu rỗng — ca máy thật
@@ -7865,57 +7868,52 @@ function rbPickMime(){
 }
 
 /* ================================================================
-   V46 GHI AM STT CLOUDFLARE
-   Đường chấm nói mới: ghi âm bằng getUserMedia + MediaRecorder rồi
-   POST bản ghi thô lên Worker Cloudflare của chủ trang (Workers AI
-   chép lời), nhận {text} và đưa vào ĐÚNG các hàm chấm sẵn có
-   (rbShowResult cho panel Đọc lại — Từ vựng / Hội thoại / Phát Âm;
-   gradeSpeak cho Luyện nói). Endpoint đã kiểm chứng sống 17/11:
-   chỉ nhận Origin của trang, body tối đa 1MB, lỗi trả {error}.
-   Chọn đường: STT là đường CHÍNH khi UA chứa "CriOS" (Chrome trên
-   iPhone) hoặc trình duyệt không có SpeechRecognition (Safari,
-   Firefox). Chrome máy tính/Android giữ SpeechRecognition làm đường
-   chính; recognition lỗi/không có kết quả thì tự rơi xuống STT trong
-   cùng lần bấm. STT lỗi thì hiện “Chưa nghe rõ — bác thử lại nhé”
-   rồi rơi xuống đường dự phòng cũ (SpeechRecognition nếu có, không
-   thì ghi âm tự kiểm tra). Không ghi âm đồng thời với recognition;
-   mỗi lần bấm là một phiên MicSessions hoàn toàn mới như cũ.
+   V50 MOT BO NGHE TREN MAY — ĐƯỜNG GHI ÂM CHẤM TRÊN MÁY
+   Đường chấm nói DUY NHẤT ngoài bộ nghe sẵn của trình duyệt: ghi âm
+   bằng getUserMedia + MediaRecorder rồi chép lời NGAY TRÊN MÁY bằng
+   bộ nghe whisper-tiny.en (xem LocalWhisper bên dưới), đưa chữ vào
+   ĐÚNG các hàm chấm sẵn có (rbShowResult cho panel Đọc lại — Từ
+   vựng / Hội thoại / Phát Âm; gradeSpeak cho Luyện nói). Đường chấm
+   qua máy chủ đã GỠ TOÀN BỘ ở V50: trang không còn gửi bản ghi đi
+   đâu cả, mất mạng vẫn chấm được sau khi bộ nghe đã tải về máy.
+   Chọn đường: ghi âm + bộ nghe trên máy là đường CHÍNH khi UA chứa
+   "CriOS" (Chrome trên iPhone) hoặc trình duyệt không có
+   SpeechRecognition (Firefox…). Chrome máy tính/Android và Safari
+   có bộ nghe sẵn giữ SpeechRecognition làm đường chính; recognition
+   lỗi/không có kết quả thì tự rơi xuống đường này trong cùng lần
+   bấm. Bộ nghe trên máy lỗi/chưa tải được thì rơi xuống ghi âm tự
+   kiểm tra như cũ. Không ghi âm đồng thời với recognition; mỗi lần
+   bấm là một phiên MicSessions hoàn toàn mới như cũ.
    ================================================================ */
-var STT_ENDPOINT = "https://hoc-tieng-anh.vl-army-trader.workers.dev/stt";
 /* ================================================================
-   V48 NGHE SAN LAM CHINH
-   Rà soát định tuyến 17/11: sttIsPrimary() vốn CHỈ dựa vào việc
-   trình duyệt có SpeechRecognition hay không (không dựa vào tên
-   trình duyệt), nên Safari iPhone/Mac CÓ bộ nghe sẵn của Apple
-   (webkitSpeechRecognition) từ trước vẫn đã đi recognition làm
-   đường CHÍNH — giống hệt Chrome máy tính/Android — và recognition
-   lỗi/câm thì đã có sẵn nhánh rơi xuống STT trong cùng lần bấm
-   (wrapper spAd ở Luyện nói; rbSrFallbackToStt ở Đọc lại — dùng
-   chung cho Hội thoại lẫn Phát Âm từ/câu). V48 chốt tường minh
-   nhánh Safari vào sttIsPrimary() để định tuyến này không bị sửa
-   nhầm về sau: Safari thật (UA có "Safari/", KHÔNG có CriOS/FxiOS/
-   EdgiOS) + có bộ nghe sẵn → recognition CHÍNH, STT là lưới dự
-   phòng. Nhận giọng và ghi âm vẫn KHÔNG BAO GIỜ chạy song song
-   (bất biến tranh mic từ V15/V16): rơi đường = phiên recognition
-   đã kết thúc hẳn rồi phiên STT mới bắt đầu. Nhánh CriOS/FxiOS
-   (STT chính), nhánh không có bộ nghe (STT chính) và nhánh ghi âm
-   tự kiểm tra giữ nguyên tuyệt đối như V46/V47.
+   V50 MOT BO NGHE TREN MAY — ĐỊNH TUYẾN MỘT BỘ NGHE DUY NHẤT
+   Giữ nguyên định tuyến của V48, chỉ thay đường ghi âm: nhóm ghi âm
+   làm chính (localIsPrimary) nay chấm THẲNG bằng bộ nghe trên máy
+   (whisper-tiny.en chạy trong trình duyệt) trên blob vừa ghi —
+   KHÔNG còn gọi mạng/máy chủ nào nữa. Nhóm bộ nghe sẵn làm chính
+   (Chrome/Edge máy tính + Android, Safari có webkitSpeechRecognition)
+   giữ nguyên: bộ nghe sẵn tức thì; lỗi/câm thì rơi xuống ghi âm +
+   bộ nghe trên máy trong cùng lần bấm. Nhận giọng và ghi âm vẫn
+   KHÔNG BAO GIỜ chạy song song (bất biến tranh mic từ V15/V16):
+   rơi đường = phiên recognition đã kết thúc hẳn rồi phiên ghi âm
+   mới bắt đầu. Tự kiểm tra là tầng cuối cho máy không chạy được
+   bộ nghe trên máy / không có mic.
    ================================================================ */
-function sttIsPrimary(){
+function localIsPrimary(){
   var ua = navigator.userAgent || "";
   if(/CriOS/.test(ua)) return true;
-  /* V48: Safari thật có bộ nghe sẵn của Apple → bộ nghe sẵn là
-     đường CHÍNH (tức thì), STT chỉ là lưới dự phòng khi recognition
-     lỗi/câm. Safari KHÔNG có bộ nghe sẵn thì không vào nhánh này
-     và vẫn rơi xuống STT-chính ở dòng ngay dưới như cũ. */
+  /* Safari thật có bộ nghe sẵn của Apple → bộ nghe sẵn là đường
+     CHÍNH (tức thì), bộ nghe trên máy là lưới dự phòng khi
+     recognition lỗi/câm. Safari KHÔNG có bộ nghe sẵn thì vẫn rơi
+     xuống ghi âm + bộ nghe trên máy làm chính ở dòng ngay dưới. */
   if(/Safari\//.test(ua) && !/CriOS|FxiOS|EdgiOS/.test(ua) && (window.SpeechRecognition || window.webkitSpeechRecognition)) return false;
   if(!(window.SpeechRecognition || window.webkitSpeechRecognition)) return true;
   return false;
 }
-/* Chuẩn hóa cho đường STT: chữ thường, bỏ dấu câu, gộp khoảng trắng,
+/* Chuẩn hóa cho đường chấm trên máy: chữ thường, bỏ dấu câu, gộp khoảng trắng,
    mở rộng viết tắt phổ biến — áp cho CẢ phía đích lẫn phía bản ghi
    trước khi vào hàm so khớp/chấm sẵn có. */
-var STT_CONTRACTIONS = {
+var LOCAL_CONTRACTIONS = {
   "i'm": "i am", "don't": "do not", "can't": "cannot", "it's": "it is",
   "you're": "you are", "what's": "what is", "let's": "let us",
   "i'll": "i will", "i've": "i have", "isn't": "is not",
@@ -7926,58 +7924,39 @@ var STT_CONTRACTIONS = {
   "i'd": "i would", "you'll": "you will", "you've": "you have",
   "couldn't": "could not", "shouldn't": "should not", "wouldn't": "would not"
 };
-function sttNormalize(s){
+function localNormalize(s){
   var x = (s || "").toLowerCase().replace(/[\u2018\u2019]/g, "'").replace(/[^a-z0-9' ]/g, " ").replace(/\s+/g, " ").trim();
   if(!x) return "";
   return x.split(" ").map(function(w){
-    return STT_CONTRACTIONS[w] || w.replace(/'/g, "");
+    return LOCAL_CONTRACTIONS[w] || w.replace(/'/g, "");
   }).join(" ").replace(/\s+/g, " ").trim();
 }
-function sttWords(s){ return sttNormalize(s).split(" ").filter(Boolean); }
-/* Cùng cách tính với similarity() nhưng trên từ đã qua sttNormalize */
-function sttSimilarity(a, b){
-  var wa = sttWords(a), wb = sttWords(b);
+function localWords(s){ return localNormalize(s).split(" ").filter(Boolean); }
+/* Cùng cách tính với similarity() nhưng trên từ đã qua localNormalize */
+function localSimilarity(a, b){
+  var wa = localWords(a), wb = localWords(b);
   if(!wb.length) return 0;
   var hit = 0; wb.forEach(function(w){ if(wa.indexOf(w) >= 0) hit++; });
   return hit / wb.length;
 }
-/* Chọn mimeType cho bản ghi gửi STT đúng thứ tự đã kiểm chứng */
-function sttPickMime(){
+/* Chọn mimeType cho bản ghi chấm trên máy đúng thứ tự đã kiểm chứng */
+function localPickMime(){
   var cands = ["audio/webm;codecs=opus", "audio/webm", "audio/mp4"];
   if(typeof MediaRecorder === "undefined") return "";
   for(var i = 0; i < cands.length; i++){ try{ if(MediaRecorder.isTypeSupported(cands[i])) return cands[i]; }catch(e){} }
   return "";
 }
-/* POST bản ghi thô lên Worker; timeout ~20 giây bằng AbortController.
-   Resolves với {text, engine} đã chép (V47 STT NHANH HON: engine là bên
-   thắng cuộc đua phía Worker, chỉ để ghi nhật ký chẩn đoán); reject với
-   Error cho mọi lỗi (mạng, HTTP ≠ 200, {error}, JSON lạ). */
-function sttPost(blob){
-  return new Promise(function(resolve, reject){
-    var ctrl = ("AbortController" in window) ? new AbortController() : null;
-    var to = setTimeout(function(){ if(ctrl){ try{ ctrl.abort(); }catch(e){} } }, 20000);
-    function done(fn, v){ clearTimeout(to); fn(v); }
-    var opts = { method: "POST", headers: { "Content-Type": blob.type || "audio/webm" }, body: blob };
-    if(ctrl) opts.signal = ctrl.signal;
-    fetch(STT_ENDPOINT, opts).then(function(r){
-      return r.json().catch(function(){ return {}; }).then(function(j){
-        if(!r.ok) throw new Error("HTTP " + r.status);
-        if(j && j.error) throw new Error(String(j.error));
-        if(!j || typeof j.text !== "string") throw new Error("Phản hồi lạ từ máy chấm");
-        /* V47 STT NHANH HON: giữ thêm trường engine của Worker; thiếu thì "?" */
-        return { text: j.text, engine: (typeof j.engine === "string" && j.engine) ? j.engine : "?" };
-      });
-    }).then(function(res){ done(resolve, res); }, function(err){ done(reject, err); });
-  });
-}
 /* ================================================================
-   V49 WHISPER TREN MAY + MIC MOT LAN — BỘ NGHE DỰ PHÒNG TRÊN MÁY
+   V50 MOT BO NGHE TREN MAY — BỘ NGHE DUY NHẤT TRÊN MÁY
    Whisper chạy ngay trong trình duyệt bằng transformers.js
-   (@xenova/transformers 2.17.2) + model whisper-tiny.en lượng tử hóa,
-   tái dùng ĐÚNG cơ chế trang bench đã đo được (nạp ~3s, chép clip
-   2–6s trong ~3–3,9s, đúng nguyên văn): nạp thư viện bằng dynamic
-   import() của file vendor/transformers.min.js (ES module) ngay trong
-   script thường của trang; env.allowRemoteModels = false,
+   (@xenova/transformers 2.17.2) + model whisper-tiny.en lượng tử hóa
+   — bộ thắng cuộc đợt thi đấu model đo thật 17/11 (chấm giọng Việt
+   thật chuẩn nhất trong các model chạy trên máy; giữ nguyên model +
+   runtime + file vendor/models như V49, KHÔNG đổi). Cơ chế nạp giữ
+   đúng trang bench đã đo (nạp ~3s, chép clip 2–6s trong ~3–3,9s):
+   nạp thư viện bằng dynamic import() của file
+   vendor/transformers.min.js (ES module) ngay trong script thường
+   của trang; env.allowRemoteModels = false,
    env.allowLocalModels = true, env.localModelPath = "./models/",
    env.backends.onnx.wasm.wasmPaths = "./vendor/", pipeline
    "automatic-speech-recognition" với model "whisper-tiny.en",
@@ -7985,19 +7964,17 @@ function sttPost(blob){
    pipeline đúng cách bench: blob ghi âm → arrayBuffer →
    AudioContext.decodeAudioData → OfflineAudioContext resample về
    16kHz mono → Float32Array kênh 0 → asr(audio).
-   CHÍNH SÁCH KÍCH HOẠT: KHÔNG tự tải ngầm, KHÔNG nạp khi mở trang.
-   Chỉ nạp khi (a) CỨU NGUY: đường STT máy chủ lỗi/quá giờ trong một
-   lần đọc — giữ nguyên blob của lần đọc đó, báo người học đang tải
-   bộ nghe dự phòng lần đầu (~54MB) rồi chép luôn blob đó trên máy;
-   (b) người học tự bấm nút “Tải bộ nghe dự phòng” trong Cài đặt →
-   Chẩn đoán giọng nói. Đã sẵn sàng thì nó ĐUA với đường máy chủ trên
-   cùng một blob (engine "local" trong nhật ký stt-result). Lỗi nạp/
-   chạy (thiếu file 404, máy không hỗ trợ, hết bộ nhớ…) → tắt êm
-   đường này trong phiên trang, trang chạy y hệt V48, người học
-   không thấy lỗi kỹ thuật — chỉ ghi local-load / local-ready /
-   local-result / local-error vào nhật ký tieng-anh-voice-log.
-   Bộ nghe trên máy CHỈ tham gia ở họ ghi âm STT; các nhánh bộ nghe
-   sẵn (recognition) giữ nguyên tuyệt đối như V48. */
+   CHÍNH SÁCH KÍCH HOẠT (V50): TỰ TẢI NỀN khi mở trang (xem
+   LocalPreload ngay dưới) + nạp theo nhu cầu ở lần đọc đầu tiên nếu
+   chưa sẵn sàng — giữ nguyên blob của lần đọc đó, báo đang chuẩn bị
+   bộ nghe rồi chép luôn blob đó trên máy, không bắt đọc lại. Đây là
+   đường chép lời DUY NHẤT cho mọi phiên ghi âm; không còn đường
+   máy chủ nào để đua hay cứu nguy nữa. Lỗi nạp/chạy (thiếu file
+   404, máy không hỗ trợ, hết bộ nhớ…) → tắt êm đường này, phiên đọc
+   rơi xuống ghi âm tự kiểm tra như cũ — chỉ ghi local-load /
+   local-ready / local-result / local-error vào nhật ký
+   tieng-anh-voice-log. Các nhánh bộ nghe sẵn (recognition) giữ
+   nguyên tuyệt đối như V48. */
 var LocalWhisper = (function(){
   var state = "idle"; /* idle | loading | ready | failed */
   var asr = null, loadPromise = null, progressCb = null;
@@ -8023,18 +8000,24 @@ var LocalWhisper = (function(){
     });
   }
   /* Nạp thư viện + model đúng một lần; các lần gọi sau dùng lại cùng
-     promise/kết quả. log: handle nhật ký của phiên đang cứu nguy (nếu
+     promise/kết quả. log: handle nhật ký của phiên đang chờ nạp (nếu
      có) — không có thì tự mở một mục nhật ký riêng cho lần nạp này,
      vẫn dùng khóa tieng-anh-voice-log sẵn có, không thêm khóa mới.
-     Resolve true/false, KHÔNG BAO GIỜ reject. */
-  function ensureLoaded(log){
+     Resolve true/false, KHÔNG BAO GIỜ reject. force=true (chỉ nút
+     “Tải lại” trong Chẩn đoán mới dùng) cho phép thử nạp lại sau một
+     lần nạp lỗi; các đường tự động khác gặp state failed thì bỏ qua
+     ngay để rơi xuống tự kiểm tra, không kẹt người học. */
+  function ensureLoaded(log, force){
     if(state === "ready") return Promise.resolve(true);
-    if(state === "failed") return Promise.resolve(false);
+    if(state === "failed"){
+      if(!force) return Promise.resolve(false);
+      state = "idle"; loadPromise = null;
+    }
     if(loadPromise) return loadPromise;
     state = "loading";
     var slog = log || null, ownLog = false;
     if(!slog){
-      try{ slog = voiceLogBegin("Bộ nghe dự phòng", "", "local-whisper"); ownLog = true; }catch(e){ slog = null; }
+      try{ slog = voiceLogBegin("Bộ nghe trên máy", "", "local-whisper"); ownLog = true; }catch(e){ slog = null; }
     }
     function ev(name, detail){ if(slog){ try{ slog.ev(name, detail); }catch(e){} } }
     function evDone(){ if(ownLog && slog){ try{ slog.finish(); }catch(e){} } }
@@ -8087,57 +8070,100 @@ var LocalWhisper = (function(){
     setProgressHandler: function(fn){ progressCb = fn || null; }
   };
 })();
-/* Đua nhiều đường chép chữ trên CÙNG một blob: promise nào resolve
-   trước với text khác rỗng thì thắng ({text, engine}); tất cả cùng
-   lỗi/rỗng mới reject. Thay Promise.any cho trình duyệt cũ. */
-function firstValidResult(list){
-  return new Promise(function(resolve, reject){
-    var left = list.length, settled = false, lastErr = null;
-    if(!left){ reject(new Error("no racers")); return; }
-    function failOne(e){
-      lastErr = e; left -= 1;
-      if(left === 0 && !settled){ settled = true; reject(lastErr || new Error("race failed")); }
+/* ================================================================
+   V50 MOT BO NGHE TREN MAY — TẢI NỀN KHI MỞ TRANG
+   Sau khi trang tải xong và rảnh (requestIdleCallback; dự phòng
+   setTimeout ~2500ms sau window load), TỰ ĐỘNG nạp bộ nghe trên máy
+   ở chế độ nền: không hộp thoại, không chặn việc học, không hiện
+   thông báo nào ngoài khu Chẩn đoán giọng nói. Bỏ qua tải nền khi
+   máy bật tiết kiệm dữ liệu (navigator.connection.saveData) hoặc
+   mạng thuộc nhóm chậm (effectiveType slow-2g/2g), hoặc bộ nghe đã
+   sẵn sàng/đang nạp. Nạp nền lỗi → tắt êm (ghi local-error như cũ),
+   trang chạy như thường; lần đọc đầu tiên mà bộ nghe chưa sẵn sàng
+   thì nạp theo nhu cầu ngay trong phiên đọc đó. Sự kiện nhật ký:
+   local-preload khi bắt đầu tải nền, local-ready khi xong. */
+var localPreloadSkipped = false;
+var LocalPreload = (function(){
+  var started = false;
+  function capable(){
+    try{ return typeof WebAssembly !== "undefined"; }catch(e){ return false; }
+  }
+  function skipReason(){
+    try{
+      var c = navigator.connection;
+      if(c){
+        if(c.saveData) return "tiết kiệm dữ liệu đang bật";
+        var et = c.effectiveType;
+        if(et === "slow-2g" || et === "2g") return "mạng đang rất chậm (" + et + ")";
+      }
+    }catch(e){}
+    return null;
+  }
+  function start(){
+    if(started) return; started = true;
+    var st = "idle";
+    try{ st = LocalWhisper.state(); }catch(e){ return; }
+    if(st === "ready" || st === "loading") return;
+    if(!capable()) return;
+    var skip = skipReason();
+    if(skip){
+      localPreloadSkipped = true;
+      if(typeof refreshLocalWhisperBtn === "function") refreshLocalWhisperBtn();
+      return;
     }
-    list.forEach(function(pr){
-      pr.then(function(r){
-        if(settled) return;
-        if(r && typeof r.text === "string" && r.text.trim()){ settled = true; resolve(r); }
-        else failOne(new Error("empty text"));
-      }, failOne);
+    var log = null;
+    try{ log = voiceLogBegin("Bộ nghe trên máy", "", "local-whisper"); }catch(e){}
+    if(log){ try{ log.ev("local-preload", "bắt đầu tải nền bộ nghe whisper-tiny.en khi trang đã rảnh"); }catch(e){} }
+    LocalWhisper.ensureLoaded(log).then(function(){
+      if(log){ try{ log.finish(); }catch(e){} }
+      if(typeof refreshLocalWhisperBtn === "function") refreshLocalWhisperBtn();
     });
-  });
-}
-function stopSttCapture(session){
+  }
+  function schedule(){
+    var arm = function(){
+      if(typeof window.requestIdleCallback === "function"){
+        window.requestIdleCallback(function(){ start(); }, { timeout: 5000 });
+      } else {
+        setTimeout(function(){ start(); }, 2500);
+      }
+    };
+    if(document.readyState === "complete") arm();
+    else window.addEventListener("load", arm);
+  }
+  return { schedule: schedule, startNow: start };
+})();
+function stopLocalCapture(session){
   if(!MicSessions.isCurrent(session.id)) return;
   if(session.capTimer){ clearTimeout(session.capTimer); session.capTimer = null; }
   var rec = session.resources.recorder;
   if(rec && rec.state === "recording"){ try{ rec.stop(); }catch(e){} }
 }
-/* Ghi âm một phiên STT: chờ TTS im hẳn → xin mic qua MicStreamKeeper
-   (điểm getUserMedia duy nhất của trang, kèm khử vọng/khử ồn/tự chỉnh
-   độ to) → MediaRecorder + bộ dò im lặng dùng chung để tự dừng khi
-   đọc xong (trần cứng của phiên là 10 giây do nơi gọi đặt). Dừng →
-   đóng track mic ngay → POST → adapter.result(text, blob, durSec).
-   Mọi lỗi đều qua adapter.error(kind) sau khi phiên đã được kết
-   thúc sạch — không bao giờ để tính năng chết cứng.
+/* Ghi âm một phiên chấm trên máy: chờ TTS im hẳn → xin mic qua
+   MicStreamKeeper (điểm getUserMedia duy nhất của trang, kèm khử
+   vọng/khử ồn/tự chỉnh độ to) → MediaRecorder + bộ dò im lặng dùng
+   chung để tự dừng khi đọc xong (trần cứng của phiên là 10 giây do
+   nơi gọi đặt). Dừng → chép ngay trên máy bằng LocalWhisper →
+   adapter.result(text, blob, durSec). Mọi lỗi đều qua
+   adapter.error(kind) sau khi phiên đã được kết thúc sạch — không
+   bao giờ để tính năng chết cứng.
    adapter: { phase(p), result(text, blob, durSec), error(kind) } */
-function startSttCapture(session, adapter){
+function startLocalCapture(session, adapter){
   if(!session.voiceLog){
     var tgt = "";
     if(session.ownerCtx && session.ownerCtx.target) tgt = session.ownerCtx.target;
     else if(session.key === "speak" && typeof speakItems !== "undefined" && speakItems[speakIndex]) tgt = speakItems[speakIndex].en;
-    session.voiceLog = voiceLogBegin(session.key === "speak" ? "Luyện nói" : "Đọc lại", tgt, "cloudflare-stt");
+    session.voiceLog = voiceLogBegin(session.key === "speak" ? "Luyện nói" : "Đọc lại", tgt, "local");
   }
   var log = session.voiceLog;
-  log.ev("stt", "bắt đầu — chờ TTS im rồi xin mic");
+  log.ev("local", "bắt đầu — chờ TTS im rồi xin mic");
   adapter.phase("starting");
   waitForTtsQuiet().then(function(){
     if(!MicSessions.isCurrent(session.id)) return;
-    log.ev("stt-tts-quiet", "speechSynthesis đã im — xin mic");
+    log.ev("local-tts-quiet", "speechSynthesis đã im — xin mic");
     micAcquire().then(function(stream){
       if(!MicSessions.isCurrent(session.id)) return;
       log.ev("mic-ok", "đã có stream mic");
-      beginSttWithStream(session, adapter, stream);
+      beginLocalWithStream(session, adapter, stream);
     }).catch(function(err){
       if(!MicSessions.isCurrent(session.id)) return;
       log.ev("mic-error", gumErrorKind(err));
@@ -8147,14 +8173,14 @@ function startSttCapture(session, adapter){
     });
   });
 }
-function beginSttWithStream(session, adapter, stream){
+function beginLocalWithStream(session, adapter, stream){
   var log = session.voiceLog;
   var chunks = [];
-  var mime = sttPickMime();
+  var mime = localPickMime();
   var rec;
-  /* V47 STT NHANH HON: ghi ở 32kbps để blob nhẹ hơn, tải lên nhanh hơn
-     trên mạng yếu; trình duyệt không nhận options này thì lùi về cách
-     tạo MediaRecorder như cũ, không lỗi. */
+   /* Ghi ở 32kbps để blob nhẹ, bộ nghe trên máy chép nhanh hơn;
+      trình duyệt không nhận options này thì lùi về cách tạo
+     MediaRecorder như cũ, không lỗi. */
   try{ rec = mime ? new MediaRecorder(stream, { mimeType: mime, audioBitsPerSecond: 32000 }) : new MediaRecorder(stream, { audioBitsPerSecond: 32000 }); }
   catch(e1){
     try{ rec = mime ? new MediaRecorder(stream, { mimeType: mime }) : new MediaRecorder(stream); }
@@ -8162,8 +8188,8 @@ function beginSttWithStream(session, adapter, stream){
   }
   session.resources.recorder = rec;
   var recStartedAt = 0;
-  /* V47 STT NHANH HON: đã nghe thấy tiếng nói thì chỉ chờ 1,2 giây im
-     lặng liên tục là tự dừng và gửi đi ngay. */
+   /* Đã nghe thấy tiếng nói thì chỉ chờ 1,2 giây im lặng liên tục
+      là tự dừng và chép ngay trên máy. */
   var det = makeEndpointDetector({ silenceMs: 1200, speechRms: 0.02 });
   try{
     var AC = window.AudioContext || window.webkitAudioContext;
@@ -8180,7 +8206,7 @@ function beginSttWithStream(session, adapter, stream){
         for(i = 0; i < buf.length; i++){ v = (buf[i] - 128) / 128; sum += v * v; }
         var d = det.feed(Math.sqrt(sum / buf.length), Date.now());
         if(d === "speech" && session.phase === "listening"){ MicSessions.setPhase(session, "recording"); if(log) log.ev("speech", "bộ dò nghe thấy tiếng nói"); adapter.phase("recording"); }
-        else if(d === "stop"){ stopSttCapture(session); }
+        else if(d === "stop"){ stopLocalCapture(session); }
       }, 120);
       session.resources.timers.push(iv);
     }
@@ -8196,87 +8222,77 @@ function beginSttWithStream(session, adapter, stream){
     var blob = new Blob(chunks, { type: rec.mimeType || mime || "audio/webm" });
     var durSec = recStartedAt ? (Date.now() - recStartedAt) / 1000 : 0;
     if(session.capTimer){ clearTimeout(session.capTimer); session.capTimer = null; }
-    /* V47 STT NHANH HON: mốc dừng ghi để đo thời gian chờ kết quả */
-    var sttStopAt = Date.now();
-    if(log) log.ev("stt-stop", "blob " + Math.round(blob.size / 1024) + "KB · " + (blob.type || "?"));
+    /* Mốc dừng ghi để đo thời gian chờ kết quả */
+    var localStopAt = Date.now();
+    if(log) log.ev("local-stop", "blob " + Math.round(blob.size / 1024) + "KB · " + (blob.type || "?"));
     MicSessions.setPhase(session, "grading"); adapter.phase("grading");
-    if(!blob.size || blob.size > 1000000){
-      if(log){ log.ev("stt-error", !blob.size ? "blob rỗng" : "blob quá 1MB"); log.finish(); }
+    if(!blob.size){
+      if(log){ log.ev("local-error", "blob rỗng"); log.finish(); }
       MicSessions.finish(session);
       adapter.error("error");
       return;
     }
-    /* Đường lỗi cũ giữ nguyên: báo “network” để adapter rơi xuống
-       dự phòng sẵn có như V46–V48. */
-    function sttFailOld(err){
+    /* V50 MOT BO NGHE TREN MAY — LUỒNG CHẤM SAU KHI GHI: chép THẲNG
+       bằng bộ nghe trên máy trên chính blob vừa ghi, không gọi mạng,
+       không đua với đường nào khác. Chưa sẵn sàng (đang tải nền /
+       nạp theo nhu cầu) → hiện trạng thái chờ nạp qua phase
+       "local-loading" rồi chép ngay khi sẵn sàng; nạp/chép lỗi hoặc
+       chép ra rỗng → adapter.error để rơi xuống tự kiểm tra như cũ. */
+    function localFail(err){
       if(!MicSessions.isCurrent(session.id)) return;
-      if(log){ log.ev("stt-error", String(err && err.message || err)); log.finish(); }
+      if(log){ log.ev("local-error", String(err && err.message || err)); log.finish(); }
       MicSessions.finish(session);
-      adapter.error("network");
+      adapter.error("error");
     }
-    function sttWin(res){
+    function localWin(text){
       if(!MicSessions.isCurrent(session.id)) return;
-      /* V47 STT NHANH HON: nhật ký ghi thêm engine + số ms chờ từ lúc dừng ghi.
-         V49: engine có thêm "local" khi bộ nghe trên máy thắng cuộc đua. */
-      if(log){ log.ev("stt-result", "engine=" + (res.engine || "?") + " · chờ " + (Date.now() - sttStopAt) + "ms · “" + String(res.text).slice(0, 60) + "”"); log.finish(); }
+      /* Định dạng dòng stt-result giữ nguyên như các bản trước;
+         engine từ nay chỉ còn "local". */
+      if(log){ log.ev("stt-result", "engine=local · chờ " + (Date.now() - localStopAt) + "ms · “" + String(text).slice(0, 60) + "”"); log.finish(); }
       MicSessions.finish(session);
-      adapter.result(res.text, blob, durSec);
+      adapter.result(text, blob, durSec);
     }
-    /* V49: bộ nghe trên máy ĐÃ sẵn sàng → cho ĐUA với đường máy chủ
-       trên cùng blob này; chưa sẵn sàng → chỉ chạy đường máy chủ như
-       cũ, máy chủ lỗi mới kích hoạt CỨU NGUY bên dưới. */
+    function localTranscribeNow(){
+      LocalWhisper.transcribe(blob, log).then(function(text){
+        if(!MicSessions.isCurrent(session.id)) return;
+        if(!text || !text.trim()){ localFail(new Error("local empty")); return; }
+        localWin(text);
+      }, function(e2){ localFail(e2); });
+    }
     var localReady = false;
     try{ localReady = LocalWhisper.isReady(); }catch(e){}
-    var racers = [sttPost(blob)];
-    if(localReady){
-      racers.push(LocalWhisper.transcribe(blob, log).then(function(text){ return { text: text, engine: "local" }; }));
-    }
-    firstValidResult(racers).then(sttWin).catch(function(err){
+    if(localReady){ localTranscribeNow(); return; }
+    try{ adapter.phase("local-loading"); }catch(e){}
+    if(log) log.ev("local-wait", "bộ nghe trên máy chưa sẵn sàng — chờ nạp xong rồi chép ngay bản ghi này");
+    LocalWhisper.ensureLoaded(log).then(function(ok){
       if(!MicSessions.isCurrent(session.id)) return;
-      /* V49 CỨU NGUY: máy chủ lỗi/quá giờ mà bộ nghe trên máy chưa
-         từng nạp (và chưa từng lỗi nạp) → nạp ngay bây giờ, báo cho
-         người học biết lần đầu phải tải ~54MB, rồi chép luôn CHÍNH
-         blob vừa ghi trên máy và chấm như thường — không bắt đọc
-         lại. Nạp/chạy lỗi thì tắt êm và về đường lỗi cũ. */
-      if(!localReady && LocalWhisper.state() !== "failed"){
-        try{ adapter.phase("local-loading"); }catch(e){}
-        if(log) log.ev("local-rescue", "máy chủ lỗi — nạp bộ nghe dự phòng để chấm ngay bản ghi này");
-        LocalWhisper.ensureLoaded(log).then(function(ok){
-          if(!MicSessions.isCurrent(session.id)) return;
-          if(!ok){ sttFailOld(err); return; }
-          LocalWhisper.transcribe(blob, log).then(function(text){
-            if(!MicSessions.isCurrent(session.id)) return;
-            if(!text || !text.trim()){ sttFailOld(new Error("local empty")); return; }
-            sttWin({ text: text, engine: "local" });
-          }, function(e2){ sttFailOld(e2); });
-        });
-        return;
-      }
-      sttFailOld(err);
+      if(!ok){ localFail(new Error("local load failed")); return; }
+      localTranscribeNow();
     });
   };
-  session.stopCapture = function(){ stopSttCapture(session); };
-  session.capTimer = setTimeout(function(){ stopSttCapture(session); }, session.capMs);
+  session.stopCapture = function(){ stopLocalCapture(session); };
+  session.capTimer = setTimeout(function(){ stopLocalCapture(session); }, session.capMs);
   MicSessions.setPhase(session, "listening");
   adapter.phase("listening");
   recStartedAt = Date.now();
-  try{ rec.start(250); if(log) log.ev("stt-start", "mime=" + (rec.mimeType || mime || "?")); }
-  catch(e){ if(log){ log.ev("stt-start-error", String(e && e.message || e)); log.finish(); } MicSessions.finish(session); adapter.error("audio-capture"); }
+  try{ rec.start(250); if(log) log.ev("local-start", "mime=" + (rec.mimeType || mime || "?")); }
+  catch(e){ if(log){ log.ev("local-start-error", String(e && e.message || e)); log.finish(); } MicSessions.finish(session); adapter.error("audio-capture"); }
 }
-/* Trạng thái panel Đọc lại cho đường STT: “starting” dùng lại khung
-   của rbPhaseUI; “listening/recording” hiện đúng dòng “Đang nghe…
-   chạm để dừng” kèm nút Dừng; “grading” hiện “Đang chấm…”. */
-function rbSttPhaseUI(ctx, session, phase){
+/* Trạng thái panel Đọc lại cho đường chấm trên máy: “starting” dùng
+   lại khung của rbPhaseUI; “listening/recording” hiện đúng dòng
+   “Đang nghe… chạm để dừng” kèm nút Dừng; “grading” hiện “Đang chấm…”. */
+function rbLocalPhaseUI(ctx, session, phase){
   if(phase === "starting"){ rbPhaseUI(ctx, session, phase); return; }
-  /* V49 CỨU NGUY: đang tải bộ nghe dự phòng lần đầu để chấm luôn bản
-     ghi vừa rồi — báo rõ ~54MB và không bắt người học đọc lại. */
+  /* V50 MOT BO NGHE TREN MAY: bộ nghe chưa sẵn sàng (đang tải nền
+     hoặc đang nạp theo nhu cầu) — báo rõ và giữ nguyên bản ghi vừa
+     rồi: nạp xong máy chép và chấm luôn, không bắt người học đọc lại. */
   if(phase === "local-loading"){
     var lp = rbPreparePanel(ctx);
     var ls = document.createElement("p"); ls.className = "rb-status";
-    ls.textContent = "Đang tải bộ nghe dự phòng về máy (khoảng 54MB, chỉ lần đầu)…";
+    ls.textContent = "Đang chuẩn bị bộ nghe trên máy…";
     lp.appendChild(ls);
     var lh = document.createElement("p"); lh.className = "rb-line";
-    lh.textContent = "Đường chấm qua mạng vừa trục trặc. Bác chờ một chút — tải xong, máy sẽ chấm luôn bản ghi vừa rồi, bác không phải đọc lại.";
+    lh.textContent = "Lần đầu máy cần tải bộ nghe về (khoảng 54MB, chỉ tải một lần). Bác chờ một chút — chuẩn bị xong, máy sẽ chấm luôn bản ghi vừa rồi ngay trên máy, bác không phải đọc lại.";
     lp.appendChild(lh);
     appendWebviewNote(lp);
     if(ctx.btn) ctx.btn.classList.remove("listening");
@@ -8311,13 +8327,13 @@ function rbSttPhaseUI(ctx, session, phase){
   panel.appendChild(actions);
   appendWebviewNote(panel);
 }
-/* Phiên Đọc lại qua STT: nhận {text} → chuẩn hóa cả hai phía bằng
-   sttNormalize → alignWords (LCS từng từ, cùng hàm với đường SR) →
+/* Phiên Đọc lại chấm trên máy: nhận {text} → chuẩn hóa cả hai phía bằng
+   localNormalize → alignWords (LCS từng từ, cùng hàm với đường SR) →
    rbShowResult chấm như cũ (tô xanh/đỏ, kết luận, gợi ý IPA tĩnh,
    đánh dấu đã thuộc, tự chuyển câu/phần đều giữ nguyên). Bản ghi thô
    được giữ lại để bác nghe lại giọng mình như đường tự kiểm tra. */
-function startSttReadback(ctx, session){
-  session.voiceLog = voiceLogBegin("Đọc lại", ctx.target, "cloudflare-stt");
+function startLocalReadback(ctx, session){
+  session.voiceLog = voiceLogBegin("Đọc lại", ctx.target, "local");
   ctx.fromRecording = false; ctx.lastBlob = null;
   if(ctx.audioUrl){ try{ URL.revokeObjectURL(ctx.audioUrl); }catch(e){} ctx.audioUrl = null; }
   var iv = setInterval(function(){
@@ -8326,14 +8342,14 @@ function startSttReadback(ctx, session){
     if(el){ var sec = Math.floor((Date.now() - session.startedAt) / 1000); el.textContent = "0:" + (sec < 10 ? "0" : "") + sec; }
   }, 500);
   session.resources.timers.push(iv);
-  startSttCapture(session, {
-    phase: function(p){ rbSttPhaseUI(ctx, session, p); },
+  startLocalCapture(session, {
+    phase: function(p){ rbLocalPhaseUI(ctx, session, p); },
     result: function(text, blob, durSec){
       ctx._srDeadStreak = 0; noteSrResult(); noteSrSessionAudible();
-      var tWords = sttWords(ctx.target);
-      var hWords = sttWords(text);
+      var tWords = localWords(ctx.target);
+      var hWords = localWords(text);
       var al = alignWords(tWords, hWords);
-      ctx._fromStt = true;
+      ctx._fromLocal = true;
       ctx.fromRecording = true;
       ctx.lastBlob = blob;
       if(ctx.audioUrl){ try{ URL.revokeObjectURL(ctx.audioUrl); }catch(e){} }
@@ -8343,104 +8359,88 @@ function startSttReadback(ctx, session){
       if(ctx.btn) ctx.btn.classList.remove("listening");
       rbShowResult(ctx, { said: text, al: al, score: al.count - al.extras.length * 0.25 });
     },
-    error: function(kind){ rbSttFail(ctx, kind); }
+    error: function(kind){ rbLocalFail(ctx, kind); }
   });
 }
-/* STT lỗi ở panel Đọc lại: hiện dòng thân thiện “Chưa nghe rõ — bác
-   thử lại nhé” rồi rơi xuống đường dự phòng sẵn có — SpeechRecognition
-   nếu trình duyệt có (trừ khi người học đã chủ động chọn ghi âm),
-   không thì ghi âm tự kiểm tra nghe lại. Lỗi mic bị từ chối thì báo
-   đúng lỗi quyền mic như cũ, không vòng qua đường nào khác. */
-function rbSttFail(ctx, kind){
+/* V50 MOT BO NGHE TREN MAY: bộ nghe trên máy lỗi ở panel Đọc lại
+   (không tải được / chép lỗi / không nghe ra chữ) → hiện dòng thân
+   thiện “Chưa nghe rõ — bác thử lại nhé” rồi rơi thẳng xuống ghi âm
+   tự kiểm tra nghe lại — tầng cuối duy nhất, không còn đường máy chủ
+   hay vòng lại bộ nghe sẵn nữa. Lỗi mic bị từ chối thì báo đúng lỗi
+   quyền mic như cũ, không vòng qua đường nào khác. */
+function rbLocalFail(ctx, kind){
   if(ctx.btn) ctx.btn.classList.remove("listening");
   if(kind === "not-allowed"){ rbShowMessage(ctx, "not-allowed"); return; }
-  ctx._sttTried = true;
+  if(kind === "audio-capture"){ rbShowMessage(ctx, "audio-capture"); return; }
+  ctx._localTried = true;
   var panel = rbPreparePanel(ctx);
   var t = document.createElement("p"); t.className = "rb-status";
   t.textContent = "Chưa nghe rõ — bác thử lại nhé";
   panel.appendChild(t);
   var p = document.createElement("p"); p.className = "rb-line";
-  var useSrFallback = rbSupported() && !ctx._forceRecord;
-  p.textContent = useSrFallback
-    ? "Đường nghe qua mạng vừa trục trặc — trang tự chuyển sang bộ nghe có sẵn của trình duyệt, bác chờ một chút rồi đọc lại nhé."
-    : "Đường nghe qua mạng vừa trục trặc — trang tự chuyển sang ghi âm tự kiểm tra, bác chờ một chút rồi đọc lại nhé.";
+  p.textContent = "Bộ nghe trên máy chưa chấm được lần này — trang tự chuyển sang ghi âm tự kiểm tra, bác chờ một chút rồi đọc lại nhé.";
   panel.appendChild(p);
   appendWebviewNote(panel);
   setTimeout(function(){
     if(rbOpenCtx !== ctx) return;
     if(!ctx.panel.classList.contains("show")) return;
     if(MicSessions.get()) return;
-    if(useSrFallback){
-      var s1 = MicSessions.begin({
-        key: "readback", ownerCtx: ctx, kind: "sr", capMs: capMsForTarget(ctx),
-        closeUI: function(s){ closeReadbackPanel(s.ownerCtx); }
-      });
-      startSRReadback(ctx, s1);
-    } else {
-      var s2 = MicSessions.begin({
-        key: "readback", ownerCtx: ctx, kind: "record", capMs: capMsForTarget(ctx),
-        closeUI: function(s){ closeReadbackPanel(s.ownerCtx); }
-      });
-      startRecorderCapture(s2, rbSelfAdapter(ctx, s2));
-    }
+    var s2 = MicSessions.begin({
+      key: "readback", ownerCtx: ctx, kind: "record", capMs: capMsForTarget(ctx),
+      closeUI: function(s){ closeReadbackPanel(s.ownerCtx); }
+    });
+    startRecorderCapture(s2, rbSelfAdapter(ctx, s2));
   }, 900);
 }
-/* ===== V46: Luyện nói qua STT ===== */
-var speakSttTried = false;
-function speakStartSttSession(){
+/* ===== V50 MOT BO NGHE TREN MAY: Luyện nói chấm trên máy ===== */
+var speakLocalTried = false;
+function speakStartLocalSession(){
   var session = MicSessions.begin({
-    key: "speak", kind: "stt", capMs: 10000,
+    key: "speak", kind: "local", capMs: 10000,
     closeUI: function(){ closeSpeakUI(); }
   });
-  session.voiceLog = voiceLogBegin("Luyện nói", speakItems[speakIndex] ? speakItems[speakIndex].en : "", "cloudflare-stt");
-  startSttCapture(session, spSttAdapter(session));
+  session.voiceLog = voiceLogBegin("Luyện nói", speakItems[speakIndex] ? speakItems[speakIndex].en : "", "local");
+  startLocalCapture(session, spLocalAdapter(session));
 }
-function spSttAdapter(session){
+function spLocalAdapter(session){
   return {
     phase: function(p){
       var btn = document.getElementById("micBtn");
       if(p === "starting"){ btn.classList.add("listening"); spStatus("Đang mở mic… bác bấm “Cho phép” nếu máy hỏi nhé."); }
       else if(p === "listening" || p === "recording"){ btn.classList.add("listening"); spStatus("Đang nghe… chạm để dừng"); }
       else if(p === "grading"){ btn.classList.remove("listening"); spStatus("Đang chấm…"); }
-      /* V49 CỨU NGUY: tải bộ nghe dự phòng lần đầu rồi chấm luôn bản ghi vừa rồi */
-      else if(p === "local-loading"){ btn.classList.remove("listening"); spStatus("Đang tải bộ nghe dự phòng về máy (khoảng 54MB, chỉ lần đầu)… tải xong máy chấm luôn bản ghi vừa rồi, bác không phải đọc lại."); }
+      /* V50: bộ nghe trên máy chưa sẵn sàng — đang nạp rồi chấm luôn bản ghi vừa rồi */
+      else if(p === "local-loading"){ btn.classList.remove("listening"); spStatus("Đang chuẩn bị bộ nghe trên máy (lần đầu cần tải khoảng 54MB)… chuẩn bị xong máy chấm luôn bản ghi vừa rồi, bác không phải đọc lại."); }
     },
     result: function(text){
       noteSrResult(); noteSrSessionAudible();
-      speakFromStt = true;
+      speakFromLocal = true;
       gradeSpeak(text);
-      speakFromStt = false;
+      speakFromLocal = false;
     },
-    error: function(kind){ speakSttFail(kind); }
+    error: function(kind){ speakLocalFail(kind); }
   };
 }
-/* STT lỗi ở Luyện nói: hiện dòng thân thiện rồi rơi xuống đường dự
-   phòng sẵn có — SpeechRecognition nếu có, không thì ghi âm tự kiểm
-   tra nghe lại (spSelfAdapter). Lỗi mic bị từ chối báo đúng như cũ. */
-function speakSttFail(kind){
+/* V50 MOT BO NGHE TREN MAY: bộ nghe trên máy lỗi ở Luyện nói (không
+   tải được / chép lỗi / không nghe ra chữ) → hiện dòng thân thiện rồi
+   rơi thẳng xuống ghi âm tự kiểm tra nghe lại (spSelfAdapter) — tầng
+   cuối duy nhất, không còn đường máy chủ hay vòng lại bộ nghe sẵn.
+   Lỗi mic bị từ chối thì báo đúng như cũ, không vòng qua đường nào. */
+function speakLocalFail(kind){
   document.getElementById("micBtn").classList.remove("listening");
   if(kind === "not-allowed"){ spStatus("Trang web chưa được phép dùng mic. Bác bấm cho phép (Allow) khi trình duyệt hỏi nhé."); return; }
+  if(kind === "audio-capture"){ spStatus("Không tìm thấy mic hoặc mic đang bận. Bác kiểm tra lại mic rồi thử lại nhé."); return; }
   spStatus("Chưa nghe rõ — bác thử lại nhé");
-  var useSrFallback = rbSupported();
   setTimeout(function(){
     var panel = document.getElementById("panel-speak");
     if(!panel || !panel.classList.contains("active")) return;
     if(MicSessions.get()) return;
-    if(useSrFallback){
-      var session = MicSessions.begin({
-        key: "speak", kind: "sr", capMs: 20000,
-        closeUI: function(){ closeSpeakUI(); }
-      });
-      session.voiceLog = voiceLogBegin("Luyện nói", speakItems[speakIndex] ? speakItems[speakIndex].en : "", "recognition");
-      startSRSession(session, spSRAdapter(session));
-    } else {
-      if(inAppBrowserInfo()) showSpeakWebviewNote();
-      var s2 = MicSessions.begin({
-        key: "speak", kind: "record", capMs: 20000,
-        closeUI: function(){ closeSpeakUI(); }
-      });
-      startRecorderCapture(s2, spSelfAdapter(s2));
-    }
+    if(inAppBrowserInfo()) showSpeakWebviewNote();
+    var s2 = MicSessions.begin({
+      key: "speak", kind: "record", capMs: 20000,
+      closeUI: function(){ closeSpeakUI(); }
+    });
+    startRecorderCapture(s2, spSelfAdapter(s2));
   }, 900);
 }
 function rbPlayBtn(ctx){
@@ -8504,8 +8504,8 @@ function beginRecorderWithStream(session, adapter, stream){
   try{ rec = mime ? new MediaRecorder(stream, { mimeType: mime }) : new MediaRecorder(stream); }
   catch(e){ MicSessions.finish(session); adapter.error("audio-capture"); return; }
   session.resources.recorder = rec;
-  /* V47 STT NHANH HON: bộ dò dùng chung — ghi âm tự kiểm tra cũng chờ
-     1,2 giây im lặng liên tục là tự dừng, nhất quán với đường STT. */
+  /* Bộ dò dùng chung — ghi âm tự kiểm tra cũng chờ 1,2 giây im lặng
+     liên tục là tự dừng, nhất quán với đường chấm trên máy. */
   var det = makeEndpointDetector({ silenceMs: 1200, speechRms: 0.02 });
   try{
     var AC = window.AudioContext || window.webkitAudioContext;
@@ -10282,48 +10282,58 @@ var voiceDiagCopyEl = document.getElementById("voiceDiagCopy");
 if(voiceDiagCopyEl) voiceDiagCopyEl.addEventListener("click", function(){ copyVoiceLog(voiceDiagCopyEl); });
 var voiceDiagOverlayEl = document.getElementById("voiceDiagOverlay");
 if(voiceDiagOverlayEl) voiceDiagOverlayEl.addEventListener("click", function(e){ if(e.target === voiceDiagOverlayEl) closeVoiceDiag(); });
-/* V49: nút tải tay bộ nghe dự phòng (Whisper trên máy) trong Chẩn
-   đoán giọng nói — chỉ nạp khi người học tự bấm, hiện tiến độ/trạng
-   thái ngay tại chỗ; nạp lỗi thì báo nhẹ nhàng và trang vẫn chạy như
-   thường, không hiện lỗi kỹ thuật. */
+/* V50 MOT BO NGHE TREN MAY — TRẠNG THÁI BỘ NGHE TRÊN MÁY trong
+   Chẩn đoán giọng nói: bộ nghe TỰ tải nền khi mở trang (xem
+   LocalPreload), khu này chỉ HIỂN THỊ trạng thái — đang tải nền… x%
+   / đã sẵn sàng ✓ / chưa tải được — và hiện nút “Tải lại” CHỈ khi
+   nạp lỗi hoặc bị bỏ qua vì tiết kiệm dữ liệu/mạng chậm; bấm nút là
+   nạp ngay (ép thử lại cả sau lần nạp lỗi). Văn bản viết dễ hiểu
+   cho người lớn tuổi, không lộ lỗi kỹ thuật. */
 var localWhisperBtnEl = document.getElementById("localWhisperBtn");
 var localWhisperStatusEl = document.getElementById("localWhisperStatus");
+var localLoadPct = -1;
 function refreshLocalWhisperBtn(){
-  if(!localWhisperBtnEl) return;
+  if(!localWhisperStatusEl && !localWhisperBtnEl) return;
   var st = "idle";
   try{ st = LocalWhisper.state(); }catch(e){}
+  function showBtn(label){ if(localWhisperBtnEl){ localWhisperBtnEl.hidden = false; localWhisperBtnEl.disabled = false; if(label) localWhisperBtnEl.textContent = label; } }
+  function hideBtn(){ if(localWhisperBtnEl){ localWhisperBtnEl.hidden = true; localWhisperBtnEl.disabled = true; } }
   if(st === "ready"){
-    localWhisperBtnEl.textContent = "Bộ nghe dự phòng đã sẵn sàng ✓";
-    localWhisperBtnEl.disabled = true;
-    if(localWhisperStatusEl) localWhisperStatusEl.textContent = "Bộ nghe dự phòng đã nằm trên máy. Từ nay, mỗi lần đọc máy sẽ cho nó đua với đường chấm qua mạng — bên nào ra chữ trước thì chấm bên đó; mạng trục trặc hẳn thì nó chấm luôn bản ghi ngay trên máy.";
+    hideBtn();
+    if(localWhisperStatusEl) localWhisperStatusEl.textContent = "Bộ nghe đã sẵn sàng ✓ — bác đọc là máy chấm ngay trên máy, không cần mạng.";
   } else if(st === "loading"){
-    localWhisperBtnEl.textContent = "Đang tải bộ nghe dự phòng…";
-    localWhisperBtnEl.disabled = true;
+    hideBtn();
+    if(localWhisperStatusEl) localWhisperStatusEl.textContent = localLoadPct >= 0
+      ? "Đang tải bộ nghe về máy… " + localLoadPct + "% — tải xong là đọc chấm được ngay trên máy."
+      : "Đang tải bộ nghe về máy… — tải xong là đọc chấm được ngay trên máy.";
   } else if(st === "failed"){
-    localWhisperBtnEl.textContent = "Tải bộ nghe dự phòng về máy (khoảng 54MB)";
-    localWhisperBtnEl.disabled = false;
-    if(localWhisperStatusEl) localWhisperStatusEl.textContent = "Chưa tải được bộ nghe dự phòng trên máy này — không sao, trang vẫn chấm bằng các đường khác như thường.";
+    showBtn("Tải lại bộ nghe");
+    if(localWhisperStatusEl) localWhisperStatusEl.textContent = "Chưa tải được bộ nghe về máy lần này. Bác kiểm tra mạng rồi bấm “Tải lại bộ nghe” nhé — trong lúc chưa có bộ nghe, phần đọc vẫn dùng được ở chế độ tự kiểm tra.";
+  } else if(typeof localPreloadSkipped !== "undefined" && localPreloadSkipped){
+    showBtn("Tải bộ nghe ngay (khoảng 54MB)");
+    if(localWhisperStatusEl) localWhisperStatusEl.textContent = "Máy đang bật tiết kiệm dữ liệu hoặc mạng đang chậm nên trang chưa tự tải bộ nghe. Bác muốn đọc được chấm ngay trên máy thì bấm nút dưới đây để tải ngay (khoảng 54MB, chỉ tải một lần).";
+  } else {
+    hideBtn();
+    if(localWhisperStatusEl) localWhisperStatusEl.textContent = "Bộ nghe chấm điểm chạy ngay trên máy này — trang tự tải về khi mở trang, bác không cần làm gì thêm.";
   }
 }
+try{
+  LocalWhisper.setProgressHandler(function(pr){
+    if(pr && pr.status === "progress" && typeof pr.progress === "number") localLoadPct = Math.max(0, Math.min(100, Math.round(pr.progress)));
+    refreshLocalWhisperBtn();
+  });
+}catch(e){}
 if(localWhisperBtnEl) localWhisperBtnEl.addEventListener("click", function(){
-  try{
-    LocalWhisper.setProgressHandler(function(pr){
-      if(!localWhisperStatusEl) return;
-      if(pr && pr.status === "progress" && typeof pr.progress === "number"){
-        localWhisperStatusEl.textContent = "Đang tải bộ nghe dự phòng… " + Math.max(1, Math.round(pr.progress)) + "%";
-      } else if(pr && pr.status === "initiate"){
-        localWhisperStatusEl.textContent = "Đang tải bộ nghe dự phòng…";
-      }
-    });
-  }catch(e){}
+  localPreloadSkipped = false;
   refreshLocalWhisperBtn();
-  if(localWhisperStatusEl) localWhisperStatusEl.textContent = "Đang tải bộ nghe dự phòng…";
-  LocalWhisper.ensureLoaded(null).then(function(){
-    try{ LocalWhisper.setProgressHandler(null); }catch(e){}
+  if(localWhisperStatusEl) localWhisperStatusEl.textContent = "Đang tải bộ nghe về máy…";
+  LocalWhisper.ensureLoaded(null, true).then(function(){
     refreshLocalWhisperBtn();
   });
 });
 refreshLocalWhisperBtn();
+/* V50 MOT BO NGHE TREN MAY: hẹn tải nền bộ nghe ngay khi trang rảnh */
+try{ LocalPreload.schedule(); }catch(e){}
 loadState();
 examLoad();
 updateStreak();
