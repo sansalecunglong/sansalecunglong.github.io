@@ -7899,8 +7899,9 @@ function sttPickMime(){
   return "";
 }
 /* POST bản ghi thô lên Worker; timeout ~20 giây bằng AbortController.
-   Resolves với text đã chép; reject với Error cho mọi lỗi (mạng,
-   HTTP ≠ 200, {error}, JSON lạ). */
+   Resolves với {text, engine} đã chép (V47 STT NHANH HON: engine là bên
+   thắng cuộc đua phía Worker, chỉ để ghi nhật ký chẩn đoán); reject với
+   Error cho mọi lỗi (mạng, HTTP ≠ 200, {error}, JSON lạ). */
 function sttPost(blob){
   return new Promise(function(resolve, reject){
     var ctrl = ("AbortController" in window) ? new AbortController() : null;
@@ -7913,9 +7914,10 @@ function sttPost(blob){
         if(!r.ok) throw new Error("HTTP " + r.status);
         if(j && j.error) throw new Error(String(j.error));
         if(!j || typeof j.text !== "string") throw new Error("Phản hồi lạ từ máy chấm");
-        return j.text;
+        /* V47 STT NHANH HON: giữ thêm trường engine của Worker; thiếu thì "?" */
+        return { text: j.text, engine: (typeof j.engine === "string" && j.engine) ? j.engine : "?" };
       });
-    }).then(function(txt){ done(resolve, txt); }, function(err){ done(reject, err); });
+    }).then(function(res){ done(resolve, res); }, function(err){ done(reject, err); });
   });
 }
 function stopSttCapture(session){
@@ -7963,10 +7965,18 @@ function beginSttWithStream(session, adapter, stream){
   var chunks = [];
   var mime = sttPickMime();
   var rec;
-  try{ rec = mime ? new MediaRecorder(stream, { mimeType: mime }) : new MediaRecorder(stream); }
-  catch(e){ if(log) log.finish(); MicSessions.finish(session); adapter.error("audio-capture"); return; }
+  /* V47 STT NHANH HON: ghi ở 32kbps để blob nhẹ hơn, tải lên nhanh hơn
+     trên mạng yếu; trình duyệt không nhận options này thì lùi về cách
+     tạo MediaRecorder như cũ, không lỗi. */
+  try{ rec = mime ? new MediaRecorder(stream, { mimeType: mime, audioBitsPerSecond: 32000 }) : new MediaRecorder(stream, { audioBitsPerSecond: 32000 }); }
+  catch(e1){
+    try{ rec = mime ? new MediaRecorder(stream, { mimeType: mime }) : new MediaRecorder(stream); }
+    catch(e){ if(log) log.finish(); MicSessions.finish(session); adapter.error("audio-capture"); return; }
+  }
   session.resources.recorder = rec;
   var recStartedAt = 0;
+  /* V47 STT NHANH HON: đã nghe thấy tiếng nói thì chỉ chờ 1,2 giây im
+     lặng liên tục là tự dừng và gửi đi ngay. */
   var det = makeEndpointDetector({ silenceMs: 1200, speechRms: 0.02 });
   try{
     var AC = window.AudioContext || window.webkitAudioContext;
@@ -7998,6 +8008,8 @@ function beginSttWithStream(session, adapter, stream){
     var blob = new Blob(chunks, { type: rec.mimeType || mime || "audio/webm" });
     var durSec = recStartedAt ? (Date.now() - recStartedAt) / 1000 : 0;
     if(session.capTimer){ clearTimeout(session.capTimer); session.capTimer = null; }
+    /* V47 STT NHANH HON: mốc dừng ghi để đo thời gian chờ kết quả */
+    var sttStopAt = Date.now();
     if(log) log.ev("stt-stop", "blob " + Math.round(blob.size / 1024) + "KB · " + (blob.type || "?"));
     MicSessions.setPhase(session, "grading"); adapter.phase("grading");
     if(!blob.size || blob.size > 1000000){
@@ -8006,11 +8018,12 @@ function beginSttWithStream(session, adapter, stream){
       adapter.error("error");
       return;
     }
-    sttPost(blob).then(function(text){
+    sttPost(blob).then(function(res){
       if(!MicSessions.isCurrent(session.id)) return;
-      if(log){ log.ev("stt-result", "“" + String(text).slice(0, 60) + "”"); log.finish(); }
+      /* V47 STT NHANH HON: nhật ký ghi thêm engine + số ms chờ từ lúc dừng ghi */
+      if(log){ log.ev("stt-result", "engine=" + (res.engine || "?") + " · chờ " + (Date.now() - sttStopAt) + "ms · “" + String(res.text).slice(0, 60) + "”"); log.finish(); }
       MicSessions.finish(session);
-      adapter.result(text, blob, durSec);
+      adapter.result(res.text, blob, durSec);
     }).catch(function(err){
       if(!MicSessions.isCurrent(session.id)) return;
       if(log){ log.ev("stt-error", String(err && err.message || err)); log.finish(); }
@@ -8251,6 +8264,8 @@ function beginRecorderWithStream(session, adapter, stream){
   try{ rec = mime ? new MediaRecorder(stream, { mimeType: mime }) : new MediaRecorder(stream); }
   catch(e){ MicSessions.finish(session); adapter.error("audio-capture"); return; }
   session.resources.recorder = rec;
+  /* V47 STT NHANH HON: bộ dò dùng chung — ghi âm tự kiểm tra cũng chờ
+     1,2 giây im lặng liên tục là tự dừng, nhất quán với đường STT. */
   var det = makeEndpointDetector({ silenceMs: 1200, speechRms: 0.02 });
   try{
     var AC = window.AudioContext || window.webkitAudioContext;
