@@ -6102,11 +6102,11 @@ document.getElementById("micBtn").addEventListener("click", function(){
     var spAd = spSRAdapter(session);
     var spErr0 = spAd.error, spEnd0 = spAd.ended;
     spAd.error = function(kind, meta){
-      if(kind !== "not-allowed" && !speakSttTried){ speakSttTried = true; speakStartSttSession(); return; }
+      if(kind !== "not-allowed" && !speakSttTried){ speakSttTried = true; if(session.voiceLog){ try{ session.voiceLog.ev("stt-fallback", "recognition lỗi (" + kind + ") — chuyển ghi âm STT"); }catch(e){} } speakStartSttSession(); return; }
       spErr0(kind, meta);
     };
     spAd.ended = function(gotResult, meta){
-      if(!gotResult && !session._userStop && !speakSttTried){ speakSttTried = true; speakStartSttSession(); return; }
+      if(!gotResult && !session._userStop && !speakSttTried){ speakSttTried = true; if(session.voiceLog){ try{ session.voiceLog.ev("stt-fallback", "recognition không có kết quả — chuyển ghi âm STT"); }catch(e){} } speakStartSttSession(); return; }
       spEnd0(gotResult, meta);
     };
     startSRSession(session, spAd); return;
@@ -7650,6 +7650,12 @@ function startSRReadback(ctx, session){
   function rbSrFallbackToStt(){
     if(ctx._sttTried) return false;
     ctx._sttTried = true;
+    /* V48 NGHE SAN LAM CHINH: ghi sự kiện rơi đường vào nhật ký của
+       chính phiên recognition vừa kết thúc (handle ev() vẫn ghi được
+       sau finish) để lần chẩn đoán sau đọc được vì sao phiên này
+       chuyển sang ghi âm STT; chế độ của phiên STT mới vẫn ghi
+       "cloudflare-stt" như hiện tại. */
+    if(session.voiceLog){ try{ session.voiceLog.ev("stt-fallback", "recognition không có kết quả — chuyển ghi âm STT"); }catch(e){} }
     var s = MicSessions.begin({
       key: "readback", ownerCtx: ctx, kind: "stt", capMs: 10000,
       closeUI: function(s2){ closeReadbackPanel(s2.ownerCtx); }
@@ -7856,9 +7862,33 @@ function rbPickMime(){
    mỗi lần bấm là một phiên MicSessions hoàn toàn mới như cũ.
    ================================================================ */
 var STT_ENDPOINT = "https://hoc-tieng-anh.vl-army-trader.workers.dev/stt";
+/* ================================================================
+   V48 NGHE SAN LAM CHINH
+   Rà soát định tuyến 17/11: sttIsPrimary() vốn CHỈ dựa vào việc
+   trình duyệt có SpeechRecognition hay không (không dựa vào tên
+   trình duyệt), nên Safari iPhone/Mac CÓ bộ nghe sẵn của Apple
+   (webkitSpeechRecognition) từ trước vẫn đã đi recognition làm
+   đường CHÍNH — giống hệt Chrome máy tính/Android — và recognition
+   lỗi/câm thì đã có sẵn nhánh rơi xuống STT trong cùng lần bấm
+   (wrapper spAd ở Luyện nói; rbSrFallbackToStt ở Đọc lại — dùng
+   chung cho Hội thoại lẫn Phát Âm từ/câu). V48 chốt tường minh
+   nhánh Safari vào sttIsPrimary() để định tuyến này không bị sửa
+   nhầm về sau: Safari thật (UA có "Safari/", KHÔNG có CriOS/FxiOS/
+   EdgiOS) + có bộ nghe sẵn → recognition CHÍNH, STT là lưới dự
+   phòng. Nhận giọng và ghi âm vẫn KHÔNG BAO GIỜ chạy song song
+   (bất biến tranh mic từ V15/V16): rơi đường = phiên recognition
+   đã kết thúc hẳn rồi phiên STT mới bắt đầu. Nhánh CriOS/FxiOS
+   (STT chính), nhánh không có bộ nghe (STT chính) và nhánh ghi âm
+   tự kiểm tra giữ nguyên tuyệt đối như V46/V47.
+   ================================================================ */
 function sttIsPrimary(){
   var ua = navigator.userAgent || "";
   if(/CriOS/.test(ua)) return true;
+  /* V48: Safari thật có bộ nghe sẵn của Apple → bộ nghe sẵn là
+     đường CHÍNH (tức thì), STT chỉ là lưới dự phòng khi recognition
+     lỗi/câm. Safari KHÔNG có bộ nghe sẵn thì không vào nhánh này
+     và vẫn rơi xuống STT-chính ở dòng ngay dưới như cũ. */
+  if(/Safari\//.test(ua) && !/CriOS|FxiOS|EdgiOS/.test(ua) && (window.SpeechRecognition || window.webkitSpeechRecognition)) return false;
   if(!(window.SpeechRecognition || window.webkitSpeechRecognition)) return true;
   return false;
 }
