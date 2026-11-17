@@ -6949,8 +6949,55 @@ function phoneticKey(w){
   if(x.charAt(x.length - 1) === "y") x = x.slice(0, -1) + "i";
   return x;
 }
+/* ================================================================
+   V52 DUNG SAI TAI VIET — KHÓA ÂM DUNG SAI RIÊNG CHO TỪ ĐƠN
+   Đo trên giọng thật của người học (17/11): cả 6 bộ nghe đều chép
+   "mother"→Maser/Mazur, "father"→Fazza/Faser vì âm /ð/ bị phát
+   thành s/z và phụ âm cuối bị nuốt — đặc trưng tai người Việt.
+   lenientKey xây TRÊN phoneticKey V51, gộp thêm:
+   - mã th (0) và mã sh (1) gộp vào s (z cũng đã → s ở V51);
+   - cụm cuối rút gọn: bỏ t đứng ngay trước s ở cuối khóa (-nts/-ts);
+   - nguyên âm đầu: o gộp vào a (âm /ʌ/ hay bị chép lệch o/a);
+     các nguyên âm SAU nguyên âm đầu (thường là âm schwa yếu) gộp
+     về một mã chung — nhưng nguyên âm đầu vẫn GIỮ phân biệt cốt
+     lõi của V51: cat (kat) ≠ cut (kut), sunny ≠ sanni.
+   Khi SO hai khóa (lenientMatch) còn cho phép lệch MỘT phụ âm cuối
+   bị nuốt: bỏ 1 phụ âm cuối thuộc {r,l,t,n} ở một trong hai khóa
+   rồi bằng nhau vẫn tính khớp (ca father/fazza thiếu r cuối).
+   CHỈ dùng cho đích MỘT TỪ (đường strict của wordMatchV51);
+   chấm CÂU giữ nguyên V51 tuyệt đối, không áp khóa này.
+   ================================================================ */
+function lenientKey(w){
+  var k = phoneticKey(w);
+  if(!k) return "";
+  k = k.replace(/0/g, "s").replace(/1/g, "s");
+  if(k.length > 2 && k.slice(-2) === "ts") k = k.slice(0, -2) + "s";
+  var seen = false, out = "";
+  for(var i = 0; i < k.length; i++){
+    var c = k.charAt(i);
+    if("aeiou".indexOf(c) >= 0){
+      if(!seen){ seen = true; out += (c === "o" ? "a" : c); }
+      else out += "a";
+    } else out += c;
+  }
+  return out;
+}
+function lenientMatch(t, h){
+  var ka = lenientKey(t), kb = lenientKey(h);
+  if(!ka || !kb) return false;
+  if(ka === kb) return true;
+  var drop = { "r": 1, "l": 1, "t": 1, "n": 1 };
+  function stripFinal(k){
+    if(k.length <= 2) return null;
+    return drop[k.charAt(k.length - 1)] ? k.slice(0, -1) : null;
+  }
+  var sa = stripFinal(ka), sb = stripFinal(kb);
+  if(sa !== null && sa === kb) return true;
+  if(sb !== null && ka === sb) return true;
+  return false;
+}
 /* Một cặp từ có được tính đúng không; strict = đích đơn lẻ.
-   Trả {ok, kind} với kind: exact|alike|phonetic|edit|split|merge. */
+   Trả {ok, kind} với kind: exact|alike|phonetic|edit|split|merge|lenient. */
 function wordMatchV51(t, h, strict){
   var tt = stripApos(t), hh = stripApos(h);
   if(tt === hh) return { ok: true, kind: "exact" };
@@ -6958,6 +7005,8 @@ function wordMatchV51(t, h, strict){
   if(ga !== undefined && ga === gb) return { ok: true, kind: "alike" };
   if(strict){
     if(editDist(tt, hh) <= 1) return { ok: true, kind: "edit" };
+    /* V52 DUNG SAI TAI VIET: đường khóa âm dung sai — CHỈ từ đơn */
+    if(lenientMatch(tt, hh)) return { ok: true, kind: "lenient" };
     return { ok: false, kind: "" };
   }
   var pk = phoneticKey(tt);
@@ -7027,7 +7076,7 @@ function gradeV51(target, said, useLocal){
   for(var i = 0; i < tW.length; i++){ if(!al.matched[i]) wrong.push(tW[i]); }
   return { tWords: tW, hWords: hW, al: al, count: al.count, total: tW.length, ratio: al.ratio, passRatio: al.passRatio, pass: al.pass, tolerant: al.tolerant, wrong: wrong };
 }
-try{ window.gradeV51 = gradeV51; window.phoneticKeyV51 = phoneticKey; window.wordMatchV51 = wordMatchV51; }catch(e){}
+try{ window.gradeV51 = gradeV51; window.phoneticKeyV51 = phoneticKey; window.wordMatchV51 = wordMatchV51; window.lenientKeyV52 = lenientKey; window.lenientMatchV52 = lenientMatch; }catch(e){}
 /* ================= PHÂN TÍCH ÂM (bảng âm vị IPA cho các từ trong 6 bài) =================
    Mỗi từ -> dãy âm vị IPA (Anh-Mỹ, khớp phiên âm trang đã có). Từ không có
    trong bảng (tên riêng…) thì bỏ qua phân tích âm, chỉ chấm từ như cũ. */
