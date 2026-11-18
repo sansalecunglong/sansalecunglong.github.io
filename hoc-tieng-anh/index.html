@@ -929,6 +929,28 @@ button{font-size:inherit}
 .rb-phon{margin-top:12px; background:var(--primary-soft); border:1.5px solid var(--primary); border-radius:var(--r-sm); padding:12px 14px; font-weight:600; font-size:max(16px,1em); line-height:1.6}
 .rb-phon b{display:block; margin-bottom:4px; color:var(--primary-strong)}
 .rb-phon p{margin-top:4px}
+/* ============================================================
+   V54 CHAM TUNG AM — KHUNG CHI TIẾT CHẤM TỪNG ÂM
+   Chỉ hiện từ: nhóm chữ ứng với âm sai/thiếu tô đỏ; nhãn
+   Đúng ✓ / Chưa đúng theo ngưỡng 70% số âm của từ; 1 dòng gợi ý.
+   ============================================================ */
+.phon-detail{margin-top:12px; background:var(--surface); border:2px solid var(--primary); border-radius:var(--r-md); padding:14px 16px; box-shadow:var(--shadow-sm)}
+.vocab-row>.phon-detail{flex:1 1 100%; width:100%}
+.phon-detail-head{display:flex; align-items:flex-start; justify-content:space-between; gap:10px; margin-bottom:6px}
+.phon-detail-title{font-weight:800; font-size:max(17px,1.02em); line-height:1.45}
+.phon-sum{font-weight:800; font-size:max(17px,1.05em); line-height:1.5; margin-bottom:4px}
+.phon-word-row{display:flex; align-items:baseline; gap:12px; flex-wrap:wrap; margin-top:10px}
+.phon-word{font-family:var(--font-display); font-size:max(24px,1.45em); font-weight:700; line-height:1.35}
+.phon-bad{color:var(--danger); background:var(--danger-soft); border-radius:7px; padding:0 3px}
+.phon-verdict{font-weight:800; font-size:max(16px,.95em); line-height:1.45}
+.phon-verdict.ok{color:var(--success)}
+.phon-verdict.bad{color:var(--danger)}
+.phon-verdict.na{color:var(--muted); font-size:max(16px,.9em)}
+.phon-hint{margin-top:8px; background:var(--accent-soft); border:1.5px solid var(--accent); color:var(--ink); border-radius:var(--r-sm); padding:10px 12px; font-weight:600; font-size:max(16px,1em); line-height:1.6}
+.phon-status{font-weight:700; font-size:max(16px,1em); line-height:1.6}
+#speakPhonSlot{margin-top:12px; text-align:center}
+#speakPhonSlot .phon-detail{text-align:left}
+#speakPhonBtn.listening{background:var(--danger); border-color:var(--danger); color:#fff; animation:pulse 1.2s ease infinite}
 .rec-time{font-variant-numeric:tabular-nums}
 
 /* ============================================================
@@ -3297,12 +3319,14 @@ body{padding-bottom:calc(70px + env(safe-area-inset-bottom,0px))}
           <p class="speak-status" id="speakStatus">Bấm nút mic rồi đọc to câu ở trên nhé</p>
           <p class="speak-heard" id="speakHeard" aria-live="polite"></p>
           <div style="text-align:center"><button type="button" class="icon-btn slow" id="speakPlayBtn" style="display:none">Nghe lại giọng của bác</button></div>
+          <div style="text-align:center; margin-top:10px"><button type="button" class="icon-btn" id="speakPhonBtn">🎙 Chấm từng âm</button></div>
           <div class="rb-actions" id="speakSelfCheck" style="display:none; justify-content:center">
             <button type="button" class="btn btn-primary" id="speakSelfOk">Tôi đọc đúng rồi <svg class="ic" aria-hidden="true"><use href="#ic-check"></use></svg></button>
             <button type="button" class="btn btn-accent" id="speakSelfRetry">Chưa đúng, đọc lại</button>
           </div>
           <p class="speak-heard" id="speakSelfNote" style="display:none">Đây là chế độ tự kiểm tra: bác tự nghe lại và tự đánh giá, trang không tự chấm.</p>
           <div class="feedback" id="speakFeedback" role="status"></div>
+          <div id="speakPhonSlot"></div>
         </div>
       </div>
       <div id="speakUnsupported" class="no-support" style="display:none">
@@ -3593,6 +3617,11 @@ body{padding-bottom:calc(70px + env(safe-area-inset-bottom,0px))}
       <p class="voice-diag-local-status" id="localWhisperStatus" role="status" aria-live="polite">Bộ nghe chấm điểm chạy ngay trên máy này — trang tự tải về khi mở trang, bác không cần làm gì thêm.</p>
       <button type="button" class="btn btn-ghost" id="localWhisperBtn" hidden>Tải lại bộ nghe</button>
     </div>
+    <div class="voice-diag-local">
+      <p class="voice-diag-local-title">Bộ chấm từng âm</p>
+      <p class="voice-diag-local-status" id="phonModelStatus" role="status" aria-live="polite">Bộ chấm từng âm (khoảng 355MB) chưa tải — trang tự tải ở lần đầu bác bấm “Xem âm nào sai” sau một lần đọc chưa đạt.</p>
+      <button type="button" class="btn btn-ghost" id="phonModelBtn" hidden>Tải bộ chấm từng âm (khoảng 355MB)</button>
+    </div>
   </div>
 </div>
 
@@ -3682,6 +3711,499 @@ body{padding-bottom:calc(70px + env(safe-area-inset-bottom,0px))}
 
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 <noscript><div style="padding:20px; text-align:center; font-weight:700">Trang học cần bật JavaScript để nghe phát âm và làm bài tập. Bác hãy mở trang bằng trình duyệt Chrome hoặc Safari nhé.</div></noscript>
+<script>
+/* V54 CHAM TUNG AM — BẢNG ÂM VỊ ĐÍCH: nhúng nguyên văn phoneme-table.js (PHONEME_TABLE, 482 từ) */
+/* Bang am vi dich cho bo cham tung am (wav2vec2-xlsr-53-espeak-cv-ft).
+   Sinh tu dong: espeak-ng en-US -> chuan hoa he espeak cua model -> can chinh
+   nhom chu bang DP doi chieu CMUdict. Khoa: tu da chuan hoa nhu trang cham
+   (chu thuong, bo dau cau, mo rong viet tat). p: am vi dich; g: nhom chu
+   song song 1-1 voi p ("" = khong co doi tac). */
+var PHONEME_TABLE = {
+  "10": {"p": ["t", "e", "n"], "g": ["1", "0", ""]},
+  "a": {"p": ["ə"], "g": ["a"]},
+  "about": {"p": ["ə", "b", "aʊ", "t"], "g": ["a", "b", "ou", "t"]},
+  "address": {"p": ["ə", "d", "r", "e", "s"], "g": ["a", "dd", "r", "e", "ss"]},
+  "after": {"p": ["æ", "f", "t", "ə", "r"], "g": ["a", "f", "t", "er", ""]},
+  "afternoon": {"p": ["æ", "f", "t", "ə", "r", "n", "uː", "n"], "g": ["a", "f", "t", "er", "", "n", "oo", "n"]},
+  "again": {"p": ["ə", "ɡ", "e", "n"], "g": ["a", "g", "ai", "n"]},
+  "age": {"p": ["eɪ", "dʒ"], "g": ["a", "ge"]},
+  "ahead": {"p": ["ə", "h", "e", "d"], "g": ["a", "h", "ea", "d"]},
+  "airport": {"p": ["e", "r", "p", "ɔː", "r", "t"], "g": ["ai", "r", "p", "or", "", "t"]},
+  "all": {"p": ["ɔː", "l"], "g": ["a", "ll"]},
+  "am": {"p": ["æ", "m"], "g": ["a", "m"]},
+  "ambulance": {"p": ["æ", "m", "b", "j", "ʊ", "l", "ə", "n", "s"], "g": ["a", "m", "b", "u", "", "l", "a", "n", "ce"]},
+  "america": {"p": ["ə", "m", "e", "r", "ɪ", "k", "ə"], "g": ["a", "m", "e", "r", "i", "c", "a"]},
+  "an": {"p": ["æ", "n"], "g": ["a", "n"]},
+  "and": {"p": ["æ", "n", "d"], "g": ["a", "n", "d"]},
+  "another": {"p": ["ə", "n", "ʌ", "ð", "ə", "r"], "g": ["a", "n", "o", "th", "er", ""]},
+  "apple": {"p": ["æ", "p", "ə", "l"], "g": ["a", "pp", "le", ""]},
+  "appointment": {"p": ["ə", "p", "ɔɪ", "n", "t", "m", "ə", "n", "t"], "g": ["a", "pp", "oi", "n", "t", "m", "e", "n", "t"]},
+  "are": {"p": ["ɑː", "r"], "g": ["a", "re"]},
+  "at": {"p": ["æ", "t"], "g": ["a", "t"]},
+  "aunt": {"p": ["æ", "n", "t"], "g": ["au", "n", "t"]},
+  "baby": {"p": ["b", "eɪ", "b", "i"], "g": ["b", "a", "b", "y"]},
+  "back": {"p": ["b", "æ", "k"], "g": ["b", "a", "ck"]},
+  "bad": {"p": ["b", "æ", "d"], "g": ["b", "a", "d"]},
+  "bag": {"p": ["b", "æ", "ɡ"], "g": ["b", "a", "g"]},
+  "banana": {"p": ["b", "ə", "n", "æ", "n", "ə"], "g": ["b", "a", "n", "a", "n", "a"]},
+  "bananas": {"p": ["b", "ə", "n", "æ", "n", "ə", "z"], "g": ["b", "a", "n", "a", "n", "a", "s"]},
+  "bank": {"p": ["b", "æ", "ŋ", "k"], "g": ["b", "a", "nk", ""]},
+  "basket": {"p": ["b", "æ", "s", "k", "ɪ", "t"], "g": ["b", "a", "s", "k", "e", "t"]},
+  "be": {"p": ["b", "iː"], "g": ["b", "e"]},
+  "beautiful": {"p": ["b", "j", "uː", "t", "i", "f", "ə", "l"], "g": ["b", "eau", "", "t", "i", "f", "u", "l"]},
+  "bed": {"p": ["b", "e", "d"], "g": ["b", "e", "d"]},
+  "before": {"p": ["b", "ɪ", "f", "ɔː", "r"], "g": ["b", "e", "f", "o", "re"]},
+  "bicycle": {"p": ["b", "aɪ", "s", "ɪ", "k", "ə", "l"], "g": ["b", "i", "c", "y", "c", "le", ""]},
+  "big": {"p": ["b", "ɪ", "ɡ"], "g": ["b", "i", "g"]},
+  "bill": {"p": ["b", "ɪ", "l"], "g": ["b", "i", "ll"]},
+  "bird": {"p": ["b", "ɜː", "d"], "g": ["b", "ir", "d"]},
+  "bit": {"p": ["b", "ɪ", "t"], "g": ["b", "i", "t"]},
+  "black": {"p": ["b", "l", "æ", "k"], "g": ["b", "l", "a", "ck"]},
+  "blue": {"p": ["b", "l", "uː"], "g": ["b", "l", "ue"]},
+  "bo": {"p": ["b", "oʊ"], "g": ["b", "o"]},
+  "body": {"p": ["b", "ɑː", "d", "i"], "g": ["b", "o", "d", "y"]},
+  "boil": {"p": ["b", "ɔɪ", "l"], "g": ["b", "oi", "l"]},
+  "book": {"p": ["b", "ʊ", "k"], "g": ["b", "oo", "k"]},
+  "both": {"p": ["b", "oʊ", "θ"], "g": ["b", "o", "th"]},
+  "boy": {"p": ["b", "ɔɪ"], "g": ["b", "oy"]},
+  "bread": {"p": ["b", "r", "e", "d"], "g": ["b", "r", "ea", "d"]},
+  "breakfast": {"p": ["b", "r", "e", "k", "f", "ə", "s", "t"], "g": ["b", "r", "ea", "k", "f", "a", "s", "t"]},
+  "bring": {"p": ["b", "r", "ɪ", "ŋ"], "g": ["b", "r", "i", "ng"]},
+  "broken": {"p": ["b", "r", "oʊ", "k", "ə", "n"], "g": ["b", "r", "o", "k", "e", "n"]},
+  "brother": {"p": ["b", "r", "ʌ", "ð", "ə", "r"], "g": ["b", "r", "o", "th", "er", ""]},
+  "brush": {"p": ["b", "r", "ʌ", "ʃ"], "g": ["b", "r", "u", "sh"]},
+  "bus": {"p": ["b", "ʌ", "s"], "g": ["b", "u", "s"]},
+  "busy": {"p": ["b", "ɪ", "z", "i"], "g": ["b", "u", "s", "y"]},
+  "but": {"p": ["b", "ʌ", "t"], "g": ["b", "u", "t"]},
+  "buy": {"p": ["b", "aɪ"], "g": ["b", "uy"]},
+  "by": {"p": ["b", "aɪ"], "g": ["b", "y"]},
+  "call": {"p": ["k", "ɔː", "l"], "g": ["c", "a", "ll"]},
+  "calm": {"p": ["k", "ɑː", "m"], "g": ["c", "a", "lm"]},
+  "can": {"p": ["k", "æ", "n"], "g": ["c", "a", "n"]},
+  "car": {"p": ["k", "ɑː", "r"], "g": ["c", "ar", ""]},
+  "card": {"p": ["k", "ɑː", "r", "d"], "g": ["c", "ar", "", "d"]},
+  "careful": {"p": ["k", "e", "r", "f", "ə", "l"], "g": ["c", "a", "re", "f", "u", "l"]},
+  "carrot": {"p": ["k", "æ", "r", "ə", "t"], "g": ["c", "a", "rr", "o", "t"]},
+  "carrots": {"p": ["k", "æ", "r", "ə", "t", "s"], "g": ["c", "a", "rr", "o", "t", "s"]},
+  "cars": {"p": ["k", "ɑː", "r", "z"], "g": ["c", "ar", "", "s"]},
+  "cash": {"p": ["k", "æ", "ʃ"], "g": ["c", "a", "sh"]},
+  "cat": {"p": ["k", "æ", "t"], "g": ["c", "a", "t"]},
+  "chair": {"p": ["tʃ", "e", "r"], "g": ["ch", "ai", "r"]},
+  "change": {"p": ["tʃ", "eɪ", "n", "dʒ"], "g": ["ch", "a", "n", "ge"]},
+  "cheap": {"p": ["tʃ", "iː", "p"], "g": ["ch", "ea", "p"]},
+  "check": {"p": ["tʃ", "e", "k"], "g": ["ch", "e", "ck"]},
+  "checks": {"p": ["tʃ", "e", "k", "s"], "g": ["ch", "e", "ck", "s"]},
+  "child": {"p": ["tʃ", "aɪ", "l", "d"], "g": ["ch", "i", "l", "d"]},
+  "children": {"p": ["tʃ", "ɪ", "l", "d", "r", "ə", "n"], "g": ["ch", "i", "l", "d", "r", "e", "n"]},
+  "choices": {"p": ["tʃ", "ɔɪ", "s", "ɪ", "z"], "g": ["ch", "oi", "c", "e", "s"]},
+  "choose": {"p": ["tʃ", "uː", "z"], "g": ["ch", "oo", "se"]},
+  "city": {"p": ["s", "ɪ", "t", "i"], "g": ["c", "i", "t", "y"]},
+  "class": {"p": ["k", "l", "æ", "s"], "g": ["c", "l", "a", "ss"]},
+  "clean": {"p": ["k", "l", "iː", "n"], "g": ["c", "l", "ea", "n"]},
+  "coffee": {"p": ["k", "ɔ", "f", "i"], "g": ["c", "o", "ff", "ee"]},
+  "coin": {"p": ["k", "ɔɪ", "n"], "g": ["c", "oi", "n"]},
+  "colors": {"p": ["k", "ʌ", "l", "ə", "r", "z"], "g": ["c", "o", "l", "or", "", "s"]},
+  "come": {"p": ["k", "ʌ", "m"], "g": ["c", "o", "me"]},
+  "coming": {"p": ["k", "ʌ", "m", "ɪ", "ŋ"], "g": ["c", "o", "m", "i", "ng"]},
+  "cook": {"p": ["k", "ʊ", "k"], "g": ["c", "oo", "k"]},
+  "cooks": {"p": ["k", "ʊ", "k", "s"], "g": ["c", "oo", "k", "s"]},
+  "corner": {"p": ["k", "ɔː", "r", "n", "ə", "r"], "g": ["c", "or", "", "n", "er", ""]},
+  "cough": {"p": ["k", "ɔ", "f"], "g": ["c", "ou", "gh"]},
+  "count": {"p": ["k", "aʊ", "n", "t"], "g": ["c", "ou", "n", "t"]},
+  "cross": {"p": ["k", "r", "ɔ", "s"], "g": ["c", "r", "o", "ss"]},
+  "cup": {"p": ["k", "ʌ", "p"], "g": ["c", "u", "p"]},
+  "cut": {"p": ["k", "ʌ", "t"], "g": ["c", "u", "t"]},
+  "dad": {"p": ["d", "æ", "d"], "g": ["d", "a", "d"]},
+  "daughter": {"p": ["d", "ɔː", "t", "ə", "r"], "g": ["d", "augh", "t", "er", ""]},
+  "daughters": {"p": ["d", "ɔː", "t", "ə", "r", "z"], "g": ["d", "augh", "t", "er", "", "s"]},
+  "david": {"p": ["d", "eɪ", "v", "ɪ", "d"], "g": ["d", "a", "v", "i", "d"]},
+  "day": {"p": ["d", "eɪ"], "g": ["d", "ay"]},
+  "delicious": {"p": ["d", "ɪ", "l", "ɪ", "ʃ", "ə", "s"], "g": ["d", "e", "l", "i", "ci", "ou", "s"]},
+  "dinner": {"p": ["d", "ɪ", "n", "ə", "r"], "g": ["d", "i", "nn", "er", ""]},
+  "discount": {"p": ["d", "ɪ", "s", "k", "aʊ", "n", "t"], "g": ["d", "i", "s", "c", "ou", "n", "t"]},
+  "dizzy": {"p": ["d", "ɪ", "z", "i"], "g": ["d", "i", "zz", "y"]},
+  "do": {"p": ["d", "uː"], "g": ["d", "o"]},
+  "doctor": {"p": ["d", "ɑː", "k", "t", "ə", "r"], "g": ["d", "o", "c", "t", "or", ""]},
+  "dog": {"p": ["d", "ɑː", "ɡ"], "g": ["d", "o", "g"]},
+  "dollars": {"p": ["d", "ɑː", "l", "ə", "r", "z"], "g": ["d", "o", "ll", "ar", "", "s"]},
+  "door": {"p": ["d", "ɔː", "r"], "g": ["d", "oo", "r"]},
+  "down": {"p": ["d", "aʊ", "n"], "g": ["d", "ow", "n"]},
+  "dress": {"p": ["d", "r", "e", "s"], "g": ["d", "r", "e", "ss"]},
+  "drink": {"p": ["d", "r", "ɪ", "ŋ", "k"], "g": ["d", "r", "i", "nk", ""]},
+  "driver": {"p": ["d", "r", "aɪ", "v", "ə", "r"], "g": ["d", "r", "i", "v", "er", ""]},
+  "each": {"p": ["iː", "tʃ"], "g": ["ea", "ch"]},
+  "ear": {"p": ["ɪ", "r"], "g": ["ea", "r"]},
+  "early": {"p": ["ɜː", "l", "i"], "g": ["ear", "l", "y"]},
+  "ears": {"p": ["ɪ", "r", "z"], "g": ["ea", "r", "s"]},
+  "easy": {"p": ["iː", "z", "i"], "g": ["ea", "s", "y"]},
+  "eat": {"p": ["iː", "t"], "g": ["ea", "t"]},
+  "eight": {"p": ["eɪ", "t"], "g": ["eigh", "t"]},
+  "eighty": {"p": ["eɪ", "t", "i"], "g": ["eigh", "t", "y"]},
+  "eleven": {"p": ["ɪ", "l", "e", "v", "ə", "n"], "g": ["e", "l", "e", "v", "e", "n"]},
+  "emergency": {"p": ["ɪ", "m", "ɜː", "dʒ", "ə", "n", "s", "i"], "g": ["e", "m", "er", "g", "e", "n", "c", "y"]},
+  "english": {"p": ["ɪ", "ŋ", "ɡ", "l", "ɪ", "ʃ"], "g": ["e", "ng", "", "l", "i", "sh"]},
+  "evening": {"p": ["iː", "v", "n", "ɪ", "ŋ"], "g": ["e", "v", "en", "i", "ng"]},
+  "every": {"p": ["e", "v", "r", "i"], "g": ["e", "v", "er", "y"]},
+  "everyone": {"p": ["e", "v", "r", "ɪ", "w", "ʌ", "n"], "g": ["e", "v", "er", "y", "o", "", "ne"]},
+  "everything": {"p": ["e", "v", "r", "ɪ", "θ", "ɪ", "ŋ"], "g": ["e", "v", "er", "y", "th", "i", "ng"]},
+  "exchange": {"p": ["e", "k", "s", "tʃ", "eɪ", "n", "dʒ"], "g": ["e", "x", "", "ch", "a", "n", "ge"]},
+  "excuse": {"p": ["e", "k", "s", "k", "j", "uː", "s"], "g": ["e", "x", "", "c", "u", "", "se"]},
+  "exercise": {"p": ["e", "k", "s", "ə", "r", "s", "aɪ", "z"], "g": ["e", "x", "", "er", "", "c", "i", "se"]},
+  "expensive": {"p": ["e", "k", "s", "p", "e", "n", "s", "ɪ", "v"], "g": ["e", "x", "", "p", "e", "n", "s", "i", "ve"]},
+  "eye": {"p": ["aɪ"], "g": ["eye"]},
+  "eyes": {"p": ["aɪ", "z"], "g": ["eye", "s"]},
+  "face": {"p": ["f", "eɪ", "s"], "g": ["f", "a", "ce"]},
+  "factory": {"p": ["f", "æ", "k", "t", "ə", "r", "i"], "g": ["f", "a", "c", "t", "or", "", "y"]},
+  "family": {"p": ["f", "æ", "m", "ɪ", "l", "i"], "g": ["f", "a", "m", "i", "l", "y"]},
+  "far": {"p": ["f", "ɑː", "r"], "g": ["f", "ar", ""]},
+  "farmer": {"p": ["f", "ɑː", "r", "m", "ə", "r"], "g": ["f", "ar", "", "m", "er", ""]},
+  "fast": {"p": ["f", "æ", "s", "t"], "g": ["f", "a", "s", "t"]},
+  "father": {"p": ["f", "ɑː", "ð", "ə", "r"], "g": ["f", "a", "th", "e", "r"]},
+  "feel": {"p": ["f", "iː", "l"], "g": ["f", "ee", "l"]},
+  "feels": {"p": ["f", "iː", "l", "z"], "g": ["f", "ee", "l", "s"]},
+  "fever": {"p": ["f", "iː", "v", "ə", "r"], "g": ["f", "e", "v", "er", ""]},
+  "fifteen": {"p": ["f", "ɪ", "f", "t", "iː", "n"], "g": ["f", "i", "f", "t", "ee", "n"]},
+  "fifty": {"p": ["f", "ɪ", "f", "t", "i"], "g": ["f", "i", "f", "t", "y"]},
+  "fine": {"p": ["f", "aɪ", "n"], "g": ["f", "i", "ne"]},
+  "first": {"p": ["f", "ɜː", "s", "t"], "g": ["f", "ir", "s", "t"]},
+  "fish": {"p": ["f", "ɪ", "ʃ"], "g": ["f", "i", "sh"]},
+  "fit": {"p": ["f", "ɪ", "t"], "g": ["f", "i", "t"]},
+  "fits": {"p": ["f", "ɪ", "t", "s"], "g": ["f", "i", "t", "s"]},
+  "five": {"p": ["f", "aɪ", "v"], "g": ["f", "i", "ve"]},
+  "food": {"p": ["f", "uː", "d"], "g": ["f", "oo", "d"]},
+  "fool": {"p": ["f", "uː", "l"], "g": ["f", "oo", "l"]},
+  "foot": {"p": ["f", "ʊ", "t"], "g": ["f", "oo", "t"]},
+  "for": {"p": ["f", "ɔː", "r"], "g": ["f", "or", ""]},
+  "forty": {"p": ["f", "ɔː", "r", "t", "i"], "g": ["f", "or", "", "t", "y"]},
+  "four": {"p": ["f", "ɔː", "r"], "g": ["f", "our", ""]},
+  "fourteen": {"p": ["f", "ɔː", "r", "t", "iː", "n"], "g": ["f", "our", "", "t", "ee", "n"]},
+  "fresh": {"p": ["f", "r", "e", "ʃ"], "g": ["f", "r", "e", "sh"]},
+  "friend": {"p": ["f", "r", "e", "n", "d"], "g": ["f", "r", "ie", "n", "d"]},
+  "friends": {"p": ["f", "r", "e", "n", "d", "z"], "g": ["f", "r", "ie", "n", "d", "s"]},
+  "from": {"p": ["f", "r", "ʌ", "m"], "g": ["f", "r", "o", "m"]},
+  "fruit": {"p": ["f", "r", "uː", "t"], "g": ["f", "r", "ui", "t"]},
+  "fry": {"p": ["f", "r", "aɪ"], "g": ["f", "r", "y"]},
+  "full": {"p": ["f", "ʊ", "l"], "g": ["f", "u", "ll"]},
+  "fun": {"p": ["f", "ʌ", "n"], "g": ["f", "u", "n"]},
+  "get": {"p": ["ɡ", "e", "t"], "g": ["g", "e", "t"]},
+  "gift": {"p": ["ɡ", "ɪ", "f", "t"], "g": ["g", "i", "f", "t"]},
+  "gifts": {"p": ["ɡ", "ɪ", "f", "t", "s"], "g": ["g", "i", "f", "t", "s"]},
+  "give": {"p": ["ɡ", "ɪ", "v"], "g": ["g", "i", "ve"]},
+  "glass": {"p": ["ɡ", "l", "æ", "s"], "g": ["g", "l", "a", "ss"]},
+  "go": {"p": ["ɡ", "oʊ"], "g": ["g", "o"]},
+  "goes": {"p": ["ɡ", "oʊ", "z"], "g": ["g", "oe", "s"]},
+  "good": {"p": ["ɡ", "ʊ", "d"], "g": ["g", "oo", "d"]},
+  "goodbye": {"p": ["ɡ", "ʊ", "d", "b", "aɪ"], "g": ["g", "oo", "d", "b", "ye"]},
+  "grandchild": {"p": ["ɡ", "r", "æ", "n", "d", "tʃ", "aɪ", "l", "d"], "g": ["g", "r", "a", "n", "d", "ch", "i", "l", "d"]},
+  "grandchildren": {"p": ["ɡ", "r", "æ", "n", "d", "tʃ", "ɪ", "l", "d", "r", "ə", "n"], "g": ["g", "r", "a", "n", "d", "ch", "i", "l", "d", "r", "e", "n"]},
+  "grandfather": {"p": ["ɡ", "r", "æ", "n", "d", "f", "ɑː", "ð", "ə", "r"], "g": ["g", "r", "a", "n", "d", "f", "a", "th", "er", ""]},
+  "grandmother": {"p": ["ɡ", "r", "æ", "n", "d", "m", "ʌ", "ð", "ə", "r"], "g": ["g", "r", "a", "n", "d", "m", "o", "th", "er", ""]},
+  "green": {"p": ["ɡ", "r", "iː", "n"], "g": ["g", "r", "ee", "n"]},
+  "ha": {"p": ["h", "ɑː"], "g": ["h", "a"]},
+  "haiphong": {"p": ["h", "eɪ", "f", "ɑː", "ŋ"], "g": ["h", "ai", "ph", "o", "ng"]},
+  "hair": {"p": ["h", "e", "r"], "g": ["h", "ai", "r"]},
+  "hand": {"p": ["h", "æ", "n", "d"], "g": ["h", "a", "n", "d"]},
+  "hands": {"p": ["h", "æ", "n", "d", "z"], "g": ["h", "a", "n", "d", "s"]},
+  "hanoi": {"p": ["h", "æ", "n", "ɔɪ"], "g": ["h", "a", "n", "oi"]},
+  "happy": {"p": ["h", "æ", "p", "i"], "g": ["h", "a", "pp", "y"]},
+  "has": {"p": ["h", "æ", "z"], "g": ["h", "a", "s"]},
+  "hat": {"p": ["h", "æ", "t"], "g": ["h", "a", "t"]},
+  "have": {"p": ["h", "æ", "v"], "g": ["h", "a", "ve"]},
+  "he": {"p": ["h", "iː"], "g": ["h", "e"]},
+  "head": {"p": ["h", "e", "d"], "g": ["h", "ea", "d"]},
+  "headache": {"p": ["h", "e", "d", "eɪ", "k"], "g": ["h", "ea", "d", "a", "che"]},
+  "healthy": {"p": ["h", "e", "l", "θ", "i"], "g": ["h", "ea", "l", "th", "y"]},
+  "hear": {"p": ["h", "ɪ", "r"], "g": ["h", "ea", "r"]},
+  "hearts": {"p": ["h", "ɑː", "r", "t", "s"], "g": ["h", "ear", "", "t", "s"]},
+  "hello": {"p": ["h", "ə", "l", "oʊ"], "g": ["h", "e", "ll", "o"]},
+  "help": {"p": ["h", "e", "l", "p"], "g": ["h", "e", "l", "p"]},
+  "her": {"p": ["h", "ɜː"], "g": ["h", "er"]},
+  "here": {"p": ["h", "ɪ", "r"], "g": ["h", "e", "re"]},
+  "hi": {"p": ["h", "aɪ"], "g": ["h", "i"]},
+  "him": {"p": ["h", "ɪ", "m"], "g": ["h", "i", "m"]},
+  "his": {"p": ["h", "ɪ", "z"], "g": ["h", "i", "s"]},
+  "hoa": {"p": ["h", "oʊ", "ə"], "g": ["h", "o", "a"]},
+  "home": {"p": ["h", "oʊ", "m"], "g": ["h", "o", "me"]},
+  "hometown": {"p": ["h", "oʊ", "m", "t", "aʊ", "n"], "g": ["h", "o", "m", "et", "ow", "n"]},
+  "hometowns": {"p": ["h", "oʊ", "m", "t", "aʊ", "n", "z"], "g": ["h", "o", "m", "et", "ow", "n", "s"]},
+  "hospital": {"p": ["h", "ɑː", "s", "p", "ɪ", "t", "ə", "l"], "g": ["h", "o", "s", "p", "i", "t", "a", "l"]},
+  "hot": {"p": ["h", "ɑː", "t"], "g": ["h", "o", "t"]},
+  "hour": {"p": ["aʊ", "ə", "r"], "g": ["hou", "r", ""]},
+  "hours": {"p": ["aʊ", "ə", "r", "z"], "g": ["hou", "r", "", "s"]},
+  "house": {"p": ["h", "aʊ", "s"], "g": ["h", "ou", "se"]},
+  "how": {"p": ["h", "aʊ"], "g": ["h", "ow"]},
+  "hundred": {"p": ["h", "ʌ", "n", "d", "r", "ɪ", "d"], "g": ["h", "u", "n", "d", "r", "e", "d"]},
+  "hung": {"p": ["h", "ʌ", "ŋ"], "g": ["h", "u", "ng"]},
+  "hungry": {"p": ["h", "ʌ", "ŋ", "ɡ", "r", "i"], "g": ["h", "u", "ng", "", "r", "y"]},
+  "hurry": {"p": ["h", "ɜː", "r", "i"], "g": ["h", "ur", "r", "y"]},
+  "hurts": {"p": ["h", "ɜː", "t", "s"], "g": ["h", "ur", "t", "s"]},
+  "husband": {"p": ["h", "ʌ", "s", "b", "ə", "n", "d"], "g": ["h", "u", "s", "b", "a", "n", "d"]},
+  "i": {"p": ["aɪ"], "g": ["I"]},
+  "idea": {"p": ["aɪ", "d", "iə"], "g": ["i", "d", "ea"]},
+  "if": {"p": ["ɪ", "f"], "g": ["i", "f"]},
+  "in": {"p": ["ɪ", "n"], "g": ["i", "n"]},
+  "is": {"p": ["ɪ", "z"], "g": ["i", "s"]},
+  "it": {"p": ["ɪ", "t"], "g": ["i", "t"]},
+  "job": {"p": ["dʒ", "ɑː", "b"], "g": ["j", "o", "b"]},
+  "john": {"p": ["dʒ", "ɑː", "n"], "g": ["j", "o", "hn"]},
+  "juice": {"p": ["dʒ", "uː", "s"], "g": ["j", "ui", "ce"]},
+  "kid": {"p": ["k", "ɪ", "d"], "g": ["k", "i", "d"]},
+  "kilo": {"p": ["k", "iː", "l", "oʊ"], "g": ["k", "i", "l", "o"]},
+  "kilos": {"p": ["k", "iː", "l", "oʊ", "z"], "g": ["k", "i", "l", "o", "s"]},
+  "kind": {"p": ["k", "aɪ", "n", "d"], "g": ["k", "i", "n", "d"]},
+  "know": {"p": ["n", "oʊ"], "g": ["kn", "ow"]},
+  "lan": {"p": ["l", "æ", "n"], "g": ["l", "a", "n"]},
+  "late": {"p": ["l", "eɪ", "t"], "g": ["l", "a", "te"]},
+  "later": {"p": ["l", "eɪ", "t", "ə", "r"], "g": ["l", "a", "t", "er", ""]},
+  "le": {"p": ["l", "ə"], "g": ["l", "e"]},
+  "learn": {"p": ["l", "ɜː", "n"], "g": ["l", "ear", "n"]},
+  "left": {"p": ["l", "e", "f", "t"], "g": ["l", "e", "f", "t"]},
+  "leg": {"p": ["l", "e", "ɡ"], "g": ["l", "e", "g"]},
+  "let": {"p": ["l", "e", "t"], "g": ["l", "e", "t"]},
+  "light": {"p": ["l", "aɪ", "t"], "g": ["l", "igh", "t"]},
+  "like": {"p": ["l", "aɪ", "k"], "g": ["l", "i", "ke"]},
+  "linh": {"p": ["l", "ɪ", "n"], "g": ["l", "i", "nh"]},
+  "little": {"p": ["l", "ɪ", "t", "ə", "l"], "g": ["l", "i", "tt", "le", ""]},
+  "live": {"p": ["l", "ɪ", "v", ""], "g": ["l", "i", "v", "e"]},
+  "lives": {"p": ["l", "ɪ", "v", "z"], "g": ["l", "i", "v", "es"]},
+  "loi": {"p": ["l", "ɔɪ"], "g": ["l", "oi"]},
+  "long": {"p": ["l", "ɔ", "ŋ"], "g": ["l", "o", "ng"]},
+  "look": {"p": ["l", "ʊ", "k"], "g": ["l", "oo", "k"]},
+  "looks": {"p": ["l", "ʊ", "k", "s"], "g": ["l", "oo", "k", "s"]},
+  "love": {"p": ["l", "ʌ", "v", ""], "g": ["l", "o", "v", "e"]},
+  "lovely": {"p": ["l", "ʌ", "v", "l", "i"], "g": ["l", "o", "v", "el", "y"]},
+  "loves": {"p": ["l", "ʌ", "v", "z"], "g": ["l", "o", "v", "es"]},
+  "lunch": {"p": ["l", "ʌ", "n", "tʃ"], "g": ["l", "u", "n", "ch"]},
+  "mai": {"p": ["m", "aɪ"], "g": ["m", "ai"]},
+  "make": {"p": ["m", "eɪ", "k"], "g": ["m", "a", "ke"]},
+  "man": {"p": ["m", "æ", "n"], "g": ["m", "a", "n"]},
+  "mango": {"p": ["m", "æ", "ŋ", "ɡ", "oʊ"], "g": ["m", "a", "ng", "", "o"]},
+  "mangoes": {"p": ["m", "æ", "ŋ", "ɡ", "oʊ", "z"], "g": ["m", "a", "ng", "", "oe", "s"]},
+  "many": {"p": ["m", "e", "n", "i"], "g": ["m", "a", "n", "y"]},
+  "market": {"p": ["m", "ɑː", "r", "k", "ɪ", "t"], "g": ["m", "ar", "", "k", "e", "t"]},
+  "me": {"p": ["m", "iː"], "g": ["m", "e"]},
+  "meals": {"p": ["m", "iː", "l", "z"], "g": ["m", "ea", "l", "s"]},
+  "medicine": {"p": ["m", "e", "d", "ə", "s", "ə", "n"], "g": ["m", "e", "d", "i", "c", "i", "ne"]},
+  "meet": {"p": ["m", "iː", "t"], "g": ["m", "ee", "t"]},
+  "menu": {"p": ["m", "e", "n", "j", "uː"], "g": ["m", "e", "n", "u", ""]},
+  "milk": {"p": ["m", "ɪ", "l", "k"], "g": ["m", "i", "l", "k"]},
+  "minute": {"p": ["m", "ɪ", "n", "ɪ", "t"], "g": ["m", "i", "n", "u", "te"]},
+  "minutes": {"p": ["m", "ɪ", "n", "ɪ", "t", "s"], "g": ["m", "i", "n", "u", "t", "es"]},
+  "mom": {"p": ["m", "ɑː", "m"], "g": ["m", "o", "m"]},
+  "money": {"p": ["m", "ʌ", "n", "i"], "g": ["m", "o", "n", "ey"]},
+  "months": {"p": ["m", "ʌ", "n", "θ", "s"], "g": ["m", "o", "n", "th", "s"]},
+  "morning": {"p": ["m", "ɔː", "r", "n", "ɪ", "ŋ"], "g": ["m", "or", "", "n", "i", "ng"]},
+  "mother": {"p": ["m", "ʌ", "ð", "ə", "r"], "g": ["m", "o", "th", "e", "r"]},
+  "motorbike": {"p": ["m", "oʊ", "t", "ə", "r", "b", "aɪ", "k"], "g": ["m", "o", "t", "or", "", "b", "i", "ke"]},
+  "mouth": {"p": ["m", "aʊ", "θ"], "g": ["m", "ou", "th"]},
+  "mr": {"p": ["m", "ɪ", "s", "t", "ə", "r"], "g": ["m", "", "", "", "", "r"]},
+  "mrs": {"p": ["m", "ɪ", "s", "ɪ", "z"], "g": ["m", "r", "", "", "s"]},
+  "much": {"p": ["m", "ʌ", "tʃ"], "g": ["m", "u", "ch"]},
+  "my": {"p": ["m", "aɪ"], "g": ["m", "y"]},
+  "nam": {"p": ["n", "æ", "m"], "g": ["n", "a", "m"]},
+  "name": {"p": ["n", "eɪ", "m"], "g": ["n", "a", "me"]},
+  "near": {"p": ["n", "ɪ", "r"], "g": ["n", "ea", "r"]},
+  "need": {"p": ["n", "iː", "d"], "g": ["n", "ee", "d"]},
+  "needs": {"p": ["n", "iː", "d", "z"], "g": ["n", "ee", "d", "s"]},
+  "new": {"p": ["n", "uː"], "g": ["n", "ew"]},
+  "nguyen": {"p": ["n", "uː", "j", "e", "n"], "g": ["ng", "u", "y", "e", "n"]},
+  "nice": {"p": ["n", "aɪ", "s"], "g": ["n", "i", "ce"]},
+  "night": {"p": ["n", "aɪ", "t"], "g": ["n", "igh", "t"]},
+  "nine": {"p": ["n", "aɪ", "n"], "g": ["n", "i", "ne"]},
+  "ninety": {"p": ["n", "aɪ", "n", "t", "i"], "g": ["n", "i", "n", "et", "y"]},
+  "no": {"p": ["n", "oʊ"], "g": ["n", "o"]},
+  "noodles": {"p": ["n", "uː", "d", "ə", "l", "z"], "g": ["n", "oo", "d", "le", "", "s"]},
+  "nose": {"p": ["n", "oʊ", "z"], "g": ["n", "o", "se"]},
+  "not": {"p": ["n", "ɑː", "t"], "g": ["n", "o", "t"]},
+  "nothing": {"p": ["n", "ʌ", "θ", "ɪ", "ŋ"], "g": ["n", "o", "th", "i", "ng"]},
+  "now": {"p": ["n", "aʊ"], "g": ["n", "ow"]},
+  "number": {"p": ["n", "ʌ", "m", "b", "ə", "r"], "g": ["n", "u", "m", "b", "er", ""]},
+  "nurse": {"p": ["n", "ɜː", "s"], "g": ["n", "ur", "se"]},
+  "of": {"p": ["ʌ", "v"], "g": ["o", "f"]},
+  "office": {"p": ["ɑː", "f", "ɪ", "s"], "g": ["o", "ff", "i", "ce"]},
+  "ok": {"p": ["oʊ", "k", "eɪ"], "g": ["o", "k", ""]},
+  "old": {"p": ["oʊ", "l", "d"], "g": ["o", "l", "d"]},
+  "older": {"p": ["oʊ", "l", "d", "ə", "r"], "g": ["o", "l", "d", "er", ""]},
+  "on": {"p": ["ɔ", "n"], "g": ["o", "n"]},
+  "one": {"p": ["w", "ʌ", "n"], "g": ["o", "", "ne"]},
+  "onion": {"p": ["ʌ", "n", "iə", "n"], "g": ["o", "n", "io", "n"]},
+  "onions": {"p": ["ʌ", "n", "iə", "n", "z"], "g": ["o", "n", "io", "n", "s"]},
+  "only": {"p": ["oʊ", "n", "l", "i"], "g": ["o", "n", "l", "y"]},
+  "open": {"p": ["oʊ", "p", "ə", "n"], "g": ["o", "p", "e", "n"]},
+  "or": {"p": ["ɔː", "r"], "g": ["or", ""]},
+  "orange": {"p": ["ɔ", "r", "ɪ", "n", "dʒ"], "g": ["o", "r", "a", "n", "ge"]},
+  "order": {"p": ["ɔː", "r", "d", "ə", "r"], "g": ["or", "", "d", "er", ""]},
+  "our": {"p": ["aʊ", "ə", "r"], "g": ["ou", "r", ""]},
+  "over": {"p": ["oʊ", "v", "ə", "r"], "g": ["o", "v", "er", ""]},
+  "pain": {"p": ["p", "eɪ", "n"], "g": ["p", "ai", "n"]},
+  "pants": {"p": ["p", "æ", "n", "t", "s"], "g": ["p", "a", "n", "t", "s"]},
+  "parents": {"p": ["p", "eə", "r", "ə", "n", "t", "s"], "g": ["p", "a", "r", "e", "n", "t", "s"]},
+  "park": {"p": ["p", "ɑː", "r", "k"], "g": ["p", "ar", "", "k"]},
+  "pay": {"p": ["p", "eɪ"], "g": ["p", "ay"]},
+  "pays": {"p": ["p", "eɪ", "z"], "g": ["p", "ay", "s"]},
+  "pen": {"p": ["p", "e", "n"], "g": ["p", "e", "n"]},
+  "people": {"p": ["p", "iː", "p", "ə", "l"], "g": ["p", "eo", "p", "le", ""]},
+  "phone": {"p": ["f", "oʊ", "n"], "g": ["ph", "o", "ne"]},
+  "photo": {"p": ["f", "oʊ", "t", "oʊ"], "g": ["ph", "o", "t", "o"]},
+  "pill": {"p": ["p", "ɪ", "l"], "g": ["p", "i", "ll"]},
+  "please": {"p": ["p", "l", "iː", "z"], "g": ["p", "l", "ea", "se"]},
+  "post": {"p": ["p", "oʊ", "s", "t"], "g": ["p", "o", "s", "t"]},
+  "potato": {"p": ["p", "ə", "t", "eɪ", "t", "oʊ"], "g": ["p", "o", "t", "a", "t", "o"]},
+  "potatoes": {"p": ["p", "ə", "t", "eɪ", "t", "oʊ", "z"], "g": ["p", "o", "t", "a", "t", "oe", "s"]},
+  "price": {"p": ["p", "r", "aɪ", "s"], "g": ["p", "r", "i", "ce"]},
+  "put": {"p": ["p", "ʊ", "t"], "g": ["p", "u", "t"]},
+  "quiet": {"p": ["k", "w", "aɪ", "ə", "t"], "g": ["qu", "", "i", "e", "t"]},
+  "rain": {"p": ["r", "eɪ", "n"], "g": ["r", "ai", "n"]},
+  "ready": {"p": ["r", "e", "d", "i"], "g": ["r", "ea", "d", "y"]},
+  "receipt": {"p": ["r", "ɪ", "s", "iː", "t"], "g": ["r", "e", "c", "ei", "pt"]},
+  "red": {"p": ["r", "e", "d"], "g": ["r", "e", "d"]},
+  "remember": {"p": ["r", "ɪ", "m", "e", "m", "b", "ə", "r"], "g": ["r", "e", "m", "e", "m", "b", "er", ""]},
+  "rest": {"p": ["r", "e", "s", "t"], "g": ["r", "e", "s", "t"]},
+  "retired": {"p": ["r", "ɪ", "t", "aɪ", "ə", "r", "d"], "g": ["r", "e", "t", "i", "re", "", "d"]},
+  "return": {"p": ["r", "ɪ", "t", "ɜː", "n"], "g": ["r", "e", "t", "ur", "n"]},
+  "rice": {"p": ["r", "aɪ", "s"], "g": ["r", "i", "ce"]},
+  "ride": {"p": ["r", "aɪ", "d"], "g": ["r", "i", "de"]},
+  "right": {"p": ["r", "aɪ", "t"], "g": ["r", "igh", "t"]},
+  "salt": {"p": ["s", "ɔ", "l", "t"], "g": ["s", "a", "l", "t"]},
+  "saturday": {"p": ["s", "æ", "t", "ə", "r", "d", "eɪ"], "g": ["s", "a", "t", "u", "r", "d", "ay"]},
+  "say": {"p": ["s", "eɪ"], "g": ["s", "ay"]},
+  "school": {"p": ["s", "k", "uː", "l"], "g": ["s", "ch", "oo", "l"]},
+  "see": {"p": ["s", "iː"], "g": ["s", "ee"]},
+  "seller": {"p": ["s", "e", "l", "ə", "r"], "g": ["s", "e", "ll", "er", ""]},
+  "seven": {"p": ["s", "e", "v", "ə", "n"], "g": ["s", "e", "v", "e", "n"]},
+  "she": {"p": ["ʃ", "iː"], "g": ["sh", "e"]},
+  "sheep": {"p": ["ʃ", "iː", "p"], "g": ["sh", "ee", "p"]},
+  "ship": {"p": ["ʃ", "ɪ", "p"], "g": ["sh", "i", "p"]},
+  "shirt": {"p": ["ʃ", "ɜː", "t"], "g": ["sh", "ir", "t"]},
+  "shoes": {"p": ["ʃ", "uː", "z"], "g": ["sh", "o", "es"]},
+  "shop": {"p": ["ʃ", "ɑː", "p"], "g": ["sh", "o", "p"]},
+  "shopping": {"p": ["ʃ", "ɑː", "p", "ɪ", "ŋ"], "g": ["sh", "o", "pp", "i", "ng"]},
+  "show": {"p": ["ʃ", "oʊ"], "g": ["sh", "ow"]},
+  "sick": {"p": ["s", "ɪ", "k"], "g": ["s", "i", "ck"]},
+  "sidewalk": {"p": ["s", "aɪ", "d", "w", "ɔː", "k"], "g": ["s", "i", "d", "ew", "a", "lk"]},
+  "sing": {"p": ["s", "ɪ", "ŋ"], "g": ["s", "i", "ng"]},
+  "sink": {"p": ["s", "ɪ", "ŋ", "k"], "g": ["s", "i", "nk", ""]},
+  "sister": {"p": ["s", "ɪ", "s", "t", "ə", "r"], "g": ["s", "i", "s", "t", "er", ""]},
+  "sisters": {"p": ["s", "ɪ", "s", "t", "ə", "r", "z"], "g": ["s", "i", "s", "t", "er", "", "s"]},
+  "sit": {"p": ["s", "ɪ", "t"], "g": ["s", "i", "t"]},
+  "sixty": {"p": ["s", "ɪ", "k", "s", "t", "i"], "g": ["s", "i", "x", "", "t", "y"]},
+  "size": {"p": ["s", "aɪ", "z"], "g": ["s", "i", "ze"]},
+  "sleep": {"p": ["s", "l", "iː", "p"], "g": ["s", "l", "ee", "p"]},
+  "slow": {"p": ["s", "l", "oʊ"], "g": ["s", "l", "ow"]},
+  "slowly": {"p": ["s", "l", "oʊ", "l", "i"], "g": ["s", "l", "ow", "l", "y"]},
+  "small": {"p": ["s", "m", "ɔː", "l"], "g": ["s", "m", "a", "ll"]},
+  "soap": {"p": ["s", "oʊ", "p"], "g": ["s", "oa", "p"]},
+  "some": {"p": ["s", "ʌ", "m"], "g": ["s", "o", "me"]},
+  "son": {"p": ["s", "ʌ", "n"], "g": ["s", "o", "n"]},
+  "sorry": {"p": ["s", "ɑː", "r", "i"], "g": ["s", "o", "rr", "y"]},
+  "soup": {"p": ["s", "uː", "p"], "g": ["s", "ou", "p"]},
+  "stomach": {"p": ["s", "t", "ʌ", "m", "ə", "k"], "g": ["s", "t", "o", "m", "a", "ch"]},
+  "stop": {"p": ["s", "t", "ɑː", "p"], "g": ["s", "t", "o", "p"]},
+  "straight": {"p": ["s", "t", "r", "eɪ", "t"], "g": ["s", "t", "r", "ai", "ght"]},
+  "street": {"p": ["s", "t", "r", "iː", "t"], "g": ["s", "t", "r", "ee", "t"]},
+  "strong": {"p": ["s", "t", "r", "ɔ", "ŋ"], "g": ["s", "t", "r", "o", "ng"]},
+  "student": {"p": ["s", "t", "uː", "d", "ə", "n", "t"], "g": ["s", "t", "u", "d", "e", "n", "t"]},
+  "students": {"p": ["s", "t", "uː", "d", "ə", "n", "t", "s"], "g": ["s", "t", "u", "d", "e", "n", "t", "s"]},
+  "sugar": {"p": ["ʃ", "ʊ", "ɡ", "ə", "r"], "g": ["s", "u", "g", "ar", ""]},
+  "summer": {"p": ["s", "ʌ", "m", "ə", "r"], "g": ["s", "u", "mm", "er", ""]},
+  "sun": {"p": ["s", "ʌ", "n"], "g": ["s", "u", "n"]},
+  "sunny": {"p": ["s", "ʌ", "n", "i"], "g": ["s", "u", "nn", "y"]},
+  "sure": {"p": ["ʃ", "ʊ", "r"], "g": ["s", "u", "re"]},
+  "sweet": {"p": ["s", "w", "iː", "t"], "g": ["s", "w", "ee", "t"]},
+  "table": {"p": ["t", "eɪ", "b", "ə", "l"], "g": ["t", "a", "b", "le", ""]},
+  "take": {"p": ["t", "eɪ", "k"], "g": ["t", "a", "ke"]},
+  "tall": {"p": ["t", "ɔː", "l"], "g": ["t", "a", "ll"]},
+  "taxi": {"p": ["t", "æ", "k", "s", "i"], "g": ["t", "a", "x", "", "i"]},
+  "tea": {"p": ["t", "iː"], "g": ["t", "ea"]},
+  "teacher": {"p": ["t", "iː", "tʃ", "ə", "r"], "g": ["t", "ea", "ch", "er", ""]},
+  "teeth": {"p": ["t", "iː", "θ"], "g": ["t", "ee", "th"]},
+  "television": {"p": ["t", "e", "l", "ɪ", "v", "ɪ", "ʒ", "ə", "n"], "g": ["t", "e", "l", "e", "v", "i", "s", "io", "n"]},
+  "ten": {"p": ["t", "e", "n"], "g": ["t", "e", "n"]},
+  "thai": {"p": ["t", "aɪ"], "g": ["t", "hai"]},
+  "thank": {"p": ["θ", "æ", "ŋ", "k"], "g": ["th", "a", "nk", ""]},
+  "thanks": {"p": ["θ", "æ", "ŋ", "k", "s"], "g": ["th", "a", "nk", "", "s"]},
+  "that": {"p": ["ð", "æ", "t"], "g": ["th", "a", "t"]},
+  "the": {"p": ["ð", "ə"], "g": ["th", "e"]},
+  "them": {"p": ["ð", "e", "m"], "g": ["th", "e", "m"]},
+  "then": {"p": ["ð", "e", "n"], "g": ["th", "e", "n"]},
+  "there": {"p": ["ð", "e", "r"], "g": ["th", "e", "re"]},
+  "these": {"p": ["ð", "iː", "z"], "g": ["th", "e", "se"]},
+  "they": {"p": ["ð", "eɪ"], "g": ["th", "ey"]},
+  "think": {"p": ["θ", "ɪ", "ŋ", "k"], "g": ["th", "i", "nk", ""]},
+  "thirsty": {"p": ["θ", "ɜː", "s", "t", "i"], "g": ["th", "ir", "s", "t", "y"]},
+  "thirteen": {"p": ["θ", "ɜː", "t", "iː", "n"], "g": ["th", "ir", "t", "ee", "n"]},
+  "thirty": {"p": ["θ", "ɜː", "t", "i"], "g": ["th", "ir", "t", "y"]},
+  "this": {"p": ["ð", "ɪ", "s"], "g": ["th", "i", "s"]},
+  "three": {"p": ["θ", "r", "iː"], "g": ["th", "r", "ee"]},
+  "time": {"p": ["t", "aɪ", "m"], "g": ["t", "i", "me"]},
+  "times": {"p": ["t", "aɪ", "m", "z"], "g": ["t", "i", "m", "es"]},
+  "tired": {"p": ["t", "aɪ", "ə", "r", "d"], "g": ["t", "i", "re", "", "d"]},
+  "to": {"p": ["t", "uː"], "g": ["t", "o"]},
+  "today": {"p": ["t", "ə", "d", "eɪ"], "g": ["t", "o", "d", "ay"]},
+  "together": {"p": ["t", "ə", "ɡ", "e", "ð", "ə", "r"], "g": ["t", "o", "g", "e", "th", "er", ""]},
+  "tom": {"p": ["t", "ɑː", "m"], "g": ["t", "o", "m"]},
+  "tomato": {"p": ["t", "ə", "m", "eɪ", "t", "oʊ"], "g": ["t", "o", "m", "a", "t", "o"]},
+  "tomatoes": {"p": ["t", "ə", "m", "eɪ", "t", "oʊ", "z"], "g": ["t", "o", "m", "a", "t", "oe", "s"]},
+  "tomorrow": {"p": ["t", "ə", "m", "ɑː", "r", "oʊ"], "g": ["t", "o", "m", "o", "rr", "ow"]},
+  "tonight": {"p": ["t", "ə", "n", "aɪ", "t"], "g": ["t", "o", "n", "igh", "t"]},
+  "too": {"p": ["t", "uː"], "g": ["t", "oo"]},
+  "tour": {"p": ["t", "ʊ", "r"], "g": ["t", "our", ""]},
+  "toy": {"p": ["t", "ɔɪ"], "g": ["t", "oy"]},
+  "traffic": {"p": ["t", "r", "æ", "f", "ɪ", "k"], "g": ["t", "r", "a", "ff", "i", "c"]},
+  "train": {"p": ["t", "r", "eɪ", "n"], "g": ["t", "r", "ai", "n"]},
+  "try": {"p": ["t", "r", "aɪ"], "g": ["t", "r", "y"]},
+  "turn": {"p": ["t", "ɜː", "n"], "g": ["t", "ur", "n"]},
+  "twelve": {"p": ["t", "w", "e", "l", "v"], "g": ["t", "w", "e", "l", "ve"]},
+  "twenty": {"p": ["t", "w", "e", "n", "t", "i"], "g": ["t", "w", "e", "n", "t", "y"]},
+  "twice": {"p": ["t", "w", "aɪ", "s"], "g": ["t", "w", "i", "ce"]},
+  "two": {"p": ["t", "uː"], "g": ["t", "wo"]},
+  "uncle": {"p": ["ʌ", "ŋ", "k", "ə", "l"], "g": ["u", "n", "c", "le", ""]},
+  "up": {"p": ["ʌ", "p"], "g": ["u", "p"]},
+  "us": {"p": ["ʌ", "s"], "g": ["u", "s"]},
+  "usual": {"p": ["j", "uː", "ʒ", "uː", "ə", "l"], "g": ["u", "", "s", "u", "a", "l"]},
+  "vegetables": {"p": ["v", "e", "dʒ", "ɪ", "t", "ə", "b", "ə", "l", "z"], "g": ["v", "e", "g", "e", "t", "a", "b", "le", "", "s"]},
+  "very": {"p": ["v", "e", "r", "i"], "g": ["v", "e", "r", "y"]},
+  "vietnam": {"p": ["v", "iː", "ə", "t", "n", "ɑː", "m"], "g": ["v", "i", "e", "t", "n", "a", "m"]},
+  "village": {"p": ["v", "ɪ", "l", "ɪ", "dʒ"], "g": ["v", "i", "ll", "a", "ge"]},
+  "wait": {"p": ["w", "eɪ", "t"], "g": ["w", "ai", "t"]},
+  "waiter": {"p": ["w", "eɪ", "t", "ə", "r"], "g": ["w", "ai", "t", "er", ""]},
+  "walk": {"p": ["w", "ɔː", "k"], "g": ["w", "a", "lk"]},
+  "walks": {"p": ["w", "ɔː", "k", "s"], "g": ["w", "a", "lk", "s"]},
+  "want": {"p": ["w", "ɔ", "n", "t"], "g": ["w", "a", "n", "t"]},
+  "wants": {"p": ["w", "ɔ", "n", "t", "s"], "g": ["w", "a", "n", "t", "s"]},
+  "warm": {"p": ["w", "ɔː", "r", "m"], "g": ["w", "a", "r", "m"]},
+  "wash": {"p": ["w", "ɑː", "ʃ"], "g": ["w", "a", "sh"]},
+  "watch": {"p": ["w", "ɑː", "tʃ"], "g": ["w", "a", "tch"]},
+  "water": {"p": ["w", "ɔː", "t", "ə", "r"], "g": ["w", "a", "t", "er", ""]},
+  "we": {"p": ["w", "iː"], "g": ["w", "e"]},
+  "weak": {"p": ["w", "iː", "k"], "g": ["w", "ea", "k"]},
+  "weather": {"p": ["w", "e", "ð", "ə", "r"], "g": ["w", "ea", "th", "er", ""]},
+  "welcome": {"p": ["w", "e", "l", "k", "ʌ", "m"], "g": ["w", "e", "l", "c", "o", "me"]},
+  "well": {"p": ["w", "e", "l"], "g": ["w", "e", "ll"]},
+  "what": {"p": ["w", "ʌ", "t"], "g": ["wh", "a", "t"]},
+  "when": {"p": ["w", "e", "n"], "g": ["wh", "e", "n"]},
+  "where": {"p": ["w", "e", "r"], "g": ["wh", "e", "re"]},
+  "white": {"p": ["w", "aɪ", "t"], "g": ["wh", "i", "te"]},
+  "who": {"p": ["h", "uː"], "g": ["wh", "o"]},
+  "wife": {"p": ["w", "aɪ", "f"], "g": ["w", "i", "fe"]},
+  "will": {"p": ["w", "ɪ", "l"], "g": ["w", "i", "ll"]},
+  "window": {"p": ["w", "ɪ", "n", "d", "oʊ"], "g": ["w", "i", "n", "d", "ow"]},
+  "with": {"p": ["w", "ɪ", "ð"], "g": ["w", "i", "th"]},
+  "work": {"p": ["w", "ɜː", "k"], "g": ["w", "or", "k"]},
+  "worker": {"p": ["w", "ɜː", "k", "ə", "r"], "g": ["w", "or", "k", "er", ""]},
+  "would": {"p": ["w", "ʊ", "d"], "g": ["w", "ou", "ld"]},
+  "year": {"p": ["j", "ɪ", "r"], "g": ["y", "ea", "r"]},
+  "years": {"p": ["j", "ɪ", "r", "z"], "g": ["y", "ea", "r", "s"]},
+  "yellow": {"p": ["j", "e", "l", "oʊ"], "g": ["y", "e", "ll", "ow"]},
+  "yes": {"p": ["j", "e", "s"], "g": ["y", "e", "s"]},
+  "you": {"p": ["j", "uː"], "g": ["y", "ou"]},
+  "young": {"p": ["j", "ʌ", "ŋ"], "g": ["y", "ou", "ng"]},
+  "your": {"p": ["j", "ɔː", "r"], "g": ["y", "ou", "r"]},
+  "yours": {"p": ["j", "ɔː", "r", "z"], "g": ["y", "our", "", "s"]},
+  "zoo": {"p": ["z", "uː"], "g": ["z", "oo"]},
+};
+
+</script>
 <script>
 /* ================= DATA ================= */
 var SPEAKER_SVG = '<svg class="ic" aria-hidden="true"><use href="#ic-speaker-high"></use></svg>'; /* V38 ICON PHOSPHOR */
@@ -5441,6 +5963,8 @@ function renderDialogue(){
       dlgRbPanel = document.createElement("div"); dlgRbPanel.className = "rb-panel"; dlgRbPanel.setAttribute("aria-live", "polite");
       dlgRbBtn = readbackBtn(line.en, "", line.vi, false, dlgRbPanel, { kind: "dlg", index: dlgIdx, lessonId: currentLesson.id });
       btns.appendChild(dlgRbBtn);
+      /* V54 CHAM TUNG AM: nút phụ ghi một lần đọc mới chỉ để chấm từng âm của câu này */
+      btns.appendChild(phonReadbackBtn(line.en, line.vi, dlgRbPanel));
     }
     bub.appendChild(who); bub.appendChild(en); bub.appendChild(vi); bub.appendChild(btns);
     if(dlgRbPanel) bub.appendChild(dlgRbPanel);
@@ -5549,6 +6073,8 @@ function syncSpeakTarget(){
   document.getElementById("speakHeard").textContent = "";
   var f = document.getElementById("speakFeedback"); f.className = "feedback"; f.textContent = "";
   var pb = document.getElementById("speakPlayBtn"); if(pb) pb.style.display = "none";
+  var pslot54 = document.getElementById("speakPhonSlot"); if(pslot54) pslot54.innerHTML = "";
+  if(typeof speakLastBlob !== "undefined") speakLastBlob = null;
   hideSpeakSelfCheck();
 }
 /* ================= LUYỆN NÓI: ĐÚNG CÂU NÀO TỰ SANG CÂU KẾ =================
@@ -5985,6 +6511,10 @@ function gradeSpeak(said){
     fb.textContent = pickEnc("wrong") + " Hãy bấm “Nghe chậm”, nghe kỹ từng từ, rồi đọc theo từng cụm nhỏ. Câu mẫu: “" + target + "” (" + speakItems[speakIndex].vi + ")";
     status.textContent = "Mình thử lại chậm rãi nhé!";
   }
+  /* V54 CHAM TUNG AM: chấm bằng đường ghi âm mà chưa đạt (score < 0,8)
+     và blob còn giữ → hiện nút phụ “🔍 Xem âm nào sai” dưới kết quả.
+     Đường recognition không có blob thì speakLastBlob rỗng — không hiện. */
+  if(typeof phonOfferSpeakDetail === "function") phonOfferSpeakDetail(score);
 }
 var spAudioUrl = null;
 function setSpAudio(blob){
@@ -6090,6 +6620,7 @@ document.getElementById("micBtn").addEventListener("click", function(){
   hideSpeakSelfCheck();
   hideSpeakVoiceRetry();
   speakLocalTried = false;
+  speakLastBlob = null; /* V54: blob chấm từng âm chỉ thuộc lần đọc sắp bắt đầu */
   /* V50 MOT BO NGHE TREN MAY: trên Chrome iPhone (CriOS) hoặc trình
      duyệt không có bộ nghe sẵn (Firefox…), ghi âm + bộ nghe trên máy
      là đường chấm CHÍNH của Luyện nói. Người học đã chủ động chọn
@@ -6346,6 +6877,7 @@ function openVoiceDiag(){
      (tải nền có thể đã xong hoặc đang chạy). Hàm khai báo ở phần
      INIT phía dưới — chỉ gọi khi đã tồn tại. */
   if(typeof refreshLocalWhisperBtn === "function") refreshLocalWhisperBtn();
+  if(typeof refreshPhonModelBtn === "function") refreshPhonModelBtn();
   var pre = document.getElementById("voiceDiagText");
   if(pre) pre.textContent = voiceLogText();
   var copyBtn = document.getElementById("voiceDiagCopy");
@@ -6753,6 +7285,7 @@ function closeReadbackPanel(ctx){
   ctx.panel.innerHTML = "";
   if(ctx.btn) ctx.btn.classList.remove("listening");
   if(ctx.audioUrl){ try{ URL.revokeObjectURL(ctx.audioUrl); }catch(e){} ctx.audioUrl = null; }
+  if(typeof phonRemoveDetail === "function") phonRemoveDetail(ctx); /* V54: đóng panel thì thu cả khung chấm từng âm */
   if(typeof rbOpenCtx !== "undefined" && rbOpenCtx === ctx) rbOpenCtx = null;
 }
 /* ===== V16: KHỐI CHỮ ĐÍCH CỐ ĐỊNH Ở ĐẦU PANEL ĐỌC LẠI =====
@@ -7350,6 +7883,13 @@ function rbShowResult(ctx, best){
   actions.appendChild(rbActionBtn("Nghe chậm lại", function(){ speak(ctx.target, 0.5); }, "slow"));
   if(ctx.fromRecording && ctx.audioUrl){
     actions.appendChild(rbPlayBtn(ctx));
+  }
+  /* V54 CHAM TUNG AM: lần chấm bằng ĐƯỜNG GHI ÂM (blob còn giữ ở
+     ctx.lastBlob) mà CHƯA ĐẠT (trượt hoặc “gần được”) → nút phụ xem
+     từng âm sai trên CHÍNH blob đó. Lớp xem thêm: verdict ở trên giữ
+     nguyên tuyệt đối. */
+  if(!perfect && ctx.fromRecording && ctx.lastBlob){
+    actions.appendChild(rbActionBtn("🔍 Xem âm nào sai", function(){ phonShowDetailForPanel(ctx); }, "vslow"));
   }
   actions.appendChild(rbActionBtn("Đọc lại lần nữa", function(){ startReadback(ctx); }, "mic"));
   panel.appendChild(actions);
@@ -8402,6 +8942,694 @@ window.addEventListener("pageshow", function(){
   }catch(e){}
 });
 /* ================================================================
+   V54 CHAM TUNG AM — BỘ CHẤM TỪNG ÂM (wav2vec2-xlsr-53-espeak-cv-ft)
+   Anh đã duyệt thiết kế qua trang thử (thu-cham-am, bản v2 đang
+   live): chấm theo TỪ, từ Đúng khi ≥70% số âm khớp; nhóm chữ ứng
+   với âm sai/thiếu tô đỏ; đúng 1 dòng gợi ý cho mỗi từ chưa đúng;
+   KHÔNG hiện bảng âm. Mã nạp model + gieo cache + giải mã CTC +
+   align/canon/isMatch/CLOSE_PAIRS + luật gợi ý lấy NGUYÊN từ trang
+   thử đã kiểm chứng trên giọng thật.
+   Model: Dayfob/wav2vec2-xlsr-53-espeak-cv-ft-onnx
+   model_int8.onnx (355.373.822 byte) gieo vào "transformers-cache"
+   dưới ĐÚNG khóa onnx/model_quantized.onnx của repo
+   facebook/wav2vec2-xlsr-53-espeak-cv-ft — máy nào đã tải ở trang
+   thử (cùng origin) là dùng lại cache đó, KHÔNG tải lại.
+   Dùng CHUNG runtime transformers.js v2 của LocalWhisper
+   (env + ./vendor/): lúc nạp bộ âm vị tạm đặt
+   env.allowRemoteModels=true và env.allowLocalModels=false (đúng
+   cấu hình trang thử), nạp xong trả lại false/true — phiên
+   whisper-tiny.en đã nạp của LocalWhisper không bị đụng vào.
+   Lớp này là LỚP XEM THÊM: không đổi verdict qua/trượt của hệ chấm
+   V51/V52, không đổi tự chuyển câu/phần, không đổi tiến độ.
+   Không thêm khóa localStorage nào; nhật ký qua voiceLog sẵn có
+   với 2 loại dòng phon-load / phon-result. Bộ âm vị KHÔNG có trạng
+   thái failed vĩnh viễn: nạp lỗi thì lần bấm sau tự thử lại từ đầu;
+   healOnReturn (mở rộng kiểu V53) reset trạng thái nạp khi quay
+   lại trang mà bộ đang lỗi hoặc lần nạp treo quá 20 giây.
+   ================================================================ */
+/* V54-PURE-BEGIN — hàm thuần (chuẩn hóa âm vị / căn chỉnh / gợi ý /
+   chấm theo từ), trích xuất được để tự kiểm tra bằng node. */
+function phonCanon(tok){
+  var x = String(tok).replace(/[ˈˌ]/g, "");
+  x = x.replace(/ː$/, "");
+  if(x === "ɹ" || x === "ɾ") x = "r";
+  if(x === "ɑ") x = "a";
+  if(x === "ɛ") x = "e";
+  if(x === "ɔ") x = "o";
+  return x;
+}
+var PHON_CLOSE_PAIRS = { "aɪ|a": 1, "aɪ|i": 1, "eə|e": 1, "eɪ|e": 1, "aʊ|a": 1, "ɔɪ|o": 1, "ʌ|a": 1, "ə|ʊ": 1, "ə|o": 1, "ə|ɐ": 1 };
+function phonIsMatch(t, h){
+  var ct = phonCanon(t), ch = phonCanon(h);
+  return ct === ch || !!PHON_CLOSE_PAIRS[ct + "|" + ch];
+}
+var PHON_VOWEL_SET = { "a": 1, "e": 1, "i": 1, "o": 1, "u": 1, "ə": 1, "ʌ": 1, "ɑ": 1, "ɐ": 1, "ɛ": 1, "ɪ": 1, "ʊ": 1, "æ": 1, "ɔ": 1, "y": 1, "aɪ": 1, "eɪ": 1, "aʊ": 1, "ɔɪ": 1, "eə": 1, "ɪə": 1, "ʊə": 1, "oʊ": 1 };
+function phonIsVowel(tok){ return !!PHON_VOWEL_SET[phonCanon(tok)]; }
+/* Căn chỉnh có trọng số như trang thử: thay âm cùng nhóm rẻ hơn
+   thay chéo nhóm nguyên âm/phụ âm; xoá/thêm ở giữa hai mức đó. */
+function phonAlign(T, H){
+  var n = T.length, m = H.length, i, j;
+  function subCost(a, b){ return phonIsMatch(a, b) ? 0 : (phonIsVowel(a) !== phonIsVowel(b) ? 5 : 2); }
+  var dp = [];
+  for(i = 0; i <= n; i++){ dp.push([]); for(j = 0; j <= m; j++) dp[i][j] = 0; }
+  for(i = 1; i <= n; i++) dp[i][0] = dp[i - 1][0] + 2;
+  for(j = 1; j <= m; j++) dp[0][j] = dp[0][j - 1] + 2;
+  for(i = 1; i <= n; i++){
+    for(j = 1; j <= m; j++){
+      dp[i][j] = Math.min(dp[i - 1][j - 1] + subCost(T[i - 1], H[j - 1]), dp[i - 1][j] + 2, dp[i][j - 1] + 2);
+    }
+  }
+  var pairs = []; i = n; j = m;
+  while(i > 0 || j > 0){
+    if(i > 0 && j > 0){
+      var c = subCost(T[i - 1], H[j - 1]);
+      if(dp[i][j] === dp[i - 1][j - 1] + c){ pairs.push({ ti: i - 1, hi: j - 1, kind: c === 0 ? "match" : "sub" }); i--; j--; continue; }
+    }
+    if(i > 0 && dp[i][j] === dp[i - 1][j] + 2){ pairs.push({ ti: i - 1, hi: null, kind: "del" }); i--; continue; }
+    pairs.push({ ti: null, hi: j - 1, kind: "ins" }); j--;
+  }
+  return pairs.reverse();
+}
+/* Gợi ý sửa cho MỘT từ chưa đúng — đúng 1 dòng, luật của trang thử,
+   thứ tự ưu tiên: th (thành z/s) -> thiếu r -> đuôi từ bị nuốt -> v. */
+function phonWordHint(wph, wpairs){
+  var heardW = [];
+  wpairs.forEach(function(p){ if(p.h != null) heardW.push(phonCanon(p.h)); });
+  var hasTh = false, hasR = false, hasV = false;
+  wph.forEach(function(ph){ if(ph === "ð") hasTh = true; if(phonCanon(ph) === "r") hasR = true; if(ph === "v") hasV = true; });
+  if(hasTh && (heardW.indexOf("z") >= 0 || heardW.indexOf("s") >= 0) && heardW.indexOf("ð") < 0 && heardW.indexOf("θ") < 0){
+    return "Âm 'th' đang thành z/s — đặt lưỡi giữa hai hàm răng rồi rung cổ họng.";
+  }
+  var rBad = false;
+  wpairs.forEach(function(p){ if(phonCanon(p.t) === "r" && p.kind !== "match") rBad = true; });
+  if(hasR && rBad) return "Thiếu âm r — uốn lưỡi nhẹ ra sau.";
+  var lastPh = wph.length ? phonCanon(wph[wph.length - 1]) : "";
+  var lastPair = wpairs.length ? wpairs[wpairs.length - 1] : null;
+  if((lastPh === "t" || lastPh === "s") && lastPair && lastPair.kind !== "match") return "Đuôi từ bị nuốt — đọc rõ âm cuối.";
+  if(hasV && heardW.indexOf("v") < 0) return "Âm v chưa rõ — cắn nhẹ môi dưới rồi rung.";
+  return "";
+}
+/* Chấm một đích (từ đơn hoặc cả câu) theo chuỗi âm vị nghe được.
+   Âm vị đích + nhóm chữ lấy từ PHONEME_TABLE (khóa = từ đã chuẩn
+   hóa như trang chấm: localNormalize). Âm vị rỗng "" trong bảng là
+   chữ câm (vd e cuối "love") — không chấm, không tô đỏ, đưa vào
+   đuôi chữ hiển thị. Từ không có trong bảng: missing=true. */
+function phonGradeTarget(targetText, heardToks){
+  var norm = (typeof localNormalize === "function")
+    ? localNormalize(targetText)
+    : String(targetText || "").toLowerCase().replace(/[^a-z0-9' ]/g, " ").replace(/\s+/g, " ").trim();
+  var keys = norm.split(" ").filter(Boolean);
+  var rawToks = String(targetText || "").split(/\s+/).map(function(w){ return w.replace(/^[^A-Za-z0-9']+|[^A-Za-z0-9']+$/g, ""); }).filter(Boolean);
+  var disp = (rawToks.length === keys.length) ? rawToks : keys;
+  var proc = keys.map(function(k){
+    var e = (typeof PHONEME_TABLE !== "undefined" && PHONEME_TABLE[k]) ? PHONEME_TABLE[k] : null;
+    if(!e) return null;
+    var p = [], g = [], silent = "";
+    e.p.forEach(function(ph, idx){
+      if(ph === ""){ silent += (e.g[idx] || ""); }
+      else { p.push(ph); g.push(e.g[idx] || ""); }
+    });
+    return { p: p, g: g, silent: silent };
+  });
+  var flat = [], offsets = [], acc = 0;
+  proc.forEach(function(w){ offsets.push(acc); if(w) acc += w.p.length; });
+  proc.forEach(function(w){ if(w) w.p.forEach(function(ph){ flat.push(ph); }); });
+  var pairs = phonAlign(flat, heardToks || []);
+  var pairByTi = {};
+  pairs.forEach(function(p){ if(p.ti != null) pairByTi[p.ti] = p; });
+  var words = [], okCount = 0;
+  proc.forEach(function(w, wi){
+    var display = disp[wi] || keys[wi] || "";
+    if(!w){
+      words.push({ key: keys[wi], display: display, missing: true, ok: false, pct: 0, matched: 0, total: 0, groups: [], red: [], tail: "", hint: "" });
+      return;
+    }
+    var wpairs = w.p.map(function(ph, k){
+      var pr = pairByTi[offsets[wi] + k];
+      return { t: ph, h: (pr && pr.hi != null) ? heardToks[pr.hi] : null, kind: pr ? pr.kind : "del" };
+    });
+    var matched = 0;
+    wpairs.forEach(function(p){ if(p.kind === "match") matched++; });
+    var pct = w.p.length ? matched / w.p.length : 0;
+    var ok = pct >= 0.7;
+    if(ok) okCount++;
+    var red = wpairs.map(function(p){ return p.kind !== "match"; });
+    var joined = w.g.join("");
+    var tail = "";
+    var lowDisp = display.toLowerCase();
+    if(joined && lowDisp.indexOf(joined) === 0 && lowDisp.length > joined.length) tail = display.slice(joined.length);
+    if(w.silent && tail.indexOf(w.silent) < 0) tail += w.silent;
+    var hint = ok ? "" : phonWordHint(w.p, wpairs);
+    words.push({ key: keys[wi], display: display, missing: false, ok: ok, pct: pct, matched: matched, total: w.p.length, groups: w.g.slice(), red: red, tail: tail, hint: hint });
+  });
+  return { words: words, okCount: okCount, totalWords: keys.length };
+}
+/* V54-PURE-END */
+/* V54-MODEL-BEGIN — nạp model âm vị + gieo cache + giải mã CTC,
+   lấy nguyên cơ chế trang thử đã kiểm chứng. */
+var PhonCTC = (function(){
+  var MODEL_ID = "facebook/wav2vec2-xlsr-53-espeak-cv-ft";
+  var ONNX_KEY = "https://huggingface.co/facebook/wav2vec2-xlsr-53-espeak-cv-ft/resolve/main/onnx/model_quantized.onnx";
+  var ONNX_SRC = "https://huggingface.co/Dayfob/wav2vec2-xlsr-53-espeak-cv-ft-onnx/resolve/main/model_int8.onnx";
+  var ONNX_SIZE = 355373822;
+  var VOCAB_URL = "https://huggingface.co/Dayfob/wav2vec2-xlsr-53-espeak-cv-ft-onnx/resolve/main/vocab.json";
+  var state = "idle"; /* idle | loading | ready | failed (failed KHÔNG vĩnh viễn) */
+  var model = null, id2tok = null, padId = 0, TensorCtor = null;
+  var loadPromise = null, loadGen = 0, loadStartedAt = 0, loadPct = -1, attempts = 0;
+  function logEv(name, detail, target){
+    try{ var lg = voiceLogBegin("Bộ chấm từng âm", target || "", "phon-ctc"); lg.ev(name, detail); lg.finish(); }catch(e){}
+  }
+  function seedDownload(cache, onProgress){
+    return fetch(ONNX_SRC).then(function(resp){
+      if(!resp.ok || !resp.body) throw new Error("không tải được bộ chấm (HTTP " + resp.status + ")");
+      var reader = resp.body.getReader();
+      var chunks = [], loaded = 0, lastPct = -1;
+      function step(){
+        return reader.read().then(function(r){
+          if(r.done) return;
+          chunks.push(r.value); loaded += r.value.byteLength;
+          var pct = Math.floor(loaded / ONNX_SIZE * 100);
+          if(pct !== lastPct){ lastPct = pct; if(onProgress) onProgress(loaded, ONNX_SIZE); }
+          return step();
+        });
+      }
+      return step().then(function(){
+        /* Đọc trọn thân file rồi mới cache.put bằng Response từ Blob —
+           đúng cách trang thử (Cache.put trên luồng trực tiếp lỗi). */
+        var blob = new Blob(chunks, { type: "application/octet-stream" });
+        if(blob.size !== ONNX_SIZE) throw new Error("tải chưa đủ bộ chấm (" + blob.size + "/" + ONNX_SIZE + " byte) — kiểm tra mạng rồi tải lại");
+        return cache.put(ONNX_KEY, new Response(blob, { headers: { "Content-Type": "application/octet-stream", "Content-Length": String(blob.size) } })).then(function(){
+          return cache.match(ONNX_KEY).then(function(chk){
+            if(!chk) throw new Error("không lưu được bộ chấm trên máy");
+            return "downloaded";
+          });
+        });
+      });
+    });
+  }
+  function seedCache(onProgress){
+    if(!("caches" in window)) return Promise.reject(new Error("trình duyệt không hỗ trợ lưu trữ (Cache API)"));
+    return caches.open("transformers-cache").then(function(cache){
+      return cache.match(ONNX_KEY).then(function(existing){
+        if(existing){
+          var len = parseInt(existing.headers.get("Content-Length") || "0", 10);
+          if(len === ONNX_SIZE) return "cached";
+          return cache.delete(ONNX_KEY).then(function(){ return seedDownload(cache, onProgress); });
+        }
+        return seedDownload(cache, onProgress);
+      });
+    });
+  }
+  function restoreEnv(mod){
+    if(!mod) return;
+    try{ mod.env.allowRemoteModels = false; mod.env.allowLocalModels = true; }catch(e){}
+  }
+  /* Nạp bộ âm vị: resolve true/false, KHÔNG BAO GIỜ reject. Đang
+     lỗi thì lần gọi sau tự thử lại từ đầu (không kẹt failed). */
+  function ensureLoaded(onProgress){
+    if(state === "ready") return Promise.resolve(true);
+    if(loadPromise) return loadPromise;
+    state = "loading"; loadStartedAt = Date.now(); loadPct = -1; attempts++;
+    var myGen = ++loadGen;
+    logEv("phon-load", "bắt đầu nạp bộ chấm từng âm (wav2vec2-xlsr-53-espeak, ~355MB lần đầu, chỉ tải 1 lần)");
+    var modRef = null;
+    loadPromise = seedCache(function(loaded, total){
+      loadPct = Math.max(0, Math.min(100, Math.floor(loaded / total * 100)));
+      if(onProgress){ try{ onProgress(loadPct); }catch(e){} }
+      if(typeof refreshPhonModelBtn === "function") refreshPhonModelBtn();
+    }).then(function(){
+      return fetch(VOCAB_URL);
+    }).then(function(r){
+      if(!r.ok) throw new Error("Không tải được bảng âm vị (HTTP " + r.status + ")");
+      return r.json();
+    }).then(function(vocab){
+      id2tok = {};
+      Object.keys(vocab).forEach(function(tok){ id2tok[vocab[tok]] = tok; });
+      padId = (typeof vocab["<pad>"] === "number") ? vocab["<pad>"] : 0;
+      return import("./vendor/transformers.min.js");
+    }).then(function(mod){
+      modRef = mod; TensorCtor = mod.Tensor;
+      /* Tạm mở remote + tắt local ĐÚNG cấu hình trang thử trong lúc
+         nạp bộ âm vị; nạp xong (dù thành hay bại) trả lại như cũ.
+         Phiên whisper-tiny.en đã nạp của LocalWhisper không bị đụng. */
+      try{ mod.env.allowRemoteModels = true; mod.env.allowLocalModels = false; }catch(e){}
+      return mod.Wav2Vec2ForCTC.from_pretrained(MODEL_ID, {
+        quantized: true,
+        progress_callback: function(pr){
+          if(pr && pr.status === "progress" && pr.file && pr.file.indexOf("onnx") >= 0 && typeof pr.progress === "number"){
+            loadPct = Math.max(0, Math.min(100, Math.round(pr.progress)));
+            if(onProgress){ try{ onProgress(loadPct); }catch(e){} }
+            if(typeof refreshPhonModelBtn === "function") refreshPhonModelBtn();
+          }
+        }
+      });
+    }).then(function(m){
+      restoreEnv(modRef);
+      if(myGen !== loadGen) return state === "ready";
+      model = m; state = "ready"; loadPct = 100;
+      logEv("phon-load", "bộ chấm từng âm đã sẵn sàng");
+      if(typeof refreshPhonModelBtn === "function") refreshPhonModelBtn();
+      return true;
+    }).catch(function(err){
+      restoreEnv(modRef);
+      if(myGen !== loadGen) return false;
+      state = "failed"; model = null; loadPromise = null;
+      logEv("phon-load", "nạp bộ chấm từng âm lỗi: " + String(err && err.message || err).slice(0, 120) + " — lần bấm sau sẽ tự thử lại từ đầu");
+      if(typeof refreshPhonModelBtn === "function") refreshPhonModelBtn();
+      return false;
+    });
+    return loadPromise;
+  }
+  /* Giải mã blob ghi âm -> Float32Array 16kHz mono (đúng trang thử) */
+  function decodeBlobTo16k(blob){
+    return blob.arrayBuffer().then(function(buf){
+      var AC = window.AudioContext || window.webkitAudioContext;
+      if(!AC || typeof OfflineAudioContext === "undefined") throw new Error("no audiocontext");
+      var ctx = new AC();
+      function closeCtx(){ try{ ctx.close(); }catch(e){} }
+      return ctx.decodeAudioData(buf).then(function(decoded){
+        var offline = new OfflineAudioContext(1, Math.ceil(decoded.duration * 16000), 16000);
+        var src = offline.createBufferSource();
+        src.buffer = decoded;
+        src.connect(offline.destination);
+        src.start();
+        return offline.startRendering();
+      }).then(function(rendered){
+        closeCtx();
+        return rendered.getChannelData(0);
+      }).catch(function(err){
+        closeCtx();
+        throw err;
+      });
+    });
+  }
+  /* Chạy model âm vị — giải mã CTC tham lam, đúng đường bench/trang thử */
+  function runPhonemes(audio){
+    var mean = 0, i;
+    for(i = 0; i < audio.length; i++) mean += audio[i];
+    mean = audio.length ? mean / audio.length : 0;
+    var varSum = 0;
+    for(i = 0; i < audio.length; i++){ var d = audio[i] - mean; varSum += d * d; }
+    var std = Math.sqrt(audio.length ? varSum / audio.length : 0) + 1e-7;
+    var norm = new Float32Array(audio.length);
+    for(i = 0; i < audio.length; i++) norm[i] = (audio[i] - mean) / std;
+    return model({ input_values: new TensorCtor("float32", norm, [1, audio.length]) }).then(function(out){
+      var logits = out.logits;
+      var frames = logits.dims[1], vsize = logits.dims[2], data = logits.data;
+      var toks = [], prev = -1;
+      for(var f = 0; f < frames; f++){
+        var best = 0, bestVal = -Infinity, off = f * vsize;
+        for(var v = 0; v < vsize; v++){ var val = data[off + v]; if(val > bestVal){ bestVal = val; best = v; } }
+        if(best !== prev && best !== padId) toks.push(id2tok[best] != null ? id2tok[best] : ("<" + best + ">"));
+        prev = best;
+      }
+      return toks;
+    });
+  }
+  function gradeBlob(blob, target){
+    return decodeBlobTo16k(blob).then(runPhonemes).then(function(toks){
+      var res = phonGradeTarget(target, toks);
+      try{
+        var lg = voiceLogBegin("Bộ chấm từng âm", target, "phon-ctc");
+        lg.ev("phon-result", "đích “" + String(target || "").slice(0, 60) + "” · " + res.words.map(function(w){
+          return w.missing ? (w.display + "=chưa có dữ liệu âm") : (w.display + "=" + Math.round(w.pct * 100) + "%");
+        }).join(" · ") + " · âm nghe được: " + toks.join(" "));
+        lg.finish();
+      }catch(e){}
+      return res;
+    });
+  }
+  /* Tự lành kiểu V53 cho bộ âm vị: quay lại trang mà bộ đang lỗi
+     hoặc lần nạp treo quá 20 giây thì RESET trạng thái nạp — lần
+     bấm sau nạp lại từ đầu, không kẹt, không bắt bấm nút nào. */
+  function healOnReturn(){
+    if(state === "failed"){
+      state = "idle"; loadPromise = null; model = null;
+      logEv("phon-load", "quay lại trang thấy bộ chấm từng âm đang lỗi — reset trạng thái nạp, lần bấm sau tự nạp lại");
+    } else if(state === "loading" && loadStartedAt && (Date.now() - loadStartedAt > 20000)){
+      loadGen++; state = "idle"; loadPromise = null; model = null;
+      logEv("phon-load", "lần nạp bộ chấm từng âm bị treo từ lúc trang bị ẩn — reset trạng thái nạp");
+    }
+    if(typeof refreshPhonModelBtn === "function") refreshPhonModelBtn();
+  }
+  return {
+    ensureLoaded: ensureLoaded,
+    gradeBlob: gradeBlob,
+    healOnReturn: healOnReturn,
+    isReady: function(){ return state === "ready"; },
+    state: function(){ return state; },
+    progress: function(){ return loadPct; },
+    _test: { attempts: function(){ return attempts; }, grade: phonGradeTarget }
+  };
+})();
+/* V54-MODEL-END */
+try{ window.PhonCTC = PhonCTC; }catch(e){}
+document.addEventListener("visibilitychange", function(){
+  if(document.hidden) return;
+  try{ PhonCTC.healOnReturn(); }catch(e){}
+});
+window.addEventListener("pageshow", function(){
+  try{ PhonCTC.healOnReturn(); }catch(e){}
+});
+/* ---------- V54: khung chi tiết chấm từng âm (lớp xem thêm) ---------- */
+var speakLastBlob = null;
+function phonRemoveDetail(ctx){
+  if(ctx && ctx._phonDetail){ try{ ctx._phonDetail.remove(); }catch(e){} ctx._phonDetail = null; }
+}
+function phonMakeDetail(target){
+  var d = document.createElement("div"); d.className = "phon-detail";
+  var head = document.createElement("div"); head.className = "phon-detail-head";
+  var t = document.createElement("span"); t.className = "phon-detail-title";
+  t.textContent = "Chấm từng âm — “" + target + "”";
+  var x = document.createElement("button"); x.type = "button"; x.className = "rb-close";
+  x.innerHTML = "Đóng " + X_IC;
+  x.setAttribute("aria-label", "Đóng khung chấm từng âm của “" + target + "”");
+  x.addEventListener("click", function(){ d._dead = true; if(d.parentNode) d.parentNode.removeChild(d); });
+  head.appendChild(t); head.appendChild(x);
+  var st = document.createElement("p"); st.className = "phon-status rb-line";
+  var body = document.createElement("div"); body.className = "phon-detail-body";
+  d.appendChild(head); d.appendChild(st); d.appendChild(body);
+  return d;
+}
+function phonBuildResultNodes(res){
+  var frag = document.createDocumentFragment();
+  if(res.totalWords > 1){
+    var sum = document.createElement("p"); sum.className = "phon-sum";
+    sum.textContent = "Đúng " + res.okCount + "/" + res.totalWords + " từ";
+    frag.appendChild(sum);
+  }
+  res.words.forEach(function(w){
+    var row = document.createElement("div"); row.className = "phon-word-row";
+    var wEl = document.createElement("span"); wEl.className = "phon-word";
+    if(w.missing){
+      wEl.textContent = w.display;
+    } else {
+      w.groups.forEach(function(g, k){
+        if(!g) return;
+        var s = document.createElement("span");
+        if(w.red[k]) s.className = "phon-bad";
+        s.textContent = g;
+        wEl.appendChild(s);
+      });
+      if(w.tail) wEl.appendChild(document.createTextNode(w.tail));
+      if(!wEl.childNodes.length) wEl.textContent = w.display;
+    }
+    row.appendChild(wEl);
+    var v = document.createElement("span");
+    if(w.missing){ v.className = "phon-verdict na"; v.textContent = "chưa có dữ liệu âm của từ này"; }
+    else { v.className = "phon-verdict " + (w.ok ? "ok" : "bad"); v.textContent = w.ok ? "Đúng ✓" : "Chưa đúng"; }
+    row.appendChild(v);
+    frag.appendChild(row);
+    if(!w.missing && !w.ok && w.hint){
+      var h = document.createElement("p"); h.className = "phon-hint"; h.textContent = w.hint;
+      frag.appendChild(h);
+    }
+  });
+  return frag;
+}
+function phonAddRetry(detail, target, blob){
+  var body = detail.querySelector(".phon-detail-body");
+  if(!body) return;
+  var actions = document.createElement("div"); actions.className = "rb-actions";
+  actions.appendChild(rbActionBtn("Thử lại", function(){
+    body.innerHTML = "";
+    phonRunIntoDetail(detail, target, blob);
+  }, "mic"));
+  body.appendChild(actions);
+}
+function phonRunIntoDetail(detail, target, blob){
+  var status = detail.querySelector(".phon-status");
+  var body = detail.querySelector(".phon-detail-body");
+  function setStatus(t){ if(status && !detail._dead) status.textContent = t; }
+  setStatus("Đang chuẩn bị bộ chấm từng âm…");
+  PhonCTC.ensureLoaded(function(pct){
+    setStatus("Đang tải bộ chấm từng âm (khoảng 355MB, chỉ tải 1 lần)… " + pct + "%");
+  }).then(function(ok){
+    if(detail._dead) return;
+    if(!ok){
+      setStatus("Chưa tải được bộ chấm từng âm — bác kiểm tra mạng rồi bấm “Thử lại” nhé.");
+      phonAddRetry(detail, target, blob);
+      return;
+    }
+    setStatus("Đang chấm từng âm…");
+    return PhonCTC.gradeBlob(blob, target).then(function(res){
+      if(detail._dead) return;
+      if(status && status.parentNode) status.parentNode.removeChild(status);
+      if(body) body.appendChild(phonBuildResultNodes(res));
+    });
+  }).catch(function(err){
+    if(detail._dead) return;
+    setStatus("Chấm từng âm bị lỗi: " + String(err && err.message || err).slice(0, 100) + " — bác bấm “Thử lại” nhé.");
+    phonAddRetry(detail, target, blob);
+  });
+}
+/* Hiện khung chi tiết ngay dưới panel Đọc lại của ctx, chấm trên
+   CHÍNH blob lần đọc vừa rồi (ctx.lastBlob). */
+function phonShowDetailForPanel(ctx){
+  if(!ctx || !ctx.lastBlob) return;
+  phonRemoveDetail(ctx);
+  var detail = phonMakeDetail(ctx.target);
+  ctx._phonDetail = detail;
+  if(ctx.panel && ctx.panel.parentNode) ctx.panel.parentNode.insertBefore(detail, ctx.panel.nextSibling);
+  phonRunIntoDetail(detail, ctx.target, ctx.lastBlob);
+}
+/* Phần 5 Luyện nói: sau một lần chấm bằng đường ghi âm mà CHƯA ĐẠT
+   (điểm < 0,8), hiện nút phụ “Xem âm nào sai” dưới kết quả. */
+function phonOfferSpeakDetail(score){
+  var slot = document.getElementById("speakPhonSlot");
+  if(!slot) return;
+  slot.innerHTML = "";
+  if(score < 0.8 && speakLastBlob){
+    var target = (typeof speakItems !== "undefined" && speakItems[speakIndex]) ? speakItems[speakIndex].en : "";
+    var blob = speakLastBlob;
+    if(!target) return;
+    slot.appendChild(rbActionBtn("🔍 Xem âm nào sai", function(){
+      slot.innerHTML = "";
+      var detail = phonMakeDetail(target);
+      slot.appendChild(detail);
+      phonRunIntoDetail(detail, target, blob);
+    }, "vslow"));
+  }
+}
+/* ---------- V54: ghi MỘT lần đọc mới chỉ để chấm từng âm ----------
+   Đúng đường ghi âm hiện có của trang: MicSessions + xin mic qua
+   MicStreamKeeper + MediaRecorder + bộ dò im lặng dùng chung.
+   KHÔNG chạy song song với recognition (phiên MicSessions mới hủy
+   phiên cũ như mọi đường ghi khác), KHÔNG chép bằng Whisper, KHÔNG
+   đụng verdict chính / tự chuyển / tiến độ. */
+function phonStopCapture(session){
+  if(!MicSessions.isCurrent(session.id)) return;
+  if(session.capTimer){ clearTimeout(session.capTimer); session.capTimer = null; }
+  var rec = session.resources.recorder;
+  if(rec && rec.state === "recording"){ try{ rec.stop(); }catch(e){} }
+}
+function phonBeginRecorder(session, adapter, stream){
+  var log = session.voiceLog || null;
+  var chunks = [];
+  var mime = localPickMime();
+  var rec;
+  try{ rec = mime ? new MediaRecorder(stream, { mimeType: mime, audioBitsPerSecond: 32000 }) : new MediaRecorder(stream, { audioBitsPerSecond: 32000 }); }
+  catch(e1){
+    try{ rec = mime ? new MediaRecorder(stream, { mimeType: mime }) : new MediaRecorder(stream); }
+    catch(e){ if(log){ try{ log.finish(); }catch(e2){} } MicSessions.finish(session); adapter.error("audio-capture"); return; }
+  }
+  session.resources.recorder = rec;
+  var det = makeEndpointDetector({ silenceMs: 1200, speechRms: 0.02 });
+  try{
+    var AC = window.AudioContext || window.webkitAudioContext;
+    if(AC){
+      var ac = new AC(); session.resources.monitorCtx = ac;
+      if(ac.state === "suspended"){ try{ ac.resume(); }catch(e){} }
+      var srcN = ac.createMediaStreamSource(stream);
+      var an = ac.createAnalyser(); an.fftSize = 512; srcN.connect(an);
+      var buf = new Uint8Array(an.fftSize);
+      var iv = setInterval(function(){
+        if(!MicSessions.isCurrent(session.id)){ clearInterval(iv); return; }
+        an.getByteTimeDomainData(buf);
+        var sum = 0, i, v;
+        for(i = 0; i < buf.length; i++){ v = (buf[i] - 128) / 128; sum += v * v; }
+        var d = det.feed(Math.sqrt(sum / buf.length), Date.now());
+        if(d === "speech" && session.phase === "listening"){ MicSessions.setPhase(session, "recording"); adapter.phase("recording"); }
+        else if(d === "stop"){ phonStopCapture(session); }
+      }, 120);
+      session.resources.timers.push(iv);
+    }
+  }catch(e){}
+  rec.ondataavailable = function(ev){ if(ev.data && ev.data.size) chunks.push(ev.data); };
+  rec.onstop = function(){
+    if(session.resources.discard) return;
+    if(!MicSessions.isCurrent(session.id)) return;
+    var blob = new Blob(chunks, { type: rec.mimeType || mime || "audio/webm" });
+    if(session.capTimer){ clearTimeout(session.capTimer); session.capTimer = null; }
+    if(log){ try{ log.ev("rec-stop", "blob " + Math.round(blob.size / 1024) + "KB · chấm từng âm"); }catch(e){} }
+    MicSessions.finish(session);
+    if(!blob.size){ adapter.error("error"); return; }
+    adapter.blob(blob);
+  };
+  session.stopCapture = function(){ phonStopCapture(session); };
+  session.capTimer = setTimeout(function(){ phonStopCapture(session); }, session.capMs);
+  MicSessions.setPhase(session, "listening");
+  adapter.phase("listening");
+  try{ rec.start(250); if(log){ try{ log.ev("rec-start", "mime=" + (rec.mimeType || mime || "?") + " · chấm từng âm"); }catch(e){} } }
+  catch(e){ if(log){ try{ log.finish(); }catch(e2){} } MicSessions.finish(session); adapter.error("audio-capture"); }
+}
+function phonCaptureBlob(session, adapter){
+  var log = session.voiceLog || null;
+  adapter.phase("starting");
+  waitForTtsQuiet().then(function(){
+    if(!MicSessions.isCurrent(session.id)) return;
+    micAcquire().then(function(stream){
+      if(!MicSessions.isCurrent(session.id)) return;
+      if(log){ try{ log.ev("mic-ok", "đã có stream mic · chấm từng âm"); }catch(e){} }
+      phonBeginRecorder(session, adapter, stream);
+    }).catch(function(err){
+      if(!MicSessions.isCurrent(session.id)) return;
+      if(log){ try{ log.ev("mic-error", gumErrorKind(err)); log.finish(); }catch(e){} }
+      MicSessions.finish(session);
+      adapter.error(gumErrorKind(err));
+    });
+  });
+}
+/* Nút “🎙 Chấm từng âm” ở từng câu Hội thoại: ghi một lần đọc mới
+   của chính câu đó, chỉ chấm từng âm và hiện khung chi tiết. */
+function startPhonReadback(ctx){
+  cancelVocabFlow(); cancelDlgFlow();
+  if(window.speechSynthesis){ try{ window.speechSynthesis.cancel(); }catch(e){} }
+  var cur = MicSessions.get();
+  if(cur && cur.kind === "phon" && cur.ownerCtx === ctx && (cur.phase === "listening" || cur.phase === "recording")){
+    if(cur.stopCapture) cur.stopCapture();
+    return;
+  }
+  if(rbOpenCtx && rbOpenCtx !== ctx) closeReadbackPanel(rbOpenCtx);
+  rbOpenCtx = ctx;
+  phonRemoveDetail(ctx);
+  var session = MicSessions.begin({
+    key: "readback", ownerCtx: ctx, kind: "phon", capMs: capMsForTarget(ctx),
+    closeUI: function(s){ closeReadbackPanel(s.ownerCtx); }
+  });
+  session.voiceLog = voiceLogBegin("Đọc lại", ctx.target, "phon");
+  phonCaptureBlob(session, {
+    phase: function(p){
+      if(p === "starting") rbPhaseUI(ctx, session, p);
+      else if(p === "listening" || p === "recording") rbLocalPhaseUI(ctx, session, p);
+    },
+    blob: function(blob){
+      ctx.lastBlob = blob; ctx.fromRecording = true;
+      if(ctx.btn) ctx.btn.classList.remove("listening");
+      var panel = rbPreparePanel(ctx);
+      var st = document.createElement("p"); st.className = "rb-status";
+      st.textContent = "Đã ghi xong — kết quả chấm từng âm ở ngay dưới đây.";
+      panel.appendChild(st);
+      phonShowDetailForPanel(ctx);
+      if(session.voiceLog){ try{ session.voiceLog.finish(); }catch(e){} }
+    },
+    error: function(kind){
+      if(ctx.btn) ctx.btn.classList.remove("listening");
+      rbShowMessage(ctx, srKind(kind));
+    }
+  });
+}
+function phonReadbackBtn(target, vi, panel){
+  var b = document.createElement("button");
+  b.type = "button"; b.className = "icon-btn";
+  b.textContent = "🎙 Chấm từng âm";
+  b.setAttribute("aria-label", "Chấm từng âm “" + target + "”");
+  var ctxRef = null;
+  b.addEventListener("click", function(){
+    if(!ctxRef) ctxRef = { target: target, ipa: "", vi: vi || "", isWord: false, panel: panel, btn: b, session: 0 };
+    startPhonReadback(ctxRef);
+  });
+  return b;
+}
+/* ---------- V54: nút “🎙 Chấm từng âm” ở Phần 5 Luyện nói ---------- */
+var speakPhonBtnEl = document.getElementById("speakPhonBtn");
+if(speakPhonBtnEl){
+  speakPhonBtnEl.addEventListener("click", function(){
+    var cur = MicSessions.get();
+    if(cur && cur.kind === "phonspk" && (cur.phase === "listening" || cur.phase === "recording")){
+      if(cur.stopCapture) cur.stopCapture();
+      return;
+    }
+    cancelSpeakAutoNext();
+    if(window.speechSynthesis){ try{ window.speechSynthesis.cancel(); }catch(e){} }
+    hideSpeakSelfCheck(); hideSpeakVoiceRetry();
+    var target = (typeof speakItems !== "undefined" && speakItems[speakIndex]) ? speakItems[speakIndex].en : "";
+    if(!target) return;
+    var slot = document.getElementById("speakPhonSlot");
+    if(slot) slot.innerHTML = "";
+    var session = MicSessions.begin({
+      key: "phonspk", kind: "phonspk", capMs: 20000,
+      closeUI: function(){
+        speakPhonBtnEl.classList.remove("listening");
+        speakPhonBtnEl.textContent = "🎙 Chấm từng âm";
+      }
+    });
+    session.voiceLog = voiceLogBegin("Luyện nói", target, "phon");
+    phonCaptureBlob(session, {
+      phase: function(p){
+        if(p === "starting"){ speakPhonBtnEl.classList.add("listening"); spStatus("Đang mở mic… bác bấm “Cho phép” nếu máy hỏi nhé."); }
+        else if(p === "listening"){ speakPhonBtnEl.classList.add("listening"); speakPhonBtnEl.textContent = "⏹ Đang nghe… chạm để dừng"; spStatus("Đang nghe… bác đọc to câu mẫu ở trên. Đọc xong cứ im lặng, máy tự dừng và chấm từng âm."); }
+        else if(p === "recording"){ spStatus("Đang ghi… bác đang nói — nói xong cứ im lặng, máy tự dừng."); }
+      },
+      blob: function(blob){
+        speakPhonBtnEl.classList.remove("listening");
+        speakPhonBtnEl.textContent = "🎙 Chấm từng âm";
+        speakLastBlob = blob;
+        spStatus("Đã ghi xong — xem kết quả chấm từng âm ngay bên dưới nhé.");
+        if(session.voiceLog){ try{ session.voiceLog.finish(); }catch(e){} }
+        var slot2 = document.getElementById("speakPhonSlot");
+        if(!slot2) return;
+        slot2.innerHTML = "";
+        var detail = phonMakeDetail(target);
+        slot2.appendChild(detail);
+        phonRunIntoDetail(detail, target, blob);
+      },
+      error: function(kind){
+        speakPhonBtnEl.classList.remove("listening");
+        speakPhonBtnEl.textContent = "🎙 Chấm từng âm";
+        if(kind === "not-allowed") spStatus("Trang web chưa được phép dùng mic. Bác bấm cho phép (Allow) khi trình duyệt hỏi nhé.");
+        else if(kind === "audio-capture") spStatus("Không tìm thấy mic hoặc mic đang bận. Bác kiểm tra lại mic rồi thử lại nhé.");
+        else spStatus("Máy chưa ghi được lần này. Bác bấm “🎙 Chấm từng âm” và đọc lại nhé.");
+      }
+    });
+  });
+}
+/* ---------- V54: dòng trạng thái bộ chấm từng âm trong Chẩn đoán ---------- */
+var phonModelBtnEl = document.getElementById("phonModelBtn");
+var phonModelStatusEl = document.getElementById("phonModelStatus");
+function refreshPhonModelBtn(){
+  if(!phonModelStatusEl && !phonModelBtnEl) return;
+  var st = "idle";
+  try{ st = PhonCTC.state(); }catch(e){}
+  function showBtn(label){ if(phonModelBtnEl){ phonModelBtnEl.hidden = false; phonModelBtnEl.disabled = false; if(label) phonModelBtnEl.textContent = label; } }
+  function hideBtn(){ if(phonModelBtnEl){ phonModelBtnEl.hidden = true; phonModelBtnEl.disabled = true; } }
+  if(st === "ready"){
+    hideBtn();
+    if(phonModelStatusEl) phonModelStatusEl.textContent = "Bộ chấm từng âm đã sẵn sàng ✓ — sau một lần đọc chưa đạt, bấm “Xem âm nào sai” là xem được ngay.";
+  } else if(st === "loading"){
+    hideBtn();
+    var pc = -1;
+    try{ pc = PhonCTC.progress(); }catch(e){}
+    if(phonModelStatusEl) phonModelStatusEl.textContent = pc >= 0
+      ? "Đang tải bộ chấm từng âm… " + pc + "% (khoảng 355MB, chỉ tải 1 lần)."
+      : "Đang tải bộ chấm từng âm… (khoảng 355MB, chỉ tải 1 lần).";
+  } else if(st === "failed"){
+    showBtn("Tải lại bộ chấm từng âm");
+    if(phonModelStatusEl) phonModelStatusEl.textContent = "Chưa tải được bộ chấm từng âm lần này. Bác kiểm tra mạng rồi bấm “Tải lại” nhé — những lần bấm sau trang cũng tự thử lại, không kẹt.";
+  } else {
+    showBtn("Tải bộ chấm từng âm (khoảng 355MB)");
+    if(phonModelStatusEl) phonModelStatusEl.textContent = "Bộ chấm từng âm chưa tải. Bác bấm nút dưới đây để tải chủ động (khoảng 355MB, chỉ tải 1 lần), hoặc để trang tự tải ở lần đầu bác bấm “Xem âm nào sai”.";
+  }
+}
+if(phonModelBtnEl){
+  phonModelBtnEl.addEventListener("click", function(){
+    refreshPhonModelBtn();
+    PhonCTC.ensureLoaded(function(){ refreshPhonModelBtn(); }).then(function(){ refreshPhonModelBtn(); });
+  });
+}
+refreshPhonModelBtn();
+
+/* ================================================================
    V50 MOT BO NGHE TREN MAY — TẢI NỀN KHI MỞ TRANG
    Sau khi trang tải xong và rảnh (requestIdleCallback; dự phòng
    setTimeout ~2500ms sau window load), TỰ ĐỘNG nạp bộ nghe trên máy
@@ -8748,8 +9976,9 @@ function spLocalAdapter(session){
       /* V50: bộ nghe trên máy chưa sẵn sàng — đang nạp rồi chấm luôn bản ghi vừa rồi */
       else if(p === "local-loading"){ btn.classList.remove("listening"); spStatus("Đang chuẩn bị bộ nghe trên máy (lần đầu cần tải khoảng 54MB)… chuẩn bị xong máy chấm luôn bản ghi vừa rồi, bác không phải đọc lại."); }
     },
-    result: function(text){
+    result: function(text, blob){
       noteSrResult(); noteSrSessionAudible();
+      speakLastBlob = blob || null; /* V54: giữ blob để chấm từng âm khi chưa đạt */
       speakFromLocal = true;
       gradeSpeak(text);
       speakFromLocal = false;
