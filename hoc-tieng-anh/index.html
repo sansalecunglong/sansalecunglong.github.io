@@ -8187,6 +8187,21 @@ function localPickMime(){
 var LocalWhisper = (function(){
   var state = "idle"; /* idle | loading | ready | failed */
   var asr = null, loadPromise = null, progressCb = null;
+  /* V53 TU LANH SAU KHI TRANG BI AN: khi màn hình tắt hoặc người học
+     chuyển sang ứng dụng khác, trình duyệt đóng băng trang — phiên
+     ONNX/WASM và AudioContext có thể hỏng ngầm trong khi state vẫn
+     ghi "ready", và chỉ một lỗi chép sau đó là đủ để mã cũ kết án
+     state="failed" vĩnh viễn cho cả buổi học (chỉ nút “Tải lại” mới
+     cứu được). Ba biến dưới đây phục vụ cơ chế tự lành:
+     loadGen — thế hệ của lần nạp hiện hành; kết quả của một lần nạp
+       cũ (bị treo lúc trang ẩn rồi mới settle muộn) không được phép
+       ghi đè trạng thái của lần nạp mới.
+     loadStartedAt — mốc bắt đầu lần nạp, để phát hiện lần nạp bị
+       treo bất tận vì trang bị đóng băng giữa chừng.
+     recoverArmed — phiếu tự chữa cho lần chép đầu tiên sau khi quay
+       lại trang: chép lỗi → tự dựng lại pipeline rồi chép lại chính
+       bản ghi đó, mỗi lần quay lại trang được cấp lại một phiếu. */
+  var loadGen = 0, loadStartedAt = 0, recoverArmed = true;
   /* Giải mã blob ghi âm sang Float32Array 16kHz mono — đúng hàm
      getAudio của trang bench, chỉ khác nguồn: bench fetch file,
      ở đây blob ghi âm có sẵn trong tay. */
@@ -8195,16 +8210,36 @@ var LocalWhisper = (function(){
       var AC = window.AudioContext || window.webkitAudioContext;
       if(!AC || typeof OfflineAudioContext === "undefined") throw new Error("no audiocontext");
       var ctx = new AC();
-      return ctx.decodeAudioData(buf).then(function(decoded){
+      function closeCtx(){ try{ ctx.close(); }catch(e){} }
+      /* V53: AudioContext tạo mới sau khi quay lại từ nền thường kẹt
+         ở trạng thái "suspended"/"interrupted" — decodeAudioData trên
+         context như vậy có thể treo hoặc ném lỗi (đúng lỗi khiến bộ
+         chấm chết sau khi màn hình tắt). Thử resume() trước, chờ tối
+         đa ~1 giây rồi vẫn giải mã tiếp; context được đóng ở MỌI
+         đường ra (trước đây đường lỗi không đóng → rò context, hết
+         hạn ngạch AudioContext của trình duyệt sau vài lần lỗi). */
+      var resumeP = Promise.resolve();
+      if(ctx.state && ctx.state !== "running" && typeof ctx.resume === "function"){
+        resumeP = Promise.race([
+          ctx.resume().then(function(){}, function(){}),
+          new Promise(function(res){ setTimeout(res, 1000); })
+        ]);
+      }
+      return resumeP.then(function(){
+        return ctx.decodeAudioData(buf);
+      }).then(function(decoded){
         var offline = new OfflineAudioContext(1, Math.ceil(decoded.duration * 16000), 16000);
         var src = offline.createBufferSource();
         src.buffer = decoded;
         src.connect(offline.destination);
         src.start();
-        return offline.startRendering().then(function(rendered){
-          try{ ctx.close(); }catch(e){}
-          return rendered.getChannelData(0);
-        });
+        return offline.startRendering();
+      }).then(function(rendered){
+        closeCtx();
+        return rendered.getChannelData(0);
+      }).catch(function(err){
+        closeCtx();
+        throw err;
       });
     });
   }
@@ -8224,6 +8259,7 @@ var LocalWhisper = (function(){
     }
     if(loadPromise) return loadPromise;
     state = "loading";
+    var myGen = ++loadGen; loadStartedAt = Date.now();
     var slog = log || null, ownLog = false;
     if(!slog){
       try{ slog = voiceLogBegin("Bộ nghe trên máy", "", "local-whisper"); ownLog = true; }catch(e){ slog = null; }
@@ -8242,11 +8278,16 @@ var LocalWhisper = (function(){
         progress_callback: function(pr){ if(progressCb){ try{ progressCb(pr); }catch(e){} } }
       });
     }).then(function(pipe){
+      /* V53: lần nạp đã bị thay thế (trang bị ẩn làm treo, cơ chế tự
+         lành đã nạp lại từ đầu) → kết quả về muộn này không được đụng
+         vào trạng thái hiện hành. */
+      if(myGen !== loadGen) return state === "ready";
       asr = pipe; state = "ready";
       ev("local-ready", "bộ nghe trên máy đã sẵn sàng");
       evDone();
       return true;
     }).catch(function(err){
+      if(myGen !== loadGen) return false;
       state = "failed"; asr = null;
       ev("local-error", "nạp thất bại: " + String(err && err.message || err).slice(0, 120));
       evDone();
@@ -8254,31 +8295,112 @@ var LocalWhisper = (function(){
     });
     return loadPromise;
   }
+  /* V53 TU LANH KHI QUAY LAI TRANG: gọi mỗi khi trang hiện trở lại
+     (visibilitychange → visible / pageshow). Ba việc:
+     1) cấp lại phiếu tự chữa cho lần chép đầu tiên sắp tới;
+     2) state "failed" → tự nạp lại ngay ở nền (trước đây chỉ nút
+        “Tải lại bộ nghe” trong Cài đặt mới làm được việc này, nên
+        quay lại trang là bộ chấm chết tới khi người học tự bấm nút);
+     3) state "loading" quá 20 giây → lần nạp đã bị đóng băng cùng
+        trang lúc ẩn và promise không bao giờ settle nữa → bỏ thế hệ
+        nạp cũ, nạp lại từ đầu.
+     state "ready" nhưng phiên ONNX đã hỏng ngầm thì không dò được
+     bằng trạng thái — trường hợp đó để transcribe tự chữa (chép lỗi
+     lần đầu → dựng lại pipeline → chép lại chính bản ghi đó).
+     Resolve true/false, không bao giờ reject. */
+  function healOnReturn(){
+    recoverArmed = true;
+    if(state === "failed"){
+      var flog = null;
+      try{ flog = voiceLogBegin("Bộ nghe trên máy", "", "local-whisper"); }catch(e){}
+      if(flog){ try{ flog.ev("local-heal", "quay lại trang thấy bộ nghe đang lỗi — tự nạp lại ở nền, không chờ bấm nút"); }catch(e){} }
+      return ensureLoaded(flog, true).then(function(ok){
+        if(flog){ try{ flog.finish(); }catch(e){} }
+        return ok;
+      });
+    }
+    if(state === "loading" && loadStartedAt && (Date.now() - loadStartedAt > 20000)){
+      var slog2 = null;
+      try{ slog2 = voiceLogBegin("Bộ nghe trên máy", "", "local-whisper"); }catch(e){}
+      if(slog2){ try{ slog2.ev("local-heal", "lần nạp bộ nghe bị treo từ lúc trang bị ẩn — bỏ và nạp lại từ đầu"); }catch(e){} }
+      loadGen++; state = "idle"; loadPromise = null;
+      return ensureLoaded(slog2, true).then(function(ok){
+        if(slog2){ try{ slog2.finish(); }catch(e){} }
+        return ok;
+      });
+    }
+    return Promise.resolve(state === "ready");
+  }
   /* Chép một blob bằng bộ nghe trên máy. Resolve text (có thể rỗng);
-     reject khi lỗi — đồng thời tắt êm đường này cho cả phiên trang. */
+     reject khi lỗi thật sự không cứu được.
+     V53: phiên ONNX/WASM hỏng ngầm sau khi trang bị ẩn là lỗi THOÁNG
+     QUA, không phải lỗi chết — mã cũ đặt state="failed" ngay ở lỗi
+     đầu tiên khiến bộ chấm tắt hẳn tới khi người học bấm nút “Tải
+     lại”. Nay: còn phiếu tự chữa (cấp lúc mở trang và mỗi lần quay
+     lại trang) thì bỏ pipeline cũ, dựng lại từ đầu rồi chép lại
+     CHÍNH blob này — người học không phải đọc lại, không phải bấm
+     gì. Chỉ khi lần chép lại sau khi dựng lại vẫn lỗi mới đặt
+     state="failed" và reject như cũ. */
   function transcribe(blob, log){
     if(state !== "ready" || !asr) return Promise.reject(new Error("local not ready"));
-    var pipe = asr, t0 = Date.now();
-    return decodeBlobTo16k(blob).then(function(audio){
-      return pipe(audio);
-    }).then(function(res){
-      var text = (res && typeof res.text === "string") ? res.text : "";
-      if(log){ try{ log.ev("local-result", "chờ " + (Date.now() - t0) + "ms · “" + text.slice(0, 60) + "”"); }catch(e){} }
-      return text;
-    }).catch(function(err){
-      state = "failed"; asr = null;
-      if(log){ try{ log.ev("local-error", "chạy thất bại: " + String(err && err.message || err).slice(0, 120)); }catch(e){} }
-      throw err;
+    var t0 = Date.now();
+    function runOnce(){
+      var pipe = asr;
+      return decodeBlobTo16k(blob).then(function(audio){
+        return pipe(audio);
+      }).then(function(res){
+        var text = (res && typeof res.text === "string") ? res.text : "";
+        if(log){ try{ log.ev("local-result", "chờ " + (Date.now() - t0) + "ms · “" + text.slice(0, 60) + "”"); }catch(e){} }
+        return text;
+      });
+    }
+    return runOnce().catch(function(err){
+      if(!recoverArmed){
+        state = "failed"; asr = null;
+        if(log){ try{ log.ev("local-error", "chạy thất bại: " + String(err && err.message || err).slice(0, 120)); }catch(e){} }
+        throw err;
+      }
+      recoverArmed = false;
+      if(log){ try{ log.ev("local-recover", "chép lỗi sau thời gian trang bị ẩn (“" + String(err && err.message || err).slice(0, 80) + "”) — tự dựng lại bộ nghe rồi chép lại bản ghi này"); }catch(e){} }
+      loadGen++; state = "idle"; asr = null; loadPromise = null;
+      return ensureLoaded(log, true).then(function(ok){
+        if(!ok || state !== "ready" || !asr) throw err;
+        return runOnce().catch(function(err2){
+          state = "failed"; asr = null;
+          if(log){ try{ log.ev("local-error", "chạy thất bại sau khi tự dựng lại: " + String(err2 && err2.message || err2).slice(0, 120)); }catch(e){} }
+          throw err2;
+        });
+      });
     });
   }
   return {
     ensureLoaded: ensureLoaded,
     transcribe: transcribe,
+    healOnReturn: healOnReturn,
     isReady: function(){ return state === "ready"; },
     state: function(){ return state; },
     setProgressHandler: function(fn){ progressCb = fn || null; }
   };
 })();
+/* V53: móc tự lành vào đúng hai tín hiệu quay lại trang — trang hiện
+   lại sau khi bị ẩn (tắt màn hình / chuyển ứng dụng) và pageshow
+   (iOS khôi phục trang từ bộ nhớ đệm khi quay lại). Chữa xong thì
+   cập nhật lại dòng trạng thái ở khu Chẩn đoán để khớp thực tế. */
+document.addEventListener("visibilitychange", function(){
+  if(document.hidden) return;
+  try{
+    LocalWhisper.healOnReturn().then(function(){
+      if(typeof refreshLocalWhisperBtn === "function") refreshLocalWhisperBtn();
+    });
+  }catch(e){}
+});
+window.addEventListener("pageshow", function(){
+  try{
+    LocalWhisper.healOnReturn().then(function(){
+      if(typeof refreshLocalWhisperBtn === "function") refreshLocalWhisperBtn();
+    });
+  }catch(e){}
+});
 /* ================================================================
    V50 MOT BO NGHE TREN MAY — TẢI NỀN KHI MỞ TRANG
    Sau khi trang tải xong và rảnh (requestIdleCallback; dự phòng
