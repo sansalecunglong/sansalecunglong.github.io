@@ -42,8 +42,6 @@
   .btn:disabled { background: #B6C6DE; cursor: default; }
   .btn:active { transform: scale(.99); }
   .ttext { font-size: 30px; font-weight: 700; margin: 0 0 2px; }
-  .tipa { color: #3D5A80; font-size: 17px; margin: 0 0 12px; }
-  .tipa b { color: #0B2A5B; letter-spacing: .5px; }
   .btnrow { display: flex; gap: 10px; }
   .btn.listen { background: #fff; color: #2563EB; border: 2px solid #2563EB; flex: 0 0 44%; }
   .btn.rec { flex: 1; }
@@ -51,20 +49,13 @@
   @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: .55; } }
   .hint { min-height: 24px; color: #B45309; font-size: 16.5px; margin-top: 8px; }
   .result { margin-top: 10px; border-top: 1px dashed #CBD5E1; padding-top: 12px; }
-  .rlabel { font-size: 15.5px; color: #64748B; margin: 8px 0 4px; }
-  .chips { line-height: 2.1; }
-  .chip {
-    display: inline-block; padding: 2px 10px; margin: 0 2px;
-    border-radius: 10px; font-size: 21px; font-weight: 600;
-    background: #EFF6FF; color: #0B2A5B;
-  }
-  .chip.ok { background: #DCFCE7; color: #166534; }
-  .chip.bad { background: #FEE2E2; color: #991B1B; }
-  .chip.extra { background: #FFEDD5; color: #9A3412; }
-  .chip.miss { background: #F8FAFC; color: #94A3B8; border: 1.5px dashed #CBD5E1; text-decoration: line-through; }
-  .wgap { display: inline-block; width: 16px; }
-  .score { font-size: 19px; font-weight: 700; margin: 10px 0 0; }
-  .raw { font-size: 14.5px; color: #64748B; word-break: break-word; margin: 6px 0 0; }
+  .wsum { font-size: 20px; font-weight: 700; margin: 2px 0 10px; }
+  .wrow { margin: 0 0 12px; }
+  .wword { font-size: 30px; font-weight: 700; letter-spacing: .5px; }
+  .wword .bad { color: #DC2626; background: #FEE2E2; border-radius: 7px; padding: 0 3px; }
+  .verdict { font-size: 18px; font-weight: 700; margin-left: 10px; white-space: nowrap; }
+  .verdict.ok { color: #166534; }
+  .verdict.bad { color: #DC2626; }
   .comment {
     background: #FFFBEB; border: 1px solid #FDE68A; color: #92400E;
     border-radius: 12px; padding: 10px 12px; margin: 8px 0 0; font-size: 17px;
@@ -113,14 +104,27 @@ env.backends.onnx.wasm.wasmPaths = VENDOR;
 env.allowLocalModels = false;
 env.allowRemoteModels = true;
 
-/* ============ Các đích đọc (âm vị đích hệ espeak, như bench đã đối chiếu) ============ */
+/* ============ Các đích đọc (âm vị đích hệ espeak, như bench đã đối chiếu) ============
+   Mỗi từ: ph = âm vị đích; g = nhóm chữ song song 1-1 với ph (để tô đỏ đúng nhóm chữ
+   khi âm đó sai/thiếu); tail = chữ câm ở cuối từ, không gắn âm, không bao giờ tô đỏ. */
 const TARGETS = [
-  { id: 'mother',  text: 'Mother',  words: [['m', 'ʌ', 'ð', 'ə', 'r']] },
-  { id: 'father',  text: 'Father',  words: [['f', 'ɑː', 'ð', 'ə', 'r']] },
-  { id: 'parents', text: 'Parents', words: [['p', 'eə', 'r', 'ə', 'n', 't', 's']] },
-  { id: 's1', text: 'I love my parents.', words: [['aɪ'], ['l', 'ʌ', 'v'], ['m', 'aɪ'], ['p', 'eə', 'r', 'ə', 'n', 't', 's']] },
-  { id: 's2', text: 'Your parents are very kind.', words: [['j', 'ɔː', 'r'], ['p', 'eə', 'r', 'ə', 'n', 't', 's'], ['ɑː', 'r'], ['v', 'e', 'r', 'i'], ['k', 'aɪ', 'n', 'd']] },
-  { id: 'today',   text: 'Today',   words: [['t', 'ə', 'd', 'eɪ']] },
+  { id: 'mother',  text: 'Mother',  words: [{ ph: ['m', 'ʌ', 'ð', 'ə', 'r'], g: ['m', 'o', 'th', 'e', 'r'] }] },
+  { id: 'father',  text: 'Father',  words: [{ ph: ['f', 'ɑː', 'ð', 'ə', 'r'], g: ['f', 'a', 'th', 'e', 'r'] }] },
+  { id: 'parents', text: 'Parents', words: [{ ph: ['p', 'eə', 'r', 'ə', 'n', 't', 's'], g: ['p', 'a', 'r', 'e', 'n', 't', 's'] }] },
+  { id: 's1', text: 'I love my parents.', words: [
+    { ph: ['aɪ'], g: ['I'] },
+    { ph: ['l', 'ʌ', 'v'], g: ['l', 'o', 'v'], tail: 'e' },
+    { ph: ['m', 'aɪ'], g: ['m', 'y'] },
+    { ph: ['p', 'eə', 'r', 'ə', 'n', 't', 's'], g: ['p', 'a', 'r', 'e', 'n', 't', 's'] },
+  ] },
+  { id: 's2', text: 'Your parents are very kind.', words: [
+    { ph: ['j', 'ɔː', 'r'], g: ['y', 'ou', 'r'] },
+    { ph: ['p', 'eə', 'r', 'ə', 'n', 't', 's'], g: ['p', 'a', 'r', 'e', 'n', 't', 's'] },
+    { ph: ['ɑː', 'r'], g: ['a', 're'] },
+    { ph: ['v', 'e', 'r', 'i'], g: ['v', 'e', 'r', 'y'] },
+    { ph: ['k', 'aɪ', 'n', 'd'], g: ['k', 'i', 'n', 'd'] },
+  ] },
+  { id: 'today',   text: 'Today',   words: [{ ph: ['t', 'ə', 'd', 'eɪ'], g: ['t', 'o', 'd', 'ay'] }] },
 ];
 
 /* ============ Trạng thái ============ */
@@ -133,13 +137,11 @@ let loading = false;
 /* ============ Dựng thẻ đích ============ */
 const cardsEl = document.getElementById('cards');
 for (const t of TARGETS) {
-  const flat = t.words.flat();
   const art = document.createElement('article');
   art.className = 'card';
   art.dataset.target = t.id;
   art.innerHTML =
     '<p class="ttext"></p>' +
-    '<p class="tipa">Âm đích: <b>' + flat.join(' ') + '</b></p>' +
     '<div class="btnrow">' +
       '<button class="btn listen" type="button">🔊 Nghe mẫu</button>' +
       '<button class="btn rec" type="button" disabled>🎤 Đọc</button>' +
@@ -420,77 +422,69 @@ function align(T, H) {
   return pairs.reverse();
 }
 
-function makeComments(pairs, flatTarget, heard) {
-  const out = [];
-  // Âm th: đích có ð, máy nghe ra z/s và KHÔNG nghe thấy âm th nào -> kết luận theo hiện diện,
-  // không phụ thuộc căn chỉnh từng vị trí (căn chỉnh dễ gán nhầm khi nhiều âm cùng lệch).
-  const hasTh = flatTarget.includes('ð') && (heard.includes('z') || heard.includes('s')) && !heard.includes('ð') && !heard.includes('θ');
-  if (hasTh) out.push("Âm 'th' đang thành z/s — đặt lưỡi giữa hai hàm răng rồi rung cổ họng.");
-  const missR = pairs.some(p => (p.kind === 'del' && canon(flatTarget[p.ti]) === 'r') ||
-                                 (p.kind === 'sub' && canon(flatTarget[p.ti]) === 'r' && canon(p.h) !== 'r'));
-  if (missR) out.push('Thiếu âm r — uốn lưỡi nhẹ ra sau.');
-  // Đuôi từ: đích kết thúc bằng t/s mà âm cuối máy nghe được không phải âm đó -> đuôi bị nuốt
-  const lastCanon = canon(flatTarget[flatTarget.length - 1]);
-  const lastHeard = heard.length ? canon(heard[heard.length - 1]) : '';
-  const missTail = (lastCanon === 't' || lastCanon === 's') && lastHeard !== lastCanon;
-  if (missTail) out.push('Đuôi từ bị nuốt — đọc rõ âm cuối.');
-  // Âm v: đích có v mà máy không nghe thấy v ở đâu cả -> âm v chưa ra (thành p/f hoặc mất hẳn)
-  const vBad = flatTarget.includes('v') && !heard.includes('v');
-  if (vBad) out.push('Âm v chưa rõ — cắn nhẹ môi dưới rồi rung.');
-  return out;
+/* Gợi ý sửa cho MỘT từ chưa đúng — đúng 1 dòng, luật như cũ, thứ tự ưu tiên:
+   th (thành z/s) -> thiếu r -> đuôi từ bị nuốt -> v chưa rõ.
+   wpairs: các cặp căn chỉnh (đã gắn t/h) thuộc riêng từ đó, theo thứ tự âm. */
+function wordHint(wph, wpairs) {
+  const heardW = wpairs.filter(p => p.h != null).map(p => canon(p.h));
+  if (wph.includes('ð') && (heardW.includes('z') || heardW.includes('s')) && !heardW.includes('ð') && !heardW.includes('θ')) {
+    return "Âm 'th' đang thành z/s — đặt lưỡi giữa hai hàm răng rồi rung cổ họng.";
+  }
+  if (wpairs.some(p => canon(p.t) === 'r' && p.kind !== 'match')) return 'Thiếu âm r — uốn lưỡi nhẹ ra sau.';
+  const lastPh = canon(wph[wph.length - 1]);
+  const lastPair = wpairs[wpairs.length - 1];
+  if ((lastPh === 't' || lastPh === 's') && lastPair && lastPair.kind !== 'match') return 'Đuôi từ bị nuốt — đọc rõ âm cuối.';
+  if (wph.includes('v') && !heardW.includes('v')) return 'Âm v chưa rõ — cắn nhẹ môi dưới rồi rung.';
+  return '';
 }
 
-function chip(tok, cls, title) {
-  return '<span class="chip ' + cls + '"' + (title ? ' title="' + title + '"' : '') + '>' + tok + '</span>';
-}
+/* Quy tắc chấm theo TỪ (anh đặt 18/11): một từ ĐÚNG khi số âm khớp >= 70% số âm
+   của từ; dưới 70% là "Chưa đúng". Hiển thị chỉ còn chính từ đó — nhóm chữ ứng
+   với âm sai/thiếu tô đỏ; âm máy nghe thêm bỏ qua khi hiển thị. */
+const WORD_PASS = 0.7;
 
 function renderResult(t, art, heard) {
-  const flat = t.words.flat();
-  const wordOf = [];
-  t.words.forEach((w, wi) => w.forEach(() => wordOf.push(wi)));
+  const flat = t.words.flatMap(w => w.ph);
   const pairs = align(flat, heard).map(p => ({
     ...p,
     t: p.ti != null ? flat[p.ti] : null,
     h: p.hi != null ? heard[p.hi] : null,
   }));
-  // Hàng âm đích (theo từng từ)
-  let targetHtml = '', lastW = -1;
-  for (const p of pairs) {
-    if (p.ti == null) continue;
-    const w = wordOf[p.ti];
-    if (lastW !== -1 && w !== lastW) targetHtml += '<span class="wgap"></span>';
-    lastW = w;
-    if (p.kind === 'match') targetHtml += chip(p.t, 'ok');
-    else if (p.kind === 'sub') targetHtml += chip(p.t, 'bad', 'Máy nghe thành: ' + p.h);
-    else targetHtml += chip(p.t, 'miss', 'Âm này chưa nghe thấy');
-  }
-  // Hàng máy nghe được
-  let heardHtml = '', lastWH = -1;
-  for (const p of pairs) {
-    const w = p.ti != null ? wordOf[p.ti] : (lastWH < 0 ? 0 : lastWH);
-    if (lastWH !== -1 && w !== lastWH) heardHtml += '<span class="wgap"></span>';
-    if (p.hi != null) heardHtml += chip(p.h, p.kind === 'match' ? 'ok' : (p.kind === 'sub' ? 'bad' : 'extra'));
-    if (p.ti != null) lastWH = w;
-  }
-  const matched = pairs.filter(p => p.kind === 'match').length;
-  const ratio = flat.length ? matched / flat.length : 0;
-  const comments = makeComments(pairs, flat, heard);
+  const pairByTi = new Map();
+  for (const p of pairs) if (p.ti != null) pairByTi.set(p.ti, p);
+  let offset = 0, okCount = 0;
+  const wordResults = [];
+  let rowsHtml = '';
+  t.words.forEach((w) => {
+    const wpairs = w.ph.map((ph, k) => pairByTi.get(offset + k));
+    const matched = wpairs.filter(p => p.kind === 'match').length;
+    const pct = w.ph.length ? matched / w.ph.length : 0;
+    const ok = pct >= WORD_PASS;
+    if (ok) okCount++;
+    const redGroups = [];
+    let wordHtml = '';
+    w.ph.forEach((ph, k) => {
+      const bad = wpairs[k].kind !== 'match';
+      if (bad) redGroups.push(w.g[k]);
+      wordHtml += bad ? '<span class="bad">' + w.g[k] + '</span>' : w.g[k];
+    });
+    if (w.tail) wordHtml += w.tail;
+    const hint = ok ? '' : wordHint(w.ph, wpairs);
+    wordResults.push({ word: w.g.join('') + (w.tail || ''), pct: Math.round(pct * 100), ok, red: redGroups, hint });
+    rowsHtml += '<div class="wrow"><span class="wword">' + wordHtml + '</span>' +
+      '<span class="verdict ' + (ok ? 'ok' : 'bad') + '">' + (ok ? 'Đúng ✓' : 'Chưa đúng — đọc lại nhé') + '</span></div>';
+    if (hint) rowsHtml += '<p class="comment">' + hint + '</p>';
+    offset += w.ph.length;
+  });
   let html = '';
-  html += '<p class="rlabel">Âm đích (xanh = khớp, đỏ = lệch, gạch = thiếu):</p><div class="chips">' + targetHtml + '</div>';
-  html += '<p class="rlabel">Máy nghe được:</p><div class="chips">' + heardHtml + '</div>';
-  html += '<p class="score">Khớp ' + matched + '/' + flat.length + ' âm (' + Math.round(ratio * 100) + '%)</p>';
-  if (ratio >= 0.85 && comments.length === 0) {
-    html += '<p class="comment good">Đọc rất tốt — các âm gần như khớp hết! 🎉</p>';
-  } else {
-    for (const c of comments.slice(0, 3)) html += '<p class="comment">' + c + '</p>';
-    if (comments.length === 0) html += '<p class="comment">Khá rồi — bác để ý các âm đỏ ở trên rồi đọc lại nhé.</p>';
-  }
-  html += '<p class="raw">Chuỗi âm vị máy nghe được: ' + (heard.join(' ') || '(không nghe thấy gì)') + '</p>';
+  if (t.words.length > 1) html += '<p class="wsum">Đúng ' + okCount + '/' + t.words.length + ' từ</p>';
+  html += rowsHtml;
   const resultEl = art.querySelector('.result');
   resultEl.innerHTML = html;
   resultEl.hidden = false;
   resultEl.dataset.done = '1';
   resultEl.dataset.raw = heard.join(' ');
+  resultEl.dataset.words = JSON.stringify(wordResults);
 }
 </script>
 </body>
