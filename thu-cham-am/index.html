@@ -1,0 +1,497 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Thử bộ chấm từng âm</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔊</text></svg>">
+<style>
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0;
+    background: #F0F6FF;
+    color: #0B2A5B;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    font-size: 18px;
+    line-height: 1.45;
+  }
+  .wrap { max-width: 640px; margin: 0 auto; padding: 16px 14px 40px; }
+  h1 { font-size: 27px; margin: 6px 0 4px; }
+  .sub { color: #3D5A80; margin: 0 0 14px; font-size: 17px; }
+  .card {
+    background: #fff;
+    border-radius: 18px;
+    box-shadow: 0 4px 18px rgba(11, 42, 91, .08);
+    padding: 16px;
+    margin: 0 0 16px;
+  }
+  .loadstatus { font-size: 18px; margin: 0 0 10px; }
+  .loadstatus.ok { color: #166534; font-weight: 600; }
+  .loadstatus.err { color: #991B1B; font-weight: 600; }
+  .barwrap { background: #E2E8F0; border-radius: 999px; height: 14px; overflow: hidden; margin: 8px 0 4px; display: none; }
+  .bar { background: #2563EB; height: 100%; width: 0%; transition: width .2s; }
+  .note { color: #64748B; font-size: 15.5px; margin: 8px 0 0; }
+  .btn {
+    appearance: none; -webkit-appearance: none;
+    border: 0; border-radius: 14px;
+    min-height: 56px; padding: 10px 18px;
+    font-size: 19px; font-weight: 600;
+    background: #2563EB; color: #fff;
+    cursor: pointer; width: 100%;
+  }
+  .btn:disabled { background: #B6C6DE; cursor: default; }
+  .btn:active { transform: scale(.99); }
+  .ttext { font-size: 30px; font-weight: 700; margin: 0 0 2px; }
+  .tipa { color: #3D5A80; font-size: 17px; margin: 0 0 12px; }
+  .tipa b { color: #0B2A5B; letter-spacing: .5px; }
+  .btnrow { display: flex; gap: 10px; }
+  .btn.listen { background: #fff; color: #2563EB; border: 2px solid #2563EB; flex: 0 0 44%; }
+  .btn.rec { flex: 1; }
+  .btn.rec.recording { background: #DC2626; animation: pulse 1.1s ease-in-out infinite; }
+  @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: .55; } }
+  .hint { min-height: 24px; color: #B45309; font-size: 16.5px; margin-top: 8px; }
+  .result { margin-top: 10px; border-top: 1px dashed #CBD5E1; padding-top: 12px; }
+  .rlabel { font-size: 15.5px; color: #64748B; margin: 8px 0 4px; }
+  .chips { line-height: 2.1; }
+  .chip {
+    display: inline-block; padding: 2px 10px; margin: 0 2px;
+    border-radius: 10px; font-size: 21px; font-weight: 600;
+    background: #EFF6FF; color: #0B2A5B;
+  }
+  .chip.ok { background: #DCFCE7; color: #166534; }
+  .chip.bad { background: #FEE2E2; color: #991B1B; }
+  .chip.extra { background: #FFEDD5; color: #9A3412; }
+  .chip.miss { background: #F8FAFC; color: #94A3B8; border: 1.5px dashed #CBD5E1; text-decoration: line-through; }
+  .wgap { display: inline-block; width: 16px; }
+  .score { font-size: 19px; font-weight: 700; margin: 10px 0 0; }
+  .raw { font-size: 14.5px; color: #64748B; word-break: break-word; margin: 6px 0 0; }
+  .comment {
+    background: #FFFBEB; border: 1px solid #FDE68A; color: #92400E;
+    border-radius: 12px; padding: 10px 12px; margin: 8px 0 0; font-size: 17px;
+  }
+  .comment.good { background: #F0FDF4; border-color: #BBF7D0; color: #166534; }
+  footer .note { text-align: center; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Thử bộ chấm từng âm</h1>
+  <p class="sub">Bộ chấm này nghe <b>từng âm một</b> trong lời đọc của bác — chỉ ra đúng âm nào chưa ra, thay vì chỉ báo sai cả từ.</p>
+
+  <section class="card" id="loadCard">
+    <p class="loadstatus" id="loadStatus">Bộ chấm chưa tải. Bấm nút dưới đây để tải về máy.</p>
+    <div class="barwrap" id="loadBarWrap"><div class="bar" id="loadBar"></div></div>
+    <button class="btn" id="loadBtn" type="button">⬇️ Tải bộ chấm</button>
+    <p class="note">Bộ chấm nặng khoảng <b>355MB</b> — nên tải bằng Wi-Fi. Chỉ tải 1 lần, máy sẽ lưu lại cho các lần sau.</p>
+  </section>
+
+  <main id="cards"></main>
+
+  <footer>
+    <p class="note">Trang thử nghiệm bộ chấm từng âm (wav2vec2-xlsr-53-espeak). Kết quả chấm chỉ để tham khảo, nghe theo cảm nhận của bác là chính.</p>
+  </footer>
+</div>
+
+<script type="module">
+import { Wav2Vec2ForCTC, Tensor, env } from 'https://sansalecunglong.github.io/hoc-tieng-anh/vendor/transformers.min.js';
+
+/* ============ Cấu hình model — đúng bản bench đã đo ============
+   - Trọng số: Dayfob/wav2vec2-xlsr-53-espeak-cv-ft-onnx, file model_int8.onnx (355.373.822 byte).
+   - transformers.js v2 xin file ở địa chỉ onnx/model_quantized.onnx của repo facebook
+     (repo facebook không có file đó) nên ta gieo sẵn đúng các byte của Dayfob vào
+     bộ nhớ đệm "transformers-cache" dưới đúng địa chỉ transformers.js sẽ hỏi.
+   - config.json lấy thật từ repo facebook (đã đối chiếu: giống hệt bản bench dùng).
+   - vocab.json lấy từ repo Dayfob (giống hệt bản bench dùng). */
+const VENDOR = 'https://sansalecunglong.github.io/hoc-tieng-anh/vendor/';
+const MODEL_ID = 'facebook/wav2vec2-xlsr-53-espeak-cv-ft';
+const ONNX_KEY = 'https://huggingface.co/facebook/wav2vec2-xlsr-53-espeak-cv-ft/resolve/main/onnx/model_quantized.onnx';
+const ONNX_SRC = 'https://huggingface.co/Dayfob/wav2vec2-xlsr-53-espeak-cv-ft-onnx/resolve/main/model_int8.onnx';
+const ONNX_SIZE = 355373822;
+const VOCAB_URL = 'https://huggingface.co/Dayfob/wav2vec2-xlsr-53-espeak-cv-ft-onnx/resolve/main/vocab.json';
+
+env.backends.onnx.wasm.wasmPaths = VENDOR;
+env.allowLocalModels = false;
+env.allowRemoteModels = true;
+
+/* ============ Các đích đọc (âm vị đích hệ espeak, như bench đã đối chiếu) ============ */
+const TARGETS = [
+  { id: 'mother',  text: 'Mother',  words: [['m', 'ʌ', 'ð', 'ə', 'r']] },
+  { id: 'father',  text: 'Father',  words: [['f', 'ɑː', 'ð', 'ə', 'r']] },
+  { id: 'parents', text: 'Parents', words: [['p', 'eə', 'r', 'ə', 'n', 't', 's']] },
+  { id: 's1', text: 'I love my parents.', words: [['aɪ'], ['l', 'ʌ', 'v'], ['m', 'aɪ'], ['p', 'eə', 'r', 'ə', 'n', 't', 's']] },
+  { id: 's2', text: 'Your parents are very kind.', words: [['j', 'ɔː', 'r'], ['p', 'eə', 'r', 'ə', 'n', 't', 's'], ['ɑː', 'r'], ['v', 'e', 'r', 'i'], ['k', 'aɪ', 'n', 'd']] },
+  { id: 'today',   text: 'Today',   words: [['t', 'ə', 'd', 'eɪ']] },
+];
+
+/* ============ Trạng thái ============ */
+let model = null;        // Wav2Vec2ForCTC đã nạp
+let id2tok = null;       // id -> token âm vị
+let padId = 0;
+let modelReady = false;
+let loading = false;
+
+/* ============ Dựng thẻ đích ============ */
+const cardsEl = document.getElementById('cards');
+for (const t of TARGETS) {
+  const flat = t.words.flat();
+  const art = document.createElement('article');
+  art.className = 'card';
+  art.dataset.target = t.id;
+  art.innerHTML =
+    '<p class="ttext"></p>' +
+    '<p class="tipa">Âm đích: <b>' + flat.join(' ') + '</b></p>' +
+    '<div class="btnrow">' +
+      '<button class="btn listen" type="button">🔊 Nghe mẫu</button>' +
+      '<button class="btn rec" type="button" disabled>🎤 Đọc</button>' +
+    '</div>' +
+    '<div class="hint"></div>' +
+    '<div class="result" hidden></div>';
+  art.querySelector('.ttext').textContent = t.text;
+  art.querySelector('.listen').addEventListener('click', () => speakTarget(t.text));
+  art.querySelector('.rec').addEventListener('click', () => onRecordButton(t, art));
+  cardsEl.appendChild(art);
+}
+
+function speakTarget(text) {
+  try {
+    speechSynthesis.cancel();
+    const u = new SpeechSynthesisUtterance(text);
+    u.lang = 'en-US';
+    u.rate = 0.92;
+    const v = speechSynthesis.getVoices().find(v => v.lang && v.lang.toLowerCase().startsWith('en'));
+    if (v) u.voice = v;
+    speechSynthesis.speak(u);
+  } catch (e) { /* máy không có giọng đọc mẫu — bỏ qua */ }
+}
+
+/* ============ Tải bộ chấm ============ */
+const loadStatus = document.getElementById('loadStatus');
+const loadBtn = document.getElementById('loadBtn');
+const loadBarWrap = document.getElementById('loadBarWrap');
+const loadBar = document.getElementById('loadBar');
+
+function setStatus(msg, cls) {
+  loadStatus.textContent = msg;
+  loadStatus.className = 'loadstatus' + (cls ? ' ' + cls : '');
+}
+
+loadBtn.addEventListener('click', loadModel);
+
+async function loadModel() {
+  if (loading || modelReady) return;
+  loading = true;
+  loadBtn.disabled = true;
+  try {
+    setStatus('Đang chuẩn bị tải bộ chấm…');
+    const how = await seedModelCache((loadedBytes, totalBytes) => {
+      const pct = Math.max(0, Math.min(100, Math.floor(loadedBytes / totalBytes * 100)));
+      loadBarWrap.style.display = 'block';
+      loadBar.style.width = pct + '%';
+      setStatus('Đang tải bộ chấm… ' + pct + '% (' + Math.round(loadedBytes / 1048576) + '/' + Math.round(totalBytes / 1048576) + ' MB)');
+    });
+    loadBarWrap.style.display = 'none';
+    setStatus(how === 'cached' ? 'Đã có bộ chấm lưu trên máy — đang nạp…' : 'Tải xong — đang nạp bộ chấm…');
+    const vocabResp = await fetch(VOCAB_URL);
+    if (!vocabResp.ok) throw new Error('Không tải được bảng âm vị (HTTP ' + vocabResp.status + ')');
+    const vocab = await vocabResp.json();
+    id2tok = {};
+    for (const [tok, id] of Object.entries(vocab)) id2tok[id] = tok;
+    padId = vocab['<pad>'] ?? 0;
+    model = await Wav2Vec2ForCTC.from_pretrained(MODEL_ID, {
+      quantized: true,
+      progress_callback: (p) => {
+        if (p && p.status === 'progress' && p.file && p.file.indexOf('onnx') >= 0 && p.total) {
+          setStatus('Đang nạp bộ chấm vào bộ nhớ… ' + Math.round(p.progress) + '%');
+        }
+      },
+    });
+    modelReady = true;
+    setStatus('Bộ chấm đã sẵn sàng ✓ — mời bác đọc thử các câu dưới đây.', 'ok');
+    loadBtn.style.display = 'none';
+    document.querySelectorAll('.btn.rec').forEach(b => { b.disabled = false; });
+  } catch (e) {
+    setStatus('Tải bộ chấm bị lỗi: ' + (e && e.message ? e.message : e) + ' — kiểm tra mạng rồi bấm tải lại.', 'err');
+    loadBtn.disabled = false;
+    loadBarWrap.style.display = 'none';
+  } finally {
+    loading = false;
+  }
+}
+
+/* Gieo file ONNX của Dayfob vào "transformers-cache" dưới đúng địa chỉ
+   transformers.js sẽ hỏi ở repo facebook (nơi không có file này). */
+async function seedModelCache(onProgress) {
+  if (!('caches' in window)) throw new Error('trình duyệt không hỗ trợ lưu trữ (Cache API)');
+  const cache = await caches.open('transformers-cache');
+  const existing = await cache.match(ONNX_KEY);
+  if (existing) {
+    const len = parseInt(existing.headers.get('Content-Length') || '0', 10);
+    if (len === ONNX_SIZE) return 'cached';
+    try { await cache.delete(ONNX_KEY); } catch (e) { /* bỏ qua */ }
+  }
+  const resp = await fetch(ONNX_SRC);
+  if (!resp.ok || !resp.body) throw new Error('không tải được bộ chấm (HTTP ' + resp.status + ')');
+  // Đọc trọn thân file về bộ nhớ rồi mới cache.put bằng Response từ Blob:
+  // Cache.put() của Chrome lỗi "network error" nếu thân Response là luồng trực tiếp.
+  // (transformers.js v2 bên trong cũng đọc trọn file rồi mới put — cùng cách này.)
+  const reader = resp.body.getReader();
+  const chunks = [];
+  let loadedBytes = 0, lastPct = -1;
+  for (;;) {
+    const { done, value } = await reader.read();
+    if (done) break;
+    chunks.push(value);
+    loadedBytes += value.byteLength;
+    const pct = Math.floor(loadedBytes / ONNX_SIZE * 100);
+    if (pct !== lastPct) { lastPct = pct; onProgress(loadedBytes, ONNX_SIZE); }
+  }
+  const blob = new Blob(chunks, { type: 'application/octet-stream' });
+  if (blob.size !== ONNX_SIZE) throw new Error('tải chưa đủ bộ chấm (' + blob.size + '/' + ONNX_SIZE + ' byte) — kiểm tra mạng rồi tải lại');
+  await cache.put(ONNX_KEY, new Response(blob, { headers: { 'Content-Type': 'application/octet-stream', 'Content-Length': String(blob.size) } }));
+  const chk = await cache.match(ONNX_KEY);
+  if (!chk) throw new Error('không lưu được bộ chấm trên máy');
+  return 'downloaded';
+}
+
+/* ============ Chạy model âm vị — đúng đường bench đã đo ============ */
+async function runPhonemes(audio) {
+  // Chuẩn hoá zero-mean / unit-variance như Wav2Vec2FeatureExtractor
+  const mean = audio.reduce((a, b) => a + b, 0) / audio.length;
+  let varSum = 0;
+  for (let i = 0; i < audio.length; i++) { const d = audio[i] - mean; varSum += d * d; }
+  const std = Math.sqrt(varSum / audio.length) + 1e-7;
+  const norm = new Float32Array(audio.length);
+  for (let i = 0; i < audio.length; i++) norm[i] = (audio[i] - mean) / std;
+  const { logits } = await model({ input_values: new Tensor('float32', norm, [1, audio.length]) });
+  const frames = logits.dims[1], vsize = logits.dims[2], data = logits.data;
+  const toks = [];
+  let prev = -1;
+  for (let f = 0; f < frames; f++) {
+    let best = 0, bestVal = -Infinity;
+    const off = f * vsize;
+    for (let v = 0; v < vsize; v++) { const val = data[off + v]; if (val > bestVal) { bestVal = val; best = v; } }
+    if (best !== prev && best !== padId) toks.push(id2tok[best] ?? ('<' + best + '>'));
+    prev = best;
+  }
+  return toks;
+}
+
+/* Giải mã blob ghi âm -> Float32Array 16kHz mono (đúng cách bench làm) */
+async function blobTo16k(blob) {
+  const buf = await blob.arrayBuffer();
+  const ctx = new (window.AudioContext || window.webkitAudioContext)();
+  const decoded = await ctx.decodeAudioData(buf);
+  const offline = new OfflineAudioContext(1, Math.ceil(decoded.duration * 16000), 16000);
+  const src = offline.createBufferSource();
+  src.buffer = decoded;
+  src.connect(offline.destination);
+  src.start();
+  const rendered = await offline.startRendering();
+  try { ctx.close(); } catch (e) { /* bỏ qua */ }
+  return rendered.getChannelData(0);
+}
+
+/* ============ Ghi âm ============ */
+const recState = new Map(); // targetId -> { stream, recorder, chunks, timer, actx }
+
+function pickMime() {
+  const list = ['audio/webm;codecs=opus', 'audio/webm', 'audio/mp4', 'audio/aac', ''];
+  for (const m of list) {
+    if (m === '') return '';
+    if (window.MediaRecorder && MediaRecorder.isTypeSupported(m)) return m;
+  }
+  return '';
+}
+
+async function onRecordButton(t, art) {
+  const st = recState.get(t.id);
+  if (st && st.recorder && st.recorder.state === 'recording') { stopRecording(t, art); return; }
+  if (!modelReady) return;
+  const btn = art.querySelector('.rec');
+  const hint = art.querySelector('.hint');
+  let stream;
+  try {
+    stream = await navigator.mediaDevices.getUserMedia({ audio: { echoCancellation: true, noiseSuppression: true, autoGainControl: true } });
+  } catch (e) {
+    hint.textContent = 'Không mở được mic — bác cho phép dùng mic rồi thử lại nhé.';
+    return;
+  }
+  const mime = pickMime();
+  const recorder = mime ? new MediaRecorder(stream, { mimeType: mime }) : new MediaRecorder(stream);
+  const chunks = [];
+  recorder.ondataavailable = (ev) => { if (ev.data && ev.data.size) chunks.push(ev.data); };
+  recorder.onstop = () => { finishRecording(t, art, chunks, recorder.mimeType || mime); };
+  // Dò im lặng: có tiếng rồi im ~1,2s thì tự dừng; trần 10s
+  const actx = new (window.AudioContext || window.webkitAudioContext)();
+  if (actx.state === 'suspended') { try { await actx.resume(); } catch (e) { /* bỏ qua */ } }
+  const analyser = actx.createAnalyser();
+  analyser.fftSize = 2048;
+  actx.createMediaStreamSource(stream).connect(analyser);
+  const buf = new Float32Array(analyser.fftSize);
+  const startedAt = performance.now();
+  let speechSeen = false, lastLoud = startedAt;
+  const timer = setInterval(() => {
+    analyser.getFloatTimeDomainData(buf);
+    let sum = 0;
+    for (let i = 0; i < buf.length; i++) sum += buf[i] * buf[i];
+    const rms = Math.sqrt(sum / buf.length);
+    const now = performance.now();
+    if (rms > 0.02) { speechSeen = true; lastLoud = now; }
+    if ((speechSeen && now - lastLoud > 1200) || now - startedAt > 10000) stopRecording(t, art);
+  }, 100);
+  recState.set(t.id, { stream, recorder, timer, actx });
+  recorder.start(250);
+  btn.classList.add('recording');
+  btn.textContent = '⏹ Đang nghe… chạm để dừng';
+  hint.textContent = 'Bác đọc đi — đọc xong im lặng một chút máy tự dừng.';
+}
+
+function stopRecording(t, art) {
+  const st = recState.get(t.id);
+  if (!st) return;
+  clearInterval(st.timer);
+  try { st.actx.close(); } catch (e) { /* bỏ qua */ }
+  if (st.recorder && st.recorder.state === 'recording') st.recorder.stop();
+  st.stream.getTracks().forEach(tr => tr.stop());
+  recState.delete(t.id);
+  const btn = art.querySelector('.rec');
+  btn.classList.remove('recording');
+  btn.textContent = '🎤 Đọc';
+}
+
+async function finishRecording(t, art, chunks, mime) {
+  const hint = art.querySelector('.hint');
+  const resultEl = art.querySelector('.result');
+  if (!chunks.length) { hint.textContent = 'Chưa ghi được tiếng — bác thử đọc lại nhé.'; return; }
+  hint.textContent = 'Đang chấm…';
+  try {
+    const blob = new Blob(chunks, { type: mime || 'audio/webm' });
+    const audio = await blobTo16k(blob);
+    const heard = await runPhonemes(audio);
+    renderResult(t, art, heard);
+    hint.textContent = '';
+  } catch (e) {
+    hint.textContent = 'Chấm bị lỗi: ' + (e && e.message ? e.message : e);
+    resultEl.hidden = true;
+  }
+}
+
+/* ============ So khớp âm vị ============ */
+function canon(tok) {
+  let x = String(tok).replace(/[ˈˌ]/g, '');
+  x = x.replace(/ː$/, '');
+  if (x === 'ɹ' || x === 'ɾ') x = 'r';
+  if (x === 'ɑ') x = 'a';
+  if (x === 'ɛ') x = 'e';
+  if (x === 'ɔ') x = 'o';
+  return x;
+}
+const CLOSE_PAIRS = new Set(['aɪ|a', 'aɪ|i', 'eə|e', 'eɪ|e', 'aʊ|a', 'ɔɪ|o', 'ʌ|a', 'ə|ʊ', 'ə|o', 'ə|ɐ']);
+function isMatch(t, h) {
+  const ct = canon(t), ch = canon(h);
+  return ct === ch || CLOSE_PAIRS.has(ct + '|' + ch);
+}
+
+const VOWEL_SET = new Set(['a', 'e', 'i', 'o', 'u', 'ə', 'ʌ', 'ɑ', 'ɐ', 'ɛ', 'ɪ', 'ʊ', 'æ', 'ɔ', 'y', 'aɪ', 'eɪ', 'aʊ', 'ɔɪ', 'eə', 'ɪə', 'ʊə', 'oʊ']);
+function isVowelTok(tok) { return VOWEL_SET.has(canon(tok)); }
+
+/* Căn chỉnh có trọng số: thay âm cùng nhóm (nguyên âm~nguyên âm, phụ âm~phụ âm) rẻ hơn
+   thay chéo nhóm; xoá+thêm đắt hơn thay cùng nhóm nhưng rẻ hơn thay chéo nhóm —
+   tránh căn chỉnh vô nghĩa kiểu phụ âm đích gán với nguyên âm nghe được. */
+function align(T, H) {
+  const n = T.length, m = H.length;
+  const subCost = (a, b) => isMatch(a, b) ? 0 : (isVowelTok(a) !== isVowelTok(b) ? 5 : 2);
+  const dp = Array.from({ length: n + 1 }, () => new Array(m + 1).fill(0));
+  for (let i = 1; i <= n; i++) dp[i][0] = dp[i - 1][0] + 2;
+  for (let j = 1; j <= m; j++) dp[0][j] = dp[0][j - 1] + 2;
+  for (let i = 1; i <= n; i++) for (let j = 1; j <= m; j++) {
+    dp[i][j] = Math.min(dp[i - 1][j - 1] + subCost(T[i - 1], H[j - 1]), dp[i - 1][j] + 2, dp[i][j - 1] + 2);
+  }
+  const pairs = [];
+  let i = n, j = m;
+  while (i > 0 || j > 0) {
+    if (i > 0 && j > 0) {
+      const c = subCost(T[i - 1], H[j - 1]);
+      if (dp[i][j] === dp[i - 1][j - 1] + c) { pairs.push({ ti: i - 1, hi: j - 1, kind: c === 0 ? 'match' : 'sub' }); i--; j--; continue; }
+    }
+    if (i > 0 && dp[i][j] === dp[i - 1][j] + 2) { pairs.push({ ti: i - 1, hi: null, kind: 'del' }); i--; continue; }
+    pairs.push({ ti: null, hi: j - 1, kind: 'ins' }); j--;
+  }
+  return pairs.reverse();
+}
+
+function makeComments(pairs, flatTarget, heard) {
+  const out = [];
+  // Âm th: đích có ð, máy nghe ra z/s và KHÔNG nghe thấy âm th nào -> kết luận theo hiện diện,
+  // không phụ thuộc căn chỉnh từng vị trí (căn chỉnh dễ gán nhầm khi nhiều âm cùng lệch).
+  const hasTh = flatTarget.includes('ð') && (heard.includes('z') || heard.includes('s')) && !heard.includes('ð') && !heard.includes('θ');
+  if (hasTh) out.push("Âm 'th' đang thành z/s — đặt lưỡi giữa hai hàm răng rồi rung cổ họng.");
+  const missR = pairs.some(p => (p.kind === 'del' && canon(flatTarget[p.ti]) === 'r') ||
+                                 (p.kind === 'sub' && canon(flatTarget[p.ti]) === 'r' && canon(p.h) !== 'r'));
+  if (missR) out.push('Thiếu âm r — uốn lưỡi nhẹ ra sau.');
+  // Đuôi từ: đích kết thúc bằng t/s mà âm cuối máy nghe được không phải âm đó -> đuôi bị nuốt
+  const lastCanon = canon(flatTarget[flatTarget.length - 1]);
+  const lastHeard = heard.length ? canon(heard[heard.length - 1]) : '';
+  const missTail = (lastCanon === 't' || lastCanon === 's') && lastHeard !== lastCanon;
+  if (missTail) out.push('Đuôi từ bị nuốt — đọc rõ âm cuối.');
+  // Âm v: đích có v mà máy không nghe thấy v ở đâu cả -> âm v chưa ra (thành p/f hoặc mất hẳn)
+  const vBad = flatTarget.includes('v') && !heard.includes('v');
+  if (vBad) out.push('Âm v chưa rõ — cắn nhẹ môi dưới rồi rung.');
+  return out;
+}
+
+function chip(tok, cls, title) {
+  return '<span class="chip ' + cls + '"' + (title ? ' title="' + title + '"' : '') + '>' + tok + '</span>';
+}
+
+function renderResult(t, art, heard) {
+  const flat = t.words.flat();
+  const wordOf = [];
+  t.words.forEach((w, wi) => w.forEach(() => wordOf.push(wi)));
+  const pairs = align(flat, heard).map(p => ({
+    ...p,
+    t: p.ti != null ? flat[p.ti] : null,
+    h: p.hi != null ? heard[p.hi] : null,
+  }));
+  // Hàng âm đích (theo từng từ)
+  let targetHtml = '', lastW = -1;
+  for (const p of pairs) {
+    if (p.ti == null) continue;
+    const w = wordOf[p.ti];
+    if (lastW !== -1 && w !== lastW) targetHtml += '<span class="wgap"></span>';
+    lastW = w;
+    if (p.kind === 'match') targetHtml += chip(p.t, 'ok');
+    else if (p.kind === 'sub') targetHtml += chip(p.t, 'bad', 'Máy nghe thành: ' + p.h);
+    else targetHtml += chip(p.t, 'miss', 'Âm này chưa nghe thấy');
+  }
+  // Hàng máy nghe được
+  let heardHtml = '', lastWH = -1;
+  for (const p of pairs) {
+    const w = p.ti != null ? wordOf[p.ti] : (lastWH < 0 ? 0 : lastWH);
+    if (lastWH !== -1 && w !== lastWH) heardHtml += '<span class="wgap"></span>';
+    if (p.hi != null) heardHtml += chip(p.h, p.kind === 'match' ? 'ok' : (p.kind === 'sub' ? 'bad' : 'extra'));
+    if (p.ti != null) lastWH = w;
+  }
+  const matched = pairs.filter(p => p.kind === 'match').length;
+  const ratio = flat.length ? matched / flat.length : 0;
+  const comments = makeComments(pairs, flat, heard);
+  let html = '';
+  html += '<p class="rlabel">Âm đích (xanh = khớp, đỏ = lệch, gạch = thiếu):</p><div class="chips">' + targetHtml + '</div>';
+  html += '<p class="rlabel">Máy nghe được:</p><div class="chips">' + heardHtml + '</div>';
+  html += '<p class="score">Khớp ' + matched + '/' + flat.length + ' âm (' + Math.round(ratio * 100) + '%)</p>';
+  if (ratio >= 0.85 && comments.length === 0) {
+    html += '<p class="comment good">Đọc rất tốt — các âm gần như khớp hết! 🎉</p>';
+  } else {
+    for (const c of comments.slice(0, 3)) html += '<p class="comment">' + c + '</p>';
+    if (comments.length === 0) html += '<p class="comment">Khá rồi — bác để ý các âm đỏ ở trên rồi đọc lại nhé.</p>';
+  }
+  html += '<p class="raw">Chuỗi âm vị máy nghe được: ' + (heard.join(' ') || '(không nghe thấy gì)') + '</p>';
+  const resultEl = art.querySelector('.result');
+  resultEl.innerHTML = html;
+  resultEl.hidden = false;
+  resultEl.dataset.done = '1';
+  resultEl.dataset.raw = heard.join(' ');
+}
+</script>
+</body>
+</html>
