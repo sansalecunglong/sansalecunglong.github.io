@@ -9096,10 +9096,17 @@ var PhonCTC = (function(){
   var state = "idle"; /* idle | loading | ready | failed (failed KHÔNG vĩnh viễn) */
   var model = null, id2tok = null, padId = 0, TensorCtor = null;
   var loadPromise = null, loadGen = 0, loadStartedAt = 0, loadPct = -1, attempts = 0;
+  /* V54.1 NHAN MO TU MAY: phân biệt đường nạp để hiện đúng chữ trạng
+     thái — null = chưa biết; true = file model_int8.onnx ĐÃ có trong
+     Cache Storage, lần nạp này chỉ mở/nạp từ máy (0 request mạng);
+     false = cache chưa có, phải tải thật từ mạng (~355MB). Chỉ đổi
+     chữ hiển thị, không đổi khóa cache / luồng nạp / chấm / heal. */
+  var loadFromCache = null;
   function logEv(name, detail, target){
     try{ var lg = voiceLogBegin("Bộ chấm từng âm", target || "", "phon-ctc"); lg.ev(name, detail); lg.finish(); }catch(e){}
   }
   function seedDownload(cache, onProgress){
+    loadFromCache = false; /* V54.1 NHAN MO TU MAY: đường tải thật từ mạng */
     return fetch(ONNX_SRC).then(function(resp){
       if(!resp.ok || !resp.body) throw new Error("không tải được bộ chấm (HTTP " + resp.status + ")");
       var reader = resp.body.getReader();
@@ -9133,7 +9140,7 @@ var PhonCTC = (function(){
       return cache.match(ONNX_KEY).then(function(existing){
         if(existing){
           var len = parseInt(existing.headers.get("Content-Length") || "0", 10);
-          if(len === ONNX_SIZE) return "cached";
+          if(len === ONNX_SIZE){ loadFromCache = true; return "cached"; } /* V54.1 NHAN MO TU MAY: đã có sẵn trong cache */
           return cache.delete(ONNX_KEY).then(function(){ return seedDownload(cache, onProgress); });
         }
         return seedDownload(cache, onProgress);
@@ -9149,7 +9156,7 @@ var PhonCTC = (function(){
   function ensureLoaded(onProgress){
     if(state === "ready") return Promise.resolve(true);
     if(loadPromise) return loadPromise;
-    state = "loading"; loadStartedAt = Date.now(); loadPct = -1; attempts++;
+    state = "loading"; loadStartedAt = Date.now(); loadPct = -1; attempts++; loadFromCache = null;
     var myGen = ++loadGen;
     logEv("phon-load", "bắt đầu nạp bộ chấm từng âm (wav2vec2-xlsr-53-espeak, ~355MB lần đầu, chỉ tải 1 lần)");
     var modRef = null;
@@ -9264,10 +9271,10 @@ var PhonCTC = (function(){
      bấm sau nạp lại từ đầu, không kẹt, không bắt bấm nút nào. */
   function healOnReturn(){
     if(state === "failed"){
-      state = "idle"; loadPromise = null; model = null;
+      state = "idle"; loadPromise = null; model = null; loadFromCache = null;
       logEv("phon-load", "quay lại trang thấy bộ chấm từng âm đang lỗi — reset trạng thái nạp, lần bấm sau tự nạp lại");
     } else if(state === "loading" && loadStartedAt && (Date.now() - loadStartedAt > 20000)){
-      loadGen++; state = "idle"; loadPromise = null; model = null;
+      loadGen++; state = "idle"; loadPromise = null; model = null; loadFromCache = null;
       logEv("phon-load", "lần nạp bộ chấm từng âm bị treo từ lúc trang bị ẩn — reset trạng thái nạp");
     }
     if(typeof refreshPhonModelBtn === "function") refreshPhonModelBtn();
@@ -9279,6 +9286,7 @@ var PhonCTC = (function(){
     isReady: function(){ return state === "ready"; },
     state: function(){ return state; },
     progress: function(){ return loadPct; },
+    fromCache: function(){ return loadFromCache; }, /* V54.1 NHAN MO TU MAY */
     _test: { attempts: function(){ return attempts; }, grade: phonGradeTarget }
   };
 })();
@@ -9363,7 +9371,12 @@ function phonRunIntoDetail(detail, target, blob){
   function setStatus(t){ if(status && !detail._dead) status.textContent = t; }
   setStatus("Đang chuẩn bị bộ chấm từng âm…");
   PhonCTC.ensureLoaded(function(pct){
-    setStatus("Đang tải bộ chấm từng âm (khoảng 355MB, chỉ tải 1 lần)… " + pct + "%");
+    /* V54.1 NHAN MO TU MAY: đã có trong cache thì nói rõ là mở từ
+       máy, không để người học hiểu lầm phải tải lại 355MB. */
+    var fromCache = null;
+    try{ fromCache = PhonCTC.fromCache(); }catch(e){}
+    if(fromCache) setStatus("Đang mở bộ chấm từng âm từ máy của bác… " + pct + "%");
+    else setStatus("Đang tải bộ chấm từng âm (khoảng 355MB, chỉ tải 1 lần)… " + pct + "%");
   }).then(function(ok){
     if(detail._dead) return;
     if(!ok){
@@ -9610,9 +9623,17 @@ function refreshPhonModelBtn(){
     hideBtn();
     var pc = -1;
     try{ pc = PhonCTC.progress(); }catch(e){}
-    if(phonModelStatusEl) phonModelStatusEl.textContent = pc >= 0
-      ? "Đang tải bộ chấm từng âm… " + pc + "% (khoảng 355MB, chỉ tải 1 lần)."
-      : "Đang tải bộ chấm từng âm… (khoảng 355MB, chỉ tải 1 lần).";
+    /* V54.1 NHAN MO TU MAY: đường mở từ cache ghi “Đang mở từ máy…” */
+    var fromCache = null;
+    try{ fromCache = PhonCTC.fromCache(); }catch(e){}
+    if(phonModelStatusEl){
+      if(fromCache) phonModelStatusEl.textContent = pc >= 0
+        ? "Đang mở từ máy… " + pc + "%"
+        : "Đang mở từ máy…";
+      else phonModelStatusEl.textContent = pc >= 0
+        ? "Đang tải bộ chấm từng âm… " + pc + "% (khoảng 355MB, chỉ tải 1 lần)."
+        : "Đang tải bộ chấm từng âm… (khoảng 355MB, chỉ tải 1 lần).";
+    }
   } else if(st === "failed"){
     showBtn("Tải lại bộ chấm từng âm");
     if(phonModelStatusEl) phonModelStatusEl.textContent = "Chưa tải được bộ chấm từng âm lần này. Bác kiểm tra mạng rồi bấm “Tải lại” nhé — những lần bấm sau trang cũng tự thử lại, không kẹt.";
