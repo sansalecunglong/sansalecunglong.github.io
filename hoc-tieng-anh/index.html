@@ -13669,5 +13669,144 @@ try{
   }catch(e){}
 })();
 </script>
+
+<!-- V55 NOEL DO — Mẫu 4: đỏ tươi + ông già Noel (lớp chủ đề phủ ngoài; gỡ = xóa comment này + khối style#noel-theme-4 + script#noel-fx-4 ở cuối body) -->
+<style id="noel-theme-4">
+
+/* ===== NOEL THEME — lớp phủ trang trí, xóa khối này + script noel-fx là gỡ hết ===== */
+.hero-panel{ position:relative; background:linear-gradient(160deg,#D92D20,#8F1D14); }
+.hero-img::after{ background:linear-gradient(180deg,rgba(143,29,20,0) 40%,rgba(143,29,20,.5)); }
+#ctaStart{ background:linear-gradient(135deg,#22A355,#15803D); border:2px solid #FFFFFF; color:#F2FFF5; box-shadow:0 8px 20px rgba(21,128,61,.4); }
+.noel-greet{ margin:0 0 12px; font-weight:700; font-size:1.05em; line-height:1.45; color:#FFE9C9; }
+.noel-ribbon{ background:repeating-linear-gradient(45deg,#C62828 0 22px,#B71C1C 22px 44px); color:#FFF7E6; text-align:center; font-weight:700; font-size:17px; line-height:1.5; padding:12px 18px; }
+.noel-host{ position:relative; }
+.lesson-head.noel-host{ padding-top:48px; }
+.noel-lights{ position:absolute; left:0; right:0; top:0; height:36px; z-index:4; pointer-events:none; }
+.noel-lights.small{ height:30px; }
+.noel-lights svg{ position:absolute; left:0; top:0; display:block; }
+.noel-bulb{ position:absolute; width:11px; height:11px; margin-left:-6px; border-radius:50%;
+  background:radial-gradient(circle at 35% 30%, rgba(255,255,255,.95), rgba(255,255,255,0) 46%), var(--c);
+  box-shadow:0 0 14px 4px var(--c);
+  animation:noelTwinkle 1.9s ease-in-out infinite alternate; }
+.noel-bulb::before{ content:""; position:absolute; left:50%; top:-6px; width:5px; height:7px; margin-left:-3px;
+  background:#2F4A38; border-radius:2px 2px 0 0; }
+.noel-lights.small .noel-bulb{ width:9px; height:9px; margin-left:-5px; }
+@keyframes noelTwinkle{ from{ opacity:.5; } to{ opacity:1; } }
+.noel-corner{ position:absolute; top:10px; right:12px; z-index:5; pointer-events:none;
+  filter:drop-shadow(0 3px 6px rgba(0,0,0,.35)); width:98px; height:98px; animation:noelBob 3s ease-in-out infinite alternate; }
+.noel-corner svg{ display:block; width:100%; height:100%; }
+@keyframes noelBob{ from{ transform:translateY(0); } to{ transform:translateY(5px); } }
+.noel-snow{ position:fixed; inset:0; z-index:40; pointer-events:none; overflow:hidden; }
+.noel-flake{ position:absolute; top:-24px; border-radius:50%;
+  background:radial-gradient(circle, #ffffff 35%, rgba(190,212,238,.8) 100%);
+  box-shadow:0 0 5px rgba(255,255,255,.85);
+  animation-name:noelFall; animation-timing-function:linear; animation-iteration-count:infinite; }
+.noel-flake i{ display:block; width:100%; height:100%; border-radius:50%; background:inherit;
+  animation-name:noelSway; animation-timing-function:ease-in-out; animation-iteration-count:infinite; animation-direction:alternate; }
+.noel-flake.glyph{ background:none; box-shadow:none; color:#fff; font-style:normal; line-height:1;
+  text-shadow:0 0 7px rgba(150,190,235,.95), 0 0 2px #fff; border-radius:0; }
+@keyframes noelFall{ to{ transform:translateY(112vh); } }
+@keyframes noelSway{ from{ transform:translateX(-9px); } to{ transform:translateX(9px); } }
+#bottomNav::before{ content:""; position:absolute; left:0; right:0; top:-1px; pointer-events:none; height:8px; background:repeating-linear-gradient(45deg,#E0342B 0 12px,#FFFFFF 12px 24px); }
+.hero-card::before{ content:""; position:absolute; top:0; left:0; right:0; height:9px; border-radius:26px 26px 0 0; background:repeating-linear-gradient(45deg,#E0342B 0 14px,#FFFFFF 14px 28px); pointer-events:none; }.progress-card{ position:relative; }.progress-card::before{ content:""; position:absolute; top:0; left:0; right:0; height:9px; border-radius:26px 26px 0 0; background:repeating-linear-gradient(45deg,#E0342B 0 14px,#FFFFFF 14px 28px); pointer-events:none; }
+@media (prefers-reduced-motion: reduce){
+  .noel-bulb, .noel-flake, .noel-flake i, .noel-corner{ animation:none !important; }
+}
+
+</style>
+<script id="noel-fx-4">
+
+(function(){
+"use strict";
+var CFG = {"bulbs": ["#FF5252", "#FFD740", "#69F0AE", "#40C4FF", "#FF80AB"], "snow": 46, "glyphs": 6, "alpha": [0.45, 1.0], "greet": "🎅 Chúc bác một mùa Giáng sinh ấm áp, an lành!", "ribbon": "🎄 Mùa Giáng sinh — chúc bác học vui, mỗi ngày một câu tiếng Anh mới.", "cornerSVG": "<svg viewBox=\"0 0 100 100\"><ellipse cx=\"50\" cy=\"68\" rx=\"26\" ry=\"21\" fill=\"#FFFFFF\"/><circle cx=\"50\" cy=\"48\" r=\"23\" fill=\"#FFCF9F\"/><path d=\"M25 38 Q28 5 58 4 Q82 3 85 22 L87 31 Q55 17 30 29 Q23 32 25 38Z\" fill=\"#D92D20\"/><path d=\"M23 33 Q52 21 87 27 L87 38 Q52 31 23 43Z\" fill=\"#FFFFFF\"/><circle cx=\"87\" cy=\"25\" r=\"7.5\" fill=\"#FFFFFF\"/><ellipse cx=\"41\" cy=\"61\" rx=\"9.5\" ry=\"5\" fill=\"#FFFFFF\" transform=\"rotate(-18 41 61)\"/><ellipse cx=\"59\" cy=\"61\" rx=\"9.5\" ry=\"5\" fill=\"#FFFFFF\" transform=\"rotate(18 59 61)\"/><circle cx=\"50\" cy=\"58\" r=\"4.4\" fill=\"#F2A094\"/><circle cx=\"41\" cy=\"47\" r=\"2.7\" fill=\"#263238\"/><circle cx=\"59\" cy=\"47\" r=\"2.7\" fill=\"#263238\"/><circle cx=\"36\" cy=\"55\" r=\"3.4\" fill=\"#F6A48F\" opacity=\".65\"/><circle cx=\"64\" cy=\"55\" r=\"3.4\" fill=\"#F6A48F\" opacity=\".65\"/></svg>"};
+var reduced = !!(window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches);
+var seed = 1234567;
+function rnd(){ seed = (seed * 1103515245 + 12345) % 2147483648; return seed / 2147483648; }
+function init(){
+  var heroPanel = document.querySelector(".hero-panel");
+  if(heroPanel){
+    buildLights(heroPanel, false);
+    if(CFG.cornerSVG){
+      var d = document.createElement("div");
+      d.className = "noel-corner"; d.setAttribute("aria-hidden","true");
+      d.innerHTML = CFG.cornerSVG;
+      heroPanel.appendChild(d);
+    }
+  }
+  var lh = document.querySelector("#viewLesson .lesson-head");
+  if(lh){ lh.classList.add("noel-host"); buildLights(lh, true); }
+  var h1 = document.querySelector(".hero .txt-card h1");
+  if(h1 && CFG.greet){
+    var p = document.createElement("p");
+    p.className = "noel-greet"; p.textContent = CFG.greet;
+    h1.parentNode.insertBefore(p, h1.nextSibling);
+  }
+  var hero = document.querySelector(".hero");
+  if(hero && hero.parentNode && CFG.ribbon){
+    var r = document.createElement("div");
+    r.className = "noel-ribbon"; r.textContent = CFG.ribbon;
+    hero.parentNode.insertBefore(r, hero.nextSibling);
+  }
+  if(!reduced && CFG.snow > 0) buildSnow();
+}
+function buildLights(host, small){
+  var box = document.createElement("div");
+  box.className = "noel-lights" + (small ? " small" : "");
+  box.setAttribute("aria-hidden","true");
+  host.appendChild(box);
+  var timer = null;
+  function draw(){
+    var w = host.clientWidth;
+    if(!w) return;
+    var step = small ? 38 : 46, sag = small ? 9 : 13, top = 2;
+    var n = Math.max(3, Math.floor(w / step));
+    var aw = w / n, H = top + sag + 20;
+    var path = "M0," + top, html = "";
+    for(var i = 0; i < n; i++){
+      var x0 = i * aw, x1 = (i + 1) * aw, xm = (x0 + x1) / 2;
+      path += " Q " + xm.toFixed(1) + "," + (top + sag * 2) + " " + x1.toFixed(1) + "," + top;
+      var c = CFG.bulbs[i % CFG.bulbs.length];
+      html += '<span class="noel-bulb" style="left:' + xm.toFixed(1) + "px;top:" + (top + sag + 1) +
+              "px;--c:" + c + ";animation-delay:" + ((i % 2) * 0.95) + "s;animation-duration:" +
+              (1.7 + (i % 3) * 0.25) + 's"></span>';
+    }
+    box.innerHTML = '<svg width="' + w + '" height="' + H + '" aria-hidden="true"><path d="' + path +
+      '" fill="none" stroke="rgba(23,43,30,.55)" stroke-width="2"/></svg>' + html;
+  }
+  draw();
+  window.addEventListener("resize", function(){ clearTimeout(timer); timer = setTimeout(draw, 180); });
+  if("IntersectionObserver" in window){
+    new IntersectionObserver(function(es){ if(es[0].isIntersecting) draw(); }, { threshold: 0.01 }).observe(box);
+  }
+}
+function buildSnow(){
+  var box = document.createElement("div");
+  box.className = "noel-snow"; box.setAttribute("aria-hidden","true");
+  var html = "";
+  for(var i = 0; i < CFG.snow; i++){
+    var left = (rnd() * 100).toFixed(2);
+    var dur = (11 + rnd() * 11).toFixed(1);
+    var delay = (-rnd() * 22).toFixed(1);
+    var sway = (2.4 + rnd() * 1.8).toFixed(2);
+    var op = (CFG.alpha[0] + rnd() * (CFG.alpha[1] - CFG.alpha[0])).toFixed(2);
+    if(i < CFG.glyphs){
+      var fs = (13 + rnd() * 6).toFixed(0);
+      html += '<span class="noel-flake glyph" style="left:' + left + "%;font-size:" + fs +
+        "px;opacity:" + op + ";animation-duration:" + dur + "s;animation-delay:" + delay + 's">&#10052;</span>';
+    } else {
+      var sz = (i % 5 < 2) ? (6 + rnd() * 3.5) : (3 + rnd() * 2.2);
+      html += '<span class="noel-flake" style="left:' + left + "%;width:" + sz.toFixed(1) + "px;height:" +
+        sz.toFixed(1) + "px;opacity:" + op + ";animation-duration:" + dur + "s;animation-delay:" + delay +
+        's"><i style="animation-duration:' + sway + 's"></i></span>';
+    }
+  }
+  box.innerHTML = html;
+  document.body.appendChild(box);
+}
+if(document.readyState !== "loading") init();
+else document.addEventListener("DOMContentLoaded", init);
+})();
+
+</script>
 </body>
 </html>
