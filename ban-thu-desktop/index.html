@@ -47,7 +47,9 @@ svg.ic{width:24px;height:24px;flex:0 0 auto}
 .btn-sm{min-height:46px; padding:9px 18px; font-size:16px}
 .side-progress .btn{width:100%; margin-top:14px}
 
-.main{margin-left:260px}
+.main{margin-left:260px; transition:margin-left .25s ease}
+body.lesson-mode .sidebar{display:none}
+body.lesson-mode .main{margin-left:0}
 .inner{max-width:1240px; margin:0 auto; padding:34px 40px 64px}
 .view{display:none}
 .view.active{display:block}
@@ -117,11 +119,13 @@ svg.ic{width:24px;height:24px;flex:0 0 auto}
 .mini-note{font-size:13.5px; color:var(--muted); margin-top:10px}
 
 /* ===== MÀN BÀI HỌC ===== */
+#view-lesson .inner{max-width:none; padding:26px 28px 56px}
+.lesson-note{background:#FFF7EA; border:1.5px solid #F5D9A8; color:#7A4A00; border-radius:12px; padding:9px 16px; font-size:14.5px; font-weight:700; margin-bottom:18px}
 .lesson-top{text-align:center; margin-bottom:22px}
 .lesson-top .back{float:left}
 .lesson-top h1{font-size:31px; color:var(--navy)}
 .lesson-top .goal{color:var(--muted); font-size:17px; margin-top:4px}
-.lesson-grid{display:grid; grid-template-columns:232px minmax(0,1fr) 264px; gap:22px; align-items:start}
+.lesson-grid{display:grid; grid-template-columns:260px minmax(0,1fr) 300px; gap:24px; align-items:start}
 .steps-card{background:var(--card); border-radius:18px; box-shadow:var(--shadow); padding:16px 14px}
 .steps-card h3{font-size:17px; color:var(--navy); padding:2px 8px 10px}
 .step{display:flex; gap:11px; align-items:flex-start; width:100%; padding:11px 10px; border-radius:13px; border:1.5px solid transparent; background:none; text-align:left}
@@ -137,7 +141,7 @@ svg.ic{width:24px;height:24px;flex:0 0 auto}
 .prog-line{display:flex; align-items:center; gap:12px; margin:14px 0 18px; font-weight:800; font-size:16px}
 .prog-track{flex:1; height:12px; background:#E4EDFA; border-radius:99px; overflow:hidden}
 .prog-track i{display:block; height:100%; width:0%; background:var(--blue)}
-.vocab-grid{display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:16px}
+.vocab-grid{display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:16px}
 .vcard{border:1.5px solid #E3EDFB; border-radius:16px; padding:14px; display:flex; flex-direction:column; gap:10px}
 .vcard .top{display:flex; gap:13px}
 .vimg{width:78px; height:78px; border-radius:12px; object-fit:cover; flex:0 0 auto; background:linear-gradient(135deg,#BFD8FF,#EAF2FF)}
@@ -394,6 +398,7 @@ svg.ic{width:24px;height:24px;flex:0 0 auto}
   <!-- ============ VIEW: BÀI HỌC ============ -->
   <section class="view" id="view-lesson">
     <div class="inner">
+      <div class="lesson-note">Vào bài học, menu bên trái tự ẩn để bài học tràn toàn màn hình — bấm “← Về trang chủ” ở đầu bài để quay lại.</div>
       <div class="lesson-top">
         <button class="btn btn-soft btn-sm back" data-goto="home">← Về trang chủ</button>
         <h1>Chương 1 · Bài 1: Chào hỏi trong ngày</h1>
@@ -561,6 +566,7 @@ svg.ic{width:24px;height:24px;flex:0 0 auto}
 function switchView(name){
   document.querySelectorAll('.view').forEach(v => v.classList.toggle('active', v.id === 'view-' + name));
   document.querySelectorAll('#sideNav button').forEach(b => b.classList.toggle('active', b.dataset.view === name));
+  document.body.classList.toggle('lesson-mode', name === 'lesson');
   window.scrollTo(0, 0);
 }
 document.querySelectorAll('#sideNav button').forEach(b => b.addEventListener('click', () => switchView(b.dataset.view)));
