@@ -367,7 +367,7 @@ html.hc .step-num{color:#fff}
   border:3px solid var(--border-strong); background:var(--surface); color:var(--muted);
 }
 .rm-dot small{font-size:.52em; font-family:var(--font-body); font-weight:800; letter-spacing:.04em; text-transform:uppercase}
-.rm-dot big{font-size:1.3em}
+.rm-dot .rm-num{font-size:1.3em}
 .rm-stage.now .rm-dot{background:var(--primary); border-color:var(--primary); color:#FFF8EA; box-shadow:var(--shadow)}
 @media (prefers-color-scheme: dark){ .rm-stage.now .rm-dot{color:#12241A} }
 html.hc .rm-stage.now .rm-dot{color:#fff}
@@ -1282,7 +1282,7 @@ html[data-font="small"] .hc-state{font-size:max(14px,.88em)}
 .lesson-row:hover{border-color:var(--primary)}
 .lesson-row:active{transform:scale(.99)}
 .lesson-row.is-done{border-color:var(--success); background:var(--success-soft)}
-.lesson-row.is-locked{opacity:.78}
+.lesson-row.is-locked{border-style:dashed}
 .lr-name{min-width:0}
 .lr-status{flex:none; font-size:max(16px,.88em); font-weight:800; color:var(--muted)}
 .lesson-row.is-done .lr-status{color:var(--success)}
@@ -2086,19 +2086,19 @@ html.hc .votd-letter{background:#DCE8FA; color:#0B2A5B; border-bottom:2px solid 
 .shortcuts{display:grid; grid-template-columns:1fr 1fr; gap:12px}
 .shortcut{border-radius:20px; padding:16px 14px 14px; box-shadow:var(--shadow-sm); text-align:left; border:none; width:100%; color:var(--ink)}
 .shortcut .sc-ic{width:48px; height:48px; border-radius:14px; display:grid; place-items:center; color:#fff; margin-bottom:10px}
-.shortcut h4{margin:0 0 3px; font-size:18.5px; font-weight:800; color:#0B2A5B; line-height:1.3}
+.shortcut h3{margin:0 0 3px; font-size:18.5px; font-weight:800; color:#0B2A5B; line-height:1.3}
 .shortcut p{margin:0 0 12px; font-size:15px; color:#54627E; line-height:1.4}
 .sc-pill{display:inline-block; padding:8px 16px; border-radius:999px; color:#fff; font-weight:800; font-size:15px}
 .sc-pink{background:#FFE9F0} .sc-pink .sc-ic{background:#E11D63} .sc-pink .sc-pill{background:#E11D63}
-.sc-mint{background:#E2F6EC} .sc-mint .sc-ic{background:#16A34A} .sc-mint .sc-pill{background:#16A34A}
-.sc-sun{background:#FFF3D1} .sc-sun .sc-ic{background:#D97706} .sc-sun .sc-pill{background:#D97706}
+.sc-mint{background:#E2F6EC} .sc-mint .sc-ic{background:#16A34A} .sc-mint .sc-pill{background:#15803D}
+.sc-sun{background:#FFF3D1} .sc-sun .sc-ic{background:#D97706} .sc-sun .sc-pill{background:#B45309}
 .sc-sky{background:#E1EEFF} .sc-sky .sc-ic{background:#2563EB} .sc-sky .sc-pill{background:#2563EB}
 @media (prefers-color-scheme: dark){
   .sc-pink{background:#3D1224} .sc-mint{background:#123524} .sc-sun{background:#3D3410} .sc-sky{background:#16305C}
-  .shortcut h4{color:#fff} .shortcut p{color:#B9CBE8}
+  .shortcut h3{color:#fff} .shortcut p{color:#B9CBE8}
 }
 html.hc .shortcut{border:2px solid #000; background:#fff}
-html.hc .shortcut h4{color:#000} html.hc .shortcut p{color:#222}
+html.hc .shortcut h3{color:#000} html.hc .shortcut p{color:#222}
 
 /* --- Khối tiến độ: vòng % thật + thanh + nhãn --- */
 .prog-flex{display:flex; gap:16px; align-items:center; margin-top:6px}
@@ -2130,7 +2130,7 @@ html.hc .ring23 .ring-bg{stroke:#DCE8FA} html.hc .ring23 .ring-fg{stroke:#0B2A5B
 #chapterList .chapter-card:nth-child(6) .ch-head::before{content:"6"; background:linear-gradient(135deg,#0EA5E9,#0369A1)}
 #pronHomeHead::before{content:"Aa"; background:linear-gradient(135deg,#22C55E,#16A34A); font-size:19px}
 .v23-ch-badge{flex:none; font-size:15px; font-weight:800; padding:7px 11px; border-radius:999px; white-space:nowrap; background:#E1EEFF; color:#1D4ED8}
-.v23-ch-badge.st-done{background:#E2F6EC; color:#15803D}
+.v23-ch-badge.st-done{background:#E2F6EC; color:#166534}
 .v23-ch-badge.st-locked{background:#E8EDF5; color:#5B6B85}
 @media (prefers-color-scheme: dark){
   .v23-ch-badge{background:#16305C; color:#9CC0FF}
@@ -2308,7 +2308,7 @@ html[data-font="xlarge"]{--fs-base:clamp(19px,5.9vw,24px)}
 #v23Stats .stat{padding:14px 16px}
 #v23Stats .stat-ic{width:48px; height:48px}
 .shortcut{padding:16px}
-.shortcut h4{font-size:max(17px,1.02em)}
+.shortcut h3{font-size:max(17px,1.02em)}
 .votd-letter{height:196px}
 .v23-ch-badge{padding:8px 14px}
 .hero-badge{padding:8px 14px}
@@ -2390,7 +2390,7 @@ html[data-font="xlarge"]{--fs-base:clamp(19px,5.9vw,24px)}
 .cg-row{display:flex; justify-content:space-between; align-items:center; gap:12px; flex-wrap:wrap; width:100%; min-height:60px; padding:14px 16px; border:2px solid var(--accent); border-radius:var(--r-sm); background:linear-gradient(90deg,var(--accent-soft),var(--primary-soft)); font:inherit; font-weight:700; color:var(--ink); cursor:pointer; text-align:left}
 .cg-row:hover{border-color:var(--primary)}
 .cg-row:active{transform:scale(.99)}
-.cg-row.is-locked{opacity:.78}
+.cg-row.is-locked{border-style:dashed}
 .cg-row .lr-status{color:var(--accent-strong); font-weight:800; white-space:nowrap}
 .cg-q-en{font-family:var(--font-display); font-size:max(22px,1.45em); font-weight:700; margin-bottom:6px; overflow-wrap:break-word}
 .cg-q-vi{color:var(--muted); font-weight:600; margin-bottom:12px}
@@ -2754,6 +2754,57 @@ body{padding-bottom:calc(108px + env(safe-area-inset-bottom,0px))}
 .bottom-nav .bn-btn.on .ic{opacity:1}
 body{padding-bottom:calc(70px + env(safe-area-inset-bottom,0px))}
 .toast{bottom:calc(70px + env(safe-area-inset-bottom,0px))}
+
+/* KD-2411-003 — banner báo bản mới (V56): hiện trên thanh dưới, không che nút học */
+.upd-banner{position:fixed; left:12px; right:12px; bottom:calc(72px + env(safe-area-inset-bottom,0px)); z-index:56; background:#FFF8E6; color:#1C2B21; border:2px solid #D97706; border-radius:14px; padding:12px 14px; box-shadow:0 6px 24px rgba(0,0,0,.18); display:flex; flex-direction:column; gap:10px}
+.upd-text{margin:0; font-size:18px; line-height:1.45; font-weight:600}
+.upd-btns{display:flex; gap:10px}
+.upd-reload{flex:1; min-height:48px; border:0; border-radius:10px; background:#15803D; color:#fff; font-size:17px; font-weight:800}
+.upd-later{flex:1; min-height:48px; border:2px solid #475569; border-radius:10px; background:#fff; color:#334155; font-size:17px; font-weight:800}
+@media (min-width:768px){.upd-banner{left:50%; right:auto; transform:translateX(-50%); width:520px}}
+</style>
+<style id="noel-theme-4">
+
+/* ===== NOEL THEME — lớp phủ trang trí, xóa khối này + script noel-fx là gỡ hết ===== */
+.hero-panel{ position:relative; background:linear-gradient(160deg,#D92D20,#8F1D14); }
+.hero-img::after{ background:linear-gradient(180deg,rgba(143,29,20,0) 40%,rgba(143,29,20,.5)); }
+#ctaStart{ background:linear-gradient(135deg,#22A355,#15803D); border:2px solid #FFFFFF; color:#F2FFF5; box-shadow:0 8px 20px rgba(21,128,61,.4); }
+.noel-greet{ margin:0 0 12px; font-weight:700; font-size:1.05em; line-height:1.45; color:#FFE9C9; }
+.noel-ribbon{ background:repeating-linear-gradient(45deg,#C62828 0 22px,#B71C1C 22px 44px); color:#FFF7E6; text-align:center; font-weight:700; font-size:17px; line-height:1.5; padding:12px 18px; }
+.noel-host{ position:relative; }
+.lesson-head.noel-host{ padding-top:48px; }
+.noel-lights{ position:absolute; left:0; right:0; top:0; height:36px; z-index:4; pointer-events:none; }
+.noel-lights.small{ height:30px; }
+.noel-lights svg{ position:absolute; left:0; top:0; display:block; }
+.noel-bulb{ position:absolute; width:11px; height:11px; margin-left:-6px; border-radius:50%;
+  background:radial-gradient(circle at 35% 30%, rgba(255,255,255,.95), rgba(255,255,255,0) 46%), var(--c);
+  box-shadow:0 0 14px 4px var(--c);
+  animation:noelTwinkle 1.9s ease-in-out infinite alternate; }
+.noel-bulb::before{ content:""; position:absolute; left:50%; top:-6px; width:5px; height:7px; margin-left:-3px;
+  background:#2F4A38; border-radius:2px 2px 0 0; }
+.noel-lights.small .noel-bulb{ width:9px; height:9px; margin-left:-5px; }
+@keyframes noelTwinkle{ from{ opacity:.5; } to{ opacity:1; } }
+.noel-corner{ position:absolute; top:10px; right:12px; z-index:5; pointer-events:none;
+  filter:drop-shadow(0 3px 6px rgba(0,0,0,.35)); width:98px; height:98px; animation:noelBob 3s ease-in-out infinite alternate; }
+.noel-corner svg{ display:block; width:100%; height:100%; }
+@keyframes noelBob{ from{ transform:translateY(0); } to{ transform:translateY(5px); } }
+.noel-snow{ position:fixed; inset:0; z-index:40; pointer-events:none; overflow:hidden; }
+.noel-flake{ position:absolute; top:-24px; border-radius:50%;
+  background:radial-gradient(circle, #ffffff 35%, rgba(190,212,238,.8) 100%);
+  box-shadow:0 0 5px rgba(255,255,255,.85);
+  animation-name:noelFall; animation-timing-function:linear; animation-iteration-count:infinite; }
+.noel-flake i{ display:block; width:100%; height:100%; border-radius:50%; background:inherit;
+  animation-name:noelSway; animation-timing-function:ease-in-out; animation-iteration-count:infinite; animation-direction:alternate; }
+.noel-flake.glyph{ background:none; box-shadow:none; color:#fff; font-style:normal; line-height:1;
+  text-shadow:0 0 7px rgba(150,190,235,.95), 0 0 2px #fff; border-radius:0; }
+@keyframes noelFall{ to{ transform:translateY(112vh); } }
+@keyframes noelSway{ from{ transform:translateX(-9px); } to{ transform:translateX(9px); } }
+#bottomNav::before{ content:""; position:absolute; left:0; right:0; top:-1px; pointer-events:none; height:8px; background:repeating-linear-gradient(45deg,#E0342B 0 12px,#FFFFFF 12px 24px); }
+.hero-card::before{ content:""; position:absolute; top:0; left:0; right:0; height:9px; border-radius:26px 26px 0 0; background:repeating-linear-gradient(45deg,#E0342B 0 14px,#FFFFFF 14px 28px); pointer-events:none; }.progress-card{ position:relative; }.progress-card::before{ content:""; position:absolute; top:0; left:0; right:0; height:9px; border-radius:26px 26px 0 0; background:repeating-linear-gradient(45deg,#E0342B 0 14px,#FFFFFF 14px 28px); pointer-events:none; }
+@media (prefers-reduced-motion: reduce){
+  .noel-bulb, .noel-flake, .noel-flake i, .noel-corner{ animation:none !important; }
+}
+
 </style>
 </head>
 <body>
@@ -2832,7 +2883,7 @@ body{padding-bottom:calc(70px + env(safe-area-inset-bottom,0px))}
         <div class="hero-chips" aria-hidden="true"><span>6 chương</span><span>60 bài học</span><span>300 từ vựng</span><span>44 âm phát âm</span></div>
       </div>
       </div>
-      <div class="hero-card" aria-label="Từ của ngày hôm nay">
+      <div class="hero-card" role="group" aria-label="Từ của ngày hôm nay">
         <span class="hc-tag">Từ của ngày hôm nay</span>
         <div class="hc-word" id="wotdWordHero">…</div>
         <div class="hc-ipa" id="wotdIpaHero">…</div>
@@ -2884,7 +2935,7 @@ body{padding-bottom:calc(70px + env(safe-area-inset-bottom,0px))}
         <div class="bar" role="progressbar" aria-label="Phần trăm hoàn thành lộ trình" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="mainBar"><div class="bar-fill" id="mainBarFill"></div></div>
         <p class="bar-label" id="barLabel">Hãy bắt đầu với bài học đầu tiên nhé!</p>
         <div class="prog-next" id="progNext"><span class="pn-line pn-ch" id="progNextCh">Chương 1: Chào hỏi &amp; giới thiệu</span><span class="pn-line pn-ls" id="progNextLs">Bài 1: Chào hỏi trong ngày</span></div>
-        <div class="badges-row" id="badgesRow" aria-label="Huy hiệu đã đạt"></div>
+        <div class="badges-row" id="badgesRow" role="group" aria-label="Huy hiệu đã đạt"></div>
       </div>
     </div>
   </section>
@@ -2976,7 +3027,7 @@ body{padding-bottom:calc(70px + env(safe-area-inset-bottom,0px))}
       <div class="roadmap">
 
         <div class="rm-stage now" id="rmStage1">
-          <div class="rm-dot" aria-hidden="true"><small>Chặng</small><big>1</big></div>
+          <div class="rm-dot" aria-hidden="true"><small>Chặng</small><span class="rm-num">1</span></div>
           <div class="rm-card">
             <div class="rm-top">
               <div>
@@ -2986,7 +3037,7 @@ body{padding-bottom:calc(70px + env(safe-area-inset-bottom,0px))}
               <span class="rm-flag here" id="rmFlag1">Bạn đang ở đây</span>
             </div>
             <p class="rm-desc">Đây chính là khóa học bác đang học ở ngay phía trên: 6 chương theo 6 chủ đề đời thường, mỗi chương 10 bài nhỏ — tổng cộng 60 bài.</p>
-            <div class="rm-topics" aria-label="Các bài trong chặng 1">
+            <div class="rm-topics" role="group" aria-label="Các bài trong chặng 1">
               <span>Chương mở đầu · Phát âm 44 âm (không bắt buộc)</span>
               <span>Chương 1 · Chào hỏi &amp; giới thiệu</span>
               <span>Chương 2 · Gia đình &amp; số đếm</span>
@@ -3003,7 +3054,7 @@ body{padding-bottom:calc(70px + env(safe-area-inset-bottom,0px))}
         </div>
 
         <div class="rm-stage">
-          <div class="rm-dot" aria-hidden="true"><small>Chặng</small><big>2</big></div>
+          <div class="rm-dot" aria-hidden="true"><small>Chặng</small><span class="rm-num">2</span></div>
           <div class="rm-card">
             <div class="rm-top">
               <div>
@@ -3013,7 +3064,7 @@ body{padding-bottom:calc(70px + env(safe-area-inset-bottom,0px))}
               <span class="rm-flag">Đang chuẩn bị</span>
             </div>
             <p class="rm-desc">Chặng tiếp theo mở rộng thêm nhiều chủ đề quen thuộc để bác nói được nhiều hơn, tự tin hơn. Chặng này đang được soạn — chưa mở học, bác cứ yên tâm học chắc Chặng 1 trước nhé.</p>
-            <div class="rm-topics" aria-label="Các chủ đề sẽ học ở chặng 2">
+            <div class="rm-topics" role="group" aria-label="Các chủ đề sẽ học ở chặng 2">
               <span>Giờ giấc &amp; lịch hẹn</span>
               <span>Ngày tháng</span>
               <span>Thời tiết</span>
@@ -3029,7 +3080,7 @@ body{padding-bottom:calc(70px + env(safe-area-inset-bottom,0px))}
         </div>
 
         <div class="rm-stage">
-          <div class="rm-dot" aria-hidden="true"><small>Chặng</small><big>3</big></div>
+          <div class="rm-dot" aria-hidden="true"><small>Chặng</small><span class="rm-num">3</span></div>
           <div class="rm-card">
             <div class="rm-top">
               <div>
@@ -3039,7 +3090,7 @@ body{padding-bottom:calc(70px + env(safe-area-inset-bottom,0px))}
               <span class="rm-flag">Đang chuẩn bị</span>
             </div>
             <p class="rm-desc">Đến chặng này, bác bắt đầu kể chuyện, nói dự định và tự xử lý các việc thường gặp — nhất là khi đi du lịch. Chặng này cũng đang được soạn, chưa mở học.</p>
-            <div class="rm-topics" aria-label="Các chủ đề sẽ học ở chặng 3">
+            <div class="rm-topics" role="group" aria-label="Các chủ đề sẽ học ở chặng 3">
               <span>Kể chuyện hôm qua</span>
               <span>Nói dự định sắp tới</span>
               <span>Du lịch · sân bay · khách sạn</span>
@@ -3052,7 +3103,7 @@ body{padding-bottom:calc(70px + env(safe-area-inset-bottom,0px))}
         </div>
 
         <div class="rm-stage far">
-          <div class="rm-dot" aria-hidden="true"><small>Chặng</small><big>4</big></div>
+          <div class="rm-dot" aria-hidden="true"><small>Chặng</small><span class="rm-num">4</span></div>
           <div class="rm-card">
             <div class="rm-top">
               <div>
@@ -3210,7 +3261,7 @@ body{padding-bottom:calc(70px + env(safe-area-inset-bottom,0px))}
     <section class="tab-panel active" id="panel-vocab" role="tabpanel" aria-label="Từ vựng">
       <h2 class="sub-h">Từ vựng của bài</h2>
       <p class="sub-p guide-once">Mỗi từ có 2 nút nghe: <b>Nghe thường</b> và <b>Nghe chậm</b>. Nghe xong, bấm <b>Đọc lại</b> và đọc to vào mic — trang web sẽ nghe lại, chỉ ngay từ nào đúng, từ nào sai để bác sửa luôn tại chỗ. Tính năng Đọc lại dùng <b>bộ nghe có sẵn trong Google Chrome</b> — mở trang bằng Chrome là bấm Đọc lại dùng được ngay, không phải tải hay bật thêm gì, chỉ cần có mạng. Học thuộc từ nào, bấm “Đã thuộc” ở từ đó.</p>
-      <div class="rb-steps guide-once" aria-label="Cách luyện nghe và đọc lại">
+      <div class="rb-steps guide-once" role="group" aria-label="Cách luyện nghe và đọc lại">
         <div class="rb-step"><b>Bước 1 · Nghe</b><span>Bấm Nghe thường hoặc Nghe chậm để nghe mẫu thật kỹ.</span></div>
         <div class="rb-step"><b>Bước 2 · Đọc lại</b><span>Bấm nút “Đọc lại” màu cam rồi đọc to vào mic, giống như mẫu vừa nghe.</span></div>
         <div class="rb-step"><b>Bước 3 · Sửa ngay</b><span>Từ đọc đúng sẽ tô xanh kèm dấu ✓, từ sai hoặc thiếu sẽ tô đỏ kèm dấu ✗ — nghe chậm lại và đọc lại ngay tại chỗ.</span></div>
@@ -3244,7 +3295,7 @@ body{padding-bottom:calc(70px + env(safe-area-inset-bottom,0px))}
           <span class="fc-inner" id="fcInner">
             <span class="fc-face fc-front">
               <span class="fc-hint">Ấn vào thẻ để xem nghĩa</span>
-              <img class="fc-img" id="fcImg" alt="" loading="lazy" style="display:none" onerror="this.style.display='none'">
+              <img class="fc-img" id="fcImg" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="" loading="lazy" style="display:none" onerror="this.style.display='none'">
               <span class="fc-word" id="fcWord">…</span>
               <span class="fc-ipa" id="fcIpaFront">…</span>
             </span>
@@ -3570,6 +3621,14 @@ body{padding-bottom:calc(70px + env(safe-area-inset-bottom,0px))}
   </div>
 </div>
 </main>
+
+<div class="upd-banner" id="updBanner" hidden role="status">
+  <p class="upd-text" id="updBannerText"></p>
+  <div class="upd-btns">
+    <button type="button" class="upd-reload" id="updReload">Tải lại</button>
+    <button type="button" class="upd-later" id="updLater">Để sau</button>
+  </div>
+</div>
 
 <nav class="bottom-nav" id="bottomNav" aria-label="Điều hướng chính">
   <div class="bottom-nav-in">
@@ -13375,6 +13434,49 @@ else window.addEventListener("load", scheduleFit);
 setTimeout(scheduleFit, 700);
 try{ renderLessonGrid(); }catch(e){}
 
+
+/* ---------- KD-2411-003 — banner báo bản mới (V56): kiểm tra version.json nền, không tự tải lại, không hiện khi đang ghi âm/chấm ---------- */
+var APP_VERSION = "V56";
+var updDismissed = false, updPending = false;
+function updIsBusy(){
+  try{
+    var cur = (typeof MicSessions !== "undefined") ? MicSessions.get() : null;
+    return !!(cur && (cur.phase === "starting" || cur.phase === "listening" || cur.phase === "recording" || cur.phase === "grading"));
+  }catch(e){ return false; }
+}
+function updShow(text, showReload){
+  updPending = false;
+  var b = document.getElementById("updBanner"); if(!b) return;
+  var t = document.getElementById("updBannerText"); if(t) t.textContent = text;
+  var r = document.getElementById("updReload"); if(r) r.style.display = showReload ? "" : "none";
+  b.hidden = false;
+}
+function updHide(){ var b = document.getElementById("updBanner"); if(b) b.hidden = true; }
+function updCheck(){
+  if(updDismissed) return;
+  fetch("version.json?cb=" + Date.now(), {cache:"no-store"}).then(function(r){ return r.ok ? r.json() : null; }).then(function(j){
+    if(!j || updDismissed) return;
+    if(j.announce && j.announce.text && (!j.announce.until || Date.now() < Date.parse(j.announce.until))){
+      if(updIsBusy()){ updPending = true; return; }
+      updShow(j.announce.text, false); return;
+    }
+    if(j.version && j.version !== APP_VERSION){
+      if(updIsBusy()){ updPending = true; return; }
+      updShow("Trang vừa có bản mới — bác học xong bài này rồi bấm Tải lại để dùng bản mới nhé", true);
+    }
+  }).catch(function(){});
+}
+(function initUpdBanner(){
+  var r = document.getElementById("updReload");
+  if(r) r.addEventListener("click", function(){ location.reload(); });
+  var l = document.getElementById("updLater");
+  if(l) l.addEventListener("click", function(){ updDismissed = true; updPending = false; updHide(); });
+  setInterval(function(){ if(updPending && !updIsBusy()){ updPending = false; updCheck(); } }, 15000);
+  setInterval(updCheck, 600000);
+  document.addEventListener("visibilitychange", function(){ if(!document.hidden) updCheck(); });
+  window.addEventListener("pageshow", function(){ updCheck(); });
+  setTimeout(updCheck, 5000);
+})();
 /* ---------- Khởi tạo phần phát âm (độc lập, lỗi thì bỏ qua) ---------- */
 try{
   pronLoad();
@@ -13472,7 +13574,7 @@ try{
     var b = el("button", "shortcut " + cls); b.type = "button";
     var ic = el("span", "sc-ic"); ic.setAttribute("aria-hidden", "true"); ic.innerHTML = svg;
     b.appendChild(ic);
-    b.appendChild(el("h4", null, title));
+    b.appendChild(el("h3", null, title));
     b.appendChild(el("p", null, desc));
     b.appendChild(el("span", "sc-pill", pill));
     return b;
@@ -13670,50 +13772,7 @@ try{
 })();
 </script>
 
-<!-- V55 NOEL DO — Mẫu 4: đỏ tươi + ông già Noel (lớp chủ đề phủ ngoài; gỡ = xóa comment này + khối style#noel-theme-4 + script#noel-fx-4 ở cuối body) -->
-<style id="noel-theme-4">
-
-/* ===== NOEL THEME — lớp phủ trang trí, xóa khối này + script noel-fx là gỡ hết ===== */
-.hero-panel{ position:relative; background:linear-gradient(160deg,#D92D20,#8F1D14); }
-.hero-img::after{ background:linear-gradient(180deg,rgba(143,29,20,0) 40%,rgba(143,29,20,.5)); }
-#ctaStart{ background:linear-gradient(135deg,#22A355,#15803D); border:2px solid #FFFFFF; color:#F2FFF5; box-shadow:0 8px 20px rgba(21,128,61,.4); }
-.noel-greet{ margin:0 0 12px; font-weight:700; font-size:1.05em; line-height:1.45; color:#FFE9C9; }
-.noel-ribbon{ background:repeating-linear-gradient(45deg,#C62828 0 22px,#B71C1C 22px 44px); color:#FFF7E6; text-align:center; font-weight:700; font-size:17px; line-height:1.5; padding:12px 18px; }
-.noel-host{ position:relative; }
-.lesson-head.noel-host{ padding-top:48px; }
-.noel-lights{ position:absolute; left:0; right:0; top:0; height:36px; z-index:4; pointer-events:none; }
-.noel-lights.small{ height:30px; }
-.noel-lights svg{ position:absolute; left:0; top:0; display:block; }
-.noel-bulb{ position:absolute; width:11px; height:11px; margin-left:-6px; border-radius:50%;
-  background:radial-gradient(circle at 35% 30%, rgba(255,255,255,.95), rgba(255,255,255,0) 46%), var(--c);
-  box-shadow:0 0 14px 4px var(--c);
-  animation:noelTwinkle 1.9s ease-in-out infinite alternate; }
-.noel-bulb::before{ content:""; position:absolute; left:50%; top:-6px; width:5px; height:7px; margin-left:-3px;
-  background:#2F4A38; border-radius:2px 2px 0 0; }
-.noel-lights.small .noel-bulb{ width:9px; height:9px; margin-left:-5px; }
-@keyframes noelTwinkle{ from{ opacity:.5; } to{ opacity:1; } }
-.noel-corner{ position:absolute; top:10px; right:12px; z-index:5; pointer-events:none;
-  filter:drop-shadow(0 3px 6px rgba(0,0,0,.35)); width:98px; height:98px; animation:noelBob 3s ease-in-out infinite alternate; }
-.noel-corner svg{ display:block; width:100%; height:100%; }
-@keyframes noelBob{ from{ transform:translateY(0); } to{ transform:translateY(5px); } }
-.noel-snow{ position:fixed; inset:0; z-index:40; pointer-events:none; overflow:hidden; }
-.noel-flake{ position:absolute; top:-24px; border-radius:50%;
-  background:radial-gradient(circle, #ffffff 35%, rgba(190,212,238,.8) 100%);
-  box-shadow:0 0 5px rgba(255,255,255,.85);
-  animation-name:noelFall; animation-timing-function:linear; animation-iteration-count:infinite; }
-.noel-flake i{ display:block; width:100%; height:100%; border-radius:50%; background:inherit;
-  animation-name:noelSway; animation-timing-function:ease-in-out; animation-iteration-count:infinite; animation-direction:alternate; }
-.noel-flake.glyph{ background:none; box-shadow:none; color:#fff; font-style:normal; line-height:1;
-  text-shadow:0 0 7px rgba(150,190,235,.95), 0 0 2px #fff; border-radius:0; }
-@keyframes noelFall{ to{ transform:translateY(112vh); } }
-@keyframes noelSway{ from{ transform:translateX(-9px); } to{ transform:translateX(9px); } }
-#bottomNav::before{ content:""; position:absolute; left:0; right:0; top:-1px; pointer-events:none; height:8px; background:repeating-linear-gradient(45deg,#E0342B 0 12px,#FFFFFF 12px 24px); }
-.hero-card::before{ content:""; position:absolute; top:0; left:0; right:0; height:9px; border-radius:26px 26px 0 0; background:repeating-linear-gradient(45deg,#E0342B 0 14px,#FFFFFF 14px 28px); pointer-events:none; }.progress-card{ position:relative; }.progress-card::before{ content:""; position:absolute; top:0; left:0; right:0; height:9px; border-radius:26px 26px 0 0; background:repeating-linear-gradient(45deg,#E0342B 0 14px,#FFFFFF 14px 28px); pointer-events:none; }
-@media (prefers-reduced-motion: reduce){
-  .noel-bulb, .noel-flake, .noel-flake i, .noel-corner{ animation:none !important; }
-}
-
-</style>
+<!-- V55 NOEL DO — Mẫu 4: đỏ tươi + ông già Noel (lớp chủ đề phủ ngoài; gỡ = xóa comment này + khối style#noel-theme-4 (đã chuyển lên cuối <head>) + script#noel-fx-4 ở cuối body) -->
 <script id="noel-fx-4">
 
 (function(){
