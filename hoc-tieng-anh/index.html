@@ -3251,15 +3251,15 @@ body{padding-bottom:calc(70px + env(safe-area-inset-bottom,0px))}
     </div>
 
     <div class="tabs" role="tablist" aria-label="Các phần của bài học">
-      <button type="button" class="tab-btn" role="tab" data-tab="vocab" aria-selected="true"><svg class="ic" aria-hidden="true"><use href="#ic-book-open"></use></svg>1 · Từ vựng</button>
-      <button type="button" class="tab-btn" role="tab" data-tab="cards" aria-selected="false"><svg class="ic" aria-hidden="true"><use href="#ic-cards"></use></svg>2 · Thẻ ghi nhớ</button>
-      <button type="button" class="tab-btn" role="tab" data-tab="dialogue" aria-selected="false"><svg class="ic" aria-hidden="true"><use href="#ic-translate"></use></svg>3 · Hội thoại</button>
-      <button type="button" class="tab-btn" role="tab" data-tab="listen" aria-selected="false"><svg class="ic" aria-hidden="true"><use href="#ic-headphones"></use></svg>4 · Luyện nghe</button>
-      <button type="button" class="tab-btn" role="tab" data-tab="speak" aria-selected="false"><svg class="ic" aria-hidden="true"><use href="#ic-microphone"></use></svg>5 · Luyện nói</button>
-      <button type="button" class="tab-btn" role="tab" data-tab="quiz" aria-selected="false"><svg class="ic" aria-hidden="true"><use href="#ic-game-controller"></use></svg>6 · Trò chơi</button>
+      <button type="button" class="tab-btn" role="tab" id="tab-vocab" data-tab="vocab" aria-controls="panel-vocab" aria-selected="true"><svg class="ic" aria-hidden="true"><use href="#ic-book-open"></use></svg>1 · Từ vựng</button>
+      <button type="button" class="tab-btn" role="tab" id="tab-cards" data-tab="cards" aria-controls="panel-cards" aria-selected="false"><svg class="ic" aria-hidden="true"><use href="#ic-cards"></use></svg>2 · Thẻ ghi nhớ</button>
+      <button type="button" class="tab-btn" role="tab" id="tab-dialogue" data-tab="dialogue" aria-controls="panel-dialogue" aria-selected="false"><svg class="ic" aria-hidden="true"><use href="#ic-translate"></use></svg>3 · Hội thoại</button>
+      <button type="button" class="tab-btn" role="tab" id="tab-listen" data-tab="listen" aria-controls="panel-listen" aria-selected="false"><svg class="ic" aria-hidden="true"><use href="#ic-headphones"></use></svg>4 · Luyện nghe</button>
+      <button type="button" class="tab-btn" role="tab" id="tab-speak" data-tab="speak" aria-controls="panel-speak" aria-selected="false"><svg class="ic" aria-hidden="true"><use href="#ic-microphone"></use></svg>5 · Luyện nói</button>
+      <button type="button" class="tab-btn" role="tab" id="tab-quiz" data-tab="quiz" aria-controls="panel-quiz" aria-selected="false"><svg class="ic" aria-hidden="true"><use href="#ic-game-controller"></use></svg>6 · Trò chơi</button>
     </div>
 
-    <section class="tab-panel active" id="panel-vocab" role="tabpanel" aria-label="Từ vựng">
+    <section class="tab-panel active" id="panel-vocab" role="tabpanel" aria-labelledby="tab-vocab" aria-label="Từ vựng">
       <h2 class="sub-h">Từ vựng của bài</h2>
       <p class="sub-p guide-once">Mỗi từ có 2 nút nghe: <b>Nghe thường</b> và <b>Nghe chậm</b>. Nghe xong, bấm <b>Đọc lại</b> và đọc to vào mic — trang web sẽ nghe lại, chỉ ngay từ nào đúng, từ nào sai để bác sửa luôn tại chỗ. Tính năng Đọc lại dùng <b>bộ nghe có sẵn trong Google Chrome</b> — mở trang bằng Chrome là bấm Đọc lại dùng được ngay, không phải tải hay bật thêm gì, chỉ cần có mạng. Học thuộc từ nào, bấm “Đã thuộc” ở từ đó.</p>
       <div class="rb-steps guide-once" role="group" aria-label="Cách luyện nghe và đọc lại">
@@ -3287,7 +3287,7 @@ body{padding-bottom:calc(70px + env(safe-area-inset-bottom,0px))}
       <div class="part-nav"><button type="button" class="btn btn-accent part-next" data-nexttab="cards">Tiếp theo: Lật thẻ ghi nhớ →</button></div>
     </section>
 
-    <section class="tab-panel" id="panel-cards" role="tabpanel" aria-label="Thẻ ghi nhớ">
+    <section class="tab-panel" id="panel-cards" role="tabpanel" aria-labelledby="tab-cards" aria-label="Thẻ ghi nhớ">
       <button type="button" class="part-prev" data-prevtab="vocab"><svg class="ic" aria-hidden="true"><use href="#ic-arrow-left"></use></svg> Phần trước: Từ vựng</button>
       <h2 class="sub-h">Thẻ ghi nhớ — bấm vào thẻ để lật</h2>
       <p class="sub-p guide-once">Nhìn mặt tiếng Anh, thử tự nói nghĩa trước, rồi ấn vào thẻ để lật xem nghĩa. Đang ở mặt sau, ấn vào thẻ lần nữa sẽ sang từ tiếp theo. Đánh dấu “Đã thuộc” hay “Chưa thuộc” để trang web nhớ giúp bác. Khi bác đánh dấu đã thuộc <b>đủ cả 5 từ ngay trong phần thẻ này</b>, trang sẽ ăn mừng rồi <b>tự chuyển sang phần Hội thoại</b> cho bác.</p>
@@ -3321,7 +3321,7 @@ body{padding-bottom:calc(70px + env(safe-area-inset-bottom,0px))}
       <div class="part-nav"><button type="button" class="btn btn-accent part-next" data-nexttab="dialogue">Tiếp theo: Hội thoại →</button></div>
     </section>
 
-    <section class="tab-panel" id="panel-dialogue" role="tabpanel" aria-label="Hội thoại mẫu">
+    <section class="tab-panel" id="panel-dialogue" role="tabpanel" aria-labelledby="tab-dialogue" aria-label="Hội thoại mẫu">
       <button type="button" class="part-prev" data-prevtab="cards"><svg class="ic" aria-hidden="true"><use href="#ic-arrow-left"></use></svg> Phần trước: Thẻ ghi nhớ</button>
       <h2 class="sub-h">Hội thoại mẫu</h2>
       <p class="sub-p guide-once">Mỗi hội thoại có <b>10 câu</b> — mỗi người nói 5 câu, dùng lại các từ vừa học trong bài. Hãy chọn tốc độ nghe ở dưới: mức <b>Thường</b> nghe sát giọng thật nhất; mới đầu chưa quen, bác chuyển sang <b>Chậm</b> rồi tăng dần lên. Khi đã quen, hãy bật chế độ <b>Đóng vai</b>: một phía sẽ bị che đi để bác tự nói phần của mình.</p>
@@ -3342,7 +3342,7 @@ body{padding-bottom:calc(70px + env(safe-area-inset-bottom,0px))}
       <div class="part-nav"><button type="button" class="btn btn-accent part-next" data-nexttab="listen">Tiếp theo: Luyện nghe →</button></div>
     </section>
 
-    <section class="tab-panel" id="panel-listen" role="tabpanel" aria-label="Luyện nghe">
+    <section class="tab-panel" id="panel-listen" role="tabpanel" aria-labelledby="tab-listen" aria-label="Luyện nghe">
       <button type="button" class="part-prev" data-prevtab="dialogue"><svg class="ic" aria-hidden="true"><use href="#ic-arrow-left"></use></svg> Phần trước: Hội thoại</button>
       <h2 class="sub-h">Luyện nghe — nghe rồi chọn đáp án</h2>
       <p class="sub-p guide-once">Phần này luyện tai nghe: trang sẽ <b>đọc một câu</b> nhưng <b>không hiện chữ</b> — bác nghe kỹ rồi chọn đáp án. Bấm nút Nghe nghe lại bao nhiêu lần cũng được, có cả nút <b>Nghe chậm</b>. Trả lời xong, trang mới hiện câu tiếng Anh và nghĩa để bác đối chiếu. Đúng từ <b>4/5 câu</b> là đạt — đạt rồi trang sẽ <b>tự chuyển sang phần Luyện nói</b> cho bác. Chưa đạt thì làm lại thoải mái, không bị phạt gì đâu.</p>
@@ -3350,7 +3350,7 @@ body{padding-bottom:calc(70px + env(safe-area-inset-bottom,0px))}
       <div class="part-nav"><button type="button" class="btn btn-accent part-next" data-nexttab="speak">Tiếp theo: Luyện nói →</button></div>
     </section>
 
-    <section class="tab-panel" id="panel-speak" role="tabpanel" aria-label="Luyện nói">
+    <section class="tab-panel" id="panel-speak" role="tabpanel" aria-labelledby="tab-speak" aria-label="Luyện nói">
       <button type="button" class="part-prev" data-prevtab="listen"><svg class="ic" aria-hidden="true"><use href="#ic-arrow-left"></use></svg> Phần trước: Luyện nghe</button>
       <h2 class="sub-h">Luyện nói theo câu mẫu</h2>
       <p class="sub-p guide-once">Chọn một câu, bấm nút loa để nghe trước, rồi bấm nút mic tròn và đọc to câu đó. Trang web sẽ nghe và cho bác biết đã đúng chưa. <b>Nói đúng một câu, trang sẽ tự chuyển sang câu tiếp theo</b> cho bác luyện tiếp. Tính năng này dùng bộ nghe có sẵn trong <b>Google Chrome</b> (cần có mạng) — mở trang bằng Chrome là dùng được ngay.</p>
@@ -3388,7 +3388,7 @@ body{padding-bottom:calc(70px + env(safe-area-inset-bottom,0px))}
       <div class="part-nav"><button type="button" class="btn btn-accent part-next" data-nexttab="quiz">Tiếp theo: Trò chơi cuối bài →</button></div>
     </section>
 
-    <section class="tab-panel" id="panel-quiz" role="tabpanel" aria-label="Trò chơi cuối bài">
+    <section class="tab-panel" id="panel-quiz" role="tabpanel" aria-labelledby="tab-quiz" aria-label="Trò chơi cuối bài">
       <button type="button" class="part-prev" data-prevtab="speak"><svg class="ic" aria-hidden="true"><use href="#ic-arrow-left"></use></svg> Phần trước: Luyện nói</button>
       <h2 class="sub-h">Trò chơi cuối bài — chơi để hoàn thành bài</h2>
       <!-- Câu giải thích chung của Phần 6, giống hệt mọi bài: chỉ hiện
@@ -13436,8 +13436,8 @@ setTimeout(scheduleFit, 700);
 try{ renderLessonGrid(); }catch(e){}
 
 
-/* ---------- KD-2411-003 — banner báo bản mới (V56): kiểm tra version.json nền, không tự tải lại, không hiện khi đang ghi âm/chấm ---------- */
-var APP_VERSION = "V56";
+/* ---------- KD-2411-003 — banner báo bản mới (V57): kiểm tra version.json nền, không tự tải lại, không hiện khi đang ghi âm/chấm ---------- */
+var APP_VERSION = "V57";
 var updDismissed = false, updPending = false;
 function updIsBusy(){
   try{
