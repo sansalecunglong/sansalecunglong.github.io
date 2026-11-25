@@ -862,7 +862,7 @@ const CONFIG = {
 };
 
 /* === AUTO-DATA-START: khu vực Muse tự cập nhật định kỳ — chỉ sửa trong 2 mốc này === */
-const PAGE_UPDATED = "25/11/2026";   // ← ngày cập nhật dữ liệu gần nhất
+const PAGE_UPDATED = "26/11/2026";   // ← ngày cập nhật dữ liệu gần nhất
 /* API dữ liệu sản phẩm Shopee qua RapidAPI (Long duyệt tối 26/10/2026):
    khóa do Long đăng ký gói miễn phí rồi gắn vào đây; để trống = tính năng tự tra tắt. */
 const RAPIDAPI_KEY = ""; /* TAM TAT 26/10/2026: goi free API v2 chi 5 luot/thang da het; cho Long quyet dinh nang goi hay doi nguon khac */
@@ -873,7 +873,6 @@ const RAPIDAPI_HOST = "shopee-product-scraper2.p.rapidapi.com";
    TUYỆT ĐỐI không ghi mã chữ cụ thể chưa lên sóng. */
 const UPCOMING = [
   { icon: "👑", when: "Mỗi ngày", title: "Shopee VIP & Voucher Xtra back lượt", desc: "Nhả lại theo các khung 0H • 9H • 12H • 15H • 18H • 20H — canh đúng khung giờ, vào app Shopee bấm Lưu ở banner tương ứng." },
-  { icon: "💸", when: "Hôm nay 25/11", title: "Lương Về Sale To — sale ngày lương cuối tháng", desc: "Đợt sale ngày lương đang diễn ra hôm nay 25/11: có mã riêng theo ngày, chỉ dùng trong ngày — canh vào app Shopee lưu mã trong ngày." },
   { icon: "🎄", when: "12/12", title: "Siêu sale 12/12 — sale đôi cuối năm", desc: "Đợt sale đôi cuối năm của Shopee ngày 12/12: mã toàn sàn và deal ngành hàng mở theo khung 0H • 9H • 12H • 15H • 18H • 20H — canh vào app Shopee lưu mã từ đầu ngày." },
 ];
 
@@ -884,68 +883,68 @@ const UPCOMING = [
    mỗi mã phải có mặt trên nguồn tổng hợp (ANM tra mã / noti.sale) trong cửa sổ
    còn hiệu lực; TUYỆT ĐỐI không bịa mã, không bịa số lượt còn. Job nền mỗi giờ
    rà lại: mã nào nguồn không còn liệt kê hoặc đã hết hạn thì gỡ. */
-const VOUCHER_UPDATED = "04:47 25/11/2026";
+const VOUCHER_UPDATED = "05:03 26/11/2026";
 const VOUCHERS = [
-  { code: "161911SWALL3000K4", off: "Giảm 18% tối đa 3500K", cond: "Đơn từ 5000K", fam: "Toàn sàn Shopee", exp: "Hết hạn 30/11/2026", chk: "ANM, 04:47 25/11" },
-  { code: "SVIPDDVMU3011M0C1000", off: "Giảm 25% tối đa 2500K", cond: "Đơn từ 1000K", fam: "Toàn sàn Shopee", exp: "Hết hạn 30/11/2026", chk: "ANM, 04:47 25/11" },
-  { code: "ELPN2TB", off: "Giảm 25% tối đa 2000K", cond: "Đơn từ 0K", fam: "Toàn sàn Shopee", exp: "Hết hạn 30/11/2026", chk: "ANM, 04:47 25/11" },
-  { code: "2511SWALL1500K", off: "Giảm 30% tối đa 1500K", cond: "Đơn từ 5000K", fam: "Toàn sàn Shopee", exp: "Hết hạn 25/11/2026", chk: "ANM, 04:47 25/11" },
-  { code: "23011ELHA100K1", off: "Giảm 25% tối đa 1300K", cond: "Đơn từ 3000K", fam: "Toàn sàn Shopee", exp: "Hết hạn 30/11/2026", chk: "ANM, 04:47 25/11" },
-  { code: "SVIPDDVP111M200C1000", off: "Giảm 25% tối đa 1000K", cond: "Đơn từ 200K", fam: "Toàn sàn Shopee", exp: "Hết hạn 30/11/2026", chk: "ANM, 04:47 25/11" },
-  { code: "161911SWALL1000K", off: "Giảm 18% tối đa 1000K", cond: "Đơn từ 3000K", fam: "Toàn sàn Shopee", exp: "Hết hạn 30/11/2026", chk: "ANM, 04:47 25/11" },
-  { code: "ELPN500B", off: "Giảm 25% tối đa 500K", cond: "Đơn từ 0K", fam: "Toàn sàn Shopee", exp: "Hết hạn 30/11/2026", chk: "ANM, 04:47 25/11" },
-  { code: "126STYLE650FF4", off: "Giảm 26% tối đa 400K", cond: "Đơn từ 650K", fam: "Thời Trang", exp: "Hết hạn 30/11/2026", chk: "ANM, 04:47 25/11" },
-  { code: "VIDEO-1543205259087872", off: "Giảm 25% tối đa 350K", cond: "Đơn từ 100K", fam: "Shopee Video — Shopee Debut", exp: "Hết hạn 30/11/2026", chk: "ANM, 04:47 25/11" },
-  { code: "VIDEO-1546205117321216", off: "Giảm 25% tối đa 200K", cond: "Đơn từ 100K", fam: "Shopee Video — KOL x First To Launch", exp: "Hết hạn 30/11/2026", chk: "ANM, 04:47 25/11" },
-  { code: "VIDEO-1541813832814592", off: "Giảm 20% tối đa 1200K", cond: "Đơn từ 1200K", fam: "Shopee Video — Hàng Quốc Tế", exp: "Hết hạn 30/11/2026", chk: "ANM, 04:47 25/11" }
+  { code: "161911SWALL3000K4", off: "Giảm 18% tối đa 3500K", cond: "Đơn từ 5000K", fam: "Toàn sàn Shopee", exp: "Hết hạn 30/11/2026", chk: "ANM, 05:03 26/11" },
+  { code: "2611SWALL3500K3", off: "Giảm 19% tối đa 3500K", cond: "Đơn từ 5000K", fam: "Toàn sàn Shopee", exp: "Hết hạn 26/11/2026", chk: "ANM, 05:03 26/11" },
+  { code: "SVIPDDVMU3011M0C1000", off: "Giảm 25% tối đa 2500K", cond: "Đơn từ 1000K", fam: "Toàn sàn Shopee", exp: "Hết hạn 30/11/2026", chk: "ANM, 05:03 26/11" },
+  { code: "ELPN2TB", off: "Giảm 25% tối đa 2000K", cond: "Đơn từ 0K", fam: "Toàn sàn Shopee", exp: "Hết hạn 30/11/2026", chk: "ANM, 05:03 26/11" },
+  { code: "23011ELHA100K1", off: "Giảm 25% tối đa 1300K", cond: "Đơn từ 3000K", fam: "Toàn sàn Shopee", exp: "Hết hạn 30/11/2026", chk: "ANM, 05:03 26/11" },
+  { code: "SVIPDDVP111M200C1000", off: "Giảm 25% tối đa 1000K", cond: "Đơn từ 200K", fam: "Toàn sàn Shopee", exp: "Hết hạn 30/11/2026", chk: "ANM, 05:03 26/11" },
+  { code: "161911SWALL1000K", off: "Giảm 18% tối đa 1000K", cond: "Đơn từ 3000K", fam: "Toàn sàn Shopee", exp: "Hết hạn 30/11/2026", chk: "ANM, 05:03 26/11" },
+  { code: "ELPN500B", off: "Giảm 25% tối đa 500K", cond: "Đơn từ 0K", fam: "Toàn sàn Shopee", exp: "Hết hạn 30/11/2026", chk: "ANM, 05:03 26/11" },
+  { code: "126STYLE650FF4", off: "Giảm 26% tối đa 400K", cond: "Đơn từ 650K", fam: "Thời Trang", exp: "Hết hạn 30/11/2026", chk: "ANM, 05:03 26/11" },
+  { code: "VIDEO-1543205259087872", off: "Giảm 25% tối đa 350K", cond: "Đơn từ 100K", fam: "Shopee Video — Shopee Debut", exp: "Hết hạn 30/11/2026", chk: "ANM, 05:03 26/11" },
+  { code: "VIDEO-1546205117321216", off: "Giảm 25% tối đa 200K", cond: "Đơn từ 100K", fam: "Shopee Video — KOL x First To Launch", exp: "Hết hạn 30/11/2026", chk: "ANM, 05:03 26/11" },
+  { code: "VIDEO-1541813832814592", off: "Giảm 20% tối đa 1200K", cond: "Đơn từ 1200K", fam: "Shopee Video — Hàng Quốc Tế", exp: "Hết hạn 30/11/2026", chk: "ANM, 05:03 26/11" }
 ];
 
 const PRODUCTS = [
-  { icon: "🪟", name: "Rèm Cửa Dán Tường Vải Gấm Cao Cấp TMFABRIC", keyword: "rèm cửa dán tường tmfabric", price: "Từ ~58K", img: "https://down-vn.img.susercontent.com/file/66349ebca456ce5029a173f6930aa369", cat: "home", pick: "best" },
+  { icon: "🧴", name: "Tẩy Tế Bào Chết Body Dove Chăm Da Sáng Mịn 280g", keyword: "tẩy tế bào chết body dove 280g", price: "Từ ~182K", img: "https://down-vn.img.susercontent.com/file/vn-11134207-81ztc-mvvox9mjl9twf7", cat: "beauty", pick: "best" },
   { icon: "📱", name: "Giá Đỡ Điện Thoại Từ Tính Kép BlueWow 360° MagSafe", keyword: "giá đỡ điện thoại từ tính bluewow", price: "Từ ~159K", img: "https://down-vn.img.susercontent.com/file/cn-11134207-820l4-mtgkc2a1kuface", cat: "tech", pick: "best" },
-  { icon: "👚", name: "Áo Thun Nữ Ôm Body JUSTDUN B18 Cổ Tròn Tay Ngắn", keyword: "áo thun nữ ôm body justdun b18", price: "Từ ~59K", img: "https://down-vn.img.susercontent.com/file/vn-11134207-81ztc-mq72d0gn4b2818", cat: "fashion", pick: "best" },
+  { icon: "👚", name: "Áo Thun Nữ Phối Cúp Ngực Vạt Chéo Ôm Body BYJANE", keyword: "áo thun nữ phối cúp ngực byjane", price: "Từ ~89K", img: "https://down-vn.img.susercontent.com/file/vn-11134207-81ztc-mu3ponjzptdsa9", cat: "fashion", pick: "best" },
   { icon: "⚡", name: "Máy Massage Xung Điện Sạc Pin 8 Chế Độ Cổ Vai Gáy", keyword: "máy massage xung điện sạc pin 8 chế độ", price: "Từ ~32K", img: "https://down-vn.img.susercontent.com/file/vn-11134207-7r98o-lsurfomhuuv883", cat: "health", pick: "best" },
-  { icon: "🧴", name: "Mặt Nạ Colorkey Luminous B5 Lẻ 1 Miếng 25ml", keyword: "mặt nạ colorkey luminous b5 lẻ 1 miếng", price: "Từ ~10K", img: "https://down-vn.img.susercontent.com/file/vn-11134201-7ras8-manxqtgxuifr45", cat: "beauty", pick: "best" },
-  { icon: "🥄", name: "Muỗng Thìa Ăn Bằng Sứ Họa Tiết Trái Cây Gốm Sứ", keyword: "muỗng thìa sứ họa tiết trái cây", price: "Từ ~13K", img: "https://down-vn.img.susercontent.com/file/vn-11134207-820l4-mgd2w12i8xzfe8", cat: "home", pick: "rated" },
+  { icon: "🏠", name: "Kệ Đa Năng Nhà Bếp Inox 304 Nhựa PP 4 Tầng", keyword: "kệ đa năng nhà bếp inox 304 4 tầng", price: "Từ ~12K", img: "https://down-vn.img.susercontent.com/file/sg-11134253-823pe-mp1vpphf9on696", cat: "home", pick: "best" },
+  { icon: "🪥", name: "Bộ 2 Nhả Kem Đánh Răng Tự Động OENON Kèm Cốc", keyword: "bộ 2 nhả kem đánh răng tự động oenon", price: "Từ ~113K", img: "https://down-vn.img.susercontent.com/file/vn-11134207-81ztc-mmbjz59fgj608c", cat: "home", pick: "rated" },
+  { icon: "👚", name: "Áo Thun Nữ Tay Bồng Viền Chun Nhún Ngực HEIMI", keyword: "áo thun nữ tay bồng heimi", price: "Từ ~60K", img: "https://down-vn.img.susercontent.com/file/vn-11134207-81ztc-mvqyg7x8adqff7", cat: "fashion", pick: "rated" },
   { icon: "📱", name: "Ốp Lưng iPhone Cửa Sổ Tình Yêu Giá Đỡ Giác Hút", keyword: "ốp lưng iphone cửa sổ tình yêu giá đỡ", price: "Từ ~70K", img: "https://down-vn.img.susercontent.com/file/sg-11134201-825ak-ms7xjfe01vyaee", cat: "tech", pick: "rated" },
-  { icon: "💆", name: "Máy Massage NEXPRO Cầm Tay 5 Đầu Cải Tiến", keyword: "máy massage nexpro cầm tay 5 đầu", price: "Từ ~228K", img: "https://down-vn.img.susercontent.com/file/vn-11134207-81ztc-mr8gtou2ksn897", cat: "health", pick: "rated" },
-  { icon: "🧴", name: "Mặt Nạ Dưỡng Da Caryophy Hộp 10 Miếng 22g", keyword: "mặt nạ caryophy hộp 10 miếng", price: "Từ ~309K", img: "https://down-vn.img.susercontent.com/file/vn-11134207-7ras8-m2387seexcij6f", cat: "beauty", pick: "rated" },
-  { icon: "👚", name: "Chân Váy Lửng SUMI Skirt Vải Kaki Kiểu Nhật AREUM", keyword: "chân váy lửng sumi skirt areum", price: "Từ ~269K", img: "https://down-vn.img.susercontent.com/file/vn-11134207-81ztc-mv32azhisa2re5", cat: "fashion", pick: "rated" },
-  { icon: "🏠", name: "Tấm Thảm Nhựa Ghép Trải Sàn Chống Trơn Trượt", keyword: "tấm thảm nhựa ghép trải sàn", price: "Từ ~7K", img: "https://down-vn.img.susercontent.com/file/sg-11134253-7ra1r-mbneo8gfi06dbb", cat: "home", pick: "cheap" },
-  { icon: "🧴", name: "Mặt Nạ Giấy Colorkey Luminous Lẻ 1 Miếng", keyword: "mặt nạ giấy colorkey lẻ 1 miếng", price: "Từ ~12K", img: "https://down-vn.img.susercontent.com/file/vn-11134207-7ras8-mbdm96hsch4j1d", cat: "beauty", pick: "cheap" },
-  { icon: "👚", name: "Áo Thun Ôm Body 2 Dây Hách Dáng D804", keyword: "áo thun ôm body 2 dây d804", price: "Từ ~60K", img: "https://down-vn.img.susercontent.com/file/vn-11134207-81ztc-msnstl91qsju09", cat: "fashion", pick: "cheap" },
+  { icon: "💆", name: "Máy Massage NEXPRO Cầm Tay 5 Đầu Cải Tiến", keyword: "máy massage nexpro cầm tay 5 đầu", price: "Từ ~228K", img: "https://down-vn.img.susercontent.com/file/vn-11134207-81ztc-mtj11r9kkoatc0", cat: "health", pick: "rated" },
+  { icon: "🧴", name: "Nước Cân Bằng Da Caryophy 300ml Portulaca Toner", keyword: "nước cân bằng da caryophy 300ml", price: "Từ ~365K", img: "https://down-vn.img.susercontent.com/file/vn-11134207-81ztc-mm6upk6t90jk43", cat: "beauty", pick: "rated" },
+  { icon: "🏠", name: "Kệ Đựng Gia Vị Dán Tường Không Khoan Đục", keyword: "kệ đựng gia vị dán tường", price: "Từ ~29K", img: "https://down-vn.img.susercontent.com/file/vn-11134207-7r98o-lsti7zp1k98k23", cat: "home", pick: "cheap" },
+  { icon: "🧴", name: "Kem Sâm Thorakao Tái Tạo Da Sáng Khỏe 7g", keyword: "kem sâm thorakao tái tạo da", price: "Từ ~54K", img: "https://down-vn.img.susercontent.com/file/vn-11134207-81ztc-mr86fyy627es0b", cat: "beauty", pick: "cheap" },
+  { icon: "👖", name: "Quần Ống Rộng Nữ Vải Đũi Mát Quảng Châu", keyword: "quần ống rộng nữ vải đũi", price: "Từ ~40K", img: "https://down-vn.img.susercontent.com/file/vn-11134207-7r98o-llk04ussriko3c", cat: "fashion", pick: "cheap" },
   { icon: "📱", name: "Dây Đeo Điện Thoại Thời Trang Chống Rơi Hàn Quốc", keyword: "dây đeo điện thoại thời trang chống rơi", price: "Từ ~51K", img: "https://down-vn.img.susercontent.com/file/vn-11134207-7ra0g-m9zvdxorad1e53", cat: "tech", pick: "cheap" },
-  { icon: "⚡", name: "Máy Massage Xung Điện Mini HAZIMI HZ-D01 8 Chế Độ", keyword: "máy massage xung điện mini hazimi", price: "Từ ~51K", img: "https://down-vn.img.susercontent.com/file/vn-11134207-81ztc-mrkd5br7d5hgc4", cat: "health", pick: "cheap" }
+  { icon: "⚡", name: "Máy Massage Xung Điện 8 Chế Độ Sạc USB Cổ Vai Gáy", keyword: "máy massage xung điện 8 chế độ sạc usb", price: "Từ ~22K", img: "https://down-vn.img.susercontent.com/file/vn-11134207-7r98o-ln5nwug9ldjsdc", cat: "health", pick: "cheap" }
 ];
 
 /* Nhận xét ngắn cho Bảng Xếp Hạng — theo đúng thứ tự của PRODUCTS ở trên
    (bảng xếp hạng lấy TOP 10 món đầu của danh sách Sản Phẩm Hot) */
 const RANK_NOTES = [
-  "Đứng đầu tìm kiếm đồ gia dụng hôm nay — rèm cửa dán tường vải gấm cao cấp TMFABRIC, không cần khoan, đạt 4.9★, giá từ ~58K.",
+  "Đứng đầu tìm kiếm chăm sóc da hôm nay — tẩy tế bào chết body Dove chăm da sáng mịn 280g, đạt 4.9★, giá từ ~182K.",
   "Dẫn đầu tìm kiếm phụ kiện điện thoại hôm nay — giá đỡ điện thoại từ tính kép BlueWow 360°, tương thích MagSafe, đạt 4.9★, giá từ ~159K.",
-  "Dẫn đầu tìm kiếm thời trang nữ hôm nay — áo thun nữ ôm body JUSTDUN B18, cotton mịn co giãn 4 chiều, đạt 4.9★, giá từ ~59K.",
+  "Dẫn đầu tìm kiếm thời trang hôm nay — áo thun nữ phối cúp ngực vạt chéo ôm body BYJANE, chất thun mịn co giãn, đạt 4.9★, giá từ ~89K.",
   "Bán chạy nhất nhóm máy massage hôm nay — máy massage xung điện sạc pin 8 chế độ, massage cổ vai gáy, đạt 4.8★, giá từ ~32K.",
-  "Bán chạy nhất chăm sóc da mặt hôm nay — mặt nạ Colorkey Luminous B5 lẻ 1 miếng 25ml, dưỡng ẩm sáng da, đạt 4.8★, giá từ ~10K.",
-  "Muỗng thìa ăn bằng sứ họa tiết trái cây đạt 4.9★ — gốm sứ dùng trong gia đình, giá từ ~13K.",
+  "Đứng đầu tìm kiếm đồ gia dụng hôm nay — kệ đa năng nhà bếp Inox 304 4 tầng, đạt 4.6★, giá từ ~12K.",
+  "Bộ 2 nhả kem đánh răng tự động OENON đạt 4.9★ — kệ treo bàn chải dán tường kèm cốc, giá từ ~113K.",
+  "Áo thun nữ tay bồng HEIMI đạt 4.9★ — viền chun nhún ngực, chất thun cotton co giãn, giá từ ~60K.",
   "Ốp lưng iPhone cửa sổ tình yêu đạt 4.9★ — giá đỡ gắn bằng giác hút, vỏ TPU cho iPhone 11–18 Pro Max, giá từ ~70K.",
   "Máy massage NEXPRO cầm tay AI cảm biến đạt 4.9★ — cổ vai gáy, động cơ lực đấm sâu, pin khỏe, giá từ ~228K.",
-  "Mặt nạ dưỡng da Caryophy hộp 10 miếng đạt 5.0★ — mặt nạ rau sam dưỡng ẩm, sáng da, giá từ ~309K.",
-  "Chân váy lửng SUMI Skirt vải kaki kiểu Nhật đạt 5.0★ — dáng đơn giản thanh lịch, giá từ ~269K."
+  "Nước cân bằng da Caryophy 300ml đạt 5.0★ — toner rau sam dưỡng ẩm, làm dịu da, giá từ ~365K."
 ];
 
 /* Đồ gia dụng rẻ hữu ích — cùng chuẩn tuyển chọn như Sản Phẩm Hot */
 const HOUSEHOLD = [
-  { icon: "🍽️", name: "Bộ Chén Sứ Đĩa Tô Thố Ly Họa Tiết Dâu Tây", keyword: "bộ chén sứ họa tiết dâu tây", price: "Từ ~19K", img: "https://down-vn.img.susercontent.com/file/vn-11134207-7qukw-lipfabb8hwpec3" },
-  { icon: "🧺", name: "Bộ 2 Thảm Lau Chân Nhà Bếp 3D Chống Trượt", keyword: "bộ 2 thảm lau chân nhà bếp 3d", price: "Từ ~38K", img: "https://down-vn.img.susercontent.com/file/vn-11134207-7r98o-loi9u6k8a8xj7f" },
-  { icon: "🧹", name: "Cây Lăn Bụi Sàn Nhà 24cm-124cm Tiện Dụng", keyword: "cây lăn bụi sàn nhà", price: "Từ ~42K", img: "https://down-vn.img.susercontent.com/file/sg-11134201-7rbkn-lnvjgue3wp80aa" },
+  { icon: "🪥", name: "Giá Đỡ Bàn Chải Đánh Răng Dán Tường Phi Hành Gia", keyword: "giá đỡ bàn chải đánh răng dán tường phi hành gia", price: "Từ ~16K", img: "https://down-vn.img.susercontent.com/file/vn-11134207-81ztc-mn2bq90f0r2dd6" },
+  { icon: "🍽️", name: "Kệ Đựng Đồ Rửa Chén Bát HOMELOVE Có Khay Hứng Nước", keyword: "kệ đựng đồ rửa chén bát homelove", price: "Từ ~31K", img: "https://down-vn.img.susercontent.com/file/vn-11134207-7ras8-m1hvc1ezi7jzae" },
+  { icon: "🏠", name: "Kệ Đựng Đồ Nhà Tắm Dán Tường Thép Sơn Tĩnh Điện", keyword: "kệ đựng đồ nhà tắm dán tường", price: "Từ ~34K", img: "https://down-vn.img.susercontent.com/file/vn-11134207-81ztc-mvlf35vlmakjd2" },
+  { icon: "🧺", name: "Giỏ Treo Tường Đựng Đồ Hành Tỏi Nhựa Mây Đan", keyword: "giỏ treo tường đựng đồ hành tỏi", price: "Từ ~36K", img: "https://down-vn.img.susercontent.com/file/vn-11134207-7ra0g-m8nnwi073hqf32" },
   { icon: "🍽️", name: "Giá Để Bát Khay Úp Bát Nhựa FURNI HOME", keyword: "giá để bát khay úp bát furni home", price: "Từ ~45K", img: "https://down-vn.img.susercontent.com/file/vn-11134207-81ztc-mpulaamk1oul55" },
-  { icon: "🪟", name: "Màn Dán Cửa Sổ FURNI HOME Không Cần Khoan", keyword: "màn dán cửa sổ furni home", price: "Từ ~62K", img: "https://down-vn.img.susercontent.com/file/vn-11134207-81ztc-mqokglz8k1dv18" },
-  { icon: "🪟", name: "Rèm Lưới Chống Muỗi Cửa Sổ Đa Năng", keyword: "rèm lưới chống muỗi cửa sổ", price: "Từ ~65K", img: "https://down-vn.img.susercontent.com/file/vn-11134207-7qukw-lixzj2vdz9huc0" },
-  { icon: "🪟", name: "Rèm Chống Muỗi Cửa Sổ Tự Dính Có Khóa Kéo", keyword: "rèm chống muỗi cửa sổ tự dính", price: "Từ ~96K", img: "https://down-vn.img.susercontent.com/file/fbb57a20bcbcb27b2dc6ff251a677ff2" },
-  { icon: "🪟", name: "Rèm Cửa Dán Treo Tường Chống Nắng 2 Trong 1", keyword: "rèm cửa dán treo tường chống nắng", price: "Từ ~135K", img: "https://down-vn.img.susercontent.com/file/vn-11134207-7ras8-m0hdq4jrqufje5" }
+  { icon: "🍽️", name: "Kệ Đựng Gia Vị 2 Tầng Chữ B Tiết Kiệm Không Gian", keyword: "kệ đựng gia vị 2 tầng chữ b", price: "Từ ~46K", img: "https://down-vn.img.susercontent.com/file/sg-11134253-823py-mp57lgleyej1a7" },
+  { icon: "🍽️", name: "Kệ Để Đồ Rửa Chén HABO Thép Carbon Chống Gỉ", keyword: "kệ để đồ rửa chén habo", price: "Từ ~61K", img: "https://down-vn.img.susercontent.com/file/vn-11134207-7ras8-m1ees8c3uteg03" },
+  { icon: "🧺", name: "Giỏ Mây Nhựa Treo Tường BAMBOOO ECO Đựng Đồ Khô", keyword: "giỏ mây nhựa treo tường bambooo eco", price: "Từ ~64K", img: "https://down-vn.img.susercontent.com/file/vn-11134207-7r98o-lvttfmtobj6jfc" }
 ];
 
-const HOT_KEYWORDS = ["Rèm Cửa Dán Tường TMFABRIC", "Giá Đỡ Điện Thoại BlueWow", "Áo Thun Nữ JUSTDUN B18", "Máy Massage Xung Điện Sạc Pin 8 Chế Độ", "Mặt Nạ Colorkey Luminous B5"];
+const HOT_KEYWORDS = ["Tẩy Tế Bào Chết Body Dove", "Giá Đỡ Điện Thoại BlueWow", "Áo Thun Nữ BYJANE", "Máy Massage Xung Điện Sạc Pin 8 Chế Độ", "Kệ Đa Năng Nhà Bếp Inox 304"];
 
 const CATEGORIES = [
   { icon: "🌀", name: "Quạt cầm tay", keyword: "quạt cầm tay" },
