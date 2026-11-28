@@ -2807,6 +2807,33 @@ body{padding-bottom:calc(70px + env(safe-area-inset-bottom,0px))}
 }
 
 </style>
+<style id="nini-css-v58">
+/* V58 KD-2811-001 — khối Trợ lý giáo viên Nini (giai đoạn 1).
+   Bố cục theo mẫu anh duyệt 28/11: thẻ bo góc lớn, một thẻ một việc,
+   chữ/nút thật to rõ, 1 nút hành động chính nổi bật mỗi thẻ,
+   tiến độ dạng phân số x/y. Giữ nguyên hệ màu trang + Noel. */
+.nini-card{padding:26px;border-radius:26px}
+.nini-head{display:flex;gap:16px;align-items:flex-start}
+.nini-avatar{flex:0 0 auto;width:64px;height:64px;border-radius:50%;background:linear-gradient(150deg,#d92d20,#8f1d14);color:#fff;font-size:32px;font-weight:800;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 14px rgba(0,0,0,.18)}
+.nini-head h2{margin:0 0 8px;font-size:28px;line-height:1.25}
+.nini-head p{margin:0;color:var(--muted);font-weight:600;line-height:1.55;font-size:17px}
+.nini-btns{display:flex;flex-direction:column;gap:12px;margin-top:20px}
+.nini-btns .btn{min-height:58px;font-size:19px;border-radius:16px;width:100%}
+.nini-note{margin:14px 0 0;font-weight:700;color:#8f1d14;font-size:17px}
+#viewNini .panel{border-radius:26px;padding:26px}
+#viewNini .panel h3{font-size:24px;margin-top:0}
+#niniGenBtn,#niniReflexStart{min-height:58px;font-size:19px;border-radius:16px;width:100%}
+#niniSubmit{min-height:54px;font-size:18px;border-radius:14px}
+.nini-q{font-size:24px;font-weight:800;line-height:1.4}
+.nini-qvi{color:var(--muted);font-weight:600;font-size:17px}
+.nini-timer{font-size:26px;font-weight:800;margin:14px 0;color:#8f1d14}
+.nini-stage{margin-top:16px}
+.nini-prog{font-size:19px;font-weight:800}
+.nini-rate-row{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:12px 0;font-size:17px}
+.nini-rate-row .q-opt.selected{background:#8f1d14;color:#fff;border-color:#8f1d14}
+.nini-mix{font-weight:700;margin:12px 0;font-size:17px;line-height:1.5}
+#niniRText{font-size:18px}
+</style>
 </head>
 <body>
 <!-- V38 ICON PHOSPHOR: sprite Phosphor Duotone (32 symbol, fill=currentColor) -->
@@ -2992,6 +3019,25 @@ body{padding-bottom:calc(70px + env(safe-area-inset-bottom,0px))}
           <p class="panel-sub">Những từ bác chưa đánh dấu “Đã thuộc”. Bấm nghe và đọc theo nhé.</p>
           <div class="review-list" id="reviewList"></div>
         </div>
+      </div>
+    </div>
+  </section>
+
+    <section class="block" id="niniHomeSection" aria-labelledby="niniHomeTitle" style="padding-top:6px">
+    <div class="wrap">
+      <div class="nini-card txt-card">
+        <div class="nini-head">
+          <span class="nini-avatar" aria-hidden="true">N</span>
+          <div>
+            <h2 id="niniHomeTitle">Trợ lý giáo viên Nini</h2>
+            <p>Nini là cô giáo nhỏ ngay trong trang, luôn ở đây cùng bác. Nini soạn <b>bài kiểm tra vừa đúng sức bác</b> từ những bài đã học, và <b>luyện phản xạ giao tiếp</b>: Nini hỏi, bác trả lời ngay bằng tiếng Anh. Mọi thứ chạy ngay trên máy của bác, không tốn tiền, không gửi ghi âm đi đâu cả.</p>
+          </div>
+        </div>
+        <div class="nini-btns">
+          <button type="button" class="btn btn-primary" id="niniGoTest">Làm bài kiểm tra theo năng lực</button>
+          <button type="button" class="btn btn-accent" id="niniGoReflex">Luyện phản xạ cùng Nini</button>
+        </div>
+        <p class="nini-note" id="niniHomeNote"></p>
       </div>
     </div>
   </section>
@@ -3543,6 +3589,55 @@ body{padding-bottom:calc(70px + env(safe-area-inset-bottom,0px))}
     </div>
     <div id="cgWrap" style="margin-top:16px"></div>
     <div class="quiz-result" id="cgResult" role="status"></div>
+  </div>
+</div>
+
+<!-- ================= NINI VIEW (V58 KD-2811-001) ================= -->
+<div class="view" id="viewNini">
+  <div class="wrap">
+    <div class="lesson-head txt-card">
+      <button type="button" class="btn btn-ghost btn-sm" data-backhome>Quay lại trang chính</button>
+      <h2>Trợ lý giáo viên Nini</h2>
+      <div class="lesson-goal">Nini chào bác! Ở đây có hai việc Nini giúp bác: làm bài kiểm tra soạn riêng theo sức học của bác, và luyện phản xạ — Nini hỏi, bác đáp ngay. Cứ thong thả, sai thì Nini đưa vào mục ôn lại, không có gì phải ngại.</div>
+    </div>
+    <div class="panel" id="niniTestPanel" style="margin-top:16px">
+      <h3>Bài kiểm tra theo năng lực</h3>
+      <p class="panel-sub" id="niniLevelInfo">Nini đang xem lại tiến độ của bác…</p>
+      <button type="button" class="btn btn-primary" id="niniGenBtn">Tạo bài kiểm tra mới (10 câu)</button>
+      <p class="nini-mix" id="niniMixInfo"></p>
+      <div id="niniQuizWrap" style="margin-top:10px"></div>
+      <div style="display:flex; gap:12px; flex-wrap:wrap; margin-top:12px">
+        <button type="button" class="btn btn-primary" id="niniSubmit" style="display:none">Chấm bài</button>
+      </div>
+      <div class="quiz-result" id="niniResult" role="status"></div>
+    </div>
+    <div class="panel" id="niniReflexPanel" style="margin-top:16px">
+      <h3>Luyện phản xạ giao tiếp</h3>
+      <p class="panel-sub">Nini đọc một câu hỏi trong hội thoại đã học, bác trả lời ngay bằng tiếng Anh. Nini tính giờ thật từ lúc hỏi xong tới lúc bác đáp, và chấm bằng đúng bộ chấm của trang. Mỗi lượt 5 câu, mỗi câu tối đa 20 giây.</p>
+      <div class="nini-rate-row">
+        <span style="font-weight:700">Tốc độ Nini hỏi:</span>
+        <button type="button" class="q-opt selected" data-nini-rate="1">Thường</button>
+        <button type="button" class="q-opt" data-nini-rate="0.5">Chậm</button>
+      </div>
+      <button type="button" class="btn btn-accent" id="niniReflexStart">Bắt đầu luyện phản xạ (5 câu)</button>
+      <div class="nini-stage" id="niniReflexStage" style="display:none">
+        <p class="nini-prog" id="niniRProg"></p>
+        <p class="nini-q" id="niniRQ"></p>
+        <p class="nini-qvi" id="niniRQVi"></p>
+        <p class="nini-timer" id="niniRTimer">Thời gian đáp: 0,0 giây</p>
+        <p id="niniRNote" style="font-weight:600"></p>
+        <div style="display:flex; gap:10px; flex-wrap:wrap; margin:10px 0">
+          <button type="button" class="btn btn-primary" id="niniRMic">Nói câu trả lời</button>
+          <button type="button" class="btn btn-ghost" id="niniRSkip">Bỏ qua câu này</button>
+        </div>
+        <div style="display:flex; gap:10px; flex-wrap:wrap; margin:10px 0">
+          <input type="text" id="niniRText" placeholder="Hoặc gõ câu trả lời vào đây…" style="flex:1; min-width:220px; padding:12px; font-size:18px; border-radius:10px; border:2px solid #ccc" autocomplete="off">
+          <button type="button" class="btn btn-soft" id="niniRAnswer">Trả lời</button>
+        </div>
+        <p id="niniRHeard" style="font-weight:600"></p>
+        <div class="feedback" id="niniRFeedback" role="status"></div>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -4358,7 +4453,7 @@ var TOTAL_QUIZ = [
 
 /* ================= STATE (localStorage) ================= */
 var STORE_KEY = "tieng-anh-nguoi-moi-v1";
-var state = { learned:{}, completed:{}, quizBest:{}, streak:0, lastDay:"", totalBest:0, practice:{}, gatePassed:{}, gameBest:{}, gameWrong:{}, __v:2 };
+var state = { learned:{}, completed:{}, quizBest:{}, streak:0, lastDay:"", totalBest:0, practice:{}, gatePassed:{}, gameBest:{}, gameWrong:{}, nini:{lastTest:null, reflex:[]}, __v:2 };
 function loadState(){
   try{
     var raw = localStorage.getItem(STORE_KEY);
@@ -4374,6 +4469,7 @@ function loadState(){
       if(!state.gatePassed) state.gatePassed = {};
       if(!state.gameBest) state.gameBest = {};
       if(!state.gameWrong) state.gameWrong = {};
+      if(!state.nini) state.nini = {lastTest:null, reflex:[]};
       if(!state.completed) state.completed = {};
     }}
   }catch(e){}
@@ -5311,7 +5407,7 @@ function showView(id){
   MicSessions.cancelCurrent(); stopGameTimer();
   if(typeof stopChGame === "function") stopChGame();
   if(typeof closeFsPanel === "function") closeFsPanel(false);
-  ["viewHome","viewLesson","viewTotal","viewGate","viewPron","viewChGame","viewReview","viewSettings"].forEach(function(v){
+  ["viewHome","viewLesson","viewTotal","viewGate","viewPron","viewChGame","viewReview","viewSettings","viewNini"].forEach(function(v){
     document.getElementById(v).classList.toggle("active", v===id);
   });
   /* V43 BO HEADER CAI DAT TOAN MAN HINH: không còn header để ẩn/hiện nữa. */
@@ -13436,13 +13532,13 @@ setTimeout(scheduleFit, 700);
 try{ renderLessonGrid(); }catch(e){}
 
 
-/* ---------- KD-2411-003 — banner báo bản mới (V57): kiểm tra version.json nền, không tự tải lại, không hiện khi đang ghi âm/chấm ---------- */
-var APP_VERSION = "V57";
+/* ---------- KD-2411-003 — banner báo bản mới (V58): kiểm tra version.json nền, không tự tải lại, không hiện khi đang ghi âm/chấm ---------- */
+var APP_VERSION = "V58";
 var updDismissed = false, updPending = false;
 function updIsBusy(){
   try{
     var cur = (typeof MicSessions !== "undefined") ? MicSessions.get() : null;
-    return !!(cur && (cur.phase === "starting" || cur.phase === "listening" || cur.phase === "recording" || cur.phase === "grading"));
+    return !!(cur && (cur.phase === "starting" || cur.phase === "listening" || cur.phase === "recording" || cur.phase === "grading")) || !!window.__niniBusy;
   }catch(e){ return false; }
 }
 function updShow(text, showReload){
@@ -13867,6 +13963,309 @@ if(document.readyState !== "loading") init();
 else document.addEventListener("DOMContentLoaded", init);
 })();
 
+</script>
+<script>
+/* ============================================================
+   V58 — KD-2811-001: TRỢ LÝ GIÁO VIÊN NINI, GIAI ĐOẠN 1
+   (a) Bài kiểm tra theo năng lực: sinh đề từ ngân hàng sẵn có
+       của 60 bài (từ vựng + cụm câu), thích ứng theo tiến độ,
+       điểm kiểm tra gần nhất và số lần sai (state.gameWrong).
+       Câu sai → recordWrong() → tự vào hàng "Ôn lại hôm nay".
+   (b) Luyện phản xạ: Nini đọc câu hỏi (SpeechSynthesis, 2 tốc
+       độ), người học đáp bằng mic (nhận giọng nói của trình
+       duyệt) hoặc gõ chữ khi máy không có mic nghe; chấm bằng
+       gradeV51 sẵn có của trang; đo thời gian đáp THẬT từ lúc
+       câu hỏi đọc xong tới lúc có câu trả lời được chấm.
+   Không gửi dữ liệu ra ngoài; mọi thứ chạy ngay trên máy.
+   ============================================================ */
+(function(){
+  "use strict";
+  if(typeof LESSONS === "undefined" || typeof gradeV51 !== "function") return;
+  function $(id){ return document.getElementById(id); }
+  function niniStore(){
+    if(!state.nini || typeof state.nini !== "object") state.nini = { lastTest:null, reflex:[] };
+    if(!Array.isArray(state.nini.reflex)) state.nini.reflex = [];
+    return state.nini;
+  }
+  function lessonOf(id){ return LESSONS.filter(function(L){ return L.id===id; })[0] || null; }
+  function frontierId(){
+    var nx = LESSONS.filter(function(L){ return !state.completed[L.id]; })[0];
+    return nx ? nx.id : 60;
+  }
+  function vocabOfLessons(list){
+    var out = [];
+    list.forEach(function(L){ L.vocab.forEach(function(v){ out.push({en:v.en, vi:v.vi, lesson:L.id, ch:L.ch, n:L.n, title:L.title}); }); });
+    return out;
+  }
+  /* ---------- (a) KIỂM TRA THEO NĂNG LỰC ---------- */
+  function niniAbility(){
+    var done = completedCount();
+    var ratio = done / LESSONS.length;
+    var lt = niniStore().lastTest;
+    var lastPct = lt ? lt.pct : null;
+    var base = (lastPct !== null) ? (0.5*ratio + 0.5*lastPct) : ratio;
+    var level = base < 0.34 ? 1 : (base < 0.67 ? 2 : 3);
+    return { done:done, ratio:ratio, lastPct:lastPct, base:base, level:level };
+  }
+  function mkMcq(v, pool, kind){
+    var others = shuffle(pool.filter(function(x){ return x.en !== v.en; })).slice(0,3);
+    var tag = "Nini · Nguồn: Chương " + v.ch + " · Bài " + v.n + " — " + v.title;
+    if(kind === "listen"){
+      var optsL = shuffle([v.en].concat(others.map(function(o){ return o.en; })));
+      return { type:"listen", tag:tag, q:"Bấm nút nghe, rồi chọn từ bác vừa nghe được:", listen:v.en, opts:optsL, answer:optsL.indexOf(v.en), explain:"Từ vừa đọc là “" + v.en + "” — " + v.vi + ".", _vocabEn:v.en, _srcLesson:v.lesson };
+    }
+    var opts = shuffle([v.vi].concat(others.map(function(o){ return o.vi; })));
+    return { type:"mcq", tag:tag, q:"“" + v.en + "” nghĩa là gì?", opts:opts, answer:opts.indexOf(v.vi), explain:"“" + v.en + "” = " + v.vi + ".", _vocabEn:v.en, _srcLesson:v.lesson };
+  }
+  function mkOrder(L){
+    var cands = L.phrases.filter(function(p){ var w = p.en.replace(/[.!?]/g,"").split(/\s+/).filter(Boolean); return w.length >= 3 && w.length <= 7; });
+    if(!cands.length) return null;
+    var ph = cands[Math.floor(Math.random()*cands.length)];
+    var words = ph.en.replace(/[.!?]/g,"").split(/\s+/).filter(Boolean);
+    return { type:"order", tag:"Nini · Nguồn: Chương " + L.ch + " · Bài " + L.n + " — " + L.title, q:"Sắp xếp thành câu “" + ph.vi + "”:", words:words, sentence:words.join(" "), explain:"Câu đúng: “" + ph.en + "” — " + ph.vi + ".", _srcLesson:L.id };
+  }
+  var NINI_MIX = { 1:{weak:5, mcq:3, listen:2, order:0}, 2:{weak:4, mcq:3, listen:2, order:1}, 3:{weak:2, mcq:3, listen:2, order:3} };
+  var niniQuestions = [];
+  function niniGenerate(){
+    var ab = niniAbility();
+    var mix = NINI_MIX[ab.level];
+    var fLesson = lessonOf(frontierId()) || LESSONS[0];
+    var unlocked = LESSONS.filter(function(L){ return state.completed[L.id] || L.ch <= fLesson.ch; });
+    var unlockedVocab = vocabOfLessons(unlocked);
+    var gw = state.gameWrong || {};
+    var weak = unlockedVocab.filter(function(v){ return (gw[v.en]||0) > 0 || !isLearned(v.en); });
+    weak.sort(function(a,b){ return (gw[b.en]||0) - (gw[a.en]||0); });
+    var used = {}, qs = [], counts = {weak:0, mcq:0, listen:0, order:0};
+    function takeVocab(list){
+      for(var i=0;i<list.length;i++){ if(!used[list[i].en]){ used[list[i].en]=1; return list[i]; } }
+      return null;
+    }
+    var i, v;
+    var weakShuffled = shuffle(weak.slice(0, Math.max(mix.weak*2, mix.weak)));
+    for(i=0;i<mix.weak;i++){ v = takeVocab(weakShuffled); if(v){ qs.push(mkMcq(v, unlockedVocab, "mcq")); counts.weak++; } }
+    var rest = shuffle(unlockedVocab.slice());
+    for(i=0;i<mix.mcq;i++){ v = takeVocab(rest); if(v){ qs.push(mkMcq(v, unlockedVocab, "mcq")); counts.mcq++; } }
+    for(i=0;i<mix.listen;i++){ v = takeVocab(rest); if(v){ qs.push(mkMcq(v, unlockedVocab, "listen")); counts.listen++; } }
+    var orderLessons = shuffle(unlocked.slice());
+    for(i=0;i<mix.order;i++){ var q = null; for(var k=0;k<orderLessons.length && !q;k++){ q = mkOrder(orderLessons[k]); } if(q){ qs.push(q); counts.order++; } }
+    /* Thiếu câu (dữ liệu quá ít) → bù bằng trắc nghiệm từ toàn bộ từ vựng đã mở */
+    while(qs.length < 10){ v = takeVocab(rest) || takeVocab(shuffle(allVocab().map(function(x){ return {en:x.en, vi:x.vi, lesson:x.lesson, ch:(lessonOf(x.lesson)||{}).ch||1, n:(lessonOf(x.lesson)||{}).n||1, title:x.lessonTitle}; }))); if(!v) break; qs.push(mkMcq(v, unlockedVocab.length>3?unlockedVocab:allVocab(), "mcq")); counts.mcq++; }
+    niniQuestions = shuffle(qs);
+    window.__niniLastMix = { level:ab.level, base:Math.round(ab.base*100)/100, counts:counts, total:niniQuestions.length, srcLessons:niniQuestions.map(function(x){ return x._srcLesson; }) };
+    return { ab:ab, counts:counts };
+  }
+  function niniLevelText(){
+    var ab = niniAbility(), el = $("niniLevelInfo");
+    if(el){
+      var s = "Nini đang biết về bác: đã học xong " + ab.done + "/60 bài";
+      if(ab.lastPct !== null) s += "; bài kiểm tra Nini gần nhất đạt " + Math.round(ab.lastPct*100) + "%";
+      s += ". Đề lần này ở mức " + ab.level + "/3 — " + (ab.level===1 ? "ôn nền nhẹ nhàng, nhiều câu ôn phần chưa thuộc." : ab.level===2 ? "vừa sức, có thêm câu nghe và sắp xếp câu." : "nâng cao, nhiều câu sắp xếp và câu ở các bài sau.");
+      el.textContent = s;
+    }
+    var hn = $("niniHomeNote");
+    if(hn && niniStore().lastTest){ hn.textContent = "Lần kiểm tra Nini gần nhất: " + niniStore().lastTest.score + "/" + niniStore().lastTest.total + " câu đúng. Nini sẽ soạn đề vừa sức bác."; }
+  }
+  var niniGenBtn = $("niniGenBtn");
+  if(niniGenBtn) niniGenBtn.addEventListener("click", function(){
+    var info = niniGenerate();
+    buildQuiz(niniQuestions, $("niniQuizWrap"));
+    $("niniSubmit").style.display = "inline-flex";
+    var res = $("niniResult"); res.className = "quiz-result"; res.innerHTML = "";
+    var c = info.counts;
+    $("niniMixInfo").textContent = "Đề mức " + info.ab.level + "/3 gồm " + niniQuestions.length + " câu: " + (c.weak+c.mcq) + " câu chọn nghĩa (" + c.weak + " câu ôn phần bác hay sai/chưa thuộc), " + c.listen + " câu nghe, " + c.order + " câu sắp xếp. Mỗi câu đều ghi rõ nguồn bài ở dòng trên cùng.";
+    $("niniQuizWrap").scrollIntoView({behavior:"smooth", block:"start"});
+  });
+  var niniSubmit = $("niniSubmit");
+  if(niniSubmit) niniSubmit.addEventListener("click", function(){
+    if(!niniQuestions.length) return;
+    var wrap = $("niniQuizWrap");
+    var res = gradeQuiz(niniQuestions, wrap);
+    var resEl = $("niniResult");
+    if(!res.answeredAll){
+      resEl.className = "quiz-result";
+      resEl.textContent = "Bác trả lời hết các câu rồi bấm “Chấm bài” lại nhé — còn câu chưa trả lời.";
+      return;
+    }
+    var wrongWords = [];
+    niniQuestions.forEach(function(q, qi){
+      var box = wrap.querySelector('[data-q="' + qi + '"]'); if(!box) return;
+      var correct = false;
+      if(q.type === "order"){
+        var built = Array.prototype.map.call(box.querySelectorAll("[data-placed]"), function(p){ return p.getAttribute("data-placed"); }).join(" ");
+        correct = normalize(built) === normalize(q.sentence);
+      } else {
+        var sel = box.querySelector(".q-opt.selected");
+        correct = !!sel && parseInt(sel.getAttribute("data-opt"),10) === q.answer;
+      }
+      if(!correct && q._vocabEn){ recordWrong(q._vocabEn); wrongWords.push(q._vocabEn); }
+    });
+    var st = niniStore();
+    st.lastTest = { score:res.score, total:niniQuestions.length, pct:res.score/niniQuestions.length, date:todayStr() };
+    saveState();
+    if(typeof renderReview === "function") renderReview();
+    resEl.className = "quiz-result show";
+    var msg = "Bác làm đúng " + res.score + "/" + niniQuestions.length + " câu. ";
+    if(wrongWords.length) msg += "Các từ bác sai (" + wrongWords.join(", ") + ") đã được Nini đưa vào mục “Ôn lại hôm nay” ở trang chính để bác ôn lại. ";
+    msg += res.score >= 8 ? "Giỏi lắm! Đề lần sau Nini sẽ nâng mức khó lên một chút." : res.score >= 5 ? "Tốt rồi — đề lần sau Nini giữ mức vừa sức và ôn thêm phần bác hay sai." : "Không sao cả — đề lần sau Nini sẽ soạn nhẹ hơn và ôn đúng phần bác chưa thuộc.";
+    resEl.textContent = msg;
+    niniLevelText();
+  });
+  /* ---------- (b) LUYỆN PHẢN XẠ ---------- */
+  var RF = { pairs:[], idx:0, rate:1, t0:0, timer:null, recog:null, done:false, results:[], active:false };
+  window.__niniReflex = RF;
+  function rfPairs(){
+    var doneLessons = LESSONS.filter(function(L){ return state.completed[L.id]; });
+    var src = doneLessons.length ? doneLessons : [LESSONS[0]];
+    var out = [];
+    src.forEach(function(L){
+      for(var i=0;i+1<L.dialogue.length;i++){
+        var a = L.dialogue[i], b = L.dialogue[i+1];
+        if(a.who !== b.who) out.push({ q:a.en, qvi:a.vi, a:b.en, avi:b.vi, src:"Chương " + L.ch + " · Bài " + L.n + " — " + L.title });
+      }
+    });
+    return out;
+  }
+  function rfSpeak(text, cb){
+    var fired = false;
+    function go(){ if(!fired){ fired = true; cb(); } }
+    try{
+      var synth = window.speechSynthesis;
+      if(!synth){ setTimeout(go, 600); return; }
+      synth.cancel();
+      var u = new SpeechSynthesisUtterance(text);
+      u.lang = "en-US"; u.rate = RF.rate;
+      try{ var vs = synth.getVoices() || []; for(var i=0;i<vs.length;i++){ if(/^en[-_]/i.test(vs[i].lang)){ u.voice = vs[i]; break; } } }catch(e){}
+      u.onend = function(){ setTimeout(go, 150); };
+      u.onerror = function(){ setTimeout(go, 300); };
+      synth.speak(u);
+      setTimeout(go, 6000); /* canh: máy không phát được tiếng thì vẫn bắt đầu tính giờ */
+    }catch(e){ setTimeout(go, 600); }
+  }
+  function rfSetBusy(b){ window.__niniBusy = b; RF.active = b; }
+  function rfStopTimer(){ if(RF.timer){ clearInterval(RF.timer); RF.timer = null; } }
+  function rfShowTimer(ms, remain){
+    var t = $("niniRTimer"); if(!t) return;
+    t.textContent = "Thời gian đáp: " + (ms/1000).toFixed(1).replace(".", ",") + " giây · Còn tối đa " + Math.max(0, Math.ceil(remain)) + " giây";
+  }
+  function rfNext(){
+    RF.done = false;
+    if(RF.idx >= RF.pairs.length){ rfFinish(); return; }
+    var p = RF.pairs[RF.idx];
+    $("niniRProg").textContent = "Câu " + (RF.idx+1) + "/" + RF.pairs.length + " · " + p.src;
+    $("niniRQ").textContent = "Nini hỏi: “" + p.q + "”";
+    $("niniRQVi").textContent = "Gợi ý nghĩa câu hỏi: " + p.qvi;
+    $("niniRHeard").textContent = "";
+    $("niniRFeedback").classList.add("show"); $("niniRFeedback").textContent = "Bác nghe Nini hỏi, rồi trả lời ngay bằng tiếng Anh nhé.";
+    $("niniRText").value = "";
+    rfShowTimer(0, 20);
+    rfSetBusy(true);
+    rfSpeak(p.q, function(){
+      RF.t0 = performance.now();
+      rfStopTimer();
+      RF.timer = setInterval(function(){
+        var ms = performance.now() - RF.t0;
+        rfShowTimer(ms, 20 - ms/1000);
+        if(ms >= 20000){ rfAnswer(null, true); }
+      }, 100);
+      rfStartSR();
+    });
+  }
+  function rfStartSR(){
+    var SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+    var note = $("niniRNote");
+    if(!SR){ if(note) note.textContent = "Máy này không có nhận giọng nói — bác gõ câu trả lời vào ô dưới rồi bấm “Trả lời”, Nini vẫn chấm thật bằng bộ chấm của trang."; return; }
+    try{
+      var r = new SR(); RF.recog = r;
+      r.lang = "en-US"; r.interimResults = false; r.maxAlternatives = 1;
+      r.onresult = function(ev){
+        var txt = ev.results[0][0].transcript || "";
+        rfAnswer(txt, false);
+      };
+      r.onerror = function(){
+        if(note) note.textContent = "Nini chưa nghe rõ qua mic — bác gõ câu trả lời vào ô dưới rồi bấm “Trả lời” nhé.";
+      };
+      r.start();
+    }catch(e){ if(note) note.textContent = "Chưa mở được mic — bác gõ câu trả lời vào ô dưới rồi bấm “Trả lời” nhé."; }
+  }
+  function rfAnswer(said, timeout){
+    if(RF.done || !RF.active) return;
+    RF.done = true;
+    rfStopTimer();
+    try{ if(RF.recog) RF.recog.stop(); }catch(e){}
+    var ms = RF.t0 ? (performance.now() - RF.t0) : 0;
+    var p = RF.pairs[RF.idx];
+    var fb = $("niniRFeedback"), heard = $("niniRHeard"); fb.classList.add("show");
+    if(timeout || !said){
+      fb.textContent = "Hết giờ cho câu này — không sao, mình qua câu tiếp nhé. Câu trả lời mẫu: “" + p.a + "” (" + p.avi + ").";
+      RF.results.push({ ms:null, pass:false, timeout:true });
+    } else {
+      heard.textContent = "Trang web nghe được: “" + said + "”";
+      var g = gradeV51(p.a, said, false);
+      var pass = !!g.pass;
+      if(pass){
+        fb.textContent = "Đúng rồi! Bác đáp trong " + (ms/1000).toFixed(1).replace(".", ",") + " giây. " + "Câu mẫu: “" + p.a + "” (" + p.avi + ").";
+      } else {
+        fb.textContent = "Gần được rồi. Câu đúng là: “" + p.a + "” (" + p.avi + ")." + (g.wrong && g.wrong.length ? " Từ cần chú ý: " + g.wrong.join(", ") + "." : "");
+        var av = allVocab();
+        (g.wrong||[]).forEach(function(w){
+          av.forEach(function(v){ if(v.en.toLowerCase() === String(w).toLowerCase()) recordWrong(v.en); });
+        });
+      }
+      RF.results.push({ ms:Math.round(ms), pass:pass, timeout:false });
+      RF.lastMs = Math.round(ms); RF.lastPass = pass;
+    }
+    rfSetBusy(false);
+    RF.idx++;
+    setTimeout(rfNext, 1600);
+  }
+  function rfFinish(){
+    rfSetBusy(false);
+    var ans = RF.results.filter(function(r){ return !r.timeout; });
+    var passed = RF.results.filter(function(r){ return r.pass; }).length;
+    var avg = ans.length ? Math.round(ans.reduce(function(s2,r){ return s2 + r.ms; }, 0) / ans.length) : null;
+    var st = niniStore();
+    st.reflex.push({ date:todayStr(), passed:passed, total:RF.pairs.length, avgMs:avg });
+    if(st.reflex.length > 10) st.reflex = st.reflex.slice(-10);
+    saveState();
+    $("niniRProg").textContent = "Đã luyện xong " + RF.pairs.length + " câu.";
+    $("niniRFeedback").classList.add("show"); $("niniRFeedback").textContent = "Kết quả phản xạ: đúng " + passed + "/" + RF.pairs.length + " câu" + (avg !== null ? ", thời gian đáp trung bình " + (avg/1000).toFixed(1).replace(".", ",") + " giây/câu (đo thật từ lúc Nini hỏi xong)." : ".") + " Bác bấm “Bắt đầu luyện phản xạ” để luyện lượt mới nhé.";
+    RF.active = false;
+  }
+  var rfStartBtn = $("niniReflexStart");
+  if(rfStartBtn) rfStartBtn.addEventListener("click", function(){
+    var pool = rfPairs();
+    if(!pool.length){ $("niniRFeedback").classList.add("show"); $("niniRFeedback").textContent = "Chưa có câu hội thoại nào để luyện — bác học Bài 1 trước nhé."; return; }
+    RF.pairs = shuffle(pool.slice()).slice(0,5);
+    RF.idx = 0; RF.results = [];
+    $("niniReflexStage").style.display = "";
+    rfNext();
+  });
+  var rfMicBtn = $("niniRMic");
+  if(rfMicBtn) rfMicBtn.addEventListener("click", function(){ rfStartSR(); $("niniRFeedback").classList.add("show"); $("niniRFeedback").textContent = "Nini đang nghe — bác nói câu trả lời nhé."; });
+  var rfAnsBtn = $("niniRAnswer");
+  if(rfAnsBtn) rfAnsBtn.addEventListener("click", function(){
+    var v = $("niniRText").value.trim();
+    if(v) rfAnswer(v, false);
+  });
+  var rfSkipBtn = $("niniRSkip");
+  if(rfSkipBtn) rfSkipBtn.addEventListener("click", function(){ rfAnswer(null, true); });
+  document.querySelectorAll("[data-nini-rate]").forEach(function(b){
+    b.addEventListener("click", function(){
+      RF.rate = parseFloat(b.getAttribute("data-nini-rate"));
+      document.querySelectorAll("[data-nini-rate]").forEach(function(x){ x.classList.toggle("selected", x === b); });
+    });
+  });
+  /* Lối vào từ trang chủ */
+  function openNini(focusReflex){
+    showView("viewNini");
+    niniLevelText();
+    if(focusReflex){ var p = $("niniReflexPanel"); if(p) p.scrollIntoView({behavior:"smooth", block:"start"}); }
+    else { var t = $("niniTestPanel"); if(t) t.scrollIntoView({behavior:"smooth", block:"start"}); }
+  }
+  var g1 = $("niniGoTest"); if(g1) g1.addEventListener("click", function(){ openNini(false); });
+  var g2 = $("niniGoReflex"); if(g2) g2.addEventListener("click", function(){ openNini(true); });
+  niniLevelText();
+})();
 </script>
 </body>
 </html>
