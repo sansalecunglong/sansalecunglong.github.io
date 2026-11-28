@@ -13599,7 +13599,7 @@ try{ renderLessonGrid(); }catch(e){}
 
 
 /* ---------- KD-2411-003 — banner báo bản mới (V58): kiểm tra version.json nền, không tự tải lại, không hiện khi đang ghi âm/chấm ---------- */
-var APP_VERSION = "V60";
+var APP_VERSION = "V61";
 var updDismissed = false, updPending = false;
 function updIsBusy(){
   try{
@@ -14475,7 +14475,8 @@ else document.addEventListener("DOMContentLoaded", init);
   });
   var dLater = $("lbDialogLater");
   if(dLater) dLater.addEventListener("click", function(){
-    var p = prof(); p.asked = true; p.joined = false; saveState();
+    /* KD-2811-001-A mục 1b (anh chốt 28/11): "Để sau" chỉ tắt cho lần tải này;
+       chưa lưu tên + đơn vị thì lần tải sau hộp hiện lại. */
     lbHideDialog();
   });
   function lbSyncSettings(){
@@ -14506,8 +14507,8 @@ else document.addEventListener("DOMContentLoaded", init);
   lbRender();
   lbLoad();
   if(prof().joined) lbSubmit(true);
-  if(!prof().asked){
-    setTimeout(function(){ if(!prof().asked) lbShowDialog(); }, 1200);
+  if(!(prof().name && prof().unit)){
+    setTimeout(function(){ if(!(prof().name && prof().unit)) lbShowDialog(); }, 1200);
   }
   window.__lbReload = lbLoad;
 })();
