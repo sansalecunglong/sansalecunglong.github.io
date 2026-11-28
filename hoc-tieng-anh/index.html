@@ -2860,6 +2860,26 @@ body{padding-bottom:calc(70px + env(safe-area-inset-bottom,0px))}
 .lb-toggle{display:flex;gap:10px;align-items:center;font-weight:700;font-size:17px;margin:8px 0 12px}
 .lb-toggle input{width:26px;height:26px}
 </style>
+<style id="nini2-css-v62">
+/* V62 — lịch sử phiên Nini + toàn văn + nút Nini thanh dưới */
+.nini-hist-row{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:14px 6px;border-bottom:2px dashed var(--border)}
+.nini-hist-row .h-txt{font-weight:700;line-height:1.45}
+.nini-hist-row .h-sub{color:var(--muted);font-weight:600;font-size:15px}
+.nini-hist-row button{min-height:52px;border-radius:14px;white-space:nowrap}
+.nini-log-item{background:var(--surface);border:2px solid var(--border);border-radius:18px;padding:18px;margin-bottom:14px}
+.nini-log-item .lg-tag{color:var(--muted);font-weight:700;font-size:14px}
+.nini-log-item .lg-q{font-weight:800;font-size:19px;margin:6px 0}
+.nini-log-item .lg-line{margin:4px 0;line-height:1.55}
+.nini-log-item .lg-pts{font-weight:800}
+.nini-log-item.ok{border-color:#2e7d32}
+.nini-log-item.bad{border-color:#c62828}
+#bottomNav .bottom-nav-in{grid-template-columns:repeat(6,1fr)}
+@media (min-width:1024px){ #bottomNav .bottom-nav-in{grid-template-columns:repeat(6,minmax(120px,1fr))} }
+#bottomNav #bnNini{background:linear-gradient(135deg,#ff6a2b,#d63c14);color:#fff;border-radius:16px;flex-direction:column;gap:1px;box-shadow:0 8px 18px rgba(214,60,20,.35)}
+#bottomNav #bnNini .ic{color:#fff;opacity:1;width:26px;height:26px}
+#bottomNav #bnNini .bn-label{font-size:13.5px;font-weight:800;line-height:1.1;color:#fff}
+#bottomNav #bnNini.on{outline:3px solid #7a1503;outline-offset:1px}
+</style>
 </head>
 <body>
 <!-- V38 ICON PHOSPHOR: sprite Phosphor Duotone (32 symbol, fill=currentColor) -->
@@ -3676,6 +3696,23 @@ body{padding-bottom:calc(70px + env(safe-area-inset-bottom,0px))}
         <div class="feedback" id="niniRFeedback" role="status"></div>
       </div>
     </div>
+    <div class="panel" id="niniHistoryPanel" style="margin-top:16px">
+      <h3>Các phiên đã học với Nini</h3>
+      <p class="panel-sub">Mỗi lần làm bài kiểm tra hay luyện phản xạ xong, Nini lưu lại toàn văn phiên ở đây — trên chính máy của bác — để bác mở xem lại câu hỏi, câu trả lời, nhận xét và điểm từng câu bất cứ lúc nào.</p>
+      <div id="niniHistoryList"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ================= NINI SESSION LOG VIEW (V62) ================= -->
+<div class="view" id="viewNiniLog">
+  <div class="wrap">
+    <div class="lesson-head txt-card">
+      <button type="button" class="btn btn-ghost btn-sm" id="niniLogBack">Quay lại Nini</button>
+      <h2>Toàn văn phiên học với Nini</h2>
+      <div class="lesson-goal" id="niniLogMeta"></div>
+    </div>
+    <div id="niniLogBody" style="margin-top:16px"></div>
   </div>
 </div>
 
@@ -3806,6 +3843,10 @@ body{padding-bottom:calc(70px + env(safe-area-inset-bottom,0px))}
     </button>
     <button type="button" class="bn-btn" id="bnReview" aria-label="Kiểm tra lại các bài đã học">
       <svg class="ic" aria-hidden="true"><use href="#ic-clipboard-text"></use></svg>
+    </button>
+    <button type="button" class="bn-btn" id="bnNini" aria-label="Mở trợ lý giáo viên Nini">
+      <svg class="ic" aria-hidden="true"><use href="#ic-star"></use></svg>
+      <span class="bn-label">Nini</span>
     </button>
     <!-- V43 BO HEADER CAI DAT TOAN MAN HINH: mục Cài đặt ở thanh dưới mở màn Cài đặt riêng toàn trang -->
     <button type="button" class="bn-btn" id="bnSettings" aria-label="Mở màn cài đặt">
@@ -5473,7 +5514,7 @@ function showView(id){
   MicSessions.cancelCurrent(); stopGameTimer();
   if(typeof stopChGame === "function") stopChGame();
   if(typeof closeFsPanel === "function") closeFsPanel(false);
-  ["viewHome","viewLesson","viewTotal","viewGate","viewPron","viewChGame","viewReview","viewSettings","viewNini"].forEach(function(v){
+  ["viewHome","viewLesson","viewTotal","viewGate","viewPron","viewChGame","viewReview","viewSettings","viewNini","viewNiniLog"].forEach(function(v){
     document.getElementById(v).classList.toggle("active", v===id);
   });
   /* V43 BO HEADER CAI DAT TOAN MAN HINH: không còn header để ẩn/hiện nữa. */
@@ -13599,7 +13640,7 @@ try{ renderLessonGrid(); }catch(e){}
 
 
 /* ---------- KD-2411-003 — banner báo bản mới (V58): kiểm tra version.json nền, không tự tải lại, không hiện khi đang ghi âm/chấm ---------- */
-var APP_VERSION = "V61";
+var APP_VERSION = "V62";
 var updDismissed = false, updPending = false;
 function updIsBusy(){
   try{
@@ -13849,13 +13890,13 @@ try{
   /* --- 7) THANH ĐIỀU HƯỚNG DƯỚI: nối vào các màn hình thật --- */
   var bnHome = document.getElementById("bnHome"), bnLesson = document.getElementById("bnLesson"), bnPron = document.getElementById("bnPron"), bnReview = document.getElementById("bnReview");
   function syncNav(){
-    var map = { viewHome: "bnHome", viewLesson: "bnLesson", viewGate: "bnLesson", viewTotal: "bnLesson", viewPron: "bnPron", viewReview: "bnReview", viewSettings: "bnSettings" };
+    var map = { viewHome: "bnHome", viewLesson: "bnLesson", viewGate: "bnLesson", viewTotal: "bnLesson", viewPron: "bnPron", viewReview: "bnReview", viewSettings: "bnSettings", viewNini: "bnNini", viewNiniLog: "bnNini" };
     var active = "bnHome";
     Object.keys(map).forEach(function(id){
       var v = document.getElementById(id);
       if(v && v.classList.contains("active")) active = map[id];
     });
-    ["bnHome", "bnLesson", "bnPron", "bnReview", "bnSettings"].forEach(function(id){
+    ["bnHome", "bnLesson", "bnPron", "bnReview", "bnSettings", "bnNini"].forEach(function(id){
       var b = document.getElementById(id);
       if(b) b.classList.toggle("on", id === active);
     });
@@ -13889,7 +13930,7 @@ try{
       openSettingsView();
     });
   }
-  ["viewHome", "viewLesson", "viewGate", "viewTotal", "viewPron", "viewReview", "viewSettings"].forEach(function(id){
+  ["viewHome", "viewLesson", "viewGate", "viewTotal", "viewPron", "viewReview", "viewSettings", "viewNini", "viewNiniLog"].forEach(function(id){
     var v = document.getElementById(id);
     if(v && window.MutationObserver) new MutationObserver(syncNav).observe(v, { attributes: true, attributeFilter: ["class"] });
   });
@@ -14051,6 +14092,7 @@ else document.addEventListener("DOMContentLoaded", init);
   function niniStore(){
     if(!state.nini || typeof state.nini !== "object") state.nini = { lastTest:null, reflex:[] };
     if(!Array.isArray(state.nini.reflex)) state.nini.reflex = [];
+    if(!Array.isArray(state.nini.sessions)) state.nini.sessions = [];
     return state.nini;
   }
   function lessonOf(id){ return LESSONS.filter(function(L){ return L.id===id; })[0] || null; }
@@ -14153,6 +14195,7 @@ else document.addEventListener("DOMContentLoaded", init);
       return;
     }
     var wrongWords = [];
+    var testItems = [];
     niniQuestions.forEach(function(q, qi){
       var box = wrap.querySelector('[data-q="' + qi + '"]'); if(!box) return;
       var correct = false;
@@ -14164,15 +14207,24 @@ else document.addEventListener("DOMContentLoaded", init);
         correct = !!sel && parseInt(sel.getAttribute("data-opt"),10) === q.answer;
       }
       if(!correct && q._vocabEn){ recordWrong(q._vocabEn); wrongWords.push(q._vocabEn); }
+      var yoursTxt = "";
+      if(q.type === "order"){ yoursTxt = built; }
+      else { var selB = box.querySelector(".q-opt.selected"); yoursTxt = selB ? selB.textContent : ""; }
+      testItems.push({ kind:q.type, tag:q.tag, q:q.q, listen:q.listen || "", yours:yoursTxt, correct:(q.type === "order" ? q.sentence : (q.opts ? q.opts[q.answer] : "")), pass:correct, explain:q.explain || "", pts:(correct ? 1 : 0) });
     });
     var st = niniStore();
     st.lastTest = { score:res.score, total:niniQuestions.length, pct:res.score/niniQuestions.length, date:todayStr() };
+    var testSess = { id:Date.now(), kind:"test", when:new Date().toISOString(), level:(window.__niniLastMix || {}).level || null, score:res.score, total:niniQuestions.length, lbPts:res.score * 2, items:testItems };
+    st.sessions.push(testSess); if(st.sessions.length > 20) st.sessions = st.sessions.slice(-20);
+    window.__niniLastSession = testSess;
     saveState();
+    renderNiniHistory();
     if(typeof renderReview === "function") renderReview();
     resEl.className = "quiz-result show";
     var msg = "Bác làm đúng " + res.score + "/" + niniQuestions.length + " câu. ";
     if(wrongWords.length) msg += "Các từ bác sai (" + wrongWords.join(", ") + ") đã được Nini đưa vào mục “Ôn lại hôm nay” ở trang chính để bác ôn lại. ";
     msg += res.score >= 8 ? "Giỏi lắm! Đề lần sau Nini sẽ nâng mức khó lên một chút." : res.score >= 5 ? "Tốt rồi — đề lần sau Nini giữ mức vừa sức và ôn thêm phần bác hay sai." : "Không sao cả — đề lần sau Nini sẽ soạn nhẹ hơn và ôn đúng phần bác chưa thuộc.";
+    msg += " Điểm từng câu: mỗi câu đúng 1 điểm, phiên này " + res.score + "/" + niniQuestions.length + " điểm. Điểm nạp Bảng xếp hạng từ bài kiểm tra gần nhất: " + res.score + " × 2 = " + (res.score * 2) + " điểm. Toàn văn bài làm đã lưu ở mục “Các phiên đã học với Nini” phía dưới.";
     resEl.textContent = msg;
     niniLevelText();
   });
@@ -14263,21 +14315,21 @@ else document.addEventListener("DOMContentLoaded", init);
     var fb = $("niniRFeedback"), heard = $("niniRHeard"); fb.classList.add("show");
     if(timeout || !said){
       fb.textContent = "Hết giờ cho câu này — không sao, mình qua câu tiếp nhé. Câu trả lời mẫu: “" + p.a + "” (" + p.avi + ").";
-      RF.results.push({ ms:null, pass:false, timeout:true });
+      RF.results.push({ ms:null, pass:false, timeout:true, q:p.q, qvi:p.qvi, expected:p.a, avi:p.avi, said:"", pts:0 });
     } else {
       heard.textContent = "Trang web nghe được: “" + said + "”";
       var g = gradeV51(p.a, said, false);
       var pass = !!g.pass;
       if(pass){
-        fb.textContent = "Đúng rồi! Bác đáp trong " + (ms/1000).toFixed(1).replace(".", ",") + " giây. " + "Câu mẫu: “" + p.a + "” (" + p.avi + ").";
+        fb.textContent = "Đúng rồi! Bác đáp trong " + (ms/1000).toFixed(1).replace(".", ",") + " giây. " + "Câu mẫu: “" + p.a + "” (" + p.avi + "). Điểm câu này: 2 điểm.";
       } else {
-        fb.textContent = "Gần được rồi. Câu đúng là: “" + p.a + "” (" + p.avi + ")." + (g.wrong && g.wrong.length ? " Từ cần chú ý: " + g.wrong.join(", ") + "." : "");
+        fb.textContent = "Gần được rồi. Câu đúng là: “" + p.a + "” (" + p.avi + ")." + (g.wrong && g.wrong.length ? " Từ cần chú ý: " + g.wrong.join(", ") + "." : "") + " Điểm câu này: 0 điểm.";
         var av = allVocab();
         (g.wrong||[]).forEach(function(w){
           av.forEach(function(v){ if(v.en.toLowerCase() === String(w).toLowerCase()) recordWrong(v.en); });
         });
       }
-      RF.results.push({ ms:Math.round(ms), pass:pass, timeout:false });
+      RF.results.push({ ms:Math.round(ms), pass:pass, timeout:false, q:p.q, qvi:p.qvi, expected:p.a, avi:p.avi, said:said, wrong:(g.wrong || []), pts:(pass ? 2 : 0) });
       RF.lastMs = Math.round(ms); RF.lastPass = pass;
     }
     rfSetBusy(false);
@@ -14295,6 +14347,12 @@ else document.addEventListener("DOMContentLoaded", init);
     saveState();
     $("niniRProg").textContent = "Đã luyện xong " + RF.pairs.length + " câu.";
     $("niniRFeedback").classList.add("show"); $("niniRFeedback").textContent = "Kết quả phản xạ: đúng " + passed + "/" + RF.pairs.length + " câu" + (avg !== null ? ", thời gian đáp trung bình " + (avg/1000).toFixed(1).replace(".", ",") + " giây/câu (đo thật từ lúc Nini hỏi xong)." : ".") + " Bác bấm “Bắt đầu luyện phản xạ” để luyện lượt mới nhé.";
+    var rfSess = { id:Date.now(), kind:"reflex", when:new Date().toISOString(), score:passed, total:RF.pairs.length, lbPts:passed * 2, avgMs:avg, items:RF.results };
+    st.sessions.push(rfSess); if(st.sessions.length > 20) st.sessions = st.sessions.slice(-20);
+    window.__niniLastSession = rfSess;
+    saveState();
+    $("niniRFeedback").textContent += " Điểm phiên: đúng " + passed + " câu × 2 = " + (passed * 2) + " điểm, cộng dồn vào Bảng xếp hạng. Toàn văn phiên đã lưu ở mục “Các phiên đã học với Nini” phía dưới.";
+    renderNiniHistory();
     RF.active = false;
   }
   var rfStartBtn = $("niniReflexStart");
@@ -14321,10 +14379,82 @@ else document.addEventListener("DOMContentLoaded", init);
       document.querySelectorAll("[data-nini-rate]").forEach(function(x){ x.classList.toggle("selected", x === b); });
     });
   });
+  /* ---------- (c) LỊCH SỬ PHIÊN & TOÀN VĂN (V62) ---------- */
+  function sessWhen(iso){
+    var d = new Date(iso);
+    function p2(n){ return (n < 10 ? "0" : "") + n; }
+    return p2(d.getDate()) + "/" + p2(d.getMonth() + 1) + " " + p2(d.getHours()) + ":" + p2(d.getMinutes());
+  }
+  function renderNiniHistory(){
+    var box = $("niniHistoryList"); if(!box) return;
+    var sessions = niniStore().sessions.slice().reverse();
+    box.innerHTML = "";
+    if(!sessions.length){
+      var e = document.createElement("p");
+      e.style.cssText = "font-weight:600;color:var(--muted)";
+      e.textContent = "Chưa có phiên nào — bác làm một bài kiểm tra hoặc luyện phản xạ là Nini lưu lại ở đây.";
+      box.appendChild(e); return;
+    }
+    sessions.forEach(function(s){
+      var row = document.createElement("div"); row.className = "nini-hist-row";
+      var txt = document.createElement("div");
+      var t1 = document.createElement("div"); t1.className = "h-txt";
+      t1.textContent = (s.kind === "test" ? "Bài kiểm tra theo năng lực" : "Luyện phản xạ") + " · " + sessWhen(s.when);
+      var t2 = document.createElement("div"); t2.className = "h-sub";
+      t2.textContent = "Đúng " + s.score + "/" + s.total + " câu · Nạp Bảng xếp hạng +" + s.lbPts + " điểm";
+      txt.appendChild(t1); txt.appendChild(t2);
+      var btn = document.createElement("button");
+      btn.type = "button"; btn.className = "btn btn-soft"; btn.textContent = "Xem lại toàn văn";
+      btn.setAttribute("data-sess-id", String(s.id));
+      btn.addEventListener("click", function(){ openNiniLog(s.id); });
+      row.appendChild(txt); row.appendChild(btn);
+      box.appendChild(row);
+    });
+  }
+  window.__renderNiniHistory = renderNiniHistory;
+  function openNiniLog(id){
+    var s = null;
+    niniStore().sessions.forEach(function(x){ if(x.id === id) s = x; });
+    if(!s) return;
+    window.__niniLogSession = s;
+    var meta = $("niniLogMeta");
+    if(meta) meta.textContent = (s.kind === "test" ? "Bài kiểm tra theo năng lực" : "Luyện phản xạ") + " · " + sessWhen(s.when) + " · Đúng " + s.score + "/" + s.total + " câu · Điểm nạp Bảng xếp hạng: +" + s.lbPts + " điểm" + (s.kind === "reflex" && s.avgMs ? " · Thời gian đáp trung bình " + (s.avgMs/1000).toFixed(1).replace(".", ",") + " giây/câu" : "") + ". Toàn văn lưu trên máy của bác.";
+    var body = $("niniLogBody"); if(!body) return;
+    body.innerHTML = "";
+    (s.items || []).forEach(function(it, i){
+      var card = document.createElement("div");
+      card.className = "nini-log-item " + (it.pass ? "ok" : "bad");
+      function line(cls, text){ var p = document.createElement("p"); p.className = cls; p.textContent = text; card.appendChild(p); return p; }
+      if(s.kind === "test"){
+        line("lg-tag", "Câu " + (i + 1) + " · " + (it.tag || ""));
+        line("lg-q", it.listen ? ("Nghe và chọn từ: “" + it.listen + "”") : it.q);
+        line("lg-line", "Bác trả lời: “" + (it.yours || "(chưa trả lời)") + "”");
+        line("lg-line", "Đáp án đúng: “" + it.correct + "”");
+        line("lg-line", it.explain || "");
+        line("lg-pts", (it.pass ? "Đúng" : "Chưa đúng") + " · Điểm câu này: " + it.pts + " điểm");
+      } else {
+        line("lg-tag", "Câu " + (i + 1));
+        line("lg-q", "Nini hỏi: “" + it.q + "” (" + (it.qvi || "") + ")");
+        line("lg-line", "Bác đáp: “" + (it.said || (it.timeout ? "(hết giờ / bỏ qua)" : "")) + "”" + (it.ms ? " · đáp trong " + (it.ms/1000).toFixed(1).replace(".", ",") + " giây" : ""));
+        line("lg-line", "Câu đúng: “" + it.expected + "” (" + (it.avi || "") + ")");
+        if(it.wrong && it.wrong.length) line("lg-line", "Từ cần chú ý: " + it.wrong.join(", ") + ".");
+        line("lg-pts", (it.pass ? "Đúng" : "Chưa đúng") + " · Điểm câu này: " + it.pts + " điểm");
+      }
+      body.appendChild(card);
+    });
+    showView("viewNiniLog");
+    window.scrollTo(0, 0);
+  }
+  var logBack = $("niniLogBack");
+  if(logBack) logBack.addEventListener("click", function(){ showView("viewNini"); });
+  var bnNiniBtn = $("bnNini");
+  if(bnNiniBtn) bnNiniBtn.addEventListener("click", function(){ openNini(false); });
+  renderNiniHistory();
   /* Lối vào từ trang chủ */
   function openNini(focusReflex){
     showView("viewNini");
     niniLevelText();
+    renderNiniHistory();
     if(focusReflex){ var p = $("niniReflexPanel"); if(p) p.scrollIntoView({behavior:"smooth", block:"start"}); }
     else { var t = $("niniTestPanel"); if(t) t.scrollIntoView({behavior:"smooth", block:"start"}); }
   }
