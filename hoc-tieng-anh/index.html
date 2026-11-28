@@ -3778,7 +3778,7 @@ body{padding-bottom:calc(70px + env(safe-area-inset-bottom,0px))}
 <div class="lb-dialog" id="lbDialog" hidden role="dialog" aria-modal="true" aria-labelledby="lbDialogTitle">
   <div class="lb-box">
     <h2 id="lbDialogTitle">Chào bác! Cho Nini biết tên để lên bảng xếp hạng nhé</h2>
-    <p>Bác nhập <b>tên</b> và <b>đơn vị</b> của mình. Điểm học của bác sẽ hiện trên Bảng xếp hạng ở trang chủ cho mọi người cùng vui. Đây là <b>tự nguyện</b> — bấm “Để sau” là vào học ngay như bình thường, không khác gì cả. Tên và đơn vị sửa lại được bất cứ lúc nào trong mục Cài đặt.</p>
+    
     <div class="lb-field">
       <label for="lbNameInput">Tên của bác</label>
       <input type="text" id="lbNameInput" placeholder="Ví dụ: Nguyễn Văn A" autocomplete="name" maxlength="60">
@@ -13599,7 +13599,7 @@ try{ renderLessonGrid(); }catch(e){}
 
 
 /* ---------- KD-2411-003 — banner báo bản mới (V58): kiểm tra version.json nền, không tự tải lại, không hiện khi đang ghi âm/chấm ---------- */
-var APP_VERSION = "V59";
+var APP_VERSION = "V60";
 var updDismissed = false, updPending = false;
 function updIsBusy(){
   try{
